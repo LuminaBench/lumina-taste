@@ -42,7 +42,7 @@ const blueprints = existsSync(join(root, 'blueprints'))
 
 const pal = read('tokens/palettes/palettes.json').palettes.map((p) => ({
   id: p.id, kind: 'palette', name: p.name, category: p.category, summary: p.mood,
-  aliases: [p.name.toLowerCase(), ...p.name.toLowerCase().split(/\s*&\s*/)],
+  aliases: [p.name.toLowerCase(), ...p.name.toLowerCase().split(/\s*&\s*/), `${p.category} palette`, ...p.mood.toLowerCase().replace(/[^a-z ]/g, '').split(' ').filter((w) => w.length > 4)],
   swatches: Object.fromEntries(['light', 'dark'].map((m) => [m, { canvas: p.modes[m].tokens['bg-canvas'].hex, accent: p.modes[m].tokens['accent-solid'].hex, text: p.modes[m].tokens['text-primary'].hex }])),
   minTextContrast: { light: p.modes.light.minRatios.textPrimary, dark: p.modes.dark.minRatios.textPrimary },
   files: [`tokens/palettes/${p.id}.css`],

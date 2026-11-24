@@ -1,3 +1,4 @@
+.lt-timeline { container-type: inline-size; }
 @scope (.lt-timeline) {
   :scope { display: grid; width: min(100%, 520px); margin: 0; padding: 0; list-style: none; }
   li { position: relative; display: grid; grid-template-columns: 110px 1fr; column-gap: var(--gap-lg); padding-bottom: var(--gap-lg); }

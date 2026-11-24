@@ -1,6 +1,6 @@
 import { chart, type ChartOptions } from '../core/frame';
 import { formatNumber } from '../core/format';
-import { arcPath, el, r } from '../core/svg';
+import { arcPath, el, r, textWidth } from '../core/svg';
 import '../core/charts.css';
 
 export interface GaugeData { value: number; max: number; target?: number; label?: string }
@@ -21,7 +21,12 @@ export function render(host: HTMLElement, data: GaugeData, opts: GaugeOptions = 
     if (d.target != null) {
       const at = a0 + (a1 - a0) * Math.min(1, d.target / d.max);
       svg.append(el('line', { x1: r(cx + Math.sin(at) * (rad - 18)), y1: r(cy - Math.cos(at) * (rad - 18)), x2: r(cx + Math.sin(at) * (rad + 6)), y2: r(cy - Math.cos(at) * (rad + 6)), style: 'stroke: var(--text-primary); stroke-width: 2; stroke-linecap: round' }));
-      svg.append(el('text', { x: r(cx + Math.sin(at) * (rad + 18)), y: r(cy - Math.cos(at) * (rad + 18) + 4), 'text-anchor': at > 0 ? 'start' : 'end', class: 'lt-tick' }, [`Target ${fmt(d.target)}`]));
+      const label = `Target ${fmt(d.target)}`;
+      const tw = textWidth(label);
+      let tx = cx + Math.sin(at) * (rad + 18);
+      const anchor = at > 0 ? 'start' : 'end';
+      tx = anchor === 'start' ? Math.min(tx, width - tw - 2) : Math.max(tx, tw + 2);
+      svg.append(el('text', { x: r(tx), y: r(cy - Math.cos(at) * (rad + 18) + 4), 'text-anchor': anchor, class: 'lt-tick' }, [label]));
     }
     svg.append(el('text', { x: cx, y: cy + 4, 'text-anchor': 'middle', style: 'font-family: var(--font-display); font-size: 30px; font-weight: 650; letter-spacing: -0.02em; fill: var(--text-primary)' }, [fmt(d.value)]));
     svg.append(el('text', { x: cx, y: cy + 24, 'text-anchor': 'middle', class: 'lt-tick' }, [`${d.label ?? ''} · ${formatNumber(t, { percent: true })} of ${fmt(d.max)}`]));

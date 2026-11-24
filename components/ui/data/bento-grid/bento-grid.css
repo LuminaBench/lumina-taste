@@ -11,8 +11,8 @@
   [data-part="viz"] i { flex: 1; height: var(--h); border-radius: var(--radius-xs) var(--radius-xs) 0 0; background: var(--accent-soft); }
   [data-part="viz"] i:nth-child(6) { background: var(--accent-solid); }
   [data-part="big"] { margin-top: auto; display: grid; place-items: center; width: 64px; height: 64px; border-radius: var(--radius-lg); background: var(--accent-soft); color: var(--accent-text); }
-  @container lt-bento (max-width: 620px) {
-    :scope { grid-template-columns: 1fr; }
-    [data-span="wide"], [data-span="tall"] { grid-column: auto; grid-row: auto; }
-  }
+}
+/* A container cannot restyle itself, so the tiles span the full row instead. */
+@container lt-bento (max-width: 620px) {
+  .lt-bento > article { grid-column: 1 / -1; grid-row: auto; }
 }

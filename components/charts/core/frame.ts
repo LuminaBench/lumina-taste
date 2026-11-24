@@ -104,6 +104,10 @@ export function chart<D, O extends ChartOptions>(host: HTMLElement, data: D, opt
     raf = requestAnimationFrame(render);
   });
   ro.observe(plot);
+  // Re-draw when the theme changes: canvas colours and measured label inks depend on it.
+  const themeTarget = host.closest<HTMLElement>('[data-palette]') ?? document.documentElement;
+  const mo = new MutationObserver(() => { syncTheme(); cancelAnimationFrame(raf); raf = requestAnimationFrame(render); });
+  mo.observe(themeTarget, { attributes: true, attributeFilter: ['data-palette', 'data-mode'] });
   render();
   const onTool = (e: MouseEvent) => {
     const b = (e.target as Element).closest<HTMLElement>('[data-export]');
@@ -117,7 +121,7 @@ export function chart<D, O extends ChartOptions>(host: HTMLElement, data: D, opt
     root: fig,
     svg: () => svg,
     update: (d) => { current = d; render(); },
-    destroy: () => { ro.disconnect(); cancelAnimationFrame(raf); cleanupInteract?.(); tip.remove(); fig.removeEventListener('click', onTool); fig.remove(); },
+    destroy: () => { ro.disconnect(); mo.disconnect(); cancelAnimationFrame(raf); cleanupInteract?.(); tip.remove(); fig.removeEventListener('click', onTool); fig.remove(); },
     exportSVG: () => exportSVG(svg, (opts.title ?? 'chart').toLowerCase().replace(/[^a-z0-9]+/g, '-'), opts),
     exportPNG: () => exportPNG(svg, (opts.title ?? 'chart').toLowerCase().replace(/[^a-z0-9]+/g, '-'), opts),
   };

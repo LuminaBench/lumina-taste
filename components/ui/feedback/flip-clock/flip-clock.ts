@@ -16,10 +16,11 @@ function setCard(el: HTMLElement, next: string) {
   flapTop.textContent = prev;
   flapBottom.textContent = next;
   el.removeAttribute('data-flip');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { [top, bottom, flapTop, flapBottom].forEach((h) => (h.textContent = next)); el.dataset.v = next; return; }
   void el.offsetWidth;
   el.setAttribute('data-flip', '');
   el.dataset.v = next;
-  const done = () => { bottom.textContent = next; };
+  const done = () => { bottom.textContent = next; flapTop.textContent = next; el.removeAttribute('data-flip'); };
   setTimeout(done, 400);
 }
 

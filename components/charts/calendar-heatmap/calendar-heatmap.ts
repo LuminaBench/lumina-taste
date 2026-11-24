@@ -9,8 +9,11 @@ export interface CalendarOptions extends ChartOptions { unit?: string }
 
 /** Year of days as weeks × weekdays. Colour is a sequential ramp from the theme (surface → accent). */
 export function render(host: HTMLElement, data: CalendarDay[], opts: CalendarOptions = {}) {
-  return chart(host, data, { height: (w: number) => Math.round(Math.min(170, (w / 54) * 7 + 44)), ...opts }, (ctx, d, o) => {
+  return chart(host, data, { height: (w: number) => Math.round(Math.min(170, Math.max(11, Math.min(16, (w - 28) / 53)) * 7 + 44)), ...opts }, (ctx, all, o) => {
     const { svg, width, height, fmt } = ctx;
+    // Never shrink cells below 11px (weekday labels need the room): show the most recent weeks that fit.
+    const fitWeeks = Math.floor((width - 28) / 11);
+    const d = all.slice(-Math.max(7, fitWeeks * 7 - 6));
     const first = new Date(`${d[0].date}T12:00:00`);
     const start = new Date(first); start.setDate(first.getDate() - ((first.getDay() + 6) % 7));
     const weeks = Math.ceil((d.length + ((first.getDay() + 6) % 7)) / 7);

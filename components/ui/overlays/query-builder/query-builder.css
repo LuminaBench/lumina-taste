@@ -1,3 +1,4 @@
+.lt-query { container-type: inline-size; }
 @scope (.lt-query) {
   :scope { display: grid; gap: var(--gap-md); width: 100%; font-size: var(--text-ui-sm); }
   [data-part="group"] { display: grid; gap: var(--gap-sm); padding: var(--gap-md); border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }

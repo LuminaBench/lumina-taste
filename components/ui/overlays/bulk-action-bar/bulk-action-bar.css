@@ -1,3 +1,4 @@
+.lt-bulk { container-type: inline-size; }
 @scope (.lt-bulk) {
   :scope { position: relative; width: 100%; padding-bottom: 64px; font-size: var(--text-ui); }
   table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }

@@ -24,7 +24,7 @@ body { min-height: 100dvh; display: flex; flex-direction: column; }
 .g-field .lt-segmented button { height: 26px; padding: 0 10px; min-width: 0; font-size: var(--text-ui-xs); }
 .g-select { position: relative; display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 30px 0 10px; border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); background: var(--bg-surface-1); }
 .g-select::after { content: ""; position: absolute; right: 11px; top: 50%; width: 6px; height: 6px; border-right: 1.5px solid var(--text-muted); border-bottom: 1.5px solid var(--text-muted); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
-.g-select:focus-within { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 1px; }
+.g-select:focus-within { border-color: var(--focus-ring); outline: var(--focus-width) solid var(--focus-ring); outline-offset: 1px; }
 .g-select select { appearance: none; border: 0; background: transparent; color: var(--text-primary); font-size: var(--text-ui-sm); font-weight: 550; outline: none; cursor: pointer; max-width: 220px; }
 .g-select select option, .g-select select optgroup { background: var(--bg-surface-1); color: var(--text-primary); }
 .g-swatch { width: 14px; height: 14px; border-radius: 50%; background: conic-gradient(var(--accent-solid) 0 50%, var(--bg-surface-3) 0); box-shadow: inset 0 0 0 1px var(--border-hairline); }
@@ -107,7 +107,7 @@ html[data-view="blueprints"] .g-main { max-width: 1600px; }
   .g-header-row { flex-wrap: wrap; gap: 10px 16px; padding: 10px 16px; }
   .g-tabs { order: 3; width: 100%; overflow-x: auto; scrollbar-width: none; }
   .g-search { width: auto; flex: 1; min-width: 160px; }
-  .g-toolbar { flex-wrap: nowrap; overflow-x: auto; padding: 0 16px 10px; scrollbar-width: none; }
+  .g-toolbar { flex-wrap: nowrap; overflow-x: auto; padding: 4px 16px 10px; scrollbar-width: none; }
   .g-field { flex: none; }
   .g-main { padding: var(--space-5) 16px var(--space-7); }
   .g-stage { padding: var(--space-4) var(--space-3); margin: var(--space-3); }

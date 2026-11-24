@@ -50,19 +50,24 @@ export function verticalBars(host: HTMLElement, data: BarItem[], opts: BarOption
 
 export function horizontalBars(host: HTMLElement, data: BarItem[], opts: BarOptions & { lollipop?: boolean } = {}): ChartInstance<BarItem[]> {
   const rows = data.length;
-  return chart(host, data, { height: () => rows * 30 + 12, ...opts }, (ctx, raw, o) => {
+  const longest = Math.max(...data.map((i) => textWidth(i.label, '12px system-ui'))) + 12;
+  // When labels would take more than 42% of the width, stack each label above its bar (mobile).
+  const stackedLabels = (w: number) => longest > w * 0.42;
+  return chart(host, data, { height: (w: number) => rows * (stackedLabels(w) ? 46 : 30) + 12, ...opts }, (ctx, raw, o) => {
     const { svg, width, height, fmt } = ctx;
     const d = sorted(raw, o.sort ?? 'desc');
-    const labelW = Math.min(width * 0.42, Math.max(...d.map((i) => textWidth(i.label, '12px system-ui'))) + 12);
+    const stack = stackedLabels(width);
+    const labelW = stack ? 0 : longest;
     const valW = Math.max(...d.map((i) => textWidth(fmt(i.value)))) + 10;
     const x = linear(niceDomain(0, Math.max(...d.map((i) => i.value)), 4, true), [labelW, width - valW]);
-    const y = band(d.map((i) => i.label), [4, height - 8], o.lollipop ? 0.6 : 0.3, 0.1);
-    svg.append(el('line', { x1: r(x(0)), x2: r(x(0)), y1: 0, y2: height - 8, class: 'lt-baseline' }));
+    const y = band(d.map((i) => i.label), [stack ? 18 : 4, height - 8], o.lollipop ? 0.6 : stack ? 0.5 : 0.3, 0.1);
+    svg.append(el('line', { x1: r(x(0)), x2: r(x(0)), y1: stack ? 18 : 0, y2: height - 8, class: 'lt-baseline' }));
     const marks: Mark[] = [];
     const g = el('g');
     d.forEach((it) => {
       const py = y(it.label), w = x(it.value) - x(0), c = fillFor(o, it.label);
-      g.append(el('text', { x: labelW - 10, y: r(py + y.bandwidth / 2 + 4), 'text-anchor': 'end', class: 'lt-label-muted', style: 'fill: var(--text-primary); font-size: 12px' }, [it.label]));
+      if (stack) g.append(el('text', { x: 0, y: r(py - 5), style: 'fill: var(--text-primary); font-size: 12px' }, [it.label]));
+      else g.append(el('text', { x: labelW - 10, y: r(py + y.bandwidth / 2 + 4), 'text-anchor': 'end', class: 'lt-label-muted', style: 'fill: var(--text-primary); font-size: 12px' }, [it.label]));
       if (o.lollipop) {
         const cy = py + y.bandwidth / 2;
         g.append(el('line', { x1: x(0), x2: r(x(it.value)), y1: r(cy), y2: r(cy), class: 'lt-mark', style: `stroke: ${c}; stroke-width: 2` }));

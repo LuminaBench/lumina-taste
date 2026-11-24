@@ -3302,7 +3302,13 @@
       "aliases": [
         "cream & charcoal",
         "cream",
-        "charcoal"
+        "charcoal",
+        "consumer palette",
+        "quiet",
+        "crafted",
+        "charcoal",
+        "actions",
+        "cream"
       ],
       "swatches": {
         "light": {
@@ -3333,7 +3339,12 @@
       "aliases": [
         "deep navy & warm sand",
         "deep navy",
-        "warm sand"
+        "warm sand",
+        "consumer palette",
+        "confident",
+        "hospitality",
+        "premium",
+        "night"
       ],
       "swatches": {
         "light": {
@@ -3364,7 +3375,13 @@
       "aliases": [
         "olive green & warm stone",
         "olive green",
-        "warm stone"
+        "warm stone",
+        "consumer palette",
+        "natural",
+        "grounded",
+        "outdoorsy",
+        "olive",
+        "limestone"
       ],
       "swatches": {
         "light": {
@@ -3395,7 +3412,15 @@
       "aliases": [
         "matte black & signal orange",
         "matte black",
-        "signal orange"
+        "signal orange",
+        "dev-tool palette",
+        "industrial",
+        "decisive",
+        "orange",
+        "matte",
+        "black",
+        "bright",
+        "white"
       ],
       "swatches": {
         "light": {
@@ -3426,7 +3451,13 @@
       "aliases": [
         "editorial paper & ink",
         "editorial paper",
-        "ink"
+        "ink",
+        "editorial palette",
+        "longform",
+        "reading",
+        "blueblack",
+        "uncoated",
+        "paper"
       ],
       "swatches": {
         "light": {
@@ -3457,7 +3488,14 @@
       "aliases": [
         "financial slate & forest",
         "financial slate",
-        "forest"
+        "forest",
+        "data palette",
+        "trustworthy",
+        "finance",
+        "slate",
+        "surfaces",
+        "forestgreen",
+        "actions"
       ],
       "swatches": {
         "light": {
@@ -3488,6 +3526,10 @@
       "aliases": [
         "nordic ice & cobalt",
         "nordic ice",
+        "cobalt",
+        "consumer palette",
+        "crisp",
+        "clean",
         "cobalt"
       ],
       "swatches": {
@@ -3519,7 +3561,13 @@
       "aliases": [
         "warm espresso & terracotta",
         "warm espresso",
-        "terracotta"
+        "terracotta",
+        "consumer palette",
+        "warmth",
+        "firedclay",
+        "actions",
+        "latte",
+        "espresso"
       ],
       "swatches": {
         "light": {
@@ -3550,7 +3598,13 @@
       "aliases": [
         "lab monochrome & acid lime",
         "lab monochrome",
-        "acid lime"
+        "acid lime",
+        "dev-tool palette",
+        "instrument",
+        "strict",
+        "greys",
+        "acidlime",
+        "signal"
       ],
       "swatches": {
         "light": {
@@ -3581,7 +3635,13 @@
       "aliases": [
         "midnight terminal & phosphor",
         "midnight terminal",
-        "phosphor"
+        "phosphor",
+        "dev-tool palette",
+        "developer",
+        "console",
+        "phosphor",
+        "green",
+        "graphite"
       ],
       "swatches": {
         "light": {
@@ -3612,7 +3672,11 @@
       "aliases": [
         "porcelain & deep teal",
         "porcelain",
-        "deep teal"
+        "deep teal",
+        "consumer palette",
+        "health",
+        "fintech",
+        "porcelain"
       ],
       "swatches": {
         "light": {
@@ -3643,7 +3707,13 @@
       "aliases": [
         "sage & clay",
         "sage",
-        "clay"
+        "clay",
+        "consumer palette",
+        "wellness",
+        "lifestyle",
+        "accents",
+        "sagetinted",
+        "linen"
       ],
       "swatches": {
         "light": {
@@ -3674,7 +3744,14 @@
       "aliases": [
         "carbon & amber",
         "carbon",
-        "amber"
+        "amber",
+        "data palette",
+        "trading",
+        "floor",
+        "amber",
+        "readouts",
+        "carbon",
+        "black"
       ],
       "swatches": {
         "light": {
@@ -3705,7 +3782,14 @@
       "aliases": [
         "linen & oxblood",
         "linen",
-        "oxblood"
+        "oxblood",
+        "editorial palette",
+        "luxury",
+        "editorial",
+        "oxblood",
+        "details",
+        "natural",
+        "linen"
       ],
       "swatches": {
         "light": {
@@ -3736,7 +3820,14 @@
       "aliases": [
         "arctic white & signal red",
         "arctic white",
-        "signal red"
+        "signal red",
+        "editorial palette",
+        "newsroom",
+        "clarity",
+        "signal",
+        "bright",
+        "arctic",
+        "white"
       ],
       "swatches": {
         "light": {
@@ -3767,7 +3858,12 @@
       "aliases": [
         "mint & deep ocean",
         "mint",
-        "deep ocean"
+        "deep ocean",
+        "data palette",
+        "fresh",
+        "fintech",
+        "ocean",
+        "whisper"
       ],
       "swatches": {
         "light": {
@@ -3798,7 +3894,15 @@
       "aliases": [
         "charcoal & sky",
         "charcoal",
-        "sky"
+        "sky",
+        "data palette",
+        "analytics",
+        "workhorse",
+        "neutral",
+        "charcoal",
+        "built",
+        "dense",
+        "dashboards"
       ],
       "swatches": {
         "light": {
@@ -3829,7 +3933,14 @@
       "aliases": [
         "ochre paper & indigo",
         "ochre paper",
-        "indigo"
+        "indigo",
+        "editorial palette",
+        "culture",
+        "archives",
+        "indigo",
+        "print",
+        "ochretinted",
+        "paper"
       ],
       "swatches": {
         "light": {
