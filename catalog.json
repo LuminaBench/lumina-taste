@@ -5,7 +5,7 @@
   "counts": {
     "ui": 162,
     "charts": 42,
-    "blueprints": 8,
+    "blueprints": 13,
     "palettes": 18,
     "themes": 36,
     "typography": 12,
@@ -6020,6 +6020,163 @@
         "blueprints/auth/page.css"
       ],
       "path": "blueprints/auth"
+    },
+    {
+      "id": "admin",
+      "order": 9,
+      "name": "Admin list with bulk actions",
+      "summary": "Users table with search, status filter, row selection and bulk actions, a detail drawer, and loading, empty and error states.",
+      "anatomy": "Sidebar | title + count + one action → search + status filter → selectable table → bulk bar → pagination; drawer for detail; ?state=loading|empty|error",
+      "aliases": [
+        "admin page",
+        "users list",
+        "user management",
+        "back office",
+        "crm table",
+        "orders list",
+        "records table"
+      ],
+      "uses": [
+        "search-input",
+        "segmented-control",
+        "data-table",
+        "bulk-action-bar",
+        "pagination",
+        "drawer",
+        "badge",
+        "skeleton",
+        "empty-state",
+        "callout"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/admin/index.html",
+        "blueprints/admin/main.ts",
+        "blueprints/admin/meta.json",
+        "blueprints/admin/page.css"
+      ],
+      "path": "blueprints/admin"
+    },
+    {
+      "id": "status",
+      "order": 10,
+      "name": "Public status page",
+      "summary": "Overall status, 90-day uptime per service, past incidents with causes and fixes, and email updates; open with ?state=incident.",
+      "anatomy": "Brand + updates link → overall status → uptime per service → past incidents → subscribe → footer",
+      "aliases": [
+        "status page",
+        "uptime page",
+        "system status",
+        "incident history",
+        "service health"
+      ],
+      "uses": [
+        "uptime-bars",
+        "timeline",
+        "callout",
+        "button",
+        "footer-minimal"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/status/index.html",
+        "blueprints/status/main.ts",
+        "blueprints/status/meta.json",
+        "blueprints/status/page.css"
+      ],
+      "path": "blueprints/status"
+    },
+    {
+      "id": "changelog",
+      "order": 11,
+      "name": "Changelog",
+      "summary": "Releases newest first with dates, versions and New / Improved / Fixed tags, a filter, and RSS and email subscriptions.",
+      "anatomy": "Top bar → title + subscribe links → tag filter → timeline of releases → older releases → footer",
+      "aliases": [
+        "changelog",
+        "release notes",
+        "what's new",
+        "product updates",
+        "releases page"
+      ],
+      "uses": [
+        "navbar-simple",
+        "segmented-control",
+        "timeline",
+        "badge",
+        "footer-minimal"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/changelog/index.html",
+        "blueprints/changelog/main.ts",
+        "blueprints/changelog/meta.json",
+        "blueprints/changelog/page.css"
+      ],
+      "path": "blueprints/changelog"
+    },
+    {
+      "id": "store",
+      "order": 12,
+      "name": "Store product page",
+      "summary": "Gallery with thumbnails, size and grind choices, one-off or subscription pricing, an add-to-bag button that shows the total, details, reviews, a mobile buy bar and a sold-out state (?state=sold-out).",
+      "anatomy": "Centred shop nav → breadcrumbs → gallery (60%) | buy box (40%) → details accordion → reviews → footer; sticky buy bar on phones",
+      "aliases": [
+        "product page",
+        "shop page",
+        "ecommerce product",
+        "pdp",
+        "store item",
+        "buy page"
+      ],
+      "uses": [
+        "navbar-centered",
+        "breadcrumbs",
+        "segmented-control",
+        "radio-cards",
+        "accordion",
+        "review-summary",
+        "sticky-action-bar",
+        "footer-minimal"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/store/index.html",
+        "blueprints/store/main.ts",
+        "blueprints/store/meta.json",
+        "blueprints/store/page.css"
+      ],
+      "path": "blueprints/store"
+    },
+    {
+      "id": "checkout",
+      "order": 13,
+      "name": "One-page checkout",
+      "summary": "Contact, address, delivery choice and payment in one column beside a sticky order summary; the Pay button shows the exact total. Open with ?state=error for a declined card.",
+      "anatomy": "Brand + secure note (no navigation) → steps → form (contact, address, delivery cards, payment, Pay £X) | order summary with promo code",
+      "aliases": [
+        "checkout",
+        "payment page",
+        "cart checkout",
+        "order form",
+        "basket",
+        "pay page"
+      ],
+      "uses": [
+        "text-field",
+        "radio-cards",
+        "order-summary",
+        "callout",
+        "button"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/checkout/index.html",
+        "blueprints/checkout/main.ts",
+        "blueprints/checkout/meta.json",
+        "blueprints/checkout/page.css"
+      ],
+      "path": "blueprints/checkout"
     }
   ],
   "palettes": [

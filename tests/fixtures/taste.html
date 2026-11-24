@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taste fixture</title>
+<!-- Deliberately breaks every page-level taste rule. Used by tests/unit/cli.test.mjs. -->
+<style>
+  body { margin: 0; font-family: system-ui, sans-serif; color: #1c1c1c; background: #fff; }
+  section { padding: 32px 24px; }
+  .s2 { padding-top: 48px; } .s3 { padding-top: 80px; } .s4 { padding-top: 136px; }
+  .btn { display: inline-block; padding: 10px 18px; border: 0; border-radius: 6px; color: #fff; font: inherit; cursor: pointer; }
+  .card { border: 1px solid #ddd; border-radius: 12px; background: #fff; padding: 24px; }
+  .inner { border: 1px solid #ddd; border-radius: 8px; background: #fafafa; padding: 16px; min-height: 90px; }
+  .r1 { border-radius: 3px; background: #eee; padding: 8px; } .r2 { border-radius: 5px; background: #eee; padding: 8px; } .r3 { border-radius: 10px; background: #eee; padding: 8px; } .r4 { border-radius: 14px; background: #eee; padding: 8px; } .r5 { border-radius: 18px; background: #eee; padding: 8px; } .r6 { border-radius: 22px; background: #eee; padding: 8px; }
+  .wide { font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <h1 style="font-size:20px">Welcome to Acme</h1>
+    <p style="font-size:20px">Lorem ipsum dolor sit amet.</p>
+    <p style="font-size:20px">Everything in one place.</p>
+    <p style="font-size:20px">Start today.</p>
+    <p style="font-size:20px">Try it now.</p>
+    <button class="btn" style="background:#d61f69" onclick="1">Sign up</button>
+    <button class="btn" style="background:#1f6fd6" onclick="1">Book a demo</button>
+    <button class="btn" style="background:#18a058" onclick="1">Start your free trial today with us</button>
+    <span style="color:#c77d00">Gold</span> <span style="color:#7a2fd6">Violet</span> <span style="color:#0aa3b5">Teal</span>
+  </section>
+  <section class="s2">
+    <h4>Features</h4>
+    <div class="card"><div class="inner">Feature one</div></div>
+    <p class="wide">This paragraph runs the full width of a large screen so each line holds far more characters than anyone can comfortably read, which makes the eye lose its place when it jumps back to the start of the next line, again and again, all the way down the page.</p>
+  </section>
+  <section class="s3">
+    <h1 style="font-size:20px">Second title</h1>
+    <div class="r1">a</div><div class="r2">b</div><div class="r3">c</div><div class="r4">d</div><div class="r5">e</div><div class="r6">f</div>
+  </section>
+  <section class="s4">
+    <p style="font-size:10px">x</p><p style="font-size:10px">x</p><p style="font-size:12px">x</p><p style="font-size:12px">x</p><p style="font-size:14px">x</p><p style="font-size:14px">x</p><p style="font-size:24px">x</p><p style="font-size:24px">x</p><p style="font-size:29px">x</p><p style="font-size:29px">x</p><p style="font-size:35px">x</p><p style="font-size:35px">x</p><p style="font-size:42px">x</p><p style="font-size:42px">x</p><p style="font-size:50px">x</p><p style="font-size:50px">x</p><p style="font-size:58px">x</p><p style="font-size:58px">x</p>
+  </section>
+</main>
+</body>
+</html>

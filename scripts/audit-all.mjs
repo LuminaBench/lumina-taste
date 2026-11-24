@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Runs audit-ui.mjs against the gallery (all four views) and every blueprint, at desktop + mobile,
-// light + dark. Starts the static preview server if needed. Exit 1 on any error.
+// light + dark. Blueprints also run the page-level taste critic (--taste --strict).
+// Starts the static preview server if needed. Exit 1 on any error.
 import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -14,9 +15,15 @@ const server = spawn(process.execPath, [join(root, 'scripts/serve.mjs'), '--port
 await new Promise((r) => setTimeout(r, 600));
 
 const blueprints = readdirSync(join(root, 'blueprints')).filter((d) => existsSync(join(root, 'blueprints', d, 'meta.json')));
-const targets = [`${base}#/`, `${base}#/charts`, `${base}#/styles`, `${base}#/pages`, `${base}#/palettes`, `${base}#/compare`, `${base}#/ui/command-palette`, `${base}#/ui/kanban-board`, `${base}#/ui/notification-center`, `${base}#/ui/prompt-composer`, `${base}#/ui/chat-thread`, `${base}#/ui/logo-marquee`, `${base}#/ui/carousel`, `${base}#/ui/swipe-actions`, `${base}#/ui/setup-checklist`, `${base}#/ui/pricing-tiers`, `${base}#/ui/sign-in-card`, `${base}#/ui/hero-split`, `${base}#/styles/mono`, `${base}#/styles/kraft`, `${base}#/ui/select-menu`, `${base}#/ui/json-viewer`, `${base}#/ui/contact-section`, `${base}#/ui/uptime-bars`, `${base}#/ui/month-calendar`, `${base}#/ui/order-summary`, `${base}#/ui/product-card`, `${base}#/ui/search-results`, `${base}#/styles/tonal`, `${base}#/styles/system`, `${base}#/styles/noir`, `${base}#/styles/ticker`, `${base}#/ui/flyout-menu`, `${base}#/ui/navbar-simple`, `${base}#/ui/app-topbar`, `${base}#/ui/article-layout`, `${base}#/ui/before-after`, `${base}#/charts/leaderboard-table`, `${base}#/ui/settings-list`, `${base}#/ui/api-key-field`, `${base}#/ui/team-members`, `${base}#/ui/danger-zone`, `${base}#/ui/usage-meters`, `${base}#/styles/ledger`, `${base}#/styles/volt`, `${base}#/styles/civic`, `${base}#/charts/treemap`, `${base}#/charts/gantt-chart`, ...blueprints.map((b) => `${base}blueprints/${b}/`)];
+const targets = [`${base}#/`, `${base}#/charts`, `${base}#/styles`, `${base}#/pages`, `${base}#/palettes`, `${base}#/compare`, `${base}#/ui/command-palette`, `${base}#/ui/kanban-board`, `${base}#/ui/notification-center`, `${base}#/ui/prompt-composer`, `${base}#/ui/chat-thread`, `${base}#/ui/logo-marquee`, `${base}#/ui/carousel`, `${base}#/ui/swipe-actions`, `${base}#/ui/setup-checklist`, `${base}#/ui/pricing-tiers`, `${base}#/ui/sign-in-card`, `${base}#/ui/hero-split`, `${base}#/styles/mono`, `${base}#/styles/kraft`, `${base}#/ui/select-menu`, `${base}#/ui/json-viewer`, `${base}#/ui/contact-section`, `${base}#/ui/uptime-bars`, `${base}#/ui/month-calendar`, `${base}#/ui/order-summary`, `${base}#/ui/product-card`, `${base}#/ui/search-results`, `${base}#/styles/tonal`, `${base}#/styles/system`, `${base}#/styles/noir`, `${base}#/styles/ticker`, `${base}#/ui/flyout-menu`, `${base}#/ui/navbar-simple`, `${base}#/ui/app-topbar`, `${base}#/ui/article-layout`, `${base}#/ui/before-after`, `${base}#/charts/leaderboard-table`, `${base}#/ui/settings-list`, `${base}#/ui/api-key-field`, `${base}#/ui/team-members`, `${base}#/ui/danger-zone`, `${base}#/ui/usage-meters`, `${base}#/styles/ledger`, `${base}#/styles/volt`, `${base}#/styles/civic`, `${base}#/charts/treemap`, `${base}#/charts/gantt-chart`];
+const pages = blueprints.map((b) => `${base}blueprints/${b}/`);
+// Every page state a blueprint ships is audited too.
+for (const s of ['admin/?state=loading', 'admin/?state=empty', 'admin/?state=error', 'status/?state=incident', 'store/?state=sold-out', 'checkout/?state=error']) pages.push(`${base}blueprints/${s}`);
 mkdirSync(join(root, 'qa/artifacts'), { recursive: true });
-const args = [join(root, 'scripts/audit-ui.mjs'), ...targets, '--json', join(root, 'qa/artifacts/audit-report.json'), '--focus-limit', process.env.FOCUS_LIMIT ?? '400', ...process.argv.slice(2)];
-const res = spawnSync(process.execPath, args, { stdio: 'inherit', cwd: root });
+const common = ['--focus-limit', process.env.FOCUS_LIMIT ?? '400', ...process.argv.slice(2)];
+// Gallery views and element pages: element-level rules.
+const res = spawnSync(process.execPath, [join(root, 'scripts/audit-ui.mjs'), ...targets, '--json', join(root, 'qa/artifacts/audit-report.json'), ...common], { stdio: 'inherit', cwd: root });
+// Blueprints are whole pages, so they also face the page-level taste critic, and its warnings fail.
+const bp = spawnSync(process.execPath, [join(root, 'scripts/audit-ui.mjs'), ...pages, '--taste', '--strict', '--json', join(root, 'qa/artifacts/audit-blueprints.json'), ...common], { stdio: 'inherit', cwd: root });
 server.kill();
-process.exit(res.status ?? 1);
+process.exit(res.status || bp.status ? 1 : 0);

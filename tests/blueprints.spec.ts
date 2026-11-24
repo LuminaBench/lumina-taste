@@ -1,4 +1,4 @@
-// The 8 page blueprints: render, no overflow, one h1, re-skin across palettes and modes, key flows work.
+// The page blueprints: render, no overflow, one h1, re-skin across palettes and modes, key flows work.
 import { expect, test } from '@playwright/test';
 import { readdirSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ids = readdirSync(join(root, 'blueprints')).filter((d) => existsSync(join(root, 'blueprints', d, 'meta.json')));
 
-test('there are 8 blueprints', () => expect(ids.length).toBe(8));
+test('there are 13 blueprints', () => expect(ids.length).toBe(13));
 
 for (const id of ids) {
   for (const vp of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
@@ -96,4 +96,63 @@ test('gallery full-screen viewer loads and syncs the theme into the blueprint', 
   await expect.poll(() => page.locator('iframe[data-blueprint]').evaluate((f: HTMLIFrameElement) => f.contentDocument!.documentElement.dataset.palette)).toBe('linen-oxblood');
   await page.selectOption('#g-bp-switch', 'auth');
   await expect(page).toHaveURL(/#\/pages\/auth/);
+});
+
+test('admin: search, status filter, bulk bar and detail drawer', async ({ page }) => {
+  await page.goto('/blueprints/admin/');
+  await page.fill('#ad-q', 'kestrel');
+  await expect(page.locator('.ad-table tbody tr:visible')).toHaveCount(1);
+  await page.fill('#ad-q', 'zzz');
+  await expect(page.locator('#ad-nomatch')).toBeVisible();
+  await page.click('#ad-reset');
+  await page.click('#ad-status [data-value="invited"]');
+  await expect(page.locator('.ad-table tbody tr:visible')).toHaveCount(2);
+  await page.locator('.ad-table tbody tr:visible input[type="checkbox"]').first().check({ force: true });
+  await expect(page.locator('.ad-table [data-part="bar"]')).toBeVisible();
+  await page.locator('.ad-table tbody tr:visible [data-user]').first().click();
+  await expect(page.locator('#ad-drawer')).toBeVisible();
+  await expect(page.locator('#ad-d-role')).toHaveText('Viewer');
+});
+
+for (const [id, state, shows] of [['admin', 'loading', '[data-view="loading"]'], ['admin', 'empty', '[data-view="empty"]'], ['admin', 'error', '[data-view="error"]'], ['status', 'incident', '.sp-incident'], ['store', 'sold-out', '.sp-sold'], ['checkout', 'error', '.co-error']] as const) {
+  test(`${id} ?state=${state} shows its state and hides the ready view`, async ({ page }) => {
+    await page.goto(`/blueprints/${id}/?state=${state}`);
+    await expect(page.locator(shows)).toBeVisible();
+    for (const el of await page.locator('[data-view="ready"]').all()) await expect(el).toBeHidden();
+  });
+}
+
+test('admin error state: Try again returns to the table', async ({ page }) => {
+  await page.goto('/blueprints/admin/?state=error');
+  await page.click('[data-view="error"] [data-set-state="ready"]');
+  await expect(page.locator('.ad-table')).toBeVisible();
+});
+
+test('store: size and plan change the price on the button', async ({ page }) => {
+  await page.goto('/blueprints/store/');
+  await page.click('#sp-size [data-value="250"]');
+  await expect(page.locator('#sp-total')).toHaveText('£11.50');
+  await page.locator('input[name="plan"][value="sub"]').check({ force: true });
+  await expect(page.locator('#sp-total')).toHaveText('£10.35');
+  await page.locator('.sp-thumbs [data-shot="cup"]').click();
+  await expect(page.locator('#sp-stage')).toHaveAttribute('data-shot', 'cup');
+});
+
+test('checkout: delivery choice updates the summary and the Pay button', async ({ page }) => {
+  await page.goto('/blueprints/checkout/');
+  await expect(page.locator('#co-pay-total')).toHaveText('£161.95');
+  await page.locator('input[name="ship"][value="9.95"]').check({ force: true });
+  await expect(page.locator('#co-total')).toHaveText('£166.95');
+  await expect(page.locator('#co-pay-total')).toHaveText('£166.95');
+  await page.click('.co-pay');
+  await expect(page.locator('#co-email')).toBeFocused();
+});
+
+test('changelog filter and status bars', async ({ page }) => {
+  await page.goto('/blueprints/changelog/');
+  await page.click('#cl-filter [data-value="fixed"]');
+  await expect(page.locator('.cl-list li:visible')).toHaveCount(3);
+  await page.goto('/blueprints/status/');
+  await expect(page.locator('.lt-uptime ol').first().locator('li')).toHaveCount(90);
+  await expect(page.locator('.lt-uptime li[data-s="down"]')).toHaveCount(1);
 });

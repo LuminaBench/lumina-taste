@@ -9,6 +9,9 @@
 //   node scripts/audit-ui.mjs <url-or-file> [more urls…]
 //     --viewports desktop,mobile   --modes light,dark   --focus-limit 250
 //     --json report.json           --screenshots dir    --strict (warnings fail too)   --quiet
+//     --taste   page-level design checks (type scale, accent hues, radii, one primary per screen,
+//               reading measure, heading order, nested cards, section rhythm, focal point,
+//               placeholder copy, button labels) and a 0–100 taste score per run
 // Requires Playwright (`npm i -D @playwright/test && npx playwright install chromium`).
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -41,6 +44,7 @@ const focusLimit = +flag('focus-limit', '250');
 const jsonOut = flag('json', null);
 const shotDir = flag('screenshots', null);
 const strict = bool('strict');
+const tasteOn = bool('taste');
 const quiet = bool('quiet');
 const targets = argv.filter((a) => !a.startsWith('--'));
 if (!targets.length) {
@@ -129,12 +133,16 @@ const PAGE_CHECKS = (copyRules = []) => {
     if (!visible(el)) continue;
     // Inert thumbnails are scaled illustrations; the live versions are audited on their own pages.
     if (el.closest('[inert], [data-audit-ignore]')) continue;
+    // Content of a closed <details> is not shown, whatever its box says.
+    if (el.closest('details:not([open])') && !el.closest('summary')) continue;
     const range = document.createRange(); range.selectNodeContents(n);
     const rects = [...range.getClientRects()].filter((r) => r.width > 0.5 && r.height > 0.5);
     if (!rects.length) continue;
     const box = rects.reduce((a, r) => ({ left: Math.min(a.left, r.left), top: Math.min(a.top, r.top), right: Math.max(a.right, r.right), bottom: Math.max(a.bottom, r.bottom) }), { left: Infinity, top: Infinity, right: -Infinity, bottom: -Infinity });
     const seen = clipRect(el, box);
     if (seen.width <= 2 || seen.height <= 2) continue; // visually hidden or masked away
+    // Parked off the page on purpose (skip links before focus).
+    if (seen.right + scrollX <= 0 || seen.bottom + scrollY <= 0) continue;
     leaves.push({ el, text: t, rects, box, seen });
   }
 
@@ -160,6 +168,8 @@ const PAGE_CHECKS = (copyRules = []) => {
   }
 
   // 3. Overlapping text (text vs text; identical stacked layers are allowed)
+  const floatCache = new Map();
+  const floating = (el) => { if (floatCache.has(el)) return floatCache.get(el); let f = null; for (let e = el; e && e.nodeType === 1; e = e.parentElement) { const p = getComputedStyle(e).position; if (p === 'fixed' || p === 'sticky') { f = e; break; } } floatCache.set(el, f); return f; };
   // One box per rendered line, clipped like the text is, so wrapped inline runs never look like overlaps.
   const boxes = [];
   for (const l of leaves) for (const lr of l.rects) {
@@ -182,6 +192,8 @@ const PAGE_CHECKS = (copyRules = []) => {
       const area = ix * iy, small = Math.min(A.r.width * A.r.height, B.r.width * B.r.height);
       if (area < small * 0.2) continue;
       if (A.text === B.text && Math.abs(A.r.left - B.r.left) < 2 && Math.abs(A.r.top - B.r.top) < 2) continue; // stacked duplicate (flip cards)
+      // A fixed or sticky bar floats over scrolling content by design.
+      if (floating(A.el) !== floating(B.el)) continue;
       const id = [list[a], list[b]].sort().join('-');
       if (reported.has(id)) continue;
       reported.add(id);
@@ -304,6 +316,130 @@ const PAGE_CHECKS = (copyRules = []) => {
   return out;
 };
 
+
+// ------------------------------------------------------------------ page-level taste checks (--taste)
+// Judges the page as a whole, the way a designer squints at it: how many type sizes, accent hues and
+// corner radii it uses, whether one thing leads, whether text lines are readable, whether headings
+// nest, whether cards nest, whether sections keep one rhythm, and whether placeholder copy is left in.
+const TASTE_CHECKS = () => {
+  const out = [];
+  const add = (rule, el, message, severity = 'warning') => out.push({ rule, severity, selector: el ? sel(el) : null, message });
+  function sel(el) { const p = []; for (let e = el; e && e.nodeType === 1 && p.length < 4; e = e.parentElement) { let s = e.tagName.toLowerCase(); if (e.id) { p.unshift(s + '#' + e.id); break; } const c = [...e.classList].filter((x) => !x.startsWith('is-')).slice(0, 2); if (c.length) s += '.' + c.join('.'); p.unshift(s); } return p.join(' > '); }
+  const shown = (el) => { const r = el.getBoundingClientRect(); if (r.width < 2 || r.height < 2) return false; for (let e = el; e && e.nodeType === 1; e = e.parentElement) { const cs = getComputedStyle(e); if (cs.display === 'none' || cs.visibility === 'hidden' || +cs.opacity === 0) return false; } return !el.closest('[inert], [aria-hidden="true"], dialog:not([open]), [hidden]'); };
+  const skip = (el) => el.closest('svg, pre, code, kbd, samp, script, style, noscript, [data-audit-ignore], .lt-chart, [data-chart-stage]');
+  const leaves = [];
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const seen = new Set();
+  for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+    const el = n.parentElement; if (!el || seen.has(el) || !n.textContent.trim() || skip(el)) continue;
+    seen.add(el); if (shown(el)) leaves.push(el);
+  }
+  const ctx = document.createElement('canvas').getContext('2d');
+  const toRgb = (c) => { ctx.fillStyle = '#000'; ctx.fillStyle = c; ctx.fillRect(0, 0, 1, 1); const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data; ctx.clearRect(0, 0, 1, 1); return [r, g, b, a / 255]; };
+  const lab = ([r, g, b]) => { const f = (v) => { v /= 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }; const R = f(r), G = f(g), B = f(b);
+    const l = Math.cbrt(0.4122214708 * R + 0.5363325363 * G + 0.0514459929 * B), m = Math.cbrt(0.2119034982 * R + 0.6806995451 * G + 0.1073969566 * B), s = Math.cbrt(0.0883024619 * R + 0.2817188376 * G + 0.6299787005 * B);
+    const L = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, A = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, Bb = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
+    return { L, C: Math.hypot(A, Bb), h: ((Math.atan2(Bb, A) * 180) / Math.PI + 360) % 360 }; };
+
+  // 1. Type scale: a calm page uses 5–7 sizes.
+  const sizes = new Map();
+  for (const el of leaves) { const fs = Math.round(parseFloat(getComputedStyle(el).fontSize)); sizes.set(fs, (sizes.get(fs) ?? 0) + 1); }
+  // Sizes used once (a badge, a footnote) do not make a scale; count the ones used repeatedly.
+  // Sizes within 8% of each other (13 and 14px) read as one step.
+  const used = [...sizes].filter(([, n]) => n > 1).map(([s]) => s).sort((a, b) => a - b);
+  const steps = used.reduce((acc, s) => { const last = acc.at(-1); if (last && s / last.at(-1) < 1.08) last.push(s); else acc.push([s]); return acc; }, []);
+  if (steps.length > 8) add('taste-type-scale', null, `${steps.length} distinct type steps in repeated use (${used.join(', ')}px). Use 5–7 steps from --text-* and drop the rest.`);
+
+  // 2. Accent hues: one accent plus status colours. Count saturated hues used on text, fills and borders outside charts.
+  const hues = new Map();
+  for (const el of document.querySelectorAll('body *')) {
+    if (skip(el) || el.closest('img, picture, video, canvas, [data-swatch], .lt-avatar, [data-part="avatar"], [data-part="swatch"]')) continue;
+    const cs = getComputedStyle(el);
+    for (const c of [cs.color, cs.backgroundColor, cs.borderTopColor]) {
+      const rgb = toRgb(c); if (rgb[3] < 0.5) continue;
+      const k = lab(rgb); if (k.C < 0.09 || k.L < 0.25 || k.L > 0.97) continue;
+      const b = Math.round(k.h / 40) % 9; if (!hues.has(b)) { if (shown(el)) hues.set(b, el); }
+    }
+  }
+  if (hues.size > 4) add('taste-colour-count', [...hues.values()][4], `${hues.size} different saturated hues. Keep one accent plus status colours; make the rest neutral.`);
+
+  // 3. Corner radii: pills and circles aside, one or two radii read as a system.
+  const radii = new Map();
+  for (const el of document.querySelectorAll('body *')) {
+    if (skip(el)) continue;
+    const cs = getComputedStyle(el); const r = parseFloat(cs.borderTopLeftRadius); if (!r) continue;
+    const box = el.getBoundingClientRect(); if (box.width < 24 || box.height < 16 || r >= Math.min(box.width, box.height) / 2 - 1) continue;
+    const framed = cs.borderTopStyle !== 'none' && parseFloat(cs.borderTopWidth) > 0 || toRgb(cs.backgroundColor)[3] > 0.05; if (!framed || !shown(el)) continue;
+    radii.set(Math.round(r), el);
+  }
+  if (radii.size > 5) add('taste-radius-mix', null, `${radii.size} corner radii (${[...radii.keys()].sort((a, b) => a - b).join(', ')}px). Use --radius-sm/md/lg/xl only.`);
+
+  // 4. One primary action per screen: filled, saturated buttons in the same viewport band.
+  const primaries = [...document.querySelectorAll('button, a, [role="button"], input[type="submit"]')].filter((el) => {
+    if (skip(el) || !shown(el)) return false;
+    const cs = getComputedStyle(el); const bg = toRgb(cs.backgroundColor); if (bg[3] < 0.9) return false;
+    const k = lab(bg); const r = el.getBoundingClientRect();
+    return k.C >= 0.08 && r.height >= 28 && r.width >= 64 && !el.closest('nav, header, [role="tablist"], [role="radiogroup"], .lt-segmented, [data-part="tabs"]') && el.dataset.tone !== 'danger';
+  });
+  const H = innerHeight;
+  for (let i = 0; i < primaries.length; i++) {
+    const a = primaries[i].getBoundingClientRect().top + scrollY;
+    const band = primaries.filter((p) => { const t = p.getBoundingClientRect().top + scrollY; return t >= a && t < a + H * 0.6; });
+    if (band.length > 2) { add('taste-primary-count', primaries[i], `${band.length} filled accent buttons within one screen. Keep one primary; make the others secondary or ghost.`); break; }
+  }
+
+  // 5. Reading measure: body text lines over ~90 characters are tiring.
+  for (const el of document.querySelectorAll('p, li, blockquote, dd')) {
+    if (skip(el) || !shown(el) || el.textContent.trim().length < 180) continue;
+    const cs = getComputedStyle(el); const fs = parseFloat(cs.fontSize);
+    const chars = el.getBoundingClientRect().width / (fs * 0.5);
+    if (chars > 95) { add('taste-measure', el, `Text line is about ${Math.round(chars)} characters wide. Cap reading text at max-width: var(--measure) (68ch).`); break; }
+  }
+
+  // 6. Headings: one h1, no skipped levels.
+  // Visually hidden headings count: screen readers navigate by them.
+  const present = (el) => { for (let e = el; e && e.nodeType === 1; e = e.parentElement) { const cs = getComputedStyle(e); if (cs.display === 'none' || cs.visibility === 'hidden') return false; } return !el.closest('[hidden], [inert], [aria-hidden="true"]'); };
+  const hs = [...document.querySelectorAll('h1, h2, h3, h4, h5, h6')].filter((h) => present(h) && !skip(h) && !h.closest('dialog, [role="dialog"], [popover]'));
+  const h1s = hs.filter((h) => h.tagName === 'H1');
+  if (h1s.length > 1) add('taste-heading-order', h1s[1], `${h1s.length} h1 headings. A page has one; use h2 for sections.`);
+  if (hs.length && !h1s.length && hs.length > 2) add('taste-heading-order', hs[0], 'No h1. Give the page one title.');
+  for (let i = 1; i < hs.length; i++) { const a = +hs[i - 1].tagName[1], b = +hs[i].tagName[1]; if (b > a + 1) { add('taste-heading-order', hs[i], `Heading jumps from h${a} to h${b}. Use h${a + 1}, then style it smaller if needed.`); break; } }
+
+  // 7. Cards inside cards.
+  const card = (el) => { const cs = getComputedStyle(el); const r = el.getBoundingClientRect(); if (r.width < 160 || r.height < 80) return false; const framed = (cs.borderTopStyle !== 'none' && parseFloat(cs.borderTopWidth) > 0 && cs.borderLeftStyle !== 'none' && parseFloat(cs.borderLeftWidth) > 0) || cs.boxShadow !== 'none'; return framed && parseFloat(cs.borderTopLeftRadius) >= 6 && toRgb(cs.backgroundColor)[3] > 0.5; };
+  let nested = 0;
+  for (const el of document.querySelectorAll('main *, body > section *, article *')) {
+    if (nested > 0 || skip(el) || el.closest('dialog, [popover], [role="dialog"], [data-stage], [data-mock], [data-part="frame"], [data-part="shot"], .lt-table-wrap, form, figure, [data-audit-ignore]') || !card(el) || !shown(el)) continue;
+    for (let p = el.parentElement, d = 0; p && p !== document.body && d < 4; p = p.parentElement, d++) if (card(p) && p.getBoundingClientRect().width - el.getBoundingClientRect().width < 80) { add('taste-nested-card', el, 'A framed card sits directly inside another framed card. Use a divider, a heading or plain spacing instead.'); nested++; break; }
+  }
+
+  // 8. Section rhythm: top-level bands share one or two vertical paddings.
+  const bands = [...document.querySelectorAll('main > section, body > section, main > div > section, body > main > *')].filter((s) => shown(s) && s.getBoundingClientRect().height > 120);
+  const pads = new Set(bands.map((s) => Math.round(parseFloat(getComputedStyle(s).paddingTop) / 8) * 8).filter((v) => v >= 24));
+  if (pads.size > 3) add('taste-rhythm', null, `Sections use ${pads.size} different top paddings (${[...pads].sort((a, b) => a - b).join(', ')}px). Use --section-y for every band.`);
+
+  // 9. Focal point: in the first screen, one text block should be clearly the largest.
+  // Figures in a KPI row are meant to match each other, so numbers do not compete with the headline.
+  const first = leaves.filter((el) => { const r = el.getBoundingClientRect(); return r.top < innerHeight && r.bottom > 0 && !/^[\s\d.,:%£$€+−\-–kKmMbB×/]+$/.test(el.textContent); });
+  if (first.length > 4) {
+    const fsOf = (el) => parseFloat(getComputedStyle(el).fontSize);
+    const max = Math.max(...first.map(fsOf));
+    const tops = first.filter((el) => fsOf(el) >= max * 0.92).map((el) => el.closest('h1, h2, h3, p, li, a, button, div') ?? el);
+    if (new Set(tops).size > 3 && max < 28) add('taste-focal', tops[0], `${new Set(tops).size} text blocks share the largest size (${Math.round(max)}px) in the first screen. Make one headline clearly bigger so the eye knows where to start.`);
+  }
+
+  // 10. Placeholder and template content.
+  const PH = /\blorem ipsum\b|\bdolor sit amet\b|\bjohn doe\b|\bjane doe\b|\bacme\b|\bfeature (one|two|three|1|2|3)\b|\byour (title|headline|text) here\b|\bproduct name\b|\bcompany name\b|\btodo\b|\bplaceholder\b|\bexample\.com\b|\b123 main st/i;
+  for (const el of leaves) { if (el.closest('input, textarea, [data-audit-ignore]')) continue; const m = PH.exec(el.textContent); if (m) { add('taste-placeholder', el, `Placeholder content: “${m[0]}”. Replace it with real copy or realistic sample data.`, 'error'); break; } }
+
+  // 11. Button labels: short verbs, not sentences.
+  for (const el of document.querySelectorAll('button, a.lt-btn, [role="button"]')) {
+    if (skip(el) || !shown(el) || el.hasAttribute('aria-expanded') || el.closest('summary, [role="tablist"], [role="listbox"], [role="menu"]')) continue; const words = el.textContent.trim().split(/\s+/).filter(Boolean);
+    if (words.length > 5) { add('taste-button-label', el, `Button label has ${words.length} words (“${el.textContent.trim().slice(0, 40)}”). Use a verb and an object: “Export report”.`); break; }
+  }
+  return out;
+};
+
 // Interactive controls to test for dead handlers / focus rings.
 const COLLECT_CONTROLS = (limit) => {
   const SEL = 'a, button, input:not([type="hidden"]), select, textarea, summary, [role="button"], [role="tab"], [role="menuitem"], [role="menuitemcheckbox"], [role="option"], [role="switch"], [role="checkbox"], [role="radio"], [role="link"], [role="slider"], [role="treeitem"], [tabindex]:not([tabindex="-1"])';
@@ -338,6 +474,7 @@ async function auditOne(browser, url, vpName, mode) {
   });
   if (process.env.LT_AUDIT_DEBUG) await page.evaluate(() => (window.__ltDebug = true));
   const findings = (await page.evaluate(PAGE_CHECKS, COPY_RULES.map(([re, why, fix]) => [re.source, re.flags, why, fix]))).map((f) => ({ ...f, viewport: vpName, mode }));
+  if (tasteOn) for (const f of await page.evaluate(TASTE_CHECKS)) findings.push({ ...f, viewport: vpName, mode });
   for (const e of runtimeErrors) findings.push({ rule: 'runtime-error', severity: 'error', selector: null, message: e, viewport: vpName, mode });
 
   // Dead controls: no click/key/pointer listener on the control or any ancestor, no native behaviour.
@@ -416,10 +553,12 @@ async function auditOne(browser, url, vpName, mode) {
       return { x: x0, y: y0, width: x1 - x0, height: y1 - y0 };
     }, i);
     if (!box || box.width < 4 || box.height < 4) continue;
-    const before = await page.screenshot({ clip: box });
+    let before;
+    try { before = await page.screenshot({ clip: box }); } catch { continue; } // clip outside the image (page wider than the screen): overflow reports it
     const label = await page.evaluate((k) => { const el = window.__ltAudit.controls[k]; el.focus({ focusVisible: true, preventScroll: true }); return document.activeElement === el ? null : 'nofocus'; }, i);
     if (label === 'nofocus') continue;
-    const after = await page.screenshot({ clip: box });
+    let after;
+    try { after = await page.screenshot({ clip: box }); } catch { continue; }
     if (before.equals(after)) {
       if (process.env.LT_AUDIT_DEBUG) { mkdirSync('qa/artifacts/focus-debug', { recursive: true }); writeFileSync(`qa/artifacts/focus-debug/${i}-${vpName}-${mode}.png`, after); console.log('focus debug', i, JSON.stringify(box), await page.evaluate(() => [scrollY, document.activeElement?.outerHTML.slice(0, 80), getComputedStyle(document.activeElement).outlineStyle, document.documentElement.dataset.modality])); }
       const s = await page.evaluate((k) => { const el = window.__ltAudit.controls[k]; return `${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''} “${(el.getAttribute('aria-label') || el.textContent || el.placeholder || '').trim().slice(0, 30)}”`; }, i);
@@ -436,6 +575,13 @@ async function auditOne(browser, url, vpName, mode) {
   return { findings, controls: meta.count, focusChecked: focusIdx.length };
 }
 
+/** 100 minus weighted findings: errors cost 12, taste warnings 6, other warnings 3. One count per rule and message. */
+function tasteScore(findings) {
+  let s = 100; const seen = new Set();
+  for (const f of findings) { const k = f.rule + f.message; if (seen.has(k)) continue; seen.add(k); s -= f.severity === 'error' ? 12 : f.rule.startsWith('taste-') ? 6 : 3; }
+  return Math.max(0, s);
+}
+
 const browser = await chromium.launch();
 const report = [];
 let errors = 0, warnings = 0;
@@ -446,11 +592,12 @@ for (const t of targets) {
     // De-duplicate identical findings (same rule + selector + message).
     const seen = new Set();
     const uniq = r.findings.filter((f) => { const k = `${f.rule}|${f.selector}|${f.message}`; if (seen.has(k)) return false; seen.add(k); return true; });
-    report.push({ url, viewport: vp, mode, controls: r.controls, focusChecked: r.focusChecked, findings: uniq });
     const e = uniq.filter((f) => f.severity === 'error').length, w = uniq.length - e;
+    const score = tasteScore(uniq);
+    report.push({ url, viewport: vp, mode, controls: r.controls, focusChecked: r.focusChecked, score, findings: uniq });
     errors += e; warnings += w;
     if (!quiet || e || w) {
-      console.log(`${e ? '✗' : w ? '!' : '✓'} ${url}  [${vp} ${VIEWPORTS[vp].width}×${VIEWPORTS[vp].height}, ${mode}]  ${e} errors, ${w} warnings · ${r.controls} controls, ${r.focusChecked} focus rings checked`);
+      console.log(`${e ? '✗' : w ? '!' : '✓'} ${url}  [${vp} ${VIEWPORTS[vp].width}×${VIEWPORTS[vp].height}, ${mode}]  ${e} errors, ${w} warnings · ${r.controls} controls, ${r.focusChecked} focus rings checked${tasteOn ? ` · taste ${score}/100` : ''}`);
       const byRule = {};
       for (const f of uniq) (byRule[f.rule] ??= []).push(f);
       for (const [rule, list] of Object.entries(byRule)) {
@@ -462,6 +609,7 @@ for (const t of targets) {
   }
 }
 await browser.close();
-if (jsonOut) writeFileSync(jsonOut, JSON.stringify({ errors, warnings, report }, null, 2));
-console.log(`\n${errors ? '✗' : '✓'} audit-ui: ${errors} errors, ${warnings} warnings across ${report.length} runs`);
+const avg = report.length ? Math.round(report.reduce((a, r) => a + r.score, 0) / report.length) : 0;
+if (jsonOut) writeFileSync(jsonOut, JSON.stringify({ errors, warnings, score: avg, report }, null, 2));
+console.log(`\n${errors ? '✗' : '✓'} audit-ui: ${errors} errors, ${warnings} warnings across ${report.length} runs${tasteOn ? ` · taste score ${avg}/100` : ''}`);
 process.exit(errors || (strict && warnings) ? 1 : 0);

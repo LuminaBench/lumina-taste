@@ -1,0 +1,24 @@
+.sp-top { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-md); padding-block: var(--space-5); }
+.sp-brand { font-family: var(--font-display); font-weight: 700; color: var(--text-primary); text-decoration: none; }
+.sp-brand span { color: var(--text-muted); font-weight: 500; }
+.sp { display: grid; gap: var(--space-6); padding-block: var(--space-5) var(--space-8); }
+.sp h1 { margin: 0; }
+.sp-now { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-5); border-radius: var(--radius-lg); background: var(--status-positive-soft); color: var(--text-primary); }
+.sp-now strong { font-size: var(--step-1); }
+.sp-now p { margin: 2px 0 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+.sp-icon { display: grid; color: var(--status-positive); }
+.lt-uptime.lt-uptime h2 { margin: 0; font-size: var(--step-0); font-weight: 650; }
+.sp-legend { display: flex; align-items: center; gap: 6px 12px; flex-wrap: wrap; margin: 0; color: var(--text-muted); font-size: var(--text-ui-xs); }
+.sp-legend span { display: inline-block; width: 10px; height: 10px; margin-right: -6px; border-radius: 2px; background: var(--status-positive); }
+.sp-legend [data-s="warn"] { background: var(--status-warning); }
+.sp-legend [data-s="down"] { background: var(--status-negative); }
+.sp-section { display: grid; gap: var(--space-4); }
+.sp-section h2 { margin: 0; }
+.sp-subscribe { padding: var(--space-6); border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
+.sp-subscribe p { margin: 4px 0 0; }
+.sp-form { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.sp-form input { flex: 1 1 220px; height: var(--control-h); padding: 0 12px; border: var(--bw-strong) solid var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-1); color: var(--text-primary); font: inherit; }
+.sp-form input:focus-visible { outline: none; border-color: var(--accent-solid); box-shadow: var(--field-ring); }
+.sp-msg { flex-basis: 100%; margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+.sp-msg:empty { display: none; }
+.lt-footer-min { padding-block: var(--space-6); }

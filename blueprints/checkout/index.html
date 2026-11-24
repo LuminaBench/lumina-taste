@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" data-palette="olive-stone" data-mode="light" data-type="humanist" data-density="balanced" data-radius="balanced" data-motion="snappy">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkout · Moss & Oak</title>
+  <meta name="description" content="Blueprint: a one-page checkout with contact, address, delivery choice, payment, an order summary and a declined-card state built with lumina-taste.">
+</head>
+<body>
+  <a class="bp-skip" href="#main">Skip to content</a>
+  <header class="co-top bp-container">
+    <a class="co-brand" href="#shop">Moss &amp; Oak</a>
+    <p class="co-secure"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg> Secure checkout</p>
+  </header>
+  <main id="main" class="bp-container co">
+    <h1 class="lt-h2">Checkout</h1>
+    <ol class="co-steps" aria-label="Checkout steps"><li aria-current="step"><span>1</span>Details</li><li><span>2</span>Delivery</li><li><span>3</span>Payment</li></ol>
+    <div class="co-split">
+      <form class="co-form" id="co-form" data-lt="text-field" novalidate>
+        <aside class="lt-callout co-error" data-tone="negative" data-view="error" role="alert" hidden>
+          <span data-part="icon"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 4.3 2.9 17.2A2 2 0 0 0 4.6 20h14.8a2 2 0 0 0 1.7-2.8L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9.5v4M12 17h.01"/></svg></span>
+          <div><strong>Your card was declined</strong><p>Your bank did not approve the payment. Nothing was charged. Check the card number and expiry date, or use another card.</p></div>
+        </aside>
+        <section class="co-sec" aria-labelledby="co-contact-h">
+          <h2 id="co-contact-h">Contact</h2>
+          <div class="lt-field"><input id="co-email" type="email" required placeholder=" " autocomplete="email" aria-describedby="co-email-m"><label for="co-email">Email</label><span data-part="valid" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><p id="co-email-m" data-part="message" data-help="For your receipt and delivery updates.">For your receipt and delivery updates.</p></div>
+        </section>
+        <section class="co-sec" aria-labelledby="co-addr-h">
+          <h2 id="co-addr-h">Delivery address</h2>
+          <div class="lt-field"><input id="co-name" type="text" required placeholder=" " autocomplete="name" aria-describedby="co-name-m"><label for="co-name">Full name</label><span data-part="valid" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><p id="co-name-m" data-part="message" data-help=""></p></div>
+          <div class="lt-field"><input id="co-line1" type="text" required placeholder=" " autocomplete="address-line1" aria-describedby="co-line1-m"><label for="co-line1">Address</label><span data-part="valid" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><p id="co-line1-m" data-part="message" data-help=""></p></div>
+          <div class="co-row">
+            <div class="lt-field"><input id="co-city" type="text" required placeholder=" " autocomplete="address-level2" aria-describedby="co-city-m"><label for="co-city">Town or city</label><span data-part="valid" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><p id="co-city-m" data-part="message" data-help=""></p></div>
+            <div class="lt-field"><input id="co-post" type="text" required placeholder=" " autocomplete="postal-code" aria-describedby="co-post-m"><label for="co-post">Postcode</label><span data-part="valid" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><p id="co-post-m" data-part="message" data-help=""></p></div>
+          </div>
+        </section>
+        <fieldset class="lt-radio-cards co-sec co-ship">
+          <legend>Delivery</legend>
+          <label data-part="card"><input type="radio" name="ship" value="4.95" checked><span data-part="check" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><span data-part="title">Standard</span><span data-part="desc">Thursday 27 – Monday 1 Dec</span><span data-part="price"><data value="4.95">£4.95</data></span></label>
+          <label data-part="card"><input type="radio" name="ship" value="9.95"><span data-part="check" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><span data-part="title">Next day</span><span data-part="desc">Wednesday 26 Nov, order by 8pm</span><span data-part="price"><data value="9.95">£9.95</data></span></label>
+          <label data-part="card"><input type="radio" name="ship" value="0"><span data-part="check" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><span data-part="title">Collect from Bristol</span><span data-part="desc">Ready in 2 hours</span><span data-part="price"><data value="0">Free</data></span></label>
+        </fieldset>
+        <section class="co-sec" aria-labelledby="co-pay-h">
+          <h2 id="co-pay-h">Payment</h2>
+          <div class="lt-field"><input id="co-card" type="text" required placeholder=" " autocomplete="cc-number" aria-describedby="co-card-m" inputmode="numeric" data-card><label for="co-card">Card number</label><span data-part="valid" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><p id="co-card-m" data-part="message" data-help=""></p></div>
+          <div class="co-row">
+            <div class="lt-field"><input id="co-exp" type="text" required placeholder=" " autocomplete="cc-exp" aria-describedby="co-exp-m"><label for="co-exp">Expiry (MM/YY)</label><span data-part="valid" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><p id="co-exp-m" data-part="message" data-help=""></p></div>
+            <div class="lt-field"><input id="co-cvc" type="text" required placeholder=" " autocomplete="cc-csc" aria-describedby="co-cvc-m" inputmode="numeric"><label for="co-cvc">Security code</label><span data-part="valid" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><p id="co-cvc-m" data-part="message" data-help="3 digits on the back.">3 digits on the back.</p></div>
+          </div>
+        </section>
+        <button type="submit" class="lt-btn co-pay" data-variant="primary" data-size="lg"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><span data-part="label">Pay <span id="co-pay-total">£162.15</span></span></button>
+        <p class="co-fine">You will not be charged until you press Pay. Returns are free within 30 days.</p>
+      </form>
+      <section class="lt-order co-summary" data-lt="order-summary" aria-labelledby="lt-os-title">
+        <h2 id="lt-os-title">Order summary</h2>
+        <ul><li><span><strong>Oak side table</strong><span>Natural oil · 1</span></span><data value="120.00">£120.00</data></li><li><span><strong>Linen cushion cover</strong><span>Clay · 2 × £18.50</span></span><data value="37.00">£37.00</data></li></ul>
+        <form data-part="promo"><label for="lt-os-code" class="lt-visually-hidden">Promo code</label><input id="lt-os-code" placeholder="Promo code" autocomplete="off"><button type="submit" class="lt-btn" data-variant="secondary" data-size="sm">Apply</button></form>
+        <p data-part="promo-msg" aria-live="polite"></p>
+        <dl>
+          <div><dt>Subtotal</dt><dd data-part="subtotal">£157.00</dd></div>
+          <div data-part="discount-row" hidden><dt>Discount</dt><dd data-part="discount">−£0.00</dd></div>
+          <div><dt>Delivery</dt><dd id="co-ship-cost">£4.95</dd></div>
+          <div hidden><dt>VAT (20%)</dt><dd data-part="vat">£0.00</dd></div>
+          <div data-part="total-row"><dt>Total, incl. VAT</dt><dd data-part="total" id="co-total">£161.95</dd></div>
+        </dl>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

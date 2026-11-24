@@ -19,7 +19,20 @@ Read `references/anti-slop-rules.md` once per session. The short version:
 4. **Numbers are tabular** (`font-variant-numeric: tabular-nums`) in tables, KPIs, timers, prices and axes.
 5. **Every control works by keyboard** and shows a `:focus-visible` ring. Motion uses `--dur-*` / `--ease-*` and collapses under reduced motion.
 6. **Plain copy.** No hype words, clichés or exclamation marks; `node scripts/lint-copy.mjs <dir>` must pass. Say what the thing does in one short sentence.
-7. **Finish with the auditor.** `node scripts/audit-ui.mjs <url>` must report 0 errors.
+7. **Finish with the auditor.** `node scripts/audit-ui.mjs <url> --taste` must report 0 errors and a taste score of 90 or more.
+
+## The loop for any page: compose, build, critique
+
+Components are rarely what makes a page look generated; the plan is. Run this loop for every page or screen:
+
+1. **Compose.** `node scripts/compose.mjs "<the user's brief in one line>"` prints a page plan: the design brief (audience, product, primary action, reading pattern, layout, density), a taste profile chosen for the domain, the sections in order with real catalog ids and a copy formula for each, the states to build, what to avoid, and the install command. Add `--json` to read it as data, `--type <id>` to force a page type.
+2. **Confirm the brief.** If the user's request does not say who the page is for or what the one action is, ask once. Otherwise state your brief in two lines and go.
+3. **Install and build** exactly what the plan lists. Start from its blueprint when it names one. Follow the section order; skip optional sections you cannot fill with real content rather than inventing it.
+4. **Write real copy** with the plan's formulas: the product's name, real numbers, specific benefits. Never ship lorem ipsum, "Acme", "John Doe" or "Feature one"; the critic fails them.
+5. **Build the states** the plan lists (loading, empty, error) as well as the happy path.
+6. **Critique.** `node scripts/audit-ui.mjs <url> --taste` checks the page like a designer would: type steps, accent hues, corner radii, one primary per screen, reading width, heading order, cards inside cards, section rhythm, a clear first thing to look at, placeholder copy and long button labels. Fix every error, then warnings, until the score is 90 or more. Then take screenshots at 390px and 1440px and look at them.
+
+`evals/evals.json` holds 30 real briefs; `node scripts/eval-score.mjs <output> --brief <slug>` scores any page you build for one of them (audit, taste, brief checks and hygiene, out of 100). The blueprints score 99 on average as reference answers.
 
 ## Find the right thing first
 
@@ -42,13 +55,13 @@ When two elements sound alike (tooltip or popover, modal or drawer, checkbox or 
 
 ## Workflow A · Greenfield app
 
-1. **Pick the taste** from the brief (or ask once if the brief is silent on mood):
+1. **Pick the taste.** `compose.mjs` proposes all of this from the brief; adjust it here (or ask once if the brief is silent on mood):
    - Palette: `references/palettes.md` (consumer, dev-tool, editorial, data). Default `slate-forest`.
    - Typography: `tokens/typography/source.json` `use` field. Default `precision`.
    - Density: `spacious` for marketing/onboarding, `balanced` for products, `dense` for admin/trading.
    - Radius `sharp | balanced | soft`; motion `snappy | calm | reduced`.
    - Style (optional): one of 35 looks in `tokens/styles/source.json` (studio, swiss, editorial, neobrutal, terminal, glass, soft, clay, retro, blueprint, lucid, flat, minimal, paper, elevated, newsprint, mono, graphite, atelier, nordic, kraft, midnight, playful, enterprise, zen, tonal, system, noir, bauhaus, ticker, linen, signal, ledger, volt, civic). `--style swiss` brings its palette, mode, type and radius; explicit flags still win. Pick a style only when the brief names a mood; default is none.
-2. **Install only what the page needs** (writes `taste-profile.json`, copies tokens + chosen files + their imports, nothing else):
+2. **Install only what the page needs** (writes `taste-profile.json`, copies tokens + chosen files + their imports, nothing else). `--framework static` is for plain HTML with no build step: it writes one `lumina.css`, one `lumina.js` (enhances every `[data-lt]` element on load, charts on `lumina.charts`) and `snippets/<id>.html` to paste; pages work from `file://`. `vanilla` copies the TypeScript sources for a bundler; `react` copies the `.react.tsx` wrappers.
    ```sh
    node scripts/install-taste.mjs --project /abs/app --dest src/ui --framework react \
      --palette navy-sand --type swiss --density balanced \
@@ -141,6 +154,17 @@ node scripts/lint-copy.mjs src/                                # hype words, cli
 | `covered-control` | Something sits on top of it: z-index, `pointer-events`, sticky headers. |
 | `slop-copy` | Rewrite the sentence plainly: what it does, for whom, with a number if you have one. See section 9 of `references/anti-slop-rules.md`. |
 | `slop-*` | See `references/anti-slop-rules.md`. |
+| `taste-type-scale` (`--taste`) | Collapse sizes to 5–7 `--text-*` steps; sizes within 8% count as one. |
+| `taste-colour-count` | One accent plus status colours; everything else neutral. |
+| `taste-radius-mix` | Use `--radius-sm/md/lg/xl` only. |
+| `taste-primary-count` | One filled accent button per screen; others secondary or ghost. |
+| `taste-measure` | Reading text `max-width: var(--measure)`. |
+| `taste-heading-order` | One h1; no skipped levels (visually hidden headings count). |
+| `taste-nested-card` | Replace the inner card with a divider or heading. Product mockups can opt out with `data-mock`. |
+| `taste-rhythm` | Every band uses `--section-y`. |
+| `taste-focal` | Make one headline clearly larger than everything else in the first screen. |
+| `taste-placeholder` | Error: replace with real copy or realistic sample data. |
+| `taste-button-label` | Verb + object, five words at most. |
 
 Requires Playwright in the skill or the project (`npm i -D @playwright/test && npx playwright install chromium`). Exit code 1 on any error.
 
@@ -151,7 +175,8 @@ Requires Playwright in the skill or the project (`npm i -D @playwright/test && n
 - Vanilla: paste the HTML, then `enhance(el)` or `autoEnhance(document, { accordion: enhance })` for every `[data-lt]`.
 - Events: components emit `lt-change` (detail = new state); React wrappers surface it as `onChange` / `onX` props.
 - Overlays use native `<dialog>`, the Popover API and CSS anchor positioning with a JS fallback.
-- Families: controls (33), navigation (26), feedback (17), overlays (18), data (32), motion (10), sections (20: heroes, features, pricing, testimonials, FAQ, CTA, stats, newsletter, how it works, team, sign-in, 404, integrations, contact, blog, feature rows, logo cloud, article, before/after). Full list: `catalog.json` or `--list`.
+- Overriding a component's own spacing or size: component rules live in `@scope`, which wins ties against plain page CSS. Use two classes (`.lt-bulk.users-table { padding-bottom: 0 }`) or set the component's custom properties instead of fighting it with `!important`.
+- Families: controls (36), navigation (26), feedback (17), overlays (18), data (35), motion (10), sections (20: heroes, features, pricing, testimonials, FAQ, CTA, stats, newsletter, how it works, team, sign-in, 404, integrations, contact, blog, feature rows, logo cloud, article, before/after). Full list: `catalog.json` or `--list`.
 
 ## Tokens at a glance
 
@@ -165,7 +190,7 @@ Requires Playwright in the skill or the project (`npm i -D @playwright/test && n
 | `--chart-1…8` | Categorical series, CVD-safe order |
 | `--space-1…9`, `--gap-xs…xl`, `--control-h`, `--radius-*`, `--dur-*`, `--ease-*`, `--shadow-sm/md/overlay` | Rhythm, density, shape, motion, elevation |
 
-Palettes are generated by `node scripts/build-tokens.mjs` from `tokens/palettes/source.json` and verified by `node scripts/test-contrast.mjs` (2,196 checks across 36 themes). To add a palette, add seeds there, rebuild and re-test; never hand-edit generated CSS.
+Palettes are generated by `node scripts/build-tokens.mjs` from `tokens/palettes/source.json` and verified by `node scripts/test-contrast.mjs` (2,268 checks across 36 themes). To add a palette, add seeds there, rebuild and re-test; never hand-edit generated CSS.
 
 ## Live gallery
 
@@ -181,10 +206,12 @@ Six views: Elements (every pattern with a live, contained demo, numbered parts, 
 SKILL.md                     this file
 catalog.json                 every pattern/chart/blueprint/palette with aliases
 engine/profiles/             taste profile engine, schema, default profile
+engine/compose/              page types, domains and moods behind compose.mjs
+evals/                       30 briefs (evals.json), fixtures and reference scores
 tokens/                      base.css, palettes/*.css (+ source.json), typography/, styles/
 components/ui/<family>/      162 patterns (html, css, ts, react.tsx)
-components/charts/           core/ + 38 chart engines (+ React wrappers)
+components/charts/           core/ + 42 chart engines (+ React wrappers)
 blueprints/                  8 page blueprints
 references/                  anti-slop-rules, page-flow, chart-selection, which-one, palettes, harvest-log
-scripts/                     search, install-taste, audit-ui, audit-all, lint-copy, build-tokens, test-contrast, build, serve
+scripts/                     compose, search, install-taste, audit-ui, audit-all, lint-copy, eval-score, eval-run, build-tokens, test-contrast, build, serve
 ```

@@ -4,6 +4,7 @@ import '../../components/ui/controls/segmented-control/segmented-control.css';
 import '../../components/ui/controls/accordion/accordion.css';
 import '../../components/ui/data/comparison-table/comparison-table.css';
 import '../../components/ui/feedback/badge/badge.css';
+import '../../components/ui/navigation/footer-minimal/footer-minimal.css';
 import './page.css';
 import { enhance as segmented } from '../../components/ui/controls/segmented-control/segmented-control';
 import { enhance as accordion } from '../../components/ui/controls/accordion/accordion';

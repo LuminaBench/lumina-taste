@@ -23,3 +23,9 @@
 @keyframes dir-in { from { opacity: 0; translate: 0 6px; } }
 @media (prefers-reduced-motion: reduce) { .dir-card a { animation: none; } }
 @media (max-width: 640px) { .dir { padding-block: var(--space-6) var(--space-8); } .dir-search kbd { display: none; } }
+
+.dir-top { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-md); padding-block: var(--space-4); border-bottom: 1px solid var(--border-hairline); }
+.dir-brand { font-family: var(--font-display); font-weight: 700; color: var(--text-primary); text-decoration: none; }
+.dir-top nav { display: flex; gap: var(--space-5); }
+.dir-top nav a { color: var(--text-secondary); text-decoration: none; font-size: var(--text-ui-sm); }
+.dir-top nav a:hover, .dir-top nav a[aria-current] { color: var(--text-primary); }

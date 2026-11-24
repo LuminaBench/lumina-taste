@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en" data-palette="slate-forest" data-mode="light" data-type="precision" data-density="balanced" data-radius="balanced" data-motion="snappy">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Status · Halyard</title>
+  <meta name="description" content="Blueprint: a public status page with 90-day uptime per service, past incidents, subscriptions and an incident state built with lumina-taste.">
+</head>
+<body>
+  <a class="bp-skip" href="#main">Skip to content</a>
+  <header class="sp-top bp-narrow">
+    <a class="sp-brand" href="#home">Halyard <span>Status</span></a>
+    <a class="lt-btn" data-variant="ghost" data-size="sm" href="#subscribe"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15ZM10 20.5a2 2 0 0 0 4 0"/></svg><span data-part="label">Get updates</span></a>
+  </header>
+  <main id="main" class="bp-narrow sp">
+    <h1 class="lt-h2">Halyard system status</h1>
+    <div class="sp-now" data-view="ready" role="status"><span class="sp-icon" aria-hidden="true"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.3 2.4 2.4 4.6-4.9"/></svg></span><div><strong>All systems working</strong><p>Checked 1 minute ago from 6 regions.</p></div></div>
+    <aside class="lt-callout sp-incident" data-tone="warning" data-view="incident" role="status" hidden>
+      <span data-part="icon"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 4.3 2.9 17.2A2 2 0 0 0 4.6 20h14.8a2 2 0 0 0 1.7-2.8L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9.5v4M12 17h.01"/></svg></span>
+      <div><strong>Slower API responses in Europe</strong><p>Since 14:05 UTC some requests to eu.api.halyard.dev take up to 4 seconds. Dashboards and alerts are not affected. Next update by 15:00 UTC.</p><p><a class="bp-link" href="#incidents">Read the live updates</a></p></div>
+    </aside>
+
+    <section class="lt-uptime" aria-labelledby="sp-svc-h">
+      <header><h2 id="sp-svc-h">Services, last 90 days</h2><p class="sp-legend"><span data-s="ok"></span>Working <span data-s="warn"></span>Degraded <span data-s="down"></span>Outage</p></header>
+        <div data-part="svc"><p><strong>API</strong><span>99.98% uptime</span></p><ol aria-label="API, last 90 days" data-days="62:warn"></ol></div>
+        <div data-part="svc"><p><strong>Dashboard</strong><span>100.00% uptime</span></p><ol aria-label="Dashboard, last 90 days" data-days=""></ol></div>
+        <div data-part="svc"><p><strong>Data ingestion</strong><span>99.91% uptime</span></p><ol aria-label="Data ingestion, last 90 days" data-days="34:down,35:warn,62:warn"></ol></div>
+        <div data-part="svc"><p><strong>Alerts and email</strong><span>99.99% uptime</span></p><ol aria-label="Alerts and email, last 90 days" data-days="71:warn"></ol></div>
+        <div data-part="svc"><p><strong>Exports</strong><span>100.00% uptime</span></p><ol aria-label="Exports, last 90 days" data-days=""></ol></div>
+        <div data-part="svc"><p><strong>Single sign-on</strong><span>99.97% uptime</span></p><ol aria-label="Single sign-on, last 90 days" data-days="12:warn"></ol></div>
+      <footer><span>90 days ago</span><span>Today</span></footer>
+    </section>
+
+    <section class="sp-section" id="incidents" aria-labelledby="sp-inc-h">
+      <h2 id="sp-inc-h" class="lt-h3">Past incidents</h2>
+      <ol class="lt-timeline">
+        <li data-tone="warning"><time datetime="2026-10-29">29 Oct 2026</time><h3>Delayed alert emails</h3><p>Alert emails arrived up to 20 minutes late between 09:10 and 09:52 UTC after an email provider slowed down. We now fail over to a second provider after 2 minutes.</p></li>
+        <li data-tone="negative"><time datetime="2026-10-01">1 Oct 2026</time><h3>Data ingestion stopped for 38 minutes</h3><p>A database migration locked the events table from 16:22 to 17:00 UTC. No events were lost; they were processed by 17:20. Migrations now run in smaller batches.</p></li>
+        <li><time datetime="2026-09-24">24 Sep 2026</time><h3>Single sign-on errors for some Okta users</h3><p>About 3% of sign-ins failed for 25 minutes after a certificate rotation. Fixed by restoring the previous certificate.</p></li>
+      </ol>
+    </section>
+
+    <section class="sp-section sp-subscribe" id="subscribe" aria-labelledby="sp-sub-h">
+      <div><h2 id="sp-sub-h" class="lt-h3">Get incident updates</h2><p class="lt-secondary">One email when something breaks and one when it is fixed. Also available as <a class="bp-link" href="#rss">RSS</a>.</p></div>
+      <form class="sp-form" novalidate>
+        <label class="lt-visually-hidden" for="sp-email">Email address</label>
+        <input id="sp-email" type="email" placeholder="you@company.com" autocomplete="email" required>
+        <button type="submit" class="lt-btn" data-variant="primary"><span data-part="label">Subscribe</span></button>
+        <p class="sp-msg" role="status"></p>
+      </form>
+    </section>
+  </main>
+  <footer class="lt-footer-min bp-narrow">
+    <p>© 2026 Halyard Labs Ltd</p>
+    <nav aria-label="Footer"><ul><li><a href="#home">halyard.dev</a></li><li><a href="#privacy">Privacy</a></li><li><a href="#api">Status API</a></li></ul></nav>
+  </footer>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

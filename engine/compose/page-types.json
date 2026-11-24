@@ -1,0 +1,1545 @@
+{
+ "$comment": "Page types, domains and mood words used by scripts/compose.mjs. Every id must exist in catalog.json (checked by tests/unit/compose.test.mjs).",
+ "pageTypes": [
+  {
+   "id": "landing",
+   "name": "Product landing page",
+   "kind": "marketing",
+   "blueprint": "landing",
+   "density": "spacious",
+   "pattern": "Z",
+   "layout": "Centred page column with full-width bands",
+   "aliases": [
+    "landing page",
+    "homepage",
+    "home page",
+    "marketing site",
+    "saas site",
+    "product site",
+    "launch page",
+    "website",
+    "startup site"
+   ],
+   "primary": "Under the hero headline, and again in the closing CTA band. Nowhere else.",
+   "sections": [
+    {
+     "id": "navbar-mega",
+     "role": "Top bar",
+     "copy": "Brand left, 3–5 links, one CTA right (\"Start free\").",
+     "rule": "Use navbar-simple instead when there is only one product area.",
+     "alt": [
+      "navbar-simple",
+      "flyout-menu"
+     ]
+    },
+    {
+     "id": "hero-split",
+     "role": "Hero",
+     "copy": "Eyebrow (≤4 words) → headline that says the outcome (≤10 words) → one sentence of how → one CTA + one quiet link → one reassurance line (\"No card required\").",
+     "rule": "Show the real product on the right, not an illustration.",
+     "alt": [
+      "hero-centered"
+     ]
+    },
+    {
+     "id": "logo-cloud",
+     "role": "Proof strip",
+     "copy": "\"Used by teams at\" + 5–6 names.",
+     "rule": "Only with real customers; skip it rather than invent logos.",
+     "optional": true
+    },
+    {
+     "id": "feature-split",
+     "role": "Main features",
+     "copy": "2–3 rows. Each: a heading that states a result, one sentence, 2–3 specific points, a real screenshot.",
+     "rule": "Alternate image left/right. Never more than three rows.",
+     "alt": [
+      "feature-grid"
+     ]
+    },
+    {
+     "id": "stats-band",
+     "role": "Evidence",
+     "copy": "3 numbers people can check, each with a plain label and a source.",
+     "rule": "No vanity totals; one figure per claim.",
+     "alt": [
+      "before-after"
+     ],
+     "optional": true
+    },
+    {
+     "id": "testimonial-grid",
+     "role": "Social proof",
+     "copy": "3 quotes with name, role and company; each quote names a concrete result.",
+     "rule": "Real people only; drop the section if you have none."
+    },
+    {
+     "id": "how-it-works",
+     "role": "How it works",
+     "copy": "3 steps, verb-first headings (\"Connect\", \"Set targets\", \"Share\").",
+     "optional": true
+    },
+    {
+     "id": "faq-section",
+     "role": "Objections",
+     "copy": "5–7 questions buyers actually ask: price, data, switching, security, cancelling."
+    },
+    {
+     "id": "cta-band",
+     "role": "Closing CTA",
+     "copy": "Restate the outcome in one line + the same CTA as the hero.",
+     "rule": "Same label as the hero button."
+    },
+    {
+     "id": "site-footer",
+     "role": "Footer",
+     "copy": "3–4 columns of 3–5 links, one line about the company, one legal row.",
+     "alt": [
+      "footer-minimal"
+     ]
+    }
+   ],
+   "states": [],
+   "avoid": [
+    "A second hero further down",
+    "Three equal CTAs",
+    "Stock illustrations of people",
+    "Feature grids with 9+ icons"
+   ]
+  },
+  {
+   "id": "pricing",
+   "name": "Pricing page",
+   "kind": "marketing",
+   "blueprint": "pricing",
+   "density": "spacious",
+   "pattern": "Z",
+   "layout": "Centred page column with full-width bands",
+   "aliases": [
+    "pricing",
+    "plans",
+    "pricing page",
+    "price list",
+    "subscription plans",
+    "compare plans"
+   ],
+   "primary": "The recommended tier's button is the only filled one.",
+   "sections": [
+    {
+     "id": "navbar-simple",
+     "role": "Top bar",
+     "copy": "Same as the rest of the site."
+    },
+    {
+     "id": "billing-toggle",
+     "role": "Header",
+     "copy": "Headline that answers \"what will this cost me\" + monthly/annual toggle with the saving in plain numbers (\"2 months free\")."
+    },
+    {
+     "id": "pricing-tiers",
+     "role": "Tiers",
+     "copy": "3 tiers. Each: who it is for (one line), price, the 4–6 things that differ, one button. Mark one as recommended.",
+     "rule": "Never four or more tiers above the fold."
+    },
+    {
+     "id": "comparison-table",
+     "role": "Full comparison",
+     "copy": "Grouped rows; ticks and short values, not paragraphs.",
+     "rule": "Sticky header row."
+    },
+    {
+     "id": "faq-section",
+     "role": "Billing questions",
+     "copy": "Trials, seats, invoices, cancelling, discounts."
+    },
+    {
+     "id": "cta-band",
+     "role": "Closing CTA",
+     "copy": "\"Still deciding?\" + talk to sales as the secondary action.",
+     "optional": true
+    },
+    {
+     "id": "footer-minimal",
+     "role": "Footer"
+    }
+   ],
+   "states": [],
+   "avoid": [
+    "Hidden prices (\"Contact us\" on every tier)",
+    "Feature lists that repeat across tiers",
+    "Countdown timers"
+   ]
+  },
+  {
+   "id": "dashboard",
+   "name": "Analytics dashboard",
+   "kind": "app",
+   "blueprint": "dashboard",
+   "density": "balanced",
+   "pattern": "F",
+   "layout": "App shell: sidebar + scrolling main; KPI row then a two-up chart grid",
+   "aliases": [
+    "dashboard",
+    "analytics",
+    "admin dashboard",
+    "metrics",
+    "reporting",
+    "overview page",
+    "kpi page",
+    "insights",
+    "control panel",
+    "console"
+   ],
+   "primary": "Top right of the page header (\"Export\", \"New report\").",
+   "sections": [
+    {
+     "id": "app-sidebar",
+     "role": "Navigation",
+     "copy": "5–9 sections, icons + labels, current one marked.",
+     "alt": [
+      "app-topbar"
+     ]
+    },
+    {
+     "id": "breadcrumbs",
+     "role": "Page header",
+     "copy": "Title (what this page answers) + \"updated 2 minutes ago\" + one action.",
+     "optional": true
+    },
+    {
+     "id": "filter-bar",
+     "role": "Global filters",
+     "copy": "Date range, segment, compare. One bar for the whole page.",
+     "rule": "Cards never repeat these filters."
+    },
+    {
+     "id": "stat-strip",
+     "role": "KPI row",
+     "copy": "2–4 figures, each with a label, a change vs the last period and a sparkline.",
+     "rule": "The most important figure first."
+    },
+    {
+     "role": "Chart grid",
+     "copy": "Each chart title is the takeaway (\"Team plan pulled ahead in March\"), subtitle is the measure and unit.",
+     "rule": "The widest story spans both columns. Pick charts from references/chart-selection.md."
+    },
+    {
+     "id": "data-table",
+     "role": "Detail",
+     "copy": "Sortable, numbers right-aligned and tabular, one row action menu."
+    }
+   ],
+   "charts": [
+    "kpi-card",
+    "multi-line-chart",
+    "horizontal-bar-chart",
+    "stacked-bar-chart"
+   ],
+   "states": [
+    "loading: skeleton of the same layout",
+    "empty: say what will appear and give one action",
+    "error: what failed, a retry button, keep the filters"
+   ],
+   "avoid": [
+    "A filter bar inside every card",
+    "Pie charts with 5+ slices",
+    "Gauges for everything",
+    "Dual-axis charts"
+   ]
+  },
+  {
+   "id": "settings",
+   "name": "Settings and account",
+   "kind": "app",
+   "blueprint": "settings",
+   "density": "balanced",
+   "pattern": "F",
+   "layout": "Settings: section nav + one form column (max 420px)",
+   "aliases": [
+    "settings",
+    "account settings",
+    "preferences",
+    "profile settings",
+    "workspace settings",
+    "billing settings",
+    "admin settings"
+   ],
+   "primary": "A sticky save bar that appears only after a change; switches save instantly.",
+   "sections": [
+    {
+     "id": "subnav",
+     "role": "Section nav",
+     "copy": "General, Members, Billing, API, Notifications, Danger zone.",
+     "alt": [
+      "app-sidebar",
+      "tabs"
+     ]
+    },
+    {
+     "id": "text-field",
+     "role": "General",
+     "copy": "Name, URL, time zone. One column, labels above fields."
+    },
+    {
+     "id": "settings-list",
+     "role": "Notifications",
+     "copy": "Switches that apply immediately, each with one line of description."
+    },
+    {
+     "id": "team-members",
+     "role": "Members",
+     "copy": "Invite by email, role per row, remove."
+    },
+    {
+     "id": "plan-card",
+     "role": "Billing",
+     "copy": "Current plan, next invoice, payment method; usage below it."
+    },
+    {
+     "id": "usage-meters",
+     "role": "Usage",
+     "copy": "Each limit as a meter with used / limit."
+    },
+    {
+     "id": "api-key-field",
+     "role": "API keys",
+     "copy": "Masked key, copy, roll with a second confirm.",
+     "optional": true
+    },
+    {
+     "id": "danger-zone",
+     "role": "Danger zone",
+     "copy": "Last on the page. Type the name to confirm."
+    },
+    {
+     "id": "sticky-action-bar",
+     "role": "Unsaved changes",
+     "copy": "\"You have unsaved changes\" + Discard + Save.",
+     "rule": "Only for fields that do not save instantly."
+    }
+   ],
+   "states": [
+    "saving: button shows progress",
+    "error: inline under the field, never only a toast"
+   ],
+   "avoid": [
+    "Two-column forms",
+    "Save buttons at the top",
+    "Delete next to Save"
+   ]
+  },
+  {
+   "id": "docs",
+   "name": "Documentation",
+   "kind": "reading",
+   "blueprint": "docs",
+   "density": "balanced",
+   "pattern": "F",
+   "layout": "Three columns: tree nav, article at 68ch, \"On this page\" rail",
+   "aliases": [
+    "docs",
+    "documentation",
+    "api reference",
+    "developer docs",
+    "guide",
+    "knowledge base",
+    "help center",
+    "manual"
+   ],
+   "primary": "None in the article; the top bar holds search and one CTA (\"Get API key\").",
+   "sections": [
+    {
+     "id": "navbar-simple",
+     "role": "Top bar",
+     "copy": "Logo, product switcher, ⌘K search, one CTA.",
+     "alt": [
+      "hide-on-scroll-header"
+     ]
+    },
+    {
+     "id": "tree-view",
+     "role": "Left nav",
+     "copy": "Grouped by task, not by internal module names."
+    },
+    {
+     "id": "breadcrumbs",
+     "role": "Location"
+    },
+    {
+     "id": "article-layout",
+     "role": "Article",
+     "copy": "Title = the task (\"Send your first event\"). Short intro, then numbered steps.",
+     "rule": "Text never wider than 68ch."
+    },
+    {
+     "id": "code-block",
+     "role": "Code",
+     "copy": "Tabs per language, copy button, real values."
+    },
+    {
+     "id": "callout",
+     "role": "Notes",
+     "copy": "Only for warnings and prerequisites.",
+     "rule": "Max two per page."
+    },
+    {
+     "id": "scrollspy-toc",
+     "role": "On this page"
+    },
+    {
+     "id": "pagination",
+     "role": "Prev / next",
+     "copy": "Name the next page, not \"Next\"."
+    }
+   ],
+   "states": [
+    "not found: search box plus the 5 most visited pages"
+   ],
+   "avoid": [
+    "Walls of callouts",
+    "Screenshots of code",
+    "Marketing copy inside docs"
+   ]
+  },
+  {
+   "id": "auth",
+   "name": "Sign in and onboarding",
+   "kind": "flow",
+   "blueprint": "auth",
+   "density": "spacious",
+   "pattern": "single",
+   "layout": "Split: form left (max 400px), product image or quote right; stacks on phones",
+   "aliases": [
+    "login",
+    "sign in",
+    "sign up",
+    "register",
+    "signup page",
+    "onboarding",
+    "auth",
+    "password reset",
+    "magic link",
+    "verify email"
+   ],
+   "primary": "One full-width button in the form.",
+   "sections": [
+    {
+     "id": "sign-in-card",
+     "role": "Form",
+     "copy": "Heading says where you are (\"Sign in to Halyard\"). Email first, SSO as secondary."
+    },
+    {
+     "id": "otp-input",
+     "role": "Code",
+     "copy": "6 boxes, paste fills all, resend after 30s.",
+     "optional": true
+    },
+    {
+     "id": "stepper-wizard",
+     "role": "Onboarding",
+     "copy": "3–4 steps max, each with one question.",
+     "optional": true
+    },
+    {
+     "id": "setup-checklist",
+     "role": "First run",
+     "copy": "3–5 tasks with progress.",
+     "optional": true
+    }
+   ],
+   "states": [
+    "error: under the field, keep what was typed",
+    "loading: button shows progress, form stays visible"
+   ],
+   "avoid": [
+    "Password rules revealed only after failing",
+    "Captcha before trying",
+    "Two primary buttons"
+   ]
+  },
+  {
+   "id": "directory",
+   "name": "Directory or catalogue",
+   "kind": "app",
+   "blueprint": "directory",
+   "density": "balanced",
+   "pattern": "F",
+   "layout": "Search on top, filters left or as chips, card grid that never needs a breakpoint",
+   "aliases": [
+    "directory",
+    "marketplace",
+    "catalog",
+    "catalogue",
+    "listing page",
+    "search results",
+    "gallery of items",
+    "templates",
+    "integrations page",
+    "job board"
+   ],
+   "primary": "Search is the main control; each card has one action.",
+   "sections": [
+    {
+     "id": "search-input",
+     "role": "Search",
+     "copy": "Placeholder names what you can search (\"Search 240 integrations\")."
+    },
+    {
+     "id": "filter-chips",
+     "role": "Filters",
+     "copy": "4–8 chips, counts on each, clear all.",
+     "alt": [
+      "filter-bar"
+     ]
+    },
+    {
+     "id": "media-card",
+     "role": "Results",
+     "copy": "Same card height, name, one-line summary, 1–2 facts.",
+     "alt": [
+      "product-card"
+     ]
+    },
+    {
+     "id": "pagination",
+     "role": "More",
+     "copy": "Show the total."
+    },
+    {
+     "id": "empty-state",
+     "role": "No results",
+     "copy": "Say what was searched, offer to clear filters."
+    }
+   ],
+   "states": [
+    "empty: suggest a broader search",
+    "loading: skeleton cards"
+   ],
+   "avoid": [
+    "Infinite scroll with a footer",
+    "Cards of different heights"
+   ]
+  },
+  {
+   "id": "blog",
+   "name": "Blog or editorial",
+   "kind": "reading",
+   "blueprint": "editorial",
+   "density": "spacious",
+   "pattern": "single",
+   "layout": "Single column at 68ch; images may break out wider",
+   "aliases": [
+    "blog",
+    "article",
+    "journal",
+    "newsletter site",
+    "magazine",
+    "essay",
+    "editorial",
+    "news",
+    "post"
+   ],
+   "primary": "Subscribe, once, after the article.",
+   "sections": [
+    {
+     "id": "navbar-centered",
+     "role": "Top bar",
+     "copy": "Name in the middle, sections left, subscribe right.",
+     "alt": [
+      "navbar-simple"
+     ]
+    },
+    {
+     "id": "article-layout",
+     "role": "Article",
+     "copy": "Headline that says the point, standfirst, byline + date + read time."
+    },
+    {
+     "id": "blog-grid",
+     "role": "More to read",
+     "copy": "3 related pieces with dates."
+    },
+    {
+     "id": "newsletter-signup",
+     "role": "Subscribe",
+     "copy": "What arrives and how often (\"One email a month\")."
+    },
+    {
+     "id": "site-footer",
+     "role": "Footer"
+    }
+   ],
+   "states": [],
+   "avoid": [
+    "Pop-ups before reading",
+    "Share bars that follow the text",
+    "Body text below 17px"
+   ]
+  },
+  {
+   "id": "portfolio",
+   "name": "Portfolio or studio site",
+   "kind": "marketing",
+   "blueprint": "editorial",
+   "density": "spacious",
+   "pattern": "Z",
+   "layout": "Centred page column; work in a two-up grid",
+   "aliases": [
+    "portfolio",
+    "personal site",
+    "studio",
+    "agency",
+    "designer portfolio",
+    "freelancer",
+    "case studies",
+    "photography site",
+    "architect"
+   ],
+   "primary": "\"Get in touch\" in the top bar and at the end.",
+   "sections": [
+    {
+     "id": "floating-pill-nav",
+     "role": "Top bar",
+     "copy": "Name, Work, About, Contact.",
+     "alt": [
+      "navbar-simple"
+     ]
+    },
+    {
+     "id": "hero-centered",
+     "role": "Statement",
+     "copy": "One sentence about what you make and for whom."
+    },
+    {
+     "id": "blog-grid",
+     "role": "Selected work",
+     "copy": "4–6 projects: client, what changed, one image each.",
+     "alt": [
+      "masonry-grid"
+     ]
+    },
+    {
+     "id": "testimonial-grid",
+     "role": "Clients",
+     "copy": "2–3 short quotes.",
+     "optional": true
+    },
+    {
+     "id": "contact-section",
+     "role": "Contact",
+     "copy": "Email, availability, what to include."
+    },
+    {
+     "id": "footer-minimal",
+     "role": "Footer"
+    }
+   ],
+   "states": [],
+   "avoid": [
+    "Skill bars with percentages",
+    "Auto-playing showreels with sound"
+   ]
+  },
+  {
+   "id": "store-product",
+   "name": "Store product page",
+   "kind": "marketing",
+   "blueprint": "store",
+   "density": "balanced",
+   "pattern": "Z",
+   "layout": "Split: gallery left (60%), buy box right (40%); buy box sticks on desktop",
+   "aliases": [
+    "product page",
+    "shop",
+    "store",
+    "ecommerce",
+    "e-commerce",
+    "online store",
+    "product detail",
+    "pdp",
+    "buy page"
+   ],
+   "primary": "\"Add to bag\" in the buy box; on phones a sticky bar repeats it.",
+   "sections": [
+    {
+     "id": "navbar-centered",
+     "role": "Top bar",
+     "copy": "Brand centred, categories left, search + bag right.",
+     "alt": [
+      "navbar-mega"
+     ]
+    },
+    {
+     "id": "breadcrumbs",
+     "role": "Location"
+    },
+    {
+     "id": "image-compare",
+     "role": "Gallery",
+     "copy": "4–6 photos, zoom on click.",
+     "alt": [
+      "carousel",
+      "lightbox"
+     ]
+    },
+    {
+     "id": "product-card",
+     "role": "Buy box",
+     "copy": "Name, price (was/now only if real), colour and size, delivery date, Add to bag."
+    },
+    {
+     "id": "review-summary",
+     "role": "Reviews",
+     "copy": "Average, count, distribution, 3 recent reviews."
+    },
+    {
+     "id": "accordion",
+     "role": "Details",
+     "copy": "Materials, sizing, delivery and returns."
+    },
+    {
+     "id": "sticky-action-bar",
+     "role": "Mobile buy bar",
+     "copy": "Price + Add to bag.",
+     "rule": "Phones only."
+    },
+    {
+     "id": "carousel",
+     "role": "Related",
+     "copy": "4–8 items, never required to buy.",
+     "optional": true
+    },
+    {
+     "id": "site-footer",
+     "role": "Footer"
+    }
+   ],
+   "states": [
+    "out of stock: say when it is back, offer a notify button"
+   ],
+   "avoid": [
+    "Fake urgency (\"Only 2 left!\")",
+    "Price hidden until checkout",
+    "Pop-up discount on load"
+   ]
+  },
+  {
+   "id": "checkout",
+   "name": "Checkout",
+   "kind": "flow",
+   "blueprint": "checkout",
+   "density": "balanced",
+   "pattern": "F",
+   "layout": "Split: form left (max 560px), order summary right; summary moves on top on phones",
+   "aliases": [
+    "checkout",
+    "payment page",
+    "cart",
+    "basket",
+    "order form",
+    "billing details",
+    "pay"
+   ],
+   "primary": "One \"Pay £X\" button whose label includes the total.",
+   "sections": [
+    {
+     "role": "Minimal header",
+     "copy": "Brand only, no navigation, a \"Secure checkout\" line.",
+     "rule": "Remove every link that leaves the flow."
+    },
+    {
+     "id": "stepper-wizard",
+     "role": "Steps",
+     "copy": "Contact → Delivery → Payment.",
+     "optional": true
+    },
+    {
+     "id": "text-field",
+     "role": "Contact and address",
+     "copy": "Email first; postcode lookup; one column."
+    },
+    {
+     "id": "radio-cards",
+     "role": "Delivery",
+     "copy": "2–3 options with date and price."
+    },
+    {
+     "id": "order-summary",
+     "role": "Summary",
+     "copy": "Items, promo code, subtotal, delivery, tax, total."
+    }
+   ],
+   "states": [
+    "error: under the field and summarised at the top",
+    "processing: disable the button, show progress, never double-charge"
+   ],
+   "avoid": [
+    "Account creation before paying",
+    "Surprise fees on the last step"
+   ]
+  },
+  {
+   "id": "changelog",
+   "name": "Changelog",
+   "kind": "reading",
+   "blueprint": "changelog",
+   "density": "balanced",
+   "pattern": "single",
+   "layout": "Single column at 68ch with dates in a left gutter on desktop",
+   "aliases": [
+    "changelog",
+    "release notes",
+    "what's new",
+    "updates page",
+    "product updates",
+    "releases"
+   ],
+   "primary": "Subscribe to updates (RSS or email) in the header.",
+   "sections": [
+    {
+     "id": "navbar-simple",
+     "role": "Top bar"
+    },
+    {
+     "id": "timeline",
+     "role": "Entries",
+     "copy": "Date, version, a title that says what changed, 1–3 sentences, an image if visual.",
+     "rule": "Newest first."
+    },
+    {
+     "id": "badge",
+     "role": "Tags",
+     "copy": "New, Improved, Fixed. One per entry."
+    },
+    {
+     "id": "newsletter-signup",
+     "role": "Subscribe",
+     "copy": "\"Get one email when we ship something.\"",
+     "optional": true
+    },
+    {
+     "id": "pagination",
+     "role": "Older"
+    }
+   ],
+   "states": [],
+   "avoid": [
+    "Marketing language for bug fixes",
+    "Version numbers without dates"
+   ]
+  },
+  {
+   "id": "status",
+   "name": "Status page",
+   "kind": "app",
+   "blueprint": "status",
+   "density": "balanced",
+   "pattern": "F",
+   "layout": "Centred column (max 760px)",
+   "aliases": [
+    "status page",
+    "uptime",
+    "system status",
+    "incidents",
+    "service health",
+    "outage page"
+   ],
+   "primary": "Subscribe to updates.",
+   "sections": [
+    {
+     "id": "banner",
+     "role": "Overall",
+     "copy": "One line: \"All systems working\" or what is affected, with the time.",
+     "rule": "Colour plus an icon plus words, never colour alone."
+    },
+    {
+     "id": "uptime-bars",
+     "role": "Services",
+     "copy": "One row per service, 90 days, % uptime."
+    },
+    {
+     "id": "timeline",
+     "role": "Incidents",
+     "copy": "Past incidents: what broke, impact, fix, times in UTC."
+    },
+    {
+     "id": "newsletter-signup",
+     "role": "Subscribe",
+     "copy": "Email or RSS.",
+     "optional": true
+    }
+   ],
+   "states": [
+    "incident: the banner changes tone and links to the live update"
+   ],
+   "avoid": [
+    "Green everywhere with no history",
+    "Vague \"degraded performance\" without scope"
+   ]
+  },
+  {
+   "id": "admin-table",
+   "name": "Admin list (users, orders, records)",
+   "kind": "app",
+   "blueprint": "admin",
+   "density": "dense",
+   "pattern": "F",
+   "layout": "App shell; page header, one filter row, full-width table",
+   "aliases": [
+    "admin",
+    "users list",
+    "user management",
+    "orders list",
+    "crm",
+    "records",
+    "back office",
+    "table page",
+    "customers list",
+    "inventory"
+   ],
+   "primary": "\"Invite user\" / \"New order\" top right; bulk actions appear when rows are ticked.",
+   "sections": [
+    {
+     "id": "app-sidebar",
+     "role": "Navigation"
+    },
+    {
+     "role": "Page header",
+     "copy": "Title + count (\"Users · 1,284\") + one action."
+    },
+    {
+     "id": "filter-bar",
+     "role": "Filters",
+     "copy": "Search, 2–3 filters, saved views.",
+     "alt": [
+      "search-input",
+      "filter-chips"
+     ]
+    },
+    {
+     "id": "data-table",
+     "role": "Table",
+     "copy": "Checkbox column, sortable headers, status badges, row menu."
+    },
+    {
+     "id": "bulk-action-bar",
+     "role": "Bulk actions",
+     "copy": "Appears when rows are ticked: count + 2–3 actions."
+    },
+    {
+     "id": "pagination",
+     "role": "Pages",
+     "copy": "Rows per page and total."
+    },
+    {
+     "id": "drawer",
+     "role": "Row detail",
+     "copy": "Opens beside the table so the list stays visible."
+    }
+   ],
+   "states": [
+    "empty: explain and offer the main action",
+    "loading: skeleton rows",
+    "error: keep filters, offer retry"
+   ],
+   "avoid": [
+    "Edit forms in modals for long records",
+    "Actions only on hover"
+   ]
+  },
+  {
+   "id": "inbox",
+   "name": "Inbox or chat app",
+   "kind": "app",
+   "blueprint": null,
+   "density": "balanced",
+   "pattern": "F",
+   "layout": "Three panes: folders, list, reading pane; collapses to one pane on phones",
+   "aliases": [
+    "inbox",
+    "messages",
+    "chat app",
+    "support inbox",
+    "email client",
+    "messaging",
+    "helpdesk",
+    "conversations",
+    "ai chat",
+    "assistant"
+   ],
+   "primary": "\"New message\" top of the list pane.",
+   "sections": [
+    {
+     "id": "app-sidebar",
+     "role": "Folders"
+    },
+    {
+     "id": "split-pane",
+     "role": "Panes",
+     "copy": "Resizable list and reading pane."
+    },
+    {
+     "id": "virtual-list",
+     "role": "Conversation list",
+     "copy": "Sender, subject, snippet, time; unread in bold."
+    },
+    {
+     "id": "chat-thread",
+     "role": "Thread"
+    },
+    {
+     "id": "prompt-composer",
+     "role": "Composer",
+     "copy": "Enter to send, Shift+Enter for a new line.",
+     "alt": [
+      "mention-input"
+     ]
+    }
+   ],
+   "states": [
+    "empty folder: one calm line",
+    "offline: banner and queued messages"
+   ],
+   "avoid": [
+    "Read receipts nobody asked for",
+    "Unread badges on every icon"
+   ]
+  },
+  {
+   "id": "not-found",
+   "name": "404 and error page",
+   "kind": "flow",
+   "blueprint": null,
+   "density": "spacious",
+   "pattern": "single",
+   "layout": "One centred block",
+   "aliases": [
+    "404",
+    "not found",
+    "error page",
+    "500 page",
+    "page missing",
+    "broken link page"
+   ],
+   "primary": "\"Go to home\" or search.",
+   "sections": [
+    {
+     "id": "not-found",
+     "role": "Message",
+     "copy": "Say what happened, why it might have happened, where to go next.",
+     "rule": "No jokes at the visitor's expense."
+    },
+    {
+     "id": "search-input",
+     "role": "Search",
+     "optional": true
+    }
+   ],
+   "states": [],
+   "avoid": [
+    "A wall of links",
+    "Animated illustrations that delay the message"
+   ]
+  },
+  {
+   "id": "contact",
+   "name": "Contact page",
+   "kind": "marketing",
+   "blueprint": null,
+   "density": "spacious",
+   "pattern": "Z",
+   "layout": "Split: form left, ways to reach you right",
+   "aliases": [
+    "contact",
+    "contact us",
+    "get in touch",
+    "support page",
+    "sales contact",
+    "book a demo"
+   ],
+   "primary": "Send in the form.",
+   "sections": [
+    {
+     "id": "navbar-simple",
+     "role": "Top bar"
+    },
+    {
+     "id": "contact-section",
+     "role": "Form and details",
+     "copy": "Reply time, email, office hours."
+    },
+    {
+     "id": "faq-section",
+     "role": "Before you ask",
+     "copy": "Top 4 questions.",
+     "optional": true
+    },
+    {
+     "id": "footer-minimal",
+     "role": "Footer"
+    }
+   ],
+   "states": [
+    "sent: confirm and say when you will reply"
+   ],
+   "avoid": [
+    "More than 5 fields",
+    "Required phone numbers"
+   ]
+  },
+  {
+   "id": "about",
+   "name": "About and team page",
+   "kind": "marketing",
+   "blueprint": null,
+   "density": "spacious",
+   "pattern": "Z",
+   "layout": "Centred page column with full-width bands",
+   "aliases": [
+    "about",
+    "about us",
+    "team page",
+    "company page",
+    "our story",
+    "careers",
+    "mission"
+   ],
+   "primary": "\"See open roles\" or \"Contact us\".",
+   "sections": [
+    {
+     "id": "navbar-simple",
+     "role": "Top bar"
+    },
+    {
+     "id": "hero-centered",
+     "role": "Why we exist",
+     "copy": "One sentence of what you do and for whom; skip the mission statement."
+    },
+    {
+     "id": "stats-band",
+     "role": "Facts",
+     "copy": "Founded, team size, customers.",
+     "optional": true
+    },
+    {
+     "id": "team-grid",
+     "role": "People",
+     "copy": "Photo, name, role, one line."
+    },
+    {
+     "id": "cta-band",
+     "role": "Next step",
+     "copy": "Open roles or contact."
+    },
+    {
+     "id": "site-footer",
+     "role": "Footer"
+    }
+   ],
+   "states": [],
+   "avoid": [
+    "Values written as single words",
+    "Stock team photos"
+   ]
+  }
+ ],
+ "domains": [
+  {
+   "id": "finance",
+   "words": [
+    "finance",
+    "financial",
+    "bank",
+    "banking",
+    "invoice",
+    "invoicing",
+    "accounting",
+    "accountant",
+    "payments",
+    "payroll",
+    "tax",
+    "expense",
+    "expenses",
+    "billing",
+    "fintech",
+    "ledger",
+    "budget",
+    "bookkeeping",
+    "insurance",
+    "lending"
+   ],
+   "palette": "navy-sand",
+   "typography": "financial",
+   "style": "ledger",
+   "mode": "light"
+  },
+  {
+   "id": "trading",
+   "words": [
+    "trading",
+    "trader",
+    "stocks",
+    "stock",
+    "markets",
+    "exchange",
+    "portfolio tracker",
+    "crypto",
+    "brokerage",
+    "forex"
+   ],
+   "palette": "carbon-amber",
+   "typography": "dense",
+   "style": "ticker",
+   "mode": "dark"
+  },
+  {
+   "id": "devtool",
+   "words": [
+    "api",
+    "apis",
+    "developer",
+    "developers",
+    "devtool",
+    "devtools",
+    "cli",
+    "sdk",
+    "infrastructure",
+    "deploy",
+    "deployment",
+    "hosting",
+    "database",
+    "observability",
+    "logs",
+    "logging",
+    "edge",
+    "git",
+    "code",
+    "serverless",
+    "kubernetes",
+    "queue",
+    "webhooks"
+   ],
+   "palette": "black-signal",
+   "typography": "technical",
+   "style": "volt",
+   "mode": "dark"
+  },
+  {
+   "id": "analytics",
+   "words": [
+    "analytics",
+    "metrics",
+    "bi",
+    "reporting",
+    "reports",
+    "monitoring",
+    "insights",
+    "data warehouse",
+    "kpi",
+    "telemetry"
+   ],
+   "palette": "slate-forest",
+   "typography": "precision",
+   "style": null,
+   "mode": "light"
+  },
+  {
+   "id": "health",
+   "words": [
+    "health",
+    "healthcare",
+    "clinic",
+    "clinics",
+    "therapy",
+    "therapist",
+    "wellness",
+    "fitness",
+    "meditation",
+    "care",
+    "patient",
+    "patients",
+    "dental",
+    "pharmacy",
+    "sleep"
+   ],
+   "palette": "sage-clay",
+   "typography": "humanist",
+   "style": "soft",
+   "mode": "light"
+  },
+  {
+   "id": "public",
+   "words": [
+    "council",
+    "government",
+    "gov",
+    "school",
+    "university",
+    "education",
+    "course",
+    "courses",
+    "nonprofit",
+    "non-profit",
+    "charity",
+    "public",
+    "library",
+    "museum",
+    "permit",
+    "benefits",
+    "students"
+   ],
+   "palette": "ochre-indigo",
+   "typography": "humanist",
+   "style": "civic",
+   "mode": "light"
+  },
+  {
+   "id": "commerce",
+   "words": [
+    "shop",
+    "store",
+    "fashion",
+    "apparel",
+    "clothing",
+    "furniture",
+    "homeware",
+    "coffee",
+    "restaurant",
+    "bakery",
+    "food",
+    "beauty",
+    "skincare",
+    "jewellery",
+    "jewelry",
+    "wine",
+    "candles",
+    "ceramics"
+   ],
+   "palette": "cream-charcoal",
+   "typography": "didone",
+   "style": "atelier",
+   "mode": "light"
+  },
+  {
+   "id": "editorial",
+   "words": [
+    "magazine",
+    "blog",
+    "newsletter",
+    "journal",
+    "writing",
+    "essays",
+    "publishing",
+    "publisher",
+    "news",
+    "podcast",
+    "books",
+    "poetry",
+    "review"
+   ],
+   "palette": "paper-ink",
+   "typography": "editorial",
+   "style": "editorial",
+   "mode": "light"
+  },
+  {
+   "id": "productivity",
+   "words": [
+    "ai",
+    "assistant",
+    "productivity",
+    "notes",
+    "tasks",
+    "todo",
+    "project",
+    "projects",
+    "collaboration",
+    "team",
+    "teams",
+    "workspace",
+    "calendar",
+    "scheduling",
+    "crm",
+    "sales",
+    "hiring",
+    "recruiting",
+    "hr",
+    "forms",
+    "docs"
+   ],
+   "palette": "ice-cobalt",
+   "typography": "geometric",
+   "style": "studio",
+   "mode": "light"
+  },
+  {
+   "id": "creative",
+   "words": [
+    "portfolio",
+    "agency",
+    "studio",
+    "designer",
+    "design",
+    "photography",
+    "photographer",
+    "architecture",
+    "architect",
+    "illustrator",
+    "film",
+    "art",
+    "gallery",
+    "artist"
+   ],
+   "palette": "olive-stone",
+   "typography": "swiss",
+   "style": "swiss",
+   "mode": "light"
+  },
+  {
+   "id": "playful",
+   "words": [
+    "kids",
+    "children",
+    "game",
+    "games",
+    "gaming",
+    "family",
+    "pets",
+    "pet",
+    "toys",
+    "party",
+    "quiz",
+    "learning app"
+   ],
+   "palette": "porcelain-teal",
+   "typography": "rounded",
+   "style": "playful",
+   "mode": "light"
+  },
+  {
+   "id": "enterprise",
+   "words": [
+    "enterprise",
+    "security",
+    "compliance",
+    "governance",
+    "procurement",
+    "erp",
+    "logistics",
+    "supply chain",
+    "manufacturing",
+    "legal",
+    "audit"
+   ],
+   "palette": "charcoal-sky",
+   "typography": "precision",
+   "style": "enterprise",
+   "mode": "light"
+  },
+  {
+   "id": "travel",
+   "words": [
+    "travel",
+    "hotel",
+    "hotels",
+    "booking",
+    "trips",
+    "trip",
+    "holiday",
+    "flights",
+    "airline",
+    "tour",
+    "tours",
+    "rental",
+    "outdoor",
+    "camping"
+   ],
+   "palette": "mint-ocean",
+   "typography": "humanist",
+   "style": "nordic",
+   "mode": "light"
+  }
+ ],
+ "moods": {
+  "dark": {
+   "mode": "dark"
+  },
+  "night": {
+   "mode": "dark"
+  },
+  "terminal": {
+   "style": "terminal",
+   "mode": "dark"
+  },
+  "minimal": {
+   "style": "minimal"
+  },
+  "minimalist": {
+   "style": "minimal"
+  },
+  "brutalist": {
+   "style": "neobrutal"
+  },
+  "neobrutalism": {
+   "style": "neobrutal"
+  },
+  "neobrutal": {
+   "style": "neobrutal"
+  },
+  "glass": {
+   "style": "glass"
+  },
+  "glassy": {
+   "style": "glass"
+  },
+  "retro": {
+   "style": "retro"
+  },
+  "swiss": {
+   "style": "swiss"
+  },
+  "luxury": {
+   "style": "atelier",
+   "typography": "didone"
+  },
+  "premium": {
+   "style": "elevated"
+  },
+  "playful": {
+   "style": "playful"
+  },
+  "friendly": {
+   "style": "soft"
+  },
+  "calm": {
+   "style": "zen"
+  },
+  "serious": {
+   "style": "enterprise"
+  },
+  "bold": {
+   "style": "signal"
+  },
+  "editorial": {
+   "style": "editorial"
+  },
+  "warm": {
+   "style": "linen"
+  },
+  "clean": {
+   "style": null
+  },
+  "dense": {
+   "density": "dense"
+  },
+  "compact": {
+   "density": "dense"
+  },
+  "spacious": {
+   "density": "spacious"
+  },
+  "airy": {
+   "density": "spacious"
+  }
+ }
+}

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" data-palette="charcoal-sky" data-mode="light" data-type="precision" data-density="dense" data-radius="balanced" data-motion="snappy">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Users · Halyard Admin</title>
+  <meta name="description" content="Blueprint: an admin users list with search, filters, bulk actions, a detail drawer and loading, empty and error states built with lumina-taste.">
+</head>
+<body>
+  <a class="bp-skip" href="#main">Skip to content</a>
+  <div class="ad-shell">
+    <nav class="ad-side" aria-label="Admin">
+      <a class="ad-brand" href="#home">Halyard <span>Admin</span></a>
+      <a href="#overview"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1Z"/></svg><span>Overview</span></a><a href="#reports"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V4M4 20h16M8.5 16v-5M13 16V8M17.5 16v-3"/></svg><span>Reports</span></a><a href="#users" aria-current="page"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.25"/><path d="M3 20a6 6 0 0 1 12 0M16 4.8a3.25 3.25 0 0 1 0 6.4M17.5 14.2A6 6 0 0 1 21 20"/></svg><span>Users</span></a><a href="#billing"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg><span>Billing</span></a><a href="#security"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><span>Security</span></a><a href="#settings"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg><span>Settings</span></a>
+    </nav>
+    <main id="main" class="ad-main">
+      <header class="ad-head">
+        <div><h1 class="lt-h2">Users</h1><p class="lt-secondary"><span id="ad-total">1,284</span> people in the Halyard workspace</p></div>
+        <button type="button" class="lt-btn" data-variant="primary"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span data-part="label">Invite user</span></button>
+      </header>
+      <div class="ad-tools" data-view="ready">
+        <div class="lt-search ad-search" data-lt="search-input">
+          <svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><label class="lt-visually-hidden" for="ad-q">Search users</label>
+          <input id="ad-q" type="search" placeholder="Search by name or email" autocomplete="off" spellcheck="false">
+          <button type="button" data-part="clear" aria-label="Clear search" hidden><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        </div>
+        <div class="lt-segmented" data-lt="segmented-control" role="radiogroup" aria-label="Status" id="ad-status">
+          <span data-part="indicator" aria-hidden="true"></span>
+          <button type="button" role="radio" aria-checked="true" tabindex="0" data-value="all">All</button>
+          <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="active">Active</button>
+          <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="invited">Invited</button>
+          <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="deactivated">Deactivated</button>
+        </div>
+      </div>
+
+      <div class="lt-bulk ad-table" data-lt="bulk-action-bar" data-view="ready">
+        <div class="lt-table-wrap" tabindex="0" role="region" aria-label="Users table, scrolls horizontally">
+        <table data-part="table" class="lt-table">
+          <caption class="lt-visually-hidden">Users in this workspace</caption>
+          <thead><tr><th scope="col"><label class="lt-check"><input type="checkbox" data-part="all" aria-label="Select all users on this page"><span data-part="box" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></label></th><th scope="col">Name</th><th scope="col">Role</th><th scope="col">Status</th><th scope="col">Last active</th></tr></thead>
+          <tbody>
+        <tr data-status="active" data-search="ana lópez ana@halyard.dev">
+          <td><label class="lt-check"><input type="checkbox" aria-label="Select Ana López"><span data-part="box" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></label></td>
+          <td><button type="button" class="ad-person" data-user="0"><span class="ad-avatar" aria-hidden="true">AL</span><span><strong>Ana López</strong><span>ana@halyard.dev</span></span></button></td>
+          <td>Owner</td>
+          <td><span class="lt-badge" data-tone="positive" data-dot>Active</span></td>
+          <td class="ad-muted">2 min ago</td>
+        </tr>
+        <tr data-status="active" data-search="kai moreno kai@halyard.dev">
+          <td><label class="lt-check"><input type="checkbox" aria-label="Select Kai Moreno"><span data-part="box" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></label></td>
+          <td><button type="button" class="ad-person" data-user="1"><span class="ad-avatar" aria-hidden="true">KM</span><span><strong>Kai Moreno</strong><span>kai@halyard.dev</span></span></button></td>
+          <td>Admin</td>
+          <td><span class="lt-badge" data-tone="positive" data-dot>Active</span></td>
+          <td class="ad-muted">1 hour ago</td>
+        </tr>
+        <tr data-status="active" data-search="lee park lee@halyard.dev">
+          <td><label class="lt-check"><input type="checkbox" aria-label="Select Lee Park"><span data-part="box" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></label></td>
+          <td><button type="button" class="ad-person" data-user="2"><span class="ad-avatar" aria-hidden="true">LP</span><span><strong>Lee Park</strong><span>lee@halyard.dev</span></span></button></td>
+          <td>Editor</td>
+          <td><span class="lt-badge" data-tone="positive" data-dot>Active</span></td>
+          <td class="ad-muted">Today, 09:12</td>
+        </tr>
+        <tr data-status="active" data-search="riya mehta riya@halyard.dev">
+          <td><label class="lt-check"><input type="checkbox" aria-label="Select Riya Mehta"><span data-part="box" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></label></td>
+          <td><button type="button" class="ad-person" data-user="3"><span class="ad-avatar" aria-hidden="true">RM</span><span><strong>Riya Mehta</strong><span>riya@halyard.dev</span></span></button></td>
+          <td>Editor</td>
+          <td><span class="lt-badge" data-tone="positive" data-dot>Active</span></td>
+          <td class="ad-muted">Yesterday</td>
+        </tr>
+        <tr data-status="invited" data-search="tom becker tom@kestrel.io">
+          <td><label class="lt-check"><input type="checkbox" aria-label="Select Tom Becker"><span data-part="box" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></label></td>
+          <td><button type="button" class="ad-person" data-user="4"><span class="ad-avatar" aria-hidden="true">TB</span><span><strong>Tom Becker</strong><span>tom@kestrel.io</span></span></button></td>
+          <td>Viewer</td>
+          <td><span class="lt-badge" data-tone="info" data-dot>Invited</span></td>
+          <td class="ad-muted">Invite sent 3 Nov</td>
+        </tr>
+        <tr data-status="active" data-search="sara ito sara@halyard.dev">
+          <td><label class="lt-check"><input type="checkbox" aria-label="Select Sara Ito"><span data-part="box" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></label></td>
+          <td><button type="button" class="ad-person" data-user="5"><span class="ad-avatar" aria-hidden="true">SI</span><span><strong>Sara Ito</strong><span>sara@halyard.dev</span></span></button></td>
+          <td>Editor</td>
+          <td><span class="lt-badge" data-tone="positive" data-dot>Active</span></td>
+          <td class="ad-muted">2 days ago</td>
+        </tr>
+        <tr data-status="deactivated" data-search="marco bianchi marco@moss.studio">
+          <td><label class="lt-check"><input type="checkbox" aria-label="Select Marco Bianchi"><span data-part="box" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></label></td>
+          <td><button type="button" class="ad-person" data-user="6"><span class="ad-avatar" aria-hidden="true">MB</span><span><strong>Marco Bianchi</strong><span>marco@moss.studio</span></span></button></td>
+          <td>Viewer</td>
+          <td><span class="lt-badge" data-dot>Deactivated</span></td>
+          <td class="ad-muted">12 Sep</td>
+        </tr>
+        <tr data-status="active" data-search="nia okafor nia@halyard.dev">
+          <td><label class="lt-check"><input type="checkbox" aria-label="Select Nia Okafor"><span data-part="box" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></label></td>
+          <td><button type="button" class="ad-person" data-user="7"><span class="ad-avatar" aria-hidden="true">NO</span><span><strong>Nia Okafor</strong><span>nia@halyard.dev</span></span></button></td>
+          <td>Admin</td>
+          <td><span class="lt-badge" data-tone="positive" data-dot>Active</span></td>
+          <td class="ad-muted">3 days ago</td>
+        </tr>
+        <tr data-status="invited" data-search="jon svensson jon@juniper.co">
+          <td><label class="lt-check"><input type="checkbox" aria-label="Select Jon Svensson"><span data-part="box" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></label></td>
+          <td><button type="button" class="ad-person" data-user="8"><span class="ad-avatar" aria-hidden="true">JS</span><span><strong>Jon Svensson</strong><span>jon@juniper.co</span></span></button></td>
+          <td>Viewer</td>
+          <td><span class="lt-badge" data-tone="info" data-dot>Invited</span></td>
+          <td class="ad-muted">Invite sent 21 Nov</td>
+        </tr>
+        <tr data-status="active" data-search="priya raman priya@larkspur.ai">
+          <td><label class="lt-check"><input type="checkbox" aria-label="Select Priya Raman"><span data-part="box" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></label></td>
+          <td><button type="button" class="ad-person" data-user="9"><span class="ad-avatar" aria-hidden="true">PR</span><span><strong>Priya Raman</strong><span>priya@larkspur.ai</span></span></button></td>
+          <td>Editor</td>
+          <td><span class="lt-badge" data-tone="positive" data-dot>Active</span></td>
+          <td class="ad-muted">Last week</td>
+        </tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="ad-nomatch" id="ad-nomatch" hidden>No users match “<span></span>”. <button type="button" class="bp-link" id="ad-reset">Clear the search</button></p>
+        <div data-part="bar" role="region" aria-label="Bulk actions" hidden>
+          <span data-part="count" aria-live="polite">0 selected</span>
+          <span data-part="sep" aria-hidden="true"></span>
+          <button type="button" data-action="role"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.25"/><path d="M3 20a6 6 0 0 1 12 0M16 4.8a3.25 3.25 0 0 1 0 6.4M17.5 14.2A6 6 0 0 1 21 20"/></svg><span>Change role</span></button>
+          <button type="button" data-action="export"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></svg><span>Export</span></button>
+          <button type="button" data-action="deactivate" data-tone="danger"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><span>Deactivate</span></button>
+          <button type="button" data-part="clear" aria-label="Clear selection"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        </div>
+      </div>
+      <nav class="lt-pagination" data-lt="pagination" data-page="1" data-total="52" data-rows="1284" aria-label="Pagination" data-view="ready">
+        <button type="button" data-part="prev"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>Previous</span></button>
+        <ol data-part="pages"></ol>
+        <button type="button" data-part="next"><span>Next</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+        <p data-part="summary" aria-live="polite"></p>
+      </nav>
+
+      <div class="ad-state" data-view="loading" aria-busy="true" aria-label="Loading users" hidden>
+        <table class="lt-table ad-skel"><caption class="lt-visually-hidden">Loading users</caption><tbody><tr><td><span class="lt-skeleton" style="width: 16px"></span></td><td><span class="lt-skeleton" style="width: 62%"></span></td><td><span class="lt-skeleton" style="width: 50%"></span></td><td><span class="lt-skeleton" style="width: 60%"></span></td><td><span class="lt-skeleton" style="width: 70%"></span></td></tr><tr><td><span class="lt-skeleton" style="width: 16px"></span></td><td><span class="lt-skeleton" style="width: 48%"></span></td><td><span class="lt-skeleton" style="width: 50%"></span></td><td><span class="lt-skeleton" style="width: 60%"></span></td><td><span class="lt-skeleton" style="width: 70%"></span></td></tr><tr><td><span class="lt-skeleton" style="width: 16px"></span></td><td><span class="lt-skeleton" style="width: 70%"></span></td><td><span class="lt-skeleton" style="width: 50%"></span></td><td><span class="lt-skeleton" style="width: 60%"></span></td><td><span class="lt-skeleton" style="width: 70%"></span></td></tr><tr><td><span class="lt-skeleton" style="width: 16px"></span></td><td><span class="lt-skeleton" style="width: 55%"></span></td><td><span class="lt-skeleton" style="width: 50%"></span></td><td><span class="lt-skeleton" style="width: 60%"></span></td><td><span class="lt-skeleton" style="width: 70%"></span></td></tr><tr><td><span class="lt-skeleton" style="width: 16px"></span></td><td><span class="lt-skeleton" style="width: 64%"></span></td><td><span class="lt-skeleton" style="width: 50%"></span></td><td><span class="lt-skeleton" style="width: 60%"></span></td><td><span class="lt-skeleton" style="width: 70%"></span></td></tr><tr><td><span class="lt-skeleton" style="width: 16px"></span></td><td><span class="lt-skeleton" style="width: 40%"></span></td><td><span class="lt-skeleton" style="width: 50%"></span></td><td><span class="lt-skeleton" style="width: 60%"></span></td><td><span class="lt-skeleton" style="width: 70%"></span></td></tr></tbody></table>
+      </div>
+      <section class="lt-empty ad-state" data-view="empty" aria-labelledby="ad-empty-h" hidden>
+        <span data-part="icon" aria-hidden="true"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.25"/><path d="M3 20a6 6 0 0 1 12 0M16 4.8a3.25 3.25 0 0 1 0 6.4M17.5 14.2A6 6 0 0 1 21 20"/></svg></span>
+        <h2 id="ad-empty-h">Invite your team</h2>
+        <p>People you invite get access to dashboards and reports. You choose what each person can change.</p>
+        <div data-part="actions"><button type="button" class="lt-btn" data-variant="secondary" data-set-state="ready"><span data-part="label">Invite by email</span></button></div>
+      </section>
+      <aside class="lt-callout ad-state" data-tone="negative" data-view="error" hidden>
+        <span data-part="icon"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 4.3 2.9 17.2A2 2 0 0 0 4.6 20h14.8a2 2 0 0 0 1.7-2.8L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9.5v4M12 17h.01"/></svg></span>
+        <div><strong>Users could not be loaded</strong><p>The directory service did not answer in time. Your filters are kept.</p><p><button type="button" class="lt-btn" data-variant="secondary" data-size="sm" data-set-state="ready"><span data-part="label">Try again</span></button></p></div>
+      </aside>
+    </main>
+  </div>
+
+  <dialog class="lt-drawer" id="ad-drawer" aria-labelledby="ad-drawer-h">
+    <header data-part="head"><h2 id="ad-drawer-h">User</h2><button type="button" data-part="close" aria-label="Close details"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></header>
+    <div data-part="body">
+      <dl class="ad-dl">
+        <div><dt>Email</dt><dd id="ad-d-email"></dd></div>
+        <div><dt>Role</dt><dd id="ad-d-role"></dd></div>
+        <div><dt>Status</dt><dd id="ad-d-status"></dd></div>
+        <div><dt>Last active</dt><dd id="ad-d-last"></dd></div>
+      </dl>
+    </div>
+    <footer data-part="foot">
+      <button type="button" class="lt-btn" data-variant="ghost" data-part="close-foot"><span data-part="label">Close</span></button>
+      <button type="button" class="lt-btn" data-variant="secondary"><span data-part="label">Reset password</span></button>
+    </footer>
+  </dialog>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

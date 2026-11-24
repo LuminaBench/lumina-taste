@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" data-palette="cream-charcoal" data-mode="light" data-type="didone" data-density="balanced" data-radius="balanced" data-motion="snappy">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Huila, Colombia · Juniper Coffee</title>
+  <meta name="description" content="Blueprint: a store product page with a gallery, size, grind and subscription options, reviews, a mobile buy bar and a sold-out state built with lumina-taste.">
+</head>
+<body>
+  <a class="bp-skip" href="#main">Skip to content</a>
+  <header class="lt-nav-centered">
+    <nav aria-label="Shop"><ul><li><a href="#coffee" aria-current="page">Coffee</a></li><li><a href="#equipment">Equipment</a></li><li><a href="#subscriptions">Subscriptions</a></li><li><a href="#journal">Journal</a></li></ul></nav>
+    <a href="#home" data-part="brand">JUNIPER&nbsp;COFFEE</a>
+    <div data-part="actions"><a href="#search" aria-label="Search"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg></a><a href="#account" aria-label="Account"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg></a><a href="#bag" aria-label="Bag, 1 item" data-part="bag"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 13.5 6 5.5h12l2.5 8V18a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2Z"/><path d="M3.5 13.5H8l1.5 2.5h5l1.5-2.5h4.5"/></svg><span>1</span></a></div>
+  </header>
+  <main id="main" class="bp-container sp-main">
+    <nav class="lt-crumbs" data-lt="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="#coffee">Coffee</a></li><li><a href="#single">Single origin</a></li><li><span aria-current="page">Huila, Colombia</span></li></ol></nav>
+    <div class="sp-split">
+      <section class="sp-gallery" aria-label="Photos">
+        <div class="sp-stage" data-shot="bag" role="img" aria-label="1 kg bag of Huila, Colombia coffee" id="sp-stage">
+          <div class="sp-bag" aria-hidden="true"><span class="sp-valve"></span><b>JUNIPER</b><span>Huila · Colombia</span><span>Washed · Medium roast</span><em>1 kg</em></div>
+        </div>
+        <div class="sp-thumbs" role="group" aria-label="Choose a photo">
+          <button type="button" aria-pressed="true" data-shot="bag"><span class="sp-t sp-t-bag"></span><span class="lt-visually-hidden">Bag front</span></button>
+          <button type="button" aria-pressed="false" data-shot="beans"><span class="sp-t sp-t-beans"></span><span class="lt-visually-hidden">Roasted beans</span></button>
+          <button type="button" aria-pressed="false" data-shot="cup"><span class="sp-t sp-t-cup"></span><span class="lt-visually-hidden">Brewed cup</span></button>
+          <button type="button" aria-pressed="false" data-shot="farm"><span class="sp-t sp-t-farm"></span><span class="lt-visually-hidden">Farm in Huila</span></button>
+        </div>
+      </section>
+      <section class="sp-buy" aria-labelledby="sp-name">
+        <p class="lt-eyebrow">Single origin</p>
+        <h1 id="sp-name" class="lt-h2">Huila, Colombia</h1>
+        <p class="sp-notes">Dark chocolate · Red apple · Panela</p>
+        <p class="sp-rating"><a class="bp-link" href="#reviews">★ 4.8 · 312 reviews</a></p>
+        <p class="sp-price"><data value="38" id="sp-price">£38</data> <span id="sp-per">£3.80 per 100 g</span></p>
+        <form class="sp-form" id="sp-form">
+          <fieldset class="sp-field"><legend>Size</legend>
+            <div class="lt-segmented" data-lt="segmented-control" role="radiogroup" aria-label="Size" id="sp-size">
+              <span data-part="indicator" aria-hidden="true"></span>
+              <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="250">250 g</button>
+              <button type="button" role="radio" aria-checked="true" tabindex="0" data-value="1000">1 kg</button>
+            </div>
+          </fieldset>
+          <fieldset class="sp-field"><legend>Grind</legend>
+            <div class="sp-chips">
+              <label><input type="radio" name="grind" value="whole" checked><span>Whole bean</span></label>
+              <label><input type="radio" name="grind" value="filter"><span>Filter</span></label>
+              <label><input type="radio" name="grind" value="espresso"><span>Espresso</span></label>
+              <label><input type="radio" name="grind" value="cafetiere"><span>Cafetière</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="lt-radio-cards sp-plan"><legend>How often</legend>
+            <label data-part="card"><input type="radio" name="plan" value="once" checked><span data-part="check" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><span data-part="title">One-off</span><span data-part="desc">Ships tomorrow</span><span data-part="price"><data value="38" id="sp-once">£38</data></span></label>
+            <label data-part="card"><input type="radio" name="plan" value="sub"><span data-part="check" aria-hidden="true"><svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><span data-part="title">Every 4 weeks</span><span data-part="desc">Save 10%, skip or cancel any time</span><span data-part="price"><data value="34.20" id="sp-sub">£34.20</data></span></label>
+          </fieldset>
+          <div data-view="ready">
+            <button type="submit" class="lt-btn sp-add" data-variant="primary" data-size="lg"><span data-part="label">Add to bag · <span id="sp-total">£38</span></span></button>
+            <p class="sp-ship"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg> Order by 2pm: roasted and shipped tomorrow. Free UK delivery over £30.</p>
+          </div>
+          <div class="sp-sold" data-view="sold-out" hidden>
+            <p><strong>Sold out until 2 December.</strong> The next roast is booked. We will email you the day it ships.</p>
+            <button type="button" class="lt-btn" data-variant="secondary" data-size="lg"><span data-part="label">Notify me</span></button>
+          </div>
+          <p class="sp-msg" role="status" id="sp-msg"></p>
+        </form>
+        <div class="lt-accordion sp-acc" data-lt="accordion">
+      <div data-part="item">
+        <h2 data-part="heading"><button type="button" data-part="trigger" id="st-acc-t1" aria-expanded="true" aria-controls="st-acc-p1">Tasting notes<svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></h2>
+        <div data-part="panel" id="st-acc-p1" role="region" aria-labelledby="st-acc-t1" data-state="open"><div data-part="inner"><p>Dark chocolate, red apple and panela sugar, with a long, clean finish. Best 7–30 days after roasting.</p></div></div>
+      </div>
+      <div data-part="item">
+        <h2 data-part="heading"><button type="button" data-part="trigger" id="st-acc-t2" aria-expanded="false" aria-controls="st-acc-p2">Origin<svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></h2>
+        <div data-part="panel" id="st-acc-p2" role="region" aria-labelledby="st-acc-t2" data-state="closed"><div data-part="inner"><p>Grown at 1,700–1,900 m by the Los Naranjos cooperative in Huila, Colombia. Caturra and Castillo varieties, fully washed and dried on raised beds.</p></div></div>
+      </div>
+      <div data-part="item">
+        <h2 data-part="heading"><button type="button" data-part="trigger" id="st-acc-t3" aria-expanded="false" aria-controls="st-acc-p3">How to brew<svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></h2>
+        <div data-part="panel" id="st-acc-p3" role="region" aria-labelledby="st-acc-t3" data-state="closed"><div data-part="inner"><p>Filter: 60 g per litre at 94 °C. Espresso: 18 g in, 40 g out in 28–32 seconds. Cafetière: 4 minutes, then press slowly.</p></div></div>
+      </div>
+      <div data-part="item">
+        <h2 data-part="heading"><button type="button" data-part="trigger" id="st-acc-t4" aria-expanded="false" aria-controls="st-acc-p4">Delivery and returns<svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></h2>
+        <div data-part="panel" id="st-acc-p4" role="region" aria-labelledby="st-acc-t4" data-state="closed"><div data-part="inner"><p>Roasted every weekday and shipped the same day. Free UK delivery over £30. If you do not like it, we refund or replace the next bag.</p></div></div>
+      </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="sp-reviews bp-section-tight" id="reviews" aria-labelledby="sp-rev-h">
+      <h2 id="sp-rev-h" class="lt-h3">What people say</h2>
+      <div class="sp-rev-grid">
+        <section class="lt-reviews" aria-labelledby="lt-rv-title">
+  <div data-part="score"><h3 id="lt-rv-title" class="lt-visually-hidden">Customer reviews</h3><p data-part="big">4.8</p><p data-part="stars" aria-label="4.8 out of 5 stars"><span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8Z"/></svg><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8Z"/></svg><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8Z"/></svg><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8Z"/></svg><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8Z"/></svg></span></p><p data-part="count">312 reviews</p></div>
+  <ol data-part="dist" aria-label="Rating distribution"><li><span>5 star</span><span data-part="bar" style="--p: 75%"><i></i></span><span>75%</span></li><li><span>4 star</span><span data-part="bar" style="--p: 19%"><i></i></span><span>19%</span></li><li><span>3 star</span><span data-part="bar" style="--p: 4%"><i></i></span><span>4%</span></li><li><span>2 star</span><span data-part="bar" style="--p: 1%"><i></i></span><span>1%</span></li><li><span>1 star</span><span data-part="bar" style="--p: 1%"><i></i></span><span>1%</span></li></ol>
+</section>
+
+        <ul class="sp-rev-list"><li><p class="st-stars" aria-label="5 out of 5 stars">★★★★★</p><p>My new everyday filter coffee. Sweet without milk, and the bag stays fresh for a month with the valve.</p><p class="st-who">Sam K. · Bristol · Verified buyer</p></li><li><p class="st-stars" aria-label="5 out of 5 stars">★★★★★</p><p>Ordered whole bean for my grinder. Arrived the day after roasting. Chocolatey as an espresso, fruitier as a V60.</p><p class="st-who">Eloise M. · Leeds · Verified buyer</p></li><li><p class="st-stars" aria-label="4 out of 5 stars">★★★★☆</p><p>Lovely coffee. I would like a 500 g bag; 1 kg is a lot for one person, though it kept well.</p><p class="st-who">Dev P. · Glasgow · Verified buyer</p></li></ul>
+      </div>
+    </section>
+  </main>
+  <div class="lt-actionbar sp-mobilebar" role="region" aria-label="Purchase" data-view="ready">
+    <p><strong id="sp-bar-price">£38</strong><span>Ships tomorrow</span></p>
+    <button type="button" class="lt-btn" data-variant="primary" data-size="lg" id="sp-bar-add">Add to bag</button>
+  </div>
+  <footer class="lt-footer-min bp-container">
+    <p>© 2026 Juniper Coffee Roasters</p>
+    <nav aria-label="Footer"><ul><li><a href="#delivery">Delivery</a></li><li><a href="#returns">Returns</a></li><li><a href="#wholesale">Wholesale</a></li><li><a href="#contact">Contact</a></li></ul></nav>
+    <p data-part="made">Roasted in Bristol</p>
+  </footer>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

@@ -8,3 +8,6 @@ playwright-report/
 *.log
 .tmp/
 preview/generated/
+
+# Agent eval runs (scored with scripts/eval-score.mjs)
+evals/runs/

@@ -1,6 +1,6 @@
 @scope (.lt-segmented) {
   :scope {
-    position: relative; isolation: isolate; display: inline-flex; gap: 2px; padding: 3px;
+    position: relative; isolation: isolate; display: inline-flex; width: fit-content; max-width: 100%; gap: 2px; padding: 3px;
     border-radius: calc(var(--radius-md) + 3px); background: var(--bg-surface-3); font-size: var(--text-ui-sm);
   }
   button {

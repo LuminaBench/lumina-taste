@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, existsSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, existsSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -35,12 +35,35 @@ test('installer copies only what is asked, keeps locks, rejects contrast-breakin
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
+test('static install bundles css, js and snippets that work without a build step', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lt-static-'));
+  try {
+    writeFileSync(join(dir, 'package.json'), '{}');
+    const r = node([join(root, 'scripts/install-taste.mjs'), '--project', dir, '--dest', 'ui', '--framework', 'static', '--components', 'accordion,toggle-switch', '--charts', 'line-chart']);
+    assert.equal(r.status, 0, r.stderr);
+    const js = readFileSync(join(dir, 'ui/lumina.js'), 'utf8');
+    assert.match(js, /var lumina=/);
+    assert.match(readFileSync(join(dir, 'ui/lumina.css'), 'utf8'), /--accent-solid/);
+    assert.ok(readFileSync(join(dir, 'ui/snippets/accordion.html'), 'utf8').includes('data-lt="accordion"'));
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
 test('audit-ui flags every slop rule on the fixture', () => {
   const out = join(mkdtempSync(join(tmpdir(), 'lt-audit-')), 'r.json');
   const r = node([join(root, 'scripts/audit-ui.mjs'), join(root, 'tests/fixtures/slop.html'), '--viewports', 'desktop', '--modes', 'light', '--json', out, '--quiet']);
   assert.equal(r.status, 1);
   const rules = new Set(JSON.parse(readFileSync(out, 'utf8')).report[0].findings.map((f) => f.rule));
   for (const rule of ['overflow', 'clipped-text', 'overlap', 'contrast', 'tabular-nums', 'slop-gradient', 'slop-gradient-text', 'slop-shadow', 'slop-emoji', 'slop-copy', 'dead-control', 'focus-visible']) assert.ok(rules.has(rule), rule);
+});
+
+test('audit-ui --taste flags every page-level rule on the taste fixture', () => {
+  const out = join(mkdtempSync(join(tmpdir(), 'lt-taste-')), 'r.json');
+  const r = node([join(root, 'scripts/audit-ui.mjs'), join(root, 'tests/fixtures/taste.html'), '--taste', '--viewports', 'desktop', '--modes', 'light', '--json', out, '--quiet']);
+  assert.equal(r.status, 1);
+  const j = JSON.parse(readFileSync(out, 'utf8'));
+  const rules = new Set(j.report[0].findings.map((f) => f.rule));
+  for (const rule of ['taste-type-scale', 'taste-colour-count', 'taste-radius-mix', 'taste-primary-count', 'taste-measure', 'taste-heading-order', 'taste-nested-card', 'taste-rhythm', 'taste-focal', 'taste-placeholder', 'taste-button-label']) assert.ok(rules.has(rule), rule);
+  assert.ok(j.score < 40, `score ${j.score}`);
 });
 
 test('copy lint flags hype and passes plain sentences', () => {

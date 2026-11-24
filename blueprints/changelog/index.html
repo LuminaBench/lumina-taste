@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" data-palette="paper-ink" data-mode="light" data-type="editorial" data-density="balanced" data-radius="balanced" data-motion="snappy">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Changelog · Halyard</title>
+  <meta name="description" content="Blueprint: a changelog with tagged releases, a filter and a subscribe link built with lumina-taste.">
+</head>
+<body>
+  <a class="bp-skip" href="#main">Skip to content</a>
+<header class="lt-nav-simple" data-lt="navbar-simple">
+  <a href="#home" data-part="brand"><span data-part="mark" aria-hidden="true"></span>Halyard</a>
+  <nav aria-label="Main"><ul data-part="links"><li><a href="#product">Product</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#customers">Customers</a></li><li><a href="#docs">Docs</a></li><li><a href="#changelog" aria-current="page">Changelog</a></li></ul></nav>
+  <div data-part="actions"><a href="#signin" data-part="signin">Sign in</a><a class="lt-btn" data-variant="primary" data-size="sm" href="#start">Start free</a></div>
+  <button type="button" data-part="toggle" aria-expanded="false" aria-controls="lt-ns-panel" aria-label="Menu"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <div id="lt-ns-panel" data-part="panel" hidden><ul><li><a href="#product">Product</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#customers">Customers</a></li><li><a href="#docs">Docs</a></li></ul><a href="#signin">Sign in</a></div>
+</header>
+
+  <main id="main" class="bp-narrow cl">
+    <header class="cl-head">
+      <p class="lt-eyebrow">Changelog</p>
+      <h1 class="lt-h1">What changed in Halyard</h1>
+      <p class="lt-lede">Every release, newest first. Most weeks bring one.</p>
+      <p class="cl-sub"><a class="bp-link" href="#rss"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg> RSS feed</a> · <a class="bp-link" href="#email">Email me when something ships</a></p>
+    </header>
+    <div class="lt-segmented" data-lt="segmented-control" role="radiogroup" aria-label="Show" id="cl-filter">
+      <span data-part="indicator" aria-hidden="true"></span>
+      <button type="button" role="radio" aria-checked="true" tabindex="0" data-value="all">All</button>
+      <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="new">New</button>
+      <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="improved">Improved</button>
+      <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="fixed">Fixed</button>
+    </div>
+    <section aria-labelledby="cl-rel-h">
+      <h2 id="cl-rel-h" class="lt-visually-hidden">Releases</h2>
+      <ol class="lt-timeline cl-list">
+        <li data-tag="new"><time datetime="2026-11-24">24 Nov 2026<span class="cl-ver">v4.2</span></time><h3><span class="lt-badge" data-tone="accent">New</span> Realtime alerts</h3><p>Alerts fire within 30 seconds of a threshold being crossed, instead of on the next hourly run. Set them from any chart menu.</p></li>
+        <li data-tag="fixed"><time datetime="2026-11-10">10 Nov 2026<span class="cl-ver">v4.1.2</span></time><h3><span class="lt-badge">Fixed</span> CSV exports keep your column order</h3><p>Exports from the table view now match what is on screen, including hidden columns you turned back on.</p></li>
+        <li data-tag="improved"><time datetime="2026-10-30">30 Oct 2026<span class="cl-ver">v4.1</span></time><h3><span class="lt-badge" data-tone="positive">Improved</span> Shared dashboards keep their filters</h3><p>When you share a dashboard, the person you send it to sees the same date range and segments you were looking at.</p></li>
+        <li data-tag="fixed"><time datetime="2026-10-14">14 Oct 2026<span class="cl-ver">v4.0.3</span></time><h3><span class="lt-badge">Fixed</span> Week numbers in January</h3><p>Charts grouped by week no longer show a week 53 at the start of the year.</p></li>
+        <li data-tag="new"><time datetime="2026-09-18">18 Sep 2026<span class="cl-ver">v4.0</span></time><h3><span class="lt-badge" data-tone="accent">New</span> A new chart engine</h3><p>Lines end with their labels, the crosshair snaps to the nearest point and every chart works with the keyboard.</p></li>
+        <li data-tag="improved"><time datetime="2026-09-02">2 Sep 2026<span class="cl-ver">v3.9</span></time><h3><span class="lt-badge" data-tone="positive">Improved</span> Queries return 3× faster</h3><p>A new query planner caches the last 24 hours, so most dashboards load in under 300 ms.</p></li>
+        <li data-tag="new"><time datetime="2026-08-12">12 Aug 2026<span class="cl-ver">v3.8</span></time><h3><span class="lt-badge" data-tone="accent">New</span> Comments on charts</h3><p>Pin a comment to a point on any chart. Teammates are notified and the thread stays attached when the data updates.</p></li>
+        <li data-tag="fixed"><time datetime="2026-07-28">28 Jul 2026<span class="cl-ver">v3.7.1</span></time><h3><span class="lt-badge">Fixed</span> Dark mode in emails</h3><p>Weekly digest emails are readable in dark mode in Gmail and Outlook.</p></li>
+      </ol>
+    </section>
+    <p class="cl-older"><a class="lt-btn" data-variant="secondary" href="#older"><span data-part="label">Older releases</span></a></p>
+  </main>
+  <footer class="lt-footer-min bp-narrow">
+    <p>© 2026 Halyard Labs Ltd</p>
+    <nav aria-label="Footer"><ul><li><a href="#privacy">Privacy</a></li><li><a href="#terms">Terms</a></li><li><a href="#status">Status</a></li></ul></nav>
+  </footer>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

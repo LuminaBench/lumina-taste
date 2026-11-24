@@ -1,0 +1,44 @@
+.ad-shell { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: 100dvh; }
+.ad-side { position: sticky; top: 0; align-self: start; display: grid; gap: 2px; height: 100dvh; padding: var(--space-5) var(--space-3); border-right: 1px solid var(--border-hairline); background: var(--bg-surface-1); align-content: start; }
+.ad-brand { padding: 0 10px var(--space-5); font-family: var(--font-display); font-weight: 700; color: var(--text-primary); text-decoration: none; }
+.ad-brand span { color: var(--text-muted); font-weight: 500; }
+.ad-side a:not(.ad-brand) { display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: var(--radius-sm); color: var(--text-secondary); font-size: var(--text-ui); font-weight: 500; text-decoration: none; }
+.ad-side a:not(.ad-brand):hover { background: var(--bg-surface-2); color: var(--text-primary); }
+.ad-side a[aria-current] { background: var(--bg-surface-3); color: var(--text-primary); font-weight: 600; }
+.ad-main { display: grid; align-content: start; gap: var(--space-5); min-width: 0; padding: var(--space-6) var(--space-7); }
+.ad-head { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-md); flex-wrap: wrap; }
+.ad-head h1 { margin: 0; }
+.ad-head p { margin: 4px 0 0; }
+.ad-tools { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-md); flex-wrap: wrap; }
+.ad-search { flex: 1 1 260px; max-width: 360px; }
+.ad-table { display: grid; gap: var(--space-3); }
+/* Component rules live in @scope, which wins ties; overrides need a second class. */
+.lt-bulk.ad-table { padding-bottom: 0; }
+/* The page scrolls, not the table: no inner max-height, rows grow to fit two-line cells. */
+.ad-table .lt-table-wrap { max-height: none; }
+.ad-table .lt-table tbody td { height: auto; padding-block: 10px; }
+.lt-bulk.ad-table [data-part="bar"] { position: sticky; left: auto; bottom: var(--space-4); justify-self: center; translate: none; z-index: 2; }
+.ad-table .lt-table { width: 100%; }
+.ad-table th:first-child, .ad-table td:first-child { width: 44px; }
+.ad-person { display: flex; align-items: center; gap: 10px; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.ad-person strong { display: block; color: var(--text-primary); font-weight: 600; }
+.ad-person span span { display: block; color: var(--text-muted); font-size: var(--text-ui-sm); }
+.ad-person:hover strong { text-decoration: underline; text-underline-offset: 3px; }
+.ad-avatar { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 50%; background: var(--bg-surface-3); color: var(--text-secondary); font-size: 0.75rem; font-weight: 700; }
+.ad-muted { color: var(--text-secondary); white-space: nowrap; }
+.ad-nomatch { margin: 0; padding: var(--space-5); color: var(--text-secondary); text-align: center; }
+.ad-state { max-width: 640px; }
+.ad-skel { width: 100%; }
+.ad-skel td { padding: 14px 12px; }
+.ad-dl { display: grid; gap: var(--space-4); margin: 0; }
+.ad-dl div { display: grid; gap: 2px; }
+.ad-dl dt { color: var(--text-muted); font-size: var(--text-ui-sm); }
+.ad-dl dd { margin: 0; color: var(--text-primary); }
+@media (max-width: 860px) {
+  .ad-shell { grid-template-columns: 1fr; }
+  .ad-side { position: static; height: auto; display: flex; overflow-x: auto; padding: var(--space-3); border-right: 0; border-bottom: 1px solid var(--border-hairline); scrollbar-width: none; }
+  .ad-brand { padding: 0 10px; align-self: center; white-space: nowrap; }
+  .ad-side a:not(.ad-brand) span { white-space: nowrap; }
+  .ad-main { padding: var(--space-5) var(--space-4); }
+  .ad-search { max-width: none; }
+}

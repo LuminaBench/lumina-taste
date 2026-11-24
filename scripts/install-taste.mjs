@@ -5,13 +5,15 @@
 //
 //   node scripts/install-taste.mjs --palette slate-forest --type precision --components data-table,command-palette
 //   node scripts/install-taste.mjs --framework react --charts line-chart,kpi-card --dest ./src/ui
+//   node scripts/install-taste.mjs --framework static --components accordion --dest ./ui   (no build step: lumina.css + lumina.js + snippets/)
 //   node scripts/install-taste.mjs --attach --root "#app" --components toast-stack      (existing app)
 //   node scripts/install-taste.mjs --density dense                (change one axis; locked axes are kept)
 //   node scripts/install-taste.mjs --style swiss                  (a style brings its palette, mode, type and radius)
 //   node scripts/install-taste.mjs --override accent-solid="oklch(0.5 0.15 30)"   (contrast-checked)
 //   node scripts/install-taste.mjs --list | --dry-run | --force (ignore locks) | --overwrite
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, join, relative, resolve } from 'node:path';
+import { basename, dirname, join, relative, resolve } from 'node:path';
+import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -53,7 +55,7 @@ if (opts.list) {
 }
 
 const framework = opts.framework ?? 'vanilla';
-if (!['vanilla', 'react'].includes(framework)) fail(`--framework must be vanilla or react`);
+if (!['vanilla', 'react', 'static'].includes(framework)) fail(`--framework must be vanilla, react or static`);
 const projectDir = resolve(opts.project ?? '.');
 const dest = resolve(projectDir, opts.dest ?? 'lumina-taste');
 const profilePath = resolve(projectDir, opts.profile ?? 'taste-profile.json');
@@ -171,9 +173,41 @@ const write = (rel, content) => {
   mkdirSync(dirname(target), { recursive: true });
   writeFileSync(target, content);
 };
-for (const f of [...tokenFiles, ...profileEngine, ...[...files].sort()]) write(f, readFileSync(join(root, f)));
+if (framework === 'static') await writeStatic();
+else for (const f of [...tokenFiles, ...profileEngine, ...[...files].sort()]) write(f, readFileSync(join(root, f)));
+
+// Static: no build step in the project. One lumina.css (tokens + component CSS) and one lumina.js that
+// enhances every [data-lt] element on load and exposes the charts, plus each component's HTML to paste.
+async function writeStatic() {
+  let esbuild;
+  try { esbuild = await import(pathToFileURL(createRequire(import.meta.url).resolve('esbuild')).href); } catch { fail('--framework static bundles with esbuild. Run `npm install` once in the skill folder, then try again.'); }
+  const imp = [], reg = [], charts = [];
+  for (const f of tokenFiles) imp.push(`import './${f}';`);
+  imp.push(`import { autoEnhance } from './components/ui/_shared/dom';`, `import './components/ui/_shared/shared.css';`);
+  want.components.forEach((id, i) => {
+    const c = catalog.ui.find((x) => x.id === id);
+    for (const f of c.files.filter((f) => f.endsWith('.css'))) imp.push(`import './${f}';`);
+    for (const d of c.deps ?? []) { const dep = catalog.ui.find((x) => x.id === d); for (const f of dep?.files.filter((f) => f.endsWith('.css')) ?? []) imp.push(`import './${f}';`); }
+    const ts = c.files.find((f) => f.endsWith(`${id}.ts`));
+    const html = c.files.find((f) => f.endsWith('.html'));
+    const name = html ? readFileSync(join(root, html), 'utf8').match(/data-lt="([^"]+)"/)?.[1] : null;
+    if (ts && name && /export function enhance\b/.test(readFileSync(join(root, ts), 'utf8'))) { imp.push(`import { enhance as e${i} } from './${ts.replace(/\.ts$/, '')}';`); reg.push(`  ${JSON.stringify(name)}: e${i},`); }
+    if (html) write(`snippets/${id}.html`, readFileSync(join(root, html)));
+  });
+  want.charts.forEach((id, i) => { const c = catalog.charts.find((x) => x.id === id); imp.push(`import { render as c${i} } from './${c.path}/${id}';`); charts.push(`  ${JSON.stringify(id)}: c${i},`); });
+  const entry = `${imp.join('\n')}\nconst registry = {\n${reg.join('\n')}\n};\nexport const charts = {\n${charts.join('\n')}\n};\nexport function enhanceAll(root = document) { return autoEnhance(root, registry); }\nif (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => enhanceAll()); else enhanceAll();\n`;
+  const r = await esbuild.build({ stdin: { contents: entry, resolveDir: root, loader: 'ts', sourcefile: 'lumina-entry.ts' }, bundle: true, format: 'iife', globalName: 'lumina', target: 'es2022', minify: true, write: false, outdir: 'out', entryNames: 'lumina', logLevel: 'silent' });
+  for (const o of r.outputFiles) write(basename(o.path), Buffer.from(o.contents));
+  for (const id of want.blueprints) {
+    const bp = catalog.blueprints.find((x) => x.id === id);
+    const b = await esbuild.build({ entryPoints: [join(root, bp.path, 'main.ts')], bundle: true, format: 'iife', target: 'es2022', minify: true, write: false, outdir: 'out', entryNames: 'main', logLevel: 'silent' });
+    for (const o of b.outputFiles) write(`${id}/${basename(o.path)}`, Buffer.from(o.contents));
+    const html = readFileSync(join(root, bp.path, 'index.html'), 'utf8').replace(/<script type="module" src="\.\/main\.ts"><\/script>/, '<link rel="stylesheet" href="./main.css">\n  <script defer src="./main.js"></script>');
+    write(`${id}/index.html`, html);
+  }
+}
 const tokenIndex = `/* lumina-taste tokens: import this once, before any component CSS. */\n${tokenFiles.map((f) => `@import "./${relative('tokens', f)}";`).join('\n')}\n`;
-write('tokens/index.css', tokenIndex);
+if (framework !== 'static') write('tokens/index.css', tokenIndex);
 
 if (!opts['no-profile']) {
   if (dry) console.log(`  ~ ${relative(process.cwd(), profilePath)}`);
@@ -188,8 +222,9 @@ if (applied.length) console.log(`  Profile updated: ${applied.join(', ')}.`);
 if (blocked.length) console.log(`  Locked, left unchanged: ${blocked.join(', ')}. Pass --force or --unlock <axis> if the user asked for it.`);
 console.log(`  Profile: ${relative(process.cwd(), profilePath)} (${profile.palette}, ${profile.mode}, ${profile.typography}, ${profile.density}, ${profile.radius}, ${profile.motion}${profile.style !== 'none' ? `, style ${profile.style}` : ''}${profile.locks.length ? `; locked: ${profile.locks.join(', ')}` : ''})`);
 console.log('\nNext:');
-console.log(`  1. Import ${relative(projectDir, join(dest, 'tokens/index.css'))} once, before component CSS.`);
+if (framework === 'static') console.log(`  1. In each page: <link rel="stylesheet" href="${relative(projectDir, join(dest, 'lumina.css'))}"> and <script defer src="${relative(projectDir, join(dest, 'lumina.js'))}"></script>.\n     Paste markup from ${relative(projectDir, join(dest, 'snippets'))}/; it is enhanced on load. Charts: lumina.charts['line-chart'](el, data, options) after DOMContentLoaded. Works from file:// too.`);
+else console.log(`  1. Import ${relative(projectDir, join(dest, 'tokens/index.css'))} once, before component CSS.`);
 if (profile.installMode === 'attach') console.log(`  2. Put the attributes on your wrapper only (host styles stay untouched):\n     <div class="lt-root" ${attrs}>…</div>   (attachRoot: "${profile.attachRoot}")`);
 else console.log(`  2. Put the attributes on <html>:\n     <html ${attrs}>\n     or call applyProfile(profile) from engine/profiles/profile.mjs (bootstrapSnippet() avoids a flash).`);
-if (want.components.length) console.log(`  3. ${framework === 'react' ? 'Import the components from their .react.tsx files.' : 'Paste each .html snippet and call enhance(el) from its .ts file (or autoEnhance(document, { id: enhance }) from _shared/dom.ts).'}`);
+if (want.components.length && framework !== 'static') console.log(`  3. ${framework === 'react' ? 'Import the components from their .react.tsx files.' : 'Paste each .html snippet and call enhance(el) from its .ts file (or autoEnhance(document, { id: enhance }) from _shared/dom.ts).'}`);
 if (blocked.length && !opts.force) process.exit(3);

@@ -1,0 +1,10 @@
+.cl { display: grid; gap: var(--space-6); padding-block: var(--space-8); }
+.cl-head { display: grid; gap: var(--space-3); }
+.cl-head h1, .cl-head p { margin: 0; }
+.cl-sub { color: var(--text-muted); font-size: var(--text-ui-sm); }
+.cl-sub a { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.cl-list li[hidden] { display: none; }
+.cl-ver { display: block; margin-top: 2px; color: var(--text-muted); font-family: var(--font-mono); font-size: var(--text-ui-xs); }
+.cl-list h3 { align-items: baseline; }
+.cl-older { margin: 0; }
+.lt-footer-min { padding-block: var(--space-6); }
