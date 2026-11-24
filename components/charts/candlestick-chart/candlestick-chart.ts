@@ -65,5 +65,5 @@ export function demo(host: HTMLElement) {
     bars.push({ t: d.toISOString().slice(0, 10), open: +open.toFixed(2), high: +high.toFixed(2), low: +low.toFixed(2), close: +close.toFixed(2), volume: Math.round(2e6 + rand() * 4e6 + Math.abs(close - open) * 6e5) });
     p = close;
   }
-  return render(host, bars, { title: 'NWND daily price', subtitle: 'Last 60 sessions, with volume', format: { prefix: '$', decimals: 2 }, source: 'Source: synthetic market data' });
+  return render(host, bars, { title: 'HLYD daily price', subtitle: 'Last 60 sessions, with volume', format: { prefix: '$', decimals: 2 }, source: 'Source: synthetic market data' });
 }

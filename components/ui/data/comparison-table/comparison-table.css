@@ -1,4 +1,4 @@
-.lt-compare-wrap { width: 100%; overflow-x: auto; }
+.lt-compare-wrap { position: relative; width: 100%; overflow-x: auto; }
 .lt-compare-wrap:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
 @scope (.lt-compare) {
   :scope { width: 100%; min-width: 520px; border-collapse: separate; border-spacing: 0; font-size: var(--text-ui); font-variant-numeric: tabular-nums; }

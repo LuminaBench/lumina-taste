@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" data-palette="slate-forest" data-mode="light" data-type="precision" data-density="balanced" data-radius="balanced" data-motion="snappy">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Revenue · Halyard</title>
+  <meta name="description" content="Blueprint: financial and analytics dashboard built with lumina-taste.">
+</head>
+<body>
+  <a class="bp-skip" href="#main">Skip to content</a>
+  <div class="bp-app">
+    <aside class="lt-sidebar" data-lt="app-sidebar" data-persist="bp-dash-sidebar" aria-label="Workspace">
+      <div data-part="head"><span data-part="ws" aria-hidden="true">H</span><span data-part="ws-name">Halyard Finance</span><button type="button" data-part="collapse" aria-expanded="true" aria-label="Collapse sidebar"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button></div>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="#overview"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1Z"/></svg><span>Overview</span></a></li>
+          <li><a href="#revenue" aria-current="page"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V4M4 20h16M8.5 16v-5M13 16V8M17.5 16v-3"/></svg><span>Revenue</span></a></li>
+          <li><a href="#customers"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.25"/><path d="M3 20a6 6 0 0 1 12 0M16 4.8a3.25 3.25 0 0 1 0 6.4M17.5 14.2A6 6 0 0 1 21 20"/></svg><span>Customers</span><em data-part="count">1,284</em></a></li>
+          <li><a href="#invoices"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-10Z"/><path d="M14 3.5v5h5"/></svg><span>Invoices</span><em data-part="count">12</em></a></li>
+        </ul>
+        <p data-part="section">Workspace</p>
+        <ul>
+          <li><a href="#billing"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg><span>Billing</span></a></li>
+          <li><a href="#settings"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg><span>Settings</span></a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="bp-app-main">
+      <header class="bp-topbar">
+        <div class="lt-search" data-lt="search-input" data-shortcut="k">
+          <svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><label class="lt-visually-hidden" for="dash-search">Search customers, invoices and reports</label>
+          <input id="dash-search" type="search" placeholder="Search customers, invoices…" autocomplete="off" spellcheck="false">
+          <button type="button" data-part="clear" aria-label="Clear search" hidden><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+          <kbd data-part="shortcut" aria-hidden="true"><span data-part="mod">⌘</span>K</kbd>
+        </div>
+        <div class="lt-account" data-lt="account-menu">
+          <button type="button" data-part="trigger" aria-haspopup="menu" aria-expanded="false" aria-controls="dash-acct"><span data-part="avatar" aria-hidden="true">RM</span><span data-part="who">Riya Mehta</span><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          <div data-part="menu" id="dash-acct" role="menu" aria-label="Account" hidden>
+            <div data-part="identity" role="presentation"><strong>Riya Mehta</strong><span>riya@halyard.dev</span></div>
+            <a role="menuitem" href="#profile" tabindex="-1"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Profile</a>
+            <a role="menuitem" href="#settings" tabindex="-1"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg>Settings</a>
+            <div data-part="sep" role="separator"></div>
+            <button type="button" role="menuitem" tabindex="-1" data-tone="danger"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 20H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3M16 16l4-4-4-4M20 12H9"/></svg>Sign out</button>
+          </div>
+        </div>
+      </header>
+      <main id="main" class="bp-dash">
+        <div class="bp-dash-head">
+          <div><h1 class="lt-h2">Revenue</h1><p class="lt-secondary">All workspaces · GBP · updated 2 minutes ago</p></div>
+          <a href="#export" class="lt-btn" data-variant="secondary"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></svg><span data-part="label">Export</span></a>
+        </div>
+        <div class="lt-filterbar" data-lt="filter-bar" id="filters" role="toolbar" aria-label="Dashboard filters">
+          <div class="lt-segmented" data-part="range" role="radiogroup" aria-label="Date range"><span data-part="indicator" aria-hidden="true"></span><button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="6">6M</button><button type="button" role="radio" aria-checked="true" tabindex="0" data-value="12">12M</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="24">24M</button></div>
+          <span data-part="chips"><button type="button" data-part="chip" aria-pressed="true">Region: Europe <svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></span>
+          <button type="button" data-part="add"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add filter</button>
+          <button type="button" data-part="reset">Reset</button>
+        </div>
+        <section class="bp-kpis" aria-label="Key metrics"><div id="k1"></div><div id="k2"></div><div id="k3"></div><div id="k4"></div></section>
+        <section class="bp-grid" aria-label="Charts">
+          <div class="bp-card bp-span-2" id="c-mrr"></div>
+          <div class="bp-card" id="c-plan"></div>
+          <div class="bp-card" id="c-pay"></div>
+          <div class="bp-card bp-span-2" id="c-region"></div>
+        </section>
+        <section class="bp-card" aria-labelledby="t-h">
+          <h2 class="bp-card-title" id="t-h">Top accounts</h2>
+          <div class="lt-table-wrap" data-lt="data-table" tabindex="0" role="region" aria-label="Top accounts table">
+            <table class="lt-table">
+              <caption class="lt-visually-hidden">Top accounts by MRR. Column headers sort the table.</caption>
+              <thead><tr>
+                <th scope="col" aria-sort="none"><button type="button" data-sort="name">Account<span data-part="sort" aria-hidden="true"></span></button></th>
+                <th scope="col" aria-sort="none"><button type="button" data-sort="plan">Plan<span data-part="sort" aria-hidden="true"></span></button></th>
+                <th scope="col" data-num aria-sort="descending"><button type="button" data-sort="mrr" data-type="number">MRR<span data-part="sort" aria-hidden="true"></span></button></th>
+                <th scope="col" data-num aria-sort="none"><button type="button" data-sort="chg" data-type="number">30-day change<span data-part="sort" aria-hidden="true"></span></button></th>
+                <th scope="col" aria-sort="none"><button type="button" data-sort="status">Health<span data-part="sort" aria-hidden="true"></span></button></th>
+              </tr></thead>
+              <tbody id="rows"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

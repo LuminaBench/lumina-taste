@@ -255,3 +255,8 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* The hidden attribute always wins over component display rules. */
+:where([data-palette]) [hidden]:not([hidden="until-found"]) {
+  display: none !important;
+}

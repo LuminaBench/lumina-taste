@@ -375,7 +375,7 @@ test.describe('data', () => {
     const s = await solo(page, 'data-table');
     await s.locator('[data-sort="name"]').click();
     await expect(s.locator('th').nth(1)).toHaveAttribute('aria-sort', 'ascending');
-    await expect(s.locator('tbody tr[data-row] [data-k="name"]').first()).toHaveText('Harbour & Co');
+    await expect(s.locator('tbody tr[data-row] [data-k="name"]').first()).toHaveText('Halyard');
     await s.locator('[data-sort="mrr"]').click();
     await expect(s.locator('tbody tr[data-row] [data-k="mrr"]').first()).toHaveText('£390');
     await s.locator('[data-part="expand"]').first().click();

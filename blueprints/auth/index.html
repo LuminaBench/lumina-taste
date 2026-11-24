@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" data-palette="sage-clay" data-mode="light" data-type="humanist" data-density="spacious" data-radius="soft" data-motion="calm">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · Halyard</title>
+  <meta name="description" content="Blueprint: minimal authentication and onboarding flow built with lumina-taste.">
+</head>
+<body>
+  <main class="au">
+    <aside class="au-side" aria-label="About Halyard">
+      <a class="au-brand" href="#top">Halyard</a>
+      <figure class="au-quote"><blockquote><p>“Setup took one coffee. By lunch the whole team had stopped asking me for numbers.”</p></blockquote><figcaption>Lee Park · Operations lead, Moss Studio</figcaption></figure>
+      <p class="au-legal">© 2026 Halyard Labs Ltd. · <a href="#privacy">Privacy</a></p>
+    </aside>
+    <section class="au-main" aria-live="polite">
+      <div class="au-card" id="step-email">
+        <h1 class="lt-h2">Sign in to Halyard</h1>
+        <p class="lt-secondary">We’ll email you a 6-digit code. No password needed.</p>
+        <form class="lt-form-demo" data-lt="text-field" id="email-form" novalidate>
+          <div class="lt-field"><input id="au-email" type="email" required placeholder=" " autocomplete="email" aria-describedby="au-email-m"><label for="au-email">Work email</label><span data-part="valid" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><p id="au-email-m" data-part="message" data-help="Use the address your team invited."> Use the address your team invited.</p></div>
+          <button type="submit" class="lt-btn" data-variant="primary" data-size="lg" id="send"><span data-part="label">Email me a code</span></button>
+        </form>
+        <p class="au-alt">New here? <a class="bp-link" href="#signup">Create a workspace</a></p>
+      </div>
+      <div class="au-card" id="step-code" hidden>
+        <button type="button" class="lt-btn au-back" data-variant="ghost" data-size="sm" id="back"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span data-part="label">Change email</span></button>
+        <h1 class="lt-h2">Check your inbox</h1>
+        <p class="lt-secondary">Enter the code we sent to <strong id="sent-to">you</strong>. It expires in 10 minutes.</p>
+        <fieldset class="lt-otp" data-lt="otp-input" data-expected="246810" id="otp">
+          <legend class="lt-visually-hidden">6-digit sign-in code</legend>
+          <div data-part="fields"><input inputmode="numeric" autocomplete="one-time-code" maxlength="1" aria-label="Digit 1"><input inputmode="numeric" maxlength="1" aria-label="Digit 2"><input inputmode="numeric" maxlength="1" aria-label="Digit 3"><span data-part="sep" aria-hidden="true"></span><input inputmode="numeric" maxlength="1" aria-label="Digit 4"><input inputmode="numeric" maxlength="1" aria-label="Digit 5"><input inputmode="numeric" maxlength="1" aria-label="Digit 6"></div>
+          <p data-part="status" role="status" aria-live="polite"></p>
+        </fieldset>
+        <p class="au-alt">Demo code: <code>246810</code> · <button type="button" class="au-linkbtn" id="resend">Resend code</button></p>
+      </div>
+      <div class="au-card" id="step-setup" hidden>
+        <ol class="au-steps" aria-label="Setup progress"><li data-state="done">Account</li><li data-state="current" aria-current="step">Workspace</li><li>Done</li></ol>
+        <h1 class="lt-h2">Name your workspace</h1>
+        <form class="lt-form-demo" data-lt="text-field" id="ws-form" novalidate>
+          <div class="lt-field"><input id="au-ws" type="text" required minlength="2" placeholder=" " autocomplete="organization" aria-describedby="au-ws-m"><label for="au-ws">Workspace name</label><span data-part="valid" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><p id="au-ws-m" data-part="message" data-help="Usually your company or team name.">Usually your company or team name.</p></div>
+          <fieldset class="lt-radio-cards au-size"><legend>How big is your team?</legend>
+            <label data-part="card"><input type="radio" name="size" value="1-10" checked><span data-part="check" aria-hidden="true"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><span data-part="title">1–10</span><span data-part="desc">Just getting started</span></label>
+            <label data-part="card"><input type="radio" name="size" value="11-50"><span data-part="check" aria-hidden="true"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><span data-part="title">11–50</span><span data-part="desc">A few teams</span></label>
+            <label data-part="card"><input type="radio" name="size" value="51+"><span data-part="check" aria-hidden="true"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><span data-part="title">51+</span><span data-part="desc">Many teams</span></label>
+          </fieldset>
+          <button type="submit" class="lt-btn" data-variant="primary" data-size="lg"><span data-part="label">Create workspace</span></button>
+        </form>
+      </div>
+      <div class="au-card au-done" id="step-done" hidden>
+        <span class="au-done-icon" aria-hidden="true"><svg class="lt-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.3 2.4 2.4 4.6-4.9"/></svg></span>
+        <h1 class="lt-h2">You’re in</h1>
+        <p class="lt-secondary"><strong id="ws-name">Your workspace</strong> is ready. Connect a data source to see your first chart.</p>
+        <a class="lt-btn" data-variant="primary" data-size="lg" href="#connect"><span data-part="label">Connect a data source</span></a>
+        <button type="button" class="au-linkbtn" id="restart">Start the demo again</button>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

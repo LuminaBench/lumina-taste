@@ -1,4 +1,4 @@
-.lt-table-wrap { width: 100%; max-height: 360px; overflow: auto; overscroll-behavior: contain; border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
+.lt-table-wrap { position: relative; width: 100%; max-height: 360px; overflow: auto; overscroll-behavior: contain; border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
 .lt-table-wrap:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
 @scope (.lt-table) {
   :scope { width: 100%; border-collapse: separate; border-spacing: 0; font-size: var(--text-ui); font-variant-numeric: tabular-nums; }

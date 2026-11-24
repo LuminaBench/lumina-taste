@@ -5,7 +5,7 @@
   "counts": {
     "ui": 84,
     "charts": 22,
-    "blueprints": 0,
+    "blueprints": 8,
     "palettes": 18,
     "themes": 36,
     "typography": 12
@@ -3043,7 +3043,255 @@
       "path": "components/charts/kpi-card"
     }
   ],
-  "blueprints": [],
+  "blueprints": [
+    {
+      "id": "landing",
+      "order": 1,
+      "name": "Product / SaaS landing page",
+      "summary": "Top dropdown nav, one focused hero, a live product frame, bento features and a high-contrast footer.",
+      "anatomy": "Navbar → hero (1 primary CTA) → product frame → proof → bento → quote → CTA band → footer",
+      "aliases": [
+        "landing page",
+        "marketing site",
+        "homepage",
+        "saas homepage",
+        "startup landing"
+      ],
+      "uses": [
+        "navbar-mega",
+        "button",
+        "segmented-control",
+        "bento-grid",
+        "site-footer",
+        "multi-line-chart",
+        "stat-strip"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/landing/index.html",
+        "blueprints/landing/main.ts",
+        "blueprints/landing/meta.json",
+        "blueprints/landing/page.css"
+      ],
+      "path": "blueprints/landing"
+    },
+    {
+      "id": "dashboard",
+      "order": 2,
+      "name": "Financial & analytics dashboard",
+      "summary": "Collapsible sidebar, one global filter bar, a KPI row, a chart grid and a sortable table.",
+      "anatomy": "Sidebar + top bar → title + global filters → KPI row → 2×2 chart grid → table",
+      "aliases": [
+        "admin dashboard",
+        "analytics dashboard",
+        "finance dashboard",
+        "saas dashboard",
+        "metrics page"
+      ],
+      "uses": [
+        "app-sidebar",
+        "search-input",
+        "account-menu",
+        "filter-bar",
+        "kpi-card",
+        "multi-line-chart",
+        "stacked-bar-chart",
+        "donut-chart",
+        "horizontal-bar-chart",
+        "data-table"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/dashboard/index.html",
+        "blueprints/dashboard/main.ts",
+        "blueprints/dashboard/meta.json",
+        "blueprints/dashboard/page.css"
+      ],
+      "path": "blueprints/dashboard"
+    },
+    {
+      "id": "editorial",
+      "order": 3,
+      "name": "Editorial portfolio / showcase",
+      "summary": "Serif + sans typography, generous margins, case-study cards and a comfortable reading measure.",
+      "anatomy": "Quiet header → statement → selected work grid → essay excerpt with pull quote → contact → footer",
+      "aliases": [
+        "portfolio",
+        "agency site",
+        "case studies",
+        "designer portfolio",
+        "studio website",
+        "blog"
+      ],
+      "uses": [
+        "floating-pill-nav",
+        "media-card",
+        "scroll-reveal",
+        "button"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/editorial/index.html",
+        "blueprints/editorial/main.ts",
+        "blueprints/editorial/meta.json",
+        "blueprints/editorial/page.css"
+      ],
+      "path": "blueprints/editorial"
+    },
+    {
+      "id": "docs",
+      "order": 4,
+      "name": "Documentation & changelog",
+      "summary": "Sticky left nav, right “On this page” scrollspy, copyable code blocks, callouts and a changelog.",
+      "anatomy": "Top bar → left nav | article | right scrollspy → changelog timeline",
+      "aliases": [
+        "docs site",
+        "documentation",
+        "developer docs",
+        "api reference",
+        "changelog page",
+        "knowledge base"
+      ],
+      "uses": [
+        "tree-view",
+        "scrollspy-toc",
+        "code-block",
+        "callout",
+        "timeline",
+        "breadcrumbs",
+        "kbd",
+        "search-input"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/docs/index.html",
+        "blueprints/docs/main.ts",
+        "blueprints/docs/meta.json",
+        "blueprints/docs/page.css"
+      ],
+      "path": "blueprints/docs"
+    },
+    {
+      "id": "pricing",
+      "order": 5,
+      "name": "Pricing & comparison page",
+      "summary": "Sliding monthly/annual toggle, three clear tiers, a crisp feature matrix and an FAQ accordion.",
+      "anatomy": "Header → billing toggle → 3 tiers (one featured) → comparison matrix → FAQ → contact line",
+      "aliases": [
+        "pricing page",
+        "plans page",
+        "pricing table",
+        "subscription tiers",
+        "compare plans"
+      ],
+      "uses": [
+        "segmented-control",
+        "button",
+        "comparison-table",
+        "accordion",
+        "badge"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/pricing/index.html",
+        "blueprints/pricing/main.ts",
+        "blueprints/pricing/meta.json",
+        "blueprints/pricing/page.css"
+      ],
+      "path": "blueprints/pricing"
+    },
+    {
+      "id": "settings",
+      "order": 6,
+      "name": "Settings & workspace panel",
+      "summary": "Sectioned forms with tactile toggles and a sticky unsaved-changes bar.",
+      "anatomy": "Section nav | form sections (profile, notifications, workspace, danger zone) + sticky save bar",
+      "aliases": [
+        "settings page",
+        "preferences",
+        "account settings",
+        "workspace settings",
+        "admin panel form"
+      ],
+      "uses": [
+        "tabs",
+        "text-field",
+        "toggle-switch",
+        "radio-group",
+        "button",
+        "description-list"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/settings/index.html",
+        "blueprints/settings/main.ts",
+        "blueprints/settings/meta.json",
+        "blueprints/settings/page.css"
+      ],
+      "path": "blueprints/settings"
+    },
+    {
+      "id": "directory",
+      "order": 7,
+      "name": "Interactive directory / skills hub",
+      "summary": "A search bar, filter pills and clean preview cards that filter live, with an honest empty state.",
+      "anatomy": "Title + search → filter pills + sort → result count → card grid → empty state",
+      "aliases": [
+        "directory",
+        "marketplace",
+        "catalog page",
+        "skills hub",
+        "app store grid",
+        "template gallery",
+        "resource library"
+      ],
+      "uses": [
+        "search-input",
+        "segmented-control",
+        "badge",
+        "empty-state",
+        "button"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/directory/index.html",
+        "blueprints/directory/main.ts",
+        "blueprints/directory/meta.json",
+        "blueprints/directory/page.css"
+      ],
+      "path": "blueprints/directory"
+    },
+    {
+      "id": "auth",
+      "order": 8,
+      "name": "Minimal auth & onboarding flow",
+      "summary": "A split sign-in screen, a one-time-code step and a two-question onboarding, with nothing else on the page.",
+      "anatomy": "Quiet brand panel | card: email → OTP → workspace name → done",
+      "aliases": [
+        "login page",
+        "sign in",
+        "sign up flow",
+        "onboarding",
+        "otp verification",
+        "magic link login"
+      ],
+      "uses": [
+        "text-field",
+        "otp-input",
+        "button",
+        "stepper-wizard",
+        "radio-cards"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/auth/index.html",
+        "blueprints/auth/main.ts",
+        "blueprints/auth/meta.json",
+        "blueprints/auth/page.css"
+      ],
+      "path": "blueprints/auth"
+    }
+  ],
   "palettes": [
     {
       "id": "cream-charcoal",

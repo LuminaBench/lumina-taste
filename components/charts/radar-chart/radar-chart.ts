@@ -43,6 +43,6 @@ export function render(host: HTMLElement, data: RadarData, opts: ChartOptions = 
 }
 
 export function demo(host: HTMLElement) {
-  return render(host, { axes: ['Speed', 'Accuracy', 'Coverage', 'Cost', 'Latency', 'Support'], max: 10, series: [{ name: 'Northwind', values: [8.6, 7.9, 8.8, 6.4, 8.1, 9.0] }, { name: 'Industry median', values: [6.2, 7.1, 6.0, 7.0, 6.5, 6.1] }] },
-    { title: 'Northwind against the median', subtitle: 'Buyer survey scores, out of 10', format: { decimals: 1 }, source: 'Source: synthetic survey' });
+  return render(host, { axes: ['Speed', 'Accuracy', 'Coverage', 'Cost', 'Latency', 'Support'], max: 10, series: [{ name: 'Halyard', values: [8.6, 7.9, 8.8, 6.4, 8.1, 9.0] }, { name: 'Industry median', values: [6.2, 7.1, 6.0, 7.0, 6.5, 6.1] }] },
+    { title: 'Halyard against the median', subtitle: 'Buyer survey scores, out of 10', format: { decimals: 1 }, source: 'Source: synthetic survey' });
 }

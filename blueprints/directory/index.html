@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" data-palette="mono-lime" data-mode="dark" data-type="technical" data-density="balanced" data-radius="balanced" data-motion="snappy">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Skills hub · Halyard</title>
+  <meta name="description" content="Blueprint: interactive directory and skills hub built with lumina-taste.">
+</head>
+<body>
+  <a class="bp-skip" href="#main">Skip to content</a>
+  <main id="main" class="bp-container dir">
+    <header class="dir-head">
+      <p class="lt-eyebrow">Skills hub</p>
+      <h1 class="lt-h1">Add superpowers to your agent</h1>
+      <p class="lt-lede">Installable skills for coding agents. Every one is reviewed, versioned and runs offline.</p>
+      <div class="lt-search dir-search" data-lt="search-input" data-shortcut="k">
+        <svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><label class="lt-visually-hidden" for="dir-q">Search skills</label>
+        <input id="dir-q" type="search" placeholder="Search 12 skills: “charts”, “audio”, “physics”…" autocomplete="off" spellcheck="false">
+        <button type="button" data-part="clear" aria-label="Clear search" hidden><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        <kbd data-part="shortcut" aria-hidden="true"><span data-part="mod">⌘</span>K</kbd>
+      </div>
+    </header>
+    <div class="dir-tools">
+      <div class="dir-pills" role="group" aria-label="Filter by category" id="pills">
+        <button type="button" aria-pressed="true" data-cat="all">All</button>
+        <button type="button" aria-pressed="false" data-cat="design">Design</button>
+        <button type="button" aria-pressed="false" data-cat="data">Data</button>
+        <button type="button" aria-pressed="false" data-cat="media">Media</button>
+        <button type="button" aria-pressed="false" data-cat="games">Games</button>
+      </div>
+      <div class="lt-segmented" data-lt="segmented-control" id="sort" role="radiogroup" aria-label="Sort"><span data-part="indicator" aria-hidden="true"></span><button type="button" role="radio" aria-checked="true" tabindex="0" data-value="popular">Popular</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="new">Newest</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="az">A–Z</button></div>
+    </div>
+    <p class="dir-count" id="count" aria-live="polite"></p>
+    <ul class="dir-grid" id="grid"></ul>
+    <section class="lt-empty dir-empty" id="empty" aria-labelledby="empty-h" hidden>
+      <span data-part="icon" aria-hidden="true"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg></span>
+      <h3 id="empty-h">No skills match that search</h3>
+      <p>Try a broader word, or clear the category filter.</p>
+      <div data-part="actions"><button type="button" class="lt-btn" data-variant="secondary" id="reset"><span data-part="label">Clear filters</span></button></div>
+    </section>
+  </main>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>
