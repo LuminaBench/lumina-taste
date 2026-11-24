@@ -1,0 +1,22 @@
+<div class="lt-tour-demo" data-lt="coach-mark">
+  <div data-part="mock">
+    <div data-part="mock-bar"><span data-tour="1" data-title="Search everything" data-body="Press / anywhere to jump to any report, person or setting."><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg> Search</span><span data-tour="3" data-title="Invite your team" data-body="Reports are better with two people looking. Invites are free."><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.25"/><path d="M3 20a6 6 0 0 1 12 0M16 4.8a3.25 3.25 0 0 1 0 6.4M17.5 14.2A6 6 0 0 1 21 20"/></svg> Invite</span></div>
+    <div data-part="mock-body"><span data-tour="2" data-title="Pin what matters" data-body="Star a report to keep it at the top of your sidebar."><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.8 2.5 5.1 5.6.8-4 4 .9 5.6-5-2.7-5 2.7.9-5.6-4-4 5.6-.8Z"/></svg> Weekly revenue</span><span data-part="mock-line"></span><span data-part="mock-line" style="width: 60%"></span></div>
+  </div>
+  <button type="button" class="lt-btn" data-variant="primary" data-part="start"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5Z"/></svg><span data-part="label">Start the tour</span></button>
+  <div class="lt-tour" data-part="layer" hidden>
+    <div data-part="spot" aria-hidden="true"></div>
+    <div data-part="card" role="dialog" aria-modal="true" aria-labelledby="lt-tour-t" aria-describedby="lt-tour-b">
+      <p data-part="step"></p>
+      <h3 id="lt-tour-t"></h3>
+      <p id="lt-tour-b"></p>
+      <div data-part="nav">
+        <button type="button" class="lt-btn" data-variant="ghost" data-size="sm" data-part="skip"><span data-part="label">Skip tour</span></button>
+        <span>
+          <button type="button" class="lt-btn" data-variant="secondary" data-size="sm" data-part="back"><span data-part="label">Back</span></button>
+          <button type="button" class="lt-btn" data-variant="primary" data-size="sm" data-part="next"><span data-part="label">Next</span></button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

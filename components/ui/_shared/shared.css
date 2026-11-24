@@ -1,0 +1,12 @@
+/* Shared component primitives. Imported once by any page that uses lumina-taste components. */
+.lt-icon {
+  display: block;
+  flex-shrink: 0;
+}
+/* Optical alignment: icons sit centred against the cap height of adjacent text. */
+.lt-inline-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  vertical-align: middle;
+}

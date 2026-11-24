@@ -1,0 +1,26 @@
+.lt-cmdk-demo .lt-btn .lt-kbd { margin-left: 4px; }
+@scope (.lt-cmdk) {
+  :scope {
+    width: min(620px, calc(100vw - 32px)); max-height: min(460px, calc(100dvh - 120px)); margin: 12vh auto auto; padding: 0; border: 0; border-radius: var(--radius-xl);
+    background: var(--bg-surface-1); color: var(--text-primary); box-shadow: var(--shadow-overlay); overflow: hidden; overscroll-behavior: contain;
+  }
+  :scope[open] { display: flex; flex-direction: column; animation: lt-cmdk-in var(--dur-3) var(--ease-out); }
+  :scope::backdrop { background: var(--scrim); animation: lt-fade var(--dur-2) var(--ease-out); }
+  [data-part="search"] { display: flex; align-items: center; gap: 10px; padding: 0 14px; border-bottom: 1px solid var(--border-hairline); color: var(--text-muted); }
+  input { flex: 1; min-width: 0; height: 52px; border: 0; background: none; color: var(--text-primary); font-size: var(--step-0); outline: none; }
+  input::placeholder { color: var(--text-muted); }
+  [data-part="list"] { flex: 1; overflow-y: auto; padding: 6px; scroll-padding: 6px; }
+  [data-part="group"] { margin: 8px 10px 4px; font-size: var(--text-ui-xs); font-weight: 600; color: var(--text-muted); }
+  [role="option"] { display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 10px; border-radius: var(--radius-md); font-size: var(--text-ui); cursor: pointer; }
+  [role="option"] > .lt-icon { color: var(--text-muted); }
+  [role="option"] > span:first-of-type { flex: 1; }
+  [role="option"][aria-selected="true"] { background: var(--bg-surface-3); }
+  [role="option"][aria-selected="true"] > .lt-icon { color: var(--accent-text); }
+  [role="option"][hidden], [role="group"][hidden] { display: none; }
+  [data-part="seq"] { display: inline-flex; gap: 3px; }
+  [data-part="empty"] { margin: 0; padding: 28px 16px; text-align: center; color: var(--text-muted); font-size: var(--text-ui-sm); }
+  [data-part="foot"] { display: flex; gap: var(--gap-md); padding: 8px 14px; border-top: 1px solid var(--border-hairline); background: var(--bg-surface-2); color: var(--text-muted); font-size: var(--text-ui-xs); }
+  [data-part="foot"] span { display: inline-flex; align-items: center; gap: 4px; }
+}
+@keyframes lt-cmdk-in { from { opacity: 0; scale: 0.98; translate: 0 -8px; } }
+@keyframes lt-fade { from { opacity: 0; } }

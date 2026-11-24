@@ -1,0 +1,6 @@
+.lt-kpi-demo { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--gap-lg); width: 100%; }
+.lt-kpi-demo > div { display: grid; gap: 4px; }
+.lt-kpi-label { font-size: var(--text-ui-xs); color: var(--text-muted); font-weight: 550; }
+@scope (.lt-countup) {
+  :scope { display: inline-block; font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: -0.02em; line-height: 1.1; color: var(--text-primary); font-variant-numeric: tabular-nums; white-space: nowrap; }
+}

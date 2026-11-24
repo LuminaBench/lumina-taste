@@ -1,0 +1,21 @@
+.lt-hovercard-demo { max-width: 40ch; margin: 0; color: var(--text-secondary); line-height: 1.6; }
+.lt-hovercard-demo a[data-part="anchor"] { color: var(--accent-text); font-weight: 550; text-decoration: underline dotted; text-underline-offset: 3px; }
+.lt-hovercard-demo code { font-family: var(--font-mono); font-size: 0.9em; color: var(--text-primary); }
+@scope (.lt-hovercard) {
+  :scope {
+    display: none; width: 280px; margin: 0; inset: auto; padding: var(--gap-md); border: 0; border-radius: var(--radius-lg);
+    background: var(--bg-surface-1); color: var(--text-primary); box-shadow: var(--shadow-overlay); font-size: var(--text-ui-sm); line-height: 1.45; overflow: visible;
+    opacity: 0; translate: 0 4px; transition: opacity var(--dur-2) var(--ease-out), translate var(--dur-2) var(--ease-out), display var(--dur-2) allow-discrete, overlay var(--dur-2) allow-discrete;
+  }
+  :scope:popover-open { display: grid; gap: 10px; opacity: 1; translate: 0 0; }
+  @starting-style { :scope:popover-open { opacity: 0; translate: 0 4px; } }
+  [data-part="top"] { display: flex; align-items: center; gap: 10px; }
+  [data-part="top"] > span:last-child { display: grid; }
+  [data-part="avatar"] { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-text); font-weight: 700; font-size: var(--text-ui-xs); }
+  [data-part="handle"] { color: var(--text-muted); font-size: var(--text-ui-xs); }
+  [data-part="bio"] { color: var(--text-secondary); }
+  [data-part="stats"] { display: flex; align-items: center; gap: 6px 12px; flex-wrap: wrap; color: var(--text-secondary); font-size: var(--text-ui-xs); font-variant-numeric: tabular-nums; }
+  [data-part="stats"] b { color: var(--text-primary); }
+  [data-part="stats"] .lt-status-dot { margin-left: auto; }
+}
+@supports (anchor-name: --a) { .lt-hovercard { position-area: bottom span-right; margin-top: 8px; position-try-fallbacks: flip-block; } }

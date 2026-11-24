@@ -1,0 +1,24 @@
+@scope (.lt-radio-cards) {
+  :scope { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--gap-sm); margin: 0; padding: 0; border: 0; min-width: 0; }
+  legend { grid-column: 1 / -1; margin-bottom: var(--gap-sm); padding: 0; font-size: var(--text-ui-sm); font-weight: 600; color: var(--text-secondary); }
+  [data-part="card"] {
+    position: relative; display: grid; gap: 2px; padding: var(--gap-md); border-radius: var(--radius-lg);
+    border: 1px solid var(--border-hairline); background: var(--bg-surface-1); cursor: pointer;
+    transition: border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-2) var(--ease-out), scale var(--dur-1) var(--ease-out);
+  }
+  [data-part="card"]:hover { border-color: var(--border-strong); }
+  [data-part="card"]:active { scale: 0.99; }
+  input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+  [data-part="title"] { font-weight: 600; font-size: var(--text-ui); }
+  [data-part="desc"] { font-size: var(--text-ui-sm); color: var(--text-secondary); }
+  [data-part="price"] { margin-top: var(--gap-sm); font-size: var(--text-ui-sm); color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+  [data-part="price"] data { font-size: var(--step-1); font-weight: 650; color: var(--text-primary); letter-spacing: -0.01em; }
+  [data-part="check"] {
+    position: absolute; top: var(--gap-md); right: var(--gap-md); display: grid; place-items: center; width: 20px; height: 20px;
+    border-radius: 50%; border: 1.5px solid var(--border-strong); color: transparent;
+    transition: background-color var(--dur-1), border-color var(--dur-1), color var(--dur-1), scale var(--dur-2) var(--ease-spring);
+  }
+  [data-part="card"]:has(input:checked) { border-color: var(--accent-solid); box-shadow: 0 0 0 1px var(--accent-solid); }
+  [data-part="card"]:has(input:checked) [data-part="check"] { background: var(--accent-solid); border-color: var(--accent-solid); color: var(--accent-ink); scale: 1.05; }
+  [data-part="card"]:has(input:focus-visible) { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
+}

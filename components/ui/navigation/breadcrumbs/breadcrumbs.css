@@ -1,0 +1,12 @@
+.lt-crumbs { container: lt-crumbs / inline-size; width: 100%; }
+@scope (.lt-crumbs) {
+  ol { display: flex; align-items: center; flex-wrap: nowrap; gap: 2px; margin: 0; padding: 0; list-style: none; font-size: var(--text-ui-sm); min-width: 0; }
+  li { display: inline-flex; align-items: center; gap: 2px; min-width: 0; flex: none; }
+  li + li::before { content: ""; width: 6px; height: 6px; margin: 0 6px 0 4px; border-top: 1.5px solid var(--text-muted); border-right: 1.5px solid var(--text-muted); rotate: 45deg; flex: none; opacity: 0.7; }
+  a, [data-part="more"] { padding: 3px 6px; border-radius: var(--radius-xs); color: var(--text-secondary); text-decoration: none; white-space: nowrap; transition: background-color var(--dur-1), color var(--dur-1); }
+  a:hover, [data-part="more"]:hover { background: var(--bg-surface-2); color: var(--text-primary); }
+  [aria-current="page"] { padding: 3px 6px; color: var(--text-primary); font-weight: 550; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  li:last-child { flex: 0 1 auto; }
+  [data-part="more"] { border: 0; background: none; font: inherit; letter-spacing: 0.1em; cursor: pointer; }
+  li[data-collapsed] { display: none; }
+}

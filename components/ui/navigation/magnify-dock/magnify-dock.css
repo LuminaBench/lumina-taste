@@ -1,0 +1,24 @@
+@scope (.lt-dock) {
+  :scope {
+    --base: 44px; display: inline-flex; align-items: flex-end; gap: 6px; height: calc(var(--base) + 16px); padding: 8px;
+    border-radius: calc(var(--radius-lg) + 6px); background: color-mix(in oklch, var(--bg-surface-1) 88%, transparent);
+    box-shadow: var(--shadow-overlay); backdrop-filter: blur(8px);
+  }
+  a {
+    --s: 1; position: relative; display: grid; place-items: center; flex: none; width: calc(var(--base) * var(--s)); height: calc(var(--base) * var(--s));
+    border-radius: calc(var(--radius-md) * var(--s)); background: var(--bg-surface-3); color: var(--text-primary);
+    transition: width var(--dur-2) var(--ease-out), height var(--dur-2) var(--ease-out);
+  }
+  a .lt-icon { width: calc(22px * min(var(--s), 1.4)); height: calc(22px * min(var(--s), 1.4)); transition: inherit; }
+  a:hover, a:focus-visible { background: var(--accent-soft); color: var(--accent-text); }
+  a:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
+  a::after {
+    content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%; translate: -50% 4px; padding: 3px 8px; border-radius: var(--radius-sm);
+    background: var(--text-primary); color: var(--bg-canvas); font-size: var(--text-ui-xs); font-weight: 550; white-space: nowrap;
+    opacity: 0; pointer-events: none; transition: opacity var(--dur-1), translate var(--dur-2) var(--ease-out);
+  }
+  a:hover::after, a:focus-visible::after { opacity: 1; translate: -50% 0; }
+  a:active { filter: brightness(0.92); }
+  [data-part="divider"] { align-self: stretch; width: 1px; margin: 6px 2px; background: var(--border-hairline); }
+  :scope:not([data-active]) a { transition-duration: var(--dur-3); }
+}

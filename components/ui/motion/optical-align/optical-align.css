@@ -1,0 +1,18 @@
+/* Optical alignment utility. Geometric centring is not visual centring:
+   - icons are centred on the cap height, not the line box;
+   - play triangles are nudged right because their visual mass sits left;
+   - trailing arrows get slightly less gap than leading icons. */
+.lt-optical { display: inline-flex; align-items: center; gap: 0.45em; line-height: 1; }
+.lt-optical > .lt-icon { width: 1.15em; height: 1.15em; margin-block: -0.1em; translate: 0 calc((1cap - 1ex) * -0.15); }
+.lt-optical[data-trail] { gap: 0.3em; }
+.lt-optical[data-trail] > .lt-icon { width: 1em; height: 1em; transition: translate var(--dur-2) var(--ease-out); }
+.lt-optical[data-trail]:hover > .lt-icon { translate: 2px 0; }
+.lt-optical[data-shift="play"] > .lt-icon { translate: 1px 0; }
+
+.lt-optical-demo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-lg); width: min(100%, 420px); }
+.lt-optical-demo [data-part="col"] { display: grid; justify-items: start; gap: var(--gap-sm); }
+.lt-optical-demo button, .lt-optical-demo a, .lt-optical-demo [data-big] { height: 34px; padding: 0 12px; border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); background: var(--bg-surface-1); color: var(--text-primary); font-size: var(--text-ui); text-decoration: none; cursor: pointer; }
+.lt-optical-demo [data-big] { font-size: var(--step-1); height: 44px; cursor: default; }
+.lt-optical-demo [data-naive] { display: inline-block; line-height: 32px; }
+.lt-optical-demo [data-naive] .lt-icon { display: inline; vertical-align: baseline; }
+.lt-optical-demo [data-big][data-naive] { line-height: 42px; }

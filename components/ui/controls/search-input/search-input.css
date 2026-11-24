@@ -1,0 +1,20 @@
+@scope (.lt-search) {
+  :scope {
+    display: flex; align-items: center; gap: var(--gap-sm); width: min(100%, 320px); height: var(--control-h); padding: 0 6px 0 10px;
+    border: 1px solid var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-1); color: var(--text-muted);
+    transition: border-color var(--dur-1), box-shadow var(--dur-1);
+  }
+  :scope:hover { border-color: var(--text-secondary); }
+  :scope:focus-within { border-color: var(--focus-ring); outline: var(--focus-width) solid var(--focus-ring); outline-offset: 0; }
+  input { flex: 1; min-width: 0; height: 100%; border: 0; background: none; outline: none; color: var(--text-primary); font-size: var(--text-ui); }
+  input::placeholder { color: var(--text-muted); }
+  input::-webkit-search-cancel-button { display: none; }
+  [data-part="clear"] { display: grid; place-items: center; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: var(--bg-surface-3); color: var(--text-secondary); cursor: pointer; }
+  [data-part="clear"]:hover { color: var(--text-primary); }
+  [data-part="clear"][hidden] { display: none; }
+  kbd {
+    display: inline-flex; align-items: center; gap: 1px; height: 22px; padding: 0 6px; border: 1px solid var(--border-hairline); border-bottom-width: 2px;
+    border-radius: 5px; background: var(--bg-surface-2); color: var(--text-secondary); font: 600 11px / 1 var(--font-mono);
+  }
+  :scope:focus-within kbd { display: none; }
+}

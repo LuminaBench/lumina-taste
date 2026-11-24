@@ -1,0 +1,12 @@
+@scope (.lt-vlist) {
+  :scope { position: relative; width: 100%; height: 288px; overflow-y: auto; overscroll-behavior: contain; border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); contain: strict; }
+  :scope:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
+  [data-part="spacer"] { position: relative; }
+  [data-part="window"] { position: absolute; inset: 0 0 auto 0; will-change: transform; }
+  [role="option"] { display: grid; grid-template-columns: 7ch 1fr auto; align-items: center; gap: var(--gap-md); height: var(--row-h, 36px); padding: 0 var(--gap-md); border-bottom: 1px solid var(--border-hairline); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; }
+  [role="option"] > :first-child { color: var(--text-muted); font-family: var(--font-mono); font-size: var(--text-ui-xs); }
+  [role="option"] > :last-child { color: var(--text-muted); font-size: var(--text-ui-xs); }
+  [role="option"][aria-selected="true"] { background: var(--accent-soft); box-shadow: inset 2px 0 0 var(--accent-solid); }
+  [data-level="warn"] > :nth-child(2)::before { content: "WARN "; color: var(--status-warning); font: 600 var(--text-ui-xs) var(--font-mono); }
+  [data-level="error"] > :nth-child(2)::before { content: "ERROR "; color: var(--status-negative); font: 600 var(--text-ui-xs) var(--font-mono); }
+}

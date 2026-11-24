@@ -1,0 +1,8 @@
+/* Stagger: children enter 40ms apart (cap the index at ~6 so long lists do not drag). */
+.lt-stagger { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.lt-stagger > * { animation: lt-stagger-in var(--dur-4) var(--ease-out) both; animation-delay: calc(min(var(--i, 0), 6) * 40ms); }
+@keyframes lt-stagger-in { from { opacity: 0; translate: 0 8px; } }
+@media (prefers-reduced-motion: reduce) { .lt-stagger > * { animation: none; } }
+.lt-stagger-demo { display: grid; justify-items: start; gap: var(--gap-md); }
+.lt-stagger-demo li { display: flex; align-items: center; gap: 8px; font-size: var(--text-ui); }
+.lt-stagger-demo li .lt-icon { color: var(--status-positive); }

@@ -1,0 +1,21 @@
+@scope (.lt-flip) {
+  :scope { --h: 64px; --w: 46px; display: inline-flex; align-items: flex-start; gap: 6px; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  [data-part="group"] { display: grid; justify-items: center; gap: 6px; }
+  [data-part="digits"] { display: flex; gap: 4px; }
+  [data-part="unit"] { font-family: var(--font-body); font-size: var(--text-ui-xs); color: var(--text-muted); font-weight: 550; }
+  [data-part="colon"] { height: var(--h); display: grid; place-items: center; font-size: calc(var(--h) * 0.5); color: var(--text-muted); }
+  [data-part="card"] { position: relative; width: var(--w); height: var(--h); perspective: 300px; font-size: calc(var(--h) * 0.62); font-weight: 600; color: var(--text-primary); }
+  [data-part="card"] > span { position: absolute; left: 0; right: 0; height: 50%; overflow: hidden; background: var(--bg-surface-2); box-shadow: inset 0 0 0 1px var(--border-hairline); }
+  [data-part="card"] > span > b { display: grid; place-items: center; height: var(--h); font-weight: inherit; }
+  [data-half="top"], [data-half="flap-top"] { top: 0; border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+  [data-half="bottom"], [data-half="flap-bottom"] { bottom: 0; border-radius: 0 0 var(--radius-sm) var(--radius-sm); }
+  [data-half="bottom"] > b, [data-half="flap-bottom"] > b { translate: 0 -50%; }
+  [data-half="flap-top"] { transform-origin: bottom; backface-visibility: hidden; z-index: 2; }
+  [data-half="flap-bottom"] { transform-origin: top; backface-visibility: hidden; z-index: 2; transform: rotateX(90deg); }
+  [data-part="card"]::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--bg-canvas); z-index: 3; }
+  [data-part="card"][data-flip] [data-half="flap-top"] { animation: lt-flip-top var(--dur-3) ease-in forwards; }
+  [data-part="card"][data-flip] [data-half="flap-bottom"] { animation: lt-flip-bottom var(--dur-3) ease-out var(--dur-3) forwards; }
+}
+@keyframes lt-flip-top { to { transform: rotateX(-90deg); } }
+@keyframes lt-flip-bottom { to { transform: rotateX(0); } }
+@media (max-width: 420px) { .lt-flip { --h: 48px; --w: 34px; } }

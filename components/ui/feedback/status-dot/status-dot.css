@@ -1,0 +1,13 @@
+.lt-status-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; font-size: var(--text-ui); }
+.lt-status-list li { display: flex; align-items: center; gap: 10px; }
+.lt-status-list .lt-muted { margin-left: auto; padding-left: var(--gap-lg); font-size: var(--text-ui-sm); }
+@scope (.lt-status-dot) {
+  :scope { --c: var(--text-muted); position: relative; display: inline-block; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+  :scope[data-tone="positive"] { --c: var(--status-positive); }
+  :scope[data-tone="warning"] { --c: var(--status-warning); }
+  :scope[data-tone="negative"] { --c: var(--status-negative); }
+  :scope[data-tone="info"] { --c: var(--status-info); }
+  :scope[data-live]::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--c); animation: lt-pulse 1.8s var(--ease-out) infinite; }
+}
+@keyframes lt-pulse { 0% { opacity: 0.55; scale: 1; } 80%, 100% { opacity: 0; scale: 2.6; } }
+@media (prefers-reduced-motion: reduce) { .lt-status-dot[data-live]::after { animation: none; } }

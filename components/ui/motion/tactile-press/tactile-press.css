@@ -1,0 +1,9 @@
+/* Tactile press: scale down on :active with a fast ease-out, spring back on release.
+   --press-scale collapses to 1 under reduced motion. Apply .lt-press to any clickable surface. */
+.lt-press { transition: scale var(--dur-2) var(--ease-spring), background-color var(--dur-1); -webkit-tap-highlight-color: transparent; }
+.lt-press:active { scale: var(--press-scale); transition-duration: var(--dur-1); transition-timing-function: var(--ease-out); }
+.lt-press[data-depth="deep"]:active { scale: calc(var(--press-scale) - 0.04); }
+.lt-press-demo { display: flex; flex-wrap: wrap; gap: var(--gap-sm); justify-content: center; }
+.lt-press-demo [data-part="tile"] { display: grid; justify-items: center; gap: 6px; width: 104px; padding: var(--gap-md) 8px; border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); color: var(--text-primary); font-size: var(--text-ui-sm); font-weight: 550; cursor: pointer; }
+.lt-press-demo [data-part="tile"]:hover { background: var(--bg-surface-2); }
+.lt-press-demo [data-part="tile"] .lt-icon { color: var(--accent-text); }

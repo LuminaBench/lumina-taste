@@ -1,0 +1,13 @@
+@scope (.lt-vt-demo) {
+  :scope { display: grid; gap: var(--gap-md); width: min(100%, 420px); }
+  .lt-segmented { justify-self: start; }
+  [data-part="items"] { display: grid; gap: var(--gap-sm); margin: 0; padding: 0; list-style: none; }
+  [data-layout="grid"] { grid-template-columns: repeat(2, 1fr); }
+  li { display: flex; flex-direction: column; gap: 2px; padding: var(--gap-md); border: 1px solid var(--border-hairline); border-radius: var(--radius-md); background: var(--bg-surface-1); }
+  [data-layout="list"] li { flex-direction: row; justify-content: space-between; padding: 10px var(--gap-md); }
+  b { font-size: var(--text-ui-sm); font-weight: 550; color: var(--text-secondary); }
+  span { font-size: var(--step-1); font-weight: 650; font-variant-numeric: tabular-nums; }
+  [data-layout="list"] span { font-size: var(--text-ui); }
+}
+::view-transition-group(*) { animation-duration: var(--dur-4, 320ms); animation-timing-function: var(--ease-out, ease-out); }
+@media (prefers-reduced-motion: reduce) { ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; } }

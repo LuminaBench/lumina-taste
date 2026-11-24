@@ -1,0 +1,19 @@
+.lt-pagination { container: lt-pag / inline-size; width: 100%; }
+@scope (.lt-pagination) {
+  :scope { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px var(--gap-sm); font-size: var(--text-ui-sm); }
+  ol { display: flex; gap: 2px; margin: 0; padding: 0; list-style: none; }
+  button {
+    display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: var(--control-h-sm); height: var(--control-h-sm); padding: 0 8px;
+    border: 1px solid transparent; border-radius: var(--radius-sm); background: none; color: var(--text-secondary); font-weight: 550; font-variant-numeric: tabular-nums; cursor: pointer;
+    transition: background-color var(--dur-1), color var(--dur-1), scale var(--dur-1);
+  }
+  button:hover:not(:disabled) { background: var(--bg-surface-2); color: var(--text-primary); }
+  button:active:not(:disabled) { scale: 0.95; }
+  button[aria-current="page"] { border-color: var(--border-strong); background: var(--bg-surface-1); color: var(--text-primary); }
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
+  [data-part="gap"] { display: grid; place-items: center; width: 24px; color: var(--text-muted); }
+  [data-part="summary"] { flex-basis: 100%; margin: 4px 0 0; text-align: center; color: var(--text-muted); font-size: var(--text-ui-xs); font-variant-numeric: tabular-nums; }
+  @container lt-pag (max-width: 420px) {
+    [data-part="prev"] span, [data-part="next"] span { display: none; }
+  }
+}

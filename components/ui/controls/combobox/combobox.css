@@ -1,0 +1,25 @@
+@scope (.lt-combobox) {
+  :scope { position: relative; display: grid; gap: 6px; width: min(100%, 300px); font-size: var(--text-ui); }
+  label { font-weight: 550; }
+  [data-part="field"] { position: relative; display: flex; }
+  input {
+    width: 100%; height: var(--control-h); padding: 0 36px 0 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-md);
+    background: var(--bg-surface-1); color: var(--text-primary); font-size: var(--text-ui); outline: none; transition: border-color var(--dur-1);
+  }
+  input:hover { border-color: var(--text-secondary); }
+  input:focus { border-color: var(--focus-ring); box-shadow: 0 0 0 1px var(--focus-ring); }
+  input::placeholder { color: var(--text-muted); }
+  [data-part="toggle"] { position: absolute; right: 4px; top: 50%; translate: 0 -50%; display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-muted); cursor: pointer; }
+  [data-part="listbox"], [data-part="empty"] {
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: var(--z-dropdown); margin: 0; padding: 4px; list-style: none;
+    max-height: 232px; overflow-y: auto; overscroll-behavior: contain; border-radius: var(--radius-lg); background: var(--bg-surface-1); box-shadow: var(--shadow-overlay);
+  }
+  [data-part="empty"] { padding: 12px; color: var(--text-muted); font-size: var(--text-ui-sm); }
+  [hidden] { display: none !important; }
+  [role="option"] { display: flex; justify-content: space-between; align-items: center; gap: var(--gap-md); padding: 7px 10px; border-radius: var(--radius-sm); cursor: pointer; }
+  [role="option"] [data-part="meta"] { color: var(--text-muted); font-size: var(--text-ui-xs); font-variant-numeric: tabular-nums; }
+  [role="option"]:hover, [role="option"][data-active] { background: var(--bg-surface-3); }
+  [role="option"][data-active] { box-shadow: inset 2px 0 0 var(--accent-solid); }
+  [role="option"][aria-selected="true"] { font-weight: 600; color: var(--accent-text); }
+  [role="option"] mark { background: none; color: inherit; font-weight: 650; text-decoration: underline; text-decoration-color: var(--accent-text); text-underline-offset: 3px; }
+}

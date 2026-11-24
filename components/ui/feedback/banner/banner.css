@@ -1,0 +1,10 @@
+@scope (.lt-banner) {
+  :scope { display: flex; align-items: center; gap: var(--gap-md); width: 100%; min-height: 44px; padding: 6px 8px 6px var(--gap-md); background: var(--bg-surface-2); border-bottom: 1px solid var(--border-hairline); font-size: var(--text-ui-sm); }
+  :scope[data-dismissed] { display: none; }
+  p { flex: 1; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 10px; margin: 0; color: var(--text-primary); text-align: center; }
+  a { display: inline-flex; align-items: center; gap: 4px; color: var(--accent-text); font-weight: 550; text-underline-offset: 3px; }
+  a .lt-icon { transition: translate var(--dur-2) var(--ease-out); }
+  a:hover .lt-icon { translate: 2px 0; }
+  [data-part="close"] { display: grid; place-items: center; flex: none; width: 28px; height: 28px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-muted); cursor: pointer; }
+  [data-part="close"]:hover { background: var(--bg-surface-3); color: var(--text-primary); }
+}

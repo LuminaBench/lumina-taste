@@ -1,0 +1,12 @@
+/* Motion tokens live in tokens/base.css (--dur-1…4, --ease-out, --ease-in-out, --ease-spring, --press-scale).
+   Rule of thumb: 90–200ms for controls, 320ms for sheets and drawers, spring only for small indicators. */
+@scope (.lt-curves) {
+  :scope { display: grid; gap: 10px; width: min(100%, 380px); }
+  [data-part="lane"] { display: grid; gap: 4px; }
+  [data-part="lane"] span { font: var(--text-ui-xs) var(--font-mono); color: var(--text-muted); }
+  [data-part="lane"]::after { content: ""; display: block; height: 0; }
+  i { position: relative; display: block; height: 24px; border-radius: var(--radius-pill); background: var(--bg-surface-3); }
+  i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--accent-solid); transition: left var(--d) var(--curve); }
+  :scope[data-run] i::after { left: calc(100% - 21px); }
+  [data-part="replay"] { justify-self: start; }
+}

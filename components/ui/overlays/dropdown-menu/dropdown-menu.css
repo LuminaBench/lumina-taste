@@ -1,0 +1,28 @@
+.lt-dropdown { position: relative; display: inline-block; }
+.lt-dropdown > [data-part="trigger"] .lt-icon { transition: rotate var(--dur-2) var(--ease-out); }
+.lt-dropdown > [data-part="trigger"][aria-expanded="true"] .lt-icon { rotate: 180deg; }
+.lt-dropdown > .lt-menu { top: calc(100% + 6px); left: 0; }
+@scope (.lt-menu) {
+  :scope {
+    position: absolute; z-index: var(--z-dropdown); display: grid; min-width: 220px; padding: 4px; border-radius: var(--radius-lg);
+    background: var(--bg-surface-1); box-shadow: var(--shadow-overlay); font-size: var(--text-ui); overscroll-behavior: contain;
+    animation: lt-menu-in var(--dur-2) var(--ease-out); transform-origin: top left;
+  }
+  :scope[hidden] { display: none; }
+  [role^="menuitem"] {
+    display: flex; align-items: center; gap: 10px; width: 100%; height: 32px; padding: 0 8px; border: 0; border-radius: var(--radius-sm);
+    background: none; color: var(--text-primary); font-size: inherit; text-align: left; cursor: pointer; outline: none; white-space: nowrap;
+  }
+  [role^="menuitem"] > .lt-icon:first-child { color: var(--text-muted); }
+  [role^="menuitem"] > span:not([data-part]) { flex: 1; }
+  [role^="menuitem"]:hover, [role^="menuitem"]:focus-visible, [role="menuitem"][aria-expanded="true"] { background: var(--bg-surface-3); }
+  [role^="menuitem"]:focus-visible { box-shadow: inset 0 0 0 var(--focus-width) var(--focus-ring); }
+  [data-tone="danger"], [data-tone="danger"] > .lt-icon:first-child { color: var(--status-negative) !important; }
+  kbd { font: 500 var(--text-ui-xs) var(--font-mono); color: var(--text-muted); }
+  [role="separator"] { height: 1px; margin: 4px 6px; background: var(--border-hairline); }
+  [data-part="check"] { display: grid; place-items: center; width: 16px; color: var(--accent-text); opacity: 0; transition: opacity var(--dur-1), scale var(--dur-2) var(--ease-spring); scale: 0.6; }
+  [aria-checked="true"] [data-part="check"] { opacity: 1; scale: 1; }
+  [data-part="sub"] { position: relative; }
+  [data-part="submenu"] { left: calc(100% + 2px); top: -4px; }
+}
+@keyframes lt-menu-in { from { opacity: 0; scale: 0.97; } }

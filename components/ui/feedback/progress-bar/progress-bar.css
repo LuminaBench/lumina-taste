@@ -1,0 +1,13 @@
+.lt-progress-demo { display: grid; gap: var(--gap-lg); width: min(100%, 360px); }
+@scope (.lt-progress) {
+  :scope { display: grid; gap: 6px; font-size: var(--text-ui-sm); }
+  [data-part="head"] { display: flex; justify-content: space-between; }
+  [data-part="head"] > span:first-child { font-weight: 550; color: var(--text-primary); }
+  [data-part="value"] { color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+  [data-part="track"] { position: relative; height: 6px; border-radius: var(--radius-pill); background: var(--bg-surface-3); overflow: hidden; }
+  [data-part="fill"] { position: absolute; inset: 0 auto 0 0; width: calc(var(--value, 0) * 1%); border-radius: inherit; background: var(--accent-solid); transition: width var(--dur-4) var(--ease-out); }
+  :scope[data-indeterminate] [data-part="fill"] { width: 36%; animation: lt-indeterminate 1.3s var(--ease-in-out) infinite; }
+  :scope[data-tone="positive"] [data-part="fill"] { background: var(--status-positive); }
+}
+@keyframes lt-indeterminate { from { translate: -100% 0; } to { translate: 280% 0; } }
+@media (prefers-reduced-motion: reduce) { .lt-progress[data-indeterminate] [data-part="fill"] { animation-duration: 3s; } }

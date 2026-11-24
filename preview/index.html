@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" data-palette="slate-forest" data-mode="light" data-type="precision" data-density="balanced" data-radius="balanced" data-motion="snappy">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lumina Taste</title>
+  <meta name="description" content="Live gallery of the lumina-taste agent skill: 18 palettes, named UI patterns, publication-grade charts and page blueprints.">
+  <script>(()=>{try{const s=JSON.parse(localStorage.getItem("lt-gallery")||"{}");const e=document.documentElement;for(const k of ["palette","mode","type","density","radius","motion"])if(typeof s[k]==="string"&&/^[a-z-]+$/.test(s[k]))e.dataset[k]=s[k]}catch{}})()</script>
+  <link rel="stylesheet" href="./gallery.css">
+</head>
+<body>
+  <a class="g-skip" href="#g-main">Skip to content</a>
+  <header class="g-header">
+    <div class="g-header-row">
+      <a class="g-brand" href="#/ui"><span class="g-brand-mark" aria-hidden="true"></span>Lumina Taste</a>
+      <nav class="g-tabs" aria-label="Sections">
+        <a href="#/ui" data-route="ui">UI elements</a>
+        <a href="#/charts" data-route="charts">Charts</a>
+        <a href="#/blueprints" data-route="blueprints">Blueprints</a>
+        <a href="#/palettes" data-route="palettes">Palettes</a>
+      </nav>
+      <div class="g-search" role="search">
+        <svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+        <label class="lt-visually-hidden" for="g-q">Search patterns, charts and aliases</label>
+        <input id="g-q" type="search" placeholder="Search “9 dots menu”, “rotating arrow”…" autocomplete="off" spellcheck="false">
+        <kbd aria-hidden="true">/</kbd>
+      </div>
+    </div>
+    <div class="g-toolbar" role="toolbar" aria-label="Theme controls">
+      <label class="g-field"><span>Palette</span>
+        <span class="g-select"><span class="g-swatch" aria-hidden="true"></span><select id="g-palette"></select></span>
+      </label>
+      <label class="g-field"><span>Type</span><span class="g-select"><select id="g-type"></select></span></label>
+      <div class="g-field"><span id="g-density-l">Density</span><div class="lt-segmented" data-g="density" role="radiogroup" aria-labelledby="g-density-l"><span data-part="indicator" aria-hidden="true"></span><button type="button" role="radio" aria-checked="false" data-value="spacious">Spacious</button><button type="button" role="radio" aria-checked="false" data-value="balanced">Balanced</button><button type="button" role="radio" aria-checked="false" data-value="dense">Dense</button></div></div>
+      <div class="g-field"><span id="g-radius-l">Radius</span><div class="lt-segmented" data-g="radius" role="radiogroup" aria-labelledby="g-radius-l"><span data-part="indicator" aria-hidden="true"></span><button type="button" role="radio" aria-checked="false" data-value="sharp">Sharp</button><button type="button" role="radio" aria-checked="false" data-value="balanced">Balanced</button><button type="button" role="radio" aria-checked="false" data-value="soft">Soft</button></div></div>
+      <div class="g-field"><span id="g-motion-l">Motion</span><div class="lt-segmented" data-g="motion" role="radiogroup" aria-labelledby="g-motion-l"><span data-part="indicator" aria-hidden="true"></span><button type="button" role="radio" aria-checked="false" data-value="snappy">Snappy</button><button type="button" role="radio" aria-checked="false" data-value="calm">Calm</button><button type="button" role="radio" aria-checked="false" data-value="reduced">Reduced</button></div></div>
+      <div class="g-field g-field-mode"><span>Dark</span><span id="g-mode-slot"></span></div>
+    </div>
+  </header>
+  <main id="g-main" class="g-main" tabindex="-1"></main>
+  <footer class="g-footer">
+    <p>lumina-taste v1.0.0 · Components and tokens under the Lumina Open UI License, tooling under MIT.</p>
+    <p><a href="https://luminabench.com">luminabench.com</a> · <a href="https://github.com/LuminaBench/lumina-taste">GitHub</a></p>
+  </footer>
+  <div class="g-announcer lt-visually-hidden" role="status" aria-live="polite"></div>
+  <script type="module" src="./gallery.js"></script>
+</body>
+</html>

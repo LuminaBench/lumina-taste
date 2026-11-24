@@ -1,0 +1,27 @@
+@property --fill { syntax: "<percentage>"; inherits: false; initial-value: 0%; }
+@scope (.lt-wizard) {
+  :scope { display: grid; gap: var(--gap-md); width: min(100%, 520px); font-size: var(--text-ui); }
+  [data-part="steps"] { display: flex; margin: 0; padding: 0; list-style: none; }
+  [data-part="step"] { position: relative; flex: 1; display: grid; justify-items: center; gap: 6px; text-align: center; }
+  [data-part="step"]:not(:first-child)::before {
+    content: ""; position: absolute; top: 13px; right: calc(50% + 18px); width: calc(100% - 36px); height: 2px; border-radius: 1px;
+    background: linear-gradient(to right, var(--accent-solid) var(--fill, 0%), var(--border-hairline) var(--fill, 0%));
+    transition: --fill var(--dur-4);
+  }
+  [data-part="step"][data-state="done"]::before, [data-part="step"][data-state="current"]::before { --fill: 100%; }
+  [data-part="dot"] {
+    position: relative; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border-strong);
+    background: var(--bg-surface-1); color: var(--text-secondary); font-size: var(--text-ui-xs); font-weight: 650; font-variant-numeric: tabular-nums;
+    transition: background-color var(--dur-2), border-color var(--dur-2), color var(--dur-2), scale var(--dur-3) var(--ease-spring);
+  }
+  [data-part="dot"] > * { grid-area: 1 / 1; transition: opacity var(--dur-2), scale var(--dur-3) var(--ease-spring); }
+  [data-part="dot"] .lt-icon { opacity: 0; scale: 0.4; }
+  [data-state="current"] [data-part="dot"] { border-color: var(--accent-solid); color: var(--accent-text); box-shadow: 0 0 0 4px var(--accent-soft); }
+  [data-state="done"] [data-part="dot"] { background: var(--accent-solid); border-color: var(--accent-solid); color: var(--accent-ink); }
+  [data-state="done"] [data-part="num"] { opacity: 0; scale: 0.4; }
+  [data-state="done"] [data-part="dot"] .lt-icon { opacity: 1; scale: 1; }
+  [data-part="name"] { font-size: var(--text-ui-xs); color: var(--text-muted); font-weight: 550; }
+  [data-state="current"] [data-part="name"], [data-state="done"] [data-part="name"] { color: var(--text-primary); }
+  [data-part="status"] { margin: 0; text-align: center; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  [data-part="actions"] { display: flex; justify-content: space-between; }
+}

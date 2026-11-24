@@ -1,0 +1,10 @@
+@scope (.lt-dl) {
+  :scope { display: grid; width: min(100%, 520px); margin: 0; font-size: var(--text-ui); }
+  :scope > div { display: grid; grid-template-columns: minmax(120px, 1fr) 2fr; gap: var(--gap-md); padding: var(--gap-sm) 0; border-bottom: 1px solid var(--border-hairline); }
+  :scope > div:first-child { border-top: 1px solid var(--border-hairline); }
+  dt { color: var(--text-muted); }
+  dd { margin: 0; color: var(--text-primary); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  dd a { margin-left: 8px; color: var(--accent-text); font-weight: 550; font-size: var(--text-ui-sm); }
+  code { font: var(--text-ui-sm) var(--font-mono); padding: 1px 6px; border-radius: var(--radius-xs); background: var(--bg-surface-2); }
+}
+@container (max-width: 380px) { .lt-dl > div { grid-template-columns: 1fr; gap: 2px; } }

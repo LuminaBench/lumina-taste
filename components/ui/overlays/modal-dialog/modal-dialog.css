@@ -1,0 +1,16 @@
+@scope (.lt-modal) {
+  :scope {
+    width: min(460px, calc(100vw - 32px)); margin: auto; padding: 0; border: 0; border-radius: var(--radius-xl);
+    background: var(--bg-surface-1); color: var(--text-primary); box-shadow: var(--shadow-overlay); overscroll-behavior: contain;
+  }
+  :scope[open] { animation: lt-modal-in var(--dur-3) var(--ease-out); }
+  :scope::backdrop { background: var(--scrim); animation: lt-fade var(--dur-2) var(--ease-out); }
+  [data-part="body"] { display: flex; gap: var(--gap-md); padding: var(--gap-lg) var(--gap-lg) var(--gap-md); }
+  [data-part="icon"] { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--status-negative-soft); color: var(--status-negative); }
+  h2 { margin: 0; font-size: var(--step-1); font-weight: 600; letter-spacing: -0.01em; }
+  p { margin: 6px 0 0; color: var(--text-secondary); font-size: var(--text-ui); text-wrap: pretty; }
+  [data-part="foot"] { display: flex; justify-content: flex-end; gap: var(--gap-sm); padding: var(--gap-md) var(--gap-lg); border-top: 1px solid var(--border-hairline); background: var(--bg-surface-2); border-radius: 0 0 var(--radius-xl) var(--radius-xl); }
+  .lt-btn[data-tone="danger"] { --btn-bg: var(--status-negative); --btn-hover: color-mix(in oklch, var(--status-negative) 88%, black); --btn-fg: var(--bg-surface-1); }
+}
+@keyframes lt-modal-in { from { opacity: 0; scale: 0.96; translate: 0 8px; } }
+@keyframes lt-fade { from { opacity: 0; } }

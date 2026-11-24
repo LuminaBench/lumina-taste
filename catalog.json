@@ -1,0 +1,3242 @@
+{
+  "name": "lumina-taste",
+  "version": "1.0.0",
+  "generated": "scripts/build-catalog.mjs",
+  "counts": {
+    "ui": 84,
+    "charts": 0,
+    "blueprints": 0,
+    "palettes": 18,
+    "themes": 36,
+    "typography": 12
+  },
+  "families": [
+    {
+      "id": "controls",
+      "title": "Controls & tactile inputs",
+      "summary": "Buttons, toggles, pickers and fields with real pressed states and no layout jump.",
+      "order": 1,
+      "count": 22
+    },
+    {
+      "id": "navigation",
+      "title": "Navigation & page chrome",
+      "summary": "Headers, rails, menus and footers that tell people where they are and get out of the way.",
+      "order": 2,
+      "count": 14
+    },
+    {
+      "id": "feedback",
+      "title": "Numbers, status & feedback",
+      "summary": "Counters, progress, loading and messages that stay readable and never shift the layout.",
+      "order": 3,
+      "count": 14
+    },
+    {
+      "id": "overlays",
+      "title": "Overlays & power-user patterns",
+      "summary": "Palettes, menus, popovers and dialogs built on native <dialog>, the Popover API and CSS anchor positioning.",
+      "order": 4,
+      "count": 13
+    },
+    {
+      "id": "data",
+      "title": "Data & layout primitives",
+      "summary": "Tables, lists, grids and blocks for showing real data cleanly, with tabular numbers everywhere.",
+      "order": 5,
+      "count": 14
+    },
+    {
+      "id": "motion",
+      "title": "Micro-motion & CSS craft",
+      "summary": "Curves, transitions and small details that make an interface feel made, all collapsing under reduced motion.",
+      "order": 6,
+      "count": 7
+    }
+  ],
+  "ui": [
+    {
+      "id": "disclosure-chevron",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Disclosure chevron",
+      "summary": "A trigger whose chevron rotates as the hidden section opens.",
+      "aliases": [
+        "rotating arrow",
+        "expand arrow",
+        "show more toggle",
+        "twisty",
+        "caret toggle",
+        "collapsible section"
+      ],
+      "pattern": "WAI-ARIA Disclosure",
+      "states": [
+        "default",
+        "hover",
+        "active",
+        "focus-visible",
+        "open"
+      ],
+      "react": "Disclosure",
+      "deps": [],
+      "files": [
+        "components/ui/controls/disclosure-chevron/disclosure-chevron.css",
+        "components/ui/controls/disclosure-chevron/disclosure-chevron.html",
+        "components/ui/controls/disclosure-chevron/disclosure-chevron.react.tsx",
+        "components/ui/controls/disclosure-chevron/disclosure-chevron.ts"
+      ],
+      "path": "components/ui/controls/disclosure-chevron"
+    },
+    {
+      "id": "accordion",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Accordion",
+      "summary": "Stacked headings that expand one answer at a time, with arrow-key travel between them.",
+      "aliases": [
+        "faq dropdown",
+        "expanding sections",
+        "collapse panels",
+        "faq list",
+        "question list that opens"
+      ],
+      "pattern": "WAI-ARIA Accordion",
+      "states": [
+        "default",
+        "hover",
+        "focus-visible",
+        "open",
+        "closed"
+      ],
+      "react": "Accordion",
+      "deps": [],
+      "files": [
+        "components/ui/controls/accordion/accordion.css",
+        "components/ui/controls/accordion/accordion.html",
+        "components/ui/controls/accordion/accordion.react.tsx",
+        "components/ui/controls/accordion/accordion.ts"
+      ],
+      "path": "components/ui/controls/accordion"
+    },
+    {
+      "id": "tree-view",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Tree view",
+      "summary": "Nested folders and files with expand, collapse and full keyboard travel.",
+      "aliases": [
+        "file tree",
+        "folder list",
+        "nested list",
+        "file explorer",
+        "outline tree"
+      ],
+      "pattern": "WAI-ARIA Tree",
+      "states": [
+        "default",
+        "hover",
+        "selected",
+        "expanded",
+        "focus-visible"
+      ],
+      "react": "TreeView",
+      "deps": [],
+      "files": [
+        "components/ui/controls/tree-view/tree-view.css",
+        "components/ui/controls/tree-view/tree-view.html",
+        "components/ui/controls/tree-view/tree-view.react.tsx",
+        "components/ui/controls/tree-view/tree-view.ts"
+      ],
+      "path": "components/ui/controls/tree-view"
+    },
+    {
+      "id": "theme-switch",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Theme switch",
+      "summary": "A light/dark switch with a springy thumb and a circular reveal of the new theme.",
+      "aliases": [
+        "dark mode toggle",
+        "sun moon switch",
+        "light dark button",
+        "night mode",
+        "theme toggle"
+      ],
+      "pattern": "WAI-ARIA Switch",
+      "states": [
+        "light",
+        "dark",
+        "hover",
+        "pressed",
+        "focus-visible"
+      ],
+      "react": "ThemeSwitch",
+      "deps": [],
+      "files": [
+        "components/ui/controls/theme-switch/theme-switch.css",
+        "components/ui/controls/theme-switch/theme-switch.html",
+        "components/ui/controls/theme-switch/theme-switch.react.tsx",
+        "components/ui/controls/theme-switch/theme-switch.ts"
+      ],
+      "path": "components/ui/controls/theme-switch"
+    },
+    {
+      "id": "segmented-control",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Segmented control",
+      "summary": "A pill row where a sliding indicator follows the selected option.",
+      "aliases": [
+        "pill toggle",
+        "sliding tabs",
+        "button group selector",
+        "monthly yearly switch",
+        "toggle group",
+        "time range picker"
+      ],
+      "pattern": "WAI-ARIA Radio Group",
+      "states": [
+        "default",
+        "hover",
+        "selected",
+        "pressed",
+        "focus-visible"
+      ],
+      "react": "SegmentedControl",
+      "deps": [],
+      "files": [
+        "components/ui/controls/segmented-control/segmented-control.css",
+        "components/ui/controls/segmented-control/segmented-control.html",
+        "components/ui/controls/segmented-control/segmented-control.react.tsx",
+        "components/ui/controls/segmented-control/segmented-control.ts"
+      ],
+      "path": "components/ui/controls/segmented-control"
+    },
+    {
+      "id": "toggle-switch",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Toggle switch",
+      "summary": "An on/off settings switch on a native checkbox, with a squash on press.",
+      "aliases": [
+        "on off switch",
+        "settings toggle",
+        "ios switch",
+        "enable toggle",
+        "lightswitch"
+      ],
+      "pattern": "WAI-ARIA Switch (native checkbox)",
+      "states": [
+        "off",
+        "on",
+        "pressed",
+        "focus-visible",
+        "disabled"
+      ],
+      "react": "ToggleSwitch",
+      "deps": [],
+      "files": [
+        "components/ui/controls/toggle-switch/toggle-switch.css",
+        "components/ui/controls/toggle-switch/toggle-switch.html",
+        "components/ui/controls/toggle-switch/toggle-switch.react.tsx"
+      ],
+      "path": "components/ui/controls/toggle-switch"
+    },
+    {
+      "id": "checkbox",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Checkbox",
+      "summary": "Animated tick that draws itself, with a select-all box that goes indeterminate.",
+      "aliases": [
+        "tick box",
+        "select all",
+        "mixed checkbox",
+        "check mark box"
+      ],
+      "pattern": "Native checkbox",
+      "states": [
+        "unchecked",
+        "checked",
+        "indeterminate",
+        "hover",
+        "pressed",
+        "focus-visible",
+        "disabled"
+      ],
+      "react": "Checkbox",
+      "deps": [],
+      "files": [
+        "components/ui/controls/checkbox/checkbox.css",
+        "components/ui/controls/checkbox/checkbox.html",
+        "components/ui/controls/checkbox/checkbox.react.tsx",
+        "components/ui/controls/checkbox/checkbox.ts"
+      ],
+      "path": "components/ui/controls/checkbox"
+    },
+    {
+      "id": "radio-group",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Radio group",
+      "summary": "A single-choice list where the dot grows into place.",
+      "aliases": [
+        "option buttons",
+        "pick one list",
+        "radio buttons"
+      ],
+      "pattern": "Native radio",
+      "states": [
+        "unchecked",
+        "checked",
+        "hover",
+        "focus-visible",
+        "disabled"
+      ],
+      "react": "RadioGroup",
+      "deps": [],
+      "files": [
+        "components/ui/controls/radio-group/radio-group.css",
+        "components/ui/controls/radio-group/radio-group.html",
+        "components/ui/controls/radio-group/radio-group.react.tsx"
+      ],
+      "path": "components/ui/controls/radio-group"
+    },
+    {
+      "id": "radio-cards",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Radio cards",
+      "summary": "Plan or option cards that select as a whole, with a check badge.",
+      "aliases": [
+        "plan picker",
+        "selectable cards",
+        "option tiles",
+        "choose a plan cards"
+      ],
+      "pattern": "Native radio",
+      "states": [
+        "default",
+        "hover",
+        "checked",
+        "pressed",
+        "focus-visible"
+      ],
+      "react": "RadioCards",
+      "deps": [],
+      "files": [
+        "components/ui/controls/radio-cards/radio-cards.css",
+        "components/ui/controls/radio-cards/radio-cards.html",
+        "components/ui/controls/radio-cards/radio-cards.react.tsx"
+      ],
+      "path": "components/ui/controls/radio-cards"
+    },
+    {
+      "id": "otp-input",
+      "kind": "ui",
+      "family": "controls",
+      "name": "OTP code input",
+      "summary": "Six boxes that auto-advance, accept a pasted code and backspace across fields.",
+      "aliases": [
+        "verification code",
+        "pin input",
+        "2fa code boxes",
+        "one time password",
+        "sms code"
+      ],
+      "pattern": "Grouped text inputs",
+      "states": [
+        "empty",
+        "filling",
+        "complete",
+        "error",
+        "focus-visible"
+      ],
+      "react": "OtpInput",
+      "deps": [],
+      "files": [
+        "components/ui/controls/otp-input/otp-input.css",
+        "components/ui/controls/otp-input/otp-input.html",
+        "components/ui/controls/otp-input/otp-input.react.tsx",
+        "components/ui/controls/otp-input/otp-input.ts"
+      ],
+      "path": "components/ui/controls/otp-input"
+    },
+    {
+      "id": "range-slider",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Range slider",
+      "summary": "A slider that snaps magnetically to detents and shows its value in a live bubble.",
+      "aliases": [
+        "slider with steps",
+        "volume slider",
+        "value slider",
+        "snap slider",
+        "detent slider"
+      ],
+      "pattern": "Native range (WAI-ARIA Slider)",
+      "states": [
+        "default",
+        "hover",
+        "dragging",
+        "snapped",
+        "focus-visible",
+        "disabled"
+      ],
+      "react": "RangeSlider",
+      "deps": [],
+      "files": [
+        "components/ui/controls/range-slider/range-slider.css",
+        "components/ui/controls/range-slider/range-slider.html",
+        "components/ui/controls/range-slider/range-slider.react.tsx",
+        "components/ui/controls/range-slider/range-slider.ts"
+      ],
+      "path": "components/ui/controls/range-slider"
+    },
+    {
+      "id": "dual-range-slider",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Dual-thumb range slider",
+      "summary": "Pick a minimum and maximum on one track; the thumbs never cross.",
+      "aliases": [
+        "price range slider",
+        "min max slider",
+        "two handle slider",
+        "range filter"
+      ],
+      "pattern": "Two native ranges (WAI-ARIA Multi-thumb Slider)",
+      "states": [
+        "default",
+        "dragging",
+        "focus-visible"
+      ],
+      "react": "DualRangeSlider",
+      "deps": [],
+      "files": [
+        "components/ui/controls/dual-range-slider/dual-range-slider.css",
+        "components/ui/controls/dual-range-slider/dual-range-slider.html",
+        "components/ui/controls/dual-range-slider/dual-range-slider.react.tsx",
+        "components/ui/controls/dual-range-slider/dual-range-slider.ts"
+      ],
+      "path": "components/ui/controls/dual-range-slider"
+    },
+    {
+      "id": "button",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Button suite",
+      "summary": "Primary, secondary, ghost, destructive and icon buttons with press scale and a no-jump loading state.",
+      "aliases": [
+        "cta",
+        "action button",
+        "submit button",
+        "icon button",
+        "loading button",
+        "danger button"
+      ],
+      "pattern": "Native button",
+      "states": [
+        "default",
+        "hover",
+        "active",
+        "focus-visible",
+        "loading",
+        "disabled"
+      ],
+      "react": "Button",
+      "deps": [],
+      "files": [
+        "components/ui/controls/button/button.css",
+        "components/ui/controls/button/button.html",
+        "components/ui/controls/button/button.react.tsx",
+        "components/ui/controls/button/button.ts"
+      ],
+      "path": "components/ui/controls/button"
+    },
+    {
+      "id": "split-button",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Split button",
+      "summary": "A main action joined to a menu of related actions.",
+      "aliases": [
+        "button with dropdown",
+        "save and more",
+        "dropdown button",
+        "action with caret"
+      ],
+      "pattern": "Button + WAI-ARIA Menu Button",
+      "states": [
+        "default",
+        "hover",
+        "open",
+        "focus-visible"
+      ],
+      "react": "SplitButton",
+      "deps": [
+        "button"
+      ],
+      "files": [
+        "components/ui/controls/split-button/split-button.css",
+        "components/ui/controls/split-button/split-button.html",
+        "components/ui/controls/split-button/split-button.react.tsx",
+        "components/ui/controls/split-button/split-button.ts"
+      ],
+      "path": "components/ui/controls/split-button"
+    },
+    {
+      "id": "copy-button",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Copy button",
+      "summary": "Copies text and morphs its icon into a check, then back.",
+      "aliases": [
+        "copy to clipboard",
+        "click to copy",
+        "copy icon that turns into tick",
+        "clipboard button"
+      ],
+      "pattern": "Native button + live region",
+      "states": [
+        "idle",
+        "copied",
+        "focus-visible"
+      ],
+      "react": "CopyButton",
+      "deps": [],
+      "files": [
+        "components/ui/controls/copy-button/copy-button.css",
+        "components/ui/controls/copy-button/copy-button.html",
+        "components/ui/controls/copy-button/copy-button.react.tsx",
+        "components/ui/controls/copy-button/copy-button.ts"
+      ],
+      "path": "components/ui/controls/copy-button"
+    },
+    {
+      "id": "tag-input",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Tag input",
+      "summary": "Type and press Enter to add chips; extra chips collapse into a +n counter.",
+      "aliases": [
+        "chip input",
+        "tags field",
+        "multi value input",
+        "email recipients field",
+        "token input"
+      ],
+      "pattern": "Text input + list",
+      "states": [
+        "empty",
+        "with tags",
+        "overflow",
+        "focus-visible"
+      ],
+      "react": "TagInput",
+      "deps": [],
+      "files": [
+        "components/ui/controls/tag-input/tag-input.css",
+        "components/ui/controls/tag-input/tag-input.html",
+        "components/ui/controls/tag-input/tag-input.react.tsx",
+        "components/ui/controls/tag-input/tag-input.ts"
+      ],
+      "path": "components/ui/controls/tag-input"
+    },
+    {
+      "id": "search-input",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Search input",
+      "summary": "A search field with a clear button and a keyboard-shortcut badge that focuses it.",
+      "aliases": [
+        "search bar",
+        "search box with shortcut",
+        "filter field",
+        "search with clear x"
+      ],
+      "pattern": "Native search input",
+      "states": [
+        "empty",
+        "typing",
+        "focus-visible"
+      ],
+      "react": "SearchInput",
+      "deps": [],
+      "files": [
+        "components/ui/controls/search-input/search-input.css",
+        "components/ui/controls/search-input/search-input.html",
+        "components/ui/controls/search-input/search-input.react.tsx",
+        "components/ui/controls/search-input/search-input.ts"
+      ],
+      "path": "components/ui/controls/search-input"
+    },
+    {
+      "id": "text-field",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Text field",
+      "summary": "Floating-label input with helper text and inline validation on blur.",
+      "aliases": [
+        "floating label input",
+        "form field",
+        "input with error",
+        "material input",
+        "email field"
+      ],
+      "pattern": "Native input + aria-describedby",
+      "states": [
+        "empty",
+        "filled",
+        "focus-visible",
+        "invalid",
+        "valid",
+        "disabled"
+      ],
+      "react": "TextField",
+      "deps": [],
+      "files": [
+        "components/ui/controls/text-field/text-field.css",
+        "components/ui/controls/text-field/text-field.html",
+        "components/ui/controls/text-field/text-field.react.tsx",
+        "components/ui/controls/text-field/text-field.ts"
+      ],
+      "path": "components/ui/controls/text-field"
+    },
+    {
+      "id": "date-range-picker",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Date range picker",
+      "summary": "A calendar popover for picking a start and end date with arrow-key travel.",
+      "aliases": [
+        "calendar picker",
+        "from to dates",
+        "booking dates",
+        "date range",
+        "check in check out"
+      ],
+      "pattern": "WAI-ARIA Date Picker Dialog (grid)",
+      "states": [
+        "closed",
+        "open",
+        "selecting",
+        "range",
+        "focus-visible"
+      ],
+      "react": "DateRangePicker",
+      "deps": [],
+      "files": [
+        "components/ui/controls/date-range-picker/date-range-picker.css",
+        "components/ui/controls/date-range-picker/date-range-picker.html",
+        "components/ui/controls/date-range-picker/date-range-picker.react.tsx",
+        "components/ui/controls/date-range-picker/date-range-picker.ts"
+      ],
+      "path": "components/ui/controls/date-range-picker"
+    },
+    {
+      "id": "combobox",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Combobox",
+      "summary": "A searchable select that filters as you type, with arrows, Enter and Esc.",
+      "aliases": [
+        "searchable select",
+        "autocomplete dropdown",
+        "typeahead",
+        "select with search",
+        "country picker"
+      ],
+      "pattern": "WAI-ARIA Combobox (list autocomplete)",
+      "states": [
+        "closed",
+        "open",
+        "filtered",
+        "no results",
+        "focus-visible"
+      ],
+      "react": "Combobox",
+      "deps": [],
+      "files": [
+        "components/ui/controls/combobox/combobox.css",
+        "components/ui/controls/combobox/combobox.html",
+        "components/ui/controls/combobox/combobox.react.tsx",
+        "components/ui/controls/combobox/combobox.ts"
+      ],
+      "path": "components/ui/controls/combobox"
+    },
+    {
+      "id": "file-dropzone",
+      "kind": "ui",
+      "family": "controls",
+      "name": "File dropzone",
+      "summary": "Drag files in or browse; shows each file with its size and a remove button.",
+      "aliases": [
+        "drag and drop upload",
+        "upload box",
+        "drop files here",
+        "file uploader"
+      ],
+      "pattern": "Native file input",
+      "states": [
+        "idle",
+        "drag-over",
+        "with files",
+        "focus-visible"
+      ],
+      "react": "FileDropzone",
+      "deps": [],
+      "files": [
+        "components/ui/controls/file-dropzone/file-dropzone.css",
+        "components/ui/controls/file-dropzone/file-dropzone.html",
+        "components/ui/controls/file-dropzone/file-dropzone.react.tsx",
+        "components/ui/controls/file-dropzone/file-dropzone.ts"
+      ],
+      "path": "components/ui/controls/file-dropzone"
+    },
+    {
+      "id": "number-stepper",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Number stepper",
+      "summary": "Minus and plus buttons around a number, with hold-to-repeat and limits.",
+      "aliases": [
+        "quantity picker",
+        "plus minus input",
+        "counter input",
+        "increment decrement"
+      ],
+      "pattern": "WAI-ARIA Spinbutton (native number)",
+      "states": [
+        "default",
+        "at min",
+        "at max",
+        "focus-visible"
+      ],
+      "react": "NumberStepper",
+      "deps": [],
+      "files": [
+        "components/ui/controls/number-stepper/number-stepper.css",
+        "components/ui/controls/number-stepper/number-stepper.html",
+        "components/ui/controls/number-stepper/number-stepper.react.tsx",
+        "components/ui/controls/number-stepper/number-stepper.ts"
+      ],
+      "path": "components/ui/controls/number-stepper"
+    },
+    {
+      "id": "data-table",
+      "kind": "ui",
+      "family": "data",
+      "name": "Sortable data table",
+      "summary": "Sticky header, sort chevrons with aria-sort, expandable detail rows and tabular numbers.",
+      "aliases": [
+        "sortable table",
+        "grid table",
+        "admin table",
+        "table with expandable rows",
+        "sticky header table"
+      ],
+      "pattern": "Table with sortable columns (APG Sortable Table)",
+      "states": [
+        "unsorted",
+        "ascending",
+        "descending",
+        "row expanded",
+        "hover"
+      ],
+      "react": "DataTable",
+      "deps": [
+        "badge"
+      ],
+      "files": [
+        "components/ui/data/data-table/data-table.css",
+        "components/ui/data/data-table/data-table.html",
+        "components/ui/data/data-table/data-table.react.tsx",
+        "components/ui/data/data-table/data-table.ts"
+      ],
+      "path": "components/ui/data/data-table"
+    },
+    {
+      "id": "virtual-list",
+      "kind": "ui",
+      "family": "data",
+      "name": "Virtualised list",
+      "summary": "Renders only the visible rows of 10,000 so scrolling stays smooth.",
+      "aliases": [
+        "infinite list",
+        "windowed list",
+        "long log list",
+        "virtual scroll",
+        "big list"
+      ],
+      "pattern": "WAI-ARIA Listbox with aria-activedescendant",
+      "states": [
+        "idle",
+        "scrolling",
+        "active row"
+      ],
+      "react": "VirtualList",
+      "deps": [],
+      "files": [
+        "components/ui/data/virtual-list/virtual-list.css",
+        "components/ui/data/virtual-list/virtual-list.html",
+        "components/ui/data/virtual-list/virtual-list.react.tsx",
+        "components/ui/data/virtual-list/virtual-list.ts"
+      ],
+      "path": "components/ui/data/virtual-list"
+    },
+    {
+      "id": "bento-grid",
+      "kind": "ui",
+      "family": "data",
+      "name": "Bento grid",
+      "summary": "Asymmetric feature tiles that collapse to one column on narrow containers.",
+      "aliases": [
+        "bento box",
+        "feature grid",
+        "tile grid",
+        "apple style grid"
+      ],
+      "pattern": "Section of articles",
+      "states": [
+        "default",
+        "single column"
+      ],
+      "react": "BentoGrid",
+      "deps": [],
+      "files": [
+        "components/ui/data/bento-grid/bento-grid.css",
+        "components/ui/data/bento-grid/bento-grid.html",
+        "components/ui/data/bento-grid/bento-grid.react.tsx"
+      ],
+      "path": "components/ui/data/bento-grid"
+    },
+    {
+      "id": "card-stack",
+      "kind": "ui",
+      "family": "data",
+      "name": "Scroll-stacking cards",
+      "summary": "Sticky cards that pile on top of each other as you scroll, earlier ones receding.",
+      "aliases": [
+        "stacked cards on scroll",
+        "sticky card pile",
+        "card deck scroll",
+        "stacking sections"
+      ],
+      "pattern": "Ordered list",
+      "states": [
+        "flat",
+        "stacking"
+      ],
+      "react": "CardStack",
+      "deps": [],
+      "files": [
+        "components/ui/data/card-stack/card-stack.css",
+        "components/ui/data/card-stack/card-stack.html",
+        "components/ui/data/card-stack/card-stack.react.tsx",
+        "components/ui/data/card-stack/card-stack.ts"
+      ],
+      "path": "components/ui/data/card-stack"
+    },
+    {
+      "id": "comparison-table",
+      "kind": "ui",
+      "family": "data",
+      "name": "Comparison table",
+      "summary": "Plan-by-feature matrix with a highlighted column and grouped rows.",
+      "aliases": [
+        "feature matrix",
+        "plan comparison",
+        "pricing table",
+        "compare plans grid"
+      ],
+      "pattern": "Table with row groups",
+      "states": [
+        "default"
+      ],
+      "react": "ComparisonTable",
+      "deps": [
+        "badge"
+      ],
+      "files": [
+        "components/ui/data/comparison-table/comparison-table.css",
+        "components/ui/data/comparison-table/comparison-table.html",
+        "components/ui/data/comparison-table/comparison-table.react.tsx"
+      ],
+      "path": "components/ui/data/comparison-table"
+    },
+    {
+      "id": "timeline",
+      "kind": "ui",
+      "family": "data",
+      "name": "Timeline / changelog",
+      "summary": "Dated entries on a quiet rail, the newest marked with the accent.",
+      "aliases": [
+        "changelog list",
+        "release notes",
+        "activity timeline",
+        "history list"
+      ],
+      "pattern": "Ordered list with <time>",
+      "states": [
+        "default",
+        "latest"
+      ],
+      "react": "Timeline",
+      "deps": [
+        "badge"
+      ],
+      "files": [
+        "components/ui/data/timeline/timeline.css",
+        "components/ui/data/timeline/timeline.html",
+        "components/ui/data/timeline/timeline.react.tsx"
+      ],
+      "path": "components/ui/data/timeline"
+    },
+    {
+      "id": "split-pane",
+      "kind": "ui",
+      "family": "data",
+      "name": "Resizable split pane",
+      "summary": "Two panes and a grip you can drag or move with the arrow keys.",
+      "aliases": [
+        "resize handle",
+        "split view",
+        "draggable divider",
+        "panel resizer"
+      ],
+      "pattern": "WAI-ARIA Window Splitter",
+      "states": [
+        "rest",
+        "hover",
+        "dragging",
+        "focus-visible"
+      ],
+      "react": "SplitPane",
+      "deps": [],
+      "files": [
+        "components/ui/data/split-pane/split-pane.css",
+        "components/ui/data/split-pane/split-pane.html",
+        "components/ui/data/split-pane/split-pane.react.tsx",
+        "components/ui/data/split-pane/split-pane.ts"
+      ],
+      "path": "components/ui/data/split-pane"
+    },
+    {
+      "id": "sortable-list",
+      "kind": "ui",
+      "family": "data",
+      "name": "Drag-to-reorder list",
+      "summary": "Reorder rows by dragging a handle or with Space and the arrow keys.",
+      "aliases": [
+        "drag and drop list",
+        "reorder handle",
+        "draggable rows",
+        "sortable items",
+        "six dots handle"
+      ],
+      "pattern": "List + live region (keyboard-accessible drag and drop)",
+      "states": [
+        "rest",
+        "grabbed",
+        "moving",
+        "dropped"
+      ],
+      "react": "SortableList",
+      "deps": [
+        "badge"
+      ],
+      "files": [
+        "components/ui/data/sortable-list/sortable-list.css",
+        "components/ui/data/sortable-list/sortable-list.html",
+        "components/ui/data/sortable-list/sortable-list.react.tsx",
+        "components/ui/data/sortable-list/sortable-list.ts"
+      ],
+      "path": "components/ui/data/sortable-list"
+    },
+    {
+      "id": "code-block",
+      "kind": "ui",
+      "family": "data",
+      "name": "Code block",
+      "summary": "Monospace code with language tabs, a filename and a copy button.",
+      "aliases": [
+        "code snippet",
+        "copyable code",
+        "syntax block",
+        "install command box"
+      ],
+      "pattern": "Figure + WAI-ARIA Tabs",
+      "states": [
+        "default",
+        "copied"
+      ],
+      "react": "CodeBlock",
+      "deps": [
+        "tabs",
+        "copy-button"
+      ],
+      "files": [
+        "components/ui/data/code-block/code-block.css",
+        "components/ui/data/code-block/code-block.html",
+        "components/ui/data/code-block/code-block.react.tsx",
+        "components/ui/data/code-block/code-block.ts"
+      ],
+      "path": "components/ui/data/code-block"
+    },
+    {
+      "id": "stat-strip",
+      "kind": "ui",
+      "family": "data",
+      "name": "Stat strip",
+      "summary": "A row of KPIs with tabular values and semantic delta arrows.",
+      "aliases": [
+        "kpi row",
+        "metrics bar",
+        "stats row",
+        "numbers strip"
+      ],
+      "pattern": "Description list",
+      "states": [
+        "default",
+        "two-up"
+      ],
+      "react": "StatStrip",
+      "deps": [],
+      "files": [
+        "components/ui/data/stat-strip/stat-strip.css",
+        "components/ui/data/stat-strip/stat-strip.html",
+        "components/ui/data/stat-strip/stat-strip.react.tsx"
+      ],
+      "path": "components/ui/data/stat-strip"
+    },
+    {
+      "id": "media-card",
+      "kind": "ui",
+      "family": "data",
+      "name": "Media card",
+      "summary": "Image cards locked to an aspect ratio so a grid of them always lines up.",
+      "aliases": [
+        "blog card",
+        "article card",
+        "thumbnail card",
+        "image card"
+      ],
+      "pattern": "Link card",
+      "states": [
+        "default",
+        "hover",
+        "focus-visible"
+      ],
+      "react": "MediaCard",
+      "deps": [],
+      "files": [
+        "components/ui/data/media-card/media-card.css",
+        "components/ui/data/media-card/media-card.html",
+        "components/ui/data/media-card/media-card.react.tsx"
+      ],
+      "path": "components/ui/data/media-card"
+    },
+    {
+      "id": "avatar-stack",
+      "kind": "ui",
+      "family": "data",
+      "name": "Avatar stack",
+      "summary": "Overlapping initials with a +n counter for collaborators.",
+      "aliases": [
+        "facepile",
+        "people stack",
+        "collaborators",
+        "avatar group"
+      ],
+      "pattern": "List with accessible count",
+      "states": [
+        "default",
+        "hover"
+      ],
+      "react": "AvatarStack",
+      "deps": [],
+      "files": [
+        "components/ui/data/avatar-stack/avatar-stack.css",
+        "components/ui/data/avatar-stack/avatar-stack.html",
+        "components/ui/data/avatar-stack/avatar-stack.react.tsx"
+      ],
+      "path": "components/ui/data/avatar-stack"
+    },
+    {
+      "id": "description-list",
+      "kind": "ui",
+      "family": "data",
+      "name": "Description list",
+      "summary": "Clean key–value rows for settings and record details.",
+      "aliases": [
+        "key value list",
+        "details list",
+        "properties panel",
+        "info rows"
+      ],
+      "pattern": "<dl>",
+      "states": [
+        "default",
+        "stacked"
+      ],
+      "react": "DescriptionList",
+      "deps": [],
+      "files": [
+        "components/ui/data/description-list/description-list.css",
+        "components/ui/data/description-list/description-list.html",
+        "components/ui/data/description-list/description-list.react.tsx"
+      ],
+      "path": "components/ui/data/description-list"
+    },
+    {
+      "id": "filter-bar",
+      "kind": "ui",
+      "family": "data",
+      "name": "Global filter bar",
+      "summary": "One filter bar per dashboard: date range, removable chips, add and reset.",
+      "aliases": [
+        "dashboard filters",
+        "filter chips",
+        "global filters",
+        "date range filter bar"
+      ],
+      "pattern": "WAI-ARIA Toolbar",
+      "states": [
+        "default",
+        "filtered",
+        "reset"
+      ],
+      "react": "FilterBar",
+      "deps": [
+        "segmented-control"
+      ],
+      "files": [
+        "components/ui/data/filter-bar/filter-bar.css",
+        "components/ui/data/filter-bar/filter-bar.html",
+        "components/ui/data/filter-bar/filter-bar.react.tsx",
+        "components/ui/data/filter-bar/filter-bar.ts"
+      ],
+      "path": "components/ui/data/filter-bar"
+    },
+    {
+      "id": "count-up",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Count-up number",
+      "summary": "A KPI that counts up once when it scrolls into view, with width reserved so nothing moves.",
+      "aliases": [
+        "animated number",
+        "number that counts up",
+        "kpi counter",
+        "stat counter",
+        "ticker number"
+      ],
+      "pattern": "<data> with aria-label",
+      "states": [
+        "idle",
+        "counting",
+        "done",
+        "reduced motion"
+      ],
+      "react": "CountUp",
+      "deps": [],
+      "files": [
+        "components/ui/feedback/count-up/count-up.css",
+        "components/ui/feedback/count-up/count-up.html",
+        "components/ui/feedback/count-up/count-up.react.tsx",
+        "components/ui/feedback/count-up/count-up.ts"
+      ],
+      "path": "components/ui/feedback/count-up"
+    },
+    {
+      "id": "odometer",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Rolling odometer",
+      "summary": "Digits roll vertically to the new value like a mechanical counter.",
+      "aliases": [
+        "rolling numbers",
+        "slot machine digits",
+        "number roller",
+        "odometer counter"
+      ],
+      "pattern": "role=img with aria-label",
+      "states": [
+        "rest",
+        "rolling"
+      ],
+      "react": "Odometer",
+      "deps": [
+        "button"
+      ],
+      "files": [
+        "components/ui/feedback/odometer/odometer.css",
+        "components/ui/feedback/odometer/odometer.html",
+        "components/ui/feedback/odometer/odometer.react.tsx",
+        "components/ui/feedback/odometer/odometer.ts"
+      ],
+      "path": "components/ui/feedback/odometer"
+    },
+    {
+      "id": "flip-clock",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Split-flap flip clock",
+      "summary": "A countdown whose digits flip like a departures board.",
+      "aliases": [
+        "flip clock",
+        "countdown timer",
+        "split flap",
+        "departure board digits",
+        "sale countdown"
+      ],
+      "pattern": "role=timer",
+      "states": [
+        "ticking",
+        "flipping",
+        "done"
+      ],
+      "react": "FlipClock",
+      "deps": [],
+      "files": [
+        "components/ui/feedback/flip-clock/flip-clock.css",
+        "components/ui/feedback/flip-clock/flip-clock.html",
+        "components/ui/feedback/flip-clock/flip-clock.react.tsx",
+        "components/ui/feedback/flip-clock/flip-clock.ts"
+      ],
+      "path": "components/ui/feedback/flip-clock"
+    },
+    {
+      "id": "status-dot",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Live status dot",
+      "summary": "Small coloured dots with an optional pulse for live states, always paired with text.",
+      "aliases": [
+        "pulsing dot",
+        "online indicator",
+        "status light",
+        "health indicator",
+        "live badge"
+      ],
+      "pattern": "Decorative + visible text",
+      "states": [
+        "positive",
+        "warning",
+        "negative",
+        "neutral",
+        "live"
+      ],
+      "react": "StatusDot",
+      "deps": [],
+      "files": [
+        "components/ui/feedback/status-dot/status-dot.css",
+        "components/ui/feedback/status-dot/status-dot.html",
+        "components/ui/feedback/status-dot/status-dot.react.tsx"
+      ],
+      "path": "components/ui/feedback/status-dot"
+    },
+    {
+      "id": "progress-bar",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Progress bar",
+      "summary": "Determinate and indeterminate bars with a label and tabular value.",
+      "aliases": [
+        "loading bar",
+        "upload progress",
+        "percent bar"
+      ],
+      "pattern": "role=progressbar",
+      "states": [
+        "determinate",
+        "indeterminate",
+        "complete"
+      ],
+      "react": "ProgressBar",
+      "deps": [],
+      "files": [
+        "components/ui/feedback/progress-bar/progress-bar.css",
+        "components/ui/feedback/progress-bar/progress-bar.html",
+        "components/ui/feedback/progress-bar/progress-bar.react.tsx"
+      ],
+      "path": "components/ui/feedback/progress-bar"
+    },
+    {
+      "id": "progress-ring",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Circular progress ring",
+      "summary": "A ring that fills to a value, with the number in the middle.",
+      "aliases": [
+        "progress circle",
+        "radial progress",
+        "donut progress",
+        "completion ring"
+      ],
+      "pattern": "role=progressbar",
+      "states": [
+        "partial",
+        "complete"
+      ],
+      "react": "ProgressRing",
+      "deps": [],
+      "files": [
+        "components/ui/feedback/progress-ring/progress-ring.css",
+        "components/ui/feedback/progress-ring/progress-ring.html",
+        "components/ui/feedback/progress-ring/progress-ring.react.tsx"
+      ],
+      "path": "components/ui/feedback/progress-ring"
+    },
+    {
+      "id": "meter",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Multi-segment meter",
+      "summary": "One bar split into labelled segments, like a storage breakdown.",
+      "aliases": [
+        "storage bar",
+        "stacked progress",
+        "usage breakdown",
+        "segmented bar"
+      ],
+      "pattern": "role=img + legend",
+      "states": [
+        "default"
+      ],
+      "react": "SegmentedMeter",
+      "deps": [],
+      "files": [
+        "components/ui/feedback/meter/meter.css",
+        "components/ui/feedback/meter/meter.html",
+        "components/ui/feedback/meter/meter.react.tsx"
+      ],
+      "path": "components/ui/feedback/meter"
+    },
+    {
+      "id": "skeleton",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Shimmer skeleton",
+      "summary": "Soft placeholder shapes with a subtle shimmer while content loads.",
+      "aliases": [
+        "loading placeholder",
+        "ghost loader",
+        "content placeholder",
+        "shimmer loader"
+      ],
+      "pattern": "aria-busy container",
+      "states": [
+        "loading",
+        "reduced motion"
+      ],
+      "react": "Skeleton",
+      "deps": [],
+      "files": [
+        "components/ui/feedback/skeleton/skeleton.css",
+        "components/ui/feedback/skeleton/skeleton.html",
+        "components/ui/feedback/skeleton/skeleton.react.tsx"
+      ],
+      "path": "components/ui/feedback/skeleton"
+    },
+    {
+      "id": "empty-state",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Empty state",
+      "summary": "A calm block that explains why a list is empty and offers one clear action.",
+      "aliases": [
+        "no results",
+        "blank slate",
+        "nothing here yet",
+        "zero state"
+      ],
+      "pattern": "Section with heading",
+      "states": [
+        "default"
+      ],
+      "react": "EmptyState",
+      "deps": [
+        "button"
+      ],
+      "files": [
+        "components/ui/feedback/empty-state/empty-state.css",
+        "components/ui/feedback/empty-state/empty-state.html",
+        "components/ui/feedback/empty-state/empty-state.react.tsx"
+      ],
+      "path": "components/ui/feedback/empty-state"
+    },
+    {
+      "id": "toast-stack",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Toast stack",
+      "summary": "Stacked notifications that expand on hover, pause while read and swipe away.",
+      "aliases": [
+        "snackbar",
+        "notification popup",
+        "toast message",
+        "flash message",
+        "sonner style toasts"
+      ],
+      "pattern": "role=status / alert live region",
+      "states": [
+        "entering",
+        "stacked",
+        "expanded",
+        "dismissing"
+      ],
+      "react": "ToastProvider",
+      "deps": [
+        "button"
+      ],
+      "files": [
+        "components/ui/feedback/toast-stack/toast-stack.css",
+        "components/ui/feedback/toast-stack/toast-stack.html",
+        "components/ui/feedback/toast-stack/toast-stack.react.tsx",
+        "components/ui/feedback/toast-stack/toast-stack.ts"
+      ],
+      "path": "components/ui/feedback/toast-stack"
+    },
+    {
+      "id": "callout",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Callout",
+      "summary": "Inline info, tip, warning and danger notes inside content.",
+      "aliases": [
+        "admonition",
+        "note box",
+        "alert box",
+        "tip box",
+        "warning box"
+      ],
+      "pattern": "aside (complementary)",
+      "states": [
+        "info",
+        "positive",
+        "warning",
+        "negative"
+      ],
+      "react": "Callout",
+      "deps": [],
+      "files": [
+        "components/ui/feedback/callout/callout.css",
+        "components/ui/feedback/callout/callout.html",
+        "components/ui/feedback/callout/callout.react.tsx"
+      ],
+      "path": "components/ui/feedback/callout"
+    },
+    {
+      "id": "banner",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Announcement banner",
+      "summary": "A thin, dismissible page-top strip for one announcement.",
+      "aliases": [
+        "top banner",
+        "announcement bar",
+        "promo strip",
+        "notice bar"
+      ],
+      "pattern": "region landmark",
+      "states": [
+        "visible",
+        "dismissed"
+      ],
+      "react": "Banner",
+      "deps": [
+        "badge"
+      ],
+      "files": [
+        "components/ui/feedback/banner/banner.css",
+        "components/ui/feedback/banner/banner.html",
+        "components/ui/feedback/banner/banner.react.tsx",
+        "components/ui/feedback/banner/banner.ts"
+      ],
+      "path": "components/ui/feedback/banner"
+    },
+    {
+      "id": "badge",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Badge system",
+      "summary": "Neutral, accent and status pills, with dot, outline and count variants.",
+      "aliases": [
+        "pill",
+        "tag",
+        "label chip",
+        "status pill",
+        "count bubble"
+      ],
+      "pattern": "Inline text",
+      "states": [
+        "neutral",
+        "accent",
+        "positive",
+        "warning",
+        "negative",
+        "info"
+      ],
+      "react": "Badge",
+      "deps": [],
+      "files": [
+        "components/ui/feedback/badge/badge.css",
+        "components/ui/feedback/badge/badge.html",
+        "components/ui/feedback/badge/badge.react.tsx"
+      ],
+      "path": "components/ui/feedback/badge"
+    },
+    {
+      "id": "kbd",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Keyboard key cap",
+      "summary": "Crisp key caps for shortcuts and key sequences.",
+      "aliases": [
+        "keyboard shortcut",
+        "hotkey",
+        "key cap",
+        "shortcut hint"
+      ],
+      "pattern": "<kbd>",
+      "states": [
+        "default"
+      ],
+      "react": "Kbd",
+      "deps": [],
+      "files": [
+        "components/ui/feedback/kbd/kbd.css",
+        "components/ui/feedback/kbd/kbd.html",
+        "components/ui/feedback/kbd/kbd.react.tsx"
+      ],
+      "path": "components/ui/feedback/kbd"
+    },
+    {
+      "id": "motion-tokens",
+      "kind": "ui",
+      "family": "motion",
+      "name": "Motion tokens & curves",
+      "summary": "Side-by-side ease-out, spring and in-out at 90–320ms, the only curves this kit uses.",
+      "aliases": [
+        "easing curves",
+        "animation timing",
+        "spring easing",
+        "transition presets",
+        "durations"
+      ],
+      "pattern": "CSS custom properties",
+      "states": [
+        "snappy",
+        "calm",
+        "reduced"
+      ],
+      "react": "MOTION",
+      "deps": [
+        "button"
+      ],
+      "files": [
+        "components/ui/motion/motion-tokens/motion-tokens.css",
+        "components/ui/motion/motion-tokens/motion-tokens.html",
+        "components/ui/motion/motion-tokens/motion-tokens.react.tsx",
+        "components/ui/motion/motion-tokens/motion-tokens.ts"
+      ],
+      "path": "components/ui/motion/motion-tokens"
+    },
+    {
+      "id": "view-transition",
+      "kind": "ui",
+      "family": "motion",
+      "name": "View Transition helper",
+      "summary": "Morph elements between layouts with the View Transitions API and a no-op fallback.",
+      "aliases": [
+        "page transition",
+        "shared element transition",
+        "layout morph",
+        "magic move"
+      ],
+      "pattern": "View Transitions API",
+      "states": [
+        "grid",
+        "list",
+        "transitioning"
+      ],
+      "react": "useViewTransition",
+      "deps": [
+        "segmented-control"
+      ],
+      "files": [
+        "components/ui/motion/view-transition/view-transition.css",
+        "components/ui/motion/view-transition/view-transition.html",
+        "components/ui/motion/view-transition/view-transition.react.tsx",
+        "components/ui/motion/view-transition/view-transition.ts"
+      ],
+      "path": "components/ui/motion/view-transition"
+    },
+    {
+      "id": "scroll-reveal",
+      "kind": "ui",
+      "family": "motion",
+      "name": "Scroll reveal",
+      "summary": "Sections fade up once as they enter view, with no scroll-jacking.",
+      "aliases": [
+        "animate on scroll",
+        "fade in on scroll",
+        "aos",
+        "reveal on scroll"
+      ],
+      "pattern": "IntersectionObserver utility",
+      "states": [
+        "armed",
+        "revealed"
+      ],
+      "react": "ScrollReveal",
+      "deps": [],
+      "files": [
+        "components/ui/motion/scroll-reveal/scroll-reveal.css",
+        "components/ui/motion/scroll-reveal/scroll-reveal.html",
+        "components/ui/motion/scroll-reveal/scroll-reveal.react.tsx",
+        "components/ui/motion/scroll-reveal/scroll-reveal.ts"
+      ],
+      "path": "components/ui/motion/scroll-reveal"
+    },
+    {
+      "id": "cursor-spotlight",
+      "kind": "ui",
+      "family": "motion",
+      "name": "Cursor-follow spotlight",
+      "summary": "A soft single-hue glow and border light that follow the pointer across a card.",
+      "aliases": [
+        "spotlight card",
+        "glow on hover",
+        "mouse follow gradient",
+        "linear style card hover"
+      ],
+      "pattern": "Pointer-driven CSS variables",
+      "states": [
+        "rest",
+        "lit"
+      ],
+      "react": "SpotlightCard",
+      "deps": [],
+      "files": [
+        "components/ui/motion/cursor-spotlight/cursor-spotlight.css",
+        "components/ui/motion/cursor-spotlight/cursor-spotlight.html",
+        "components/ui/motion/cursor-spotlight/cursor-spotlight.react.tsx",
+        "components/ui/motion/cursor-spotlight/cursor-spotlight.ts"
+      ],
+      "path": "components/ui/motion/cursor-spotlight"
+    },
+    {
+      "id": "optical-align",
+      "kind": "ui",
+      "family": "motion",
+      "name": "Optical icon alignment",
+      "summary": "Icons centred on cap height, play triangles nudged, trailing arrows tightened.",
+      "aliases": [
+        "icon alignment",
+        "vertically center icon with text",
+        "icon baseline fix",
+        "optical centering"
+      ],
+      "pattern": "CSS utility",
+      "states": [
+        "default",
+        "hover"
+      ],
+      "react": "Optical",
+      "deps": [],
+      "files": [
+        "components/ui/motion/optical-align/optical-align.css",
+        "components/ui/motion/optical-align/optical-align.html",
+        "components/ui/motion/optical-align/optical-align.react.tsx"
+      ],
+      "path": "components/ui/motion/optical-align"
+    },
+    {
+      "id": "tactile-press",
+      "kind": "ui",
+      "family": "motion",
+      "name": "Tactile press",
+      "summary": "Press-down scale on :active with a spring release, for any clickable surface.",
+      "aliases": [
+        "press scale",
+        "button squish",
+        "click feedback",
+        "tap animation"
+      ],
+      "pattern": "CSS utility",
+      "states": [
+        "rest",
+        "pressed"
+      ],
+      "react": "PRESS",
+      "deps": [],
+      "files": [
+        "components/ui/motion/tactile-press/tactile-press.css",
+        "components/ui/motion/tactile-press/tactile-press.html",
+        "components/ui/motion/tactile-press/tactile-press.react.tsx"
+      ],
+      "path": "components/ui/motion/tactile-press"
+    },
+    {
+      "id": "stagger-in",
+      "kind": "ui",
+      "family": "motion",
+      "name": "Staggered entrance",
+      "summary": "List items enter 40ms apart, capped so long lists never drag.",
+      "aliases": [
+        "stagger animation",
+        "cascade in",
+        "list entrance",
+        "sequential fade"
+      ],
+      "pattern": "CSS utility",
+      "states": [
+        "entering",
+        "settled"
+      ],
+      "react": "Stagger",
+      "deps": [
+        "button"
+      ],
+      "files": [
+        "components/ui/motion/stagger-in/stagger-in.css",
+        "components/ui/motion/stagger-in/stagger-in.html",
+        "components/ui/motion/stagger-in/stagger-in.react.tsx",
+        "components/ui/motion/stagger-in/stagger-in.ts"
+      ],
+      "path": "components/ui/motion/stagger-in"
+    },
+    {
+      "id": "navbar-mega",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Navbar with mega dropdown",
+      "summary": "Top navigation whose Product item opens a clean two-column panel with a featured card.",
+      "aliases": [
+        "top nav",
+        "header with dropdown",
+        "mega menu",
+        "site header",
+        "navigation bar",
+        "hamburger menu"
+      ],
+      "pattern": "WAI-ARIA Disclosure Navigation",
+      "states": [
+        "closed",
+        "mega open",
+        "mobile menu",
+        "focus-visible"
+      ],
+      "react": "NavbarMega",
+      "deps": [
+        "button"
+      ],
+      "files": [
+        "components/ui/navigation/navbar-mega/navbar-mega.css",
+        "components/ui/navigation/navbar-mega/navbar-mega.html",
+        "components/ui/navigation/navbar-mega/navbar-mega.react.tsx",
+        "components/ui/navigation/navbar-mega/navbar-mega.ts"
+      ],
+      "path": "components/ui/navigation/navbar-mega"
+    },
+    {
+      "id": "hide-on-scroll-header",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Hide-on-scroll header",
+      "summary": "A sticky header that slides away when you scroll down and returns on the first scroll up.",
+      "aliases": [
+        "auto hide header",
+        "smart sticky header",
+        "header that disappears on scroll",
+        "headroom"
+      ],
+      "pattern": "Sticky landmark",
+      "states": [
+        "visible",
+        "hidden",
+        "scrolled"
+      ],
+      "react": "HideOnScrollHeader",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/hide-on-scroll-header/hide-on-scroll-header.css",
+        "components/ui/navigation/hide-on-scroll-header/hide-on-scroll-header.html",
+        "components/ui/navigation/hide-on-scroll-header/hide-on-scroll-header.react.tsx",
+        "components/ui/navigation/hide-on-scroll-header/hide-on-scroll-header.ts"
+      ],
+      "path": "components/ui/navigation/hide-on-scroll-header"
+    },
+    {
+      "id": "app-sidebar",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Collapsible app sidebar",
+      "summary": "A left rail of sections that collapses to icons and remembers the choice.",
+      "aliases": [
+        "left nav",
+        "side menu",
+        "dashboard sidebar",
+        "collapsible menu",
+        "nav rail",
+        "drawer nav"
+      ],
+      "pattern": "Navigation landmark + disclosure",
+      "states": [
+        "expanded",
+        "collapsed",
+        "current",
+        "hover",
+        "focus-visible"
+      ],
+      "react": "AppSidebar",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/app-sidebar/app-sidebar.css",
+        "components/ui/navigation/app-sidebar/app-sidebar.html",
+        "components/ui/navigation/app-sidebar/app-sidebar.react.tsx",
+        "components/ui/navigation/app-sidebar/app-sidebar.ts"
+      ],
+      "path": "components/ui/navigation/app-sidebar"
+    },
+    {
+      "id": "bottom-nav",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Mobile bottom nav",
+      "summary": "Up to five tabs pinned to the bottom of a phone screen, with a sliding active pill.",
+      "aliases": [
+        "tab bar",
+        "bottom tab bar",
+        "mobile footer nav",
+        "app tabs"
+      ],
+      "pattern": "Navigation landmark",
+      "states": [
+        "default",
+        "current",
+        "pressed",
+        "badge"
+      ],
+      "react": "BottomNav",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/bottom-nav/bottom-nav.css",
+        "components/ui/navigation/bottom-nav/bottom-nav.html",
+        "components/ui/navigation/bottom-nav/bottom-nav.react.tsx",
+        "components/ui/navigation/bottom-nav/bottom-nav.ts"
+      ],
+      "path": "components/ui/navigation/bottom-nav"
+    },
+    {
+      "id": "magnify-dock",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Magnifying dock",
+      "summary": "A row of app icons that swell as the pointer passes, like a desktop dock.",
+      "aliases": [
+        "mac dock",
+        "fisheye menu",
+        "icons that grow on hover",
+        "launcher bar"
+      ],
+      "pattern": "Navigation landmark",
+      "states": [
+        "rest",
+        "magnified",
+        "focus-visible"
+      ],
+      "react": "MagnifyDock",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/magnify-dock/magnify-dock.css",
+        "components/ui/navigation/magnify-dock/magnify-dock.html",
+        "components/ui/navigation/magnify-dock/magnify-dock.react.tsx",
+        "components/ui/navigation/magnify-dock/magnify-dock.ts"
+      ],
+      "path": "components/ui/navigation/magnify-dock"
+    },
+    {
+      "id": "waffle-launcher",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Waffle app launcher",
+      "summary": "A 9-dot button that opens a grid of apps, navigable with arrow keys.",
+      "aliases": [
+        "9 dots menu",
+        "app switcher",
+        "grid menu",
+        "apps launcher",
+        "nine dot icon"
+      ],
+      "pattern": "WAI-ARIA Menu Button (grid layout)",
+      "states": [
+        "closed",
+        "open",
+        "focus-visible"
+      ],
+      "react": "WaffleLauncher",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/waffle-launcher/waffle-launcher.css",
+        "components/ui/navigation/waffle-launcher/waffle-launcher.html",
+        "components/ui/navigation/waffle-launcher/waffle-launcher.react.tsx",
+        "components/ui/navigation/waffle-launcher/waffle-launcher.ts"
+      ],
+      "path": "components/ui/navigation/waffle-launcher"
+    },
+    {
+      "id": "account-menu",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Account menu",
+      "summary": "Avatar button that opens profile, settings and a clearly separated sign-out.",
+      "aliases": [
+        "user menu",
+        "profile dropdown",
+        "avatar menu",
+        "my account"
+      ],
+      "pattern": "WAI-ARIA Menu Button",
+      "states": [
+        "closed",
+        "open",
+        "focus-visible"
+      ],
+      "react": "AccountMenu",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/account-menu/account-menu.css",
+        "components/ui/navigation/account-menu/account-menu.html",
+        "components/ui/navigation/account-menu/account-menu.react.tsx",
+        "components/ui/navigation/account-menu/account-menu.ts"
+      ],
+      "path": "components/ui/navigation/account-menu"
+    },
+    {
+      "id": "scrollspy-toc",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Scrollspy “On this page”",
+      "summary": "A rail of headings that highlights where you are as you read.",
+      "aliases": [
+        "on this page",
+        "table of contents",
+        "toc sidebar",
+        "section highlighter",
+        "right rail"
+      ],
+      "pattern": "Navigation landmark + aria-current=location",
+      "states": [
+        "default",
+        "current",
+        "hover"
+      ],
+      "react": "ScrollspyToc",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/scrollspy-toc/scrollspy-toc.css",
+        "components/ui/navigation/scrollspy-toc/scrollspy-toc.html",
+        "components/ui/navigation/scrollspy-toc/scrollspy-toc.react.tsx",
+        "components/ui/navigation/scrollspy-toc/scrollspy-toc.ts"
+      ],
+      "path": "components/ui/navigation/scrollspy-toc"
+    },
+    {
+      "id": "breadcrumbs",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Breadcrumbs",
+      "summary": "A trail of parent pages that collapses its middle into “…” when space runs out.",
+      "aliases": [
+        "breadcrumb trail",
+        "path navigation",
+        "you are here links"
+      ],
+      "pattern": "WAI-ARIA Breadcrumb",
+      "states": [
+        "full",
+        "collapsed",
+        "expanded"
+      ],
+      "react": "Breadcrumbs",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/breadcrumbs/breadcrumbs.css",
+        "components/ui/navigation/breadcrumbs/breadcrumbs.html",
+        "components/ui/navigation/breadcrumbs/breadcrumbs.react.tsx",
+        "components/ui/navigation/breadcrumbs/breadcrumbs.ts"
+      ],
+      "path": "components/ui/navigation/breadcrumbs"
+    },
+    {
+      "id": "stepper-wizard",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Step indicator wizard",
+      "summary": "Numbered steps that tick off as you move through a multi-step flow.",
+      "aliases": [
+        "progress steps",
+        "multi step form",
+        "onboarding steps",
+        "checkout steps",
+        "wizard"
+      ],
+      "pattern": "List + aria-current=step",
+      "states": [
+        "upcoming",
+        "current",
+        "done"
+      ],
+      "react": "StepperWizard",
+      "deps": [
+        "button"
+      ],
+      "files": [
+        "components/ui/navigation/stepper-wizard/stepper-wizard.css",
+        "components/ui/navigation/stepper-wizard/stepper-wizard.html",
+        "components/ui/navigation/stepper-wizard/stepper-wizard.react.tsx",
+        "components/ui/navigation/stepper-wizard/stepper-wizard.ts"
+      ],
+      "path": "components/ui/navigation/stepper-wizard"
+    },
+    {
+      "id": "pagination",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Pagination bar",
+      "summary": "Previous, next and a compact page list with ellipses and a results summary.",
+      "aliases": [
+        "page numbers",
+        "pager",
+        "next previous buttons",
+        "results pages"
+      ],
+      "pattern": "Navigation landmark + aria-current=page",
+      "states": [
+        "first page",
+        "middle",
+        "last page",
+        "focus-visible"
+      ],
+      "react": "Pagination",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/pagination/pagination.css",
+        "components/ui/navigation/pagination/pagination.html",
+        "components/ui/navigation/pagination/pagination.react.tsx",
+        "components/ui/navigation/pagination/pagination.ts"
+      ],
+      "path": "components/ui/navigation/pagination"
+    },
+    {
+      "id": "site-footer",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Balanced footer",
+      "summary": "Brand line, four even link columns and a single legal row.",
+      "aliases": [
+        "footer links",
+        "site footer",
+        "bottom of page",
+        "multi column footer"
+      ],
+      "pattern": "contentinfo landmark",
+      "states": [
+        "default",
+        "hover"
+      ],
+      "react": "SiteFooter",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/site-footer/site-footer.css",
+        "components/ui/navigation/site-footer/site-footer.html",
+        "components/ui/navigation/site-footer/site-footer.react.tsx"
+      ],
+      "path": "components/ui/navigation/site-footer"
+    },
+    {
+      "id": "floating-pill-nav",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Floating pill nav",
+      "summary": "A compact floating pill of links with a highlight that glides between them.",
+      "aliases": [
+        "pill navbar",
+        "floating menu",
+        "island nav",
+        "capsule nav"
+      ],
+      "pattern": "Navigation landmark",
+      "states": [
+        "rest",
+        "hover",
+        "current",
+        "focus-visible"
+      ],
+      "react": "FloatingPillNav",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/floating-pill-nav/floating-pill-nav.css",
+        "components/ui/navigation/floating-pill-nav/floating-pill-nav.html",
+        "components/ui/navigation/floating-pill-nav/floating-pill-nav.react.tsx",
+        "components/ui/navigation/floating-pill-nav/floating-pill-nav.ts"
+      ],
+      "path": "components/ui/navigation/floating-pill-nav"
+    },
+    {
+      "id": "tabs",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Tabs",
+      "summary": "Underline tabs with a sliding indicator and arrow-key switching.",
+      "aliases": [
+        "tab bar",
+        "underline tabs",
+        "tabbed panels",
+        "view switcher"
+      ],
+      "pattern": "WAI-ARIA Tabs",
+      "states": [
+        "default",
+        "selected",
+        "hover",
+        "focus-visible"
+      ],
+      "react": "Tabs",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/tabs/tabs.css",
+        "components/ui/navigation/tabs/tabs.html",
+        "components/ui/navigation/tabs/tabs.react.tsx",
+        "components/ui/navigation/tabs/tabs.ts"
+      ],
+      "path": "components/ui/navigation/tabs"
+    },
+    {
+      "id": "command-palette",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Command palette (⌘K)",
+      "summary": "A searchable list of every action, opened with ⌘K and driven entirely by keyboard.",
+      "aliases": [
+        "cmd k",
+        "command menu",
+        "spotlight search",
+        "quick actions",
+        "kbar",
+        "omnibar"
+      ],
+      "pattern": "Modal dialog + WAI-ARIA Combobox/Listbox",
+      "states": [
+        "closed",
+        "open",
+        "filtered",
+        "empty",
+        "active option"
+      ],
+      "react": "CommandPalette",
+      "deps": [
+        "button",
+        "kbd"
+      ],
+      "files": [
+        "components/ui/overlays/command-palette/command-palette.css",
+        "components/ui/overlays/command-palette/command-palette.html",
+        "components/ui/overlays/command-palette/command-palette.react.tsx",
+        "components/ui/overlays/command-palette/command-palette.ts"
+      ],
+      "path": "components/ui/overlays/command-palette"
+    },
+    {
+      "id": "selection-bubble",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Selection bubble menu",
+      "summary": "A small format toolbar that appears above selected text.",
+      "aliases": [
+        "text selection toolbar",
+        "floating format bar",
+        "highlight menu",
+        "medium style toolbar",
+        "inline toolbar"
+      ],
+      "pattern": "WAI-ARIA Toolbar in a manual popover",
+      "states": [
+        "hidden",
+        "shown",
+        "focus-visible"
+      ],
+      "react": "SelectionBubble",
+      "deps": [],
+      "files": [
+        "components/ui/overlays/selection-bubble/selection-bubble.css",
+        "components/ui/overlays/selection-bubble/selection-bubble.html",
+        "components/ui/overlays/selection-bubble/selection-bubble.react.tsx",
+        "components/ui/overlays/selection-bubble/selection-bubble.ts"
+      ],
+      "path": "components/ui/overlays/selection-bubble"
+    },
+    {
+      "id": "bulk-action-bar",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Bulk action bar",
+      "summary": "A dark floating bar that appears when rows are ticked, with count, actions and clear.",
+      "aliases": [
+        "bar when ticking rows",
+        "selection toolbar",
+        "batch actions",
+        "multi select actions",
+        "contextual action bar"
+      ],
+      "pattern": "region landmark + live count",
+      "states": [
+        "hidden",
+        "visible",
+        "focus-visible"
+      ],
+      "react": "BulkActionTable",
+      "deps": [
+        "checkbox"
+      ],
+      "files": [
+        "components/ui/overlays/bulk-action-bar/bulk-action-bar.css",
+        "components/ui/overlays/bulk-action-bar/bulk-action-bar.html",
+        "components/ui/overlays/bulk-action-bar/bulk-action-bar.react.tsx",
+        "components/ui/overlays/bulk-action-bar/bulk-action-bar.ts"
+      ],
+      "path": "components/ui/overlays/bulk-action-bar"
+    },
+    {
+      "id": "query-builder",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Rule query builder",
+      "summary": "Build AND/OR filter rules with field, operator and value rows, one nested group deep.",
+      "aliases": [
+        "filter builder",
+        "condition builder",
+        "predicate editor",
+        "segment builder",
+        "where clause builder",
+        "rule editor"
+      ],
+      "pattern": "Form with grouped selects",
+      "states": [
+        "empty",
+        "rules",
+        "nested group"
+      ],
+      "react": "QueryBuilder",
+      "deps": [
+        "segmented-control"
+      ],
+      "files": [
+        "components/ui/overlays/query-builder/query-builder.css",
+        "components/ui/overlays/query-builder/query-builder.html",
+        "components/ui/overlays/query-builder/query-builder.react.tsx",
+        "components/ui/overlays/query-builder/query-builder.ts"
+      ],
+      "path": "components/ui/overlays/query-builder"
+    },
+    {
+      "id": "dropdown-menu",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Dropdown menu with submenu",
+      "summary": "A menu button with shortcuts, checkbox items and a cascading submenu.",
+      "aliases": [
+        "actions menu",
+        "more menu",
+        "cascading menu",
+        "nested dropdown",
+        "flyout menu"
+      ],
+      "pattern": "WAI-ARIA Menu Button + Menu",
+      "states": [
+        "closed",
+        "open",
+        "submenu open",
+        "checked",
+        "focus-visible"
+      ],
+      "react": "DropdownMenu",
+      "deps": [
+        "button"
+      ],
+      "files": [
+        "components/ui/overlays/dropdown-menu/dropdown-menu.css",
+        "components/ui/overlays/dropdown-menu/dropdown-menu.html",
+        "components/ui/overlays/dropdown-menu/dropdown-menu.react.tsx",
+        "components/ui/overlays/dropdown-menu/dropdown-menu.ts"
+      ],
+      "path": "components/ui/overlays/dropdown-menu"
+    },
+    {
+      "id": "context-menu",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Context menu",
+      "summary": "A right-click (or long-press, or Shift+F10) menu that opens at the pointer.",
+      "aliases": [
+        "right click menu",
+        "long press menu",
+        "contextual menu",
+        "secondary click menu"
+      ],
+      "pattern": "WAI-ARIA Menu",
+      "states": [
+        "closed",
+        "open",
+        "submenu open"
+      ],
+      "react": "ContextMenu",
+      "deps": [
+        "dropdown-menu"
+      ],
+      "files": [
+        "components/ui/overlays/context-menu/context-menu.css",
+        "components/ui/overlays/context-menu/context-menu.html",
+        "components/ui/overlays/context-menu/context-menu.react.tsx",
+        "components/ui/overlays/context-menu/context-menu.ts"
+      ],
+      "path": "components/ui/overlays/context-menu"
+    },
+    {
+      "id": "tooltip",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Anchored tooltip",
+      "summary": "Short labels that appear on hover and keyboard focus, anchored with CSS anchor positioning.",
+      "aliases": [
+        "hover hint",
+        "title popup",
+        "info tip",
+        "hover label"
+      ],
+      "pattern": "WAI-ARIA Tooltip",
+      "states": [
+        "hidden",
+        "delayed",
+        "shown"
+      ],
+      "react": "Tooltip",
+      "deps": [
+        "button"
+      ],
+      "files": [
+        "components/ui/overlays/tooltip/tooltip.css",
+        "components/ui/overlays/tooltip/tooltip.html",
+        "components/ui/overlays/tooltip/tooltip.react.tsx",
+        "components/ui/overlays/tooltip/tooltip.ts"
+      ],
+      "path": "components/ui/overlays/tooltip"
+    },
+    {
+      "id": "popover",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Anchored popover",
+      "summary": "A small interactive panel on the native Popover API, with light dismiss and focus handling.",
+      "aliases": [
+        "popup panel",
+        "share popover",
+        "floating panel",
+        "click popup"
+      ],
+      "pattern": "Popover API (non-modal dialog)",
+      "states": [
+        "closed",
+        "open"
+      ],
+      "react": "Popover",
+      "deps": [
+        "button"
+      ],
+      "files": [
+        "components/ui/overlays/popover/popover.css",
+        "components/ui/overlays/popover/popover.html",
+        "components/ui/overlays/popover/popover.react.tsx",
+        "components/ui/overlays/popover/popover.ts"
+      ],
+      "path": "components/ui/overlays/popover"
+    },
+    {
+      "id": "hover-card",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Hover preview card",
+      "summary": "A profile or link preview that appears after a short hover or on focus.",
+      "aliases": [
+        "profile hover card",
+        "link preview",
+        "user card on hover",
+        "peek card"
+      ],
+      "pattern": "Manual popover (supplementary)",
+      "states": [
+        "hidden",
+        "shown"
+      ],
+      "react": "HoverCard",
+      "deps": [
+        "status-dot"
+      ],
+      "files": [
+        "components/ui/overlays/hover-card/hover-card.css",
+        "components/ui/overlays/hover-card/hover-card.html",
+        "components/ui/overlays/hover-card/hover-card.react.tsx",
+        "components/ui/overlays/hover-card/hover-card.ts"
+      ],
+      "path": "components/ui/overlays/hover-card"
+    },
+    {
+      "id": "drawer",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Slide-over drawer",
+      "summary": "A panel that slides in from the right over a scrim, for filters or detail views.",
+      "aliases": [
+        "side panel",
+        "slide over",
+        "off canvas",
+        "sheet from right",
+        "filter panel"
+      ],
+      "pattern": "Modal dialog",
+      "states": [
+        "closed",
+        "opening",
+        "open"
+      ],
+      "react": "Drawer",
+      "deps": [
+        "button"
+      ],
+      "files": [
+        "components/ui/overlays/drawer/drawer.css",
+        "components/ui/overlays/drawer/drawer.html",
+        "components/ui/overlays/drawer/drawer.react.tsx",
+        "components/ui/overlays/drawer/drawer.ts"
+      ],
+      "path": "components/ui/overlays/drawer"
+    },
+    {
+      "id": "modal-dialog",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Modal dialog",
+      "summary": "A focused confirmation dialog with a clean scrim and a clear destructive action.",
+      "aliases": [
+        "popup",
+        "confirm dialog",
+        "are you sure box",
+        "lightbox",
+        "alert dialog"
+      ],
+      "pattern": "WAI-ARIA Dialog (Modal) on <dialog>",
+      "states": [
+        "closed",
+        "open"
+      ],
+      "react": "ConfirmDialog",
+      "deps": [
+        "button"
+      ],
+      "files": [
+        "components/ui/overlays/modal-dialog/modal-dialog.css",
+        "components/ui/overlays/modal-dialog/modal-dialog.html",
+        "components/ui/overlays/modal-dialog/modal-dialog.react.tsx",
+        "components/ui/overlays/modal-dialog/modal-dialog.ts"
+      ],
+      "path": "components/ui/overlays/modal-dialog"
+    },
+    {
+      "id": "bottom-sheet",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Mobile bottom sheet",
+      "summary": "An action sheet that rises from the bottom and drags down to dismiss.",
+      "aliases": [
+        "action sheet",
+        "drawer from bottom",
+        "swipe up panel",
+        "mobile sheet"
+      ],
+      "pattern": "Modal dialog",
+      "states": [
+        "closed",
+        "open",
+        "dragging"
+      ],
+      "react": "BottomSheet",
+      "deps": [
+        "button"
+      ],
+      "files": [
+        "components/ui/overlays/bottom-sheet/bottom-sheet.css",
+        "components/ui/overlays/bottom-sheet/bottom-sheet.html",
+        "components/ui/overlays/bottom-sheet/bottom-sheet.react.tsx",
+        "components/ui/overlays/bottom-sheet/bottom-sheet.ts"
+      ],
+      "path": "components/ui/overlays/bottom-sheet"
+    },
+    {
+      "id": "coach-mark",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Coach-mark product tour",
+      "summary": "A spotlight that walks people through key parts of the screen, one step at a time.",
+      "aliases": [
+        "product tour",
+        "onboarding tour",
+        "walkthrough",
+        "spotlight tour",
+        "feature highlight"
+      ],
+      "pattern": "Modal dialog over spotlight",
+      "states": [
+        "idle",
+        "step n",
+        "done",
+        "skipped"
+      ],
+      "react": "CoachMarkTour",
+      "deps": [
+        "button"
+      ],
+      "files": [
+        "components/ui/overlays/coach-mark/coach-mark.css",
+        "components/ui/overlays/coach-mark/coach-mark.html",
+        "components/ui/overlays/coach-mark/coach-mark.react.tsx",
+        "components/ui/overlays/coach-mark/coach-mark.ts"
+      ],
+      "path": "components/ui/overlays/coach-mark"
+    }
+  ],
+  "charts": [],
+  "blueprints": [],
+  "palettes": [
+    {
+      "id": "cream-charcoal",
+      "kind": "palette",
+      "name": "Cream & Charcoal",
+      "category": "consumer",
+      "summary": "Quiet, warm, crafted. Charcoal actions on a soft cream page.",
+      "aliases": [
+        "cream & charcoal",
+        "cream",
+        "charcoal"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#faf5eb",
+          "accent": "#302a25",
+          "text": "#1b150a"
+        },
+        "dark": {
+          "canvas": "#14110e",
+          "accent": "#ece0c8",
+          "text": "#f9f2ea"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.45,
+        "dark": 13.35
+      },
+      "files": [
+        "tokens/palettes/cream-charcoal.css"
+      ]
+    },
+    {
+      "id": "navy-sand",
+      "kind": "palette",
+      "name": "Deep Navy & Warm Sand",
+      "category": "consumer",
+      "summary": "Confident hospitality and premium SaaS. Navy ink on sand by day, sand on navy by night.",
+      "aliases": [
+        "deep navy & warm sand",
+        "deep navy",
+        "warm sand"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#fcf3e6",
+          "accent": "#1c3461",
+          "text": "#1d1406"
+        },
+        "dark": {
+          "canvas": "#0b1423",
+          "accent": "#e9cca1",
+          "text": "#eef4ff"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.3,
+        "dark": 13.04
+      },
+      "files": [
+        "tokens/palettes/navy-sand.css"
+      ]
+    },
+    {
+      "id": "olive-stone",
+      "kind": "palette",
+      "name": "Olive Green & Warm Stone",
+      "category": "consumer",
+      "summary": "Natural, grounded, outdoorsy. Olive on warm limestone.",
+      "aliases": [
+        "olive green & warm stone",
+        "olive green",
+        "warm stone"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#f8f3ec",
+          "accent": "#536228",
+          "text": "#1b150d"
+        },
+        "dark": {
+          "canvas": "#13130d",
+          "accent": "#afc177",
+          "text": "#f5f4e6"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.07,
+        "dark": 13.19
+      },
+      "files": [
+        "tokens/palettes/olive-stone.css"
+      ]
+    },
+    {
+      "id": "black-signal",
+      "kind": "palette",
+      "name": "Matte Black & Signal Orange",
+      "category": "dev-tool",
+      "summary": "Industrial and decisive. One loud orange on matte black or bright white.",
+      "aliases": [
+        "matte black & signal orange",
+        "matte black",
+        "signal orange"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#fcfaf8",
+          "accent": "#e65909",
+          "text": "#181614"
+        },
+        "dark": {
+          "canvas": "#0e0c0b",
+          "accent": "#fa6e1d",
+          "text": "#f7f3ef"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.93,
+        "dark": 14.53
+      },
+      "files": [
+        "tokens/palettes/black-signal.css"
+      ]
+    },
+    {
+      "id": "paper-ink",
+      "kind": "palette",
+      "name": "Editorial Paper & Ink",
+      "category": "editorial",
+      "summary": "Long-form reading. Blue-black ink on uncoated paper.",
+      "aliases": [
+        "editorial paper & ink",
+        "editorial paper",
+        "ink"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#fbf7eb",
+          "accent": "#1d3c79",
+          "text": "#1b1608"
+        },
+        "dark": {
+          "canvas": "#0c1118",
+          "accent": "#99c1f4",
+          "text": "#eef4ff"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.46,
+        "dark": 13.59
+      },
+      "files": [
+        "tokens/palettes/paper-ink.css"
+      ]
+    },
+    {
+      "id": "slate-forest",
+      "kind": "palette",
+      "name": "Financial Slate & Forest",
+      "category": "data",
+      "summary": "Trustworthy finance. Cool slate surfaces, forest-green actions.",
+      "aliases": [
+        "financial slate & forest",
+        "financial slate",
+        "forest"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#f3f8fd",
+          "accent": "#1c5e39",
+          "text": "#12171c"
+        },
+        "dark": {
+          "canvas": "#0b1017",
+          "accent": "#66c189",
+          "text": "#ebf5ff"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.49,
+        "dark": 13.72
+      },
+      "files": [
+        "tokens/palettes/slate-forest.css"
+      ]
+    },
+    {
+      "id": "ice-cobalt",
+      "kind": "palette",
+      "name": "Nordic Ice & Cobalt",
+      "category": "consumer",
+      "summary": "Crisp and clean. Cobalt on pale ice.",
+      "aliases": [
+        "nordic ice & cobalt",
+        "nordic ice",
+        "cobalt"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#eff9fd",
+          "accent": "#1b56ca",
+          "text": "#0c181d"
+        },
+        "dark": {
+          "canvas": "#05111a",
+          "accent": "#68a0fe",
+          "text": "#e9f5ff"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.57,
+        "dark": 13.82
+      },
+      "files": [
+        "tokens/palettes/ice-cobalt.css"
+      ]
+    },
+    {
+      "id": "espresso-terracotta",
+      "kind": "palette",
+      "name": "Warm Espresso & Terracotta",
+      "category": "consumer",
+      "summary": "Cafe warmth. Fired-clay actions on latte or espresso.",
+      "aliases": [
+        "warm espresso & terracotta",
+        "warm espresso",
+        "terracotta"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#fcf1e7",
+          "accent": "#af5234",
+          "text": "#1f1307"
+        },
+        "dark": {
+          "canvas": "#190f0a",
+          "accent": "#e58361",
+          "text": "#fff0e8"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.07,
+        "dark": 13.47
+      },
+      "files": [
+        "tokens/palettes/espresso-terracotta.css"
+      ]
+    },
+    {
+      "id": "mono-lime",
+      "kind": "palette",
+      "name": "Lab Monochrome & Acid Lime",
+      "category": "dev-tool",
+      "summary": "Lab instrument. Strict greys with one acid-lime signal.",
+      "aliases": [
+        "lab monochrome & acid lime",
+        "lab monochrome",
+        "acid lime"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#f9f9f9",
+          "accent": "#151614",
+          "text": "#161616"
+        },
+        "dark": {
+          "canvas": "#0d0d0d",
+          "accent": "#bff538",
+          "text": "#f3f3f3"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.77,
+        "dark": 14.16
+      },
+      "files": [
+        "tokens/palettes/mono-lime.css"
+      ]
+    },
+    {
+      "id": "terminal-phosphor",
+      "kind": "palette",
+      "name": "Midnight Terminal & Phosphor",
+      "category": "dev-tool",
+      "summary": "Developer console. Phosphor green on cool graphite.",
+      "aliases": [
+        "midnight terminal & phosphor",
+        "midnight terminal",
+        "phosphor"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#f5f8fc",
+          "accent": "#05773b",
+          "text": "#13161b"
+        },
+        "dark": {
+          "canvas": "#080d12",
+          "accent": "#5edb81",
+          "text": "#ecf4fe"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.72,
+        "dark": 14.42
+      },
+      "files": [
+        "tokens/palettes/terminal-phosphor.css"
+      ]
+    },
+    {
+      "id": "porcelain-teal",
+      "kind": "palette",
+      "name": "Porcelain & Deep Teal",
+      "category": "consumer",
+      "summary": "Calm health and fintech. Deep teal on porcelain.",
+      "aliases": [
+        "porcelain & deep teal",
+        "porcelain",
+        "deep teal"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#f4fafa",
+          "accent": "#017272",
+          "text": "#111718"
+        },
+        "dark": {
+          "canvas": "#081214",
+          "accent": "#5cc9c2",
+          "text": "#e1f9fd"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.85,
+        "dark": 13.68
+      },
+      "files": [
+        "tokens/palettes/porcelain-teal.css"
+      ]
+    },
+    {
+      "id": "sage-clay",
+      "kind": "palette",
+      "name": "Sage & Clay",
+      "category": "consumer",
+      "summary": "Wellness and lifestyle. Clay accents on sage-tinted linen.",
+      "aliases": [
+        "sage & clay",
+        "sage",
+        "clay"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#f1f7ee",
+          "accent": "#9e5a3b",
+          "text": "#12180f"
+        },
+        "dark": {
+          "canvas": "#0e130d",
+          "accent": "#d99a77",
+          "text": "#ecf7e9"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.18,
+        "dark": 13.33
+      },
+      "files": [
+        "tokens/palettes/sage-clay.css"
+      ]
+    },
+    {
+      "id": "carbon-amber",
+      "kind": "palette",
+      "name": "Carbon & Amber",
+      "category": "data",
+      "summary": "Trading floor. Amber readouts on carbon black.",
+      "aliases": [
+        "carbon & amber",
+        "carbon",
+        "amber"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#fcf9f3",
+          "accent": "#985602",
+          "text": "#19160f"
+        },
+        "dark": {
+          "canvas": "#0c0a08",
+          "accent": "#fcb02b",
+          "text": "#f8f2ec"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.76,
+        "dark": 14.8
+      },
+      "files": [
+        "tokens/palettes/carbon-amber.css"
+      ]
+    },
+    {
+      "id": "linen-oxblood",
+      "kind": "palette",
+      "name": "Linen & Oxblood",
+      "category": "editorial",
+      "summary": "Luxury editorial. Oxblood details on natural linen.",
+      "aliases": [
+        "linen & oxblood",
+        "linen",
+        "oxblood"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#fbf3e9",
+          "accent": "#7f282e",
+          "text": "#1d1408"
+        },
+        "dark": {
+          "canvas": "#160e0d",
+          "accent": "#e39193",
+          "text": "#fef0ed"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.2,
+        "dark": 13.58
+      },
+      "files": [
+        "tokens/palettes/linen-oxblood.css"
+      ]
+    },
+    {
+      "id": "arctic-red",
+      "kind": "palette",
+      "name": "Arctic White & Signal Red",
+      "category": "editorial",
+      "summary": "Newsroom clarity. Signal red on bright arctic white.",
+      "aliases": [
+        "arctic white & signal red",
+        "arctic white",
+        "signal red"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#fafcfe",
+          "accent": "#cc2827",
+          "text": "#141618"
+        },
+        "dark": {
+          "canvas": "#0b0e11",
+          "accent": "#fa6863",
+          "text": "#edf4fc"
+        }
+      },
+      "minTextContrast": {
+        "light": 15.19,
+        "dark": 14.23
+      },
+      "files": [
+        "tokens/palettes/arctic-red.css"
+      ]
+    },
+    {
+      "id": "mint-ocean",
+      "kind": "palette",
+      "name": "Mint & Deep Ocean",
+      "category": "data",
+      "summary": "Fresh fintech. Deep ocean blue on a whisper of mint.",
+      "aliases": [
+        "mint & deep ocean",
+        "mint",
+        "deep ocean"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#eefaf5",
+          "accent": "#014e6c",
+          "text": "#0b1914"
+        },
+        "dark": {
+          "canvas": "#02141b",
+          "accent": "#80ddbd",
+          "text": "#e5f7ff"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.53,
+        "dark": 13.39
+      },
+      "files": [
+        "tokens/palettes/mint-ocean.css"
+      ]
+    },
+    {
+      "id": "charcoal-sky",
+      "kind": "palette",
+      "name": "Charcoal & Sky",
+      "category": "data",
+      "summary": "Analytics workhorse. Sky blue on neutral charcoal, built for dense dashboards.",
+      "aliases": [
+        "charcoal & sky",
+        "charcoal",
+        "sky"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#f4f9fd",
+          "accent": "#0074a4",
+          "text": "#12171b"
+        },
+        "dark": {
+          "canvas": "#0a0f12",
+          "accent": "#55bef0",
+          "text": "#eaf5fd"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.73,
+        "dark": 14.01
+      },
+      "files": [
+        "tokens/palettes/charcoal-sky.css"
+      ]
+    },
+    {
+      "id": "ochre-indigo",
+      "kind": "palette",
+      "name": "Ochre Paper & Indigo",
+      "category": "editorial",
+      "summary": "Culture and archives. Indigo print on ochre-tinted paper.",
+      "aliases": [
+        "ochre paper & indigo",
+        "ochre paper",
+        "indigo"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#f9f0de",
+          "accent": "#2e3a81",
+          "text": "#1c1505"
+        },
+        "dark": {
+          "canvas": "#0e111b",
+          "accent": "#e6c686",
+          "text": "#eff3ff"
+        }
+      },
+      "minTextContrast": {
+        "light": 13.74,
+        "dark": 13.42
+      },
+      "files": [
+        "tokens/palettes/ochre-indigo.css"
+      ]
+    }
+  ],
+  "typography": [
+    {
+      "id": "editorial",
+      "kind": "typography",
+      "name": "Editorial Serif + Grotesque Sans",
+      "summary": "Magazines, portfolios, essays, premium marketing.",
+      "aliases": [
+        "editorial serif + grotesque sans"
+      ],
+      "webfont": "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter+Tight:wght@400..600&display=swap",
+      "files": [
+        "tokens/typography/typography.css"
+      ]
+    },
+    {
+      "id": "precision",
+      "kind": "typography",
+      "name": "Precision Dev Sans + Mono",
+      "summary": "Developer tools, infra dashboards, docs, command palettes.",
+      "aliases": [
+        "precision dev sans + mono"
+      ],
+      "webfont": "https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap",
+      "files": [
+        "tokens/typography/typography.css"
+      ]
+    },
+    {
+      "id": "financial",
+      "kind": "typography",
+      "name": "Financial Condensed",
+      "summary": "Trading, analytics, KPI walls, sports data. Condensed headings fit more numbers per row.",
+      "aliases": [
+        "financial condensed"
+      ],
+      "webfont": "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap",
+      "files": [
+        "tokens/typography/typography.css"
+      ]
+    },
+    {
+      "id": "humanist",
+      "kind": "typography",
+      "name": "Warm Humanist",
+      "summary": "Consumer apps, health, education, onboarding. Friendly but adult.",
+      "aliases": [
+        "warm humanist"
+      ],
+      "webfont": "https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400..700&family=Source+Code+Pro&display=swap",
+      "files": [
+        "tokens/typography/typography.css"
+      ]
+    },
+    {
+      "id": "swiss",
+      "kind": "typography",
+      "name": "Swiss Neo-Grotesk",
+      "summary": "Product marketing, agency sites, posters. Tight, rational, grid-first.",
+      "aliases": [
+        "swiss neo-grotesk"
+      ],
+      "webfont": "https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap",
+      "files": [
+        "tokens/typography/typography.css"
+      ]
+    },
+    {
+      "id": "bookish",
+      "kind": "typography",
+      "name": "Classic Book Serif",
+      "summary": "Long reads, documentation prose, literary sites. Serif everywhere, generous leading.",
+      "aliases": [
+        "classic book serif"
+      ],
+      "webfont": "https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..600&family=Source+Serif+4:opsz,wght@8..60,400..600&display=swap",
+      "files": [
+        "tokens/typography/typography.css"
+      ]
+    },
+    {
+      "id": "geometric",
+      "kind": "typography",
+      "name": "Geometric Product",
+      "summary": "Startups, mobile apps, fintech consumer. Round geometry, clean numerals.",
+      "aliases": [
+        "geometric product"
+      ],
+      "webfont": "https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=DM+Mono&display=swap",
+      "files": [
+        "tokens/typography/typography.css"
+      ]
+    },
+    {
+      "id": "technical",
+      "kind": "typography",
+      "name": "Technical Mono Display",
+      "summary": "Changelogs, terminal products, hardware, lab tools. Mono headings, sans body.",
+      "aliases": [
+        "technical mono display"
+      ],
+      "webfont": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&family=IBM+Plex+Sans:wght@400;500;600&display=swap",
+      "files": [
+        "tokens/typography/typography.css"
+      ]
+    },
+    {
+      "id": "didone",
+      "kind": "typography",
+      "name": "Luxury Didone + Geometric",
+      "summary": "Fashion, hospitality, luxury retail. High-contrast display, quiet geometric body.",
+      "aliases": [
+        "luxury didone + geometric"
+      ],
+      "webfont": "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..600&family=Jost:wght@400..600&display=swap",
+      "files": [
+        "tokens/typography/typography.css"
+      ]
+    },
+    {
+      "id": "slab",
+      "kind": "typography",
+      "name": "Modern Slab + Sans",
+      "summary": "Learning products, recipe and outdoor brands, sturdy marketing.",
+      "aliases": [
+        "modern slab + sans"
+      ],
+      "webfont": "https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600&family=Inter:wght@400..600&display=swap",
+      "files": [
+        "tokens/typography/typography.css"
+      ]
+    },
+    {
+      "id": "dense",
+      "kind": "typography",
+      "name": "Data-Dense Condensed Sans",
+      "summary": "Admin consoles, tables with 12+ columns, monitoring. Small, sharp, tabular.",
+      "aliases": [
+        "data-dense condensed sans"
+      ],
+      "webfont": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono&display=swap",
+      "files": [
+        "tokens/typography/typography.css"
+      ]
+    },
+    {
+      "id": "rounded",
+      "kind": "typography",
+      "name": "Friendly Rounded",
+      "summary": "Kids, games, casual consumer, playful onboarding without going childish.",
+      "aliases": [
+        "friendly rounded"
+      ],
+      "webfont": "https://fonts.googleapis.com/css2?family=Nunito:wght@400..800&display=swap",
+      "files": [
+        "tokens/typography/typography.css"
+      ]
+    }
+  ]
+}

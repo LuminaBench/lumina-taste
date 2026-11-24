@@ -1,0 +1,9 @@
+.lt-odo-demo { display: grid; justify-items: start; gap: var(--gap-sm); }
+@scope (.lt-odometer) {
+  :scope { display: inline-flex; height: 1.15em; overflow: hidden; font-family: var(--font-display); font-size: var(--step-4); font-weight: var(--weight-display); line-height: 1.15; letter-spacing: -0.02em; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+  [data-part="digit"] { display: inline-block; width: 1ch; height: 1.15em; overflow: hidden; text-align: center; -webkit-mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent); mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent); }
+  [data-part="strip"] { display: flex; flex-direction: column; transform: translateY(calc(var(--n, 0) * -1.15em)); transition: transform var(--dur-4) var(--ease-out); }
+  [data-part="strip"] > span { height: 1.15em; }
+  [data-part="sep"] { display: inline-block; width: 0.4ch; }
+}
+@media (prefers-reduced-motion: reduce) { .lt-odometer [data-part="strip"] { transition: none; } }

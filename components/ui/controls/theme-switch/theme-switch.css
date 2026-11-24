@@ -1,0 +1,46 @@
+@scope (.lt-theme-switch) {
+  :scope {
+    --w: 56px; --h: 30px; --pad: 3px; --knob: calc(var(--h) - var(--pad) * 2);
+    display: inline-grid; padding: 0; border: 0; background: none; cursor: pointer; border-radius: var(--radius-pill);
+    -webkit-tap-highlight-color: transparent;
+  }
+  :scope:focus-visible { outline: none; }
+  :scope:focus-visible [data-part="track"] { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 3px; }
+  [data-part="track"] {
+    position: relative; display: block; width: var(--w); height: var(--h); border-radius: var(--radius-pill);
+    background: var(--bg-surface-3); box-shadow: inset 0 0 0 1px var(--border-hairline);
+    transition: background-color var(--dur-3) var(--ease-out);
+  }
+  [data-part="glyph"] {
+    position: absolute; top: 50%; translate: 0 -50%; color: var(--text-muted); display: grid;
+    transition: opacity var(--dur-2) var(--ease-out), transform var(--dur-4) var(--ease-spring);
+  }
+  [data-glyph="sun"][data-part="glyph"] { left: 8px; opacity: 0; transform: rotate(-90deg) scale(0.6); }
+  [data-glyph="moon"][data-part="glyph"] { right: 8px; opacity: 0.8; }
+  [data-part="thumb"] {
+    position: absolute; top: var(--pad); left: var(--pad); display: grid; place-items: center;
+    width: var(--knob); height: var(--knob); border-radius: var(--radius-pill);
+    background: var(--bg-surface-1); color: var(--status-warning); box-shadow: var(--shadow-sm), 0 0 0 1px var(--border-hairline);
+    transition: transform var(--dur-4) var(--ease-spring), width var(--dur-2) var(--ease-out), background-color var(--dur-3);
+  }
+  [data-part="thumb-icon"] { position: absolute; display: grid; transition: opacity var(--dur-2), transform var(--dur-4) var(--ease-spring); }
+  [data-part="thumb-icon"][data-glyph="moon"] { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+  :scope:hover [data-part="thumb"] { box-shadow: var(--shadow-md), 0 0 0 1px var(--border-hairline); }
+  :scope:active [data-part="thumb"] { width: calc(var(--knob) + 4px); }
+
+  :scope[aria-checked="true"] [data-part="track"] { background: var(--accent-solid); box-shadow: none; }
+  :scope[aria-checked="true"] [data-part="thumb"] { transform: translateX(calc(var(--w) - var(--knob) - var(--pad) * 2)); color: var(--accent-solid); }
+  :scope[aria-checked="true"]:active [data-part="thumb"] { transform: translateX(calc(var(--w) - var(--knob) - var(--pad) * 2 - 4px)); }
+  :scope[aria-checked="true"] [data-part="thumb-icon"][data-glyph="sun"] { opacity: 0; transform: rotate(90deg) scale(0.5); }
+  :scope[aria-checked="true"] [data-part="thumb-icon"][data-glyph="moon"] { opacity: 1; transform: none; }
+  :scope[aria-checked="true"] [data-part="glyph"][data-glyph="sun"] { opacity: 0.85; transform: none; color: var(--accent-ink); }
+  :scope[aria-checked="true"] [data-part="glyph"][data-glyph="moon"] { opacity: 0; transform: rotate(60deg) scale(0.6); }
+}
+/* Circular reveal from the switch (View Transitions API; plain swap elsewhere). */
+:root.lt-theme-transition::view-transition-old(root),
+:root.lt-theme-transition::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+:root.lt-theme-transition::view-transition-new(root) { animation: lt-theme-reveal var(--dur-4, 320ms) var(--ease-out, ease-out); }
+@keyframes lt-theme-reveal {
+  from { clip-path: circle(0 at var(--lt-vt-x, 50%) var(--lt-vt-y, 0)); }
+  to { clip-path: circle(var(--lt-vt-r, 150vmax) at var(--lt-vt-x, 50%) var(--lt-vt-y, 0)); }
+}

@@ -1,0 +1,14 @@
+.lt-skeleton-card { display: grid; gap: 10px; width: min(100%, 340px); padding: var(--gap-md); border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
+.lt-skeleton-card [data-part="row"] { display: flex; align-items: center; gap: 12px; }
+.lt-skeleton-card [data-part="lines"] { flex: 1; display: grid; gap: 8px; }
+@scope (.lt-skeleton) {
+  :scope {
+    display: block; height: 10px; border-radius: var(--radius-xs);
+    background: linear-gradient(90deg, var(--bg-surface-3) 0%, var(--bg-surface-2) 40%, var(--bg-surface-3) 80%) 0 0 / 300% 100%;
+    animation: lt-shimmer 1.6s linear infinite;
+  }
+  :scope[data-shape="circle"] { flex: none; width: 40px; height: 40px; border-radius: 50%; }
+  :scope[data-shape="block"] { height: 120px; border-radius: var(--radius-md); }
+}
+@keyframes lt-shimmer { from { background-position: 100% 0; } to { background-position: -50% 0; } }
+@media (prefers-reduced-motion: reduce) { .lt-skeleton { animation: none; } }

@@ -1,0 +1,15 @@
+.lt-badge-demo { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--gap-sm); }
+@scope (.lt-badge) {
+  :scope {
+    --c: var(--text-secondary); --bg: var(--bg-surface-3); display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px;
+    border-radius: var(--radius-pill); background: var(--bg); color: var(--c); font-size: var(--text-ui-xs); font-weight: 600; line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums;
+  }
+  :scope[data-tone="accent"] { --c: var(--accent-text); --bg: var(--accent-soft); }
+  :scope[data-tone="positive"] { --c: var(--status-positive); --bg: var(--status-positive-soft); }
+  :scope[data-tone="warning"] { --c: var(--status-warning); --bg: var(--status-warning-soft); }
+  :scope[data-tone="negative"] { --c: var(--status-negative); --bg: var(--status-negative-soft); }
+  :scope[data-tone="info"] { --c: var(--status-info); --bg: var(--status-info-soft); }
+  :scope[data-dot]::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  :scope[data-variant="outline"] { --bg: transparent; box-shadow: inset 0 0 0 1px var(--border-strong); font-family: var(--font-mono); font-weight: 500; }
+  :scope[data-variant="count"] { min-width: 20px; height: 20px; padding: 0 6px; justify-content: center; --bg: var(--accent-solid); --c: var(--accent-ink); }
+}

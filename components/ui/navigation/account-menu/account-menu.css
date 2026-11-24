@@ -1,0 +1,21 @@
+@scope (.lt-account) {
+  :scope { position: relative; display: inline-block; font-size: var(--text-ui); }
+  [data-part="trigger"] { display: inline-flex; align-items: center; gap: 8px; height: var(--control-h); padding: 0 8px 0 4px; border: 1px solid transparent; border-radius: var(--radius-pill); background: none; color: var(--text-primary); cursor: pointer; transition: background-color var(--dur-1), border-color var(--dur-1); }
+  [data-part="trigger"]:hover, [data-part="trigger"][aria-expanded="true"] { background: var(--bg-surface-2); border-color: var(--border-hairline); }
+  [data-part="trigger"] > .lt-icon { color: var(--text-muted); transition: rotate var(--dur-2) var(--ease-out); }
+  [data-part="trigger"][aria-expanded="true"] > .lt-icon { rotate: 180deg; }
+  [data-part="avatar"] { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-text); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.02em; }
+  [data-part="who"] { font-weight: 550; }
+  [data-part="menu"] { position: absolute; top: calc(100% + 6px); right: 0; z-index: var(--z-dropdown); display: grid; min-width: 232px; padding: 4px; border-radius: var(--radius-lg); background: var(--bg-surface-1); box-shadow: var(--shadow-overlay); animation: lt-acct-in var(--dur-2) var(--ease-out); transform-origin: top right; }
+  [data-part="menu"][hidden] { display: none; }
+  [data-part="identity"] { display: grid; padding: 8px 10px 10px; }
+  [data-part="identity"] span { color: var(--text-muted); font-size: var(--text-ui-sm); }
+  [role="menuitem"] { display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-primary); font-size: var(--text-ui); text-decoration: none; text-align: left; cursor: pointer; outline: none; }
+  [role="menuitem"] .lt-icon { color: var(--text-muted); }
+  [role="menuitem"]:hover, [role="menuitem"]:focus-visible { background: var(--bg-surface-3); }
+  [role="menuitem"]:focus-visible { box-shadow: inset 0 0 0 var(--focus-width) var(--focus-ring); }
+  [role="menuitem"][data-tone="danger"], [role="menuitem"][data-tone="danger"] .lt-icon { color: var(--status-negative); }
+  kbd { margin-left: auto; font: 500 var(--text-ui-xs) var(--font-mono); color: var(--text-muted); }
+  [data-part="sep"] { height: 1px; margin: 4px 6px; background: var(--border-hairline); }
+}
+@keyframes lt-acct-in { from { opacity: 0; scale: 0.97; translate: 0 -4px; } }

@@ -1,0 +1,461 @@
+{
+  "title": "Controls & tactile inputs",
+  "summary": "Buttons, toggles, pickers and fields with real pressed states and no layout jump.",
+  "order": 1,
+  "components": [
+    {
+      "id": "disclosure-chevron",
+      "name": "Disclosure chevron",
+      "summary": "A trigger whose chevron rotates as the hidden section opens.",
+      "pattern": "WAI-ARIA Disclosure",
+      "states": [
+        "default",
+        "hover",
+        "active",
+        "focus-visible",
+        "open"
+      ],
+      "aliases": [
+        "rotating arrow",
+        "expand arrow",
+        "show more toggle",
+        "twisty",
+        "caret toggle",
+        "collapsible section"
+      ],
+      "react": "Disclosure"
+    },
+    {
+      "id": "accordion",
+      "name": "Accordion",
+      "summary": "Stacked headings that expand one answer at a time, with arrow-key travel between them.",
+      "pattern": "WAI-ARIA Accordion",
+      "states": [
+        "default",
+        "hover",
+        "focus-visible",
+        "open",
+        "closed"
+      ],
+      "aliases": [
+        "faq dropdown",
+        "expanding sections",
+        "collapse panels",
+        "faq list",
+        "question list that opens"
+      ],
+      "react": "Accordion"
+    },
+    {
+      "id": "tree-view",
+      "name": "Tree view",
+      "summary": "Nested folders and files with expand, collapse and full keyboard travel.",
+      "pattern": "WAI-ARIA Tree",
+      "states": [
+        "default",
+        "hover",
+        "selected",
+        "expanded",
+        "focus-visible"
+      ],
+      "aliases": [
+        "file tree",
+        "folder list",
+        "nested list",
+        "file explorer",
+        "outline tree"
+      ],
+      "react": "TreeView"
+    },
+    {
+      "id": "theme-switch",
+      "name": "Theme switch",
+      "summary": "A light/dark switch with a springy thumb and a circular reveal of the new theme.",
+      "pattern": "WAI-ARIA Switch",
+      "states": [
+        "light",
+        "dark",
+        "hover",
+        "pressed",
+        "focus-visible"
+      ],
+      "aliases": [
+        "dark mode toggle",
+        "sun moon switch",
+        "light dark button",
+        "night mode",
+        "theme toggle"
+      ],
+      "react": "ThemeSwitch"
+    },
+    {
+      "id": "segmented-control",
+      "name": "Segmented control",
+      "summary": "A pill row where a sliding indicator follows the selected option.",
+      "pattern": "WAI-ARIA Radio Group",
+      "states": [
+        "default",
+        "hover",
+        "selected",
+        "pressed",
+        "focus-visible"
+      ],
+      "aliases": [
+        "pill toggle",
+        "sliding tabs",
+        "button group selector",
+        "monthly yearly switch",
+        "toggle group",
+        "time range picker"
+      ],
+      "react": "SegmentedControl"
+    },
+    {
+      "id": "toggle-switch",
+      "name": "Toggle switch",
+      "summary": "An on/off settings switch on a native checkbox, with a squash on press.",
+      "pattern": "WAI-ARIA Switch (native checkbox)",
+      "states": [
+        "off",
+        "on",
+        "pressed",
+        "focus-visible",
+        "disabled"
+      ],
+      "aliases": [
+        "on off switch",
+        "settings toggle",
+        "ios switch",
+        "enable toggle",
+        "lightswitch"
+      ],
+      "react": "ToggleSwitch"
+    },
+    {
+      "id": "checkbox",
+      "name": "Checkbox",
+      "summary": "Animated tick that draws itself, with a select-all box that goes indeterminate.",
+      "pattern": "Native checkbox",
+      "states": [
+        "unchecked",
+        "checked",
+        "indeterminate",
+        "hover",
+        "pressed",
+        "focus-visible",
+        "disabled"
+      ],
+      "aliases": [
+        "tick box",
+        "select all",
+        "mixed checkbox",
+        "check mark box"
+      ],
+      "react": "Checkbox"
+    },
+    {
+      "id": "radio-group",
+      "name": "Radio group",
+      "summary": "A single-choice list where the dot grows into place.",
+      "pattern": "Native radio",
+      "states": [
+        "unchecked",
+        "checked",
+        "hover",
+        "focus-visible",
+        "disabled"
+      ],
+      "aliases": [
+        "option buttons",
+        "pick one list",
+        "radio buttons"
+      ],
+      "react": "RadioGroup"
+    },
+    {
+      "id": "radio-cards",
+      "name": "Radio cards",
+      "summary": "Plan or option cards that select as a whole, with a check badge.",
+      "pattern": "Native radio",
+      "states": [
+        "default",
+        "hover",
+        "checked",
+        "pressed",
+        "focus-visible"
+      ],
+      "aliases": [
+        "plan picker",
+        "selectable cards",
+        "option tiles",
+        "choose a plan cards"
+      ],
+      "react": "RadioCards",
+      "fill": true
+    },
+    {
+      "id": "otp-input",
+      "name": "OTP code input",
+      "summary": "Six boxes that auto-advance, accept a pasted code and backspace across fields.",
+      "pattern": "Grouped text inputs",
+      "states": [
+        "empty",
+        "filling",
+        "complete",
+        "error",
+        "focus-visible"
+      ],
+      "aliases": [
+        "verification code",
+        "pin input",
+        "2fa code boxes",
+        "one time password",
+        "sms code"
+      ],
+      "react": "OtpInput"
+    },
+    {
+      "id": "range-slider",
+      "name": "Range slider",
+      "summary": "A slider that snaps magnetically to detents and shows its value in a live bubble.",
+      "pattern": "Native range (WAI-ARIA Slider)",
+      "states": [
+        "default",
+        "hover",
+        "dragging",
+        "snapped",
+        "focus-visible",
+        "disabled"
+      ],
+      "aliases": [
+        "slider with steps",
+        "volume slider",
+        "value slider",
+        "snap slider",
+        "detent slider"
+      ],
+      "react": "RangeSlider"
+    },
+    {
+      "id": "dual-range-slider",
+      "name": "Dual-thumb range slider",
+      "summary": "Pick a minimum and maximum on one track; the thumbs never cross.",
+      "pattern": "Two native ranges (WAI-ARIA Multi-thumb Slider)",
+      "states": [
+        "default",
+        "dragging",
+        "focus-visible"
+      ],
+      "aliases": [
+        "price range slider",
+        "min max slider",
+        "two handle slider",
+        "range filter"
+      ],
+      "react": "DualRangeSlider"
+    },
+    {
+      "id": "button",
+      "name": "Button suite",
+      "summary": "Primary, secondary, ghost, destructive and icon buttons with press scale and a no-jump loading state.",
+      "pattern": "Native button",
+      "states": [
+        "default",
+        "hover",
+        "active",
+        "focus-visible",
+        "loading",
+        "disabled"
+      ],
+      "aliases": [
+        "cta",
+        "action button",
+        "submit button",
+        "icon button",
+        "loading button",
+        "danger button"
+      ],
+      "react": "Button"
+    },
+    {
+      "id": "split-button",
+      "name": "Split button",
+      "summary": "A main action joined to a menu of related actions.",
+      "pattern": "Button + WAI-ARIA Menu Button",
+      "states": [
+        "default",
+        "hover",
+        "open",
+        "focus-visible"
+      ],
+      "aliases": [
+        "button with dropdown",
+        "save and more",
+        "dropdown button",
+        "action with caret"
+      ],
+      "react": "SplitButton",
+      "deps": [
+        "button"
+      ]
+    },
+    {
+      "id": "copy-button",
+      "name": "Copy button",
+      "summary": "Copies text and morphs its icon into a check, then back.",
+      "pattern": "Native button + live region",
+      "states": [
+        "idle",
+        "copied",
+        "focus-visible"
+      ],
+      "aliases": [
+        "copy to clipboard",
+        "click to copy",
+        "copy icon that turns into tick",
+        "clipboard button"
+      ],
+      "react": "CopyButton"
+    },
+    {
+      "id": "tag-input",
+      "name": "Tag input",
+      "summary": "Type and press Enter to add chips; extra chips collapse into a +n counter.",
+      "pattern": "Text input + list",
+      "states": [
+        "empty",
+        "with tags",
+        "overflow",
+        "focus-visible"
+      ],
+      "aliases": [
+        "chip input",
+        "tags field",
+        "multi value input",
+        "email recipients field",
+        "token input"
+      ],
+      "react": "TagInput"
+    },
+    {
+      "id": "search-input",
+      "name": "Search input",
+      "summary": "A search field with a clear button and a keyboard-shortcut badge that focuses it.",
+      "pattern": "Native search input",
+      "states": [
+        "empty",
+        "typing",
+        "focus-visible"
+      ],
+      "aliases": [
+        "search bar",
+        "search box with shortcut",
+        "filter field",
+        "search with clear x"
+      ],
+      "react": "SearchInput"
+    },
+    {
+      "id": "text-field",
+      "name": "Text field",
+      "summary": "Floating-label input with helper text and inline validation on blur.",
+      "pattern": "Native input + aria-describedby",
+      "states": [
+        "empty",
+        "filled",
+        "focus-visible",
+        "invalid",
+        "valid",
+        "disabled"
+      ],
+      "aliases": [
+        "floating label input",
+        "form field",
+        "input with error",
+        "material input",
+        "email field"
+      ],
+      "react": "TextField"
+    },
+    {
+      "id": "date-range-picker",
+      "name": "Date range picker",
+      "summary": "A calendar popover for picking a start and end date with arrow-key travel.",
+      "pattern": "WAI-ARIA Date Picker Dialog (grid)",
+      "states": [
+        "closed",
+        "open",
+        "selecting",
+        "range",
+        "focus-visible"
+      ],
+      "aliases": [
+        "calendar picker",
+        "from to dates",
+        "booking dates",
+        "date range",
+        "check in check out"
+      ],
+      "react": "DateRangePicker"
+    },
+    {
+      "id": "combobox",
+      "name": "Combobox",
+      "summary": "A searchable select that filters as you type, with arrows, Enter and Esc.",
+      "pattern": "WAI-ARIA Combobox (list autocomplete)",
+      "states": [
+        "closed",
+        "open",
+        "filtered",
+        "no results",
+        "focus-visible"
+      ],
+      "aliases": [
+        "searchable select",
+        "autocomplete dropdown",
+        "typeahead",
+        "select with search",
+        "country picker"
+      ],
+      "react": "Combobox"
+    },
+    {
+      "id": "file-dropzone",
+      "name": "File dropzone",
+      "summary": "Drag files in or browse; shows each file with its size and a remove button.",
+      "pattern": "Native file input",
+      "states": [
+        "idle",
+        "drag-over",
+        "with files",
+        "focus-visible"
+      ],
+      "aliases": [
+        "drag and drop upload",
+        "upload box",
+        "drop files here",
+        "file uploader"
+      ],
+      "react": "FileDropzone"
+    },
+    {
+      "id": "number-stepper",
+      "name": "Number stepper",
+      "summary": "Minus and plus buttons around a number, with hold-to-repeat and limits.",
+      "pattern": "WAI-ARIA Spinbutton (native number)",
+      "states": [
+        "default",
+        "at min",
+        "at max",
+        "focus-visible"
+      ],
+      "aliases": [
+        "quantity picker",
+        "plus minus input",
+        "counter input",
+        "increment decrement"
+      ],
+      "react": "NumberStepper"
+    }
+  ]
+}

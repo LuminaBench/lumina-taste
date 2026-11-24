@@ -1,0 +1,14 @@
+{
+  "title": "Micro-motion & CSS craft",
+  "summary": "Curves, transitions and small details that make an interface feel made, all collapsing under reduced motion.",
+  "order": 6,
+  "components": [
+    { "id": "motion-tokens", "name": "Motion tokens & curves", "summary": "Side-by-side ease-out, spring and in-out at 90–320ms, the only curves this kit uses.", "pattern": "CSS custom properties", "states": ["snappy", "calm", "reduced"], "aliases": ["easing curves", "animation timing", "spring easing", "transition presets", "durations"], "react": "MOTION", "deps": ["button"] },
+    { "id": "view-transition", "name": "View Transition helper", "summary": "Morph elements between layouts with the View Transitions API and a no-op fallback.", "pattern": "View Transitions API", "states": ["grid", "list", "transitioning"], "aliases": ["page transition", "shared element transition", "layout morph", "magic move"], "react": "useViewTransition", "deps": ["segmented-control"] },
+    { "id": "scroll-reveal", "name": "Scroll reveal", "summary": "Sections fade up once as they enter view, with no scroll-jacking.", "pattern": "IntersectionObserver utility", "states": ["armed", "revealed"], "aliases": ["animate on scroll", "fade in on scroll", "aos", "reveal on scroll"], "react": "ScrollReveal", "fill": true },
+    { "id": "cursor-spotlight", "name": "Cursor-follow spotlight", "summary": "A soft single-hue glow and border light that follow the pointer across a card.", "pattern": "Pointer-driven CSS variables", "states": ["rest", "lit"], "aliases": ["spotlight card", "glow on hover", "mouse follow gradient", "linear style card hover"], "react": "SpotlightCard", "fill": true },
+    { "id": "optical-align", "name": "Optical icon alignment", "summary": "Icons centred on cap height, play triangles nudged, trailing arrows tightened.", "pattern": "CSS utility", "states": ["default", "hover"], "aliases": ["icon alignment", "vertically center icon with text", "icon baseline fix", "optical centering"], "react": "Optical" },
+    { "id": "tactile-press", "name": "Tactile press", "summary": "Press-down scale on :active with a spring release, for any clickable surface.", "pattern": "CSS utility", "states": ["rest", "pressed"], "aliases": ["press scale", "button squish", "click feedback", "tap animation"], "react": "PRESS" },
+    { "id": "stagger-in", "name": "Staggered entrance", "summary": "List items enter 40ms apart, capped so long lists never drag.", "pattern": "CSS utility", "states": ["entering", "settled"], "aliases": ["stagger animation", "cascade in", "list entrance", "sequential fade"], "react": "Stagger", "deps": ["button"] }
+  ]
+}

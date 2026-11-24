@@ -1,0 +1,13 @@
+import { chromium } from '@playwright/test';
+const [,, url, out, w = '1440', h = '900', mode = 'light'] = process.argv;
+const b = await chromium.launch();
+const p = await b.newPage({ viewport: { width: +w, height: +h } });
+const errs = [];
+p.on('pageerror', (e) => errs.push(e.message));
+p.on('console', (m) => m.type() === 'error' && errs.push(m.text()));
+await p.goto(url);
+await p.evaluate((m) => (document.documentElement.dataset.mode = m), mode);
+await p.waitForTimeout(400);
+await p.screenshot({ path: out, fullPage: process.env.FULL === '1' });
+console.log(errs.length ? 'ERRORS: ' + errs.join('\n') : 'no errors');
+await b.close();

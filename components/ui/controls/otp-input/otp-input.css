@@ -1,0 +1,24 @@
+@scope (.lt-otp) {
+  :scope { margin: 0; padding: 0; border: 0; min-width: 0; }
+  legend { margin-bottom: var(--gap-sm); padding: 0; font-size: var(--text-ui-sm); color: var(--text-secondary); }
+  [data-part="fields"] { display: flex; align-items: center; gap: var(--gap-sm); }
+  input {
+    width: calc(var(--control-h) + 6px); height: calc(var(--control-h) + 14px); padding: 0; flex: none;
+    border: 1px solid var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-1);
+    color: var(--text-primary); font: 600 var(--step-1) / 1 var(--font-mono); font-variant-numeric: tabular-nums; text-align: center; caret-color: var(--accent-solid);
+    transition: border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1), scale var(--dur-2) var(--ease-spring);
+  }
+  input:hover { border-color: var(--text-secondary); }
+  input:focus-visible { outline: none; border-color: var(--focus-ring); box-shadow: 0 0 0 1px var(--focus-ring); }
+  input[data-filled] { scale: 1.04; }
+  input:not(:placeholder-shown), input[data-filled] { scale: 1; border-color: var(--text-secondary); }
+  [data-part="sep"] { width: 10px; height: 2px; border-radius: 1px; background: var(--border-strong); flex: none; }
+  [data-part="status"] { min-height: 1.4em; margin: var(--gap-sm) 0 0; font-size: var(--text-ui-sm); color: var(--text-secondary); }
+  :scope[data-state="complete"] input { border-color: var(--status-positive); }
+  :scope[data-state="complete"] [data-part="status"] { color: var(--status-positive); }
+  :scope[data-state="error"] input { border-color: var(--status-negative); animation: lt-otp-shake var(--dur-4) var(--ease-out); }
+  :scope[data-state="error"] [data-part="status"] { color: var(--status-negative); }
+}
+@media (max-width: 420px) { .lt-otp input { width: 38px; } .lt-otp [data-part="fields"] { gap: 6px; } }
+@keyframes lt-otp-shake { 20% { translate: -4px 0; } 40% { translate: 4px 0; } 60% { translate: -2px 0; } 80% { translate: 2px 0; } }
+@media (prefers-reduced-motion: reduce) { .lt-otp input { animation: none !important; } }

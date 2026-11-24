@@ -1,0 +1,11 @@
+.lt-avatar-row { display: flex; align-items: center; gap: var(--gap-sm); font-size: var(--text-ui-sm); }
+@scope (.lt-avatars) {
+  :scope { display: flex; margin: 0; padding: 0 0 0 8px; list-style: none; }
+  li {
+    display: grid; place-items: center; width: 32px; height: 32px; margin-left: -8px; border-radius: 50%; box-shadow: 0 0 0 2px var(--bg-canvas);
+    background: color-mix(in oklch, var(--c) 22%, var(--bg-surface-1)); color: var(--text-primary); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.02em;
+    transition: translate var(--dur-2) var(--ease-spring);
+  }
+  li:hover { translate: 0 -3px; z-index: 1; }
+  [data-part="more"] { background: var(--bg-surface-3); color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+}

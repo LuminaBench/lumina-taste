@@ -1,0 +1,21 @@
+.lt-switch-list { display: grid; gap: var(--gap-md); }
+@scope (.lt-switch) {
+  :scope { --w: 36px; --h: 20px; display: inline-flex; align-items: center; gap: var(--gap-sm); font-size: var(--text-ui); color: var(--text-primary); cursor: pointer; }
+  input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+  [data-part="track"] {
+    position: relative; flex: none; width: var(--w); height: var(--h); border-radius: var(--radius-pill);
+    background: var(--border-strong); transition: background-color var(--dur-2) var(--ease-out);
+  }
+  [data-part="thumb"] {
+    position: absolute; top: 2px; left: 2px; width: calc(var(--h) - 4px); height: calc(var(--h) - 4px);
+    border-radius: var(--radius-pill); background: var(--bg-surface-1); box-shadow: var(--shadow-sm);
+    transition: transform var(--dur-3) var(--ease-spring), width var(--dur-1) var(--ease-out);
+  }
+  :scope:active [data-part="thumb"] { width: calc(var(--h) + 1px); }
+  input:checked + [data-part="track"] { background: var(--accent-solid); }
+  input:checked + [data-part="track"] [data-part="thumb"] { transform: translateX(calc(var(--w) - var(--h))); background: var(--accent-ink); }
+  :scope:active input:checked + [data-part="track"] [data-part="thumb"] { transform: translateX(calc(var(--w) - var(--h) - 5px)); }
+  input:focus-visible + [data-part="track"] { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
+  :scope:has(input:disabled) { cursor: not-allowed; color: var(--text-muted); }
+  input:disabled + [data-part="track"] { opacity: 0.45; }
+}
