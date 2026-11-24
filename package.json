@@ -1,0 +1,37 @@
+{
+  "name": "lumina-taste",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Anti-slop UI, micro-interaction, page-flow and data-visualization skill for coding agents: 18 OKLCH palettes, 84 named UI patterns, 18 chart engines and 8 page blueprints in vanilla TS and React.",
+  "license": "SEE LICENSE IN LICENSE",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "tokens": "node scripts/build-tokens.mjs",
+    "test:contrast": "node scripts/test-contrast.mjs",
+    "catalog": "node scripts/build-catalog.mjs",
+    "typecheck": "tsc --noEmit",
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/build.mjs && node scripts/serve.mjs --open",
+    "serve": "node scripts/serve.mjs",
+    "test:ui": "node scripts/build.mjs && playwright test -c tests/playwright.config.ts",
+    "audit": "node scripts/audit-ui.mjs",
+    "audit:all": "node scripts/audit-all.mjs",
+    "search": "node scripts/search.mjs",
+    "install-taste": "node scripts/install-taste.mjs",
+    "test": "npm run test:contrast && npm run test:unit && npm run typecheck && npm run test:ui",
+    "test:unit": "node --test tests/unit/profile.test.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "esbuild": "^0.25.12",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "5.9"
+  }
+}

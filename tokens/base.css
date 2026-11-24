@@ -1,0 +1,257 @@
+/*
+ * lumina-taste base tokens: density, radius, motion, elevation and the minimal element layer.
+ * The taste root is any element carrying data-palette (usually <html>, or a wrapper in attach mode).
+ * Axes are independent attributes: data-palette, data-mode, data-type, data-density, data-radius, data-motion.
+ */
+
+/* ---------- defaults (balanced density, balanced radius, snappy motion) ---------- */
+:where([data-palette]) {
+  /* 4px grid. Fixed scale for layout; density-aware gaps for components. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  --gap-xs: 4px;
+  --gap-sm: 8px;
+  --gap-md: 16px;
+  --gap-lg: 24px;
+  --gap-xl: 40px;
+  --control-h: 36px;
+  --control-h-sm: 28px;
+  --control-h-lg: 44px;
+  --control-px: 14px;
+  --cell-py: 10px;
+  --cell-px: 12px;
+  --section-y: 96px;
+  --text-ui: 0.875rem;
+  --text-ui-sm: 0.8125rem;
+  --text-ui-xs: 0.75rem;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 999px;
+
+  --dur-1: 90ms;
+  --dur-2: 140ms;
+  --dur-3: 200ms;
+  --dur-4: 320ms;
+  --ease-out: cubic-bezier(0.2, 0.9, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.3, 1.4, 0.5, 1);
+  --press-scale: 0.97;
+
+  --shadow-sm: 0 1px 2px oklch(0.2 0.01 260 / 0.06);
+  --shadow-md: 0 1px 2px oklch(0.2 0.01 260 / 0.05), 0 4px 12px -4px oklch(0.2 0.01 260 / 0.1);
+  --shadow-overlay: 0 0 0 1px var(--border-hairline), 0 2px 6px oklch(0.2 0.01 260 / 0.06),
+    0 12px 24px -12px oklch(0.2 0.01 260 / 0.22);
+  --scrim: oklch(0.18 0.01 260 / 0.42);
+
+  --z-sticky: 20;
+  --z-dropdown: 40;
+  --z-overlay: 60;
+  --z-toast: 80;
+  --z-tooltip: 90;
+
+  --measure: 68ch;
+  --focus-width: 2px;
+  --focus-offset: 2px;
+
+  /* Typography fallbacks if no data-type is set. */
+  --font-display: system-ui, sans-serif;
+  --font-body: system-ui, sans-serif;
+  --font-mono: ui-monospace, Menlo, Consolas, monospace;
+  --weight-display: 600;
+  --weight-body: 400;
+  --tracking-display: -0.02em;
+  --leading-display: 1.08;
+  --step-n2: 0.75rem;
+  --step-n1: 0.875rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.5rem;
+  --step-3: 2rem;
+  --step-4: 2.75rem;
+  --step-5: 3.5rem;
+}
+
+:where([data-mode="dark"]) {
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.3);
+  --shadow-md: 0 1px 2px oklch(0 0 0 / 0.3), 0 4px 12px -4px oklch(0 0 0 / 0.3);
+  --shadow-overlay: 0 0 0 1px var(--border-hairline), 0 2px 6px oklch(0 0 0 / 0.25),
+    0 12px 24px -12px oklch(0 0 0 / 0.3);
+  --scrim: oklch(0.05 0 0 / 0.6);
+}
+
+/* ---------- density ---------- */
+[data-density="spacious"] {
+  --gap-xs: 8px;
+  --gap-sm: 12px;
+  --gap-md: 20px;
+  --gap-lg: 32px;
+  --gap-xl: 48px;
+  --control-h: 44px;
+  --control-h-sm: 32px;
+  --control-h-lg: 52px;
+  --control-px: 18px;
+  --cell-py: 14px;
+  --cell-px: 16px;
+  --section-y: 128px;
+  --text-ui: 0.9375rem;
+  --text-ui-sm: 0.875rem;
+  --text-ui-xs: 0.8125rem;
+}
+[data-density="dense"] {
+  --gap-xs: 4px;
+  --gap-sm: 8px;
+  --gap-md: 12px;
+  --gap-lg: 16px;
+  --gap-xl: 32px;
+  --control-h: 32px;
+  --control-h-sm: 24px;
+  --control-h-lg: 36px;
+  --control-px: 10px;
+  --cell-py: 6px;
+  --cell-px: 8px;
+  --section-y: 64px;
+  --text-ui: 0.8125rem;
+  --text-ui-sm: 0.75rem;
+  --text-ui-xs: 0.6875rem;
+}
+
+/* ---------- radius ---------- */
+[data-radius="sharp"] {
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+}
+[data-radius="soft"] {
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+}
+
+/* ---------- motion ---------- */
+[data-motion="calm"] {
+  --dur-1: 140ms;
+  --dur-2: 220ms;
+  --dur-3: 320ms;
+  --dur-4: 480ms;
+  --ease-out: cubic-bezier(0.25, 0.8, 0.25, 1);
+  --ease-spring: cubic-bezier(0.3, 1.22, 0.5, 1);
+  --press-scale: 0.985;
+}
+[data-motion="reduced"] {
+  --dur-1: 1ms;
+  --dur-2: 1ms;
+  --dur-3: 1ms;
+  --dur-4: 1ms;
+  --ease-spring: linear;
+  --press-scale: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-palette] {
+    --dur-1: 1ms;
+    --dur-2: 1ms;
+    --dur-3: 1ms;
+    --dur-4: 1ms;
+    --ease-spring: linear;
+    --press-scale: 1;
+  }
+}
+
+/* ---------- element layer (zero-specificity, so host styles always win in attach mode) ---------- */
+:where([data-palette]) {
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-weight: var(--weight-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  accent-color: var(--accent-solid);
+}
+:where(html[data-palette]) {
+  background: var(--bg-canvas);
+  scrollbar-gutter: stable;
+  scroll-padding-top: 88px;
+}
+:where(html[data-palette]) :where(body) {
+  margin: 0;
+  background: var(--bg-canvas);
+}
+:where([data-palette]) :where(*, *::before, *::after) {
+  box-sizing: border-box;
+}
+:where([data-palette]) :where(button, input, select, textarea) {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+:where([data-palette]) :where(svg) {
+  flex-shrink: 0;
+}
+:where([data-palette]) :where(table, time, data, output, kbd, code, [data-num], .lt-num) {
+  font-variant-numeric: tabular-nums;
+}
+:where([data-palette]) :where(::selection) {
+  background: var(--accent-soft);
+  color: var(--text-primary);
+}
+:where([data-palette]) :where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
+  outline: var(--focus-width) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+/* ---------- type utilities ---------- */
+.lt-display,
+.lt-h1,
+.lt-h2,
+.lt-h3 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
+  text-wrap: balance;
+  margin: 0;
+}
+.lt-display { font-size: var(--step-5); }
+.lt-h1 { font-size: var(--step-4); }
+.lt-h2 { font-size: var(--step-3); }
+.lt-h3 { font-size: var(--step-1); letter-spacing: -0.01em; line-height: 1.25; }
+.lt-lede { font-size: var(--step-1); color: var(--text-secondary); line-height: 1.45; text-wrap: pretty; max-width: 60ch; }
+.lt-body { font-size: var(--step-0); line-height: 1.6; max-width: var(--measure); text-wrap: pretty; }
+.lt-eyebrow {
+  font-size: var(--text-ui-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.lt-num { font-variant-numeric: tabular-nums; }
+.lt-mono { font-family: var(--font-mono); font-size: 0.92em; }
+.lt-muted { color: var(--text-muted); }
+.lt-secondary { color: var(--text-secondary); }
+.lt-visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

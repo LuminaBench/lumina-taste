@@ -1,0 +1,137 @@
+{
+  "$comment": "Typography pairings. Each stack names a recommended web font first, then installed system faces that keep the same character, so pages look right with zero font downloads. 'webfont' is an optional Google Fonts URL for projects that want the exact faces. Scales are fluid between 360px and 1440px viewports.",
+  "pairings": [
+    {
+      "id": "editorial",
+      "name": "Editorial Serif + Grotesque Sans",
+      "use": "Magazines, portfolios, essays, premium marketing.",
+      "display": "\"Fraunces\", \"Iowan Old Style\", \"Charter\", \"Palatino Linotype\", Georgia, serif",
+      "body": "\"Inter Tight\", \"Helvetica Neue\", \"Segoe UI\", system-ui, sans-serif",
+      "mono": "\"JetBrains Mono\", ui-monospace, \"SF Mono\", Menlo, Consolas, monospace",
+      "displayWeight": 500, "bodyWeight": 400, "displayTracking": -0.025, "displayLeading": 1.06,
+      "base": [16, 18], "ratio": [1.2, 1.333],
+      "webfont": "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter+Tight:wght@400..600&display=swap"
+    },
+    {
+      "id": "precision",
+      "name": "Precision Dev Sans + Mono",
+      "use": "Developer tools, infra dashboards, docs, command palettes.",
+      "display": "\"Geist\", \"Inter\", \"SF Pro Display\", \"Segoe UI\", system-ui, sans-serif",
+      "body": "\"Geist\", \"Inter\", \"SF Pro Text\", \"Segoe UI\", system-ui, sans-serif",
+      "mono": "\"Geist Mono\", \"JetBrains Mono\", ui-monospace, \"SF Mono\", Menlo, Consolas, monospace",
+      "displayWeight": 600, "bodyWeight": 400, "displayTracking": -0.03, "displayLeading": 1.08,
+      "base": [14, 15], "ratio": [1.16, 1.25],
+      "webfont": "https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap"
+    },
+    {
+      "id": "financial",
+      "name": "Financial Condensed",
+      "use": "Trading, analytics, KPI walls, sports data. Condensed headings fit more numbers per row.",
+      "display": "\"Barlow Condensed\", \"Roboto Condensed\", \"Avenir Next Condensed\", \"Arial Narrow\", sans-serif-condensed, sans-serif",
+      "body": "\"IBM Plex Sans\", \"Helvetica Neue\", \"Segoe UI\", system-ui, sans-serif",
+      "mono": "\"IBM Plex Mono\", ui-monospace, \"SF Mono\", Menlo, Consolas, monospace",
+      "displayWeight": 600, "bodyWeight": 400, "displayTracking": -0.005, "displayLeading": 1.04,
+      "base": [14, 15], "ratio": [1.2, 1.3],
+      "webfont": "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap"
+    },
+    {
+      "id": "humanist",
+      "name": "Warm Humanist",
+      "use": "Consumer apps, health, education, onboarding. Friendly but adult.",
+      "display": "\"Source Sans 3\", \"Seravek\", \"Gill Sans Nova\", \"Gill Sans\", \"Segoe UI\", Calibri, sans-serif",
+      "body": "\"Source Sans 3\", \"Seravek\", \"Segoe UI\", Calibri, system-ui, sans-serif",
+      "mono": "\"Source Code Pro\", ui-monospace, Menlo, Consolas, monospace",
+      "displayWeight": 600, "bodyWeight": 400, "displayTracking": -0.015, "displayLeading": 1.1,
+      "base": [16, 17], "ratio": [1.2, 1.28],
+      "webfont": "https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400..700&family=Source+Code+Pro&display=swap"
+    },
+    {
+      "id": "swiss",
+      "name": "Swiss Neo-Grotesk",
+      "use": "Product marketing, agency sites, posters. Tight, rational, grid-first.",
+      "display": "\"Inter Display\", \"Inter\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+      "body": "\"Inter\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+      "mono": "\"JetBrains Mono\", ui-monospace, Menlo, Consolas, monospace",
+      "displayWeight": 600, "bodyWeight": 400, "displayTracking": -0.035, "displayLeading": 1.02,
+      "base": [15, 17], "ratio": [1.22, 1.38],
+      "webfont": "https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap"
+    },
+    {
+      "id": "bookish",
+      "name": "Classic Book Serif",
+      "use": "Long reads, documentation prose, literary sites. Serif everywhere, generous leading.",
+      "display": "\"Newsreader\", \"Iowan Old Style\", \"Charter\", Georgia, serif",
+      "body": "\"Source Serif 4\", \"Iowan Old Style\", \"Charter\", Georgia, serif",
+      "mono": "\"IBM Plex Mono\", ui-monospace, Menlo, Consolas, monospace",
+      "displayWeight": 500, "bodyWeight": 400, "displayTracking": -0.015, "displayLeading": 1.1,
+      "base": [17, 19], "ratio": [1.18, 1.28],
+      "webfont": "https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..600&family=Source+Serif+4:opsz,wght@8..60,400..600&display=swap"
+    },
+    {
+      "id": "geometric",
+      "name": "Geometric Product",
+      "use": "Startups, mobile apps, fintech consumer. Round geometry, clean numerals.",
+      "display": "\"Manrope\", \"Avenir Next\", Avenir, \"Century Gothic\", \"Segoe UI\", sans-serif",
+      "body": "\"Manrope\", \"Avenir Next\", Avenir, \"Segoe UI\", system-ui, sans-serif",
+      "mono": "\"DM Mono\", ui-monospace, Menlo, Consolas, monospace",
+      "displayWeight": 650, "bodyWeight": 450, "displayTracking": -0.025, "displayLeading": 1.06,
+      "base": [15, 16], "ratio": [1.2, 1.32],
+      "webfont": "https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=DM+Mono&display=swap"
+    },
+    {
+      "id": "technical",
+      "name": "Technical Mono Display",
+      "use": "Changelogs, terminal products, hardware, lab tools. Mono headings, sans body.",
+      "display": "\"JetBrains Mono\", \"IBM Plex Mono\", ui-monospace, \"SF Mono\", Menlo, Consolas, monospace",
+      "body": "\"IBM Plex Sans\", \"Helvetica Neue\", \"Segoe UI\", system-ui, sans-serif",
+      "mono": "\"JetBrains Mono\", ui-monospace, \"SF Mono\", Menlo, Consolas, monospace",
+      "displayWeight": 600, "bodyWeight": 400, "displayTracking": -0.04, "displayLeading": 1.1,
+      "base": [14, 15], "ratio": [1.15, 1.25],
+      "webfont": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+    },
+    {
+      "id": "didone",
+      "name": "Luxury Didone + Geometric",
+      "use": "Fashion, hospitality, luxury retail. High-contrast display, quiet geometric body.",
+      "display": "\"Playfair Display\", \"Didot\", \"Bodoni 72\", \"Bodoni MT\", Georgia, serif",
+      "body": "\"Jost\", \"Futura\", \"Avenir Next\", \"Century Gothic\", system-ui, sans-serif",
+      "mono": "ui-monospace, Menlo, Consolas, monospace",
+      "displayWeight": 500, "bodyWeight": 400, "displayTracking": -0.01, "displayLeading": 1.04,
+      "base": [15, 17], "ratio": [1.25, 1.414],
+      "webfont": "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..600&family=Jost:wght@400..600&display=swap"
+    },
+    {
+      "id": "slab",
+      "name": "Modern Slab + Sans",
+      "use": "Learning products, recipe and outdoor brands, sturdy marketing.",
+      "display": "\"Zilla Slab\", \"Roboto Slab\", \"Rockwell\", \"Museo Slab\", Georgia, serif",
+      "body": "\"Inter\", \"Helvetica Neue\", \"Segoe UI\", system-ui, sans-serif",
+      "mono": "\"Roboto Mono\", ui-monospace, Menlo, Consolas, monospace",
+      "displayWeight": 600, "bodyWeight": 400, "displayTracking": -0.015, "displayLeading": 1.08,
+      "base": [15, 17], "ratio": [1.2, 1.32],
+      "webfont": "https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600&family=Inter:wght@400..600&display=swap"
+    },
+    {
+      "id": "dense",
+      "name": "Data-Dense Condensed Sans",
+      "use": "Admin consoles, tables with 12+ columns, monitoring. Small, sharp, tabular.",
+      "display": "\"IBM Plex Sans Condensed\", \"Roboto Condensed\", \"Avenir Next Condensed\", \"Arial Narrow\", sans-serif",
+      "body": "\"IBM Plex Sans\", \"Helvetica Neue\", \"Segoe UI\", system-ui, sans-serif",
+      "mono": "\"IBM Plex Mono\", ui-monospace, Menlo, Consolas, monospace",
+      "displayWeight": 600, "bodyWeight": 400, "displayTracking": -0.01, "displayLeading": 1.1,
+      "base": [13, 14], "ratio": [1.14, 1.2],
+      "webfont": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono&display=swap"
+    },
+    {
+      "id": "rounded",
+      "name": "Friendly Rounded",
+      "use": "Kids, games, casual consumer, playful onboarding without going childish.",
+      "display": "\"Nunito\", ui-rounded, \"SF Pro Rounded\", \"Varela Round\", \"Segoe UI\", sans-serif",
+      "body": "\"Nunito\", ui-rounded, \"SF Pro Rounded\", \"Segoe UI\", system-ui, sans-serif",
+      "mono": "ui-monospace, Menlo, Consolas, monospace",
+      "displayWeight": 750, "bodyWeight": 500, "displayTracking": -0.02, "displayLeading": 1.08,
+      "base": [15, 17], "ratio": [1.2, 1.3],
+      "webfont": "https://fonts.googleapis.com/css2?family=Nunito:wght@400..800&display=swap"
+    }
+  ]
+}

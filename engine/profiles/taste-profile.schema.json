@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/LuminaBench/lumina-taste/engine/profiles/taste-profile.schema.json",
+  "title": "lumina-taste profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "profileVersion",
+    "palette",
+    "mode",
+    "typography",
+    "density",
+    "radius",
+    "motion",
+    "locks",
+    "overrides",
+    "installMode"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "profileVersion": {
+      "const": 1
+    },
+    "palette": {
+      "enum": [
+        "cream-charcoal",
+        "navy-sand",
+        "olive-stone",
+        "black-signal",
+        "paper-ink",
+        "slate-forest",
+        "ice-cobalt",
+        "espresso-terracotta",
+        "mono-lime",
+        "terminal-phosphor",
+        "porcelain-teal",
+        "sage-clay",
+        "carbon-amber",
+        "linen-oxblood",
+        "arctic-red",
+        "mint-ocean",
+        "charcoal-sky",
+        "ochre-indigo"
+      ]
+    },
+    "mode": {
+      "enum": [
+        "light",
+        "dark"
+      ]
+    },
+    "typography": {
+      "enum": [
+        "editorial",
+        "precision",
+        "financial",
+        "humanist",
+        "swiss",
+        "bookish",
+        "geometric",
+        "technical",
+        "didone",
+        "slab",
+        "dense",
+        "rounded"
+      ]
+    },
+    "density": {
+      "enum": [
+        "spacious",
+        "balanced",
+        "dense"
+      ]
+    },
+    "radius": {
+      "enum": [
+        "sharp",
+        "balanced",
+        "soft"
+      ]
+    },
+    "motion": {
+      "enum": [
+        "snappy",
+        "calm",
+        "reduced"
+      ]
+    },
+    "locks": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "enum": [
+              "palette",
+              "mode",
+              "typography",
+              "density",
+              "radius",
+              "motion",
+              "overrides",
+              "installMode",
+              "attachRoot"
+            ]
+          },
+          {
+            "type": "string",
+            "pattern": "^overrides\\.[a-z][a-z0-9-]*$"
+          }
+        ]
+      },
+      "description": "Fields an agent must not change on follow-up edits unless the user explicitly unlocks them."
+    },
+    "overrides": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*$"
+      },
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Token name without the leading -- mapped to a CSS value. Colour overrides are re-checked for contrast by the installer."
+    },
+    "installMode": {
+      "enum": [
+        "greenfield",
+        "attach"
+      ],
+      "description": "greenfield styles <html>; attach scopes everything to attachRoot so host styles are untouched."
+    },
+    "attachRoot": {
+      "type": "string",
+      "default": ".lt-root"
+    }
+  }
+}

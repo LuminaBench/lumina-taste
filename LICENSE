@@ -1,0 +1,86 @@
+lumina-taste — Split License
+Copyright (c) 2026 LuminaBench
+
+This repository is released under two licenses. Which one applies depends on the file's location.
+
+  Part A — MIT License
+    scripts/          (CLI, search, installer, auditor, build and test tooling)
+    engine/           (taste-profile engine)
+    tests/
+    SKILL.md
+    package.json, tsconfig.json and other build configuration
+
+  Part B — Lumina Open UI License 1.0
+    tokens/           (palettes, typography, base tokens)
+    components/       (UI encyclopedia, motion utilities, chart engines)
+    blueprints/       (page blueprints)
+    references/       (design guidance)
+    preview/          (showcase gallery)
+    catalog.json
+
+If a file is not listed above, Part A applies.
+
+------------------------------------------------------------------------------
+PART A — MIT LICENSE
+------------------------------------------------------------------------------
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+the software covered by Part A and associated documentation files (the
+"Software"), to deal in the Software without restriction, including without
+limitation the rights to use, copy, modify, merge, publish, distribute,
+sublicense, and/or sell copies of the Software, and to permit persons to whom
+the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+------------------------------------------------------------------------------
+PART B — LUMINA OPEN UI LICENSE 1.0
+------------------------------------------------------------------------------
+
+In plain English: use it in anything you build, for free, forever. Just don't
+repackage the kit itself and sell or give it away as a competing kit.
+
+1. Grant. LuminaBench grants you a worldwide, royalty-free, non-exclusive,
+   perpetual license to use, copy, modify and combine the materials covered by
+   Part B (the "Materials") inside your own end products: websites, web and
+   mobile apps, SaaS products, internal tools, games, client projects,
+   prototypes and documentation, whether personal or commercial.
+
+2. No attribution required. You do not need to credit LuminaBench in your end
+   products or their source code.
+
+3. Shipping is fine. Your end products may include the Materials in source or
+   compiled form, and you may share their source code (including in public or
+   open-source repositories), as long as the Materials are part of a product
+   that does something beyond offering the Materials themselves.
+
+4. Restrictions. You may not, in whole or substantial part, alone or bundled:
+   (a) redistribute, sell, sublicense or rent the Materials as a UI kit,
+       component library, design system, theme, template pack, palette pack,
+       chart library, icon or token set, dataset or Agent Skill;
+   (b) rebrand the Materials and offer them as your own kit or skill;
+   (c) use the Materials, the catalog or its aliases as a training or
+       evaluation dataset for a product that competes with this kit.
+   Forking this repository on GitHub to contribute changes back, or to keep a
+   private copy for your own projects, is permitted.
+
+5. Ownership. LuminaBench keeps all rights not expressly granted. Your own
+   modifications and your end products remain yours.
+
+6. Termination. This license ends automatically if you break section 4. It is
+   restored if you stop within 30 days of notice.
+
+7. No warranty. The Materials are provided "as is", without warranty of any
+   kind. LuminaBench is not liable for any claim or damages arising from their
+   use.
+
+Questions about what counts as a competing kit: https://luminabench.com

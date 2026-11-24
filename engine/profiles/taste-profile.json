@@ -1,0 +1,13 @@
+{
+  "profileVersion": 1,
+  "palette": "slate-forest",
+  "mode": "light",
+  "typography": "precision",
+  "density": "balanced",
+  "radius": "balanced",
+  "motion": "snappy",
+  "locks": [],
+  "overrides": {},
+  "installMode": "greenfield",
+  "attachRoot": ".lt-root"
+}

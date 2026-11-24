@@ -1,0 +1,4901 @@
+{
+  "version": 1,
+  "palettes": [
+    {
+      "id": "cream-charcoal",
+      "name": "Cream & Charcoal",
+      "category": "consumer",
+      "mood": "Quiet, warm, crafted. Charcoal actions on a soft cream page.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.972 0.014 85)",
+              "hex": "#faf5eb"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.988 0.007 85)",
+              "hex": "#fdfbf6"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.948 0.015 85)",
+              "hex": "#f2ede3"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.922 0.018 85)",
+              "hex": "#ebe5d8"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.887 0.018 85)",
+              "hex": "#dfd9cd"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.642 0.021 85)",
+              "hex": "#938c7f"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.022 85)",
+              "hex": "#1b150a"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.022 85)",
+              "hex": "#534c40"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.525 0.02 85)",
+              "hex": "#706a5e"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.29 0.012 60)",
+              "hex": "#302a25"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.245 0.012 60)",
+              "hex": "#251f1b"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.008 60)",
+              "hex": "#fef9f5"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.945 0.004 60)",
+              "hex": "#efecea"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.29 0.02 60)",
+              "hex": "#332921"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.29 0.02 60)",
+              "hex": "#332921"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.952 0.035 150)",
+              "hex": "#dff6e3"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.515 0.13 150)",
+              "hex": "#1b7b3c"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.952 0.023 27)",
+              "hex": "#feeae7"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.952 0.033 68)",
+              "hex": "#ffecd8"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.53 0.116 68)",
+              "hex": "#975d01"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.952 0.024 245)",
+              "hex": "#e2f1ff"
+            },
+            "status-info": {
+              "oklch": "oklch(0.525 0.11 245)",
+              "hex": "#2870a5"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.13 250)",
+              "hex": "#1f6cb0"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.15 58)",
+              "hex": "#ce710c"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.099 170)",
+              "hex": "#00755a"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.16 32)",
+              "hex": "#c74d38"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.09 222)",
+              "hex": "#3d92ad"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.12 345)",
+              "hex": "#a25281"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.123 95)",
+              "hex": "#977e01"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0.09 290)",
+              "hex": "#6e659f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.45,
+            "accentInk": 13.54
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.18 0.008 70)",
+              "hex": "#14110e"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.215 0.008 70)",
+              "hex": "#1c1916"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.245 0.009 70)",
+              "hex": "#23201c"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.275 0.009 70)",
+              "hex": "#2b2723"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.295 0.01 70)",
+              "hex": "#302c27"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.515 0.012 70)",
+              "hex": "#6c6660"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.013 70)",
+              "hex": "#f9f2ea"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.013 70)",
+              "hex": "#c3bcb5"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.012 70)",
+              "hex": "#a39d97"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.91 0.035 85)",
+              "hex": "#ece0c8"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.955 0.035 85)",
+              "hex": "#fbefd6"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 85)",
+              "hex": "#130f06"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.255 0.011 85)",
+              "hex": "#25221d"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.91 0.035 85)",
+              "hex": "#ece0c8"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.91 0.035 85)",
+              "hex": "#ece0c8"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.24 0.04 150)",
+              "hex": "#102515"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.24 0.04 27)",
+              "hex": "#301715"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.24 0.04 68)",
+              "hex": "#2c1b08"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.24 0.04 245)",
+              "hex": "#0d2131"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.13 250)",
+              "hex": "#67b0f9"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.106 58)",
+              "hex": "#ffb984"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.11 170)",
+              "hex": "#4ab494"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.115 32)",
+              "hex": "#ffa28f"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.09 222)",
+              "hex": "#8cdffb"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.12 345)",
+              "hex": "#da85b6"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.13 95)",
+              "hex": "#f2d76c"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0.09 290)",
+              "hex": "#b6aeee"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 13.35,
+            "accentInk": 14.62
+          }
+        }
+      }
+    },
+    {
+      "id": "navy-sand",
+      "name": "Deep Navy & Warm Sand",
+      "category": "consumer",
+      "mood": "Confident hospitality and premium SaaS. Navy ink on sand by day, sand on navy by night.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.968 0.02 80)",
+              "hex": "#fcf3e6"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.984 0.01 80)",
+              "hex": "#fdf9f2"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.944 0.022 80)",
+              "hex": "#f4ebdc"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.918 0.025 80)",
+              "hex": "#ede3d2"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.883 0.026 80)",
+              "hex": "#e2d7c6"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.638 0.03 80)",
+              "hex": "#958a77"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.03 80)",
+              "hex": "#1d1406"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.03 80)",
+              "hex": "#564c3b"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.525 0.027 80)",
+              "hex": "#736959"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.33 0.085 262)",
+              "hex": "#1c3461"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.285 0.085 262)",
+              "hex": "#112853"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.007 262)",
+              "hex": "#f7faff"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.943 0.026 262)",
+              "hex": "#e3edfe"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.33 0.085 262)",
+              "hex": "#1c3461"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.33 0.085 262)",
+              "hex": "#1c3461"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.948 0.035 150)",
+              "hex": "#def5e2"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.51 0.13 150)",
+              "hex": "#187a3b"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.948 0.025 27)",
+              "hex": "#fee8e5"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.948 0.035 68)",
+              "hex": "#feead5"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.53 0.116 68)",
+              "hex": "#975d01"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.948 0.026 245)",
+              "hex": "#e0f0ff"
+            },
+            "status-info": {
+              "oklch": "oklch(0.52 0.11 245)",
+              "hex": "#266ea4"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.085 262)",
+              "hex": "#4e699a"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.15 58)",
+              "hex": "#ce710c"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.099 170)",
+              "hex": "#00755a"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.16 32)",
+              "hex": "#c74d38"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.09 222)",
+              "hex": "#3d92ad"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.12 345)",
+              "hex": "#a25281"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.123 95)",
+              "hex": "#977e01"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0 0)",
+              "hex": "#6f6f6f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.3,
+            "accentInk": 11.72
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.19 0.035 262)",
+              "hex": "#0b1423"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.225 0.037 262)",
+              "hex": "#121c2d"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.255 0.039 262)",
+              "hex": "#182336"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.285 0.04 262)",
+              "hex": "#1f2a3e"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.305 0.042 262)",
+              "hex": "#232f44"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.52 0.053 262)",
+              "hex": "#586988"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.016 262)",
+              "hex": "#eef4ff"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.03 262)",
+              "hex": "#b3bed2"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.027 262)",
+              "hex": "#959fb0"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.86 0.065 78)",
+              "hex": "#e9cca1"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.905 0.065 78)",
+              "hex": "#f8dbb0"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 78)",
+              "hex": "#140e06"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.265 0.021 78)",
+              "hex": "#2b241a"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.86 0.065 78)",
+              "hex": "#e9cca1"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.86 0.065 78)",
+              "hex": "#e9cca1"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.25 0.04 150)",
+              "hex": "#132717"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.25 0.04 27)",
+              "hex": "#321a17"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.25 0.04 68)",
+              "hex": "#2e1e0b"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.25 0.04 245)",
+              "hex": "#102334"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.065 78)",
+              "hex": "#c2a67c"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.082 250)",
+              "hex": "#a2cfff"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.11 170)",
+              "hex": "#4ab494"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.115 32)",
+              "hex": "#ffa28f"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.09 222)",
+              "hex": "#8cdffb"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.12 345)",
+              "hex": "#da85b6"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.062 290)",
+              "hex": "#d6d1fe"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0 0)",
+              "hex": "#b7b7b7"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 13.04,
+            "accentInk": 12.43
+          }
+        }
+      }
+    },
+    {
+      "id": "olive-stone",
+      "name": "Olive Green & Warm Stone",
+      "category": "consumer",
+      "mood": "Natural, grounded, outdoorsy. Olive on warm limestone.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.966 0.011 78)",
+              "hex": "#f8f3ec"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.982 0.005 78)",
+              "hex": "#fbf9f5"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.942 0.012 78)",
+              "hex": "#f0ebe3"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.916 0.014 78)",
+              "hex": "#e8e2d9"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.881 0.014 78)",
+              "hex": "#ddd7ce"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.641 0.017 78)",
+              "hex": "#928b81"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.018 78)",
+              "hex": "#1b150d"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.018 78)",
+              "hex": "#534c42"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.525 0.016 78)",
+              "hex": "#706960"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.47 0.085 122)",
+              "hex": "#536228"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.425 0.085 122)",
+              "hex": "#47551a"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.008 122)",
+              "hex": "#f9fbf5"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.941 0.027 122)",
+              "hex": "#e8efdb"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.47 0.085 122)",
+              "hex": "#536228"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.47 0.085 122)",
+              "hex": "#536228"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.946 0.035 150)",
+              "hex": "#ddf4e1"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.51 0.13 150)",
+              "hex": "#187a3b"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.946 0.027 27)",
+              "hex": "#ffe7e3"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.946 0.035 68)",
+              "hex": "#fee9d5"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.53 0.116 68)",
+              "hex": "#975d01"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.946 0.027 245)",
+              "hex": "#dff0ff"
+            },
+            "status-info": {
+              "oklch": "oklch(0.52 0.11 245)",
+              "hex": "#266ea4"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.085 122)",
+              "hex": "#617136"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.635 0.13 250)",
+              "hex": "#468fd6"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.119 58)",
+              "hex": "#944f02"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.11 170)",
+              "hex": "#168f70"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.16 32)",
+              "hex": "#d55a44"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.09 222)",
+              "hex": "#247d97"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.12 345)",
+              "hex": "#b26191"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0.09 290)",
+              "hex": "#6e659f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.07,
+            "accentInk": 6.4
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.185 0.012 105)",
+              "hex": "#13130d"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.22 0.013 105)",
+              "hex": "#1b1b14"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.25 0.013 105)",
+              "hex": "#22221b"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.28 0.014 105)",
+              "hex": "#2a2921"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.3 0.014 105)",
+              "hex": "#2f2e26"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.515 0.018 105)",
+              "hex": "#69685d"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.019 105)",
+              "hex": "#f5f4e6"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.019 105)",
+              "hex": "#bfbfb1"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.017 105)",
+              "hex": "#a09f93"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.78 0.1 120)",
+              "hex": "#afc177"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.825 0.1 120)",
+              "hex": "#bdd085"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 120)",
+              "hex": "#0e1107"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.26 0.032 120)",
+              "hex": "#222614"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.78 0.1 120)",
+              "hex": "#afc177"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.78 0.1 120)",
+              "hex": "#afc177"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.245 0.04 150)",
+              "hex": "#112616"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.245 0.04 27)",
+              "hex": "#311916"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.245 0.04 68)",
+              "hex": "#2d1d0a"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.245 0.04 245)",
+              "hex": "#0f2232"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.1 120)",
+              "hex": "#a3b46b"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.082 250)",
+              "hex": "#a2cfff"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.15 58)",
+              "hex": "#e2832d"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.11 170)",
+              "hex": "#6cd5b3"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.076 32)",
+              "hex": "#ffbfb2"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.09 222)",
+              "hex": "#5eb1cd"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.08 345)",
+              "hex": "#ffc3e4"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0.09 290)",
+              "hex": "#b6aeee"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 13.19,
+            "accentInk": 9.73
+          }
+        }
+      }
+    },
+    {
+      "id": "black-signal",
+      "name": "Matte Black & Signal Orange",
+      "category": "dev-tool",
+      "mood": "Industrial and decisive. One loud orange on matte black or bright white.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.986 0.003 60)",
+              "hex": "#fcfaf8"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.997 0.002 60)",
+              "hex": "#fffefd"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.962 0.003 60)",
+              "hex": "#f4f2f0"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.936 0.004 60)",
+              "hex": "#ece9e7"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.901 0.004 60)",
+              "hex": "#e0dedc"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.651 0.005 60)",
+              "hex": "#928f8c"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.005 60)",
+              "hex": "#181614"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.005 60)",
+              "hex": "#4f4c4a"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.53 0.004 60)",
+              "hex": "#6e6b69"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.64 0.19 42)",
+              "hex": "#e65909"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.685 0.19 42)",
+              "hex": "#f66725"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 42)",
+              "hex": "#170d09"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.945 0.029 42)",
+              "hex": "#ffe7de"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.54 0.163 42)",
+              "hex": "#b84400"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.54 0.163 42)",
+              "hex": "#b84400"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.955 0.035 150)",
+              "hex": "#e0f7e4"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.52 0.13 150)",
+              "hex": "#1d7d3e"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.955 0.022 27)",
+              "hex": "#ffebe8"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.955 0.031 68)",
+              "hex": "#ffeddb"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.54 0.118 68)",
+              "hex": "#9b5f02"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.955 0.022 245)",
+              "hex": "#e4f2fe"
+            },
+            "status-info": {
+              "oklch": "oklch(0.53 0.11 245)",
+              "hex": "#2971a7"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.157 42)",
+              "hex": "#af4000"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.13 250)",
+              "hex": "#4790d8"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.099 170)",
+              "hex": "#00755a"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.09 222)",
+              "hex": "#2f86a0"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.12 345)",
+              "hex": "#b86797"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.113 95)",
+              "hex": "#867000"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.09 290)",
+              "hex": "#7f77b2"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0 0)",
+              "hex": "#6f6f6f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.93,
+            "accentInk": 5.28
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.155 0.004 60)",
+              "hex": "#0e0c0b"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.19 0.004 60)",
+              "hex": "#151312"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.22 0.004 60)",
+              "hex": "#1c1a19"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.25 0.005 60)",
+              "hex": "#23211f"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.27 0.005 60)",
+              "hex": "#282624"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.5 0.006 60)",
+              "hex": "#666260"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.006 60)",
+              "hex": "#f7f3ef"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.006 60)",
+              "hex": "#c1bdba"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.006 60)",
+              "hex": "#a19e9b"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.7 0.19 45)",
+              "hex": "#fa6e1d"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.745 0.164 45)",
+              "hex": "#ff864b"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 45)",
+              "hex": "#170d08"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.23 0.05 45)",
+              "hex": "#301407"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.7 0.19 45)",
+              "hex": "#fa6e1d"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.7 0.19 45)",
+              "hex": "#fa6e1d"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.215 0.04 150)",
+              "hex": "#0a1f0f"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.215 0.04 27)",
+              "hex": "#29120f"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.215 0.04 68)",
+              "hex": "#251504"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.215 0.04 245)",
+              "hex": "#071b2b"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.168 45)",
+              "hex": "#ff8346"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.082 250)",
+              "hex": "#a2cfff"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.11 170)",
+              "hex": "#4ab494"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.09 222)",
+              "hex": "#78cbe7"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.095 345)",
+              "hex": "#ffb8df"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.13 95)",
+              "hex": "#bea333"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.062 290)",
+              "hex": "#d6d1fe"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0 0)",
+              "hex": "#b7b7b7"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.53,
+            "accentInk": 6.66
+          }
+        }
+      }
+    },
+    {
+      "id": "paper-ink",
+      "name": "Editorial Paper & Ink",
+      "category": "editorial",
+      "mood": "Long-form reading. Blue-black ink on uncoated paper.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.975 0.016 90)",
+              "hex": "#fbf7eb"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.991 0.008 90)",
+              "hex": "#fefcf6"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.951 0.018 90)",
+              "hex": "#f3efe2"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.925 0.02 90)",
+              "hex": "#ebe6d8"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.89 0.021 90)",
+              "hex": "#e0dacb"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.645 0.024 90)",
+              "hex": "#938d7d"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.026 90)",
+              "hex": "#1b1608"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.026 90)",
+              "hex": "#534d3d"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.53 0.023 90)",
+              "hex": "#716b5d"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.37 0.11 262)",
+              "hex": "#1d3c79"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.325 0.11 262)",
+              "hex": "#12306b"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.007 262)",
+              "hex": "#f7faff"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.945 0.025 262)",
+              "hex": "#e4edfe"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.37 0.11 262)",
+              "hex": "#1d3c79"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.37 0.11 262)",
+              "hex": "#1d3c79"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.955 0.035 150)",
+              "hex": "#e0f7e4"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.515 0.13 150)",
+              "hex": "#1b7b3c"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.955 0.022 27)",
+              "hex": "#ffebe8"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.955 0.031 68)",
+              "hex": "#ffeddb"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.535 0.117 68)",
+              "hex": "#995e01"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.955 0.022 245)",
+              "hex": "#e4f2fe"
+            },
+            "status-info": {
+              "oklch": "oklch(0.525 0.11 245)",
+              "hex": "#2870a5"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.11 262)",
+              "hex": "#4567a8"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.15 58)",
+              "hex": "#ce710c"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.099 170)",
+              "hex": "#00755a"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.16 32)",
+              "hex": "#c74d38"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.09 222)",
+              "hex": "#3d92ad"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.12 345)",
+              "hex": "#a25281"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.123 95)",
+              "hex": "#977e01"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0 0)",
+              "hex": "#6f6f6f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.46,
+            "accentInk": 10.17
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.175 0.018 262)",
+              "hex": "#0c1118"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.21 0.019 262)",
+              "hex": "#141821"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.24 0.02 262)",
+              "hex": "#1a1f29"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.27 0.021 262)",
+              "hex": "#212731"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.29 0.022 262)",
+              "hex": "#252c37"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.51 0.027 262)",
+              "hex": "#5e6676"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.016 262)",
+              "hex": "#eef4ff"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.029 262)",
+              "hex": "#b4bed1"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.026 262)",
+              "hex": "#969faf"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.8 0.085 255)",
+              "hex": "#99c1f4"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.845 0.078 255)",
+              "hex": "#aacfff"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 255)",
+              "hex": "#091018"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.25 0.027 255)",
+              "hex": "#19222f"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.8 0.085 255)",
+              "hex": "#99c1f4"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.8 0.085 255)",
+              "hex": "#99c1f4"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.235 0.04 150)",
+              "hex": "#0f2314"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.235 0.04 27)",
+              "hex": "#2e1614"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.235 0.04 68)",
+              "hex": "#2a1a07"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.235 0.04 245)",
+              "hex": "#0c2030"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.085 255)",
+              "hex": "#86aee0"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.106 58)",
+              "hex": "#ffb984"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.11 170)",
+              "hex": "#4ab494"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.115 32)",
+              "hex": "#ffa28f"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.09 222)",
+              "hex": "#8cdffb"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.12 345)",
+              "hex": "#da85b6"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.13 95)",
+              "hex": "#f2d76c"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0.09 290)",
+              "hex": "#b6aeee"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 13.59,
+            "accentInk": 10.27
+          }
+        }
+      }
+    },
+    {
+      "id": "slate-forest",
+      "name": "Financial Slate & Forest",
+      "category": "data",
+      "mood": "Trustworthy finance. Cool slate surfaces, forest-green actions.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.977 0.008 250)",
+              "hex": "#f3f8fd"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.993 0.003 250)",
+              "hex": "#fbfdff"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.953 0.009 250)",
+              "hex": "#ebf0f5"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.927 0.01 250)",
+              "hex": "#e2e7ed"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.892 0.01 250)",
+              "hex": "#d7dce2"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.647 0.012 250)",
+              "hex": "#898f95"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.013 250)",
+              "hex": "#12171c"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.013 250)",
+              "hex": "#484e54"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.53 0.012 250)",
+              "hex": "#676c73"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.43 0.09 155)",
+              "hex": "#1c5e39"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.385 0.09 155)",
+              "hex": "#0a512d"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.008 155)",
+              "hex": "#f6fcf8"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.945 0.029 155)",
+              "hex": "#def3e4"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.43 0.09 155)",
+              "hex": "#1c5e39"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.43 0.09 155)",
+              "hex": "#1c5e39"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.955 0.035 150)",
+              "hex": "#e0f7e4"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.515 0.13 150)",
+              "hex": "#1b7b3c"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.955 0.022 27)",
+              "hex": "#ffebe8"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.955 0.031 68)",
+              "hex": "#ffeddb"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.535 0.117 68)",
+              "hex": "#995e01"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.955 0.022 245)",
+              "hex": "#e4f2fe"
+            },
+            "status-info": {
+              "oklch": "oklch(0.53 0.11 245)",
+              "hex": "#2971a7"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.09 155)",
+              "hex": "#397852"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.13 250)",
+              "hex": "#4790d8"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.119 58)",
+              "hex": "#944f02"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.16 32)",
+              "hex": "#c74d38"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.09 222)",
+              "hex": "#3d92ad"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.12 345)",
+              "hex": "#a25281"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.123 95)",
+              "hex": "#977e01"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0.09 290)",
+              "hex": "#6e659f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.49,
+            "accentInk": 7.45
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.172 0.016 250)",
+              "hex": "#0b1017"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.207 0.017 250)",
+              "hex": "#12181f"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.237 0.018 250)",
+              "hex": "#181f27"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.267 0.018 250)",
+              "hex": "#1f272e"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.287 0.019 250)",
+              "hex": "#242b34"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.507 0.024 250)",
+              "hex": "#5b6773"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.017 250)",
+              "hex": "#ebf5ff"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.026 250)",
+              "hex": "#b2bfce"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.023 250)",
+              "hex": "#94a0ad"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.74 0.12 155)",
+              "hex": "#66c189"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.785 0.12 155)",
+              "hex": "#75d097"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 155)",
+              "hex": "#08120c"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.247 0.038 155)",
+              "hex": "#112619"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.74 0.12 155)",
+              "hex": "#66c189"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.74 0.12 155)",
+              "hex": "#66c189"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.232 0.04 150)",
+              "hex": "#0e2313"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.232 0.04 27)",
+              "hex": "#2e1613"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.232 0.04 68)",
+              "hex": "#2a1907"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.232 0.04 245)",
+              "hex": "#0b1f2f"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.12 155)",
+              "hex": "#66c189"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.082 250)",
+              "hex": "#a2cfff"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.15 58)",
+              "hex": "#e2832d"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.115 32)",
+              "hex": "#ffa28f"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.09 222)",
+              "hex": "#8cdffb"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.12 345)",
+              "hex": "#da85b6"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.13 95)",
+              "hex": "#f2d76c"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0.09 290)",
+              "hex": "#b6aeee"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 13.72,
+            "accentInk": 8.67
+          }
+        }
+      }
+    },
+    {
+      "id": "ice-cobalt",
+      "name": "Nordic Ice & Cobalt",
+      "category": "consumer",
+      "mood": "Crisp and clean. Cobalt on pale ice.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.976 0.012 225)",
+              "hex": "#eff9fd"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.992 0.005 225)",
+              "hex": "#f9fdff"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.952 0.013 225)",
+              "hex": "#e6f1f6"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.926 0.015 225)",
+              "hex": "#dde9ee"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.891 0.016 225)",
+              "hex": "#d1dee3"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.641 0.018 225)",
+              "hex": "#818f95"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.019 225)",
+              "hex": "#0c181d"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.019 225)",
+              "hex": "#424f55"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.53 0.017 225)",
+              "hex": "#626e73"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.49 0.19 262)",
+              "hex": "#1b56ca"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.445 0.19 262)",
+              "hex": "#0c47ba"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.007 262)",
+              "hex": "#f7faff"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.945 0.026 262)",
+              "hex": "#e3edff"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.49 0.19 262)",
+              "hex": "#1b56ca"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.49 0.19 262)",
+              "hex": "#1b56ca"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.955 0.035 150)",
+              "hex": "#e0f7e4"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.515 0.13 150)",
+              "hex": "#1b7b3c"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.955 0.022 27)",
+              "hex": "#ffebe8"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.955 0.031 68)",
+              "hex": "#ffeddb"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.535 0.117 68)",
+              "hex": "#995e01"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.955 0.022 245)",
+              "hex": "#e4f2fe"
+            },
+            "status-info": {
+              "oklch": "oklch(0.53 0.11 245)",
+              "hex": "#2971a7"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.19 262)",
+              "hex": "#245fd4"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.15 58)",
+              "hex": "#ce710c"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.099 170)",
+              "hex": "#00755a"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.16 32)",
+              "hex": "#c74d38"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.09 222)",
+              "hex": "#3d92ad"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.12 345)",
+              "hex": "#a25281"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.123 95)",
+              "hex": "#977e01"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0 0)",
+              "hex": "#6f6f6f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.57,
+            "accentInk": 6.21
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.17 0.026 240)",
+              "hex": "#05111a"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.205 0.027 240)",
+              "hex": "#0b1922"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.235 0.029 240)",
+              "hex": "#11202a"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.265 0.03 240)",
+              "hex": "#172732"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.285 0.031 240)",
+              "hex": "#1c2c38"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.505 0.039 240)",
+              "hex": "#516879"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.018 240)",
+              "hex": "#e9f5ff"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.03 240)",
+              "hex": "#adc1cf"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.027 240)",
+              "hex": "#90a1ae"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.71 0.15 260)",
+              "hex": "#68a0fe"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.755 0.125 260)",
+              "hex": "#80b0fe"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 260)",
+              "hex": "#0a1018"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.245 0.048 260)",
+              "hex": "#122037"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.71 0.15 260)",
+              "hex": "#68a0fe"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.71 0.15 260)",
+              "hex": "#68a0fe"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.23 0.04 150)",
+              "hex": "#0e2213"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.23 0.04 27)",
+              "hex": "#2d1512"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.23 0.04 68)",
+              "hex": "#291906"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.23 0.04 245)",
+              "hex": "#0b1f2e"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.134 260)",
+              "hex": "#78abff"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.106 58)",
+              "hex": "#ffb984"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.11 170)",
+              "hex": "#4ab494"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.115 32)",
+              "hex": "#ffa28f"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.09 222)",
+              "hex": "#8cdffb"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.12 345)",
+              "hex": "#da85b6"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.13 95)",
+              "hex": "#f2d76c"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0.09 290)",
+              "hex": "#b6aeee"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 13.82,
+            "accentInk": 7.32
+          }
+        }
+      }
+    },
+    {
+      "id": "espresso-terracotta",
+      "name": "Warm Espresso & Terracotta",
+      "category": "consumer",
+      "mood": "Cafe warmth. Fired-clay actions on latte or espresso.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.965 0.018 65)",
+              "hex": "#fcf1e7"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.981 0.009 65)",
+              "hex": "#fdf8f3"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.941 0.02 65)",
+              "hex": "#f5e9de"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.915 0.022 65)",
+              "hex": "#eee0d4"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.88 0.023 65)",
+              "hex": "#e3d5c8"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.635 0.027 65)",
+              "hex": "#97887a"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.029 65)",
+              "hex": "#1f1307"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.029 65)",
+              "hex": "#584a3d"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.52 0.026 65)",
+              "hex": "#74665a"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.55 0.13 38)",
+              "hex": "#af5234"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.505 0.13 38)",
+              "hex": "#a14427"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.007 38)",
+              "hex": "#fff9f7"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.94 0.031 38)",
+              "hex": "#ffe5dd"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.535 0.13 38)",
+              "hex": "#aa4d30"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.535 0.13 38)",
+              "hex": "#aa4d30"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.945 0.035 150)",
+              "hex": "#ddf4e1"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.505 0.13 150)",
+              "hex": "#167839"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.945 0.027 27)",
+              "hex": "#ffe6e3"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.945 0.035 68)",
+              "hex": "#fde9d5"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.525 0.115 68)",
+              "hex": "#955b01"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.945 0.028 245)",
+              "hex": "#deefff"
+            },
+            "status-info": {
+              "oklch": "oklch(0.52 0.11 245)",
+              "hex": "#266ea4"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.13 38)",
+              "hex": "#a5492b"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.635 0.13 250)",
+              "hex": "#468fd6"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.099 170)",
+              "hex": "#00755a"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.09 222)",
+              "hex": "#2f86a0"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.12 345)",
+              "hex": "#b86797"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.113 95)",
+              "hex": "#867000"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.09 290)",
+              "hex": "#7f77b2"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0 0)",
+              "hex": "#6f6f6f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.07,
+            "accentInk": 4.94
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.18 0.02 50)",
+              "hex": "#190f0a"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.215 0.021 50)",
+              "hex": "#221711"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.245 0.022 50)",
+              "hex": "#291d17"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.275 0.023 50)",
+              "hex": "#31241e"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.295 0.024 50)",
+              "hex": "#372922"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.515 0.03 50)",
+              "hex": "#766358"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.019 50)",
+              "hex": "#fff0e8"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.03 50)",
+              "hex": "#cfb9ad"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.027 50)",
+              "hex": "#ad9a90"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.71 0.13 40)",
+              "hex": "#e58361"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.755 0.13 40)",
+              "hex": "#f5916f"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 40)",
+              "hex": "#170c09"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.255 0.042 40)",
+              "hex": "#341b13"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.71 0.13 40)",
+              "hex": "#e58361"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.71 0.13 40)",
+              "hex": "#e58361"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.24 0.04 150)",
+              "hex": "#102515"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.24 0.04 27)",
+              "hex": "#301715"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.24 0.04 68)",
+              "hex": "#2c1b08"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.24 0.04 245)",
+              "hex": "#0d2131"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.13 40)",
+              "hex": "#f08d6a"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.082 250)",
+              "hex": "#a2cfff"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.11 170)",
+              "hex": "#4ab494"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.09 222)",
+              "hex": "#78cbe7"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.095 345)",
+              "hex": "#ffb8df"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.13 95)",
+              "hex": "#bea333"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.062 290)",
+              "hex": "#d6d1fe"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0 0)",
+              "hex": "#b7b7b7"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 13.47,
+            "accentInk": 7.09
+          }
+        }
+      }
+    },
+    {
+      "id": "mono-lime",
+      "name": "Lab Monochrome & Acid Lime",
+      "category": "dev-tool",
+      "mood": "Lab instrument. Strict greys with one acid-lime signal.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.982 0 0)",
+              "hex": "#f9f9f9"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.997 0 0)",
+              "hex": "#fefefe"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.958 0 0)",
+              "hex": "#f1f1f1"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.932 0 0)",
+              "hex": "#e8e8e8"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.897 0 0)",
+              "hex": "#dddddd"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.647 0 0)",
+              "hex": "#8e8e8e"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0 0)",
+              "hex": "#161616"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0 0)",
+              "hex": "#4d4d4d"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.53 0 0)",
+              "hex": "#6c6c6c"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.2 0.005 125)",
+              "hex": "#151614"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.155 0.005 125)",
+              "hex": "#0c0d0a"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.91 0.2 125)",
+              "hex": "#c3f74c"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.945 0.06 125)",
+              "hex": "#e3f5c9"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.2 0.02 125)",
+              "hex": "#14180e"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.2 0.02 125)",
+              "hex": "#14180e"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.955 0.035 150)",
+              "hex": "#e0f7e4"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.52 0.13 150)",
+              "hex": "#1d7d3e"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.955 0.022 27)",
+              "hex": "#ffebe8"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.955 0.031 68)",
+              "hex": "#ffeddb"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.54 0.118 68)",
+              "hex": "#9b5f02"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.955 0.022 245)",
+              "hex": "#e4f2fe"
+            },
+            "status-info": {
+              "oklch": "oklch(0.53 0.11 245)",
+              "hex": "#2971a7"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.13 250)",
+              "hex": "#1f6cb0"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.15 58)",
+              "hex": "#ce710c"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.099 170)",
+              "hex": "#00755a"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.16 32)",
+              "hex": "#c74d38"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.09 222)",
+              "hex": "#3d92ad"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.12 345)",
+              "hex": "#a25281"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.123 95)",
+              "hex": "#977e01"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0.09 290)",
+              "hex": "#6e659f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.77,
+            "accentInk": 14.46
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.16 0 0)",
+              "hex": "#0d0d0d"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.195 0 0)",
+              "hex": "#151515"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.225 0 0)",
+              "hex": "#1c1c1c"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.255 0 0)",
+              "hex": "#232323"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.275 0 0)",
+              "hex": "#282828"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.505 0 0)",
+              "hex": "#656565"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0 0)",
+              "hex": "#f3f3f3"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0 0)",
+              "hex": "#bebebe"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0 0)",
+              "hex": "#9e9e9e"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.9 0.21 125)",
+              "hex": "#bff538"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.945 0.155 125)",
+              "hex": "#d5ff86"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 125)",
+              "hex": "#0d1107"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.235 0.05 125)",
+              "hex": "#192205"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.9 0.21 125)",
+              "hex": "#bff538"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.9 0.21 125)",
+              "hex": "#bff538"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.22 0.04 150)",
+              "hex": "#0b2010"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.22 0.04 27)",
+              "hex": "#2b1310"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.22 0.04 68)",
+              "hex": "#271704"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.22 0.04 245)",
+              "hex": "#091c2c"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.186 125)",
+              "hex": "#90bd00"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.082 250)",
+              "hex": "#a2cfff"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.15 58)",
+              "hex": "#e2832d"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.11 170)",
+              "hex": "#6cd5b3"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.076 32)",
+              "hex": "#ffbfb2"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.09 222)",
+              "hex": "#5eb1cd"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.08 345)",
+              "hex": "#ffc3e4"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0.13 95)",
+              "hex": "#d1b64a"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.16,
+            "accentInk": 14.84
+          }
+        }
+      }
+    },
+    {
+      "id": "terminal-phosphor",
+      "name": "Midnight Terminal & Phosphor",
+      "category": "dev-tool",
+      "mood": "Developer console. Phosphor green on cool graphite.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.979 0.006 255)",
+              "hex": "#f5f8fc"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.995 0.002 255)",
+              "hex": "#fcfdff"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.955 0.007 255)",
+              "hex": "#edf0f5"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.929 0.007 255)",
+              "hex": "#e4e8ec"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.894 0.008 255)",
+              "hex": "#d9dce1"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.649 0.009 255)",
+              "hex": "#8b8f94"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.01 255)",
+              "hex": "#13161b"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.01 255)",
+              "hex": "#494d53"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.53 0.009 255)",
+              "hex": "#686c71"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.5 0.13 152)",
+              "hex": "#05773b"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.455 0.119 152)",
+              "hex": "#026933"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.008 152)",
+              "hex": "#f6fcf7"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.945 0.042 152)",
+              "hex": "#d9f6df"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.5 0.13 152)",
+              "hex": "#05773b"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.5 0.13 152)",
+              "hex": "#05773b"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.955 0.035 150)",
+              "hex": "#e0f7e4"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.515 0.13 150)",
+              "hex": "#1b7b3c"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.955 0.022 27)",
+              "hex": "#ffebe8"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.955 0.031 68)",
+              "hex": "#ffeddb"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.54 0.118 68)",
+              "hex": "#9b5f02"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.955 0.022 245)",
+              "hex": "#e4f2fe"
+            },
+            "status-info": {
+              "oklch": "oklch(0.53 0.11 245)",
+              "hex": "#2971a7"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.13 152)",
+              "hex": "#137d41"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.13 250)",
+              "hex": "#4790d8"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.119 58)",
+              "hex": "#944f02"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.16 32)",
+              "hex": "#c74d38"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.09 222)",
+              "hex": "#3d92ad"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.12 345)",
+              "hex": "#a25281"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.123 95)",
+              "hex": "#977e01"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0.09 290)",
+              "hex": "#6e659f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.72,
+            "accentInk": 5.44
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.155 0.014 255)",
+              "hex": "#080d12"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.19 0.015 255)",
+              "hex": "#0f141b"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.22 0.015 255)",
+              "hex": "#161b22"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.25 0.016 255)",
+              "hex": "#1d2229"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.27 0.017 255)",
+              "hex": "#21272f"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.5 0.021 255)",
+              "hex": "#5b646f"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.016 255)",
+              "hex": "#ecf4fe"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.022 255)",
+              "hex": "#b5bfcc"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.02 255)",
+              "hex": "#969fab"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.8 0.17 150)",
+              "hex": "#5edb81"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.845 0.17 150)",
+              "hex": "#6eeb8f"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 150)",
+              "hex": "#09120b"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.23 0.05 150)",
+              "hex": "#082310"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.8 0.17 150)",
+              "hex": "#5edb81"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.8 0.17 150)",
+              "hex": "#5edb81"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.215 0.04 150)",
+              "hex": "#0a1f0f"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.215 0.04 27)",
+              "hex": "#29120f"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.215 0.04 68)",
+              "hex": "#251504"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.215 0.04 245)",
+              "hex": "#071b2b"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.17 150)",
+              "hex": "#47c86e"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.082 250)",
+              "hex": "#a2cfff"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.15 58)",
+              "hex": "#e2832d"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.115 32)",
+              "hex": "#ffa28f"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.09 222)",
+              "hex": "#8cdffb"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.12 345)",
+              "hex": "#da85b6"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.13 95)",
+              "hex": "#f2d76c"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0.09 290)",
+              "hex": "#b6aeee"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.42,
+            "accentInk": 10.81
+          }
+        }
+      }
+    },
+    {
+      "id": "porcelain-teal",
+      "name": "Porcelain & Deep Teal",
+      "category": "consumer",
+      "mood": "Calm health and fintech. Deep teal on porcelain.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.981 0.006 200)",
+              "hex": "#f4fafa"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.997 0.003 200)",
+              "hex": "#fcffff"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.957 0.007 200)",
+              "hex": "#ecf2f3"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.931 0.007 200)",
+              "hex": "#e3eaea"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.896 0.008 200)",
+              "hex": "#d7dedf"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.651 0.009 200)",
+              "hex": "#899191"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.01 200)",
+              "hex": "#111718"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.01 200)",
+              "hex": "#474f4f"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.53 0.009 200)",
+              "hex": "#666d6e"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.5 0.085 195)",
+              "hex": "#017272"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.455 0.077 195)",
+              "hex": "#026464"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.008 195)",
+              "hex": "#f4fcfc"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.945 0.029 195)",
+              "hex": "#d8f3f3"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.5 0.085 195)",
+              "hex": "#017272"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.5 0.085 195)",
+              "hex": "#017272"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.955 0.035 150)",
+              "hex": "#e0f7e4"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.52 0.13 150)",
+              "hex": "#1d7d3e"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.955 0.022 27)",
+              "hex": "#ffebe8"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.955 0.031 68)",
+              "hex": "#ffeddb"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.54 0.118 68)",
+              "hex": "#9b5f02"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.955 0.022 245)",
+              "hex": "#e4f2fe"
+            },
+            "status-info": {
+              "oklch": "oklch(0.53 0.11 245)",
+              "hex": "#2971a7"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.088 195)",
+              "hex": "#047879"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.13 250)",
+              "hex": "#4790d8"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.119 58)",
+              "hex": "#944f02"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.16 32)",
+              "hex": "#c74d38"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.12 345)",
+              "hex": "#b86797"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.113 95)",
+              "hex": "#867000"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.09 290)",
+              "hex": "#7f77b2"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0 0)",
+              "hex": "#6f6f6f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.85,
+            "accentInk": 5.53
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.175 0.016 210)",
+              "hex": "#081214"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.21 0.017 210)",
+              "hex": "#0f1b1d"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.24 0.018 210)",
+              "hex": "#152224"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.27 0.018 210)",
+              "hex": "#1c292b"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.29 0.019 210)",
+              "hex": "#202e31"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.51 0.024 210)",
+              "hex": "#576a6e"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.026 210)",
+              "hex": "#e1f9fd"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.026 210)",
+              "hex": "#abc3c7"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.023 210)",
+              "hex": "#8fa3a6"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.77 0.1 190)",
+              "hex": "#5cc9c2"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.815 0.1 190)",
+              "hex": "#6cd7d1"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 190)",
+              "hex": "#051211"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.25 0.032 190)",
+              "hex": "#0d2725"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.77 0.1 190)",
+              "hex": "#5cc9c2"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.77 0.1 190)",
+              "hex": "#5cc9c2"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.235 0.04 150)",
+              "hex": "#0f2314"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.235 0.04 27)",
+              "hex": "#2e1614"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.235 0.04 68)",
+              "hex": "#2a1a07"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.235 0.04 245)",
+              "hex": "#0c2030"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.1 190)",
+              "hex": "#52bfb9"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.082 250)",
+              "hex": "#a2cfff"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.15 58)",
+              "hex": "#e2832d"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.115 32)",
+              "hex": "#ffa28f"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.09 222)",
+              "hex": "#8cdffb"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.12 345)",
+              "hex": "#da85b6"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.13 95)",
+              "hex": "#f2d76c"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0.09 290)",
+              "hex": "#b6aeee"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 13.68,
+            "accentInk": 9.62
+          }
+        }
+      }
+    },
+    {
+      "id": "sage-clay",
+      "name": "Sage & Clay",
+      "category": "consumer",
+      "mood": "Wellness and lifestyle. Clay accents on sage-tinted linen.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.968 0.013 135)",
+              "hex": "#f1f7ee"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.984 0.006 135)",
+              "hex": "#f8fbf7"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.944 0.014 135)",
+              "hex": "#e8efe5"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.918 0.016 135)",
+              "hex": "#dfe6dc"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.883 0.017 135)",
+              "hex": "#d4dbd0"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.638 0.019 135)",
+              "hex": "#878e83"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.021 135)",
+              "hex": "#12180f"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.021 135)",
+              "hex": "#485044"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.525 0.019 135)",
+              "hex": "#666d62"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.54 0.1 45)",
+              "hex": "#9e5a3b"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.495 0.1 45)",
+              "hex": "#904d2e"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.007 45)",
+              "hex": "#fef9f6"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.943 0.03 45)",
+              "hex": "#ffe6dc"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.53 0.1 45)",
+              "hex": "#9b5738"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.53 0.1 45)",
+              "hex": "#9b5738"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.948 0.035 150)",
+              "hex": "#def5e2"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.51 0.13 150)",
+              "hex": "#187a3b"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.948 0.025 27)",
+              "hex": "#fee8e5"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.948 0.035 68)",
+              "hex": "#feead5"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.53 0.116 68)",
+              "hex": "#975d01"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.948 0.026 245)",
+              "hex": "#e0f0ff"
+            },
+            "status-info": {
+              "oklch": "oklch(0.52 0.11 245)",
+              "hex": "#266ea4"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.1 45)",
+              "hex": "#985535"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.13 250)",
+              "hex": "#4790d8"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.099 170)",
+              "hex": "#00755a"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.09 222)",
+              "hex": "#2f86a0"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.12 345)",
+              "hex": "#b86797"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.113 95)",
+              "hex": "#867000"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.09 290)",
+              "hex": "#7f77b2"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0 0)",
+              "hex": "#6f6f6f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.18,
+            "accentInk": 5.05
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.18 0.014 140)",
+              "hex": "#0e130d"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.215 0.015 140)",
+              "hex": "#161b15"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.245 0.015 140)",
+              "hex": "#1d221b"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.275 0.016 140)",
+              "hex": "#242a22"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.295 0.017 140)",
+              "hex": "#282f27"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.51 0.021 140)",
+              "hex": "#60695e"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.022 140)",
+              "hex": "#ecf7e9"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.022 140)",
+              "hex": "#b7c1b4"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.02 140)",
+              "hex": "#98a296"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.74 0.09 50)",
+              "hex": "#d99a77"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.785 0.09 50)",
+              "hex": "#e8a885"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 50)",
+              "hex": "#170d08"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.255 0.029 50)",
+              "hex": "#2e1f16"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.74 0.09 50)",
+              "hex": "#d99a77"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.74 0.09 50)",
+              "hex": "#d99a77"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.24 0.04 150)",
+              "hex": "#102515"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.24 0.04 27)",
+              "hex": "#301715"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.24 0.04 68)",
+              "hex": "#2c1b08"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.24 0.04 245)",
+              "hex": "#0d2131"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.09 50)",
+              "hex": "#d99a77"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.082 250)",
+              "hex": "#a2cfff"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.11 170)",
+              "hex": "#4ab494"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.09 222)",
+              "hex": "#78cbe7"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.095 345)",
+              "hex": "#ffb8df"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.13 95)",
+              "hex": "#bea333"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.062 290)",
+              "hex": "#d6d1fe"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0 0)",
+              "hex": "#b7b7b7"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 13.33,
+            "accentInk": 8.05
+          }
+        }
+      }
+    },
+    {
+      "id": "carbon-amber",
+      "name": "Carbon & Amber",
+      "category": "data",
+      "mood": "Trading floor. Amber readouts on carbon black.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.982 0.008 85)",
+              "hex": "#fcf9f3"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.997 0.003 85)",
+              "hex": "#fffefc"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.958 0.009 85)",
+              "hex": "#f4f1ea"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.932 0.01 85)",
+              "hex": "#ebe8e1"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.897 0.01 85)",
+              "hex": "#e0ddd6"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.652 0.012 85)",
+              "hex": "#938f88"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.013 85)",
+              "hex": "#19160f"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.013 85)",
+              "hex": "#504d45"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.53 0.012 85)",
+              "hex": "#6f6b64"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.52 0.119 62)",
+              "hex": "#985602"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.475 0.109 62)",
+              "hex": "#874c01"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.008 62)",
+              "hex": "#fef9f5"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.945 0.035 62)",
+              "hex": "#ffe8d6"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.52 0.119 62)",
+              "hex": "#985602"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.52 0.119 62)",
+              "hex": "#985602"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.955 0.035 150)",
+              "hex": "#e0f7e4"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.52 0.13 150)",
+              "hex": "#1d7d3e"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.955 0.022 27)",
+              "hex": "#ffebe8"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.955 0.031 68)",
+              "hex": "#ffeddb"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.54 0.118 68)",
+              "hex": "#9b5f02"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.955 0.022 245)",
+              "hex": "#e4f2fe"
+            },
+            "status-info": {
+              "oklch": "oklch(0.53 0.11 245)",
+              "hex": "#2971a7"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.119 62)",
+              "hex": "#985602"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.13 250)",
+              "hex": "#4790d8"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.099 170)",
+              "hex": "#00755a"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.16 32)",
+              "hex": "#c74d38"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.09 222)",
+              "hex": "#3d92ad"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.12 345)",
+              "hex": "#a25281"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.123 95)",
+              "hex": "#977e01"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0.09 290)",
+              "hex": "#6e659f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.76,
+            "accentInk": 5.48
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.145 0.006 70)",
+              "hex": "#0c0a08"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.18 0.006 70)",
+              "hex": "#13110f"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.21 0.007 70)",
+              "hex": "#1a1815"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.24 0.007 70)",
+              "hex": "#211f1c"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.26 0.007 70)",
+              "hex": "#262320"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.495 0.009 70)",
+              "hex": "#65615c"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.01 70)",
+              "hex": "#f8f2ec"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.01 70)",
+              "hex": "#c2bdb7"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.009 70)",
+              "hex": "#a29d98"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.81 0.16 75)",
+              "hex": "#fcb02b"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.855 0.124 75)",
+              "hex": "#ffc36d"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 75)",
+              "hex": "#150e06"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.22 0.047 75)",
+              "hex": "#271700"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.81 0.16 75)",
+              "hex": "#fcb02b"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.81 0.16 75)",
+              "hex": "#fcb02b"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.205 0.04 150)",
+              "hex": "#081c0d"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.205 0.04 27)",
+              "hex": "#270f0d"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.205 0.04 68)",
+              "hex": "#231302"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.205 0.04 245)",
+              "hex": "#061928"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.156 75)",
+              "hex": "#e39a01"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.082 250)",
+              "hex": "#a2cfff"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.11 170)",
+              "hex": "#4ab494"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.115 32)",
+              "hex": "#ffa28f"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.09 222)",
+              "hex": "#8cdffb"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.12 345)",
+              "hex": "#da85b6"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.062 290)",
+              "hex": "#d6d1fe"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0 0)",
+              "hex": "#b7b7b7"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.8,
+            "accentInk": 10.37
+          }
+        }
+      }
+    },
+    {
+      "id": "linen-oxblood",
+      "name": "Linen & Oxblood",
+      "category": "editorial",
+      "mood": "Luxury editorial. Oxblood details on natural linen.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.968 0.016 75)",
+              "hex": "#fbf3e9"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.984 0.008 75)",
+              "hex": "#fdf9f4"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.944 0.018 75)",
+              "hex": "#f4ebe0"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.918 0.02 75)",
+              "hex": "#ece2d6"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.883 0.021 75)",
+              "hex": "#e1d7ca"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.638 0.024 75)",
+              "hex": "#948a7c"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.026 75)",
+              "hex": "#1d1408"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.026 75)",
+              "hex": "#564b3d"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.525 0.023 75)",
+              "hex": "#72695c"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.41 0.12 20)",
+              "hex": "#7f282e"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.365 0.12 20)",
+              "hex": "#701923"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.007 20)",
+              "hex": "#fff8f8"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.943 0.028 20)",
+              "hex": "#ffe5e4"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.41 0.12 20)",
+              "hex": "#7f282e"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.41 0.12 20)",
+              "hex": "#7f282e"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.948 0.035 150)",
+              "hex": "#def5e2"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.51 0.13 150)",
+              "hex": "#187a3b"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.948 0.025 27)",
+              "hex": "#fee8e5"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.948 0.035 68)",
+              "hex": "#feead5"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.53 0.116 68)",
+              "hex": "#975d01"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.948 0.026 245)",
+              "hex": "#e0f0ff"
+            },
+            "status-info": {
+              "oklch": "oklch(0.52 0.11 245)",
+              "hex": "#266ea4"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.12 20)",
+              "hex": "#a3484b"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.13 250)",
+              "hex": "#4790d8"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.119 58)",
+              "hex": "#944f02"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.11 170)",
+              "hex": "#168f70"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.09 222)",
+              "hex": "#3d92ad"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.12 345)",
+              "hex": "#a25281"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.123 95)",
+              "hex": "#977e01"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0.09 290)",
+              "hex": "#6e659f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.2,
+            "accentInk": 8.92
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.175 0.014 30)",
+              "hex": "#160e0d"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.21 0.015 30)",
+              "hex": "#1f1614"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.24 0.015 30)",
+              "hex": "#261d1b"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.27 0.016 30)",
+              "hex": "#2e2422"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.29 0.017 30)",
+              "hex": "#332826"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.51 0.021 30)",
+              "hex": "#72625f"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.016 30)",
+              "hex": "#fef0ed"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.022 30)",
+              "hex": "#ccb9b5"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.02 30)",
+              "hex": "#ab9a97"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.74 0.1 18)",
+              "hex": "#e39193"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.785 0.1 18)",
+              "hex": "#f29fa1"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 18)",
+              "hex": "#170c0c"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.25 0.032 18)",
+              "hex": "#2f1b1c"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.74 0.1 18)",
+              "hex": "#e39193"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.74 0.1 18)",
+              "hex": "#e39193"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.235 0.04 150)",
+              "hex": "#0f2314"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.235 0.04 27)",
+              "hex": "#2e1614"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.235 0.04 68)",
+              "hex": "#2a1a07"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.235 0.04 245)",
+              "hex": "#0c2030"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.1 18)",
+              "hex": "#e39193"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.082 250)",
+              "hex": "#a2cfff"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.15 58)",
+              "hex": "#e2832d"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.11 170)",
+              "hex": "#6cd5b3"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.09 222)",
+              "hex": "#8cdffb"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.12 345)",
+              "hex": "#da85b6"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.13 95)",
+              "hex": "#f2d76c"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0.09 290)",
+              "hex": "#b6aeee"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 13.58,
+            "accentInk": 7.98
+          }
+        }
+      }
+    },
+    {
+      "id": "arctic-red",
+      "name": "Arctic White & Signal Red",
+      "category": "editorial",
+      "mood": "Newsroom clarity. Signal red on bright arctic white.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.99 0.003 250)",
+              "hex": "#fafcfe"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.997 0.001 250)",
+              "hex": "#fefeff"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.966 0.003 250)",
+              "hex": "#f2f4f6"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.94 0.004 250)",
+              "hex": "#e9ebee"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.905 0.004 250)",
+              "hex": "#dee0e2"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.655 0.005 250)",
+              "hex": "#8e9194"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.005 250)",
+              "hex": "#141618"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.005 250)",
+              "hex": "#4b4d50"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.53 0.004 250)",
+              "hex": "#6a6c6e"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.55 0.2 27)",
+              "hex": "#cc2827"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.505 0.2 27)",
+              "hex": "#bc0e18"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.007 27)",
+              "hex": "#fff8f7"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.945 0.027 27)",
+              "hex": "#ffe6e3"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.545 0.2 27)",
+              "hex": "#cb2526"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.545 0.2 27)",
+              "hex": "#cb2526"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.955 0.035 150)",
+              "hex": "#e0f7e4"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.52 0.13 150)",
+              "hex": "#1d7d3e"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.955 0.022 27)",
+              "hex": "#ffebe8"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.955 0.031 68)",
+              "hex": "#ffeddb"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.54 0.118 68)",
+              "hex": "#9b5f02"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.955 0.022 245)",
+              "hex": "#e4f2fe"
+            },
+            "status-info": {
+              "oklch": "oklch(0.53 0.11 245)",
+              "hex": "#2971a7"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.2 27)",
+              "hex": "#c2181d"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.13 250)",
+              "hex": "#4790d8"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.119 58)",
+              "hex": "#944f02"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.11 170)",
+              "hex": "#168f70"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.09 222)",
+              "hex": "#3d92ad"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.12 345)",
+              "hex": "#a25281"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.123 95)",
+              "hex": "#977e01"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0.09 290)",
+              "hex": "#6e659f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 15.19,
+            "accentInk": 5.13
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.16 0.008 250)",
+              "hex": "#0b0e11"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.195 0.008 250)",
+              "hex": "#121518"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.225 0.009 250)",
+              "hex": "#191c20"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.255 0.009 250)",
+              "hex": "#202327"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.275 0.01 250)",
+              "hex": "#24282c"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.5 0.012 250)",
+              "hex": "#5e646a"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.013 250)",
+              "hex": "#edf4fc"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.013 250)",
+              "hex": "#b8bfc6"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.012 250)",
+              "hex": "#999fa6"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.7 0.18 25)",
+              "hex": "#fa6863"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.745 0.154 25)",
+              "hex": "#ff817a"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 25)",
+              "hex": "#170c0b"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.235 0.05 25)",
+              "hex": "#321312"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.7 0.18 25)",
+              "hex": "#fa6863"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.7 0.18 25)",
+              "hex": "#fa6863"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.22 0.04 150)",
+              "hex": "#0b2010"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.22 0.04 27)",
+              "hex": "#2b1310"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.22 0.04 68)",
+              "hex": "#271704"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.22 0.04 245)",
+              "hex": "#091c2c"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.158 25)",
+              "hex": "#ff7e77"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.082 250)",
+              "hex": "#a2cfff"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.15 58)",
+              "hex": "#e2832d"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.11 170)",
+              "hex": "#6cd5b3"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.09 222)",
+              "hex": "#8cdffb"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.12 345)",
+              "hex": "#da85b6"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.13 95)",
+              "hex": "#f2d76c"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0.09 290)",
+              "hex": "#b6aeee"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.23,
+            "accentInk": 6.61
+          }
+        }
+      }
+    },
+    {
+      "id": "mint-ocean",
+      "name": "Mint & Deep Ocean",
+      "category": "data",
+      "mood": "Fresh fintech. Deep ocean blue on a whisper of mint.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.975 0.014 170)",
+              "hex": "#eefaf5"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.991 0.007 170)",
+              "hex": "#f8fefb"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.951 0.015 170)",
+              "hex": "#e6f2ed"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.925 0.018 170)",
+              "hex": "#dbeae4"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.89 0.018 170)",
+              "hex": "#d0dfd9"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.64 0.021 170)",
+              "hex": "#80918a"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.022 170)",
+              "hex": "#0b1914"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.022 170)",
+              "hex": "#42514b"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.525 0.02 170)",
+              "hex": "#5f6e68"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.4 0.081 232)",
+              "hex": "#014e6c"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.355 0.072 232)",
+              "hex": "#01425b"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.008 232)",
+              "hex": "#f5fbff"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.945 0.032 232)",
+              "hex": "#d9f1ff"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.4 0.081 232)",
+              "hex": "#014e6c"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.4 0.081 232)",
+              "hex": "#014e6c"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.955 0.035 150)",
+              "hex": "#e0f7e4"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.515 0.13 150)",
+              "hex": "#1b7b3c"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.955 0.022 27)",
+              "hex": "#ffebe8"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.955 0.031 68)",
+              "hex": "#ffeddb"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.535 0.117 68)",
+              "hex": "#995e01"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.955 0.022 245)",
+              "hex": "#e4f2fe"
+            },
+            "status-info": {
+              "oklch": "oklch(0.53 0.11 245)",
+              "hex": "#2971a7"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.1 232)",
+              "hex": "#147298"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.15 58)",
+              "hex": "#ce710c"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.099 170)",
+              "hex": "#00755a"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.16 32)",
+              "hex": "#c74d38"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.12 345)",
+              "hex": "#b86797"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.113 95)",
+              "hex": "#867000"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.09 290)",
+              "hex": "#7f77b2"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0 0)",
+              "hex": "#6f6f6f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.53,
+            "accentInk": 8.72
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.18 0.03 225)",
+              "hex": "#02141b"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.215 0.032 225)",
+              "hex": "#061c25"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.245 0.033 225)",
+              "hex": "#0d242c"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.275 0.034 225)",
+              "hex": "#142b34"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.295 0.036 225)",
+              "hex": "#17303a"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.51 0.045 225)",
+              "hex": "#4a6c7a"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.022 225)",
+              "hex": "#e5f7ff"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.03 225)",
+              "hex": "#aac2cc"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.027 225)",
+              "hex": "#8da2ab"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.83 0.1 170)",
+              "hex": "#80ddbd"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.875 0.1 170)",
+              "hex": "#8feccc"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 170)",
+              "hex": "#06120e"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.255 0.032 170)",
+              "hex": "#122820"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.83 0.1 170)",
+              "hex": "#80ddbd"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.83 0.1 170)",
+              "hex": "#80ddbd"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.24 0.04 150)",
+              "hex": "#102515"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.24 0.04 27)",
+              "hex": "#301715"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.24 0.04 68)",
+              "hex": "#2c1b08"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.24 0.04 245)",
+              "hex": "#0d2131"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.1 170)",
+              "hex": "#63bfa1"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.082 250)",
+              "hex": "#a2cfff"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.15 58)",
+              "hex": "#e2832d"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.115 32)",
+              "hex": "#ffa28f"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.09 222)",
+              "hex": "#8cdffb"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.12 345)",
+              "hex": "#da85b6"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.13 95)",
+              "hex": "#f2d76c"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0.09 290)",
+              "hex": "#b6aeee"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 13.39,
+            "accentInk": 11.81
+          }
+        }
+      }
+    },
+    {
+      "id": "charcoal-sky",
+      "name": "Charcoal & Sky",
+      "category": "data",
+      "mood": "Analytics workhorse. Sky blue on neutral charcoal, built for dense dashboards.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.98 0.007 240)",
+              "hex": "#f4f9fd"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.996 0.002 240)",
+              "hex": "#fdfeff"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.956 0.008 240)",
+              "hex": "#ecf1f5"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.93 0.009 240)",
+              "hex": "#e3e9ed"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.895 0.009 240)",
+              "hex": "#d7dde2"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.65 0.011 240)",
+              "hex": "#899095"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.011 240)",
+              "hex": "#12171b"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.011 240)",
+              "hex": "#484e53"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.53 0.01 240)",
+              "hex": "#676d71"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.53 0.114 236)",
+              "hex": "#0074a4"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.485 0.104 236)",
+              "hex": "#016791"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.008 236)",
+              "hex": "#f5fbff"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.945 0.03 236)",
+              "hex": "#dbf1ff"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.52 0.111 236)",
+              "hex": "#0371a0"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.52 0.111 236)",
+              "hex": "#0371a0"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.955 0.035 150)",
+              "hex": "#e0f7e4"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.52 0.13 150)",
+              "hex": "#1d7d3e"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.955 0.022 27)",
+              "hex": "#ffebe8"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.54 0.17 27)",
+              "hex": "#bd3933"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.955 0.031 68)",
+              "hex": "#ffeddb"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.54 0.118 68)",
+              "hex": "#9b5f02"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.955 0.022 245)",
+              "hex": "#e4f2fe"
+            },
+            "status-info": {
+              "oklch": "oklch(0.53 0.11 245)",
+              "hex": "#2971a7"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.111 236)",
+              "hex": "#0371a0"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.15 58)",
+              "hex": "#ce710c"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.099 170)",
+              "hex": "#00755a"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.16 32)",
+              "hex": "#c74d38"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.12 345)",
+              "hex": "#b86797"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.113 95)",
+              "hex": "#867000"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.09 290)",
+              "hex": "#7f77b2"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0 0)",
+              "hex": "#6f6f6f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.73,
+            "accentInk": 4.99
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.165 0.01 240)",
+              "hex": "#0a0f12"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.2 0.011 240)",
+              "hex": "#12171b"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.23 0.011 240)",
+              "hex": "#181e22"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.26 0.011 240)",
+              "hex": "#1f2529"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.28 0.012 240)",
+              "hex": "#242a2e"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.505 0.015 240)",
+              "hex": "#5d666d"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.016 240)",
+              "hex": "#eaf5fd"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.016 240)",
+              "hex": "#b5bfc7"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.014 240)",
+              "hex": "#97a0a6"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.76 0.12 232)",
+              "hex": "#55bef0"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.805 0.119 232)",
+              "hex": "#66cdff"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 232)",
+              "hex": "#061117"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.24 0.038 232)",
+              "hex": "#09222e"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.76 0.12 232)",
+              "hex": "#55bef0"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.76 0.12 232)",
+              "hex": "#55bef0"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.225 0.04 150)",
+              "hex": "#0d2111"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.225 0.04 27)",
+              "hex": "#2c1411"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.225 0.04 68)",
+              "hex": "#281805"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.225 0.04 245)",
+              "hex": "#0a1d2d"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.12 232)",
+              "hex": "#4eb8e9"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.106 58)",
+              "hex": "#ffb984"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.11 170)",
+              "hex": "#4ab494"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.115 32)",
+              "hex": "#ffa28f"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.095 345)",
+              "hex": "#ffb8df"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.13 95)",
+              "hex": "#bea333"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.062 290)",
+              "hex": "#d6d1fe"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0 0)",
+              "hex": "#b7b7b7"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 14.01,
+            "accentInk": 9.1
+          }
+        }
+      }
+    },
+    {
+      "id": "ochre-indigo",
+      "name": "Ochre Paper & Indigo",
+      "category": "editorial",
+      "mood": "Culture and archives. Indigo print on ochre-tinted paper.",
+      "modes": {
+        "light": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.958 0.026 85)",
+              "hex": "#f9f0de"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.974 0.013 85)",
+              "hex": "#faf6ed"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.934 0.029 85)",
+              "hex": "#f2e8d4"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.908 0.033 85)",
+              "hex": "#ebdfc8"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.873 0.034 85)",
+              "hex": "#e0d4bd"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.628 0.039 85)",
+              "hex": "#93876e"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.2 0.03 85)",
+              "hex": "#1c1505"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.42 0.03 85)",
+              "hex": "#554c3a"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.515 0.027 85)",
+              "hex": "#6f6756"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.38 0.12 272)",
+              "hex": "#2e3a81"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.335 0.12 272)",
+              "hex": "#232d73"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.985 0.007 272)",
+              "hex": "#f8faff"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.933 0.031 272)",
+              "hex": "#e1e8fe"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.38 0.12 272)",
+              "hex": "#2e3a81"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.38 0.12 272)",
+              "hex": "#2e3a81"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.938 0.035 150)",
+              "hex": "#dbf2de"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.505 0.13 150)",
+              "hex": "#167839"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.938 0.031 27)",
+              "hex": "#ffe3df"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.535 0.17 27)",
+              "hex": "#bc3732"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.938 0.035 68)",
+              "hex": "#fbe7d2"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.525 0.115 68)",
+              "hex": "#955b01"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.938 0.031 245)",
+              "hex": "#daedfe"
+            },
+            "status-info": {
+              "oklch": "oklch(0.515 0.11 245)",
+              "hex": "#246da2"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.52 0.12 272)",
+              "hex": "#5162ad"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.64 0.15 58)",
+              "hex": "#ce710c"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.5 0.099 170)",
+              "hex": "#00755a"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.58 0.16 32)",
+              "hex": "#c74d38"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.62 0.09 222)",
+              "hex": "#3d92ad"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.55 0.12 345)",
+              "hex": "#a25281"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.6 0.123 95)",
+              "hex": "#977e01"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.54 0 0)",
+              "hex": "#6f6f6f"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 13.74,
+            "accentInk": 9.87
+          }
+        },
+        "dark": {
+          "tokens": {
+            "bg-canvas": {
+              "oklch": "oklch(0.18 0.022 272)",
+              "hex": "#0e111b"
+            },
+            "bg-surface-1": {
+              "oklch": "oklch(0.215 0.023 272)",
+              "hex": "#161924"
+            },
+            "bg-surface-2": {
+              "oklch": "oklch(0.245 0.024 272)",
+              "hex": "#1c202c"
+            },
+            "bg-surface-3": {
+              "oklch": "oklch(0.275 0.025 272)",
+              "hex": "#232734"
+            },
+            "border-hairline": {
+              "oklch": "oklch(0.295 0.026 272)",
+              "hex": "#282c3a"
+            },
+            "border-strong": {
+              "oklch": "oklch(0.515 0.033 272)",
+              "hex": "#61677b"
+            },
+            "text-primary": {
+              "oklch": "oklch(0.965 0.016 272)",
+              "hex": "#eff3ff"
+            },
+            "text-secondary": {
+              "oklch": "oklch(0.8 0.03 272)",
+              "hex": "#b7bdd2"
+            },
+            "text-muted": {
+              "oklch": "oklch(0.7 0.027 272)",
+              "hex": "#989eb0"
+            },
+            "accent-solid": {
+              "oklch": "oklch(0.84 0.09 85)",
+              "hex": "#e6c686"
+            },
+            "accent-hover": {
+              "oklch": "oklch(0.885 0.09 85)",
+              "hex": "#f5d594"
+            },
+            "accent-ink": {
+              "oklch": "oklch(0.17 0.02 85)",
+              "hex": "#130f06"
+            },
+            "accent-soft": {
+              "oklch": "oklch(0.255 0.029 85)",
+              "hex": "#292212"
+            },
+            "accent-text": {
+              "oklch": "oklch(0.84 0.09 85)",
+              "hex": "#e6c686"
+            },
+            "focus-ring": {
+              "oklch": "oklch(0.84 0.09 85)",
+              "hex": "#e6c686"
+            },
+            "status-positive-soft": {
+              "oklch": "oklch(0.24 0.04 150)",
+              "hex": "#102515"
+            },
+            "status-positive": {
+              "oklch": "oklch(0.8 0.13 150)",
+              "hex": "#7cd591"
+            },
+            "status-negative-soft": {
+              "oklch": "oklch(0.24 0.04 27)",
+              "hex": "#301715"
+            },
+            "status-negative": {
+              "oklch": "oklch(0.8 0.114 27)",
+              "hex": "#ffa196"
+            },
+            "status-warning-soft": {
+              "oklch": "oklch(0.24 0.04 68)",
+              "hex": "#2c1b08"
+            },
+            "status-warning": {
+              "oklch": "oklch(0.8 0.14 68)",
+              "hex": "#f8ab4f"
+            },
+            "status-info-soft": {
+              "oklch": "oklch(0.24 0.04 245)",
+              "hex": "#0d2131"
+            },
+            "status-info": {
+              "oklch": "oklch(0.8 0.108 245)",
+              "hex": "#80c5ff"
+            },
+            "chart-1": {
+              "oklch": "oklch(0.74 0.09 85)",
+              "hex": "#c5a767"
+            },
+            "chart-2": {
+              "oklch": "oklch(0.84 0.082 250)",
+              "hex": "#a2cfff"
+            },
+            "chart-3": {
+              "oklch": "oklch(0.7 0.11 170)",
+              "hex": "#4ab494"
+            },
+            "chart-4": {
+              "oklch": "oklch(0.8 0.115 32)",
+              "hex": "#ffa28f"
+            },
+            "chart-5": {
+              "oklch": "oklch(0.86 0.09 222)",
+              "hex": "#8cdffb"
+            },
+            "chart-6": {
+              "oklch": "oklch(0.72 0.12 345)",
+              "hex": "#da85b6"
+            },
+            "chart-7": {
+              "oklch": "oklch(0.88 0.062 290)",
+              "hex": "#d6d1fe"
+            },
+            "chart-8": {
+              "oklch": "oklch(0.78 0 0)",
+              "hex": "#b7b7b7"
+            }
+          },
+          "minRatios": {
+            "textPrimary": 13.42,
+            "accentInk": 11.64
+          }
+        }
+      }
+    }
+  ]
+}
