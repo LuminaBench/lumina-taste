@@ -1258,6 +1258,315 @@
         ]
       ],
       "added": 3
+    },
+    {
+      "id": "uptime-bars",
+      "name": "Uptime bars",
+      "summary": "A status-page strip with one small bar per day per service: green, amber or red.",
+      "pattern": "<ol> of days",
+      "states": [
+        "all operational",
+        "degraded day",
+        "outage day"
+      ],
+      "aliases": [
+        "status page",
+        "uptime history",
+        "service health bars",
+        "incident history",
+        "availability strip"
+      ],
+      "react": "UptimeBars",
+      "api": "grid repeat(90)",
+      "w": 640,
+      "called": [
+        "status page with green bars",
+        "uptime history strip",
+        "90 day availability bars",
+        "service status bars"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"now\"]",
+          "name": "Current status",
+          "api": "",
+          "text": "The one sentence people came for, first."
+        },
+        {
+          "sel": "[data-part=\"svc\"]:nth-child(4) li[data-s=\"down\"]",
+          "name": "Outage day",
+          "api": "hidden text",
+          "text": "Red bar plus \"Day 34: outage\" for screen readers."
+        },
+        {
+          "sel": "[data-part=\"svc\"]:nth-child(2) p span",
+          "name": "Uptime",
+          "api": "tabular-nums",
+          "text": "Exact percentage over the window."
+        }
+      ],
+      "prompt": "Add a status-page uptime strip: a header with the current state as a green pill, then one row per service with name and exact uptime, and 90 thin day bars coloured by status (operational, degraded, outage) each with visually hidden text, plus a legend and \"90 days ago / Today\" labels.",
+      "debug": "Debug my uptime bars. Rule out: status by colour alone; 90 separate tab stops; bars too thin to see on mobile (drop to 30 days); a rounded \"99.9%\" that hides real outages. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ol> + CSS grid",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<UptimeBars services>",
+          "React"
+        ]
+      ],
+      "added": 5
+    },
+    {
+      "id": "review-summary",
+      "name": "Review summary",
+      "summary": "The average rating in large type, a row of stars and a five-to-one breakdown in bars.",
+      "pattern": "Figure + <ol> distribution",
+      "states": [
+        "default",
+        "narrow"
+      ],
+      "aliases": [
+        "rating breakdown",
+        "reviews histogram",
+        "star distribution",
+        "average rating",
+        "product reviews summary"
+      ],
+      "react": "ReviewSummary",
+      "api": "<ol> bars",
+      "w": 520,
+      "called": [
+        "average stars with bars for each rating",
+        "reviews summary like a store page",
+        "5 star breakdown chart",
+        "rating histogram"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"big\"]",
+          "name": "Average",
+          "api": "tabular-nums",
+          "text": "One decimal place; the number first, stars second."
+        },
+        {
+          "sel": "[data-part=\"dist\"] li:first-child",
+          "name": "Distribution row",
+          "api": "",
+          "text": "Share in words and bars."
+        },
+        {
+          "sel": "[data-part=\"count\"]",
+          "name": "Count",
+          "api": "",
+          "text": "How many reviews the average is based on."
+        }
+      ],
+      "prompt": "Add a review summary: the average (one decimal) in large display type, five stars with an aria-label, the total review count, and a distribution list of 5 to 1 star rows each with a bar and a percentage.",
+      "debug": "Debug my review summary. Rule out: stars without a text alternative; bars without percentages; an average without the count; partial-star fills that ignore the actual value. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ol> + width %",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ReviewSummary average counts>",
+          "React"
+        ]
+      ],
+      "added": 5
+    },
+    {
+      "id": "file-list",
+      "name": "File list",
+      "summary": "Files with a type tile, name, size and owner, date and two quiet actions per row.",
+      "pattern": "<ul> of rows",
+      "states": [
+        "default",
+        "hover",
+        "long names"
+      ],
+      "aliases": [
+        "attachments list",
+        "documents list",
+        "file browser rows",
+        "uploaded files",
+        "drive list"
+      ],
+      "react": "FileList",
+      "api": "grid 36px 1fr auto auto",
+      "w": 560,
+      "called": [
+        "list of uploaded files with icons",
+        "documents with pdf badges",
+        "attachments section",
+        "file rows with share buttons"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:nth-child(2) [data-part=\"type\"]",
+          "name": "Type tile",
+          "api": "",
+          "text": "Three letters in mono; colour by family, never alone."
+        },
+        {
+          "sel": "li:first-child [data-part=\"name\"] a",
+          "name": "Name",
+          "api": "text-overflow: ellipsis",
+          "text": "Long names cut with an ellipsis, full name on open."
+        },
+        {
+          "sel": "li:first-child [data-part=\"acts\"]",
+          "name": "Actions",
+          "api": "aria-label",
+          "text": "Each button names the file it acts on."
+        }
+      ],
+      "prompt": "Add a file list: a header with count and total size, then rows with a 36×40 type tile (PDF red tint, sheets green tint, others neutral) showing three mono letters, the file name as a link with \"size · owner\" under it, the date, and Share/More icon buttons labelled with the file name.",
+      "debug": "Debug my file list. Rule out: icon buttons without names; long names pushing the date off; file type shown by colour only; rows that are not links to anything. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ul> + grid",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<FileList files>",
+          "React"
+        ]
+      ],
+      "added": 5
+    },
+    {
+      "id": "diff-view",
+      "name": "Diff view",
+      "summary": "A unified code diff with old and new line numbers, +/− signs and softly tinted rows.",
+      "pattern": "<table> in a scroll region",
+      "states": [
+        "context",
+        "added",
+        "removed"
+      ],
+      "aliases": [
+        "code diff",
+        "git diff",
+        "changes view",
+        "pull request diff",
+        "before after code"
+      ],
+      "react": "DiffView",
+      "api": "<table> + tints",
+      "w": 620,
+      "called": [
+        "code changes with green and red lines",
+        "git diff view",
+        "pull request changes",
+        "added and removed lines"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-k=\"add\"]:first-of-type [data-part=\"sign\"]",
+          "name": "Added line",
+          "api": "hidden \"added\"",
+          "text": "Green tint and a plus; the word for screen readers."
+        },
+        {
+          "sel": "tr:first-child [data-part=\"n\"]",
+          "name": "Line numbers",
+          "api": "user-select: none",
+          "text": "Old and new; copying code skips them."
+        },
+        {
+          "sel": "[data-part=\"stat\"]",
+          "name": "Summary",
+          "api": "",
+          "text": "+2 −1 at a glance."
+        }
+      ],
+      "prompt": "Add a unified diff view: a caption bar with the file path in mono and a +N −N summary, then a table in a horizontally scrolling region with old and new line numbers (not selectable), a +/− sign column, the code, softly tinted added/removed rows and visually hidden \"added\"/\"removed\" text.",
+      "debug": "Debug my diff view. Rule out: red/green as the only signal; line numbers copied with the code; long lines widening the page; full-saturation backgrounds that hide syntax colours. The symptom:",
+      "code": [
+        [
+          "diff2html",
+          "Diff2Html.html()",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<DiffView lines>",
+          "React"
+        ]
+      ],
+      "added": 5
+    },
+    {
+      "id": "json-viewer",
+      "name": "JSON viewer",
+      "summary": "Collapsible JSON as a keyboard-navigable tree, with types told apart by colour and text.",
+      "pattern": "WAI-ARIA Tree View",
+      "states": [
+        "expanded",
+        "collapsed",
+        "focused node"
+      ],
+      "aliases": [
+        "json tree",
+        "object inspector",
+        "api response viewer",
+        "collapsible json",
+        "data inspector"
+      ],
+      "react": "JsonViewer",
+      "api": "role=\"tree\"",
+      "w": 480,
+      "called": [
+        "expandable json view",
+        "api response viewer",
+        "tree of json keys",
+        "object inspector like devtools"
+      ],
+      "anatomy": [
+        {
+          "sel": "[aria-level=\"2\"][aria-expanded] [data-part=\"caret\"]",
+          "name": "Toggle",
+          "api": "aria-expanded",
+          "text": "Click the row, or Right/Left."
+        },
+        {
+          "sel": "[data-t=\"string\"]",
+          "name": "String",
+          "api": "",
+          "text": "Quoted, so type is clear without colour."
+        },
+        {
+          "sel": "[data-part=\"hint\"]",
+          "name": "Size",
+          "api": "",
+          "text": "{2} or [2] says what is inside when collapsed."
+        }
+      ],
+      "prompt": "Add a JSON viewer: render an object as a role=\"tree\" with nested groups, a caret that rotates on expanded nodes, {n}/[n] size hints, typed values (strings quoted in accent ink, numbers and booleans in amber, null in italic muted), one tab stop with arrow-key travel, Right/Left to expand and collapse, and a Collapse all button.",
+      "debug": "Debug my JSON viewer. Rule out: building HTML from values without escaping (XSS); every node a tab stop; types shown by colour only; huge payloads rendered all at once (collapse past depth 2). The symptom:",
+      "code": [
+        [
+          "react-json-view",
+          "<ReactJson src>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<JsonViewer value>",
+          "React"
+        ]
+      ],
+      "added": 5
     }
   ]
 }

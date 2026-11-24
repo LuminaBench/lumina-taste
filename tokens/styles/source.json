@@ -629,6 +629,171 @@
     "cta": "See week",
     "badge": "On track"
    }
+  },
+  {
+   "id": "kraft",
+   "name": "Kraft",
+   "kind": "Warm print",
+   "palette": "espresso-terracotta",
+   "mode": "light",
+   "type": "slab",
+   "radius": "balanced",
+   "aliases": [
+    "brown paper look",
+    "warm print design",
+    "craft packaging style",
+    "coffee shop website"
+   ],
+   "summary": "Warm paper ground, slab-serif headings, dashed rules and a terracotta accent. Feels hand-made but stays tidy.",
+   "signals": [
+    "warm paper background",
+    "slab serif headings",
+    "dashed dividers",
+    "terracotta accent",
+    "small offset shadows"
+   ],
+   "useFor": "Food and drink, independent shops, studios, newsletters, community sites.",
+   "notTo": "Retro, which leans on chunky offset shadows and pastel; kraft is quieter and warmer.",
+   "brief": "Use the paper ground and slab headings; let dashed rules do the dividing.",
+   "sample": {
+    "eyebrow": "Roastery",
+    "title": "Fresh on Fridays",
+    "body": "Small batch · Lisbon",
+    "cta": "Order beans",
+    "badge": "New"
+   }
+  },
+  {
+   "id": "midnight",
+   "name": "Midnight",
+   "kind": "Deep dark",
+   "palette": "navy-sand",
+   "mode": "dark",
+   "type": "geometric",
+   "radius": "soft",
+   "aliases": [
+    "navy dark mode",
+    "deep blue dark theme",
+    "night ui",
+    "calm dark app"
+   ],
+   "summary": "Deep navy surfaces, soft corners and a warm sand accent. Darker and calmer than plain dark mode.",
+   "signals": [
+    "deep navy, not grey",
+    "soft corners",
+    "warm accent on cool ground",
+    "one-step lighter cards",
+    "faint inner highlight"
+   ],
+   "useFor": "Finance, wellness at night, media apps, premium consumer products.",
+   "notTo": "Glass, which blurs and glows; midnight stays solid.",
+   "brief": "Keep the ground deep and the accent warm; never pure black.",
+   "sample": {
+    "eyebrow": "Savings",
+    "title": "£1,240 this month",
+    "body": "Up 8% on October",
+    "cta": "See goals",
+    "badge": "On track"
+   }
+  },
+  {
+   "id": "playful",
+   "name": "Playful",
+   "kind": "Friendly bold",
+   "palette": "mint-ocean",
+   "mode": "light",
+   "type": "rounded",
+   "radius": "soft",
+   "aliases": [
+    "fun friendly ui",
+    "bouncy design",
+    "duolingo-like playful",
+    "rounded colourful app"
+   ],
+   "summary": "Big rounded corners, chunky buttons that press down, rounded type and a bright accent.",
+   "signals": [
+    "very rounded corners",
+    "buttons with a bottom edge that presses",
+    "rounded sans type",
+    "bright single accent",
+    "bigger controls"
+   ],
+   "useFor": "Education, kids and family, games-adjacent apps, onboarding.",
+   "notTo": "Neobrutalism, which uses black outlines; playful uses soft colour edges.",
+   "brief": "Make every control a little bigger and give buttons a pressable bottom edge.",
+   "sample": {
+    "eyebrow": "Day 12",
+    "title": "Streak kept",
+    "body": "3 lessons · 18 min",
+    "cta": "Keep going",
+    "badge": "+20 XP"
+   }
+  },
+  {
+   "id": "enterprise",
+   "name": "Enterprise",
+   "kind": "Calm business software",
+   "palette": "slate-forest",
+   "mode": "light",
+   "type": "humanist",
+   "radius": "balanced",
+   "aliases": [
+    "b2b saas ui",
+    "admin console look",
+    "corporate clean",
+    "business dashboard style"
+   ],
+   "summary": "Dense but calm: grey canvas, white cards with fine borders, compact controls and no decoration.",
+   "signals": [
+    "grey canvas, white cards",
+    "fine borders and tiny shadows",
+    "compact controls",
+    "humanist type",
+    "status colours carry meaning"
+   ],
+   "useFor": "Admin consoles, CRMs, HR and finance tools, internal software.",
+   "notTo": "Studio, which is airier; enterprise packs more onto the screen without crowding it.",
+   "brief": "Set density to dense and let borders, not colour, separate things.",
+   "sample": {
+    "eyebrow": "Invoices",
+    "title": "42 awaiting approval",
+    "body": "£86,240 · due this week",
+    "cta": "Review",
+    "badge": "3 overdue"
+   }
+  },
+  {
+   "id": "zen",
+   "name": "Zen",
+   "kind": "Ultra minimal",
+   "palette": "sage-clay",
+   "mode": "light",
+   "type": "bookish",
+   "radius": "soft",
+   "aliases": [
+    "calm minimal",
+    "meditation app look",
+    "quiet design",
+    "lots of white space"
+   ],
+   "summary": "Almost nothing: wide margins, light weights, no borders and one muted accent used once.",
+   "signals": [
+    "no borders",
+    "light text weights",
+    "very wide spacing",
+    "muted sage accent",
+    "one action per screen"
+   ],
+   "useFor": "Journaling, meditation, reading apps, personal sites.",
+   "notTo": "Minimal, which keeps borders and normal weights; zen removes both.",
+   "brief": "Remove every border, lighten the type and give the one action room.",
+   "sample": {
+    "eyebrow": "Morning",
+    "title": "Breathe for two minutes",
+    "body": "4 in · 4 hold · 6 out",
+    "cta": "Begin",
+    "badge": "Daily"
+   }
   }
  ]
 }

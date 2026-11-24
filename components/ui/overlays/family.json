@@ -1175,6 +1175,74 @@
         ]
       ],
       "added": 3
+    },
+    {
+      "id": "confirm-popover",
+      "name": "Confirm popover",
+      "summary": "A small \"are you sure?\" next to the button, with Cancel focused first. Lighter than a modal.",
+      "pattern": "Disclosure (non-modal dialog)",
+      "states": [
+        "closed",
+        "asking",
+        "confirmed"
+      ],
+      "aliases": [
+        "popconfirm",
+        "inline confirm",
+        "are you sure popup",
+        "delete confirmation bubble",
+        "confirm tooltip"
+      ],
+      "react": "ConfirmPopover",
+      "api": "role=\"dialog\" (non-modal)",
+      "w": 420,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"trigger\"]"
+        ]
+      ],
+      "called": [
+        "small confirm bubble next to delete",
+        "are you sure popup by the button",
+        "inline confirmation",
+        "revoke key confirm"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"panel\"] strong",
+          "name": "Question",
+          "api": "aria-labelledby",
+          "text": "Names the action and its consequence."
+        },
+        {
+          "sel": "[data-part=\"cancel\"]",
+          "name": "Cancel",
+          "api": "focused first",
+          "text": "The safe choice gets focus."
+        },
+        {
+          "sel": "[data-part=\"confirm\"]",
+          "name": "Confirm",
+          "api": "data-tone=\"danger\"",
+          "text": "Repeats the verb: \"Revoke key\", not \"OK\"."
+        }
+      ],
+      "prompt": "Add an inline confirm for a row-level destructive action: clicking \"Revoke\" opens a small non-modal panel anchored under it with a bold question plus the consequence, Cancel (focused first) and a filled red \"Revoke key\"; Esc and outside clicks cancel and return focus; after confirming, the button reads \"Revoked\" and a status line explains what to do next.",
+      "debug": "Debug my confirm popover. Rule out: \"OK\" / \"Cancel\" labels; the confirm button focused first; a modal where an inline confirm would do; no way to recover after confirming. The symptom:",
+      "code": [
+        [
+          "Ant Design",
+          "Popconfirm",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ConfirmPopover>",
+          "React"
+        ]
+      ],
+      "added": 5
     }
   ]
 }

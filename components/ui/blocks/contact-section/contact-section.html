@@ -1,0 +1,14 @@
+<section class="lt-contact-section" aria-labelledby="lt-cs-title" data-lt="contact-section">
+  <div data-part="info">
+    <p data-part="eyebrow">Contact</p><h2 id="lt-cs-title">Talk to a person</h2>
+    <p data-part="lede">We reply within one working day. For outages, check the status page first.</p>
+    <dl><div><dt>Email</dt><dd><a href="#mail">hello@halyard.example</a></dd></div><div><dt>Status</dt><dd><a href="#status">status.halyard.example</a></dd></div><div><dt>Office</dt><dd>Lisbon, Portugal</dd></div></dl>
+  </div>
+  <form data-part="form" novalidate>
+    <div data-part="row"><label>Name<input name="name" autocomplete="name" required></label><label>Work email<input name="email" type="email" autocomplete="email" required></label></div>
+    <label>Topic<select name="topic"><option>Sales</option><option>Support</option><option>Billing</option><option>Something else</option></select></label>
+    <label>Message<textarea name="message" rows="4" required></textarea></label>
+    <button type="submit" class="lt-btn" data-variant="primary">Send message</button>
+    <p data-part="msg" role="status"></p>
+  </form>
+</section>

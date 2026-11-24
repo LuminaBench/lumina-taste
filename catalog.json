@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
   "counts": {
-    "ui": 124,
+    "ui": 137,
     "charts": 38,
     "blueprints": 8,
     "palettes": 18,
     "themes": 36,
     "typography": 12,
-    "styles": 20
+    "styles": 25
   },
   "families": [
     {
@@ -17,35 +17,35 @@
       "title": "Controls & tactile inputs",
       "summary": "Buttons, toggles, pickers and fields with real pressed states and no layout jump.",
       "order": 1,
-      "count": 30
+      "count": 32
     },
     {
       "id": "navigation",
       "title": "Navigation & page chrome",
       "summary": "Headers, rails, menus and footers that tell people where they are and get out of the way.",
       "order": 2,
-      "count": 19
+      "count": 20
     },
     {
       "id": "feedback",
       "title": "Feedback, status & numbers",
       "summary": "Counters, progress, loading and messages that stay readable and never shift the layout.",
       "order": 3,
-      "count": 16
+      "count": 17
     },
     {
       "id": "overlays",
       "title": "Overlays & power-user patterns",
       "summary": "Palettes, menus, popovers and dialogs built on native <dialog>, the Popover API and CSS anchor positioning.",
       "order": 4,
-      "count": 16
+      "count": 17
     },
     {
       "id": "data",
       "title": "Data & layout primitives",
       "summary": "Tables, lists, grids and blocks for showing real data cleanly, with tabular numbers everywhere.",
       "order": 5,
-      "count": 20
+      "count": 25
     },
     {
       "id": "motion",
@@ -59,7 +59,7 @@
       "title": "Sections for pages",
       "summary": "Whole page sections (heroes, pricing, FAQs, sign-in) built from the same tokens, so a page can be assembled in minutes and still look designed.",
       "order": 7,
-      "count": 13
+      "count": 16
     }
   ],
   "ui": [
@@ -417,6 +417,90 @@
         "components/ui/blocks/not-found/not-found.react.tsx"
       ],
       "path": "components/ui/blocks/not-found"
+    },
+    {
+      "id": "integrations-grid",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Integrations grid",
+      "summary": "One linked tile per tool with a two-letter mark, its name and what it is for.",
+      "aliases": [
+        "integrations page",
+        "connectors grid",
+        "apps we work with",
+        "partner logos grid",
+        "app directory"
+      ],
+      "pattern": "<ul> of links",
+      "states": [
+        "four columns",
+        "two",
+        "one"
+      ],
+      "react": "IntegrationsGrid",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/integrations-grid/integrations-grid.css",
+        "components/ui/blocks/integrations-grid/integrations-grid.html",
+        "components/ui/blocks/integrations-grid/integrations-grid.react.tsx"
+      ],
+      "path": "components/ui/blocks/integrations-grid"
+    },
+    {
+      "id": "contact-section",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Contact section",
+      "summary": "Ways to reach you on the left, a four-field form on the right that validates on submit.",
+      "aliases": [
+        "contact us",
+        "contact form",
+        "get in touch",
+        "support form",
+        "sales enquiry"
+      ],
+      "pattern": "<form> + description list",
+      "states": [
+        "empty",
+        "errors",
+        "sent"
+      ],
+      "react": "ContactSection",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/contact-section/contact-section.css",
+        "components/ui/blocks/contact-section/contact-section.html",
+        "components/ui/blocks/contact-section/contact-section.react.tsx",
+        "components/ui/blocks/contact-section/contact-section.ts"
+      ],
+      "path": "components/ui/blocks/contact-section"
+    },
+    {
+      "id": "blog-grid",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Blog grid",
+      "summary": "Three latest posts with an image, kind, date and title; the whole card is one link.",
+      "aliases": [
+        "latest posts",
+        "articles section",
+        "news grid",
+        "resources section",
+        "blog preview"
+      ],
+      "pattern": "<article> cards with a stretched link",
+      "states": [
+        "three columns",
+        "stacked"
+      ],
+      "react": "BlogGrid",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/blog-grid/blog-grid.css",
+        "components/ui/blocks/blog-grid/blog-grid.html",
+        "components/ui/blocks/blog-grid/blog-grid.react.tsx"
+      ],
+      "path": "components/ui/blocks/blog-grid"
     },
     {
       "id": "disclosure-chevron",
@@ -1325,6 +1409,67 @@
       "path": "components/ui/controls/formatting-toolbar"
     },
     {
+      "id": "password-field",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Password field",
+      "summary": "Show/hide toggle, a four-step strength meter and rules that tick off as you type.",
+      "aliases": [
+        "password input",
+        "show password eye",
+        "password strength meter",
+        "new password field",
+        "password rules"
+      ],
+      "pattern": "Text field + toggle button",
+      "states": [
+        "empty",
+        "weak",
+        "fair",
+        "strong",
+        "visible"
+      ],
+      "react": "PasswordField",
+      "deps": [],
+      "files": [
+        "components/ui/controls/password-field/password-field.css",
+        "components/ui/controls/password-field/password-field.html",
+        "components/ui/controls/password-field/password-field.react.tsx",
+        "components/ui/controls/password-field/password-field.ts"
+      ],
+      "path": "components/ui/controls/password-field"
+    },
+    {
+      "id": "select-menu",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Select menu",
+      "summary": "A custom select whose options carry a short description, with typeahead and full keyboard support.",
+      "aliases": [
+        "custom select",
+        "dropdown select",
+        "listbox select",
+        "role picker",
+        "select with descriptions"
+      ],
+      "pattern": "WAI-ARIA Select-only Combobox",
+      "states": [
+        "closed",
+        "open",
+        "highlighted",
+        "selected"
+      ],
+      "react": "SelectMenu",
+      "deps": [],
+      "files": [
+        "components/ui/controls/select-menu/select-menu.css",
+        "components/ui/controls/select-menu/select-menu.html",
+        "components/ui/controls/select-menu/select-menu.react.tsx",
+        "components/ui/controls/select-menu/select-menu.ts"
+      ],
+      "path": "components/ui/controls/select-menu"
+    },
+    {
       "id": "data-table",
       "kind": "ui",
       "family": "data",
@@ -1898,6 +2043,146 @@
       "path": "components/ui/data/swipe-actions"
     },
     {
+      "id": "uptime-bars",
+      "kind": "ui",
+      "family": "data",
+      "name": "Uptime bars",
+      "summary": "A status-page strip with one small bar per day per service: green, amber or red.",
+      "aliases": [
+        "status page",
+        "uptime history",
+        "service health bars",
+        "incident history",
+        "availability strip"
+      ],
+      "pattern": "<ol> of days",
+      "states": [
+        "all operational",
+        "degraded day",
+        "outage day"
+      ],
+      "react": "UptimeBars",
+      "deps": [],
+      "files": [
+        "components/ui/data/uptime-bars/uptime-bars.css",
+        "components/ui/data/uptime-bars/uptime-bars.html",
+        "components/ui/data/uptime-bars/uptime-bars.react.tsx"
+      ],
+      "path": "components/ui/data/uptime-bars"
+    },
+    {
+      "id": "review-summary",
+      "kind": "ui",
+      "family": "data",
+      "name": "Review summary",
+      "summary": "The average rating in large type, a row of stars and a five-to-one breakdown in bars.",
+      "aliases": [
+        "rating breakdown",
+        "reviews histogram",
+        "star distribution",
+        "average rating",
+        "product reviews summary"
+      ],
+      "pattern": "Figure + <ol> distribution",
+      "states": [
+        "default",
+        "narrow"
+      ],
+      "react": "ReviewSummary",
+      "deps": [],
+      "files": [
+        "components/ui/data/review-summary/review-summary.css",
+        "components/ui/data/review-summary/review-summary.html",
+        "components/ui/data/review-summary/review-summary.react.tsx"
+      ],
+      "path": "components/ui/data/review-summary"
+    },
+    {
+      "id": "file-list",
+      "kind": "ui",
+      "family": "data",
+      "name": "File list",
+      "summary": "Files with a type tile, name, size and owner, date and two quiet actions per row.",
+      "aliases": [
+        "attachments list",
+        "documents list",
+        "file browser rows",
+        "uploaded files",
+        "drive list"
+      ],
+      "pattern": "<ul> of rows",
+      "states": [
+        "default",
+        "hover",
+        "long names"
+      ],
+      "react": "FileList",
+      "deps": [],
+      "files": [
+        "components/ui/data/file-list/file-list.css",
+        "components/ui/data/file-list/file-list.html",
+        "components/ui/data/file-list/file-list.react.tsx"
+      ],
+      "path": "components/ui/data/file-list"
+    },
+    {
+      "id": "diff-view",
+      "kind": "ui",
+      "family": "data",
+      "name": "Diff view",
+      "summary": "A unified code diff with old and new line numbers, +/− signs and softly tinted rows.",
+      "aliases": [
+        "code diff",
+        "git diff",
+        "changes view",
+        "pull request diff",
+        "before after code"
+      ],
+      "pattern": "<table> in a scroll region",
+      "states": [
+        "context",
+        "added",
+        "removed"
+      ],
+      "react": "DiffView",
+      "deps": [],
+      "files": [
+        "components/ui/data/diff-view/diff-view.css",
+        "components/ui/data/diff-view/diff-view.html",
+        "components/ui/data/diff-view/diff-view.react.tsx"
+      ],
+      "path": "components/ui/data/diff-view"
+    },
+    {
+      "id": "json-viewer",
+      "kind": "ui",
+      "family": "data",
+      "name": "JSON viewer",
+      "summary": "Collapsible JSON as a keyboard-navigable tree, with types told apart by colour and text.",
+      "aliases": [
+        "json tree",
+        "object inspector",
+        "api response viewer",
+        "collapsible json",
+        "data inspector"
+      ],
+      "pattern": "WAI-ARIA Tree View",
+      "states": [
+        "expanded",
+        "collapsed",
+        "focused node"
+      ],
+      "react": "JsonViewer",
+      "deps": [],
+      "files": [
+        "components/ui/data/json-viewer/json-viewer.css",
+        "components/ui/data/json-viewer/json-viewer.html",
+        "components/ui/data/json-viewer/json-viewer.react.tsx",
+        "components/ui/data/json-viewer/json-viewer.ts"
+      ],
+      "path": "components/ui/data/json-viewer"
+    },
+    {
       "id": "count-up",
       "kind": "ui",
       "family": "feedback",
@@ -2346,6 +2631,36 @@
         "components/ui/feedback/setup-checklist/setup-checklist.ts"
       ],
       "path": "components/ui/feedback/setup-checklist"
+    },
+    {
+      "id": "undo-snackbar",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Undo snackbar",
+      "summary": "Delete at once and offer Undo for a few seconds, instead of asking \"Are you sure?\".",
+      "aliases": [
+        "undo toast",
+        "snackbar with undo",
+        "soft delete",
+        "undo delete",
+        "reversible action bar"
+      ],
+      "pattern": "role=\"status\" + timed commit",
+      "states": [
+        "hidden",
+        "offering undo",
+        "paused",
+        "committed"
+      ],
+      "react": "UndoSnackbar",
+      "deps": [],
+      "files": [
+        "components/ui/feedback/undo-snackbar/undo-snackbar.css",
+        "components/ui/feedback/undo-snackbar/undo-snackbar.html",
+        "components/ui/feedback/undo-snackbar/undo-snackbar.react.tsx",
+        "components/ui/feedback/undo-snackbar/undo-snackbar.ts"
+      ],
+      "path": "components/ui/feedback/undo-snackbar"
     },
     {
       "id": "motion-tokens",
@@ -3183,6 +3498,33 @@
       "path": "components/ui/navigation/hamburger-menu"
     },
     {
+      "id": "sticky-action-bar",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Sticky action bar",
+      "summary": "A bottom bar on phones that keeps the price and the one action in thumb reach.",
+      "aliases": [
+        "sticky add to cart",
+        "mobile bottom cta",
+        "floating checkout bar",
+        "sticky footer button",
+        "bottom action bar"
+      ],
+      "pattern": "Fixed region + safe-area padding",
+      "states": [
+        "resting",
+        "over content"
+      ],
+      "react": "StickyActionBar",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/sticky-action-bar/sticky-action-bar.css",
+        "components/ui/navigation/sticky-action-bar/sticky-action-bar.html",
+        "components/ui/navigation/sticky-action-bar/sticky-action-bar.react.tsx"
+      ],
+      "path": "components/ui/navigation/sticky-action-bar"
+    },
+    {
       "id": "command-palette",
       "kind": "ui",
       "family": "overlays",
@@ -3672,6 +4014,35 @@
         "components/ui/overlays/cookie-consent/cookie-consent.ts"
       ],
       "path": "components/ui/overlays/cookie-consent"
+    },
+    {
+      "id": "confirm-popover",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Confirm popover",
+      "summary": "A small \"are you sure?\" next to the button, with Cancel focused first. Lighter than a modal.",
+      "aliases": [
+        "popconfirm",
+        "inline confirm",
+        "are you sure popup",
+        "delete confirmation bubble",
+        "confirm tooltip"
+      ],
+      "pattern": "Disclosure (non-modal dialog)",
+      "states": [
+        "closed",
+        "asking",
+        "confirmed"
+      ],
+      "react": "ConfirmPopover",
+      "deps": [],
+      "files": [
+        "components/ui/overlays/confirm-popover/confirm-popover.css",
+        "components/ui/overlays/confirm-popover/confirm-popover.html",
+        "components/ui/overlays/confirm-popover/confirm-popover.react.tsx",
+        "components/ui/overlays/confirm-popover/confirm-popover.ts"
+      ],
+      "path": "components/ui/overlays/confirm-popover"
     }
   ],
   "charts": [
@@ -6070,6 +6441,111 @@
       "radius": "soft",
       "useFor": "Health, wellbeing, home and family apps, onboarding flows, consumer tools.",
       "notTo": "Soft, which uses pastel tints and puffier shadows; nordic stays grey and restrained.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "kraft",
+      "kind": "style",
+      "name": "Kraft",
+      "summary": "Warm paper ground, slab-serif headings, dashed rules and a terracotta accent. Feels hand-made but stays tidy.",
+      "aliases": [
+        "brown paper look",
+        "warm print design",
+        "craft packaging style",
+        "coffee shop website"
+      ],
+      "palette": "espresso-terracotta",
+      "mode": "light",
+      "typography": "slab",
+      "radius": "balanced",
+      "useFor": "Food and drink, independent shops, studios, newsletters, community sites.",
+      "notTo": "Retro, which leans on chunky offset shadows and pastel; kraft is quieter and warmer.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "midnight",
+      "kind": "style",
+      "name": "Midnight",
+      "summary": "Deep navy surfaces, soft corners and a warm sand accent. Darker and calmer than plain dark mode.",
+      "aliases": [
+        "navy dark mode",
+        "deep blue dark theme",
+        "night ui",
+        "calm dark app"
+      ],
+      "palette": "navy-sand",
+      "mode": "dark",
+      "typography": "geometric",
+      "radius": "soft",
+      "useFor": "Finance, wellness at night, media apps, premium consumer products.",
+      "notTo": "Glass, which blurs and glows; midnight stays solid.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "playful",
+      "kind": "style",
+      "name": "Playful",
+      "summary": "Big rounded corners, chunky buttons that press down, rounded type and a bright accent.",
+      "aliases": [
+        "fun friendly ui",
+        "bouncy design",
+        "duolingo-like playful",
+        "rounded colourful app"
+      ],
+      "palette": "mint-ocean",
+      "mode": "light",
+      "typography": "rounded",
+      "radius": "soft",
+      "useFor": "Education, kids and family, games-adjacent apps, onboarding.",
+      "notTo": "Neobrutalism, which uses black outlines; playful uses soft colour edges.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "enterprise",
+      "kind": "style",
+      "name": "Enterprise",
+      "summary": "Dense but calm: grey canvas, white cards with fine borders, compact controls and no decoration.",
+      "aliases": [
+        "b2b saas ui",
+        "admin console look",
+        "corporate clean",
+        "business dashboard style"
+      ],
+      "palette": "slate-forest",
+      "mode": "light",
+      "typography": "humanist",
+      "radius": "balanced",
+      "useFor": "Admin consoles, CRMs, HR and finance tools, internal software.",
+      "notTo": "Studio, which is airier; enterprise packs more onto the screen without crowding it.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "zen",
+      "kind": "style",
+      "name": "Zen",
+      "summary": "Almost nothing: wide margins, light weights, no borders and one muted accent used once.",
+      "aliases": [
+        "calm minimal",
+        "meditation app look",
+        "quiet design",
+        "lots of white space"
+      ],
+      "palette": "sage-clay",
+      "mode": "light",
+      "typography": "bookish",
+      "radius": "soft",
+      "useFor": "Journaling, meditation, reading apps, personal sites.",
+      "notTo": "Minimal, which keeps borders and normal weights; zen removes both.",
       "files": [
         "tokens/styles/styles.css"
       ]

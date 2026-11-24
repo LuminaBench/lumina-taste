@@ -1,0 +1,20 @@
+@scope (.lt-files) {
+  :scope { width: 100%; max-width: 560px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); font-size: var(--text-ui); overflow: hidden; }
+  header { display: flex; align-items: baseline; justify-content: space-between; padding: 14px 16px 10px; }
+  h3 { margin: 0; font-size: var(--text-ui); font-weight: 650; }
+  [data-part="meta"] { color: var(--text-muted); font-size: var(--text-ui-xs); font-variant-numeric: tabular-nums; }
+  ul { margin: 0; padding: 0; list-style: none; }
+  [data-part="file"] { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto auto; align-items: center; gap: 12px; padding: 10px 16px; border-top: var(--bw) var(--border-style) var(--border-hairline); }
+  [data-part="file"]:hover { background: var(--bg-surface-2); }
+  [data-part="type"] { display: grid; place-items: center; width: 36px; height: 40px; border-radius: 6px; background: var(--bg-surface-3); color: var(--text-secondary); font: 700 9px/1 var(--font-mono); letter-spacing: 0.04em; }
+  [data-t="pdf"] { background: var(--status-negative-soft); color: var(--status-negative); }
+  [data-t="xls"], [data-t="csv"] { background: var(--status-positive-soft); color: var(--status-positive); }
+  [data-part="name"] { display: grid; min-width: 0; }
+  [data-part="name"] a { overflow: hidden; color: var(--text-primary); font-size: var(--text-ui-sm); font-weight: 600; text-decoration: none; text-overflow: ellipsis; white-space: nowrap; }
+  [data-part="name"] a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  [data-part="name"] span { color: var(--text-muted); font-size: var(--text-ui-xs); font-variant-numeric: tabular-nums; }
+  time { color: var(--text-muted); font-size: var(--text-ui-xs); white-space: nowrap; }
+  [data-part="acts"] { display: flex; gap: 2px; }
+  [data-part="acts"] button { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-muted); cursor: pointer; }
+  [data-part="acts"] button:hover { background: var(--bg-surface-3); color: var(--text-primary); }
+}

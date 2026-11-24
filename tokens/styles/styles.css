@@ -251,3 +251,56 @@
 }
 [data-style="nordic"] :is(.lt-bento > article, .lt-media-card, .lt-kpi, .lt-stat-strip, .lt-radio-cards [data-part="card"], .lt-skeleton-card, .g-mini-card, .pr-tier, .bp-card, .st-section, .lt-pricing-tiers [data-part="tier"]:not([data-featured]), .lt-testimonial-grid figure, .lt-sign-in-card [data-part="card"], .lt-hero-split [data-part="frame"], .lt-checklist) { border-color: transparent; background: var(--bg-surface-2); box-shadow: var(--surface-shadow); }
 [data-style="nordic"] :is(.lt-field input, .lt-search, .lt-combobox input, .lt-tags [data-part="box"], .g-mini-field) { border-color: transparent; background: var(--bg-surface-2); }
+
+/* ---------------------------------------------------------------- kraft */
+[data-style="kraft"] {
+  --border-style: dashed;
+  --shadow-sm: 2px 2px 0 color-mix(in oklab, var(--text-primary) 12%, transparent);
+  --shadow-md: 3px 3px 0 color-mix(in oklab, var(--text-primary) 12%, transparent);
+  --surface-shadow: 3px 3px 0 color-mix(in oklab, var(--text-primary) 10%, transparent);
+  --canvas-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .15 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+[data-style="kraft"] .lt-btn { --border-style: solid; }
+[data-style="kraft"] :is(.lt-bento > article, .lt-media-card, .lt-kpi, .g-mini-card, .pr-tier, .bp-card, .lt-pricing-tiers [data-part="tier"], .lt-testimonial-grid figure, .lt-checklist) { box-shadow: var(--surface-shadow); }
+
+/* ---------------------------------------------------------------- midnight */
+[data-style="midnight"] {
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.4);
+  --shadow-md: 0 8px 16px -10px oklch(0 0 0 / 0.32);
+  --surface-shadow: inset 0 1px 0 color-mix(in oklab, var(--text-primary) 7%, transparent), 0 8px 16px -12px oklch(0 0 0 / 0.32);
+}
+[data-style="midnight"] :is(.lt-bento > article, .lt-media-card, .lt-kpi, .lt-stat-strip, .g-mini-card, .pr-tier, .bp-card, .st-section, .lt-pricing-tiers [data-part="tier"], .lt-testimonial-grid figure, .lt-sign-in-card [data-part="card"], .lt-hero-split [data-part="frame"], .lt-checklist) { border-color: color-mix(in oklab, var(--text-primary) 8%, transparent); box-shadow: var(--surface-shadow); }
+
+/* ---------------------------------------------------------------- playful */
+[data-style="playful"] {
+  --control-h: 42px;
+  --control-shadow: 0 3px 0 color-mix(in oklab, var(--text-primary) 18%, transparent);
+  --control-shadow-hover: 0 4px 0 color-mix(in oklab, var(--text-primary) 18%, transparent);
+  --control-shadow-active: 0 0 0 transparent;
+  --press-translate: 0 3px;
+  --press-scale: 1;
+  --surface-shadow: 0 4px 0 color-mix(in oklab, var(--text-primary) 8%, transparent);
+}
+[data-style="playful"] .lt-btn[data-variant="primary"] { --control-shadow: 0 3px 0 color-mix(in oklab, var(--accent-solid) 60%, var(--text-primary)); font-weight: 700; }
+[data-style="playful"] :is(.lt-bento > article, .lt-kpi, .g-mini-card, .pr-tier, .bp-card, .lt-pricing-tiers [data-part="tier"], .lt-testimonial-grid figure, .lt-checklist) { box-shadow: var(--surface-shadow); border-width: 2px; }
+
+/* ---------------------------------------------------------------- enterprise */
+[data-style="enterprise"] {
+  --shadow-sm: 0 1px 1px oklch(0 0 0 / 0.04);
+  --shadow-md: 0 1px 2px oklch(0 0 0 / 0.06), 0 2px 6px -2px oklch(0 0 0 / 0.08);
+  --surface-shadow: 0 1px 2px oklch(0 0 0 / 0.05);
+  --eyebrow-tracking: 0.04em;
+}
+[data-style="enterprise"][data-palette], [data-style="enterprise"] [data-theme-root] { --bg-canvas: var(--bg-surface-2); }
+[data-style="enterprise"] :is(.lt-bento > article, .lt-media-card, .lt-kpi, .lt-stat-strip, .lt-table-wrap, .g-mini-card, .pr-tier, .bp-card, .st-section, .lt-pricing-tiers [data-part="tier"], .lt-testimonial-grid figure, .lt-checklist) { background: var(--bg-surface-1); box-shadow: var(--surface-shadow); }
+
+/* ---------------------------------------------------------------- zen */
+[data-style="zen"] {
+  --shadow-sm: none;
+  --shadow-md: none;
+  --surface-shadow: none;
+  --weight-display: 400;
+  --eyebrow-tracking: 0.2em;
+}
+[data-style="zen"] :is(.lt-bento > article, .lt-media-card, .lt-kpi, .lt-stat-strip, .g-mini-card, .pr-tier, .bp-card, .st-section, .lt-pricing-tiers [data-part="tier"]:not([data-featured]), .lt-testimonial-grid figure, .lt-checklist) { border-color: transparent; background: transparent; box-shadow: none; }
+[data-style="zen"] :is(h1, h2, h3, .lt-display) { font-weight: 400; }

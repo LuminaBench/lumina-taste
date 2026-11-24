@@ -333,5 +333,50 @@ export const STYLES = [
     "mode": "light",
     "typography": "rounded",
     "radius": "soft"
+  },
+  {
+    "id": "kraft",
+    "name": "Kraft",
+    "kind": "Warm print",
+    "palette": "espresso-terracotta",
+    "mode": "light",
+    "typography": "slab",
+    "radius": "balanced"
+  },
+  {
+    "id": "midnight",
+    "name": "Midnight",
+    "kind": "Deep dark",
+    "palette": "navy-sand",
+    "mode": "dark",
+    "typography": "geometric",
+    "radius": "soft"
+  },
+  {
+    "id": "playful",
+    "name": "Playful",
+    "kind": "Friendly bold",
+    "palette": "mint-ocean",
+    "mode": "light",
+    "typography": "rounded",
+    "radius": "soft"
+  },
+  {
+    "id": "enterprise",
+    "name": "Enterprise",
+    "kind": "Calm business software",
+    "palette": "slate-forest",
+    "mode": "light",
+    "typography": "humanist",
+    "radius": "balanced"
+  },
+  {
+    "id": "zen",
+    "name": "Zen",
+    "kind": "Ultra minimal",
+    "palette": "sage-clay",
+    "mode": "light",
+    "typography": "bookish",
+    "radius": "soft"
   }
 ];

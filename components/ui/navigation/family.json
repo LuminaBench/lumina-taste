@@ -1276,6 +1276,67 @@
         ]
       ],
       "added": 3
+    },
+    {
+      "id": "sticky-action-bar",
+      "name": "Sticky action bar",
+      "summary": "A bottom bar on phones that keeps the price and the one action in thumb reach.",
+      "pattern": "Fixed region + safe-area padding",
+      "states": [
+        "resting",
+        "over content"
+      ],
+      "aliases": [
+        "sticky add to cart",
+        "mobile bottom cta",
+        "floating checkout bar",
+        "sticky footer button",
+        "bottom action bar"
+      ],
+      "react": "StickyActionBar",
+      "api": "position: fixed · env(safe-area-inset-bottom)",
+      "w": 380,
+      "called": [
+        "add to cart bar stuck at the bottom",
+        "mobile checkout button that follows you",
+        "sticky buy bar",
+        "bottom bar with price and button"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-actionbar strong",
+          "name": "Price",
+          "api": "tabular-nums",
+          "text": "What it costs, always visible."
+        },
+        {
+          "sel": ".lt-actionbar .lt-btn",
+          "name": "Action",
+          "api": "",
+          "text": "The one primary action, full height for thumbs."
+        },
+        {
+          "sel": ".lt-actionbar",
+          "name": "Bar",
+          "api": "env(safe-area-inset-bottom)",
+          "text": "Clears the home indicator on phones."
+        }
+      ],
+      "prompt": "Add a sticky action bar for mobile product pages: fixed to the bottom with safe-area padding, a translucent surface with a hairline top border, the price and availability on the left and one large primary button on the right; add bottom padding to the page so content is never hidden behind it.",
+      "debug": "Debug my sticky bar. Rule out: content hidden behind the bar (add padding-bottom to the page); ignoring env(safe-area-inset-bottom); two competing buttons; showing it on desktop where the main button is already visible. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "position: fixed; bottom: 0",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<StickyActionBar price>",
+          "React"
+        ]
+      ],
+      "added": 5
     }
   ]
 }

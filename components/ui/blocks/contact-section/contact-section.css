@@ -1,0 +1,26 @@
+@scope (.lt-contact-section) {
+  :scope { container-type: inline-size; display: block; width: 100%; padding: 56px 40px; background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  @container (max-width: 640px) { :scope { padding: 36px 20px; } }
+  .lt-eyebrow, [data-part="eyebrow"] { margin: 0 0 10px; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; color: var(--accent-text); }
+  h2 { margin: 0; font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
+  [data-part="lede"] { margin: 12px 0 0; max-width: 56ch; color: var(--text-secondary); font-size: var(--step-0); line-height: 1.55; text-wrap: pretty; }
+
+  :scope { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 48px; }
+  @container (max-width: 760px) { :scope { grid-template-columns: 1fr; gap: 28px; } }
+  dl { display: grid; gap: 14px; margin: 28px 0 0; }
+  dt { color: var(--text-muted); font-size: var(--text-ui-xs); font-weight: 600; }
+  dd { margin: 2px 0 0; font-size: var(--text-ui); }
+  dd a { color: var(--text-primary); text-underline-offset: 3px; }
+  form { display: grid; gap: 14px; padding: 24px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); }
+  [data-part="row"] { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @container (max-width: 520px) { [data-part="row"] { grid-template-columns: 1fr; } }
+  label { display: grid; gap: 6px; font-size: var(--text-ui-sm); font-weight: 550; }
+  input, select, textarea { width: 100%; padding: 0 12px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-1); color: var(--text-primary); font: inherit; font-weight: 400; font-size: var(--text-ui); box-shadow: var(--field-shadow); }
+  input, select { height: var(--control-h); }
+  textarea { padding: 10px 12px; line-height: 1.5; resize: vertical; }
+  [aria-invalid="true"] { border-color: var(--status-negative); }
+  form .lt-btn { justify-self: start; }
+  [data-part="msg"] { margin: 0; min-height: 1.2em; font-size: var(--text-ui-sm); color: var(--text-secondary); }
+  [data-state="error"] [data-part="msg"] { color: var(--status-negative); }
+  [data-state="sent"] [data-part="msg"] { color: var(--status-positive); }
+}

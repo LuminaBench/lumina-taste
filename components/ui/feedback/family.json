@@ -954,6 +954,75 @@
         ]
       ],
       "added": 3
+    },
+    {
+      "id": "undo-snackbar",
+      "name": "Undo snackbar",
+      "summary": "Delete at once and offer Undo for a few seconds, instead of asking \"Are you sure?\".",
+      "pattern": "role=\"status\" + timed commit",
+      "states": [
+        "hidden",
+        "offering undo",
+        "paused",
+        "committed"
+      ],
+      "aliases": [
+        "undo toast",
+        "snackbar with undo",
+        "soft delete",
+        "undo delete",
+        "reversible action bar"
+      ],
+      "react": "UndoSnackbar",
+      "api": "role=\"status\"",
+      "w": 380,
+      "preview": [
+        [
+          "click",
+          "li:nth-child(2) [data-part=\"delete\"]"
+        ]
+      ],
+      "called": [
+        "message at the bottom with an undo button",
+        "deleted with undo",
+        "snackbar that lets you take it back",
+        "undo bar after delete"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"text\"]",
+          "name": "What happened",
+          "api": "role=\"status\"",
+          "text": "Names the thing, in the past tense."
+        },
+        {
+          "sel": "[data-part=\"undo\"]",
+          "name": "Undo",
+          "api": "",
+          "text": "One action; restores focus to the row."
+        },
+        {
+          "sel": "[data-part=\"timer\"]",
+          "name": "Time left",
+          "api": "pauses on hover",
+          "text": "A thin line shows how long Undo stays."
+        }
+      ],
+      "prompt": "Replace confirm dialogs for reversible deletes with an undo snackbar: remove the item immediately, show a dark status bar (\"Deleted “Q4 forecast”.\" + Undo) with a thin countdown line, pause the timer while hovered or focused, commit after six seconds, and restore the row and focus on Undo.",
+      "debug": "Debug my undo snackbar. Rule out: deleting on the server before the timer ends; a timer that keeps running while the user reaches for Undo; focus lost after Undo; using it for actions that cannot be undone. The symptom:",
+      "code": [
+        [
+          "Material",
+          "Snackbar with action",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<UndoSnackbar open onUndo>",
+          "React"
+        ]
+      ],
+      "added": 5
     }
   ]
 }

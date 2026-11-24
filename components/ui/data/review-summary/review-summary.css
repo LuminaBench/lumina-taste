@@ -1,0 +1,17 @@
+@scope (.lt-reviews) {
+  :scope { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 28px; width: 100%; max-width: 520px; font-size: var(--text-ui); }
+  @container (max-width: 420px) { :scope { grid-template-columns: 1fr; } }
+  [data-part="score"] { display: grid; justify-items: start; gap: 4px; }
+  p { margin: 0; }
+  [data-part="big"] { font-family: var(--font-display); font-size: var(--step-5); font-weight: var(--weight-display); letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+  [data-part="stars"] span { display: inline-flex; gap: 1px; color: var(--accent-solid); }
+  [data-part="stars"] svg { fill: currentColor; stroke: none; }
+  /* The last star reads as partial for averages under 5. */
+  [data-part="stars"] svg:last-child { opacity: 0.4; }
+  [data-part="count"] { color: var(--text-muted); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; }
+  [data-part="dist"] { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  [data-part="dist"] li { display: grid; grid-template-columns: 48px minmax(0, 1fr) 40px; align-items: center; gap: 10px; font-size: var(--text-ui-sm); color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+  [data-part="dist"] li > span:last-child { text-align: right; }
+  [data-part="bar"] { height: 8px; border-radius: var(--radius-pill); background: var(--bg-surface-3); overflow: hidden; }
+  [data-part="bar"] i { display: block; width: var(--p); height: 100%; border-radius: inherit; background: var(--accent-solid); }
+}

@@ -110,7 +110,12 @@
         "mono",
         "graphite",
         "atelier",
-        "nordic"
+        "nordic",
+        "kraft",
+        "midnight",
+        "playful",
+        "enterprise",
+        "zen"
       ],
       "description": "Visual style layer. 'none' is the plain kit."
     },

@@ -1,0 +1,20 @@
+@scope (.lt-integrations-grid) {
+  :scope { container-type: inline-size; display: block; width: 100%; padding: 56px 40px; background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  @container (max-width: 640px) { :scope { padding: 36px 20px; } }
+  .lt-eyebrow, [data-part="eyebrow"] { margin: 0 0 10px; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; color: var(--accent-text); }
+  h2 { margin: 0; font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
+  [data-part="lede"] { margin: 12px 0 0; max-width: 56ch; color: var(--text-secondary); font-size: var(--step-0); line-height: 1.55; text-wrap: pretty; }
+
+  header { max-width: 640px; margin-bottom: 32px; }
+  [data-part="lede"] a { color: var(--accent-text); text-underline-offset: 3px; }
+  ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+  @container (max-width: 860px) { ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @container (max-width: 420px) { ul { grid-template-columns: 1fr; } }
+  a { display: flex; align-items: center; gap: 12px; height: 100%; padding: 14px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); color: var(--text-primary); text-decoration: none; transition: border-color var(--dur-1), translate var(--dur-2) var(--ease-out); }
+  a:hover { border-color: var(--border-strong); translate: 0 -1px; }
+  a > .lt-icon { margin-left: auto; color: var(--text-muted); }
+  [data-part="mark"] { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--bg-surface-3); font: 700 11px/1 var(--font-mono); color: var(--text-secondary); }
+  a > span:nth-child(2) { display: grid; min-width: 0; }
+  strong { font-size: var(--text-ui-sm); font-weight: 650; }
+  strong + span { color: var(--text-muted); font-size: var(--text-ui-xs); }
+}

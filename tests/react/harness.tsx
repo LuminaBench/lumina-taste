@@ -51,6 +51,19 @@ import { HowItWorks } from '../../components/ui/blocks/how-it-works/how-it-works
 import { TeamGrid } from '../../components/ui/blocks/team-grid/team-grid.react';
 import { SignInCard } from '../../components/ui/blocks/sign-in-card/sign-in-card.react';
 import { NotFound } from '../../components/ui/blocks/not-found/not-found.react';
+import { PasswordField } from '../../components/ui/controls/password-field/password-field.react';
+import { SelectMenu } from '../../components/ui/controls/select-menu/select-menu.react';
+import { UptimeBars } from '../../components/ui/data/uptime-bars/uptime-bars.react';
+import { ReviewSummary } from '../../components/ui/data/review-summary/review-summary.react';
+import { FileList } from '../../components/ui/data/file-list/file-list.react';
+import { DiffView } from '../../components/ui/data/diff-view/diff-view.react';
+import { JsonViewer } from '../../components/ui/data/json-viewer/json-viewer.react';
+import { StickyActionBar } from '../../components/ui/navigation/sticky-action-bar/sticky-action-bar.react';
+import { UndoSnackbar } from '../../components/ui/feedback/undo-snackbar/undo-snackbar.react';
+import { ConfirmPopover } from '../../components/ui/overlays/confirm-popover/confirm-popover.react';
+import { IntegrationsGrid } from '../../components/ui/blocks/integrations-grid/integrations-grid.react';
+import { ContactSection } from '../../components/ui/blocks/contact-section/contact-section.react';
+import { BlogGrid } from '../../components/ui/blocks/blog-grid/blog-grid.react';
 import { Disclosure } from '../../components/ui/controls/disclosure-chevron/disclosure-chevron.react';
 import { Accordion } from '../../components/ui/controls/accordion/accordion.react';
 import { TreeView } from '../../components/ui/controls/tree-view/tree-view.react';
@@ -326,6 +339,19 @@ function App() {
       <Case id="team-grid"><TeamGrid title="Team" people={[{ name: 'Ana López', role: 'Engineering' }]} /></Case>
       <Case id="sign-in"><SignInCard product="Halyard" onEmail={(e) => log.push(`signin:${e}`)} /></Case>
       <Case id="not-found"><NotFound title="Not here" lede="Try search." links={[{ label: 'Home', href: '#h' }]} /></Case>
+      <Case id="password"><PasswordField onChange={(n) => log.push(`pw:${n}`)} /></Case>
+      <Case id="select-menu"><SelectMenu label="Role" options={[{ value: 'admin', label: 'Admin', description: 'Manage people' }, { value: 'viewer', label: 'Viewer' }]} defaultValue="viewer" onChange={(v) => log.push(`role:${v}`)} /></Case>
+      <Case id="uptime"><UptimeBars services={[{ name: 'API', uptime: '99.9%', days: ['ok', 'warn', 'ok', 'down'] }]} /></Case>
+      <Case id="reviews"><ReviewSummary average={4.6} counts={[80, 15, 3, 1, 1]} /></Case>
+      <Case id="files"><FileList files={[{ name: 'a.pdf', type: 'PDF', size: '1 MB', owner: 'Ana', when: 'Today', href: '#a' }]} /></Case>
+      <Case id="diff"><DiffView file="a.ts" lines={[{ kind: 'del', old: 1, text: 'a' }, { kind: 'add', new: 1, text: 'b' }]} /></Case>
+      <Case id="json"><JsonViewer value={{ a: 1, b: [true, null] }} /></Case>
+      <Case id="action-bar"><div style={{ position: 'relative', height: 120, contain: 'layout paint' }}><StickyActionBar label="Buy" price="£179" note="In stock"><button type="button" className="lt-btn" data-variant="primary">Add to basket</button></StickyActionBar></div></Case>
+      <Case id="undo"><UndoSnackbar open message="Deleted." onUndo={() => log.push('undo')} /></Case>
+      <Case id="confirm"><ConfirmPopover label="Revoke" question="Revoke this key?" confirmLabel="Revoke key" onConfirm={() => log.push('revoked')} /></Case>
+      <Case id="integrations"><IntegrationsGrid title="Integrations" items={[{ name: 'Postgres', kind: 'Database', href: '#pg' }]} /></Case>
+      <Case id="contact"><ContactSection email="hello@example.com" onSend={() => log.push('sent')} /></Case>
+      <Case id="blog"><BlogGrid posts={[{ kind: 'Guide', title: 'Post', href: '#p', date: '1 Nov', read: '3 min' }]} /></Case>
       <Case id="stagger"><Stagger><span>One</span><span>Two</span></Stagger></Case>
     </ToastProvider>
   );

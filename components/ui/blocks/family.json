@@ -819,6 +819,197 @@
         ]
       ],
       "added": 4
+    },
+    {
+      "id": "integrations-grid",
+      "name": "Integrations grid",
+      "summary": "One linked tile per tool with a two-letter mark, its name and what it is for.",
+      "pattern": "<ul> of links",
+      "states": [
+        "four columns",
+        "two",
+        "one"
+      ],
+      "aliases": [
+        "integrations page",
+        "connectors grid",
+        "apps we work with",
+        "partner logos grid",
+        "app directory"
+      ],
+      "react": "IntegrationsGrid",
+      "api": "grid repeat(4)",
+      "w": 1000,
+      "called": [
+        "grid of apps it connects to",
+        "integrations section with logos",
+        "works with these tools",
+        "connector tiles"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:first-child [data-part=\"mark\"]",
+          "name": "Mark",
+          "api": "",
+          "text": "Monogram placeholder; swap for the real logo in mono."
+        },
+        {
+          "sel": "li:first-child strong",
+          "name": "Name and use",
+          "api": "",
+          "text": "\"Postgres · Database\": what it is and why."
+        },
+        {
+          "sel": "li:first-child a > .lt-icon",
+          "name": "Link cue",
+          "api": "",
+          "text": "The whole tile is one link."
+        }
+      ],
+      "prompt": "Build an integrations section: eyebrow, heading and a lede with a \"see all\" link, then a 4-column grid (2, then 1 when narrow) of whole-tile links each with a 36px monochrome mark, the tool name, a one-word purpose and an arrow; tiles lift 1px on hover.",
+      "debug": "Debug my integrations grid. Rule out: full-colour logos shouting over the page; tiles that are not links; mixed logo sizes; dozens of tiles with no search. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ul> of <a>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<IntegrationsGrid items>",
+          "React"
+        ]
+      ],
+      "added": 5
+    },
+    {
+      "id": "contact-section",
+      "name": "Contact section",
+      "summary": "Ways to reach you on the left, a four-field form on the right that validates on submit.",
+      "pattern": "<form> + description list",
+      "states": [
+        "empty",
+        "errors",
+        "sent"
+      ],
+      "aliases": [
+        "contact us",
+        "contact form",
+        "get in touch",
+        "support form",
+        "sales enquiry"
+      ],
+      "react": "ContactSection",
+      "api": "<form novalidate>",
+      "w": 1000,
+      "preview": [
+        [
+          "click",
+          "button[type=\"submit\"]"
+        ]
+      ],
+      "called": [
+        "contact us page with a form",
+        "get in touch section",
+        "support request form",
+        "email us form with topics"
+      ],
+      "anatomy": [
+        {
+          "sel": "dl",
+          "name": "Other ways",
+          "api": "<dl>",
+          "text": "Email, status page, office: not everything needs the form."
+        },
+        {
+          "sel": "select",
+          "name": "Topic",
+          "api": "<select>",
+          "text": "Routes the message without free-text guessing."
+        },
+        {
+          "sel": "[data-part=\"msg\"]",
+          "name": "Result",
+          "api": "role=\"status\"",
+          "text": "Lists what is missing, then confirms."
+        }
+      ],
+      "prompt": "Build a contact section: left column with eyebrow, heading, reply-time promise and a description list (email, status page, office); right column a card form with name and work email side by side, a topic select, a message textarea and one primary button; validate on submit, mark invalid fields, list what is missing, confirm in place.",
+      "debug": "Debug my contact form. Rule out: placeholder-only labels; validation on every keystroke; a CAPTCHA before anything is typed; no confirmation of what happens next. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<form> + <label>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ContactSection email>",
+          "React"
+        ]
+      ],
+      "added": 5
+    },
+    {
+      "id": "blog-grid",
+      "name": "Blog grid",
+      "summary": "Three latest posts with an image, kind, date and title; the whole card is one link.",
+      "pattern": "<article> cards with a stretched link",
+      "states": [
+        "three columns",
+        "stacked"
+      ],
+      "aliases": [
+        "latest posts",
+        "articles section",
+        "news grid",
+        "resources section",
+        "blog preview"
+      ],
+      "react": "BlogGrid",
+      "api": "h3 a::after inset 0",
+      "w": 1000,
+      "called": [
+        "latest blog posts section",
+        "three article cards",
+        "news and updates grid",
+        "recent posts with images"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:first-child [data-part=\"meta\"] span",
+          "name": "Kind",
+          "api": "",
+          "text": "Guide, Engineering, Customers: one word."
+        },
+        {
+          "sel": "li:first-child h3 a",
+          "name": "Title link",
+          "api": "::after inset 0",
+          "text": "One link per card, stretched over it."
+        },
+        {
+          "sel": "[data-part=\"all\"]",
+          "name": "All posts",
+          "api": "",
+          "text": "Top-right, quiet."
+        }
+      ],
+      "prompt": "Build a \"From the blog\" section: heading with an \"All posts →\" link on the right, then three post cards (16:10 image, kind in accent ink and date, a balanced two-line title, read time); the title link is stretched over the whole card so there is one link per card.",
+      "debug": "Debug my blog grid. Rule out: several links per card (image, title, read more) for the same URL; titles over three lines; images of mixed ratios; dates without a year on old posts. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<article> + stretched link",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<BlogGrid posts>",
+          "React"
+        ]
+      ],
+      "added": 5
     }
   ]
 }

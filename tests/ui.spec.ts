@@ -749,3 +749,58 @@ test.describe('sections', () => {
     await expect(page.locator('.g-el.g-el-wide')).toBeVisible();
   });
 });
+
+test.describe('added in 1.0 (batch 3)', () => {
+  test('password field: reveal toggles and strength rises', async ({ page }) => {
+    const s = await solo(page, 'password-field');
+    const input = s.locator('input');
+    await input.fill('abc');
+    await expect(s.locator('[data-part="strength"]')).toHaveText('Strength: Weak');
+    await input.fill('Halyard-Taste-2026');
+    await expect(s.locator('[data-part="strength"]')).toHaveText('Strength: Strong');
+    await s.locator('[data-part="reveal"]').click();
+    await expect(input).toHaveAttribute('type', 'text');
+  });
+  test('select menu: open with ArrowDown, typeahead, Enter chooses', async ({ page }) => {
+    const s = await solo(page, 'select-menu');
+    await s.locator('[data-part="trigger"]').focus();
+    await page.keyboard.press('ArrowDown');
+    await expect(s.locator('[role="listbox"]')).toBeVisible();
+    await page.keyboard.press('v');
+    await page.keyboard.press('Enter');
+    await expect(s.locator('[data-part="value"]')).toHaveText('Viewer');
+    await expect(s.locator('[data-part="trigger"]')).toBeFocused();
+  });
+  test('json viewer: Left collapses, Collapse all hides children', async ({ page }) => {
+    const s = await solo(page, 'json-viewer');
+    const nested = s.locator('[role="treeitem"][aria-level="2"][aria-expanded]').first();
+    await nested.locator(':scope > [data-part="row"]').click();
+    await expect(nested).toHaveAttribute('aria-expanded', 'false');
+    await page.keyboard.press('ArrowRight');
+    await expect(nested).toHaveAttribute('aria-expanded', 'true');
+    await s.locator('[data-part="toggle-all"]').click();
+    await expect(nested).toHaveAttribute('aria-expanded', 'false');
+  });
+  test('undo snackbar restores the row', async ({ page }) => {
+    const s = await solo(page, 'undo-snackbar');
+    await s.locator('li').nth(0).locator('[data-part="delete"]').click();
+    await expect(s.locator('li').nth(0)).toBeHidden();
+    await s.locator('[data-part="undo"]').click();
+    await expect(s.locator('li').nth(0)).toBeVisible();
+  });
+  test('confirm popover: Esc cancels and returns focus', async ({ page }) => {
+    const s = await solo(page, 'confirm-popover');
+    await s.locator('[data-part="trigger"]').click();
+    await expect(s.locator('[data-part="panel"]')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(s.locator('[data-part="trigger"]')).toBeFocused();
+    await s.locator('[data-part="trigger"]').click();
+    await s.locator('[data-part="confirm"]').click();
+    await expect(s.locator('[data-part="trigger"]')).toHaveText('Revoked');
+  });
+  test('contact section lists missing fields', async ({ page }) => {
+    const s = await solo(page, 'contact-section');
+    await s.locator('button[type="submit"]').click();
+    await expect(s.locator('[data-part="msg"]')).toContainText('Please fill in: name, work email, message');
+  });
+});

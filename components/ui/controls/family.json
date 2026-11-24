@@ -2135,6 +2135,156 @@
         ]
       ],
       "added": 3
+    },
+    {
+      "id": "password-field",
+      "name": "Password field",
+      "summary": "Show/hide toggle, a four-step strength meter and rules that tick off as you type.",
+      "pattern": "Text field + toggle button",
+      "states": [
+        "empty",
+        "weak",
+        "fair",
+        "strong",
+        "visible"
+      ],
+      "aliases": [
+        "password input",
+        "show password eye",
+        "password strength meter",
+        "new password field",
+        "password rules"
+      ],
+      "react": "PasswordField",
+      "api": "autocomplete=\"new-password\"",
+      "w": 340,
+      "preview": [
+        [
+          "type",
+          "input",
+          "Halyard-2026!"
+        ]
+      ],
+      "called": [
+        "password box with an eye icon",
+        "password strength bar",
+        "password with rules that turn green",
+        "create password field"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"reveal\"]",
+          "name": "Show/hide",
+          "api": "aria-pressed",
+          "text": "Label changes to \"Hide password\" when shown."
+        },
+        {
+          "sel": "[data-part=\"meter\"]",
+          "name": "Strength",
+          "api": "aria-hidden + text",
+          "text": "Bars for sight, a word for everyone."
+        },
+        {
+          "sel": "[data-part=\"rules\"] li:first-child",
+          "name": "Rule",
+          "api": "aria-describedby",
+          "text": "Ticks green the moment it is met."
+        }
+      ],
+      "prompt": "Add a new-password field: an input with autocomplete=\"new-password\" and an eye button (aria-pressed, label switches to \"Hide password\"), a four-segment strength meter with a word (\"Strength: Good\"), and three rules that tick as they are met; rules are linked with aria-describedby.",
+      "debug": "Debug my password field. Rule out: autocomplete off (breaks password managers); paste blocked; strength shown only by colour; rules revealed only after a failed submit. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<input type=\"password\">",
+          ""
+        ],
+        [
+          "zxcvbn",
+          "zxcvbn(password)",
+          "real strength scoring"
+        ],
+        [
+          "lumina-taste",
+          "<PasswordField>",
+          "React"
+        ]
+      ],
+      "added": 5
+    },
+    {
+      "id": "select-menu",
+      "name": "Select menu",
+      "summary": "A custom select whose options carry a short description, with typeahead and full keyboard support.",
+      "pattern": "WAI-ARIA Select-only Combobox",
+      "states": [
+        "closed",
+        "open",
+        "highlighted",
+        "selected"
+      ],
+      "aliases": [
+        "custom select",
+        "dropdown select",
+        "listbox select",
+        "role picker",
+        "select with descriptions"
+      ],
+      "react": "SelectMenu",
+      "api": "aria-haspopup=\"listbox\"",
+      "w": 320,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"trigger\"]"
+        ]
+      ],
+      "called": [
+        "dropdown to pick a role with explanations",
+        "custom select box",
+        "select with a tick on the chosen option",
+        "pick one from a list menu"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"trigger\"]",
+          "name": "Trigger",
+          "api": "aria-haspopup=\"listbox\"",
+          "text": "Shows the current value; up/down arrows open it."
+        },
+        {
+          "sel": "[role=\"option\"][data-active]",
+          "name": "Highlighted option",
+          "api": "aria-activedescendant",
+          "text": "Arrow keys and typeahead move the highlight."
+        },
+        {
+          "sel": "[aria-selected=\"true\"] [data-part=\"tick\"]",
+          "name": "Chosen",
+          "api": "aria-selected",
+          "text": "A tick, not just a colour."
+        }
+      ],
+      "prompt": "Add a select menu for picking a role: a button showing the current value with a chevrons icon, opening a listbox of options that each have a name and a one-line description; arrows, Home/End and typeahead move the highlight, Enter/Space choose, Esc closes and returns focus. Use a native <select> instead when options need no descriptions.",
+      "debug": "Debug my select. Rule out: a div-based select with no keyboard; the list scrolling the page; options without aria-selected; a custom select where a native one would do. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<select>",
+          "when no descriptions"
+        ],
+        [
+          "Radix",
+          "Select",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SelectMenu options>",
+          "React"
+        ]
+      ],
+      "added": 5
     }
   ]
 }
