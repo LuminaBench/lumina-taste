@@ -17,11 +17,11 @@ export function walk(n: number, start: number, drift: number, vol: number, seed:
 export const round = (vals: number[], d = 1) => vals.map((v) => +v.toFixed(d));
 
 /** Fictional systems for benchmark-style demos. Groups are made-up labs; numbers are synthetic. */
-export const LABS = ['Northwind', 'Halyard', 'Kestrel', 'Juniper', 'Moss'];
+export const LABS = ['Larkspur', 'Halyard', 'Kestrel', 'Juniper', 'Moss'];
 export interface DemoSystem { name: string; lab: string; score: number | null; speed: number; price: number; p5: number; p50: number; p95: number; context: number }
 export const SYSTEMS: DemoSystem[] = [
-  { name: 'Atlas 3', lab: 'Northwind', score: 71.2, speed: 142, price: 6.4, p5: 0.38, p50: 0.62, p95: 1.24, context: 400 },
-  { name: 'Atlas 3 Mini', lab: 'Northwind', score: 62.5, speed: 231, price: 1.1, p5: 0.22, p50: 0.34, p95: 0.71, context: 200 },
+  { name: 'Atlas 3', lab: 'Larkspur', score: 71.2, speed: 142, price: 6.4, p5: 0.38, p50: 0.62, p95: 1.24, context: 400 },
+  { name: 'Atlas 3 Mini', lab: 'Larkspur', score: 62.5, speed: 231, price: 1.1, p5: 0.22, p50: 0.34, p95: 0.71, context: 200 },
   { name: 'Keel Pro', lab: 'Halyard', score: 68.9, speed: 88, price: 9.8, p5: 0.52, p50: 0.81, p95: 1.65, context: 1000 },
   { name: 'Keel Flash', lab: 'Halyard', score: 57.4, speed: 264, price: 0.6, p5: 0.18, p50: 0.29, p95: 0.52, context: 1000 },
   { name: 'Talon 2', lab: 'Kestrel', score: 66.1, speed: 119, price: 4.2, p5: 0.41, p50: 0.7, p95: 1.38, context: 256 },
