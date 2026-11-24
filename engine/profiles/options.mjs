@@ -297,5 +297,41 @@ export const STYLES = [
     "mode": "light",
     "typography": "bookish",
     "radius": "sharp"
+  },
+  {
+    "id": "mono",
+    "name": "Monochrome",
+    "kind": "Ink only",
+    "palette": "paper-ink",
+    "mode": "light",
+    "typography": "precision",
+    "radius": "balanced"
+  },
+  {
+    "id": "graphite",
+    "name": "Graphite",
+    "kind": "Dark product UI",
+    "palette": "black-signal",
+    "mode": "dark",
+    "typography": "technical",
+    "radius": "sharp"
+  },
+  {
+    "id": "atelier",
+    "name": "Atelier",
+    "kind": "Editorial luxury",
+    "palette": "porcelain-teal",
+    "mode": "light",
+    "typography": "didone",
+    "radius": "sharp"
+  },
+  {
+    "id": "nordic",
+    "name": "Nordic",
+    "kind": "Soft neutral",
+    "palette": "olive-stone",
+    "mode": "light",
+    "typography": "rounded",
+    "radius": "soft"
   }
 ];

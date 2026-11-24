@@ -1,0 +1,16 @@
+<section class="lt-sign-in-card" aria-labelledby="lt-si-title" data-lt="sign-in-card">
+  <div data-part="card">
+    <span data-part="logo" aria-hidden="true">H</span>
+    <h2 id="lt-si-title">Sign in to Halyard</h2>
+    <p data-part="lede">Welcome back. Use your work email.</p>
+    <div data-part="sso"><button type="button" class="lt-btn" data-variant="secondary"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5a13 13 0 0 1 0 17M12 3.5a13 13 0 0 0 0 17"/></svg>Continue with SSO</button><button type="button" class="lt-btn" data-variant="secondary"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8.5 8-4 4 4 4M15.5 8l4 4-4 4M13.5 5l-3 14"/></svg>Continue with GitHub</button></div>
+    <p data-part="or"><span>or</span></p>
+    <form data-part="form" novalidate>
+      <label for="lt-si-email">Work email</label>
+      <input id="lt-si-email" type="email" autocomplete="email" required placeholder="you@company.com" aria-describedby="lt-si-msg">
+      <button type="submit" class="lt-btn" data-variant="primary">Email me a sign-in link</button>
+      <p id="lt-si-msg" data-part="msg" aria-live="polite"></p>
+    </form>
+    <p data-part="foot">New here? <a href="#signup">Create an account</a></p>
+  </div>
+</section>

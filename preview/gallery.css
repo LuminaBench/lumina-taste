@@ -250,7 +250,7 @@ html[data-view^="pages"] .g-main { max-width: 1640px; }
 
 /* ---------------------------------------------------------------- responsive */
 @media (max-width: 1080px) {
-  .g-el, .g-chart-detail, .g-style-detail { grid-template-columns: 1fr; gap: 28px; }
+  .g-el, .g-chart-detail, .g-style-detail { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .g-el-left, .g-chart-detail .g-chart-card, .g-style-big { position: static; }
   .g-nav a { padding: 7px 9px; }
 }
@@ -322,3 +322,12 @@ html[data-view^="pages"] .g-main { max-width: 1640px; }
 }
 .g-card:has(.g-stretch:focus-visible) .g-prev { border-color: var(--focus-ring); }
 .g-stretch:focus-visible { text-decoration: underline 2px var(--focus-ring); text-underline-offset: 4px; }
+/* Wide elements (page sections, navbars, footers): the stage spans the page, docs sit below. */
+.g-el.g-el-wide { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+.g-el.g-el-wide .g-el-left { position: static; }
+.g-el.g-el-wide .g-stage { min-height: min(640px, 72vh); }
+.g-el.g-el-wide .g-el-right { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 56px; align-items: start; }
+.g-el.g-el-wide .g-el-right > :is(h1, .g-apis, .g-aka, .g-about) { grid-column: 1 / -1; }
+@media (max-width: 980px) { .g-el.g-el-wide .g-el-right { grid-template-columns: 1fr; } }
+.g-style-detail .g-aka { margin-top: 10px; }
+.g-style-prev { min-width: 0; overflow: hidden; }

@@ -27,7 +27,7 @@ export const COPY_RULES = [
   [/\b(boost|skyrocket)(s|ed|ing)? (your )?productivity\b/i, 'Hype', 'Say which task gets faster.'],
   [/\btransform(s|ing)? the way (you|teams)\b/i, 'Hype', 'Describe the before and after.'],
   [/\bat your fingertips\b/i, 'Cliché', 'Say where it is: "in the top bar".'],
-  [/\b(magic(al)?|magically)\b/i, 'Vague', 'Explain what happens.'],
+  [/\b(magic(al)?|magically)\b(?! link)/i, 'Vague', 'Explain what happens.'],
   [/\bstreamlin(e|ed|es|ing) your\b/i, 'Jargon', 'Say which steps go away.'],
   [/\b(a|the) testament to\b/i, 'Generated tic', 'Delete it.'],
   [/\bnavigat(e|ing) the complexit(y|ies)\b/i, 'Generated tic', 'Say the actual problem.'],

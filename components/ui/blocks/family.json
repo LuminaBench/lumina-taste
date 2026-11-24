@@ -1,0 +1,824 @@
+{
+  "title": "Sections for pages",
+  "summary": "Whole page sections (heroes, pricing, FAQs, sign-in) built from the same tokens, so a page can be assembled in minutes and still look designed.",
+  "order": 7,
+  "components": [
+    {
+      "id": "hero-split",
+      "name": "Hero, split",
+      "summary": "Headline, one line of explanation and one primary action on the left; the product on the right.",
+      "pattern": "<section> with labelled heading",
+      "states": [
+        "desktop two columns",
+        "stacked on narrow screens"
+      ],
+      "aliases": [
+        "landing hero",
+        "above the fold",
+        "header section with screenshot",
+        "split hero",
+        "marketing hero"
+      ],
+      "react": "HeroSplit",
+      "api": "grid 1fr 1.05fr",
+      "w": 1040,
+      "called": [
+        "top section of a landing page with a screenshot",
+        "headline left image right",
+        "hero with two buttons",
+        "first screen of a SaaS site"
+      ],
+      "anatomy": [
+        {
+          "sel": "h2",
+          "name": "Headline",
+          "api": "text-wrap: balance",
+          "text": "What it does, under 12 words."
+        },
+        {
+          "sel": "[data-part=\"cta\"] [data-variant=\"primary\"]",
+          "name": "Primary action",
+          "api": "",
+          "text": "One filled button; the second is ghost."
+        },
+        {
+          "sel": "[data-part=\"note\"]",
+          "name": "Reassurance",
+          "api": "",
+          "text": "Removes the main worry in one line."
+        },
+        {
+          "sel": "[data-part=\"frame\"]",
+          "name": "Product",
+          "api": "",
+          "text": "The real product, not stock art."
+        }
+      ],
+      "prompt": "Build a split hero: left column with a short eyebrow, a headline under 12 words, a one-sentence lede, one primary button plus a ghost secondary, and a reassurance line with two checks; right column shows the product in a framed card. Stack on narrow containers. Tokens only.",
+      "debug": "Debug my hero. Rule out: two primary buttons; a headline over two lines on desktop; illustration instead of product; text over a busy image with low contrast. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<section> + grid",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<HeroSplit title lede primary>",
+          "React"
+        ]
+      ],
+      "added": 4
+    },
+    {
+      "id": "hero-centered",
+      "name": "Hero, centred",
+      "summary": "A centred headline with an announcement pill, two actions and a framed product shot below.",
+      "pattern": "<section> with labelled heading",
+      "states": [
+        "default",
+        "narrow"
+      ],
+      "aliases": [
+        "centered hero",
+        "announcement pill hero",
+        "product launch hero",
+        "big headline section"
+      ],
+      "react": "HeroCentered",
+      "api": "justify-items: center",
+      "w": 1040,
+      "called": [
+        "big centred headline with a little new badge above",
+        "launch page hero",
+        "hero with announcement pill",
+        "centred landing header with screenshot below"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"pill\"]",
+          "name": "Announcement",
+          "api": "<a>",
+          "text": "One recent thing, linked."
+        },
+        {
+          "sel": "h2",
+          "name": "Headline",
+          "api": "max-width: 16ch",
+          "text": "Short lines read better centred."
+        },
+        {
+          "sel": "[data-part=\"shot\"]",
+          "name": "Product shot",
+          "api": "",
+          "text": "Framed, lifted with one soft shadow."
+        }
+      ],
+      "prompt": "Build a centred hero: an announcement pill (\"New\" chip + text + arrow) linking to the changelog, a headline capped at 16ch, a lede, a primary and a secondary button, then a framed product shot. Keep text centred only because every line is short.",
+      "debug": "Debug my centred hero. Rule out: centred paragraphs longer than three lines; a pill nobody can click; the product shot cropped on mobile; gradient headline text. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<section>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<HeroCentered>",
+          "React"
+        ]
+      ],
+      "added": 4
+    },
+    {
+      "id": "feature-grid",
+      "name": "Feature grid",
+      "summary": "Six features in three columns: a quiet icon, a short title and one sentence each.",
+      "pattern": "<section> + <ul>",
+      "states": [
+        "3 columns",
+        "2 columns",
+        "1 column"
+      ],
+      "aliases": [
+        "features section",
+        "benefits grid",
+        "why us section",
+        "icon grid",
+        "feature list"
+      ],
+      "react": "FeatureGrid",
+      "api": "grid repeat(3)",
+      "w": 1000,
+      "called": [
+        "grid of features with icons",
+        "six benefits in three columns",
+        "why choose us section",
+        "feature boxes"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:first-child [data-part=\"icon\"]",
+          "name": "Icon tile",
+          "api": "",
+          "text": "One icon style, one accent; never emoji."
+        },
+        {
+          "sel": "li:first-child h3",
+          "name": "Title",
+          "api": "",
+          "text": "Three to five words."
+        },
+        {
+          "sel": "li:first-child p",
+          "name": "Sentence",
+          "api": "",
+          "text": "One sentence with a concrete detail."
+        }
+      ],
+      "prompt": "Build a feature grid: eyebrow and a two-line heading, then six features in three columns (two, then one on narrow containers), each with a 36px outlined icon tile, a short title and one concrete sentence. No cards, no shadows: whitespace does the grouping.",
+      "debug": "Debug my feature grid. Rule out: emoji icons; every feature in its own heavy card; paragraphs instead of one sentence; uneven icon styles. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ul> + grid",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<FeatureGrid features>",
+          "React"
+        ]
+      ],
+      "added": 4
+    },
+    {
+      "id": "pricing-tiers",
+      "name": "Pricing tiers",
+      "summary": "Three plans side by side; the middle one is outlined in the accent and is the only filled button.",
+      "pattern": "<section> + <ul> of plans",
+      "states": [
+        "three columns",
+        "stacked"
+      ],
+      "aliases": [
+        "pricing table",
+        "plans section",
+        "pricing cards",
+        "subscription tiers",
+        "pricing page"
+      ],
+      "react": "PricingTiers",
+      "api": "grid repeat(3)",
+      "w": 1000,
+      "called": [
+        "three pricing cards with the middle one highlighted",
+        "plans and prices section",
+        "pricing boxes with ticks",
+        "subscription options"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-featured]",
+          "name": "Featured plan",
+          "api": "data-featured",
+          "text": "Accent outline and badge; one per page."
+        },
+        {
+          "sel": "[data-featured] [data-part=\"price\"] b",
+          "name": "Price",
+          "api": "tabular-nums",
+          "text": "Large, with the unit in plain words beside it."
+        },
+        {
+          "sel": "[data-featured] [data-part=\"features\"]",
+          "name": "What you get",
+          "api": "",
+          "text": "Short lines, the difference first."
+        }
+      ],
+      "prompt": "Build pricing tiers: a centred heading and one-line lede, then three plan cards (name, who it is for, price with \"per seat / month\", a full-width button, then a hairline and a tick list). Feature the middle plan with an accent outline, a \"Most popular\" badge and the only primary button. Stack to one column under 760px.",
+      "debug": "Debug my pricing cards. Rule out: three primary buttons; prices that jump width when toggled; feature lists of different lengths pushing buttons out of line; a featured plan that is just a different colour with no label. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ul> of plans",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<PricingTiers tiers>",
+          "React"
+        ]
+      ],
+      "added": 4
+    },
+    {
+      "id": "testimonial-grid",
+      "name": "Testimonial grid",
+      "summary": "Three short customer quotes with a name and role, aligned so the names sit on one line.",
+      "pattern": "<figure> + <blockquote>",
+      "states": [
+        "three columns",
+        "stacked"
+      ],
+      "aliases": [
+        "customer quotes",
+        "reviews section",
+        "social proof",
+        "testimonials",
+        "what customers say"
+      ],
+      "react": "TestimonialGrid",
+      "api": "<blockquote>",
+      "w": 1000,
+      "called": [
+        "customer quotes section",
+        "three reviews in boxes",
+        "what people say about us",
+        "social proof cards"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:first-child blockquote",
+          "name": "Quote",
+          "api": "<blockquote>",
+          "text": "One specific outcome, under 30 words."
+        },
+        {
+          "sel": "li:first-child figcaption",
+          "name": "Attribution",
+          "api": "<figcaption>",
+          "text": "Name and role; pinned to the bottom so all three line up."
+        }
+      ],
+      "prompt": "Build a testimonial grid: eyebrow and heading, then three quote cards in a row (stacked when narrow), each a <figure> with a short <blockquote> about a concrete outcome and a <figcaption> with an initials avatar, name and role pinned to the bottom so names align. No star ratings, no carousels.",
+      "debug": "Debug my testimonials. Rule out: quotes so long they become paragraphs; names at different heights; star ratings on B2B quotes; a carousel hiding two of the three. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<figure><blockquote>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<TestimonialGrid quotes>",
+          "React"
+        ]
+      ],
+      "added": 4
+    },
+    {
+      "id": "faq-section",
+      "name": "FAQ section",
+      "summary": "Heading on the left, questions on the right as native details that open with a rotating plus.",
+      "pattern": "<details> / <summary>",
+      "states": [
+        "first open",
+        "all closed",
+        "narrow"
+      ],
+      "aliases": [
+        "frequently asked questions",
+        "faq accordion",
+        "questions and answers",
+        "help section"
+      ],
+      "react": "FaqSection",
+      "api": "<details>",
+      "w": 1000,
+      "called": [
+        "faq with plus icons",
+        "questions section on a pricing page",
+        "expandable questions list",
+        "help questions"
+      ],
+      "anatomy": [
+        {
+          "sel": "details:first-child summary",
+          "name": "Question",
+          "api": "<summary>",
+          "text": "The question as people would ask it."
+        },
+        {
+          "sel": "details:first-child [data-part=\"chev\"]",
+          "name": "Plus",
+          "api": "rotate: 45deg",
+          "text": "Turns into a cross when open."
+        },
+        {
+          "sel": "[data-part=\"lede\"] a",
+          "name": "Way out",
+          "api": "",
+          "text": "Where to ask anything not listed."
+        }
+      ],
+      "prompt": "Build an FAQ section: two columns (heading with a \"write to us\" line on the left, questions on the right), each question a native <details>/<summary> with hairline dividers and a plus that rotates to a cross; first one open; stacks under 760px; no JavaScript.",
+      "debug": "Debug my FAQ. Rule out: a JS accordion where native <details> would do; the default disclosure triangle showing next to your icon; answers longer than four lines; questions nobody asks. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<details><summary>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<FaqSection items>",
+          "React"
+        ]
+      ],
+      "added": 4
+    },
+    {
+      "id": "cta-band",
+      "name": "Call-to-action band",
+      "summary": "A calm closing panel with one sentence and one primary action, tinted with a single soft accent glow.",
+      "pattern": "<section> + panel",
+      "states": [
+        "side by side",
+        "stacked"
+      ],
+      "aliases": [
+        "cta section",
+        "sign up band",
+        "closing banner",
+        "get started section",
+        "final call to action"
+      ],
+      "react": "CtaBand",
+      "api": "flex space-between",
+      "w": 1000,
+      "called": [
+        "sign up box at the bottom of the page",
+        "final call to action strip",
+        "get started section before the footer",
+        "closing banner with a button"
+      ],
+      "anatomy": [
+        {
+          "sel": "h2",
+          "name": "Promise",
+          "api": "max-width: 22ch",
+          "text": "What they get and how fast."
+        },
+        {
+          "sel": "[data-variant=\"primary\"]",
+          "name": "Primary action",
+          "api": "",
+          "text": "The same action as the hero."
+        },
+        {
+          "sel": "[data-part=\"panel\"]",
+          "name": "Panel",
+          "api": "radial-gradient",
+          "text": "One soft accent glow from a corner, single hue."
+        }
+      ],
+      "prompt": "Build a closing CTA band before the footer: a rounded panel with a single-hue accent glow from the top-right corner, a two-line promise heading, a short reassurance line, and the same primary action as the hero plus a ghost alternative; wraps to stacked on narrow screens.",
+      "debug": "Debug my CTA band. Rule out: a purple-to-blue gradient background; a different primary action than the hero; three buttons; white text on a light tint. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<section>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<CtaBand title primary>",
+          "React"
+        ]
+      ],
+      "added": 4
+    },
+    {
+      "id": "stats-band",
+      "name": "Stats band",
+      "summary": "Four large figures with plain labels, divided by hairlines instead of boxes.",
+      "pattern": "<dl> (label, value)",
+      "states": [
+        "four across",
+        "two by two"
+      ],
+      "aliases": [
+        "numbers section",
+        "metrics strip",
+        "by the numbers",
+        "social proof numbers",
+        "big stats row"
+      ],
+      "react": "StatsBand",
+      "api": "<dl>",
+      "w": 1000,
+      "called": [
+        "row of big numbers on a landing page",
+        "by the numbers section",
+        "four statistics with labels",
+        "metrics band"
+      ],
+      "anatomy": [
+        {
+          "sel": "dl > div:first-child dd",
+          "name": "Figure",
+          "api": "tabular-nums",
+          "text": "Large display type; units written out."
+        },
+        {
+          "sel": "dl > div:first-child dt",
+          "name": "Label",
+          "api": "<dt>",
+          "text": "Says what the number counts and over what period."
+        },
+        {
+          "sel": "dl > div:nth-child(2)",
+          "name": "Divider",
+          "api": "border-left",
+          "text": "Hairlines group the figures; no cards."
+        }
+      ],
+      "prompt": "Build a stats band: a small eyebrow heading, then a <dl> of four figures in a row (two by two when narrow), each a large display-type value above a plain label that says what was counted and over what period, divided by hairlines, no boxes or icons.",
+      "debug": "Debug my stats band. Rule out: rounded vanity numbers with no period (\"10k+ users\"); icons on every figure; numbers that jump width when counting up; boxes around each stat. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<dl><dt><dd>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<StatsBand stats>",
+          "React"
+        ]
+      ],
+      "added": 4
+    },
+    {
+      "id": "newsletter-signup",
+      "name": "Newsletter signup",
+      "summary": "One-line email form that validates on submit, explains errors and confirms in place.",
+      "pattern": "<form> + live message",
+      "states": [
+        "idle",
+        "error",
+        "subscribed"
+      ],
+      "aliases": [
+        "email signup",
+        "subscribe form",
+        "mailing list box",
+        "newsletter section",
+        "email capture"
+      ],
+      "react": "NewsletterSignup",
+      "api": "type=\"email\" · novalidate",
+      "w": 900,
+      "preview": [
+        [
+          "type",
+          "input",
+          "ana@halyard.dev"
+        ],
+        [
+          "click",
+          "button[type=\"submit\"]"
+        ]
+      ],
+      "called": [
+        "subscribe box with email field",
+        "newsletter signup section",
+        "enter your email to get updates",
+        "mailing list form"
+      ],
+      "anatomy": [
+        {
+          "sel": "input",
+          "name": "Email field",
+          "api": "autocomplete=\"email\"",
+          "text": "Hidden label, real type, browser autofill."
+        },
+        {
+          "sel": "[data-part=\"msg\"]",
+          "name": "Message",
+          "api": "aria-live",
+          "text": "Reassurance, then the error or the confirmation, in the same spot."
+        }
+      ],
+      "prompt": "Build a newsletter section: a short promise on the left (\"One email a month\") and an email field with a Subscribe button on the right; validate on submit only, explain errors in words with an example, confirm in place (\"Check you@… for a link\"), and keep a \"No spam\" line under the field.",
+      "debug": "Debug my signup form. Rule out: errors shown while the user is still typing; a placeholder as the only label; success shown as a toast that disappears; no autocomplete=\"email\". The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<form novalidate>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<NewsletterSignup onSubscribe>",
+          "React"
+        ]
+      ],
+      "added": 4
+    },
+    {
+      "id": "how-it-works",
+      "name": "How it works",
+      "summary": "Three numbered steps on one thin connecting line, turning vertical on narrow screens.",
+      "pattern": "<ol> of steps",
+      "states": [
+        "horizontal",
+        "vertical"
+      ],
+      "aliases": [
+        "steps section",
+        "process section",
+        "3 steps",
+        "getting started steps",
+        "how to use"
+      ],
+      "react": "HowItWorks",
+      "api": "<ol> + connector line",
+      "w": 1000,
+      "called": [
+        "three steps with numbers in circles",
+        "how it works section",
+        "process explained in steps",
+        "1 2 3 steps with a line"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:first-child [data-part=\"n\"]",
+          "name": "Step number",
+          "api": "<ol>",
+          "text": "The list is ordered, so the numbers are real."
+        },
+        {
+          "sel": "ol",
+          "name": "Connector",
+          "api": "::before",
+          "text": "One hairline links the steps; vertical when stacked."
+        },
+        {
+          "sel": "li:nth-child(2) p",
+          "name": "Detail",
+          "api": "",
+          "text": "One sentence with the concrete action."
+        }
+      ],
+      "prompt": "Build a \"How it works\" section: eyebrow and heading, then an <ol> of three steps each with a 35px numbered circle, a short title and one sentence, joined by a single hairline behind the circles; the line and list turn vertical under 760px. First step circle in the accent.",
+      "debug": "Debug my steps section. Rule out: numbers as decorative divs in an unordered list; the connector line drawn through the text on mobile; more than four steps; icons and numbers competing. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ol>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<HowItWorks steps>",
+          "React"
+        ]
+      ],
+      "added": 4
+    },
+    {
+      "id": "team-grid",
+      "name": "Team grid",
+      "summary": "Square portraits or initials with a name and role, in a grid that fills any width.",
+      "pattern": "<ul> of people",
+      "states": [
+        "wide",
+        "narrow"
+      ],
+      "aliases": [
+        "team section",
+        "about us people",
+        "staff grid",
+        "meet the team",
+        "people cards"
+      ],
+      "react": "TeamGrid",
+      "api": "auto-fill minmax(140px)",
+      "w": 1000,
+      "called": [
+        "meet the team section",
+        "grid of people photos with names",
+        "about us team",
+        "staff photos with roles"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:first-child [data-part=\"avatar\"]",
+          "name": "Portrait",
+          "api": "aspect-ratio: 1",
+          "text": "Same crop for everyone; initials when there is no photo."
+        },
+        {
+          "sel": "li:first-child strong",
+          "name": "Name and role",
+          "api": "",
+          "text": "Two short lines, nothing else."
+        }
+      ],
+      "prompt": "Build a team section: heading and a one-line lede with a hiring link, then a grid (auto-fill, min 140px) of square portraits with rounded corners, falling back to large initials on a neutral tile, each with name and role underneath.",
+      "debug": "Debug my team grid. Rule out: photos of different crops and sizes; social icons on every person; bios that make the grid uneven; images without width and height causing layout shift. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ul> + grid auto-fill",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<TeamGrid people>",
+          "React"
+        ]
+      ],
+      "added": 4
+    },
+    {
+      "id": "sign-in-card",
+      "name": "Sign-in card",
+      "summary": "A centred card with SSO buttons, an \"or\" divider and a passwordless email link.",
+      "pattern": "<form> + provider buttons",
+      "states": [
+        "default",
+        "invalid email",
+        "link sent"
+      ],
+      "aliases": [
+        "login page",
+        "sign in form",
+        "auth card",
+        "magic link login",
+        "sso login"
+      ],
+      "react": "SignInCard",
+      "api": "autocomplete=\"email\"",
+      "w": 560,
+      "preview": [
+        [
+          "type",
+          "input",
+          "ana@halyard.dev"
+        ],
+        [
+          "click",
+          "form button[type=\"submit\"]"
+        ]
+      ],
+      "called": [
+        "login box in the middle of the page",
+        "sign in with google or email",
+        "magic link sign in",
+        "auth card with sso"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"sso\"]",
+          "name": "Providers",
+          "api": "",
+          "text": "Secondary buttons; the email path is the one primary."
+        },
+        {
+          "sel": "[data-part=\"or\"]",
+          "name": "Divider",
+          "api": "",
+          "text": "\"or\" between two hairlines."
+        },
+        {
+          "sel": "input",
+          "name": "Email",
+          "api": "autocomplete=\"email\"",
+          "text": "Visible label, real type, autofill."
+        },
+        {
+          "sel": "[data-part=\"msg\"]",
+          "name": "Result",
+          "api": "aria-live",
+          "text": "\"Check your inbox\" in place, no page change."
+        }
+      ],
+      "prompt": "Build a passwordless sign-in card: a small mark, \"Sign in to <product>\", one line of welcome, SSO provider buttons (secondary), an \"or\" divider, a labelled work-email field and one primary \"Email me a sign-in link\" button; validate on submit, confirm in place, and link to sign-up at the bottom.",
+      "debug": "Debug my sign-in card. Rule out: provider buttons styled as primary alongside the main button; no visible label on the email field; errors that blame the user vaguely (\"Invalid input\"); autocomplete turned off. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<form> + <input type=\"email\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SignInCard product>",
+          "React"
+        ]
+      ],
+      "added": 4
+    },
+    {
+      "id": "not-found",
+      "name": "Not found (404)",
+      "summary": "A calm error page: what happened in plain words, a search box and four ways out.",
+      "pattern": "<section> + search",
+      "states": [
+        "404",
+        "500 variant"
+      ],
+      "aliases": [
+        "404 page",
+        "error page",
+        "page not found",
+        "broken link page",
+        "oops page"
+      ],
+      "react": "NotFound",
+      "api": "role=\"search\"",
+      "w": 820,
+      "called": [
+        "page not found screen",
+        "404 page with search",
+        "error page design",
+        "broken link landing"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"code\"]",
+          "name": "Code",
+          "api": "",
+          "text": "Small and mono; the words matter more."
+        },
+        {
+          "sel": "h2",
+          "name": "What happened",
+          "api": "",
+          "text": "No jokes, no blame."
+        },
+        {
+          "sel": "[data-part=\"search\"]",
+          "name": "Search",
+          "api": "role=\"search\"",
+          "text": "The fastest way to what they wanted."
+        },
+        {
+          "sel": "[data-part=\"links\"]",
+          "name": "Ways out",
+          "api": "",
+          "text": "Home, docs, status, a person."
+        }
+      ],
+      "prompt": "Build a 404 page: a small mono \"404\", a plain heading (\"This page moved or never existed\"), one line suggesting what to do, a rounded search field and four quiet links (Home, Docs, Status, Contact support). Centred, no illustration, no jokes.",
+      "debug": "Debug my error page. Rule out: a giant illustration pushing the way out below the fold; a joke heading that hides what happened; no search; links styled as primary buttons. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<section> + <form role=\"search\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<NotFound title links>",
+          "React"
+        ]
+      ],
+      "added": 4
+    }
+  ]
+}

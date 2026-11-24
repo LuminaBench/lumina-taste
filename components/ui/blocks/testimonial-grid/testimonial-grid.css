@@ -1,0 +1,20 @@
+@scope (.lt-testimonial-grid) {
+  :scope { container-type: inline-size; display: block; width: 100%; padding: 56px 40px; background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  @container (max-width: 640px) { :scope { padding: 36px 20px; } }
+  .lt-eyebrow, [data-part="eyebrow"] { margin: 0 0 10px; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; color: var(--accent-text); }
+  h2 { margin: 0; font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
+  [data-part="lede"] { margin: 12px 0 0; max-width: 56ch; color: var(--text-secondary); font-size: var(--step-0); line-height: 1.55; text-wrap: pretty; }
+
+  header { max-width: 640px; margin-bottom: 32px; }
+  ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+  @container (max-width: 760px) { ul { grid-template-columns: 1fr; } }
+  figure { display: grid; grid-template-rows: 1fr auto; gap: 24px; height: 100%; margin: 0; padding: 24px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); }
+  blockquote { margin: 0; }
+  blockquote p { margin: 0; font-size: var(--step-0); line-height: 1.5; text-wrap: pretty; }
+  blockquote p::before { content: "“"; } blockquote p::after { content: "”"; }
+  figcaption { display: flex; align-items: center; gap: 10px; }
+  figcaption > span:last-child { display: grid; }
+  figcaption strong { font-size: var(--text-ui-sm); font-weight: 650; }
+  figcaption strong + span { color: var(--text-muted); font-size: var(--text-ui-xs); }
+  [data-part="avatar"] { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--bg-surface-3); font-size: 11px; font-weight: 700; }
+}

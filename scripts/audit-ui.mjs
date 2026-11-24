@@ -53,7 +53,8 @@ const toUrl = (t) => (/^(https?|file):/.test(t) ? t : existsSync(t) ? pathToFile
 // Runs inside the page. Returns findings for everything that can be judged from the DOM alone.
 const PAGE_CHECKS = (copyRules = []) => {
   const out = [];
-  const W = innerWidth;
+  // The real screen width: on phones the layout viewport (innerWidth) grows when content overflows.
+  const W = Math.min(innerWidth, document.documentElement.clientWidth || innerWidth, screen.width || innerWidth);
   const add = (rule, severity, el, message) => out.push({ rule, severity, selector: el ? sel(el) : null, message });
   function sel(el) {
     if (!el || el.nodeType !== 1) return '';
@@ -408,7 +409,11 @@ async function auditOne(browser, url, vpName, mode) {
       el.scrollIntoView({ block: 'center', inline: 'nearest' });
       const r = el.getBoundingClientRect();
       const vis = r.width > 1 && r.height > 1 && getComputedStyle(el).visibility !== 'hidden';
-      return vis ? { x: Math.max(0, r.left - 8), y: Math.max(0, r.top - 8), width: Math.min(innerWidth, r.width + 16), height: Math.min(innerHeight, r.height + 16) } : null;
+      if (!vis) return null;
+      // Judge only what is on screen: clip to the viewport, and skip controls that cannot be scrolled fully into view.
+      const x0 = Math.max(0, r.left - 8), y0 = Math.max(0, r.top - 8), x1 = Math.min(innerWidth, r.right + 8), y1 = Math.min(innerHeight, r.bottom + 8);
+      if (r.top < 0 || r.left < 0 || r.bottom > innerHeight || r.right > innerWidth) return null;
+      return { x: x0, y: y0, width: x1 - x0, height: y1 - y0 };
     }, i);
     if (!box || box.width < 4 || box.height < 4) continue;
     const before = await page.screenshot({ clip: box });
@@ -416,6 +421,7 @@ async function auditOne(browser, url, vpName, mode) {
     if (label === 'nofocus') continue;
     const after = await page.screenshot({ clip: box });
     if (before.equals(after)) {
+      if (process.env.LT_AUDIT_DEBUG) { mkdirSync('qa/artifacts/focus-debug', { recursive: true }); writeFileSync(`qa/artifacts/focus-debug/${i}-${vpName}-${mode}.png`, after); console.log('focus debug', i, JSON.stringify(box), await page.evaluate(() => [scrollY, document.activeElement?.outerHTML.slice(0, 80), getComputedStyle(document.activeElement).outlineStyle, document.documentElement.dataset.modality])); }
       const s = await page.evaluate((k) => { const el = window.__ltAudit.controls[k]; return `${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''} “${(el.getAttribute('aria-label') || el.textContent || el.placeholder || '').trim().slice(0, 30)}”`; }, i);
       findings.push({ rule: 'focus-visible', severity: 'error', selector: s, message: 'No visible focus indicator when focused by keyboard.', viewport: vpName, mode });
     }

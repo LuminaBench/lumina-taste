@@ -158,7 +158,7 @@ export function viewElement(main: HTMLElement, id: string) {
   const fam = FAMILIES.find((f: { id: string }) => f.id === c.family) as { title: string } | undefined;
   main.innerHTML = `
     <nav class="g-crumbs" aria-label="Breadcrumb"><a href="#/">Elements</a><span aria-hidden="true">/</span><a href="#/?f=${c.family}">${esc(fam?.title ?? c.family)}</a></nav>
-    <article class="g-el" id="ui-${c.id}" data-id="${c.id}">
+    <article class="g-el${(c.w ?? 0) >= 900 ? ' g-el-wide' : ''}" id="ui-${c.id}" data-id="${c.id}">
       <div class="g-el-left">
         <div class="g-stagebox">
           <div class="g-stage-tools" role="toolbar" aria-label="Preview controls">

@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
   "counts": {
-    "ui": 111,
+    "ui": 124,
     "charts": 38,
     "blueprints": 8,
     "palettes": 18,
     "themes": 36,
     "typography": 12,
-    "styles": 16
+    "styles": 20
   },
   "families": [
     {
@@ -53,9 +53,371 @@
       "summary": "Curves, transitions and small details that make an interface feel made, all collapsing under reduced motion.",
       "order": 6,
       "count": 10
+    },
+    {
+      "id": "blocks",
+      "title": "Sections for pages",
+      "summary": "Whole page sections (heroes, pricing, FAQs, sign-in) built from the same tokens, so a page can be assembled in minutes and still look designed.",
+      "order": 7,
+      "count": 13
     }
   ],
   "ui": [
+    {
+      "id": "hero-split",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Hero, split",
+      "summary": "Headline, one line of explanation and one primary action on the left; the product on the right.",
+      "aliases": [
+        "landing hero",
+        "above the fold",
+        "header section with screenshot",
+        "split hero",
+        "marketing hero"
+      ],
+      "pattern": "<section> with labelled heading",
+      "states": [
+        "desktop two columns",
+        "stacked on narrow screens"
+      ],
+      "react": "HeroSplit",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/hero-split/hero-split.css",
+        "components/ui/blocks/hero-split/hero-split.html",
+        "components/ui/blocks/hero-split/hero-split.react.tsx"
+      ],
+      "path": "components/ui/blocks/hero-split"
+    },
+    {
+      "id": "hero-centered",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Hero, centred",
+      "summary": "A centred headline with an announcement pill, two actions and a framed product shot below.",
+      "aliases": [
+        "centered hero",
+        "announcement pill hero",
+        "product launch hero",
+        "big headline section"
+      ],
+      "pattern": "<section> with labelled heading",
+      "states": [
+        "default",
+        "narrow"
+      ],
+      "react": "HeroCentered",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/hero-centered/hero-centered.css",
+        "components/ui/blocks/hero-centered/hero-centered.html",
+        "components/ui/blocks/hero-centered/hero-centered.react.tsx"
+      ],
+      "path": "components/ui/blocks/hero-centered"
+    },
+    {
+      "id": "feature-grid",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Feature grid",
+      "summary": "Six features in three columns: a quiet icon, a short title and one sentence each.",
+      "aliases": [
+        "features section",
+        "benefits grid",
+        "why us section",
+        "icon grid",
+        "feature list"
+      ],
+      "pattern": "<section> + <ul>",
+      "states": [
+        "3 columns",
+        "2 columns",
+        "1 column"
+      ],
+      "react": "FeatureGrid",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/feature-grid/feature-grid.css",
+        "components/ui/blocks/feature-grid/feature-grid.html",
+        "components/ui/blocks/feature-grid/feature-grid.react.tsx"
+      ],
+      "path": "components/ui/blocks/feature-grid"
+    },
+    {
+      "id": "pricing-tiers",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Pricing tiers",
+      "summary": "Three plans side by side; the middle one is outlined in the accent and is the only filled button.",
+      "aliases": [
+        "pricing table",
+        "plans section",
+        "pricing cards",
+        "subscription tiers",
+        "pricing page"
+      ],
+      "pattern": "<section> + <ul> of plans",
+      "states": [
+        "three columns",
+        "stacked"
+      ],
+      "react": "PricingTiers",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/pricing-tiers/pricing-tiers.css",
+        "components/ui/blocks/pricing-tiers/pricing-tiers.html",
+        "components/ui/blocks/pricing-tiers/pricing-tiers.react.tsx"
+      ],
+      "path": "components/ui/blocks/pricing-tiers"
+    },
+    {
+      "id": "testimonial-grid",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Testimonial grid",
+      "summary": "Three short customer quotes with a name and role, aligned so the names sit on one line.",
+      "aliases": [
+        "customer quotes",
+        "reviews section",
+        "social proof",
+        "testimonials",
+        "what customers say"
+      ],
+      "pattern": "<figure> + <blockquote>",
+      "states": [
+        "three columns",
+        "stacked"
+      ],
+      "react": "TestimonialGrid",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/testimonial-grid/testimonial-grid.css",
+        "components/ui/blocks/testimonial-grid/testimonial-grid.html",
+        "components/ui/blocks/testimonial-grid/testimonial-grid.react.tsx"
+      ],
+      "path": "components/ui/blocks/testimonial-grid"
+    },
+    {
+      "id": "faq-section",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "FAQ section",
+      "summary": "Heading on the left, questions on the right as native details that open with a rotating plus.",
+      "aliases": [
+        "frequently asked questions",
+        "faq accordion",
+        "questions and answers",
+        "help section"
+      ],
+      "pattern": "<details> / <summary>",
+      "states": [
+        "first open",
+        "all closed",
+        "narrow"
+      ],
+      "react": "FaqSection",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/faq-section/faq-section.css",
+        "components/ui/blocks/faq-section/faq-section.html",
+        "components/ui/blocks/faq-section/faq-section.react.tsx"
+      ],
+      "path": "components/ui/blocks/faq-section"
+    },
+    {
+      "id": "cta-band",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Call-to-action band",
+      "summary": "A calm closing panel with one sentence and one primary action, tinted with a single soft accent glow.",
+      "aliases": [
+        "cta section",
+        "sign up band",
+        "closing banner",
+        "get started section",
+        "final call to action"
+      ],
+      "pattern": "<section> + panel",
+      "states": [
+        "side by side",
+        "stacked"
+      ],
+      "react": "CtaBand",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/cta-band/cta-band.css",
+        "components/ui/blocks/cta-band/cta-band.html",
+        "components/ui/blocks/cta-band/cta-band.react.tsx"
+      ],
+      "path": "components/ui/blocks/cta-band"
+    },
+    {
+      "id": "stats-band",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Stats band",
+      "summary": "Four large figures with plain labels, divided by hairlines instead of boxes.",
+      "aliases": [
+        "numbers section",
+        "metrics strip",
+        "by the numbers",
+        "social proof numbers",
+        "big stats row"
+      ],
+      "pattern": "<dl> (label, value)",
+      "states": [
+        "four across",
+        "two by two"
+      ],
+      "react": "StatsBand",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/stats-band/stats-band.css",
+        "components/ui/blocks/stats-band/stats-band.html",
+        "components/ui/blocks/stats-band/stats-band.react.tsx"
+      ],
+      "path": "components/ui/blocks/stats-band"
+    },
+    {
+      "id": "newsletter-signup",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Newsletter signup",
+      "summary": "One-line email form that validates on submit, explains errors and confirms in place.",
+      "aliases": [
+        "email signup",
+        "subscribe form",
+        "mailing list box",
+        "newsletter section",
+        "email capture"
+      ],
+      "pattern": "<form> + live message",
+      "states": [
+        "idle",
+        "error",
+        "subscribed"
+      ],
+      "react": "NewsletterSignup",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/newsletter-signup/newsletter-signup.css",
+        "components/ui/blocks/newsletter-signup/newsletter-signup.html",
+        "components/ui/blocks/newsletter-signup/newsletter-signup.react.tsx",
+        "components/ui/blocks/newsletter-signup/newsletter-signup.ts"
+      ],
+      "path": "components/ui/blocks/newsletter-signup"
+    },
+    {
+      "id": "how-it-works",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "How it works",
+      "summary": "Three numbered steps on one thin connecting line, turning vertical on narrow screens.",
+      "aliases": [
+        "steps section",
+        "process section",
+        "3 steps",
+        "getting started steps",
+        "how to use"
+      ],
+      "pattern": "<ol> of steps",
+      "states": [
+        "horizontal",
+        "vertical"
+      ],
+      "react": "HowItWorks",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/how-it-works/how-it-works.css",
+        "components/ui/blocks/how-it-works/how-it-works.html",
+        "components/ui/blocks/how-it-works/how-it-works.react.tsx"
+      ],
+      "path": "components/ui/blocks/how-it-works"
+    },
+    {
+      "id": "team-grid",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Team grid",
+      "summary": "Square portraits or initials with a name and role, in a grid that fills any width.",
+      "aliases": [
+        "team section",
+        "about us people",
+        "staff grid",
+        "meet the team",
+        "people cards"
+      ],
+      "pattern": "<ul> of people",
+      "states": [
+        "wide",
+        "narrow"
+      ],
+      "react": "TeamGrid",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/team-grid/team-grid.css",
+        "components/ui/blocks/team-grid/team-grid.html",
+        "components/ui/blocks/team-grid/team-grid.react.tsx"
+      ],
+      "path": "components/ui/blocks/team-grid"
+    },
+    {
+      "id": "sign-in-card",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Sign-in card",
+      "summary": "A centred card with SSO buttons, an \"or\" divider and a passwordless email link.",
+      "aliases": [
+        "login page",
+        "sign in form",
+        "auth card",
+        "magic link login",
+        "sso login"
+      ],
+      "pattern": "<form> + provider buttons",
+      "states": [
+        "default",
+        "invalid email",
+        "link sent"
+      ],
+      "react": "SignInCard",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/sign-in-card/sign-in-card.css",
+        "components/ui/blocks/sign-in-card/sign-in-card.html",
+        "components/ui/blocks/sign-in-card/sign-in-card.react.tsx",
+        "components/ui/blocks/sign-in-card/sign-in-card.ts"
+      ],
+      "path": "components/ui/blocks/sign-in-card"
+    },
+    {
+      "id": "not-found",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Not found (404)",
+      "summary": "A calm error page: what happened in plain words, a search box and four ways out.",
+      "aliases": [
+        "404 page",
+        "error page",
+        "page not found",
+        "broken link page",
+        "oops page"
+      ],
+      "pattern": "<section> + search",
+      "states": [
+        "404",
+        "500 variant"
+      ],
+      "react": "NotFound",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/not-found/not-found.css",
+        "components/ui/blocks/not-found/not-found.html",
+        "components/ui/blocks/not-found/not-found.react.tsx"
+      ],
+      "path": "components/ui/blocks/not-found"
+    },
     {
       "id": "disclosure-chevron",
       "kind": "ui",
@@ -5624,6 +5986,90 @@
       "radius": "sharp",
       "useFor": "News, data journalism, archives, long dense reference pages.",
       "notTo": "Editorial, which is airier and uses single thin rules.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "mono",
+      "kind": "style",
+      "name": "Monochrome",
+      "summary": "Black, white and greys only. The accent becomes ink, so hierarchy comes from weight, size and space.",
+      "aliases": [
+        "black and white ui",
+        "no colour design",
+        "greyscale minimal",
+        "ink only interface"
+      ],
+      "palette": "paper-ink",
+      "mode": "light",
+      "typography": "precision",
+      "radius": "balanced",
+      "useFor": "Developer tools, documentation, portfolios, anything that should feel quiet and exact.",
+      "notTo": "Minimal, which keeps a brand colour; monochrome removes it entirely.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "graphite",
+      "kind": "style",
+      "name": "Graphite",
+      "summary": "Near-black surfaces, crisp hairlines, small corners and mono labels. No glow, no gradients.",
+      "aliases": [
+        "dark dev tool look",
+        "crisp dark mode",
+        "terminal-adjacent dark ui",
+        "dark dashboard with thin lines"
+      ],
+      "palette": "black-signal",
+      "mode": "dark",
+      "typography": "technical",
+      "radius": "sharp",
+      "useFor": "Developer tools, infrastructure dashboards, trading and monitoring screens.",
+      "notTo": "Terminal, which goes green-on-black and fully mono; graphite keeps a sans body.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "atelier",
+      "kind": "style",
+      "name": "Atelier",
+      "summary": "High-contrast serif headings, wide margins, thin rules and almost no boxes. Feels printed.",
+      "aliases": [
+        "luxury brand site",
+        "high fashion minimal",
+        "gallery website look",
+        "elegant serif and whitespace"
+      ],
+      "palette": "porcelain-teal",
+      "mode": "light",
+      "typography": "didone",
+      "radius": "sharp",
+      "useFor": "Brands, studios, hospitality, galleries, premium product launches.",
+      "notTo": "Editorial, which is denser and reads like a magazine; atelier is sparse like a gallery wall.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "nordic",
+      "kind": "style",
+      "name": "Nordic",
+      "summary": "Warm greys, rounded shapes, filled surfaces instead of borders and gentle low shadows.",
+      "aliases": [
+        "scandinavian ui",
+        "calm rounded design",
+        "soft neutral app",
+        "friendly minimal"
+      ],
+      "palette": "olive-stone",
+      "mode": "light",
+      "typography": "rounded",
+      "radius": "soft",
+      "useFor": "Health, wellbeing, home and family apps, onboarding flows, consumer tools.",
+      "notTo": "Soft, which uses pastel tints and puffier shadows; nordic stays grey and restrained.",
       "files": [
         "tokens/styles/styles.css"
       ]

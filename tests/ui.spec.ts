@@ -714,3 +714,38 @@ test('previews never scroll the page on load', async ({ page }) => {
     expect(await page.evaluate(() => scrollY), r).toBe(0);
   }
 });
+
+test.describe('sections', () => {
+  test('every section block renders with a heading and no errors', async ({ page }) => {
+    const errors = errorsOf(page);
+    await page.goto('/#/?f=blocks');
+    const ids = await page.$$eval('.g-card', (c) => c.map((x) => x.getAttribute('data-id')!));
+    expect(ids.length).toBeGreaterThanOrEqual(12);
+    for (const id of ids) {
+      await page.evaluate((i) => (location.hash = `#/ui/${i}`), id);
+      await expect(page.locator(`#ui-${id} [data-stage] h2`).first()).toBeVisible();
+    }
+    expect(errors).toEqual([]);
+  });
+  test('newsletter: explains a bad email, confirms a good one', async ({ page }) => {
+    const s = await solo(page, 'newsletter-signup');
+    await s.locator('input').fill('ana@');
+    await s.locator('button[type="submit"]').click();
+    await expect(s.locator('[data-part="msg"]')).toContainText('looks incomplete');
+    await s.locator('input').fill('ana@halyard.dev');
+    await s.locator('button[type="submit"]').click();
+    await expect(s.locator('[data-part="msg"]')).toContainText('Check ana@halyard.dev');
+  });
+  test('sign-in card: empty email is explained, valid email confirms', async ({ page }) => {
+    const s = await solo(page, 'sign-in-card');
+    await s.locator('form button[type="submit"]').click();
+    await expect(s.locator('[data-part="msg"]')).toHaveText('Enter your work email.');
+    await s.locator('input').fill('kai@kestrel.dev');
+    await s.locator('form button[type="submit"]').click();
+    await expect(s.locator('[data-part="msg"]')).toContainText('sign-in link');
+  });
+  test('wide elements get a full-width stage', async ({ page }) => {
+    await page.goto('/#/ui/pricing-tiers');
+    await expect(page.locator('.g-el.g-el-wide')).toBeVisible();
+  });
+});

@@ -38,6 +38,19 @@ import { Spinner, LoadingDots, BarLoader } from '../../components/ui/feedback/lo
 import { SetupChecklist } from '../../components/ui/feedback/setup-checklist/setup-checklist.react';
 import { MasonryGrid } from '../../components/ui/data/masonry-grid/masonry-grid.react';
 import { SwipeActions } from '../../components/ui/data/swipe-actions/swipe-actions.react';
+import { HeroSplit } from '../../components/ui/blocks/hero-split/hero-split.react';
+import { HeroCentered } from '../../components/ui/blocks/hero-centered/hero-centered.react';
+import { FeatureGrid } from '../../components/ui/blocks/feature-grid/feature-grid.react';
+import { PricingTiers } from '../../components/ui/blocks/pricing-tiers/pricing-tiers.react';
+import { TestimonialGrid } from '../../components/ui/blocks/testimonial-grid/testimonial-grid.react';
+import { FaqSection } from '../../components/ui/blocks/faq-section/faq-section.react';
+import { CtaBand } from '../../components/ui/blocks/cta-band/cta-band.react';
+import { StatsBand } from '../../components/ui/blocks/stats-band/stats-band.react';
+import { NewsletterSignup } from '../../components/ui/blocks/newsletter-signup/newsletter-signup.react';
+import { HowItWorks } from '../../components/ui/blocks/how-it-works/how-it-works.react';
+import { TeamGrid } from '../../components/ui/blocks/team-grid/team-grid.react';
+import { SignInCard } from '../../components/ui/blocks/sign-in-card/sign-in-card.react';
+import { NotFound } from '../../components/ui/blocks/not-found/not-found.react';
 import { Disclosure } from '../../components/ui/controls/disclosure-chevron/disclosure-chevron.react';
 import { Accordion } from '../../components/ui/controls/accordion/accordion.react';
 import { TreeView } from '../../components/ui/controls/tree-view/tree-view.react';
@@ -300,6 +313,19 @@ function App() {
       <Case id="checklist"><SetupChecklist title="Get set up" steps={[{ title: 'One', done: true }, { title: 'Two' }]} onChange={(d) => log.push(`done:${d}`)} /></Case>
       <Case id="masonry"><MasonryGrid label="Boards">{[<p key="a">A</p>, <p key="b">B</p>]}</MasonryGrid></Case>
       <Case id="swipe"><SwipeActions label="Inbox" rows={[{ id: '1', from: 'Kai', subject: 'Hi', time: '09:00' }]} onAction={(a) => log.push(`swipe:${a}`)} /></Case>
+      <Case id="hero-split"><HeroSplit title="One page" lede="All numbers." primary={{ label: 'Start', href: '#s' }} notes={['No card']} /></Case>
+      <Case id="hero-centered"><HeroCentered title="Reports" lede="Plain charts." primary={{ label: 'Start', href: '#s' }} announcement={{ label: 'New', text: 'Alerts', href: '#a' }} /></Case>
+      <Case id="feature-grid"><FeatureGrid title="Why" features={[{ icon: 'bell', title: 'Alerts', text: 'When numbers move.' }]} /></Case>
+      <Case id="pricing-tiers"><PricingTiers title="Pricing" tiers={[{ name: 'Team', for: 'Teams', price: '£24', per: 'per seat', features: ['Alerts'], cta: { label: 'Start', href: '#t' }, featured: true }]} /></Case>
+      <Case id="testimonials"><TestimonialGrid title="Customers" quotes={[{ quote: 'One number now.', name: 'Riya Mehta', role: 'Finance' }]} /></Case>
+      <Case id="faq-section"><FaqSection title="Questions" items={[{ q: 'Can I cancel?', a: 'Yes.' }]} /></Case>
+      <Case id="cta-band"><CtaBand title="Start now" primary={{ label: 'Start', href: '#s' }} /></Case>
+      <Case id="stats-band"><StatsBand title="Numbers" stats={[{ value: '180 ms', label: 'median query' }]} /></Case>
+      <Case id="newsletter"><NewsletterSignup title="One email a month" onSubscribe={(e) => log.push(`sub:${e}`)} /></Case>
+      <Case id="how-it-works"><HowItWorks title="Three steps" steps={[{ title: 'Connect', text: 'Point it at a database.' }]} /></Case>
+      <Case id="team-grid"><TeamGrid title="Team" people={[{ name: 'Ana López', role: 'Engineering' }]} /></Case>
+      <Case id="sign-in"><SignInCard product="Halyard" onEmail={(e) => log.push(`signin:${e}`)} /></Case>
+      <Case id="not-found"><NotFound title="Not here" lede="Try search." links={[{ label: 'Home', href: '#h' }]} /></Case>
       <Case id="stagger"><Stagger><span>One</span><span>Two</span></Stagger></Case>
     </ToastProvider>
   );

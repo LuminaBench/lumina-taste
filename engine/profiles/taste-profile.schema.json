@@ -106,7 +106,11 @@
         "minimal",
         "paper",
         "elevated",
-        "newsprint"
+        "newsprint",
+        "mono",
+        "graphite",
+        "atelier",
+        "nordic"
       ],
       "description": "Visual style layer. 'none' is the plain kit."
     },

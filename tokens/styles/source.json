@@ -1,502 +1,634 @@
 {
-  "$comment": "Whole looks. Each style sets style tokens (tokens/styles/styles.css) and recommends a palette, type pairing and corner radius that suit it.",
-  "styles": [
-    {
-      "id": "studio",
-      "name": "Studio",
-      "kind": "Product default",
-      "palette": "slate-forest",
-      "mode": "light",
-      "type": "precision",
-      "radius": "balanced",
-      "aliases": [
-        "clean modern app",
-        "calm saas look",
-        "default product ui"
-      ],
-      "summary": "Hairline borders, soft surfaces, one accent and almost no shadow. The calm default for products people use all day.",
-      "signals": [
-        "1px hairline borders",
-        "surfaces one step apart",
-        "one accent colour",
-        "shadows only on overlays"
-      ],
-      "useFor": "Dashboards, settings, admin tools, most SaaS products.",
-      "notTo": "Minimal, which removes the borders and most of the chrome as well.",
-      "brief": "Keep chrome quiet so content leads.",
-      "sample": {
-        "eyebrow": "Plan",
-        "title": "Team workspace",
-        "body": "12 seats · renews 1 Feb",
-        "cta": "Upgrade",
-        "badge": "Active"
-      }
-    },
-    {
-      "id": "swiss",
-      "name": "Swiss",
-      "kind": "Graphic design movement",
-      "palette": "arctic-red",
-      "mode": "light",
-      "type": "swiss",
-      "radius": "sharp",
-      "aliases": [
-        "international typographic style",
-        "big grotesk type and red",
-        "grid poster look"
-      ],
-      "summary": "Square corners, strong black rules, a tight grid and one signal red. Type does the work, decoration does none.",
-      "signals": [
-        "square corners everywhere",
-        "strong 1px black rules",
-        "bold grotesque headlines",
-        "one signal red",
-        "no shadows at all"
-      ],
-      "useFor": "Agencies, portfolios, conference sites, editorial product pages.",
-      "notTo": "Brutalism, which also drops decoration but keeps browser-default parts and ignores the grid.",
-      "brief": "Align everything to a strict grid and let type size carry hierarchy.",
-      "sample": {
-        "eyebrow": "Issue 14",
-        "title": "Form follows content",
-        "body": "Zurich · 12 March",
-        "cta": "Register",
-        "badge": "New"
-      }
-    },
-    {
-      "id": "editorial",
-      "name": "Editorial",
-      "kind": "Print-inspired",
-      "palette": "paper-ink",
-      "mode": "light",
-      "type": "editorial",
-      "radius": "sharp",
-      "aliases": [
-        "magazine look",
-        "serif newspaper style",
-        "long read layout"
-      ],
-      "summary": "Serif display type, thin rules instead of boxes, generous margins. Reads like a well-set magazine.",
-      "signals": [
-        "serif headlines",
-        "thin rules, few boxes",
-        "small-caps labels",
-        "wide margins and a narrow measure"
-      ],
-      "useFor": "Publications, essays, portfolios, research and annual reports.",
-      "notTo": "Newsprint, which is denser, uses double rules and packs more columns.",
-      "brief": "Separate with rules and space, not cards.",
-      "sample": {
-        "eyebrow": "Essay",
-        "title": "The form is the service",
-        "body": "9 min read · Mara Oduya",
-        "cta": "Read",
-        "badge": "Long read"
-      }
-    },
-    {
-      "id": "neobrutal",
-      "name": "Neobrutalism",
-      "kind": "Industry trend",
-      "palette": "black-signal",
-      "mode": "light",
-      "type": "geometric",
-      "radius": "balanced",
-      "aliases": [
-        "bright blocks with black outlines and hard shadows",
-        "thick borders offset shadow",
-        "gumroad style"
-      ],
-      "summary": "Thick ink outlines, hard offset shadows with zero blur, flat saturated blocks. Buttons physically press down.",
-      "signals": [
-        "2px ink outlines",
-        "hard offset shadows, zero blur",
-        "flat saturated fills",
-        "buttons press into their shadow"
-      ],
-      "useFor": "Creator tools, playful consumer apps, launches that want to be remembered.",
-      "notTo": "Brutalism, which uses raw browser defaults and no colour at all.",
-      "brief": "Every surface gets an ink outline and a solid offset shadow; pressing a button removes its shadow.",
-      "sample": {
-        "eyebrow": "Launch",
-        "title": "Ship it loud",
-        "body": "v2.0 is out today",
-        "cta": "Try it",
-        "badge": "Beta"
-      }
-    },
-    {
-      "id": "terminal",
-      "name": "Terminal",
-      "kind": "Developer aesthetic",
-      "palette": "terminal-phosphor",
-      "mode": "dark",
-      "type": "technical",
-      "radius": "sharp",
-      "aliases": [
-        "hacker console look",
-        "monospace green on black",
-        "command line ui"
-      ],
-      "summary": "Monospace everywhere, dashed rules, square corners and a phosphor accent on near-black.",
-      "signals": [
-        "monospace for all text",
-        "dashed borders",
-        "square corners",
-        "phosphor accent on near-black"
-      ],
-      "useFor": "CLIs, developer tools, infra status pages, changelogs.",
-      "notTo": "Blueprint, which is technical too but uses a drawn grid and blue lines.",
-      "brief": "Treat the screen like a console: mono type, dashed separators, no rounded corners.",
-      "sample": {
-        "eyebrow": "~/deploy",
-        "title": "build #4821 passed",
-        "body": "2m 14s · main",
-        "cta": "Promote",
-        "badge": "OK"
-      }
-    },
-    {
-      "id": "glass",
-      "name": "Glass",
-      "kind": "Industry trend",
-      "palette": "charcoal-sky",
-      "mode": "dark",
-      "type": "geometric",
-      "radius": "soft",
-      "aliases": [
-        "frosted cards over a soft background",
-        "glassmorphism done calmly",
-        "translucent panels"
-      ],
-      "summary": "Translucent, blurred panels over a soft single-hue glow, with a thin light edge. Calm, not rainbow.",
-      "signals": [
-        "frosted translucent panels",
-        "a soft single-hue glow behind",
-        "thin light edge on every panel",
-        "large corners"
-      ],
-      "useFor": "Media apps, dashboards over imagery, consumer widgets.",
-      "notTo": "The purple-to-pink gradient hero, which this deliberately avoids.",
-      "brief": "Panels are 70% opaque with a 16px backdrop blur over a quiet glow; keep text contrast checked.",
-      "sample": {
-        "eyebrow": "Now playing",
-        "title": "Night drive",
-        "body": "lo-fi · 2:41 of 4:30",
-        "cta": "Play",
-        "badge": "Live"
-      }
-    },
-    {
-      "id": "soft",
-      "name": "Soft UI",
-      "kind": "Industry trend",
-      "palette": "cream-charcoal",
-      "mode": "light",
-      "type": "humanist",
-      "radius": "soft",
-      "aliases": [
-        "soft buttons pushed out of the background",
-        "neumorphism but readable",
-        "pillowy surfaces"
-      ],
-      "summary": "Surfaces share the page colour and lift out of it with paired light and dark shadows. Fields press in.",
-      "signals": [
-        "surfaces the same colour as the page",
-        "paired light and dark shadows",
-        "fields pressed in",
-        "borders kept on inputs for contrast"
-      ],
-      "useFor": "Calm consumer apps, smart-home and wellness controls.",
-      "notTo": "Clay, which is puffier, more colourful and uses inner highlights.",
-      "brief": "Raise cards with soft paired shadows; keep a visible border on every input.",
-      "sample": {
-        "eyebrow": "Living room",
-        "title": "21.5° and steady",
-        "body": "Heating · eco mode",
-        "cta": "Adjust",
-        "badge": "Eco"
-      }
-    },
-    {
-      "id": "clay",
-      "name": "Clay",
-      "kind": "Industry trend",
-      "palette": "sage-clay",
-      "mode": "light",
-      "type": "rounded",
-      "radius": "soft",
-      "aliases": [
-        "puffy 3d buttons like play-doh",
-        "claymorphism",
-        "squishy cards"
-      ],
-      "summary": "Puffy rounded objects with an inner highlight, an inner shade and a soft drop, like modelling clay.",
-      "signals": [
-        "oversized corners",
-        "inner highlight plus inner shade",
-        "soft drop shadow",
-        "friendly rounded type"
-      ],
-      "useFor": "Kids, habits, games, playful onboarding.",
-      "notTo": "Soft UI, which stays the page colour and avoids inner highlights.",
-      "brief": "Round everything generously and give surfaces an inner highlight and a soft drop.",
-      "sample": {
-        "eyebrow": "Streak",
-        "title": "12 days in a row",
-        "body": "Morning run · done",
-        "cta": "Log today",
-        "badge": "+2"
-      }
-    },
-    {
-      "id": "retro",
-      "name": "Classic Desktop",
-      "kind": "Retrospective",
-      "palette": "charcoal-sky",
-      "mode": "light",
-      "type": "dense",
-      "radius": "sharp",
-      "aliases": [
-        "old mac os window",
-        "windows 98 bevel buttons",
-        "platinum ui"
-      ],
-      "summary": "Bevelled buttons, inset fields and square windows from 1990s desktop software, kept crisp.",
-      "signals": [
-        "raised bevels on buttons",
-        "inset fields",
-        "square corners",
-        "dense system type"
-      ],
-      "useFor": "Nostalgic products, games, utilities, playful internal tools.",
-      "notTo": "Skeuomorphism, which imitates real materials rather than old software.",
-      "brief": "Buttons get a light top-left and dark bottom-right bevel; fields are inset.",
-      "sample": {
-        "eyebrow": "Control panel",
-        "title": "Display settings",
-        "body": "1024 × 768 · 256 colours",
-        "cta": "Apply",
-        "badge": "OK"
-      }
-    },
-    {
-      "id": "blueprint",
-      "name": "Blueprint",
-      "kind": "Technical",
-      "palette": "ice-cobalt",
-      "mode": "dark",
-      "type": "technical",
-      "radius": "sharp",
-      "aliases": [
-        "engineering drawing grid",
-        "technical schematic look",
-        "graph paper ui"
-      ],
-      "summary": "A faint drawn grid behind everything, dashed construction lines and mono labels. Looks measured.",
-      "signals": [
-        "faint grid ground",
-        "dashed construction lines",
-        "mono labels",
-        "square corners"
-      ],
-      "useFor": "Hardware, infrastructure, API references, architecture diagrams.",
-      "notTo": "Terminal, which has no grid and is all text.",
-      "brief": "Put a 24px grid behind the page and draw separators as dashed lines.",
-      "sample": {
-        "eyebrow": "Rev C",
-        "title": "Sensor board",
-        "body": "42 × 18 mm · 4 layers",
-        "cta": "Order",
-        "badge": "Spec"
-      }
-    },
-    {
-      "id": "lucid",
-      "name": "Lucid Dark",
-      "kind": "Product trend",
-      "palette": "charcoal-sky",
-      "mode": "dark",
-      "type": "precision",
-      "radius": "balanced",
-      "aliases": [
-        "linear style dark app",
-        "premium dark dashboard",
-        "subtle top highlight panels"
-      ],
-      "summary": "Near-black panels with a faint top highlight and a 1px inner edge. Dense, quiet and precise.",
-      "signals": [
-        "near-black surfaces",
-        "faint top highlight on panels",
-        "1px inner edge",
-        "compact type"
-      ],
-      "useFor": "Developer tools, issue trackers, pro dashboards.",
-      "notTo": "Glass, which is translucent and blurred.",
-      "brief": "Give panels a 1px inner edge and a faint top-to-bottom sheen; keep everything compact.",
-      "sample": {
-        "eyebrow": "Cycle 32",
-        "title": "18 issues left",
-        "body": "Due Friday · 64% done",
-        "cta": "Open",
-        "badge": "On track"
-      }
-    },
-    {
-      "id": "flat",
-      "name": "Flat",
-      "kind": "Design movement",
-      "palette": "ice-cobalt",
-      "mode": "light",
-      "type": "geometric",
-      "radius": "balanced",
-      "aliases": [
-        "everything is just solid colors with no shadows",
-        "metro style",
-        "flat design"
-      ],
-      "summary": "Solid fills, no borders on surfaces, no shadows, no gradients. Hierarchy comes from colour blocks.",
-      "signals": [
-        "solid colour fills",
-        "no shadows",
-        "no borders on surfaces",
-        "simple glyph icons"
-      ],
-      "useFor": "Public services, kiosks, simple consumer apps.",
-      "notTo": "Minimal, which keeps borders thin and uses mostly white space.",
-      "brief": "Remove borders and shadows from surfaces and separate areas with fills.",
-      "sample": {
-        "eyebrow": "Transit",
-        "title": "Next bus in 4 min",
-        "body": "Route 18 · Stop C",
-        "cta": "Track",
-        "badge": "Live"
-      }
-    },
-    {
-      "id": "minimal",
-      "name": "Minimal",
-      "kind": "Design approach",
-      "palette": "cream-charcoal",
-      "mode": "light",
-      "type": "swiss",
-      "radius": "sharp",
-      "aliases": [
-        "the page with almost nothing on it",
-        "lots of white space",
-        "quiet luxury website"
-      ],
-      "summary": "Very few elements, wide spacing, underline fields and text-like buttons. Empty space is the material.",
-      "signals": [
-        "few elements per screen",
-        "underline-only fields",
-        "text-style secondary buttons",
-        "wide spacing"
-      ],
-      "useFor": "Luxury, architecture, fashion, single-product sites.",
-      "notTo": "Flat, which fills areas with solid colour blocks.",
-      "brief": "Cut every element that is not essential and double the spacing between what remains.",
-      "sample": {
-        "eyebrow": "Chair 01",
-        "title": "Fewer, better",
-        "body": "Oak · made to last thirty years",
-        "cta": "See the chair",
-        "badge": "Edition"
-      }
-    },
-    {
-      "id": "paper",
-      "name": "Paper",
-      "kind": "Material-inspired",
-      "palette": "linen-oxblood",
-      "mode": "light",
-      "type": "bookish",
-      "radius": "balanced",
-      "aliases": [
-        "looks like real paper",
-        "letterpress card",
-        "stationery feel"
-      ],
-      "summary": "A faint paper grain, warm ink and pressed-in labels. Tactile without imitating leather or wood.",
-      "signals": [
-        "faint paper grain",
-        "warm ink colours",
-        "pressed-in labels",
-        "soft paper shadow"
-      ],
-      "useFor": "Invitations, journals, stationery, recipe and hospitality sites.",
-      "notTo": "Skeuomorphism, which copies specific real objects in detail.",
-      "brief": "Add a very faint grain to the page and a soft paper drop to cards.",
-      "sample": {
-        "eyebrow": "Menu",
-        "title": "Autumn tasting",
-        "body": "Seven courses · from £68",
-        "cta": "Book a table",
-        "badge": "Seasonal"
-      }
-    },
-    {
-      "id": "elevated",
-      "name": "Elevated",
-      "kind": "Product approach",
-      "palette": "navy-sand",
-      "mode": "light",
-      "type": "geometric",
-      "radius": "soft",
-      "aliases": [
-        "cards that float",
-        "material design shadows",
-        "raised panels no borders"
-      ],
-      "summary": "Borderless cards lifted by layered soft shadows, rounded corners and plenty of room.",
-      "signals": [
-        "borderless cards",
-        "layered soft shadows",
-        "rounded corners",
-        "raised primary buttons"
-      ],
-      "useFor": "Consumer apps, mobile-first products, marketplaces.",
-      "notTo": "Soft UI, where surfaces share the page colour.",
-      "brief": "Drop borders on cards and lift them with a two-layer shadow.",
-      "sample": {
-        "eyebrow": "Stay",
-        "title": "Harbour loft",
-        "body": "2 guests · 3 nights · £420",
-        "cta": "Reserve",
-        "badge": "Superhost"
-      }
-    },
-    {
-      "id": "newsprint",
-      "name": "Newsprint",
-      "kind": "Print-inspired",
-      "palette": "arctic-red",
-      "mode": "light",
-      "type": "bookish",
-      "radius": "sharp",
-      "aliases": [
-        "old newspaper layout",
-        "dense columns with rules",
-        "broadsheet style"
-      ],
-      "summary": "Dense serif text, double rules, tight columns and almost no colour. Information first.",
-      "signals": [
-        "double rules",
-        "dense serif text",
-        "tight columns",
-        "colour only for alerts"
-      ],
-      "useFor": "News, data journalism, archives, long dense reference pages.",
-      "notTo": "Editorial, which is airier and uses single thin rules.",
-      "brief": "Set dense serif columns divided by double rules; use colour only for alerts.",
-      "sample": {
-        "eyebrow": "Markets",
-        "title": "Rates held at 4.25%",
-        "body": "Late edition · page 3",
-        "cta": "Read",
-        "badge": "Breaking"
-      }
-    }
-  ]
+ "$comment": "Whole looks. Each style sets style tokens (tokens/styles/styles.css) and recommends a palette, type pairing and corner radius that suit it.",
+ "styles": [
+  {
+   "id": "studio",
+   "name": "Studio",
+   "kind": "Product default",
+   "palette": "slate-forest",
+   "mode": "light",
+   "type": "precision",
+   "radius": "balanced",
+   "aliases": [
+    "clean modern app",
+    "calm saas look",
+    "default product ui"
+   ],
+   "summary": "Hairline borders, soft surfaces, one accent and almost no shadow. The calm default for products people use all day.",
+   "signals": [
+    "1px hairline borders",
+    "surfaces one step apart",
+    "one accent colour",
+    "shadows only on overlays"
+   ],
+   "useFor": "Dashboards, settings, admin tools, most SaaS products.",
+   "notTo": "Minimal, which removes the borders and most of the chrome as well.",
+   "brief": "Keep chrome quiet so content leads.",
+   "sample": {
+    "eyebrow": "Plan",
+    "title": "Team workspace",
+    "body": "12 seats · renews 1 Feb",
+    "cta": "Upgrade",
+    "badge": "Active"
+   }
+  },
+  {
+   "id": "swiss",
+   "name": "Swiss",
+   "kind": "Graphic design movement",
+   "palette": "arctic-red",
+   "mode": "light",
+   "type": "swiss",
+   "radius": "sharp",
+   "aliases": [
+    "international typographic style",
+    "big grotesk type and red",
+    "grid poster look"
+   ],
+   "summary": "Square corners, strong black rules, a tight grid and one signal red. Type does the work, decoration does none.",
+   "signals": [
+    "square corners everywhere",
+    "strong 1px black rules",
+    "bold grotesque headlines",
+    "one signal red",
+    "no shadows at all"
+   ],
+   "useFor": "Agencies, portfolios, conference sites, editorial product pages.",
+   "notTo": "Brutalism, which also drops decoration but keeps browser-default parts and ignores the grid.",
+   "brief": "Align everything to a strict grid and let type size carry hierarchy.",
+   "sample": {
+    "eyebrow": "Issue 14",
+    "title": "Form follows content",
+    "body": "Zurich · 12 March",
+    "cta": "Register",
+    "badge": "New"
+   }
+  },
+  {
+   "id": "editorial",
+   "name": "Editorial",
+   "kind": "Print-inspired",
+   "palette": "paper-ink",
+   "mode": "light",
+   "type": "editorial",
+   "radius": "sharp",
+   "aliases": [
+    "magazine look",
+    "serif newspaper style",
+    "long read layout"
+   ],
+   "summary": "Serif display type, thin rules instead of boxes, generous margins. Reads like a well-set magazine.",
+   "signals": [
+    "serif headlines",
+    "thin rules, few boxes",
+    "small-caps labels",
+    "wide margins and a narrow measure"
+   ],
+   "useFor": "Publications, essays, portfolios, research and annual reports.",
+   "notTo": "Newsprint, which is denser, uses double rules and packs more columns.",
+   "brief": "Separate with rules and space, not cards.",
+   "sample": {
+    "eyebrow": "Essay",
+    "title": "The form is the service",
+    "body": "9 min read · Mara Oduya",
+    "cta": "Read",
+    "badge": "Long read"
+   }
+  },
+  {
+   "id": "neobrutal",
+   "name": "Neobrutalism",
+   "kind": "Industry trend",
+   "palette": "black-signal",
+   "mode": "light",
+   "type": "geometric",
+   "radius": "balanced",
+   "aliases": [
+    "bright blocks with black outlines and hard shadows",
+    "thick borders offset shadow",
+    "gumroad style"
+   ],
+   "summary": "Thick ink outlines, hard offset shadows with zero blur, flat saturated blocks. Buttons physically press down.",
+   "signals": [
+    "2px ink outlines",
+    "hard offset shadows, zero blur",
+    "flat saturated fills",
+    "buttons press into their shadow"
+   ],
+   "useFor": "Creator tools, playful consumer apps, launches that want to be remembered.",
+   "notTo": "Brutalism, which uses raw browser defaults and no colour at all.",
+   "brief": "Every surface gets an ink outline and a solid offset shadow; pressing a button removes its shadow.",
+   "sample": {
+    "eyebrow": "Launch",
+    "title": "Ship it loud",
+    "body": "v2.0 is out today",
+    "cta": "Try it",
+    "badge": "Beta"
+   }
+  },
+  {
+   "id": "terminal",
+   "name": "Terminal",
+   "kind": "Developer aesthetic",
+   "palette": "terminal-phosphor",
+   "mode": "dark",
+   "type": "technical",
+   "radius": "sharp",
+   "aliases": [
+    "hacker console look",
+    "monospace green on black",
+    "command line ui"
+   ],
+   "summary": "Monospace everywhere, dashed rules, square corners and a phosphor accent on near-black.",
+   "signals": [
+    "monospace for all text",
+    "dashed borders",
+    "square corners",
+    "phosphor accent on near-black"
+   ],
+   "useFor": "CLIs, developer tools, infra status pages, changelogs.",
+   "notTo": "Blueprint, which is technical too but uses a drawn grid and blue lines.",
+   "brief": "Treat the screen like a console: mono type, dashed separators, no rounded corners.",
+   "sample": {
+    "eyebrow": "~/deploy",
+    "title": "build #4821 passed",
+    "body": "2m 14s · main",
+    "cta": "Promote",
+    "badge": "OK"
+   }
+  },
+  {
+   "id": "glass",
+   "name": "Glass",
+   "kind": "Industry trend",
+   "palette": "charcoal-sky",
+   "mode": "dark",
+   "type": "geometric",
+   "radius": "soft",
+   "aliases": [
+    "frosted cards over a soft background",
+    "glassmorphism done calmly",
+    "translucent panels"
+   ],
+   "summary": "Translucent, blurred panels over a soft single-hue glow, with a thin light edge. Calm, not rainbow.",
+   "signals": [
+    "frosted translucent panels",
+    "a soft single-hue glow behind",
+    "thin light edge on every panel",
+    "large corners"
+   ],
+   "useFor": "Media apps, dashboards over imagery, consumer widgets.",
+   "notTo": "The purple-to-pink gradient hero, which this deliberately avoids.",
+   "brief": "Panels are 70% opaque with a 16px backdrop blur over a quiet glow; keep text contrast checked.",
+   "sample": {
+    "eyebrow": "Now playing",
+    "title": "Night drive",
+    "body": "lo-fi · 2:41 of 4:30",
+    "cta": "Play",
+    "badge": "Live"
+   }
+  },
+  {
+   "id": "soft",
+   "name": "Soft UI",
+   "kind": "Industry trend",
+   "palette": "cream-charcoal",
+   "mode": "light",
+   "type": "humanist",
+   "radius": "soft",
+   "aliases": [
+    "soft buttons pushed out of the background",
+    "neumorphism but readable",
+    "pillowy surfaces"
+   ],
+   "summary": "Surfaces share the page colour and lift out of it with paired light and dark shadows. Fields press in.",
+   "signals": [
+    "surfaces the same colour as the page",
+    "paired light and dark shadows",
+    "fields pressed in",
+    "borders kept on inputs for contrast"
+   ],
+   "useFor": "Calm consumer apps, smart-home and wellness controls.",
+   "notTo": "Clay, which is puffier, more colourful and uses inner highlights.",
+   "brief": "Raise cards with soft paired shadows; keep a visible border on every input.",
+   "sample": {
+    "eyebrow": "Living room",
+    "title": "21.5° and steady",
+    "body": "Heating · eco mode",
+    "cta": "Adjust",
+    "badge": "Eco"
+   }
+  },
+  {
+   "id": "clay",
+   "name": "Clay",
+   "kind": "Industry trend",
+   "palette": "sage-clay",
+   "mode": "light",
+   "type": "rounded",
+   "radius": "soft",
+   "aliases": [
+    "puffy 3d buttons like play-doh",
+    "claymorphism",
+    "squishy cards"
+   ],
+   "summary": "Puffy rounded objects with an inner highlight, an inner shade and a soft drop, like modelling clay.",
+   "signals": [
+    "oversized corners",
+    "inner highlight plus inner shade",
+    "soft drop shadow",
+    "friendly rounded type"
+   ],
+   "useFor": "Kids, habits, games, playful onboarding.",
+   "notTo": "Soft UI, which stays the page colour and avoids inner highlights.",
+   "brief": "Round everything generously and give surfaces an inner highlight and a soft drop.",
+   "sample": {
+    "eyebrow": "Streak",
+    "title": "12 days in a row",
+    "body": "Morning run · done",
+    "cta": "Log today",
+    "badge": "+2"
+   }
+  },
+  {
+   "id": "retro",
+   "name": "Classic Desktop",
+   "kind": "Retrospective",
+   "palette": "charcoal-sky",
+   "mode": "light",
+   "type": "dense",
+   "radius": "sharp",
+   "aliases": [
+    "old mac os window",
+    "windows 98 bevel buttons",
+    "platinum ui"
+   ],
+   "summary": "Bevelled buttons, inset fields and square windows from 1990s desktop software, kept crisp.",
+   "signals": [
+    "raised bevels on buttons",
+    "inset fields",
+    "square corners",
+    "dense system type"
+   ],
+   "useFor": "Nostalgic products, games, utilities, playful internal tools.",
+   "notTo": "Skeuomorphism, which imitates real materials rather than old software.",
+   "brief": "Buttons get a light top-left and dark bottom-right bevel; fields are inset.",
+   "sample": {
+    "eyebrow": "Control panel",
+    "title": "Display settings",
+    "body": "1024 × 768 · 256 colours",
+    "cta": "Apply",
+    "badge": "OK"
+   }
+  },
+  {
+   "id": "blueprint",
+   "name": "Blueprint",
+   "kind": "Technical",
+   "palette": "ice-cobalt",
+   "mode": "dark",
+   "type": "technical",
+   "radius": "sharp",
+   "aliases": [
+    "engineering drawing grid",
+    "technical schematic look",
+    "graph paper ui"
+   ],
+   "summary": "A faint drawn grid behind everything, dashed construction lines and mono labels. Looks measured.",
+   "signals": [
+    "faint grid ground",
+    "dashed construction lines",
+    "mono labels",
+    "square corners"
+   ],
+   "useFor": "Hardware, infrastructure, API references, architecture diagrams.",
+   "notTo": "Terminal, which has no grid and is all text.",
+   "brief": "Put a 24px grid behind the page and draw separators as dashed lines.",
+   "sample": {
+    "eyebrow": "Rev C",
+    "title": "Sensor board",
+    "body": "42 × 18 mm · 4 layers",
+    "cta": "Order",
+    "badge": "Spec"
+   }
+  },
+  {
+   "id": "lucid",
+   "name": "Lucid Dark",
+   "kind": "Product trend",
+   "palette": "charcoal-sky",
+   "mode": "dark",
+   "type": "precision",
+   "radius": "balanced",
+   "aliases": [
+    "linear style dark app",
+    "premium dark dashboard",
+    "subtle top highlight panels"
+   ],
+   "summary": "Near-black panels with a faint top highlight and a 1px inner edge. Dense, quiet and precise.",
+   "signals": [
+    "near-black surfaces",
+    "faint top highlight on panels",
+    "1px inner edge",
+    "compact type"
+   ],
+   "useFor": "Developer tools, issue trackers, pro dashboards.",
+   "notTo": "Glass, which is translucent and blurred.",
+   "brief": "Give panels a 1px inner edge and a faint top-to-bottom sheen; keep everything compact.",
+   "sample": {
+    "eyebrow": "Cycle 32",
+    "title": "18 issues left",
+    "body": "Due Friday · 64% done",
+    "cta": "Open",
+    "badge": "On track"
+   }
+  },
+  {
+   "id": "flat",
+   "name": "Flat",
+   "kind": "Design movement",
+   "palette": "ice-cobalt",
+   "mode": "light",
+   "type": "geometric",
+   "radius": "balanced",
+   "aliases": [
+    "everything is just solid colors with no shadows",
+    "metro style",
+    "flat design"
+   ],
+   "summary": "Solid fills, no borders on surfaces, no shadows, no gradients. Hierarchy comes from colour blocks.",
+   "signals": [
+    "solid colour fills",
+    "no shadows",
+    "no borders on surfaces",
+    "simple glyph icons"
+   ],
+   "useFor": "Public services, kiosks, simple consumer apps.",
+   "notTo": "Minimal, which keeps borders thin and uses mostly white space.",
+   "brief": "Remove borders and shadows from surfaces and separate areas with fills.",
+   "sample": {
+    "eyebrow": "Transit",
+    "title": "Next bus in 4 min",
+    "body": "Route 18 · Stop C",
+    "cta": "Track",
+    "badge": "Live"
+   }
+  },
+  {
+   "id": "minimal",
+   "name": "Minimal",
+   "kind": "Design approach",
+   "palette": "cream-charcoal",
+   "mode": "light",
+   "type": "swiss",
+   "radius": "sharp",
+   "aliases": [
+    "the page with almost nothing on it",
+    "lots of white space",
+    "quiet luxury website"
+   ],
+   "summary": "Very few elements, wide spacing, underline fields and text-like buttons. Empty space is the material.",
+   "signals": [
+    "few elements per screen",
+    "underline-only fields",
+    "text-style secondary buttons",
+    "wide spacing"
+   ],
+   "useFor": "Luxury, architecture, fashion, single-product sites.",
+   "notTo": "Flat, which fills areas with solid colour blocks.",
+   "brief": "Cut every element that is not essential and double the spacing between what remains.",
+   "sample": {
+    "eyebrow": "Chair 01",
+    "title": "Fewer, better",
+    "body": "Oak · made to last thirty years",
+    "cta": "See the chair",
+    "badge": "Edition"
+   }
+  },
+  {
+   "id": "paper",
+   "name": "Paper",
+   "kind": "Material-inspired",
+   "palette": "linen-oxblood",
+   "mode": "light",
+   "type": "bookish",
+   "radius": "balanced",
+   "aliases": [
+    "looks like real paper",
+    "letterpress card",
+    "stationery feel"
+   ],
+   "summary": "A faint paper grain, warm ink and pressed-in labels. Tactile without imitating leather or wood.",
+   "signals": [
+    "faint paper grain",
+    "warm ink colours",
+    "pressed-in labels",
+    "soft paper shadow"
+   ],
+   "useFor": "Invitations, journals, stationery, recipe and hospitality sites.",
+   "notTo": "Skeuomorphism, which copies specific real objects in detail.",
+   "brief": "Add a very faint grain to the page and a soft paper drop to cards.",
+   "sample": {
+    "eyebrow": "Menu",
+    "title": "Autumn tasting",
+    "body": "Seven courses · from £68",
+    "cta": "Book a table",
+    "badge": "Seasonal"
+   }
+  },
+  {
+   "id": "elevated",
+   "name": "Elevated",
+   "kind": "Product approach",
+   "palette": "navy-sand",
+   "mode": "light",
+   "type": "geometric",
+   "radius": "soft",
+   "aliases": [
+    "cards that float",
+    "material design shadows",
+    "raised panels no borders"
+   ],
+   "summary": "Borderless cards lifted by layered soft shadows, rounded corners and plenty of room.",
+   "signals": [
+    "borderless cards",
+    "layered soft shadows",
+    "rounded corners",
+    "raised primary buttons"
+   ],
+   "useFor": "Consumer apps, mobile-first products, marketplaces.",
+   "notTo": "Soft UI, where surfaces share the page colour.",
+   "brief": "Drop borders on cards and lift them with a two-layer shadow.",
+   "sample": {
+    "eyebrow": "Stay",
+    "title": "Harbour loft",
+    "body": "2 guests · 3 nights · £420",
+    "cta": "Reserve",
+    "badge": "Superhost"
+   }
+  },
+  {
+   "id": "newsprint",
+   "name": "Newsprint",
+   "kind": "Print-inspired",
+   "palette": "arctic-red",
+   "mode": "light",
+   "type": "bookish",
+   "radius": "sharp",
+   "aliases": [
+    "old newspaper layout",
+    "dense columns with rules",
+    "broadsheet style"
+   ],
+   "summary": "Dense serif text, double rules, tight columns and almost no colour. Information first.",
+   "signals": [
+    "double rules",
+    "dense serif text",
+    "tight columns",
+    "colour only for alerts"
+   ],
+   "useFor": "News, data journalism, archives, long dense reference pages.",
+   "notTo": "Editorial, which is airier and uses single thin rules.",
+   "brief": "Set dense serif columns divided by double rules; use colour only for alerts.",
+   "sample": {
+    "eyebrow": "Markets",
+    "title": "Rates held at 4.25%",
+    "body": "Late edition · page 3",
+    "cta": "Read",
+    "badge": "Breaking"
+   }
+  },
+  {
+   "id": "mono",
+   "name": "Monochrome",
+   "kind": "Ink only",
+   "palette": "paper-ink",
+   "mode": "light",
+   "type": "precision",
+   "radius": "balanced",
+   "aliases": [
+    "black and white ui",
+    "no colour design",
+    "greyscale minimal",
+    "ink only interface"
+   ],
+   "summary": "Black, white and greys only. The accent becomes ink, so hierarchy comes from weight, size and space.",
+   "signals": [
+    "primary buttons in solid ink",
+    "no brand colour anywhere",
+    "hairline borders",
+    "generous whitespace",
+    "bold type for emphasis"
+   ],
+   "useFor": "Developer tools, documentation, portfolios, anything that should feel quiet and exact.",
+   "notTo": "Minimal, which keeps a brand colour; monochrome removes it entirely.",
+   "brief": "Set the accent to ink and let typography carry every decision.",
+   "sample": {
+    "eyebrow": "Changelog",
+    "title": "Quiet by default",
+    "body": "Version 4.2 · 24 November",
+    "cta": "Read notes",
+    "badge": "New"
+   }
+  },
+  {
+   "id": "graphite",
+   "name": "Graphite",
+   "kind": "Dark product UI",
+   "palette": "black-signal",
+   "mode": "dark",
+   "type": "technical",
+   "radius": "sharp",
+   "aliases": [
+    "dark dev tool look",
+    "crisp dark mode",
+    "terminal-adjacent dark ui",
+    "dark dashboard with thin lines"
+   ],
+   "summary": "Near-black surfaces, crisp hairlines, small corners and mono labels. No glow, no gradients.",
+   "signals": [
+    "near-black canvas with one step lighter cards",
+    "1px light hairlines",
+    "mono uppercase labels",
+    "small radii",
+    "flat, no shadows"
+   ],
+   "useFor": "Developer tools, infrastructure dashboards, trading and monitoring screens.",
+   "notTo": "Terminal, which goes green-on-black and fully mono; graphite keeps a sans body.",
+   "brief": "Draw structure with hairlines and spacing; keep colour for state.",
+   "sample": {
+    "eyebrow": "us-east-1",
+    "title": "All systems normal",
+    "body": "p95 182 ms · 0 incidents",
+    "cta": "Open logs",
+    "badge": "Live"
+   }
+  },
+  {
+   "id": "atelier",
+   "name": "Atelier",
+   "kind": "Editorial luxury",
+   "palette": "porcelain-teal",
+   "mode": "light",
+   "type": "didone",
+   "radius": "sharp",
+   "aliases": [
+    "luxury brand site",
+    "high fashion minimal",
+    "gallery website look",
+    "elegant serif and whitespace"
+   ],
+   "summary": "High-contrast serif headings, wide margins, thin rules and almost no boxes. Feels printed.",
+   "signals": [
+    "didone display type",
+    "lots of empty space",
+    "thin 1px rules between sections",
+    "no card backgrounds",
+    "spaced uppercase eyebrows"
+   ],
+   "useFor": "Brands, studios, hospitality, galleries, premium product launches.",
+   "notTo": "Editorial, which is denser and reads like a magazine; atelier is sparse like a gallery wall.",
+   "brief": "Give every element twice the space you think it needs and remove one border.",
+   "sample": {
+    "eyebrow": "Autumn collection",
+    "title": "Made slowly",
+    "body": "Lisbon · Studio 4",
+    "cta": "View pieces",
+    "badge": "New"
+   }
+  },
+  {
+   "id": "nordic",
+   "name": "Nordic",
+   "kind": "Soft neutral",
+   "palette": "olive-stone",
+   "mode": "light",
+   "type": "rounded",
+   "radius": "soft",
+   "aliases": [
+    "scandinavian ui",
+    "calm rounded design",
+    "soft neutral app",
+    "friendly minimal"
+   ],
+   "summary": "Warm greys, rounded shapes, filled surfaces instead of borders and gentle low shadows.",
+   "signals": [
+    "filled light-grey cards, no borders",
+    "rounded corners",
+    "soft low shadows",
+    "rounded sans type",
+    "muted sage accent"
+   ],
+   "useFor": "Health, wellbeing, home and family apps, onboarding flows, consumer tools.",
+   "notTo": "Soft, which uses pastel tints and puffier shadows; nordic stays grey and restrained.",
+   "brief": "Swap borders for filled surfaces and keep every shadow below 8px blur.",
+   "sample": {
+    "eyebrow": "This week",
+    "title": "Three calm wins",
+    "body": "Sleep 7h 40m · 12k steps",
+    "cta": "See week",
+    "badge": "On track"
+   }
+  }
+ ]
 }
