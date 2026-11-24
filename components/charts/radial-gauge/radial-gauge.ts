@@ -26,7 +26,7 @@ export function render(host: HTMLElement, data: GaugeData, opts: GaugeOptions = 
       let tx = cx + Math.sin(at) * (rad + 18);
       const anchor = at > 0 ? 'start' : 'end';
       tx = anchor === 'start' ? Math.min(tx, width - tw - 2) : Math.max(tx, tw + 2);
-      svg.append(el('text', { x: r(tx), y: r(cy - Math.cos(at) * (rad + 18) + 4), 'text-anchor': anchor, class: 'lt-tick' }, [label]));
+      svg.append(el('text', { x: r(tx), y: r(cy - Math.cos(at) * (rad + 18) + 4), 'text-anchor': anchor, class: 'lt-tick', style: 'fill: var(--text-secondary); paint-order: stroke; stroke: var(--bg-surface-1); stroke-width: 3px; stroke-linejoin: round' }, [label]));
     }
     svg.append(el('text', { x: cx, y: cy + 4, 'text-anchor': 'middle', style: 'font-family: var(--font-display); font-size: 30px; font-weight: 650; letter-spacing: -0.02em; fill: var(--text-primary)' }, [fmt(d.value)]));
     svg.append(el('text', { x: cx, y: cy + 24, 'text-anchor': 'middle', class: 'lt-tick' }, [`${d.label ?? ''} · ${formatNumber(t, { percent: true })} of ${fmt(d.max)}`]));

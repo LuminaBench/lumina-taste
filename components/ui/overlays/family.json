@@ -937,6 +937,87 @@
           "React"
         ]
       ]
+    },
+    {
+      "id": "notification-center",
+      "name": "Notification centre",
+      "summary": "A bell with an unread count that opens a panel of updates you can filter and mark read.",
+      "pattern": "Disclosure (non-modal dialog) + tabs",
+      "states": [
+        "closed",
+        "open",
+        "unread",
+        "all read",
+        "focus-visible"
+      ],
+      "aliases": [
+        "notifications dropdown",
+        "bell menu",
+        "inbox popover",
+        "activity feed panel",
+        "alerts panel"
+      ],
+      "react": "NotificationCenter",
+      "api": "aria-haspopup=\"dialog\"",
+      "w": 420,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"bell\"]"
+        ]
+      ],
+      "called": [
+        "bell icon with a red number that opens a list",
+        "notifications dropdown",
+        "activity panel from the top bar",
+        "unread notifications popup"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"count\"]",
+          "name": "Unread count",
+          "api": "visually hidden text",
+          "text": "Red dot with a number; the button says \"3 unread\" in words."
+        },
+        {
+          "sel": "[data-part=\"all\"]",
+          "name": "Mark all as read",
+          "api": "",
+          "text": "One action at the top, disabled when nothing is unread."
+        },
+        {
+          "sel": "[data-part=\"item\"][data-unread] [data-part=\"dot\"]",
+          "name": "Unread marker",
+          "api": "",
+          "text": "Accent dot plus hidden \"Unread\" text."
+        },
+        {
+          "sel": "[role=\"tab\"][data-filter=\"unread\"]",
+          "name": "Filter",
+          "api": "role=\"tab\"",
+          "text": "All or Unread."
+        }
+      ],
+      "prompt": "Add a notification centre to the top bar: a bell button with a red unread count (and the count in its accessible name) that opens a 380px panel with a title, \"Mark all as read\", All/Unread tabs and rows of avatar, who did what, an optional quote and a relative time. Clicking a row marks it read. Esc and outside clicks close and return focus to the bell.",
+      "debug": "Debug my notification centre. Rule out: a count that only exists visually; the panel opening as a page-blocking modal; unread state shown by colour alone; the list scrolling the page when it reaches its end (overscroll-behavior: contain). The symptom:",
+      "code": [
+        [
+          "WAI-ARIA",
+          "Disclosure + Tabs",
+          ""
+        ],
+        [
+          "Knock / Novu",
+          "<NotificationFeed>",
+          "hosted feeds"
+        ],
+        [
+          "lumina-taste",
+          "<NotificationCenter items>",
+          "React"
+        ]
+      ],
+      "added": 2
     }
   ]
 }

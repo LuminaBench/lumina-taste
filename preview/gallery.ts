@@ -265,10 +265,12 @@ function render() {
 }
 main.addEventListener('click', (e) => {
   const t = e.target as Element;
+  // Clicks inside a live demo belong to the demo, never to the gallery chrome.
+  if (t.closest('[data-stage], [data-chart-stage], .g-pal-live')) return;
   const fam = t.closest<HTMLElement>('[data-fam]');
   if (fam) { state.family = fam.dataset.fam!; if (location.hash.includes('?')) history.replaceState(null, '', '#/'); return render(); }
-  const sort = t.closest<HTMLElement>('[data-sort]');
-  if (sort) { state.sort = sort.dataset.sort!; return render(); }
+  const sort = t.closest<HTMLElement>('[data-g-sort]');
+  if (sort) { state.sort = sort.dataset.gSort!; return render(); }
   if (t.closest('[data-surprise]')) { const c = UI[Math.floor(Math.random() * UI.length)]; location.hash = `#/ui/${c.id}`; return; }
   const ex = t.closest<HTMLElement>('[data-example]');
   if (ex) { q.value = ex.dataset.example!; q.focus(); q.dispatchEvent(new Event('input')); return; }

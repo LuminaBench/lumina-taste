@@ -1,0 +1,8 @@
+@scope (.lt-typewriter) {
+  :scope { margin: 0; font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.1; color: var(--text-primary); }
+  [data-part="word"] { color: var(--accent-text); white-space: nowrap; }
+  [data-part="caret"] { display: inline-block; width: 0.08em; height: 0.95em; margin-left: 0.06em; vertical-align: -0.1em; background: var(--accent-solid); animation: lt-caret 1s steps(1) infinite; }
+  :scope[data-typing] [data-part="caret"] { animation: none; }
+}
+@keyframes lt-caret { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .lt-typewriter [data-part="caret"] { display: none; } }

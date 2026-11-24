@@ -88,11 +88,12 @@ test('dashboard global filter updates charts', async ({ page }) => {
 });
 
 test('gallery full-screen viewer loads and syncs the theme into the blueprint', async ({ page }) => {
-  await page.goto('/#/blueprints/landing');
+  await page.goto('/#/pages/landing');
   const frame = page.frameLocator('iframe[data-blueprint]');
   await expect(frame.locator('h1')).toBeVisible();
-  await page.selectOption('#g-palette', 'linen-oxblood');
+  await page.click('#g-theme-btn');
+  await page.click('#g-theme [data-axis="palette"][data-value="linen-oxblood"]');
   await expect.poll(() => page.locator('iframe[data-blueprint]').evaluate((f: HTMLIFrameElement) => f.contentDocument!.documentElement.dataset.palette)).toBe('linen-oxblood');
   await page.selectOption('#g-bp-switch', 'auth');
-  await expect(page).toHaveURL(/#\/blueprints\/auth/);
+  await expect(page).toHaveURL(/#\/pages\/auth/);
 });

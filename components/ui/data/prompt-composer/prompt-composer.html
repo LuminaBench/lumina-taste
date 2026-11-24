@@ -1,0 +1,12 @@
+<form class="lt-composer" data-lt="prompt-composer" aria-label="Message">
+  <label for="lt-composer-input" class="lt-visually-hidden">Message</label>
+  <textarea id="lt-composer-input" rows="1" placeholder="Ask about this report…" maxlength="2000" aria-describedby="lt-composer-hint"></textarea>
+  <div data-part="bar">
+    <button type="button" data-part="attach" aria-label="Attach a file"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m20 11.5-7.8 7.8a5 5 0 0 1-7.1-7.1l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8"/></svg></button>
+    <div data-part="mode" role="radiogroup" aria-label="Mode"><button type="button" role="radio" aria-checked="true">Ask</button><button type="button" role="radio" aria-checked="false" tabindex="-1">Edit</button></div>
+    <span id="lt-composer-hint" data-part="hint"><kbd class="lt-kbd">⌘</kbd><kbd class="lt-kbd">↵</kbd> to send</span>
+    <span data-part="count" aria-hidden="true">0 / 2000</span>
+    <button type="submit" data-part="send" aria-label="Send" disabled><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+  </div>
+  <p data-part="sent" aria-live="polite"></p>
+</form>

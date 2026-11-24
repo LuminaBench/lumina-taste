@@ -14,7 +14,7 @@ const server = spawn(process.execPath, [join(root, 'scripts/serve.mjs'), '--port
 await new Promise((r) => setTimeout(r, 600));
 
 const blueprints = readdirSync(join(root, 'blueprints')).filter((d) => existsSync(join(root, 'blueprints', d, 'meta.json')));
-const targets = [`${base}#/ui`, `${base}#/charts`, `${base}#/blueprints`, `${base}#/palettes`, ...blueprints.map((b) => `${base}blueprints/${b}/`)];
+const targets = [`${base}#/`, `${base}#/charts`, `${base}#/styles`, `${base}#/pages`, `${base}#/palettes`, `${base}#/ui/command-palette`, `${base}#/ui/kanban-board`, `${base}#/ui/notification-center`, `${base}#/ui/prompt-composer`, `${base}#/ui/chat-thread`, `${base}#/ui/logo-marquee`, `${base}#/charts/leaderboard-table`, ...blueprints.map((b) => `${base}blueprints/${b}/`)];
 mkdirSync(join(root, 'qa/artifacts'), { recursive: true });
 const args = [join(root, 'scripts/audit-ui.mjs'), ...targets, '--json', join(root, 'qa/artifacts/audit-report.json'), '--focus-limit', process.env.FOCUS_LIMIT ?? '400', ...process.argv.slice(2)];
 const res = spawnSync(process.execPath, args, { stdio: 'inherit', cwd: root });

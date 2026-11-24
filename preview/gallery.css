@@ -176,7 +176,7 @@ html[data-mode="dark"] .g-mode-btn .g-moon, html[data-mode="light"] .g-mode-btn 
 .g-chart-card > header a:hover h3 { color: var(--accent-text); }
 .g-chart-stage { min-width: 0; min-height: 240px; margin-top: 6px; background: transparent; }
 .g-chart-detail { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 40px; align-items: start; }
-.g-chart-detail .g-chart-card { position: sticky; top: 88px; }
+.g-chart-detail .g-chart-card:not(.is-wide) { position: sticky; top: 88px; }
 .g-chart-doc { display: grid; gap: 12px; }
 .g-dl { display: grid; gap: 0; margin: 8px 0 0; }
 .g-dl > div { display: grid; grid-template-columns: 130px 1fr; gap: 16px; padding: 10px 0; border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
@@ -289,3 +289,4 @@ html[data-view^="pages"] .g-main { max-width: 1640px; }
 @media (min-width: 980px) {
   .g-grid > .g-card[data-wide] .g-prev { aspect-ratio: auto; height: 100%; min-height: 190px; contain: size layout paint; }
 }
+.g-new { display: inline-block; margin-left: 8px; padding: 2px 6px; border-radius: var(--radius-pill); background: var(--accent-soft); color: var(--accent-text); font: 650 10px/1.2 var(--font-body); letter-spacing: 0.02em; vertical-align: 2px; }

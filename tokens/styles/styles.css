@@ -74,7 +74,7 @@
 [data-style="glass"] {
   --canvas-image:
     radial-gradient(55% 45% at 12% 8%, color-mix(in oklab, var(--accent-solid) 26%, transparent), transparent 72%),
-    radial-gradient(45% 50% at 92% 88%, color-mix(in oklab, var(--chart-5) 20%, transparent), transparent 72%);
+    radial-gradient(45% 50% at 92% 88%, color-mix(in oklab, var(--accent-solid) 14%, transparent), transparent 72%);
   --surface-blur: blur(16px) saturate(1.3);
 }
 [data-style="glass"] :is(.lt-bento > article, .lt-media-card, .lt-kpi, .lt-stat-strip, .lt-table-wrap, .lt-code, .lt-radio-cards [data-part="card"], .lt-skeleton-card, .lt-filterbar, .g-mini-card, .pr-tier, .bp-card, .st-section, .dir-card a, .lt-spotlight, .lt-menu, .lt-popover, .lt-hovercard, .lt-toasts [data-part="toast"], .g-card, .g-chart-card) {

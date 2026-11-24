@@ -859,6 +859,281 @@
           "React"
         ]
       ]
+    },
+    {
+      "id": "chat-thread",
+      "name": "Chat thread",
+      "summary": "Message bubbles grouped by sender, with read status, an attachment and a typing indicator.",
+      "pattern": "role=\"log\" (live region)",
+      "states": [
+        "incoming",
+        "outgoing",
+        "attachment",
+        "typing"
+      ],
+      "aliases": [
+        "message bubbles",
+        "chat ui",
+        "conversation view",
+        "imessage style chat",
+        "dm thread"
+      ],
+      "react": "ChatThread",
+      "api": "role=\"log\"",
+      "w": 480,
+      "called": [
+        "chat bubbles left and right",
+        "message thread like a phone",
+        "conversation with typing dots",
+        "dm screen"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-from=\"me\"] [data-part=\"bubble\"]:last-of-type",
+          "name": "Outgoing bubble",
+          "api": "",
+          "text": "Accent fill on the right; the tail corner is only on the last bubble of a group."
+        },
+        {
+          "sel": "[data-from=\"them\"] [data-part=\"meta\"]",
+          "name": "Group header",
+          "api": "<time datetime>",
+          "text": "Name and time once per group, not per message."
+        },
+        {
+          "sel": "[data-part=\"typing\"]",
+          "name": "Typing indicator",
+          "api": "visually hidden text",
+          "text": "Three dots for sight, \"Riya is typing\" for screen readers."
+        },
+        {
+          "sel": "[data-part=\"status\"]",
+          "name": "Read status",
+          "api": "",
+          "text": "Only under your latest message."
+        }
+      ],
+      "prompt": "Build a chat thread: an <ol role=\"log\" aria-live=\"polite\">, consecutive messages from one sender grouped with one avatar, name and <time>, incoming bubbles on a neutral surface and outgoing on the accent, small tail corners only where bubbles stack, a file attachment card, \"Read 09:45\" under the latest outgoing group, and a three-dot typing indicator with hidden text.",
+      "debug": "Debug my chat thread. Rule out: every message repeating the avatar and time; long URLs breaking the bubble (overflow-wrap: anywhere); the log announcing old messages on load; accent bubbles with text below 4.5:1. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ol role=\"log\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ChatThread groups>",
+          "React"
+        ]
+      ],
+      "added": 2
+    },
+    {
+      "id": "prompt-composer",
+      "name": "Prompt composer",
+      "summary": "A chat input that grows with its text, sends with ⌘↵ and keeps attach and mode within reach.",
+      "pattern": "<form> + auto-growing <textarea>",
+      "states": [
+        "empty",
+        "typing",
+        "near limit",
+        "sent",
+        "focus-within"
+      ],
+      "aliases": [
+        "chat input",
+        "message box",
+        "ai prompt box",
+        "composer",
+        "send message field"
+      ],
+      "react": "PromptComposer",
+      "api": "field-sizing: content",
+      "w": 520,
+      "preview": [
+        [
+          "type",
+          "textarea",
+          "Summarise churn by plan for Q4"
+        ]
+      ],
+      "called": [
+        "message box at the bottom of a chat",
+        "text box with a send arrow",
+        "prompt input that grows",
+        "chat composer with attach button"
+      ],
+      "anatomy": [
+        {
+          "sel": "textarea",
+          "name": "Text area",
+          "api": "field-sizing: content",
+          "text": "Grows to eight lines, then scrolls."
+        },
+        {
+          "sel": "[data-part=\"send\"]",
+          "name": "Send",
+          "api": "disabled when empty",
+          "text": "The only filled button, so it is easy to find."
+        },
+        {
+          "sel": "[data-part=\"hint\"]",
+          "name": "Shortcut hint",
+          "api": "aria-describedby",
+          "text": "Enter makes a new line; ⌘↵ sends."
+        },
+        {
+          "sel": "[data-part=\"mode\"]",
+          "name": "Mode switch",
+          "api": "role=\"radiogroup\"",
+          "text": "Small and secondary."
+        }
+      ],
+      "prompt": "Add a prompt composer: a rounded form with a textarea that grows to eight lines (field-sizing: content with a JS fallback), a bar with an attach button, a small Ask/Edit radiogroup, a \"⌘↵ to send\" hint, a character count that warns near the limit and a round send button that is disabled until there is text. Enter adds a line; ⌘/Ctrl+Enter sends.",
+      "debug": "Debug my composer. Rule out: Enter sending when people expect a new line (or the reverse, document whichever you pick); the textarea jumping height on every keystroke; send enabled for whitespace; the page scrolling when the textarea grows. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "field-sizing: content",
+          "auto-grow"
+        ],
+        [
+          "lumina-taste",
+          "<PromptComposer onSend>",
+          "React"
+        ]
+      ],
+      "added": 2
+    },
+    {
+      "id": "kanban-board",
+      "name": "Kanban board",
+      "summary": "Cards in status columns you can drag, or move with Space and the arrow keys.",
+      "pattern": "Drag and drop with keyboard alternative",
+      "states": [
+        "idle",
+        "dragging",
+        "lifted (keyboard)",
+        "drop target"
+      ],
+      "aliases": [
+        "task board",
+        "trello board",
+        "status columns",
+        "drag cards between columns",
+        "scrum board"
+      ],
+      "react": "KanbanBoard",
+      "api": "draggable + aria-live",
+      "w": 720,
+      "called": [
+        "columns of cards you drag between",
+        "trello style board",
+        "to do doing done board",
+        "task cards in columns"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-col=\"todo\"] [data-part=\"card\"]:first-child",
+          "name": "Card",
+          "api": "draggable · tabindex",
+          "text": "One tab stop for the board; arrows move between cards."
+        },
+        {
+          "sel": "[data-col=\"doing\"] header [data-part=\"n\"]",
+          "name": "Column count",
+          "api": "",
+          "text": "Updates as cards move."
+        },
+        {
+          "sel": "[data-col=\"todo\"] [data-tag=\"bug\"]",
+          "name": "Tag",
+          "api": "",
+          "text": "Colour plus a word, never colour alone."
+        }
+      ],
+      "prompt": "Add a kanban board: columns as <section> with a heading and a live count, cards as list items that are draggable with native drag and drop, plus a keyboard path: Space lifts a card, arrows move it between columns and within a column, Space drops, Esc cancels; announce every move in an assertive live region.",
+      "debug": "Debug my kanban board. Rule out: drag and drop with no keyboard alternative; every card as its own tab stop; counts that do not update; layout reads inside dragover causing jank; the board forcing the page to scroll sideways on mobile (scroll the board instead). The symptom:",
+      "code": [
+        [
+          "dnd-kit",
+          "<DndContext> + useSortable",
+          ""
+        ],
+        [
+          "HTML",
+          "draggable + dragover",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<KanbanBoard columns>",
+          "React"
+        ]
+      ],
+      "added": 2
+    },
+    {
+      "id": "image-compare",
+      "name": "Before/after slider",
+      "summary": "Two images stacked with a draggable divider; arrows move it too.",
+      "pattern": "Native range driving clip-path",
+      "states": [
+        "default",
+        "dragging",
+        "focus-visible"
+      ],
+      "aliases": [
+        "image comparison slider",
+        "before after",
+        "reveal slider",
+        "compare images",
+        "juxtapose"
+      ],
+      "react": "ImageCompare",
+      "api": "<input type=\"range\"> + clip-path",
+      "w": 520,
+      "called": [
+        "slider that wipes between two pictures",
+        "before and after image",
+        "drag a line to compare",
+        "photo comparison swipe"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"handle\"]",
+          "name": "Handle",
+          "api": "left: var(--pos)",
+          "text": "Shows where to grab; the real control is the range input."
+        },
+        {
+          "sel": "[data-part=\"after\"] [data-part=\"tag\"]",
+          "name": "Labels",
+          "api": "role=\"img\" aria-label",
+          "text": "Each side says what it is."
+        }
+      ],
+      "prompt": "Add a before/after slider: two images stacked in a 16:9 frame, the top one clipped with clip-path: inset(0 0 0 var(--pos)), a round handle on a 2px divider, and a transparent full-size <input type=\"range\"> on top so drag, touch and arrow keys all work. Label both images and show focus on the handle.",
+      "debug": "Debug my before/after slider. Rule out: a custom pointer handler with no keyboard path; images of different sizes drifting apart (object-fit: cover on both); the range thumb invisible but still the hit target; no aria-valuetext. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<input type=\"range\">",
+          ""
+        ],
+        [
+          "CSS",
+          "clip-path: inset()",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ImageCompare before after>",
+          "React"
+        ]
+      ],
+      "added": 2
     }
   ]
 }

@@ -63,6 +63,9 @@ export const ICONS = {
   'message': '<path d="M5 18.5V6.5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8Z"/>',
   sliders: '<path d="M5 6h9M18 6h1M5 12h3M12 12h7M5 18h11M20 18h-1"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
   pause: '<path d="M9 5.5v13M15 5.5v13"/>',
+  paperclip: '<path d="m20 11.5-7.8 7.8a5 5 0 0 1-7.1-7.1l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  send: '<path d="M12 19V5M6 11l6-6 6 6"/>',
   download: '<path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/>',
 } as const;
 

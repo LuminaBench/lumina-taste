@@ -1,0 +1,31 @@
+@scope (.lt-notify) {
+  :scope { position: relative; display: inline-block; font-size: var(--text-ui); }
+  [data-part="bell"] { position: relative; display: grid; place-items: center; width: var(--control-h); height: var(--control-h); border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-md); background: var(--bg-surface-1); color: var(--text-secondary); cursor: pointer; transition: background-color var(--dur-1), color var(--dur-1); }
+  [data-part="bell"]:hover, [data-part="bell"][aria-expanded="true"] { background: var(--bg-surface-2); color: var(--text-primary); }
+  [data-part="bell"]:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
+  [data-part="count"] { position: absolute; top: -5px; right: -5px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: var(--radius-pill); background: var(--status-negative); color: var(--bg-canvas); font-size: 10.5px; font-weight: 700; line-height: 18px; font-variant-numeric: tabular-nums; box-shadow: 0 0 0 2px var(--bg-canvas); }
+  [data-part="count"][hidden] { display: none; }
+  [data-part="panel"] { position: absolute; top: calc(100% + 8px); right: 0; z-index: var(--z-dropdown, 30); width: min(380px, calc(100vw - 32px)); border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); box-shadow: var(--shadow-overlay); overflow: hidden; transform-origin: top right; animation: lt-notify-in var(--dur-3) var(--ease-out); }
+  [data-part="panel"][hidden] { display: none; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px 6px; }
+  h3 { margin: 0; font-size: var(--text-ui); font-weight: 650; }
+  [data-part="all"] { border: 0; background: none; color: var(--accent-text); font-size: var(--text-ui-xs); font-weight: 600; cursor: pointer; }
+  [data-part="all"]:disabled { color: var(--text-muted); cursor: default; }
+  [data-part="tabs"] { display: flex; gap: 4px; padding: 0 10px 8px; border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
+  [role="tab"] { height: 28px; padding: 0 10px; border: 0; border-radius: var(--radius-pill); background: none; color: var(--text-secondary); font-size: var(--text-ui-xs); font-weight: 600; cursor: pointer; }
+  [role="tab"][aria-selected="true"] { background: var(--bg-surface-3); color: var(--text-primary); }
+  [data-part="list"] { max-height: 320px; margin: 0; padding: 4px; overflow-y: auto; list-style: none; overscroll-behavior: contain; }
+  [data-part="item"][hidden] { display: none; }
+  [data-part="row"] { display: flex; align-items: flex-start; gap: 10px; width: 100%; padding: 10px; border: 0; border-radius: var(--radius-md); background: none; color: var(--text-secondary); font: inherit; font-size: var(--text-ui-sm); text-align: left; cursor: pointer; }
+  [data-part="row"]:hover { background: var(--bg-surface-2); }
+  [data-part="row"]:focus-visible, [role="tab"]:focus-visible, [data-part="all"]:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -2px; }
+  [data-part="avatar"] { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--bg-surface-3); color: var(--text-primary); font-size: 11px; font-weight: 700; }
+  [data-part="body"] { display: grid; gap: 3px; flex: 1; min-width: 0; }
+  [data-part="line"] strong { color: var(--text-primary); font-weight: 600; }
+  [data-part="quote"] { color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  [data-part="time"] { color: var(--text-muted); font-size: var(--text-ui-xs); }
+  [data-part="dot"] { flex: none; width: 8px; height: 8px; margin-top: 6px; border-radius: 50%; background: var(--accent-solid); }
+  [data-part="item"]:not([data-unread]) [data-part="dot"] { visibility: hidden; }
+  [data-part="empty"] { margin: 0; padding: 28px 16px; text-align: center; color: var(--text-muted); font-size: var(--text-ui-sm); }
+}
+@keyframes lt-notify-in { from { opacity: 0; scale: 0.97; translate: 0 -4px; } }

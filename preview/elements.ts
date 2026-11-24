@@ -39,7 +39,7 @@ function card(c: Doc) {
   return `<article class="g-card" data-id="${c.id}" id="card-${c.id}"${(c.w ?? 0) >= 620 ? ' data-wide' : ''}>
     <div class="g-prev" data-stage data-theme-root data-contained inert ${themeAttrs()}><div class="g-prev-in" ${widthOf(c)}>${c.html}</div></div>
     <div class="g-card-body">
-      <div class="g-card-title"><h3><a class="g-stretch" href="#/ui/${c.id}">${esc(c.name)}</a></h3><span class="g-tag">${esc(c.familyTitle.split(' ')[0].replace(',', ''))}</span></div>
+      <div class="g-card-title"><h3><a class="g-stretch" href="#/ui/${c.id}">${esc(c.name)}</a>${c.added ? '<span class="g-new">New</span>' : ''}</h3><span class="g-tag">${esc(c.familyTitle.split(' ')[0].replace(',', ''))}</span></div>
       <code class="g-api">${esc(doc(c).api)}</code>
       <p>${esc(c.summary)}</p>
     </div>
@@ -52,7 +52,8 @@ export function runPreview(c: Doc, inner: HTMLElement) {
     const el = inner.querySelector<HTMLElement>(sel);
     if (!el) continue;
     if (kind === 'click') el.click();
-    else if (kind === 'type' && el instanceof HTMLInputElement) { el.value = text ?? ''; el.dispatchEvent(new Event('input', { bubbles: true })); }
+    else if (kind === 'type' && (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) { el.value = text ?? ''; el.dispatchEvent(new Event('input', { bubbles: true })); }
+    else if (kind === 'scroll') el.scrollTop = +(text ?? 0);
   }
 }
 const widthOf = (c: Doc) => (c.w ? `style="width:${c.w}px"` : '');
@@ -88,8 +89,9 @@ export function viewIndex(main: HTMLElement, query: string, family: string, sort
         ${FAMILIES.map((f: { id: string; title: string }) => `<button type="button" data-fam="${f.id}" aria-pressed="${family === f.id}">${esc(f.title.split(' ')[0].replace(',', ''))} <span>${ALL.filter((c) => c.family === f.id).length}</span></button>`).join('')}
       </div>
       <div class="g-sort">
-        <button type="button" data-sort="featured" aria-pressed="${sort === 'featured'}">Featured</button>
-        <button type="button" data-sort="az" aria-pressed="${sort === 'az'}">A–Z</button>
+        <button type="button" data-g-sort="featured" aria-pressed="${sort === 'featured'}">Featured</button>
+        <button type="button" data-g-sort="new" aria-pressed="${sort === 'new'}">New</button>
+        <button type="button" data-g-sort="az" aria-pressed="${sort === 'az'}">A–Z</button>
         <button type="button" data-surprise>${ICON.shuffle}<span>Surprise me</span></button>
       </div>
     </div>
@@ -116,7 +118,7 @@ export function viewElement(main: HTMLElement, id: string) {
           </div>
           <div class="g-stage" data-stage data-theme-root data-contained ${themeAttrs()}>
             <div class="g-stage-in" ${widthOf(c)}>${c.html}</div>
-            <div class="g-pins" aria-hidden="true"></div>
+            <div class="g-pins" aria-hidden="true" data-audit-ignore></div>
           </div>
         </div>
         <p class="g-caption">Live and contained: everything opens inside this box. Flip mode changes only the preview.</p>
@@ -152,13 +154,14 @@ export function viewElement(main: HTMLElement, id: string) {
   const pinsLayer = stage.querySelector<HTMLElement>('.g-pins')!;
   let cleanup: Array<() => void> = [];
   let fitter: ReturnType<typeof fit> | null = null;
-  const mount = () => {
+  // First load shows the demo in its most telling state (menu open, row ticked…); Reset gives a clean one.
+  const mount = (preview = true) => {
     cleanup.splice(0).forEach((f) => f());
     inner.innerHTML = c.html;
     if (c.enhance) for (const el of inner.querySelectorAll<HTMLElement>('[data-lt]')) cleanup.push(c.enhance(el));
     fitter = fit(stage, inner, 28);
     cleanup.push(fitter);
-    requestAnimationFrame(() => { runPreview(c, inner); requestAnimationFrame(placePins); });
+    requestAnimationFrame(() => { if (preview) runPreview(c, inner); requestAnimationFrame(placePins); });
   };
   const showPins = () => main.querySelector('[data-pins]')!.getAttribute('aria-pressed') === 'true';
   function placePins() {
@@ -208,7 +211,7 @@ export function viewElement(main: HTMLElement, id: string) {
     b.setAttribute('aria-pressed', String(!showPins()));
     placePins();
   });
-  main.querySelector('[data-replay]')!.addEventListener('click', () => { delete stage.dataset.lock; syncRoots(main); mount(); });
+  main.querySelector('[data-replay]')!.addEventListener('click', () => { delete stage.dataset.lock; syncRoots(main); mount(false); });
   main.querySelector('[data-copy-prompt]')!.addEventListener('click', (e) => copyText(d.prompt, e.currentTarget as HTMLElement));
   main.querySelector('[data-copy-debug]')!.addEventListener('click', (e) => copyText(d.debug, e.currentTarget as HTMLElement));
   main.querySelector('[data-copy-install]')!.addEventListener('click', (e) => copyText(`node scripts/install-taste.mjs --components ${c.id}`, e.currentTarget as HTMLElement));

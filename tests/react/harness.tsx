@@ -7,6 +7,25 @@ import '../../tokens/palettes/all.css';
 import '../../tokens/typography/typography.css';
 import '../../components/ui/_shared/shared.css';
 
+import { Rating } from '../../components/ui/controls/rating/rating.react';
+import { BillingToggle } from '../../components/ui/controls/billing-toggle/billing-toggle.react';
+import { ColorPicker } from '../../components/ui/controls/color-picker/color-picker.react';
+import { TimeSlots } from '../../components/ui/controls/time-slots/time-slots.react';
+import { SpeedDial } from '../../components/ui/navigation/speed-dial/speed-dial.react';
+import { BackToTop } from '../../components/ui/navigation/back-to-top/back-to-top.react';
+import { DrilldownMenu } from '../../components/ui/navigation/drilldown-menu/drilldown-menu.react';
+import { NotificationCenter } from '../../components/ui/overlays/notification-center/notification-center.react';
+import { ChatThread } from '../../components/ui/data/chat-thread/chat-thread.react';
+import { PromptComposer } from '../../components/ui/data/prompt-composer/prompt-composer.react';
+import { KanbanBoard } from '../../components/ui/data/kanban-board/kanban-board.react';
+import { ImageCompare } from '../../components/ui/data/image-compare/image-compare.react';
+import { TextShimmer } from '../../components/ui/motion/text-shimmer/text-shimmer.react';
+import { Typewriter } from '../../components/ui/motion/typewriter/typewriter.react';
+import { LogoMarquee } from '../../components/ui/motion/logo-marquee/logo-marquee.react';
+import { RankedColumns } from '../../components/charts/ranked-columns/ranked-columns.react';
+import { LeaderboardTable } from '../../components/charts/leaderboard-table/leaderboard-table.react';
+import { TradeoffScatter } from '../../components/charts/tradeoff-scatter/tradeoff-scatter.react';
+import { WaterfallChart } from '../../components/charts/waterfall-chart/waterfall-chart.react';
 import { Disclosure } from '../../components/ui/controls/disclosure-chevron/disclosure-chevron.react';
 import { Accordion } from '../../components/ui/controls/accordion/accordion.react';
 import { TreeView } from '../../components/ui/controls/tree-view/tree-view.react';
@@ -238,6 +257,25 @@ function App() {
       <Case id="chart-sankey"><SankeyChart data={{ nodes: [{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }], links: [{ source: 'a', target: 'b', value: 5 }] }} options={{ title: 'Flow' }} /></Case>
       <Case id="chart-kpi"><KpiCard data={{ label: 'Revenue', value: 24400, previous: 21000, spark: [1, 2, 3, 2, 4] }} options={{ format: { prefix: '£', compact: true } }} /></Case>
       <Case id="chart-spark">Trend <Sparkline values={[1, 3, 2, 5, 4]} label="Trend" /></Case>
+      <Case id="rating"><Rating legend="Rate it" defaultValue={3} onChange={(v) => log.push(`rating:${v}`)} /></Case>
+      <Case id="billing"><BillingToggle plan="Team" monthly="£24" yearly="£19" onChange={(p) => log.push(`billing:${p}`)} /></Case>
+      <Case id="color"><ColorPicker legend="Colour" swatches={[{ name: 'Ocean', value: '#2f6fb0' }, { name: 'Clay', value: '#c0623f' }]} onChange={(c) => log.push(`color:${c}`)} /></Case>
+      <Case id="slots"><TimeSlots day="Tuesday" zone="GMT" defaultValue="10:00" groups={[{ label: 'Morning', slots: [{ time: '09:00' }, { time: '09:30', booked: true }, { time: '10:00' }] }]} onChange={(t) => log.push(`slot:${t}`)} /></Case>
+      <Case id="dial"><div style={{ position: 'relative', height: 220 }}><SpeedDial label="Create" actions={[{ label: 'Upload', icon: 'upload' }, { label: 'Folder', icon: 'folder' }]} onAction={(a) => log.push(`dial:${a}`)} /></div></Case>
+      <Case id="totop"><BackToTop><h3>Article</h3><p style={{ height: 900 }}>Long text</p></BackToTop></Case>
+      <Case id="drill"><DrilldownMenu items={[{ label: 'Products', children: [{ label: 'Analytics', href: '#a' }] }, { label: 'Pricing', href: '#p' }]} /></Case>
+      <Case id="notify"><NotificationCenter items={[{ id: '1', who: 'Ana López', verb: 'commented on', what: 'Q4', time: '2m', unread: true }, { id: '2', who: 'Kai', verb: 'assigned', what: 'Churn', time: '1h' }]} onUnreadChange={(n) => log.push(`unread:${n}`)} /></Case>
+      <Case id="chat"><ChatThread label="Chat" day="Today" groups={[{ id: 'a', from: 'them', name: 'Riya', initials: 'RM', time: '09:41', messages: [{ id: 'm1', from: 'them', text: 'Hi' }] }, { id: 'b', from: 'me', time: '09:42', messages: [{ id: 'm2', from: 'me', text: 'Hello' }], status: 'Read' }]} typing={{ initials: 'RM', name: 'Riya' }} /></Case>
+      <Case id="composer"><PromptComposer onSend={(t) => log.push(`send:${t}`)} /></Case>
+      <Case id="kanban"><KanbanBoard columns={[{ id: 'todo', title: 'To do', cards: [{ id: 'c1', title: 'One', tag: 'Bug', who: 'AL' }] }, { id: 'done', title: 'Done', cards: [] }]} onMove={(c, col) => log.push(`kanban:${c}:${col}`)} /></Case>
+      <Case id="compare"><ImageCompare before={<span />} after={<span />} beforeLabel="Before" afterLabel="After" caption="Compare" /></Case>
+      <Case id="shimmer"><TextShimmer>Loading…</TextShimmer><span /></Case>
+      <Case id="typewriter"><Typewriter prefix="Build" words={['pages', 'apps']} /></Case>
+      <Case id="marquee"><LogoMarquee lead="Trusted by" logos={[{ name: 'Halyard' }, { name: 'Moss' }]} /></Case>
+      <Case id="chart-ranked"><RankedColumns data={[{ label: 'A', value: 3, group: 'X' }, { label: 'B', value: null, group: 'Y' }]} options={{ title: 'Ranked' }} /></Case>
+      <Case id="chart-leader"><LeaderboardTable data={{ columns: [{ name: 'Score' }, { name: 'Price', better: 'low' }], rows: [{ label: 'A', group: 'X', values: [3, 1] }, { label: 'B', group: 'Y', values: [2, 2] }] }} options={{ title: 'Board' }} /></Case>
+      <Case id="chart-tradeoff"><TradeoffScatter data={[{ label: 'A', x: 1, y: 3 }, { label: 'B', x: 2, y: 5 }, { label: 'C', x: 3, y: 4 }]} options={{ title: 'Trade-off', quadrant: true }} /></Case>
+      <Case id="chart-waterfall"><WaterfallChart data={[{ label: 'Start', value: 10 }, { label: 'Up', value: 4 }, { label: 'End', value: 0, total: true }]} options={{ title: 'Bridge' }} /></Case>
       <Case id="stagger"><Stagger><span>One</span><span>Two</span></Stagger></Case>
     </ToastProvider>
   );

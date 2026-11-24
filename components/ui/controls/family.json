@@ -1608,6 +1608,260 @@
           "React"
         ]
       ]
+    },
+    {
+      "id": "rating",
+      "name": "Star rating",
+      "summary": "Five stars on native radios: hover previews, arrows change it, the caption says it in words.",
+      "pattern": "Radio group (native)",
+      "states": [
+        "empty",
+        "hover preview",
+        "selected",
+        "focus-visible"
+      ],
+      "aliases": [
+        "stars",
+        "review stars",
+        "5 star rating",
+        "feedback stars",
+        "score input"
+      ],
+      "react": "Rating",
+      "api": "<input type=\"radio\">",
+      "w": 300,
+      "called": [
+        "stars you click to rate something",
+        "five star review input",
+        "rate this article stars",
+        "star score picker"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"star\"][data-v=\"4\"]",
+          "name": "Star",
+          "api": "<label> + radio",
+          "text": "The radio carries state; the label draws the star."
+        },
+        {
+          "sel": "[data-part=\"caption\"]",
+          "name": "Caption",
+          "api": "<output>",
+          "text": "Says the score in words, not just a number."
+        }
+      ],
+      "prompt": "Add a star rating: five native radios in a fieldset with a legend, labels drawing filled stars up to the hovered or checked one, arrow keys from the browser, and an <output> caption that says the score in words (\"4 of 5 · Very useful\").",
+      "debug": "Debug my star rating. Rule out: stars as divs with click handlers (no keyboard); radios hidden with display: none (unfocusable); no visible focus ring; hover preview that sticks after the pointer leaves. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<input type=\"radio\"> × 5",
+          ""
+        ],
+        [
+          "Radix",
+          "RadioGroup",
+          "headless"
+        ],
+        [
+          "lumina-taste",
+          "<Rating legend>",
+          "React"
+        ]
+      ],
+      "added": 2
+    },
+    {
+      "id": "billing-toggle",
+      "name": "Billing period toggle",
+      "summary": "Monthly or yearly with a sliding pill, a savings badge and a price that swaps in place.",
+      "pattern": "WAI-ARIA Radio Group",
+      "states": [
+        "monthly",
+        "yearly",
+        "focus-visible"
+      ],
+      "aliases": [
+        "monthly yearly switch",
+        "pricing toggle",
+        "annual discount toggle",
+        "billing switch"
+      ],
+      "react": "BillingToggle",
+      "api": "role=\"radiogroup\"",
+      "w": 360,
+      "called": [
+        "monthly yearly switch on a pricing page",
+        "toggle that shows the annual discount",
+        "pricing period switch",
+        "save 20% yearly toggle"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-period=\"yearly\"]",
+          "name": "Period option",
+          "api": "role=\"radio\"",
+          "text": "Arrows move and select, like a segmented control."
+        },
+        {
+          "sel": "[data-part=\"save\"]",
+          "name": "Savings badge",
+          "api": "",
+          "text": "States the saving once, on the option that earns it."
+        },
+        {
+          "sel": "[data-price]",
+          "name": "Price",
+          "api": "tabular-nums",
+          "text": "Swaps with a short rise so the change is noticed."
+        }
+      ],
+      "prompt": "Add a billing period toggle above the pricing cards: a radiogroup pill with Monthly and Yearly, a \"Save 20%\" badge on Yearly, a sliding indicator, and every price on the page swapping between data-monthly and data-yearly values with a short fade-up. Default to yearly.",
+      "debug": "Debug my billing toggle. Rule out: prices that jump width (use tabular figures and a min width); a checkbox switch where the label does not say which side is on; savings badge on both options; the indicator measured before fonts load. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "role=\"radiogroup\"",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<BillingToggle monthly yearly>",
+          "React"
+        ]
+      ],
+      "added": 2
+    },
+    {
+      "id": "color-picker",
+      "name": "Colour swatch picker",
+      "summary": "Preset swatches on native radios, a hex field for anything else and a live preview tag.",
+      "pattern": "Radio group + text field",
+      "states": [
+        "preset selected",
+        "custom hex",
+        "invalid hex",
+        "focus-visible"
+      ],
+      "aliases": [
+        "color picker",
+        "swatch picker",
+        "label colour",
+        "hex input",
+        "colour chooser"
+      ],
+      "react": "ColorPicker",
+      "api": "<input type=\"radio\"> + hex",
+      "w": 360,
+      "called": [
+        "row of colour circles to pick from",
+        "label colour chooser",
+        "pick a tag colour",
+        "colour dots with a hex box"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"swatch\"]:nth-child(2)",
+          "name": "Swatch",
+          "api": "<input type=\"radio\">",
+          "text": "Named for screen readers (\"Ocean\"), ring when picked."
+        },
+        {
+          "sel": "input[type=\"text\"]",
+          "name": "Hex field",
+          "api": "aria-invalid",
+          "text": "Accepts any six-digit hex; validates on blur."
+        },
+        {
+          "sel": "[data-part=\"tag\"]",
+          "name": "Preview",
+          "api": "",
+          "text": "Shows the colour where it will be used, not as a lone square."
+        }
+      ],
+      "prompt": "Add a colour picker for labels: 6–8 preset swatches as native radios with visually hidden names and a ring on the checked one, a hex text field that applies valid input live and explains invalid input on blur, and a preview tag tinted with the result.",
+      "debug": "Debug my colour picker. Rule out: swatches with no accessible names; a ring in a fixed colour that vanishes on similar swatches; validation that fires on every keystroke; low-contrast text on the tinted preview. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<input type=\"radio\"> + <input type=\"text\">",
+          ""
+        ],
+        [
+          "react-colorful",
+          "<HexColorPicker>",
+          "full picker"
+        ],
+        [
+          "lumina-taste",
+          "<ColorPicker swatches>",
+          "React"
+        ]
+      ],
+      "added": 2
+    },
+    {
+      "id": "time-slots",
+      "name": "Time-slot picker",
+      "summary": "Bookable times in a grid by part of day; booked slots are struck through and skipped.",
+      "pattern": "WAI-ARIA Radio Group (grid navigation)",
+      "states": [
+        "available",
+        "selected",
+        "booked",
+        "focus-visible"
+      ],
+      "aliases": [
+        "time picker",
+        "appointment slots",
+        "booking times",
+        "meeting scheduler",
+        "calendly times"
+      ],
+      "react": "TimeSlots",
+      "api": "role=\"radio\" grid",
+      "w": 420,
+      "called": [
+        "grid of meeting times to book",
+        "pick a time for a call",
+        "appointment slot buttons",
+        "available times list"
+      ],
+      "anatomy": [
+        {
+          "sel": "[aria-checked=\"true\"]",
+          "name": "Selected slot",
+          "api": "aria-checked",
+          "text": "Filled with the accent; the summary repeats it in words."
+        },
+        {
+          "sel": "[aria-disabled=\"true\"]",
+          "name": "Booked slot",
+          "api": "aria-disabled",
+          "text": "Struck through and skipped by the arrow keys."
+        },
+        {
+          "sel": "[data-part=\"day\"] span",
+          "name": "Time zone",
+          "api": "",
+          "text": "Always say which zone the times are in."
+        }
+      ],
+      "prompt": "Add a time-slot picker for booking a call: the date and time zone on top, slots grouped by Morning and Afternoon in a responsive grid of buttons with role=\"radio\", booked slots struck through with aria-disabled and skipped by arrow keys, and a live summary line (\"30-minute call at 10:30\").",
+      "debug": "Debug my time-slot picker. Rule out: no time zone shown; booked slots that still take focus; each slot as its own tab stop; selected state shown by colour alone. The symptom:",
+      "code": [
+        [
+          "WAI-ARIA",
+          "Radio Group",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<TimeSlots groups>",
+          "React"
+        ]
+      ],
+      "added": 2
     }
   ]
 }

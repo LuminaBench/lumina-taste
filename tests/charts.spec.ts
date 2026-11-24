@@ -2,6 +2,9 @@
 import { expect, test } from '@playwright/test';
 
 const noInteract = new Set(['radial-gauge', 'sparkline', 'kpi-card']);
+// Vertical gridlines are banned on time and category axes (no cage). Charts whose x axis is a
+// continuous value scale (scatter, ranges, distributions) keep light value guides.
+const valueX = new Set(['range-bar-chart', 'dumbbell-chart', 'box-plot', 'beeswarm-chart', 'tradeoff-scatter', 'frontier-chart']);
 
 for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile', width: 390, height: 844 }]) {
   test(`all charts render cleanly (${vp.name})`, async ({ page }) => {
@@ -22,7 +25,7 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
       expect(r.hasSvg, `${r.id} svg`).toBe(true);
       expect(r.marks, `${r.id} marks`).toBeGreaterThan(2);
       expect(r.overflow, `${r.id} overflows its card at ${vp.width}px`).toBe(false);
-      expect(r.vgrid, `${r.id} has vertical gridlines`).toBe(0);
+      if (!valueX.has(r.id!)) expect(r.vgrid, `${r.id} has vertical gridlines`).toBe(0);
     }
     expect(await page.$$eval('.lt-tick', (t) => t.every((x) => getComputedStyle(x).fontVariantNumeric.includes('tabular-nums')))).toBe(true);
     expect(errors).toEqual([]);
@@ -60,14 +63,22 @@ test('charts are keyboard navigable', async ({ page }) => {
 });
 
 test('one-click SVG and PNG export', async ({ page }) => {
-  await page.goto('/#/charts/bar-chart');
-  const [svgDl] = await Promise.all([page.waitForEvent('download'), page.click('[data-export="svg"]')]);
+  // The gallery never downloads anything (export is off in previews); the React harness keeps it on.
+  await page.goto('/_react/');
+  await page.locator('[data-case="chart-bar"] [data-export="svg"]').scrollIntoViewIfNeeded();
+  const [svgDl] = await Promise.all([page.waitForEvent('download'), page.click('[data-case="chart-bar"] [data-export="svg"]')]);
   expect(svgDl.suggestedFilename()).toMatch(/\.svg$/);
-  const [pngDl] = await Promise.all([page.waitForEvent('download'), page.click('[data-export="png"]')]);
+  const [pngDl] = await Promise.all([page.waitForEvent('download'), page.click('[data-case="chart-bar"] [data-export="png"]')]);
   expect(pngDl.suggestedFilename()).toMatch(/\.png$/);
 });
 
 test('donut never shows more than four parts', async ({ page }) => {
   await page.goto('/#/charts/donut-chart');
   expect(await page.locator('[data-chart="donut-chart"] path.lt-mark').count()).toBeLessThanOrEqual(4);
+});
+
+test('gallery previews never offer downloads', async ({ page }) => {
+  await page.goto('/#/charts');
+  await expect(page.locator('[data-chart]').first()).toBeVisible();
+  await expect(page.locator('[data-export]')).toHaveCount(0);
 });

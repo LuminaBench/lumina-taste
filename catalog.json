@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
   "counts": {
-    "ui": 84,
-    "charts": 22,
+    "ui": 99,
+    "charts": 38,
     "blueprints": 8,
     "palettes": 18,
     "themes": 36,
@@ -16,18 +16,18 @@
       "title": "Controls & tactile inputs",
       "summary": "Buttons, toggles, pickers and fields with real pressed states and no layout jump.",
       "order": 1,
-      "count": 22
+      "count": 26
     },
     {
       "id": "navigation",
       "title": "Navigation & page chrome",
       "summary": "Headers, rails, menus and footers that tell people where they are and get out of the way.",
       "order": 2,
-      "count": 14
+      "count": 17
     },
     {
       "id": "feedback",
-      "title": "Numbers, status & feedback",
+      "title": "Feedback, status & numbers",
       "summary": "Counters, progress, loading and messages that stay readable and never shift the layout.",
       "order": 3,
       "count": 14
@@ -37,21 +37,21 @@
       "title": "Overlays & power-user patterns",
       "summary": "Palettes, menus, popovers and dialogs built on native <dialog>, the Popover API and CSS anchor positioning.",
       "order": 4,
-      "count": 13
+      "count": 14
     },
     {
       "id": "data",
       "title": "Data & layout primitives",
       "summary": "Tables, lists, grids and blocks for showing real data cleanly, with tabular numbers everywhere.",
       "order": 5,
-      "count": 14
+      "count": 18
     },
     {
       "id": "motion",
-      "title": "Micro-motion & CSS craft",
+      "title": "Motion & CSS craft",
       "summary": "Curves, transitions and small details that make an interface feel made, all collapsing under reduced motion.",
       "order": 6,
-      "count": 7
+      "count": 10
     }
   ],
   "ui": [
@@ -725,6 +725,124 @@
       "path": "components/ui/controls/number-stepper"
     },
     {
+      "id": "rating",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Star rating",
+      "summary": "Five stars on native radios: hover previews, arrows change it, the caption says it in words.",
+      "aliases": [
+        "stars",
+        "review stars",
+        "5 star rating",
+        "feedback stars",
+        "score input"
+      ],
+      "pattern": "Radio group (native)",
+      "states": [
+        "empty",
+        "hover preview",
+        "selected",
+        "focus-visible"
+      ],
+      "react": "Rating",
+      "deps": [],
+      "files": [
+        "components/ui/controls/rating/rating.css",
+        "components/ui/controls/rating/rating.html",
+        "components/ui/controls/rating/rating.react.tsx",
+        "components/ui/controls/rating/rating.ts"
+      ],
+      "path": "components/ui/controls/rating"
+    },
+    {
+      "id": "billing-toggle",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Billing period toggle",
+      "summary": "Monthly or yearly with a sliding pill, a savings badge and a price that swaps in place.",
+      "aliases": [
+        "monthly yearly switch",
+        "pricing toggle",
+        "annual discount toggle",
+        "billing switch"
+      ],
+      "pattern": "WAI-ARIA Radio Group",
+      "states": [
+        "monthly",
+        "yearly",
+        "focus-visible"
+      ],
+      "react": "BillingToggle",
+      "deps": [],
+      "files": [
+        "components/ui/controls/billing-toggle/billing-toggle.css",
+        "components/ui/controls/billing-toggle/billing-toggle.html",
+        "components/ui/controls/billing-toggle/billing-toggle.react.tsx",
+        "components/ui/controls/billing-toggle/billing-toggle.ts"
+      ],
+      "path": "components/ui/controls/billing-toggle"
+    },
+    {
+      "id": "color-picker",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Colour swatch picker",
+      "summary": "Preset swatches on native radios, a hex field for anything else and a live preview tag.",
+      "aliases": [
+        "color picker",
+        "swatch picker",
+        "label colour",
+        "hex input",
+        "colour chooser"
+      ],
+      "pattern": "Radio group + text field",
+      "states": [
+        "preset selected",
+        "custom hex",
+        "invalid hex",
+        "focus-visible"
+      ],
+      "react": "ColorPicker",
+      "deps": [],
+      "files": [
+        "components/ui/controls/color-picker/color-picker.css",
+        "components/ui/controls/color-picker/color-picker.html",
+        "components/ui/controls/color-picker/color-picker.react.tsx",
+        "components/ui/controls/color-picker/color-picker.ts"
+      ],
+      "path": "components/ui/controls/color-picker"
+    },
+    {
+      "id": "time-slots",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Time-slot picker",
+      "summary": "Bookable times in a grid by part of day; booked slots are struck through and skipped.",
+      "aliases": [
+        "time picker",
+        "appointment slots",
+        "booking times",
+        "meeting scheduler",
+        "calendly times"
+      ],
+      "pattern": "WAI-ARIA Radio Group (grid navigation)",
+      "states": [
+        "available",
+        "selected",
+        "booked",
+        "focus-visible"
+      ],
+      "react": "TimeSlots",
+      "deps": [],
+      "files": [
+        "components/ui/controls/time-slots/time-slots.css",
+        "components/ui/controls/time-slots/time-slots.html",
+        "components/ui/controls/time-slots/time-slots.react.tsx",
+        "components/ui/controls/time-slots/time-slots.ts"
+      ],
+      "path": "components/ui/controls/time-slots"
+    },
+    {
       "id": "data-table",
       "kind": "ui",
       "family": "data",
@@ -1119,6 +1237,125 @@
         "components/ui/data/filter-bar/filter-bar.ts"
       ],
       "path": "components/ui/data/filter-bar"
+    },
+    {
+      "id": "chat-thread",
+      "kind": "ui",
+      "family": "data",
+      "name": "Chat thread",
+      "summary": "Message bubbles grouped by sender, with read status, an attachment and a typing indicator.",
+      "aliases": [
+        "message bubbles",
+        "chat ui",
+        "conversation view",
+        "imessage style chat",
+        "dm thread"
+      ],
+      "pattern": "role=\"log\" (live region)",
+      "states": [
+        "incoming",
+        "outgoing",
+        "attachment",
+        "typing"
+      ],
+      "react": "ChatThread",
+      "deps": [],
+      "files": [
+        "components/ui/data/chat-thread/chat-thread.css",
+        "components/ui/data/chat-thread/chat-thread.html",
+        "components/ui/data/chat-thread/chat-thread.react.tsx"
+      ],
+      "path": "components/ui/data/chat-thread"
+    },
+    {
+      "id": "prompt-composer",
+      "kind": "ui",
+      "family": "data",
+      "name": "Prompt composer",
+      "summary": "A chat input that grows with its text, sends with ⌘↵ and keeps attach and mode within reach.",
+      "aliases": [
+        "chat input",
+        "message box",
+        "ai prompt box",
+        "composer",
+        "send message field"
+      ],
+      "pattern": "<form> + auto-growing <textarea>",
+      "states": [
+        "empty",
+        "typing",
+        "near limit",
+        "sent",
+        "focus-within"
+      ],
+      "react": "PromptComposer",
+      "deps": [],
+      "files": [
+        "components/ui/data/prompt-composer/prompt-composer.css",
+        "components/ui/data/prompt-composer/prompt-composer.html",
+        "components/ui/data/prompt-composer/prompt-composer.react.tsx",
+        "components/ui/data/prompt-composer/prompt-composer.ts"
+      ],
+      "path": "components/ui/data/prompt-composer"
+    },
+    {
+      "id": "kanban-board",
+      "kind": "ui",
+      "family": "data",
+      "name": "Kanban board",
+      "summary": "Cards in status columns you can drag, or move with Space and the arrow keys.",
+      "aliases": [
+        "task board",
+        "trello board",
+        "status columns",
+        "drag cards between columns",
+        "scrum board"
+      ],
+      "pattern": "Drag and drop with keyboard alternative",
+      "states": [
+        "idle",
+        "dragging",
+        "lifted (keyboard)",
+        "drop target"
+      ],
+      "react": "KanbanBoard",
+      "deps": [],
+      "files": [
+        "components/ui/data/kanban-board/kanban-board.css",
+        "components/ui/data/kanban-board/kanban-board.html",
+        "components/ui/data/kanban-board/kanban-board.react.tsx",
+        "components/ui/data/kanban-board/kanban-board.ts"
+      ],
+      "path": "components/ui/data/kanban-board"
+    },
+    {
+      "id": "image-compare",
+      "kind": "ui",
+      "family": "data",
+      "name": "Before/after slider",
+      "summary": "Two images stacked with a draggable divider; arrows move it too.",
+      "aliases": [
+        "image comparison slider",
+        "before after",
+        "reveal slider",
+        "compare images",
+        "juxtapose"
+      ],
+      "pattern": "Native range driving clip-path",
+      "states": [
+        "default",
+        "dragging",
+        "focus-visible"
+      ],
+      "react": "ImageCompare",
+      "deps": [],
+      "files": [
+        "components/ui/data/image-compare/image-compare.css",
+        "components/ui/data/image-compare/image-compare.html",
+        "components/ui/data/image-compare/image-compare.react.tsx",
+        "components/ui/data/image-compare/image-compare.ts"
+      ],
+      "path": "components/ui/data/image-compare"
     },
     {
       "id": "count-up",
@@ -1711,6 +1948,91 @@
       "path": "components/ui/motion/stagger-in"
     },
     {
+      "id": "text-shimmer",
+      "kind": "ui",
+      "family": "motion",
+      "name": "Text shimmer",
+      "summary": "Loading text with a soft light sweeping across it; still under reduced motion.",
+      "aliases": [
+        "shimmering text",
+        "thinking text",
+        "loading text sweep",
+        "shiny text",
+        "glimmer"
+      ],
+      "pattern": "background-clip: text",
+      "states": [
+        "animating",
+        "reduced motion"
+      ],
+      "react": "TextShimmer",
+      "deps": [],
+      "files": [
+        "components/ui/motion/text-shimmer/text-shimmer.css",
+        "components/ui/motion/text-shimmer/text-shimmer.html",
+        "components/ui/motion/text-shimmer/text-shimmer.react.tsx"
+      ],
+      "path": "components/ui/motion/text-shimmer"
+    },
+    {
+      "id": "typewriter",
+      "kind": "ui",
+      "family": "motion",
+      "name": "Typewriter words",
+      "summary": "A headline whose last word types, pauses and deletes itself to cycle through options.",
+      "aliases": [
+        "rotating text",
+        "typing animation",
+        "changing words headline",
+        "typed.js effect",
+        "word cycler"
+      ],
+      "pattern": "aria-hidden animation + static text",
+      "states": [
+        "typing",
+        "holding",
+        "paused",
+        "reduced motion"
+      ],
+      "react": "Typewriter",
+      "deps": [],
+      "files": [
+        "components/ui/motion/typewriter/typewriter.css",
+        "components/ui/motion/typewriter/typewriter.html",
+        "components/ui/motion/typewriter/typewriter.react.tsx",
+        "components/ui/motion/typewriter/typewriter.ts"
+      ],
+      "path": "components/ui/motion/typewriter"
+    },
+    {
+      "id": "logo-marquee",
+      "kind": "ui",
+      "family": "motion",
+      "name": "Logo marquee",
+      "summary": "An endless, edge-faded strip of customer wordmarks that pauses on hover.",
+      "aliases": [
+        "logo cloud",
+        "scrolling logos",
+        "infinite ticker",
+        "customer logos strip",
+        "trusted by bar"
+      ],
+      "pattern": "CSS animation with duplicated row",
+      "states": [
+        "scrolling",
+        "paused",
+        "reduced motion"
+      ],
+      "react": "LogoMarquee",
+      "deps": [],
+      "files": [
+        "components/ui/motion/logo-marquee/logo-marquee.css",
+        "components/ui/motion/logo-marquee/logo-marquee.html",
+        "components/ui/motion/logo-marquee/logo-marquee.react.tsx"
+      ],
+      "path": "components/ui/motion/logo-marquee"
+    },
+    {
       "id": "navbar-mega",
       "kind": "ui",
       "family": "navigation",
@@ -2118,6 +2440,94 @@
       "path": "components/ui/navigation/tabs"
     },
     {
+      "id": "speed-dial",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Speed dial (FAB)",
+      "summary": "A round floating button that fans out three labelled actions above it.",
+      "aliases": [
+        "floating action button",
+        "fab",
+        "plus button that expands",
+        "action fan",
+        "quick create button"
+      ],
+      "pattern": "WAI-ARIA Menu Button",
+      "states": [
+        "closed",
+        "open",
+        "focus-visible"
+      ],
+      "react": "SpeedDial",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/speed-dial/speed-dial.css",
+        "components/ui/navigation/speed-dial/speed-dial.html",
+        "components/ui/navigation/speed-dial/speed-dial.react.tsx",
+        "components/ui/navigation/speed-dial/speed-dial.ts"
+      ],
+      "path": "components/ui/navigation/speed-dial"
+    },
+    {
+      "id": "back-to-top",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Back-to-top button",
+      "summary": "Appears once you have scrolled, shows reading progress in its ring and takes you back up.",
+      "aliases": [
+        "scroll to top",
+        "return to top arrow",
+        "go up button",
+        "scroll progress button"
+      ],
+      "pattern": "Button + scroll progress",
+      "states": [
+        "hidden",
+        "visible",
+        "progress",
+        "focus-visible"
+      ],
+      "react": "BackToTop",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/back-to-top/back-to-top.css",
+        "components/ui/navigation/back-to-top/back-to-top.html",
+        "components/ui/navigation/back-to-top/back-to-top.react.tsx",
+        "components/ui/navigation/back-to-top/back-to-top.ts"
+      ],
+      "path": "components/ui/navigation/back-to-top"
+    },
+    {
+      "id": "drilldown-menu",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Drill-down menu",
+      "summary": "Mobile navigation where each submenu slides in over its parent with a back row.",
+      "aliases": [
+        "sliding menu",
+        "nested mobile menu",
+        "multi-level menu",
+        "push menu",
+        "cascading mobile nav"
+      ],
+      "pattern": "Disclosure navigation (sliding levels)",
+      "states": [
+        "root",
+        "submenu",
+        "nested submenu",
+        "focus-visible"
+      ],
+      "react": "DrilldownMenu",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/drilldown-menu/drilldown-menu.css",
+        "components/ui/navigation/drilldown-menu/drilldown-menu.html",
+        "components/ui/navigation/drilldown-menu/drilldown-menu.react.tsx",
+        "components/ui/navigation/drilldown-menu/drilldown-menu.ts"
+      ],
+      "path": "components/ui/navigation/drilldown-menu"
+    },
+    {
       "id": "command-palette",
       "kind": "ui",
       "family": "overlays",
@@ -2517,6 +2927,37 @@
         "components/ui/overlays/coach-mark/coach-mark.ts"
       ],
       "path": "components/ui/overlays/coach-mark"
+    },
+    {
+      "id": "notification-center",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Notification centre",
+      "summary": "A bell with an unread count that opens a panel of updates you can filter and mark read.",
+      "aliases": [
+        "notifications dropdown",
+        "bell menu",
+        "inbox popover",
+        "activity feed panel",
+        "alerts panel"
+      ],
+      "pattern": "Disclosure (non-modal dialog) + tabs",
+      "states": [
+        "closed",
+        "open",
+        "unread",
+        "all read",
+        "focus-visible"
+      ],
+      "react": "NotificationCenter",
+      "deps": [],
+      "files": [
+        "components/ui/overlays/notification-center/notification-center.css",
+        "components/ui/overlays/notification-center/notification-center.html",
+        "components/ui/overlays/notification-center/notification-center.react.tsx",
+        "components/ui/overlays/notification-center/notification-center.ts"
+      ],
+      "path": "components/ui/overlays/notification-center"
     }
   ],
   "charts": [
@@ -3041,6 +3482,399 @@
         "components/charts/kpi-card/meta.json"
       ],
       "path": "components/charts/kpi-card"
+    },
+    {
+      "id": "ranked-columns",
+      "kind": "chart",
+      "name": "Ranked columns",
+      "group": "Leaderboards",
+      "summary": "Sorted columns with the value on top, colour by group and hatched gaps for missing results.",
+      "aliases": [
+        "leaderboard bar chart",
+        "benchmark chart",
+        "ranked bar chart",
+        "intelligence index chart",
+        "score comparison"
+      ],
+      "bestFor": "Benchmark and leaderboard results across 6–20 entries",
+      "avoidFor": "Trends over time or more than ~24 entries (use the leaderboard table)",
+      "dataShape": "items: label + value (null = not available) + group",
+      "react": "RankedColumns",
+      "order": 30,
+      "files": [
+        "components/charts/ranked-columns/meta.json",
+        "components/charts/ranked-columns/ranked-columns.react.tsx",
+        "components/charts/ranked-columns/ranked-columns.ts"
+      ],
+      "path": "components/charts/ranked-columns"
+    },
+    {
+      "id": "leaderboard-table",
+      "kind": "chart",
+      "name": "Leaderboard table",
+      "group": "Leaderboards",
+      "summary": "Rank, name and group, an inline bar for the main score and heat cells for the rest.",
+      "aliases": [
+        "leaderboard",
+        "ranking table",
+        "table with bars",
+        "heat table",
+        "scoreboard"
+      ],
+      "bestFor": "Ranking many entries on one score while showing 2–4 supporting metrics",
+      "avoidFor": "Exact lookup of dozens of columns (use a data table)",
+      "dataShape": "columns (name, format, better) + rows (label, group, values)",
+      "react": "LeaderboardTable",
+      "order": 31,
+      "files": [
+        "components/charts/leaderboard-table/leaderboard-table.react.tsx",
+        "components/charts/leaderboard-table/leaderboard-table.ts",
+        "components/charts/leaderboard-table/meta.json"
+      ],
+      "path": "components/charts/leaderboard-table"
+    },
+    {
+      "id": "range-bar-chart",
+      "kind": "chart",
+      "name": "Range bars (p5–p95)",
+      "group": "Leaderboards",
+      "summary": "A capsule from low to high percentile with a dot at the median, sorted by the median.",
+      "aliases": [
+        "latency range chart",
+        "error bar chart",
+        "percentile chart",
+        "min max chart",
+        "interval chart"
+      ],
+      "bestFor": "Latency, price or estimate ranges where spread matters as much as the middle",
+      "avoidFor": "Single values (use ranked columns)",
+      "dataShape": "items: label + lo + mid + hi",
+      "react": "RangeBarChart",
+      "order": 32,
+      "files": [
+        "components/charts/range-bar-chart/meta.json",
+        "components/charts/range-bar-chart/range-bar-chart.react.tsx",
+        "components/charts/range-bar-chart/range-bar-chart.ts"
+      ],
+      "path": "components/charts/range-bar-chart"
+    },
+    {
+      "id": "tradeoff-scatter",
+      "kind": "chart",
+      "name": "Trade-off quadrant",
+      "group": "Leaderboards",
+      "summary": "Labelled scatter with the better-on-both quadrant shaded and median guides.",
+      "aliases": [
+        "quadrant chart",
+        "price vs quality chart",
+        "magic quadrant",
+        "labelled scatter",
+        "2x2 chart"
+      ],
+      "bestFor": "Showing which entries win on two measures at once, like quality against price",
+      "avoidFor": "More than ~40 labelled points (use a plain scatter)",
+      "dataShape": "points: label + x + y + group",
+      "react": "TradeoffScatter",
+      "order": 33,
+      "files": [
+        "components/charts/tradeoff-scatter/meta.json",
+        "components/charts/tradeoff-scatter/tradeoff-scatter.react.tsx",
+        "components/charts/tradeoff-scatter/tradeoff-scatter.ts"
+      ],
+      "path": "components/charts/tradeoff-scatter"
+    },
+    {
+      "id": "frontier-chart",
+      "kind": "chart",
+      "name": "Pareto frontier",
+      "group": "Leaderboards",
+      "summary": "A stepped line through the entries nothing else beats on both axes; everything behind it is muted.",
+      "aliases": [
+        "efficient frontier",
+        "pareto chart",
+        "best value line",
+        "trade-off curve",
+        "frontier line"
+      ],
+      "bestFor": "Picking the efficient options in a two-way trade-off",
+      "avoidFor": "When one axis does not matter",
+      "dataShape": "points: label + x + y + group",
+      "react": "FrontierChart",
+      "order": 34,
+      "files": [
+        "components/charts/frontier-chart/frontier-chart.react.tsx",
+        "components/charts/frontier-chart/frontier-chart.ts",
+        "components/charts/frontier-chart/meta.json"
+      ],
+      "path": "components/charts/frontier-chart"
+    },
+    {
+      "id": "slope-chart",
+      "kind": "chart",
+      "name": "Slope chart",
+      "group": "Comparison",
+      "summary": "Two columns of values joined by lines, so rises and falls read at a glance.",
+      "aliases": [
+        "slopegraph",
+        "before and after chart",
+        "two point line chart",
+        "change chart"
+      ],
+      "bestFor": "Before/after for 4–12 items where the change is the story",
+      "avoidFor": "More than two points in time (use a line or bump chart)",
+      "dataShape": "from, to + items: label + a + b",
+      "react": "SlopeChart",
+      "order": 35,
+      "files": [
+        "components/charts/slope-chart/meta.json",
+        "components/charts/slope-chart/slope-chart.react.tsx",
+        "components/charts/slope-chart/slope-chart.ts"
+      ],
+      "path": "components/charts/slope-chart"
+    },
+    {
+      "id": "dumbbell-chart",
+      "kind": "chart",
+      "name": "Dumbbell chart",
+      "group": "Comparison",
+      "summary": "Two dots per row joined by a bar, sorted by the gap between them.",
+      "aliases": [
+        "dot plot comparison",
+        "connected dot plot",
+        "gap chart",
+        "barbell chart"
+      ],
+      "bestFor": "Gaps between two measures per item: plan vs actual, men vs women, p50 vs p95",
+      "avoidFor": "More than two measures per row",
+      "dataShape": "aName, bName + items: label + a + b",
+      "react": "DumbbellChart",
+      "order": 36,
+      "files": [
+        "components/charts/dumbbell-chart/dumbbell-chart.react.tsx",
+        "components/charts/dumbbell-chart/dumbbell-chart.ts",
+        "components/charts/dumbbell-chart/meta.json"
+      ],
+      "path": "components/charts/dumbbell-chart"
+    },
+    {
+      "id": "bullet-chart",
+      "kind": "chart",
+      "name": "Bullet chart",
+      "group": "Single value",
+      "summary": "A thin bar against grey bands and a target tick: a gauge that fits in a row.",
+      "aliases": [
+        "target bar",
+        "kpi bar against goal",
+        "progress against target",
+        "linear gauge"
+      ],
+      "bestFor": "Several KPIs against targets in little space",
+      "avoidFor": "Showing change over time",
+      "dataShape": "items: label + value + target + bands [poor, ok, good]",
+      "react": "BulletChart",
+      "order": 37,
+      "files": [
+        "components/charts/bullet-chart/bullet-chart.react.tsx",
+        "components/charts/bullet-chart/bullet-chart.ts",
+        "components/charts/bullet-chart/meta.json"
+      ],
+      "path": "components/charts/bullet-chart"
+    },
+    {
+      "id": "waterfall-chart",
+      "kind": "chart",
+      "name": "Waterfall chart",
+      "group": "Composition",
+      "summary": "A start total, the steps that raise or lower it, and the end total.",
+      "aliases": [
+        "bridge chart",
+        "revenue bridge",
+        "cascade chart",
+        "walk chart",
+        "mario chart"
+      ],
+      "bestFor": "Explaining how one number became another: revenue bridges, budget changes",
+      "avoidFor": "Unordered parts of a whole (use a stacked bar)",
+      "dataShape": "items: label + value (+ total: true for subtotals)",
+      "react": "WaterfallChart",
+      "order": 38,
+      "files": [
+        "components/charts/waterfall-chart/meta.json",
+        "components/charts/waterfall-chart/waterfall-chart.react.tsx",
+        "components/charts/waterfall-chart/waterfall-chart.ts"
+      ],
+      "path": "components/charts/waterfall-chart"
+    },
+    {
+      "id": "stacked-100-bar",
+      "kind": "chart",
+      "name": "100% stacked bar",
+      "group": "Composition",
+      "summary": "Horizontal bars that all reach 100%, split into parts with percentages inside.",
+      "aliases": [
+        "percent stacked bar",
+        "share bar",
+        "likert chart",
+        "composition bar",
+        "mix chart"
+      ],
+      "bestFor": "Comparing the mix of 2–5 parts across categories (survey answers, traffic sources)",
+      "avoidFor": "Comparing totals (the totals are hidden)",
+      "dataShape": "categories + series: name + values",
+      "react": "Stacked100Bar",
+      "order": 39,
+      "files": [
+        "components/charts/stacked-100-bar/meta.json",
+        "components/charts/stacked-100-bar/stacked-100-bar.react.tsx",
+        "components/charts/stacked-100-bar/stacked-100-bar.ts"
+      ],
+      "path": "components/charts/stacked-100-bar"
+    },
+    {
+      "id": "histogram",
+      "kind": "chart",
+      "name": "Histogram",
+      "group": "Distribution",
+      "summary": "Values grouped into equal bins with no gaps, and a line at the median.",
+      "aliases": [
+        "distribution chart",
+        "frequency chart",
+        "bins chart",
+        "value spread"
+      ],
+      "bestFor": "The shape of one measure: response times, order sizes, ages",
+      "avoidFor": "Comparing more than two distributions (use a box plot)",
+      "dataShape": "values: number[]",
+      "react": "Histogram",
+      "order": 40,
+      "files": [
+        "components/charts/histogram/histogram.react.tsx",
+        "components/charts/histogram/histogram.ts",
+        "components/charts/histogram/meta.json"
+      ],
+      "path": "components/charts/histogram"
+    },
+    {
+      "id": "box-plot",
+      "kind": "chart",
+      "name": "Box plot",
+      "group": "Distribution",
+      "summary": "Median, middle half and whiskers for each group, with outliers as rings.",
+      "aliases": [
+        "box and whisker",
+        "candlestick distribution",
+        "quartile chart",
+        "spread chart"
+      ],
+      "bestFor": "Comparing the spread of 3–10 groups",
+      "avoidFor": "Audiences new to statistics (use a beeswarm or range bars)",
+      "dataShape": "groups: label + values[]",
+      "react": "BoxPlot",
+      "order": 41,
+      "files": [
+        "components/charts/box-plot/box-plot.react.tsx",
+        "components/charts/box-plot/box-plot.ts",
+        "components/charts/box-plot/meta.json"
+      ],
+      "path": "components/charts/box-plot"
+    },
+    {
+      "id": "beeswarm-chart",
+      "kind": "chart",
+      "name": "Beeswarm",
+      "group": "Distribution",
+      "summary": "Every value as a dot, packed so none overlap, with a line at each median.",
+      "aliases": [
+        "swarm plot",
+        "dot strip",
+        "jitter plot",
+        "dot distribution"
+      ],
+      "bestFor": "Showing individual values and their spread for up to a few hundred points",
+      "avoidFor": "Thousands of points (use a histogram)",
+      "dataShape": "groups: label + values[]",
+      "react": "BeeswarmChart",
+      "order": 42,
+      "files": [
+        "components/charts/beeswarm-chart/beeswarm-chart.react.tsx",
+        "components/charts/beeswarm-chart/beeswarm-chart.ts",
+        "components/charts/beeswarm-chart/meta.json"
+      ],
+      "path": "components/charts/beeswarm-chart"
+    },
+    {
+      "id": "bump-chart",
+      "kind": "chart",
+      "name": "Bump chart",
+      "group": "Trends",
+      "summary": "Rank over time: lines cross as entries overtake each other.",
+      "aliases": [
+        "rank chart",
+        "ranking over time",
+        "position chart",
+        "league table chart"
+      ],
+      "bestFor": "Who led when, for 4–10 entries over a few periods",
+      "avoidFor": "When the size of the gap matters (ranks hide it)",
+      "dataShape": "x labels + series: name + ranks[]",
+      "react": "BumpChart",
+      "order": 43,
+      "files": [
+        "components/charts/bump-chart/bump-chart.react.tsx",
+        "components/charts/bump-chart/bump-chart.ts",
+        "components/charts/bump-chart/meta.json"
+      ],
+      "path": "components/charts/bump-chart"
+    },
+    {
+      "id": "small-multiples",
+      "kind": "chart",
+      "name": "Small multiples",
+      "group": "Trends",
+      "summary": "One small area chart per series on a shared scale, with the others ghosted behind.",
+      "aliases": [
+        "trellis chart",
+        "facet grid",
+        "panel chart",
+        "grid of mini charts",
+        "sparkline grid"
+      ],
+      "bestFor": "Six or more series that would tangle in one line chart",
+      "avoidFor": "Two or three series (one line chart is clearer)",
+      "dataShape": "x + series: name + values",
+      "react": "SmallMultiples",
+      "order": 44,
+      "files": [
+        "components/charts/small-multiples/meta.json",
+        "components/charts/small-multiples/small-multiples.react.tsx",
+        "components/charts/small-multiples/small-multiples.ts"
+      ],
+      "path": "components/charts/small-multiples"
+    },
+    {
+      "id": "annotated-line-chart",
+      "kind": "chart",
+      "name": "Annotated line chart",
+      "group": "Trends",
+      "summary": "A trend with dashed rules and short notes where something happened.",
+      "aliases": [
+        "line chart with events",
+        "timeline chart",
+        "event markers",
+        "annotated trend",
+        "chart with notes"
+      ],
+      "bestFor": "Explaining jumps and dips: releases, incidents, campaigns, price changes",
+      "avoidFor": "More than about six notes (move them to a table under the chart)",
+      "dataShape": "x + series + annotations: at + label",
+      "react": "AnnotatedLineChart",
+      "order": 45,
+      "files": [
+        "components/charts/annotated-line-chart/annotated-line-chart.react.tsx",
+        "components/charts/annotated-line-chart/annotated-line-chart.ts",
+        "components/charts/annotated-line-chart/meta.json"
+      ],
+      "path": "components/charts/annotated-line-chart"
     }
   ],
   "blueprints": [
@@ -3312,9 +4146,9 @@
       ],
       "swatches": {
         "light": {
-          "canvas": "#faf5eb",
+          "canvas": "#f9f6f2",
           "accent": "#302a25",
-          "text": "#1b150a"
+          "text": "#181611"
         },
         "dark": {
           "canvas": "#14110e",
@@ -3323,7 +4157,7 @@
         }
       },
       "minTextContrast": {
-        "light": 14.45,
+        "light": 14.49,
         "dark": 13.35
       },
       "files": [
@@ -3348,9 +4182,9 @@
       ],
       "swatches": {
         "light": {
-          "canvas": "#fcf3e6",
+          "canvas": "#faf6f0",
           "accent": "#1c3461",
-          "text": "#1d1406"
+          "text": "#19150f"
         },
         "dark": {
           "canvas": "#0b1423",
@@ -3359,7 +4193,7 @@
         }
       },
       "minTextContrast": {
-        "light": 14.3,
+        "light": 14.6,
         "dark": 13.04
       },
       "files": [
@@ -3385,9 +4219,9 @@
       ],
       "swatches": {
         "light": {
-          "canvas": "#f8f3ec",
+          "canvas": "#f9f6f2",
           "accent": "#536228",
-          "text": "#1b150d"
+          "text": "#191510"
         },
         "dark": {
           "canvas": "#13130d",
@@ -3396,7 +4230,7 @@
         }
       },
       "minTextContrast": {
-        "light": 14.07,
+        "light": 14.61,
         "dark": 13.19
       },
       "files": [
@@ -3461,9 +4295,9 @@
       ],
       "swatches": {
         "light": {
-          "canvas": "#fbf7eb",
+          "canvas": "#f8f7f2",
           "accent": "#1d3c79",
-          "text": "#1b1608"
+          "text": "#181610"
         },
         "dark": {
           "canvas": "#0c1118",
@@ -3472,7 +4306,7 @@
         }
       },
       "minTextContrast": {
-        "light": 14.46,
+        "light": 14.49,
         "dark": 13.59
       },
       "files": [
@@ -3571,9 +4405,9 @@
       ],
       "swatches": {
         "light": {
-          "canvas": "#fcf1e7",
+          "canvas": "#fbf6f1",
           "accent": "#af5234",
-          "text": "#1f1307"
+          "text": "#1b150f"
         },
         "dark": {
           "canvas": "#190f0a",
@@ -3582,7 +4416,7 @@
         }
       },
       "minTextContrast": {
-        "light": 14.07,
+        "light": 14.51,
         "dark": 13.47
       },
       "files": [
@@ -3717,9 +4551,9 @@
       ],
       "swatches": {
         "light": {
-          "canvas": "#f1f7ee",
+          "canvas": "#f4f8f3",
           "accent": "#9e5a3b",
-          "text": "#12180f"
+          "text": "#141712"
         },
         "dark": {
           "canvas": "#0e130d",
@@ -3728,7 +4562,7 @@
         }
       },
       "minTextContrast": {
-        "light": 14.18,
+        "light": 14.55,
         "dark": 13.33
       },
       "files": [
@@ -3755,9 +4589,9 @@
       ],
       "swatches": {
         "light": {
-          "canvas": "#fcf9f3",
+          "canvas": "#fbf9f5",
           "accent": "#985602",
-          "text": "#19160f"
+          "text": "#181612"
         },
         "dark": {
           "canvas": "#0c0a08",
@@ -3793,9 +4627,9 @@
       ],
       "swatches": {
         "light": {
-          "canvas": "#fbf3e9",
+          "canvas": "#faf6f1",
           "accent": "#7f282e",
-          "text": "#1d1408"
+          "text": "#1a1510"
         },
         "dark": {
           "canvas": "#160e0d",
@@ -3804,7 +4638,7 @@
         }
       },
       "minTextContrast": {
-        "light": 14.2,
+        "light": 14.47,
         "dark": 13.58
       },
       "files": [
@@ -3867,9 +4701,9 @@
       ],
       "swatches": {
         "light": {
-          "canvas": "#eefaf5",
+          "canvas": "#f1f9f6",
           "accent": "#014e6c",
-          "text": "#0b1914"
+          "text": "#101815"
         },
         "dark": {
           "canvas": "#02141b",
@@ -3878,7 +4712,7 @@
         }
       },
       "minTextContrast": {
-        "light": 14.53,
+        "light": 14.55,
         "dark": 13.39
       },
       "files": [
@@ -3944,9 +4778,9 @@
       ],
       "swatches": {
         "light": {
-          "canvas": "#f9f0de",
+          "canvas": "#fbf6ed",
           "accent": "#2e3a81",
-          "text": "#1c1505"
+          "text": "#1a150b"
         },
         "dark": {
           "canvas": "#0e111b",
@@ -3955,7 +4789,7 @@
         }
       },
       "minTextContrast": {
-        "light": 13.74,
+        "light": 14.6,
         "dark": 13.42
       },
       "files": [

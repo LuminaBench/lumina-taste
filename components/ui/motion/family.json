@@ -373,6 +373,174 @@
           "React"
         ]
       ]
+    },
+    {
+      "id": "text-shimmer",
+      "name": "Text shimmer",
+      "summary": "Loading text with a soft light sweeping across it; still under reduced motion.",
+      "pattern": "background-clip: text",
+      "states": [
+        "animating",
+        "reduced motion"
+      ],
+      "aliases": [
+        "shimmering text",
+        "thinking text",
+        "loading text sweep",
+        "shiny text",
+        "glimmer"
+      ],
+      "react": "TextShimmer",
+      "api": "background-clip: text",
+      "w": 360,
+      "called": [
+        "text with light moving across it while loading",
+        "thinking… shimmer",
+        "shiny loading label",
+        "glowing sweep on text"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-shimmer:first-child",
+          "name": "Shimmer text",
+          "api": "role=\"status\"",
+          "text": "Muted text with a primary-ink highlight passing through."
+        }
+      ],
+      "prompt": "Add a text shimmer for in-progress states: muted text with a linear-gradient highlight in primary ink clipped to the text, sweeping left to right every 2.2s, role=\"status\" so the words are announced, and plain muted text under reduced motion.",
+      "debug": "Debug my text shimmer. Rule out: the gradient colours hard-coded so it vanishes in dark mode; -webkit-text-fill-color missing in Safari; animation left running under reduced motion; shimmer on text people need to read carefully. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "background-clip: text",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<TextShimmer>",
+          "React"
+        ]
+      ],
+      "added": 2
+    },
+    {
+      "id": "typewriter",
+      "name": "Typewriter words",
+      "summary": "A headline whose last word types, pauses and deletes itself to cycle through options.",
+      "pattern": "aria-hidden animation + static text",
+      "states": [
+        "typing",
+        "holding",
+        "paused",
+        "reduced motion"
+      ],
+      "aliases": [
+        "rotating text",
+        "typing animation",
+        "changing words headline",
+        "typed.js effect",
+        "word cycler"
+      ],
+      "react": "Typewriter",
+      "api": "aria-hidden + visually hidden",
+      "w": 520,
+      "called": [
+        "headline where one word keeps changing",
+        "typing text effect",
+        "words that type and delete",
+        "rotating word in hero"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"word\"]",
+          "name": "Rotating word",
+          "api": "aria-hidden",
+          "text": "Accent ink; the sentence stays readable around it."
+        },
+        {
+          "sel": "[data-part=\"caret\"]",
+          "name": "Caret",
+          "api": "",
+          "text": "Blinks only while waiting, solid while typing."
+        }
+      ],
+      "prompt": "Add a typewriter headline: a fixed prefix and a last word that deletes at 38ms per letter, types at about 90ms, holds for 2s, then moves to the next word. Hide the moving text from screen readers and give them the full sentence once; pause on hover, focus and hidden tabs; swap words without typing under reduced motion.",
+      "debug": "Debug my typewriter. Rule out: screen readers announcing every letter (aria-hidden on the animated text); layout shift as the word changes width (put it at the end of the line); timers running in background tabs; no reduced-motion path. The symptom:",
+      "code": [
+        [
+          "Typed.js",
+          "new Typed()",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<Typewriter words>",
+          "React"
+        ]
+      ],
+      "added": 2
+    },
+    {
+      "id": "logo-marquee",
+      "name": "Logo marquee",
+      "summary": "An endless, edge-faded strip of customer wordmarks that pauses on hover.",
+      "pattern": "CSS animation with duplicated row",
+      "states": [
+        "scrolling",
+        "paused",
+        "reduced motion"
+      ],
+      "aliases": [
+        "logo cloud",
+        "scrolling logos",
+        "infinite ticker",
+        "customer logos strip",
+        "trusted by bar"
+      ],
+      "react": "LogoMarquee",
+      "api": "@keyframes translate: -100%",
+      "w": 640,
+      "called": [
+        "row of company logos that scrolls forever",
+        "trusted by logos moving sideways",
+        "infinite logo ticker",
+        "logo carousel strip"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"row\"]:first-child li:nth-child(2)",
+          "name": "Wordmark",
+          "api": "",
+          "text": "Muted ink so logos do not compete with the page."
+        },
+        {
+          "sel": "[data-part=\"track\"]",
+          "name": "Faded edges",
+          "api": "mask-image",
+          "text": "Logos fade in and out instead of being cut."
+        },
+        {
+          "sel": "[data-part=\"row\"][aria-hidden]",
+          "name": "Duplicate row",
+          "api": "aria-hidden",
+          "text": "Makes the loop seamless; hidden from screen readers."
+        }
+      ],
+      "prompt": "Add a logo marquee under the hero: a muted \"Trusted by teams at\" line, then two identical rows of wordmarks (the second aria-hidden) translating -100% over 32s linear infinite, edges faded with mask-image, paused on hover and focus, and a static centred wrap under reduced motion.",
+      "debug": "Debug my marquee. Rule out: a jump at the loop point (rows must be identical with equal padding); screen readers reading every logo twice; colourful logos fighting the hero; animation under reduced motion. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "@keyframes + translate",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<LogoMarquee logos>",
+          "React"
+        ]
+      ],
+      "added": 2
     }
   ]
 }

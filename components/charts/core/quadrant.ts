@@ -114,7 +114,7 @@ export function tradeoff(host: HTMLElement, data: TradeoffPoint[], opts: Tradeof
       lg.append(el('text', { x: r(pl.x), y: r(pl.y), 'text-anchor': pl.anchor, style: `fill: ${isOn(p) ? 'var(--text-primary)' : 'var(--text-muted)'}; font-size: 11px; font-weight: ${isOn(p) ? 600 : 500}; paint-order: stroke; stroke: var(--bg-surface-1); stroke-width: 3px; stroke-linejoin: round` }, [p.label]));
     });
     svg.append(lg);
-    ctx.interact({ mode: 'nearest', marks: sorted.map((p) => marks[sorted.indexOf(p)]) });
+    ctx.interact({ mode: 'nearest', marks, radius: 90 });
     const frontNames = front ? [...front].map((p) => p.label).join(', ') : '';
     return {
       summary: `Scatter of ${d.length} items, ${o.xLabel ?? 'x'} against ${o.yLabel ?? 'y'}.${front ? ` On the frontier: ${frontNames}.` : ''}`,

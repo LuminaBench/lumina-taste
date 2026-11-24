@@ -1,0 +1,13 @@
+@scope (.lt-rating) {
+  :scope { display: grid; gap: 8px; margin: 0; padding: 0; border: 0; min-width: 0; font-size: var(--text-ui); }
+  legend { padding: 0; margin-bottom: 8px; font-weight: 550; }
+  [data-part="stars"] { display: inline-flex; gap: 2px; width: max-content; }
+  input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+  label { display: grid; place-items: center; width: 34px; height: 34px; border-radius: var(--radius-sm); color: var(--border-strong); cursor: pointer; transition: color var(--dur-1), scale var(--dur-2) var(--ease-spring); }
+  label svg { fill: currentColor; stroke: none; }
+  label[data-on] { color: var(--accent-solid); }
+  label:active { scale: 0.88; }
+  input:focus-visible + label { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 1px; }
+  [data-part="caption"] { font-size: var(--text-ui-sm); color: var(--text-secondary); font-variant-numeric: tabular-nums; min-height: 1.4em; }
+  :scope[data-preview] [data-part="caption"] { color: var(--text-muted); }
+}

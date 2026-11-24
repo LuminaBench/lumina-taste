@@ -1,0 +1,19 @@
+@scope (.lt-billing) {
+  :scope { display: grid; gap: var(--gap-lg); justify-items: center; font-size: var(--text-ui); }
+  [data-part="switch"] { position: relative; isolation: isolate; display: inline-flex; padding: 3px; border-radius: var(--radius-pill); background: var(--bg-surface-3); }
+  button { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; height: calc(var(--control-h) - 6px); padding: 0 var(--gap-md); border: 0; border-radius: var(--radius-pill); background: none; color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 600; cursor: pointer; transition: color var(--dur-2); }
+  button[aria-checked="true"] { color: var(--text-primary); }
+  button:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 1px; }
+  [data-part="save"] { padding: 2px 7px; border-radius: var(--radius-pill); background: var(--status-positive-soft); color: var(--status-positive); font-size: var(--text-ui-xs); font-weight: 650; }
+  [data-part="indicator"] { position: absolute; z-index: 0; top: 3px; bottom: 3px; left: 0; width: var(--w, 0); border-radius: var(--radius-pill); background: var(--bg-surface-1); box-shadow: var(--shadow-sm), 0 0 0 1px var(--border-hairline); transform: translateX(var(--x, 0)); transition: transform var(--dur-4) var(--ease-spring), width var(--dur-3) var(--ease-out); }
+  :scope:not([data-ready]) [data-part="indicator"] { transition: none; }
+  [data-part="plan"] { display: grid; gap: 4px; justify-items: center; text-align: center; }
+  [data-part="plan"] p { margin: 0; }
+  [data-part="name"] { font-weight: 600; color: var(--text-secondary); }
+  [data-part="price"] { display: flex; align-items: baseline; gap: 8px; }
+  [data-price] { display: inline-block; font-family: var(--font-display); font-size: var(--step-4); font-weight: var(--weight-display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; min-width: 3ch; }
+  [data-price][data-swap] { animation: lt-price-in var(--dur-3) var(--ease-out); }
+  [data-part="per"] { color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  [data-part="note"] { color: var(--text-muted); font-size: var(--text-ui-sm); }
+}
+@keyframes lt-price-in { from { opacity: 0; translate: 0 6px; } }

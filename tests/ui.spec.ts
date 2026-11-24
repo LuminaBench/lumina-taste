@@ -9,7 +9,14 @@ const errorsOf = (page: Page) => {
   return errors;
 };
 const card = (page: Page, id: string) => page.locator(`#ui-${id} [data-stage]`);
-const solo = async (page: Page, id: string) => { await page.goto(`/#/ui/${id}`); await expect(page.locator(`#ui-${id}`)).toBeVisible(); return card(page, id); };
+// Detail pages open in a showcase state (menus open, rows ticked); Reset mounts a clean demo.
+const solo = async (page: Page, id: string) => {
+  await page.goto(`/#/ui/${id}`);
+  await expect(page.locator(`#ui-${id}`)).toBeVisible();
+  await page.locator('[data-replay]').click();
+  await page.waitForTimeout(760); // let the stage finish fitting (150 ms and 700 ms passes)
+  return card(page, id);
+};
 
 test('all 80+ patterns render with non-empty stages and no errors', async ({ page }) => {
   const errors = errorsOf(page);
@@ -23,10 +30,10 @@ test('all 80+ patterns render with non-empty stages and no errors', async ({ pag
 });
 
 test('every pattern re-skins across all 36 palette × mode themes', async ({ page }) => {
-  await page.goto('/#/ui');
+  await page.goto('/#/palettes');
   const result = await page.evaluate(async () => {
     const html = document.documentElement;
-    const ids = [...document.querySelectorAll<HTMLOptionElement>('#g-palette option')].map((o) => o.value);
+    const ids = [...document.querySelectorAll<HTMLElement>('.g-pal[data-palette]')].map((o) => o.dataset.palette!);
     const seen = new Set<string>();
     for (const id of ids) for (const mode of ['light', 'dark']) {
       html.dataset.palette = id; html.dataset.mode = mode;
@@ -41,7 +48,9 @@ test('every pattern re-skins across all 36 palette × mode themes', async ({ pag
 
 test('keyboard focus is visible on the first control of every stage', async ({ page }) => {
   await page.goto('/#/ui');
-  await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important}' });
+  await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important} .g-prev-in{transform:none!important;width:auto!important} .g-prev{aspect-ratio:auto!important;min-height:220px;contain:none!important} .g-stretch::after{display:none}' });
+  // Grid previews are inert thumbnails; make them live for this check.
+  await page.evaluate(() => document.querySelectorAll('[inert]').forEach((n) => n.removeAttribute('inert')));
   // Tag the first keyboard-focusable control of each stage, then compare pixels before/after focus.
   const ids = await page.evaluate(() => {
     const out: string[] = [];
@@ -70,16 +79,19 @@ test('keyboard focus is visible on the first control of every stage', async ({ p
 });
 
 test('clicking every visible control in every stage never throws', async ({ page }) => {
+  test.setTimeout(300_000);
   const errors = errorsOf(page);
   await page.goto('/#/ui');
   const ids = await page.$$eval('.g-card', (c) => c.map((x) => x.getAttribute('data-id')!));
+  expect(ids.length).toBeGreaterThanOrEqual(80);
   for (const id of ids) {
-    const buttons = card(page, id).locator('button:visible');
-    const n = Math.min(await buttons.count(), 8);
-    for (let i = 0; i < n; i++) {
-      const b = buttons.nth(i);
-      if (!(await b.isEnabled()) || !(await b.isVisible())) continue;
-      await b.click({ timeout: 2000, trial: false }).catch(() => {});
+    await page.evaluate((i) => (location.hash = `#/ui/${i}`), id);
+    await expect(page.locator(`#ui-${id}`)).toBeVisible();
+    // Snapshot the buttons first: clicks open and close things, so live locators shift under us.
+    const handles = (await card(page, id).locator('button:visible').elementHandles()).slice(0, 8);
+    for (const h of handles) {
+      if (!(await h.isEnabled().catch(() => false))) continue;
+      await h.click({ timeout: 800 }).catch(() => {});
       await page.keyboard.press('Escape');
     }
   }
@@ -110,9 +122,13 @@ test.describe('controls', () => {
   });
   test('theme switch flips data-mode', async ({ page }) => {
     const s = await solo(page, 'theme-switch');
-    const before = await page.evaluate(() => document.documentElement.dataset.mode);
+    // Inside the gallery the switch is contained: it flips the stage, never the page.
+    const stage = page.locator('#ui-theme-switch .g-stage');
+    const page0 = await page.evaluate(() => document.documentElement.dataset.mode);
+    const before = await stage.getAttribute('data-mode');
     await s.locator('.lt-theme-switch').click();
-    await expect.poll(() => page.evaluate(() => document.documentElement.dataset.mode)).not.toBe(before);
+    await expect.poll(() => stage.getAttribute('data-mode')).not.toBe(before);
+    expect(await page.evaluate(() => document.documentElement.dataset.mode)).toBe(page0);
   });
   test('segmented control: arrows select', async ({ page }) => {
     const s = await solo(page, 'segmented-control');
@@ -289,6 +305,8 @@ test.describe('feedback', () => {
 test.describe('overlays', () => {
   test('command palette: ⌘K, filter, Enter', async ({ page }) => {
     const s = await solo(page, 'command-palette');
+    // Contained demos only take ⌘K while focus is inside their box.
+    await s.locator('[data-part="open"]').focus();
     await page.keyboard.press('ControlOrMeta+k');
     await expect(s.locator('dialog')).toBeVisible();
     await page.keyboard.type('settings');
@@ -417,4 +435,108 @@ test('search finds sloppy aliases', async ({ page }) => {
     await page.fill('#g-q', q);
     await expect(page.locator('.g-card').first()).toHaveAttribute('data-id', id);
   }
+});
+
+test.describe('added in 1.0', () => {
+  test('rating: arrows change the value and the caption says it', async ({ page }) => {
+    const s = await solo(page, 'rating');
+    await s.locator('input[value="4"]').focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(s.locator('input[value="5"]')).toBeChecked();
+    await expect(s.locator('[data-part="caption"]')).toHaveText('5 of 5 · Essential');
+  });
+  test('billing toggle swaps prices', async ({ page }) => {
+    const s = await solo(page, 'billing-toggle');
+    await s.locator('[data-period="monthly"]').click();
+    await expect(s.locator('[data-price]')).toHaveText('£24');
+    await page.keyboard.press('ArrowRight');
+    await expect(s.locator('[data-price]')).toHaveText('£19');
+  });
+  test('colour picker: hex field validates and applies', async ({ page }) => {
+    const s = await solo(page, 'color-picker');
+    const field = s.locator('input[type="text"]');
+    await field.fill('#c0623f');
+    await expect(s.locator('input[value="#c0623f"]')).toBeChecked();
+    await field.fill('nope');
+    await field.blur();
+    await expect(field).toHaveAttribute('aria-invalid', 'true');
+  });
+  test('time slots: arrows skip booked slots', async ({ page }) => {
+    const s = await solo(page, 'time-slots');
+    await s.locator('[aria-checked="true"]').focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(s.locator('[aria-checked="true"]')).toHaveText('11:30');
+    await expect(s.locator('[data-part="summary"]')).toContainText('11:30');
+  });
+  test('speed dial opens, arrows move, Esc returns focus', async ({ page }) => {
+    const s = await solo(page, 'speed-dial');
+    const fab = s.locator('[data-part="fab"]');
+    await fab.click();
+    await expect(fab).toHaveAttribute('aria-expanded', 'true');
+    await fab.press('ArrowUp');
+    await expect(s.locator('[role="menuitem"]').last()).toBeFocused();
+    await page.keyboard.press('ArrowUp');
+    await expect(s.locator('[role="menuitem"]').nth(1)).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(fab).toBeFocused();
+    await expect(fab).toHaveAttribute('aria-expanded', 'false');
+  });
+  test('back to top appears after scrolling and returns', async ({ page }) => {
+    const s = await solo(page, 'back-to-top');
+    const btn = s.locator('[data-part="button"]');
+    await expect(btn).toBeHidden();
+    await s.locator('[data-part="scroller"]').evaluate((n) => { n.style.scrollBehavior = 'auto'; n.scrollTop = 500; });
+    await expect(btn).toBeVisible();
+    await btn.click();
+    await expect.poll(() => s.locator('[data-part="scroller"]').evaluate((n) => n.scrollTop)).toBe(0);
+  });
+  test('drill-down menu goes in and back out', async ({ page }) => {
+    const s = await solo(page, 'drilldown-menu');
+    await s.locator('[data-target="products"]').click();
+    await expect(s.locator('#lt-dd-products')).toBeVisible();
+    await expect(s.locator('#lt-dd-products [data-part="back"]')).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(s.locator('[data-target="products"]')).toBeFocused();
+  });
+  test('notification centre: mark all as read clears the count', async ({ page }) => {
+    const s = await solo(page, 'notification-center');
+    await s.locator('[data-part="bell"]').click();
+    await expect(s.locator('[data-part="panel"]')).toBeVisible();
+    await s.locator('[data-filter="unread"]').click();
+    await expect(s.locator('[data-part="item"]:visible')).toHaveCount(3);
+    await s.locator('[data-part="all"]').click();
+    await expect(s.locator('[data-part="count"]')).toBeHidden();
+    await expect(s.locator('[data-part="empty"]')).toBeVisible();
+  });
+  test('prompt composer: send is disabled until there is text; Cmd+Enter sends', async ({ page }) => {
+    const s = await solo(page, 'prompt-composer');
+    const send = s.locator('[data-part="send"]');
+    await expect(send).toBeDisabled();
+    await s.locator('textarea').fill('Summarise churn');
+    await expect(send).toBeEnabled();
+    await s.locator('textarea').press('ControlOrMeta+Enter');
+    await expect(s.locator('textarea')).toHaveValue('');
+    await expect(s.locator('[data-part="sent"]')).toContainText('Summarise churn');
+  });
+  test('kanban: Space, ArrowRight, Space moves a card', async ({ page }) => {
+    const s = await solo(page, 'kanban-board');
+    const card = s.locator('[data-col="todo"] [data-part="card"]').first();
+    await card.focus();
+    await page.keyboard.press('Space');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('Space');
+    await expect(s.locator('[data-col="doing"] [data-part="card"]')).toHaveCount(3);
+    await expect(s.locator('[data-col="doing"] [data-part="n"]')).toHaveText('3');
+    await expect(s.locator('[data-part="live"]')).toContainText('Dropped');
+  });
+  test('image compare follows the range input', async ({ page }) => {
+    const s = await solo(page, 'image-compare');
+    await s.locator('input[type="range"]').focus();
+    await page.keyboard.press('End');
+    await expect.poll(() => s.locator('.lt-compare').evaluate((n) => (n as HTMLElement).style.getPropertyValue('--pos'))).toBe('100%');
+  });
+  test('typewriter keeps the full sentence for screen readers', async ({ page }) => {
+    const s = await solo(page, 'typewriter');
+    await expect(s.locator('.lt-visually-hidden')).toContainText('dashboards, pricing pages, settings screens and onboarding flows');
+  });
 });

@@ -125,6 +125,8 @@ const PAGE_CHECKS = () => {
     const el = n.parentElement;
     if (!el || ['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE', 'TITLE', 'OPTION'].includes(el.tagName)) continue;
     if (!visible(el)) continue;
+    // Inert thumbnails are scaled illustrations; the live versions are audited on their own pages.
+    if (el.closest('[inert], [data-audit-ignore]')) continue;
     const range = document.createRange(); range.selectNodeContents(n);
     const rects = [...range.getClientRects()].filter((r) => r.width > 0.5 && r.height > 0.5);
     if (!rects.length) continue;
@@ -150,7 +152,8 @@ const PAGE_CHECKS = () => {
     if (!cut) continue;
     // Allowed: text inside a scroll container (user can scroll to it).
     let scroller = false;
-    for (let a = l.el; a && a !== document.body; a = a.parentElement) { const o = getComputedStyle(a).overflowX; if (o === 'auto' || o === 'scroll') { scroller = true; break; } }
+    // Also allowed: text fading out under a mask (marquees, edge fades) — the cut is the design.
+    for (let a = l.el; a && a !== document.body; a = a.parentElement) { const c2 = getComputedStyle(a); if (c2.overflowX === 'auto' || c2.overflowX === 'scroll' || /gradient|url/.test(c2.getPropertyValue('mask-image') + c2.getPropertyValue('-webkit-mask-image'))) { scroller = true; break; } }
     if (!scroller) add('clipped-text', 'error', l.el, `Text is cut off: “${l.text.slice(0, 40)}”.`);
   }
 
@@ -366,6 +369,8 @@ async function auditOne(browser, url, vpName, mode) {
       const x = Math.min(innerWidth - 1, Math.max(0, r.left + r.width / 2)), y = Math.min(innerHeight - 1, Math.max(0, r.top + r.height / 2));
       const top = document.elementFromPoint(x, y);
       if (!top || el.contains(top) || top.contains(el) && top !== document.body && !(top === document.documentElement)) continue;
+      // Under an open dialog or menu that belongs to the same demo: covered on purpose while it is open.
+      if (top.closest('dialog[open], [data-contained-open], [popover]:popover-open, [role="menu"], [role="dialog"]')) continue;
       if (el.labels && [...el.labels].some((l) => l.contains(top))) continue;
       if (top.closest('label') && top.closest('label').contains(el)) continue;
       // Visually hidden native inputs under a styled label are fine.

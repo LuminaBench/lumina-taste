@@ -931,6 +931,209 @@
           "React"
         ]
       ]
+    },
+    {
+      "id": "speed-dial",
+      "name": "Speed dial (FAB)",
+      "summary": "A round floating button that fans out three labelled actions above it.",
+      "pattern": "WAI-ARIA Menu Button",
+      "states": [
+        "closed",
+        "open",
+        "focus-visible"
+      ],
+      "aliases": [
+        "floating action button",
+        "fab",
+        "plus button that expands",
+        "action fan",
+        "quick create button"
+      ],
+      "react": "SpeedDial",
+      "api": "aria-haspopup=\"menu\"",
+      "w": 360,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"fab\"]"
+        ]
+      ],
+      "called": [
+        "round plus button in the corner that opens more buttons",
+        "floating create button",
+        "fab with labels",
+        "bottom right action button menu"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"fab\"]",
+          "name": "Floating button",
+          "api": "aria-expanded",
+          "text": "The plus turns into a close mark when open."
+        },
+        {
+          "sel": "li:last-child [data-part=\"mini\"]",
+          "name": "Action",
+          "api": "role=\"menuitem\"",
+          "text": "Icon plus a visible label; never icons alone."
+        },
+        {
+          "sel": "li:first-child [data-part=\"text\"]",
+          "name": "Label",
+          "api": "",
+          "text": "Sits on a surface so it reads over any content."
+        }
+      ],
+      "prompt": "Add a speed dial: a 52px round accent button fixed to the bottom-right with aria-haspopup=\"menu\"; opening fans out 3 labelled mini actions above it with a short spring and a 35ms stagger, the plus rotates 45°, arrow keys move between actions, Esc and outside clicks close and return focus.",
+      "debug": "Debug my speed dial. Rule out: actions with icons but no labels; the menu still focusable while hidden (use visibility: hidden when closed); the FAB covering page content without padding at the bottom; animations that ignore reduced motion. The symptom:",
+      "code": [
+        [
+          "Material",
+          "FloatingActionButton + SpeedDial",
+          ""
+        ],
+        [
+          "WAI-ARIA",
+          "Menu Button",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SpeedDial actions>",
+          "React"
+        ]
+      ],
+      "added": 2
+    },
+    {
+      "id": "back-to-top",
+      "name": "Back-to-top button",
+      "summary": "Appears once you have scrolled, shows reading progress in its ring and takes you back up.",
+      "pattern": "Button + scroll progress",
+      "states": [
+        "hidden",
+        "visible",
+        "progress",
+        "focus-visible"
+      ],
+      "aliases": [
+        "scroll to top",
+        "return to top arrow",
+        "go up button",
+        "scroll progress button"
+      ],
+      "react": "BackToTop",
+      "api": "scrollTo({ top: 0 })",
+      "w": 440,
+      "preview": [
+        [
+          "scroll",
+          "[data-part=\"scroller\"]",
+          "420"
+        ]
+      ],
+      "called": [
+        "arrow button that takes you back up the page",
+        "scroll to top circle",
+        "button that appears when you scroll down",
+        "reading progress ring button"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"button\"]",
+          "name": "Button",
+          "api": "hidden until 40% of a screen",
+          "text": "Out of the way until it is useful."
+        },
+        {
+          "sel": "[data-part=\"ring\"]",
+          "name": "Progress ring",
+          "api": "stroke-dashoffset",
+          "text": "How far through the page you are."
+        }
+      ],
+      "prompt": "Add a back-to-top button: hidden until the reader has scrolled 40% of a screen, a 44px round button bottom-right whose ring shows scroll progress, smooth scroll to the top (instant under reduced motion), and focus moved to the first heading after it scrolls.",
+      "debug": "Debug my back-to-top button. Rule out: scroll handlers that run layout on every event (throttle with rAF); the button covering a footer link or cookie banner; focus left on the button after jumping so the next Tab goes back down. The symptom:",
+      "code": [
+        [
+          "JS",
+          "scrollTo({ top: 0, behavior: 'smooth' })",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<BackToTop>",
+          "React"
+        ]
+      ],
+      "added": 2
+    },
+    {
+      "id": "drilldown-menu",
+      "name": "Drill-down menu",
+      "summary": "Mobile navigation where each submenu slides in over its parent with a back row.",
+      "pattern": "Disclosure navigation (sliding levels)",
+      "states": [
+        "root",
+        "submenu",
+        "nested submenu",
+        "focus-visible"
+      ],
+      "aliases": [
+        "sliding menu",
+        "nested mobile menu",
+        "multi-level menu",
+        "push menu",
+        "cascading mobile nav"
+      ],
+      "react": "DrilldownMenu",
+      "api": "aria-controls + back",
+      "w": 340,
+      "preview": [
+        [
+          "click",
+          "[data-target=\"products\"]"
+        ],
+        [
+          "click",
+          "[data-target=\"integrations\"]"
+        ]
+      ],
+      "called": [
+        "mobile menu where submenus slide in",
+        "menu with back arrow to go up a level",
+        "nested navigation that slides sideways",
+        "phone menu with levels"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"level\"]:not([hidden]) [data-part=\"back\"]",
+          "name": "Back row",
+          "api": "<button>",
+          "text": "Names where you are; Left arrow or Esc also goes back."
+        },
+        {
+          "sel": "[data-part=\"level\"]:not([hidden]) li:nth-child(3) a",
+          "name": "Link",
+          "api": "<a href>",
+          "text": "Real links for pages, buttons only for submenus."
+        }
+      ],
+      "prompt": "Add a drill-down mobile menu: each level is a list; items with children are buttons with a chevron that slide the submenu in from the right, a back row at the top of every submenu names the level and slides back; focus lands on the back row going in and on the parent item coming out; Right/Left arrows and Esc work too.",
+      "debug": "Debug my drill-down menu. Rule out: hidden levels still in the tab order (use hidden or visibility: hidden); focus lost to <body> after a level change; submenus as links to \"#\" instead of buttons; animations that ignore reduced motion. The symptom:",
+      "code": [
+        [
+          "WAI-ARIA",
+          "Disclosure Navigation",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<DrilldownMenu items>",
+          "React"
+        ]
+      ],
+      "added": 2
     }
   ]
 }
