@@ -11,7 +11,7 @@
 //     --json report.json           --screenshots dir    --strict (warnings fail too)   --quiet
 //     --taste   page-level design checks (type scale, accent hues, radii, one primary per screen,
 //               reading measure, heading order, nested cards, section rhythm, focal point,
-//               placeholder copy, button labels) and a 0–100 taste score per run
+//               placeholder copy, empty visual boxes, button labels) and a 0–100 taste score per run
 // Requires Playwright (`npm i -D @playwright/test && npx playwright install chromium`).
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -432,6 +432,20 @@ const TASTE_CHECKS = () => {
   const PH = /\blorem ipsum\b|\bdolor sit amet\b|\bjohn doe\b|\bjane doe\b|\bacme\b|\bfeature (one|two|three|1|2|3)\b|\byour (title|headline|text) here\b|\bproduct name\b|\bcompany name\b|\btodo\b|\bplaceholder\b|\bexample\.com\b|\b123 main st/i;
   for (const el of leaves) { if (el.closest('input, textarea, [data-audit-ignore]')) continue; const m = PH.exec(el.textContent); if (m) { add('taste-placeholder', el, `Placeholder content: “${m[0]}”. Replace it with real copy or realistic sample data.`, 'error'); break; } }
 
+  // 11b. Empty visual boxes: a large framed area with nothing in it reads as a missing image.
+  for (const el of document.querySelectorAll('main *, body > section *')) {
+    if (skip(el) || el.closest('[role="img"][aria-label], [aria-busy="true"], .lt-skeleton, .lt-skeleton-card, [data-audit-ignore], dialog, [popover], [hidden], [inert]')) continue;
+    const r = el.getBoundingClientRect(); if (r.width < 200 || r.height < 120) continue;
+    if (el.textContent.trim() || el.querySelector('img, svg, canvas, video, picture, iframe, input, textarea, select, button, [role="img"]')) continue;
+    const cs = getComputedStyle(el); const painted = toRgb(cs.backgroundColor)[3] > 0.05 || cs.backgroundImage !== 'none' || (cs.borderTopStyle !== 'none' && parseFloat(cs.borderTopWidth) > 0);
+    // Decorative placeholders are often aria-hidden, so judge what is painted, not what is announced.
+    const painted2 = (() => { for (let e = el; e && e.nodeType === 1; e = e.parentElement) { const c = getComputedStyle(e); if (c.display === 'none' || c.visibility === 'hidden' || +c.opacity === 0) return false; } return true; })();
+    if (!painted || !painted2 || el.parentElement?.closest('[data-empty-flagged]')) continue;
+    el.setAttribute('data-empty-flagged', '');
+    add('taste-empty-visual', el, `A ${Math.round(r.width)}×${Math.round(r.height)}px box has nothing in it, which reads as a missing image. Put a real screenshot or a small live mockup (stat-strip, table, chart) in it, or remove it.`);
+    break;
+  }
+
   // 11. Button labels: short verbs, not sentences.
   for (const el of document.querySelectorAll('button, a.lt-btn, [role="button"]')) {
     if (skip(el) || !shown(el) || el.hasAttribute('aria-expanded') || el.closest('summary, [role="tablist"], [role="listbox"], [role="menu"]')) continue; const words = el.textContent.trim().split(/\s+/).filter(Boolean);
@@ -569,7 +583,14 @@ async function auditOne(browser, url, vpName, mode) {
   if (shotDir) {
     mkdirSync(shotDir, { recursive: true });
     const name = url.replace(/^\w+:\/\//, '').replace(/[^a-z0-9]+/gi, '-').slice(0, 60);
-    await page.screenshot({ path: `${shotDir}/${name}-${vpName}-${mode}.png`, fullPage: true });
+    // The first screen as people see it, then the whole page with sticky and fixed bars put back in
+    // the flow (otherwise a full-page capture shows them floating halfway down).
+    const base = `${shotDir}/${name}-${vpName}-${mode}`;
+    await page.evaluate(() => scrollTo(0, 0));
+    await page.screenshot({ path: `${base}-screen.png` });
+    await page.evaluate(() => { for (const el of document.querySelectorAll('body *')) { const p = getComputedStyle(el).position; if (p === 'sticky') el.style.position = 'relative'; else if (p === 'fixed') el.style.position = 'absolute'; } });
+    await page.screenshot({ path: `${base}-full.png`, fullPage: true });
+    shots.push(`${base}-screen.png`, `${base}-full.png`);
   }
   await ctx.close();
   return { findings, controls: meta.count, focusChecked: focusIdx.length };
@@ -582,6 +603,7 @@ function tasteScore(findings) {
   return Math.max(0, s);
 }
 
+const shots = [];
 const browser = await chromium.launch();
 const report = [];
 let errors = 0, warnings = 0;
@@ -611,5 +633,6 @@ for (const t of targets) {
 await browser.close();
 const avg = report.length ? Math.round(report.reduce((a, r) => a + r.score, 0) / report.length) : 0;
 if (jsonOut) writeFileSync(jsonOut, JSON.stringify({ errors, warnings, score: avg, report }, null, 2));
+if (shots.length) console.log(`\nScreenshots (${shots.length}): ${shotDir}/  (…-screen.png is the first screen, …-full.png the whole page)`);
 console.log(`\n${errors ? '✗' : '✓'} audit-ui: ${errors} errors, ${warnings} warnings across ${report.length} runs${tasteOn ? ` · taste score ${avg}/100` : ''}`);
 process.exit(errors || (strict && warnings) ? 1 : 0);

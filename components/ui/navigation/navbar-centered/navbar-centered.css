@@ -8,5 +8,9 @@
   [data-part="actions"] a { position: relative; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; color: var(--text-primary); }
   [data-part="actions"] a:hover { background: var(--bg-surface-2); }
   [data-part="bag"] span { position: absolute; top: 4px; right: 2px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: var(--radius-pill); background: var(--text-primary); color: var(--bg-canvas); font-size: 10px; font-weight: 700; line-height: 16px; text-align: center; }
-  @container (max-width: 640px) { nav { display: none; } :scope { grid-template-columns: auto 1fr; } [data-part="brand"] { font-size: var(--step-0); } }
+  [data-part="brand"] { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  /* Container queries style the children; the root's own columns follow the viewport. */
+  @container (max-width: 640px) { nav { display: none; } [data-part="brand"] { font-size: var(--step-0); letter-spacing: 0.1em; } }
+  @container (max-width: 420px) { [data-part="brand"] { font-size: var(--text-ui); letter-spacing: 0.06em; } }
+  @media (max-width: 640px) { :scope { grid-template-columns: minmax(0, 1fr) auto; padding: 0 16px; } }
 }

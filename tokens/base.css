@@ -145,6 +145,13 @@
   --text-ui-xs: 0.6875rem;
 }
 
+/* Sections breathe less on phones, at every density, so every band keeps one rhythm. */
+@media (max-width: 640px) {
+  :root, [data-density] { --section-y: 64px; }
+  [data-density="spacious"] { --section-y: 80px; }
+  [data-density="dense"] { --section-y: 48px; }
+}
+
 /* ---------- radius ---------- */
 [data-radius="sharp"] {
   --radius-xs: 2px;

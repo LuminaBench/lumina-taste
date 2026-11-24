@@ -72,7 +72,12 @@ const styleOffer = !profile.style && domain?.style ? domain.style : null;
 // ---------------------------------------------------------------- product name for copy
 const quoted = brief.match(/["“']([^"”']{2,40})["”']/)?.[1];
 const named = brief.match(/\b(?:called|named)\s+([A-Z][\w&.-]*(?:\s+[A-Z][\w&.-]*)?)/)?.[1];
-const product = quoted ?? named ?? null;
+// "…for Tally, an invoicing tool" / "…for Beacon." : a capitalised name after "for", not a generic word.
+const GENERIC = new Set(['A', 'An', 'The', 'Our', 'My', 'Your', 'Their', 'This', 'That', 'Every', 'Each', 'Teams', 'People', 'Developers', 'Freelancers']);
+const afterFor = [...brief.matchAll(/\bfor\s+([A-Z][\w&.'’-]*(?:\s+[A-Z][\w&.'’-]*)?)(?=[\s,.;:)]|$)/g)].map((m) => m[1]).find((w) => !GENERIC.has(w.split(' ')[0]));
+const leading = brief.match(/^([A-Z][\w&.-]+),\s+(?:an?|the)\s/)?.[1];
+const product = quoted ?? named ?? afterFor ?? leading ?? null;
+const restyle = (kb.restyle?.words ?? []).some((w) => text.includes(` ${w} `) || text.includes(` ${w}`));
 
 // ---------------------------------------------------------------- plan
 const sections = type.sections.map((s, i) => ({ n: i + 1, ...s, exists: !s.id || uiIds.has(s.id) }));
@@ -99,6 +104,7 @@ const plan = {
   blueprint: blueprint ?? (type.blueprint ? `${type.blueprint} (not in this version; start from the sections below)` : null),
   sections,
   charts,
+  restyle: restyle ? kb.restyle.notes : null,
   states: type.states,
   avoid: type.avoid,
   finish: [
@@ -127,7 +133,11 @@ L.push(H('Profile and install'), '');
 L.push(`Palette \`${profile.palette}\` (${profile.mode}), type \`${profile.typography}\`, density \`${profile.density}\`${profile.style ? `, style \`${profile.style}\`` : ', no style'}.${domain ? ` Chosen for the ${domain.id} domain.` : ' No domain recognised, so these are the neutral defaults.'}`);
 if (styleOffer) L.push(`If the brief wants more character, add \`--style ${styleOffer}\`.`);
 L.push('', '```sh', install, '```', '');
-if (blueprint) L.push(`Start from the \`${blueprint}\` blueprint and keep its anatomy; replace its copy and data.`, '');
+if (blueprint) {
+  const bpMeta = cat.blueprints.find((b) => b.id === blueprint);
+  L.push(`Start from the \`${blueprint}\` blueprint and keep its anatomy; replace its copy and data. With \`--framework static\` it lands in \`<dest>/${blueprint}/index.html\` as a complete page (its own main.css and main.js), so move it where the page should live. It already uses ${(bpMeta?.uses ?? []).map((u) => `\`${u}\``).join(', ')}.`, '');
+}
+if (restyle) { L.push(H('Restyling an existing page'), ''); for (const n of kb.restyle.notes) L.push(`- ${n}`); L.push(''); }
 L.push(H('Sections, in order'), '');
 for (const s of sections) {
   const id = s.id ? `\`${s.id}\`` : '_(layout, no component)_';

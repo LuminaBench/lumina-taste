@@ -331,3 +331,6 @@ html[data-view^="pages"] .g-main { max-width: 1640px; }
 @media (max-width: 980px) { .g-el.g-el-wide .g-el-right { grid-template-columns: 1fr; } }
 .g-style-detail .g-aka { margin-top: 10px; }
 .g-style-prev { min-width: 0; overflow: hidden; }
+
+/* Section blocks pad with --section-y on real pages; the gallery previews them in a smaller box. */
+[data-stage], .g-prev, .g-stage, .g-stagebox { --block-y: 56px; --block-x: 40px; --block-y-sm: 36px; --block-x-sm: 20px; }

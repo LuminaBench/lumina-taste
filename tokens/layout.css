@@ -1,0 +1,42 @@
+/* lumina-taste layout utilities: the recipes in references/page-flow.md as classes.
+   Zero specificity (:where), so your own page CSS always wins. Every class works at 390px. */
+
+/* Page width */
+:where(.lt-container) { width: min(var(--container, 1180px), 100% - 32px); margin-inline: auto; }
+:where(.lt-narrow) { width: min(var(--narrow, 760px), 100% - 32px); margin-inline: auto; }
+:where(.lt-prose) { max-width: var(--measure); }
+
+/* Bands: one idea per band, the same vertical rhythm everywhere. Section blocks (lt-hero-*,
+   lt-feature-*, lt-faq-section…) already carry this padding: place them straight in <main>. */
+:where(.lt-band) { padding-block: var(--section-y); }
+:where(.lt-band-tight) { padding-block: calc(var(--section-y) * 0.6); }
+:where(.lt-band[data-tone="well"]) { background: var(--bg-surface-2); }
+:where(.lt-band[data-tone="contrast"]) { background: var(--text-primary); color: var(--bg-canvas); }
+
+/* Flow */
+:where(.lt-stack) { display: grid; align-content: start; gap: var(--gap, var(--space-4)); }
+:where(.lt-stack) > :where(*) { margin-block: 0; }
+:where(.lt-cluster) { display: flex; flex-wrap: wrap; align-items: center; gap: var(--gap, var(--space-3)); }
+:where(.lt-page-head) { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--gap-md); }
+
+/* Grids that never need a breakpoint; set --min to change the card width. */
+:where(.lt-grid) { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--min, 280px)), 1fr)); gap: var(--gap, var(--gap-lg)); }
+:where(.lt-split) { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: var(--gap, var(--space-7)); align-items: start; }
+:where(.lt-split[data-ratio="half"]) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 860px) { :where(.lt-split) { grid-template-columns: minmax(0, 1fr); } }
+
+/* App layouts */
+:where(.lt-shell) { display: grid; grid-template-columns: auto minmax(0, 1fr); min-height: 100dvh; }
+:where(.lt-shell > main) { min-width: 0; padding: var(--space-6); }
+:where(.lt-settings) { display: grid; grid-template-columns: 200px minmax(0, 420px); gap: var(--space-7); }
+:where(.lt-dash) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap-lg); }
+:where(.lt-dash > .wide) { grid-column: 1 / -1; }
+@media (max-width: 860px) { :where(.lt-dash) { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 720px) {
+  :where(.lt-settings) { grid-template-columns: minmax(0, 1fr); }
+  :where(.lt-shell) { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Skip link: hidden until focused (transform keeps it on the page, so it never fails a contrast check). */
+:where(.lt-skip) { position: absolute; left: 12px; top: 12px; z-index: 100; padding: 8px 12px; border-radius: var(--radius-sm); background: var(--accent-solid); color: var(--accent-ink); font-weight: 600; text-decoration: none; transform: translateY(-200%); }
+:where(.lt-skip:focus) { transform: none; }

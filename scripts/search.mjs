@@ -15,12 +15,14 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
 const opt = (name, def) => { const i = args.indexOf(`--${name}`); if (i < 0) return def; const v = args[i + 1]; args.splice(i, 2); return v; };
 const flag = (name) => { const i = args.indexOf(`--${name}`); if (i < 0) return false; args.splice(i, 1); return true; };
+const card = opt('card', null);
 const kind = opt('kind', null);
 const limit = +opt('limit', '8');
 const asJson = flag('json');
 const query = args.join(' ').trim();
+if (card) { printCard(card); process.exit(0); }
 if (!query) {
-  console.error('Usage: node scripts/search.mjs "<words>" [--kind ui|chart|blueprint|palette|typography|style] [--limit 8] [--json]');
+  console.error('Usage: node scripts/search.mjs "<words>" [--kind ui|chart|blueprint|palette|typography|style] [--limit 8] [--json]\n       node scripts/search.mjs --card <id>     everything about one item on one screen');
   process.exit(2);
 }
 
@@ -39,4 +41,34 @@ if (asJson) {
     if (d.aliases?.length) console.log(`${''.padEnd(11)}aka: ${d.aliases.slice(0, 4).join(', ')}`);
     console.log(`${''.padEnd(11)}${installHint(d)}\n`);
   }
+}
+
+// One compact card per item: what it is, when to pick it (and its look-alikes), its parts, states,
+// the agent prompt, files and the install line. Read this instead of opening the source files.
+function printCard(id) {
+  const c = JSON.parse(readFileSync(join(root, 'catalog.json'), 'utf8'));
+  const all = [...c.ui, ...c.charts.map((x) => ({ ...x, kind: 'chart' })), ...c.blueprints.map((x) => ({ ...x, kind: 'blueprint' })), ...c.palettes.map((x) => ({ ...x, kind: 'palette' })), ...c.typography.map((x) => ({ ...x, kind: 'typography' })), ...(c.styles ?? []).map((x) => ({ ...x, kind: 'style' }))];
+  const d = all.find((x) => x.id === id);
+  if (!d) { console.error(`No item "${id}". Search first: node scripts/search.mjs "<words>"`); process.exit(1); }
+  const kind = d.kind ?? 'ui';
+  const L = [`${d.name}  (${kind} · ${d.id})`, '', d.summary];
+  if (d.aliases?.length) L.push(`Also called: ${d.aliases.join(', ')}`);
+  if (kind === 'ui') {
+    const fam = JSON.parse(readFileSync(join(root, 'components/ui', d.family, 'family.json'), 'utf8'));
+    const doc = (fam.components ?? fam.items ?? []).find((x) => x.id === id) ?? {};
+    if (d.pattern) L.push(`Pattern: ${d.pattern}`);
+    if (d.states?.length) L.push(`States: ${d.states.join(', ')}`);
+    const pairs = JSON.parse(readFileSync(join(root, 'components/ui/compare.json'), 'utf8')).pairs.filter((p) => p.ids.includes(id));
+    for (const p of pairs) L.push('', `${p.title} ${p.rule}`, `  This one: ${p.use[id]}`);
+    if (doc.anatomy?.length) { L.push('', 'Parts:'); for (const a of doc.anatomy) L.push(`  ${a.name} (${a.sel})${a.api ? ` · ${a.api}` : ''}${a.text ? ` · ${a.text}` : ''}`); }
+    if (doc.prompt) L.push('', `Prompt: ${doc.prompt}`);
+    if (doc.debug) L.push(`Debug prompt: ${Array.isArray(doc.debug) ? doc.debug.join(' ') : doc.debug}`);
+    if (d.react) L.push(`React: <${d.react} />`);
+  }
+  if (kind === 'chart') L.push(`Best for: ${d.bestFor}`, `Avoid for: ${d.avoidFor}`, `Data: ${d.dataShape}`, `React: <${d.react} />`);
+  if (kind === 'blueprint') L.push(`Anatomy: ${d.anatomy}`, `Uses: ${(d.uses ?? []).join(', ')}`);
+  if (kind === 'style') L.push(`Palette ${d.palette} (${d.mode}), type ${d.typography}, radius ${d.radius}`, `Use for: ${d.useFor}`, `Not: ${d.notTo}`);
+  if (d.files?.length) L.push('', `Files: ${d.files.join(', ')}`);
+  L.push(`Install: ${installHint({ ...d, kind })}`);
+  console.log(L.join('\n'));
 }

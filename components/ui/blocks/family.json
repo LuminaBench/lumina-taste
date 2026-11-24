@@ -30,7 +30,7 @@
       ],
       "anatomy": [
         {
-          "sel": "h2",
+          "sel": "h1",
           "name": "Headline",
           "api": "text-wrap: balance",
           "text": "What it does, under 12 words."
@@ -102,7 +102,7 @@
           "text": "One recent thing, linked."
         },
         {
-          "sel": "h2",
+          "sel": "h1",
           "name": "Headline",
           "api": "max-width: 16ch",
           "text": "Short lines read better centred."
@@ -1024,7 +1024,7 @@
         "zig zag features",
         "alternating sections",
         "feature with image left right",
-        "feature deep dive",
+        "feature details",
         "text image rows"
       ],
       "react": "FeatureSplit",

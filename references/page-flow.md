@@ -10,7 +10,9 @@ Where things go, and how a page breathes. Use this before placing a single compo
 
 ### Layout recipes
 
-Copy these; they cover almost every page. All use `--space-*` / `--gap-*` and work at 390px.
+Every install ships these as classes in `tokens/layout.css` (zero specificity, so your CSS wins): `.lt-container`, `.lt-narrow`, `.lt-prose`, `.lt-band` (+ `data-tone="well"`), `.lt-stack`, `.lt-cluster`, `.lt-page-head`, `.lt-grid` (`--min` sets the card width), `.lt-split` (`data-ratio="half"`), `.lt-shell`, `.lt-settings`, `.lt-dash` (`.wide` spans both columns) and `.lt-skip`. Section blocks (heroes, features, FAQ, CTA bands…) already bring their own band padding and background: put them straight inside `<main>`, never inside another `.lt-band`.
+
+The same recipes as plain CSS, if you prefer to write your own. All use `--space-*` / `--gap-*` and work at 390px.
 
 ```css
 /* 1. Centred page column: landing, pricing, docs article */

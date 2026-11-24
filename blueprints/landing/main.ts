@@ -5,6 +5,7 @@ import '../../components/ui/navigation/navbar-mega/navbar-mega.css';
 import '../../components/ui/navigation/site-footer/site-footer.css';
 import '../../components/ui/data/bento-grid/bento-grid.css';
 import '../../components/ui/data/stat-strip/stat-strip.css';
+import '../../components/ui/blocks/faq-section/faq-section.css';
 import './page.css';
 import { enhance as navbar } from '../../components/ui/navigation/navbar-mega/navbar-mega';
 import { enhance as segmented } from '../../components/ui/controls/segmented-control/segmented-control';

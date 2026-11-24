@@ -1,5 +1,5 @@
 @scope (.lt-settings-list) {
-  :scope { width: 100%; max-width: 620px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); font-size: var(--text-ui); }
+  :scope { width: 100%; max-width: var(--lt-panel-max, 720px); border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); font-size: var(--text-ui); }
   header { padding: 18px 20px 12px; }
   h3 { margin: 0; font-size: var(--text-ui); font-weight: 650; }
   header p { margin: 4px 0 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }

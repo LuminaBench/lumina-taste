@@ -1,11 +1,11 @@
 @scope (.lt-members) {
-  :scope { width: 100%; max-width: 720px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); font-size: var(--text-ui); }
+  :scope { width: 100%; max-width: var(--lt-panel-max, 720px); border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); font-size: var(--text-ui); }
   header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 18px; }
   h3 { margin: 0; font-size: var(--text-ui); font-weight: 650; }
   header p { margin: 2px 0 0; color: var(--text-muted); font-size: var(--text-ui-xs); }
   [data-part="invite"] { display: flex; gap: 6px; }
   [data-part="invite"] input { width: 220px; height: var(--control-h-sm); padding: 0 10px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-sm); background: var(--bg-surface-1); color: var(--text-primary); font-size: var(--text-ui-sm); }
-  [data-part="scroll"] { overflow-x: auto; }
+  [data-part="scroll"] { position: relative; overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; }
   th { padding: 8px 18px; border-top: var(--bw) var(--border-style) var(--border-hairline); border-bottom: var(--bw) var(--border-style) var(--border-hairline); color: var(--text-muted); font-size: var(--text-ui-xs); font-weight: 600; text-align: left; }
   td { padding: 10px 18px; border-bottom: var(--bw) var(--border-style) var(--border-hairline); vertical-align: middle; }

@@ -5,4 +5,5 @@
   a { color: var(--text-secondary); text-decoration: none; }
   a:hover { color: var(--text-primary); text-decoration: underline; text-underline-offset: 3px; }
   @container (max-width: 560px) { :scope { flex-direction: column; align-items: flex-start; } }
+  @media (max-width: 560px) { :scope { flex-direction: column; align-items: flex-start; } }
 }

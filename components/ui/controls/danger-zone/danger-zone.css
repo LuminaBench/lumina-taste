@@ -1,5 +1,5 @@
 @scope (.lt-danger) {
-  :scope { width: 100%; max-width: 620px; border: var(--bw) var(--border-style) color-mix(in oklab, var(--status-negative) 45%, var(--border-hairline)); border-radius: var(--radius-lg); background: var(--bg-surface-1); font-size: var(--text-ui); }
+  :scope { width: 100%; max-width: var(--lt-panel-max, 720px); border: var(--bw) var(--border-style) color-mix(in oklab, var(--status-negative) 45%, var(--border-hairline)); border-radius: var(--radius-lg); background: var(--bg-surface-1); font-size: var(--text-ui); }
   h3 { margin: 0; padding: 14px 18px; color: var(--status-negative); font-size: var(--text-ui); font-weight: 650; }
   [data-part="row"] { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 18px; border-top: var(--bw) var(--border-style) var(--border-hairline); }
   [data-part="row"] p { margin: 0; font-size: var(--text-ui-sm); color: var(--text-secondary); }

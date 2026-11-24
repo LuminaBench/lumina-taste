@@ -20,6 +20,14 @@ const RAD = 3;
 const sorted = (items: BarItem[], s: BarOptions['sort']) => (s === 'desc' ? [...items].sort((a, b) => b.value - a.value) : s === 'asc' ? [...items].sort((a, b) => a.value - b.value) : items);
 const fillFor = (o: BarOptions, label: string) => (o.highlight && o.highlight !== label ? 'var(--border-strong)' : 'var(--chart-1)');
 
+/** Keep every nth category label so labels never collide on narrow charts (labels are never rotated). */
+function thinCategories(cats: string[], width: number): string[] {
+  const longest = Math.max(...cats.map((c) => c.length));
+  const slot = Math.max(56, longest * 7 + 14);
+  const every = Math.max(1, Math.ceil(cats.length / Math.max(1, Math.floor(width / slot))));
+  return cats.filter((_, i) => i % every === 0);
+}
+
 export function verticalBars(host: HTMLElement, data: BarItem[], opts: BarOptions = {}): ChartInstance<BarItem[]> {
   return chart(host, data, opts, (ctx, raw, o) => {
     const { svg, width, height, fmt } = ctx;
@@ -114,7 +122,7 @@ export function groupedBars(host: HTMLElement, data: GroupData, opts: BarOptions
       marks.push({ x: x(c) + x.bandwidth / 2, y: y(Math.max(...d.series.map((s) => s.values[ci]))), hit: { x: x(c), y: m.t, w: x.bandwidth, h: height - m.b - m.t }, html: tipHtml(c, d.series.map((s, si) => ({ color: seriesColor(si), label: s.name, value: fmt(s.values[ci]) }))), text: `${c}: ${d.series.map((s) => `${s.name} ${fmt(s.values[ci])}`).join(', ')}` });
     });
     svg.append(g);
-    xLabels(svg, d.categories.map((c) => ({ x: x(c) + x.bandwidth / 2, text: c })), height - 6, width);
+    xLabels(svg, thinCategories(d.categories, width).map((c) => ({ x: x(c) + x.bandwidth / 2, text: c })), height - 6, width);
     ctx.interact({ mode: 'nearest', marks });
     return { summary: `Grouped bar chart: ${d.series.length} series across ${d.categories.length} categories.`, table: { head: ['', ...d.series.map((s) => s.name)], rows: d.categories.map((c, ci) => [c, ...d.series.map((s) => fmt(s.values[ci]))]) } };
   });
@@ -144,7 +152,7 @@ export function stackedBars(host: HTMLElement, data: GroupData, opts: BarOptions
       marks.push({ x: x(c) + x.bandwidth / 2, y: y(totals[ci]), hit: { x: x(c), y: y(totals[ci]), w: x.bandwidth, h: y(0) - y(totals[ci]) }, html: tipHtml(`${c} · ${fmt(totals[ci])}`, d.series.map((s, si) => ({ color: seriesColor(si), label: s.name, value: fmt(s.values[ci]) })).reverse()), text: `${c}: total ${fmt(totals[ci])}` });
     });
     svg.append(g);
-    xLabels(svg, d.categories.map((c) => ({ x: x(c) + x.bandwidth / 2, text: c })), height - 6, width);
+    xLabels(svg, thinCategories(d.categories, width).map((c) => ({ x: x(c) + x.bandwidth / 2, text: c })), height - 6, width);
     ctx.interact({ mode: 'nearest', marks });
     return { summary: `Stacked bar chart of ${d.categories.length} categories split into ${d.series.length} parts.`, table: { head: ['', ...d.series.map((s) => s.name), 'Total'], rows: d.categories.map((c, ci) => [c, ...d.series.map((s) => fmt(s.values[ci])), fmt(totals[ci])]) } };
   });

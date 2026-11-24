@@ -62,7 +62,7 @@ test('audit-ui --taste flags every page-level rule on the taste fixture', () => 
   assert.equal(r.status, 1);
   const j = JSON.parse(readFileSync(out, 'utf8'));
   const rules = new Set(j.report[0].findings.map((f) => f.rule));
-  for (const rule of ['taste-type-scale', 'taste-colour-count', 'taste-radius-mix', 'taste-primary-count', 'taste-measure', 'taste-heading-order', 'taste-nested-card', 'taste-rhythm', 'taste-focal', 'taste-placeholder', 'taste-button-label']) assert.ok(rules.has(rule), rule);
+  for (const rule of ['taste-type-scale', 'taste-colour-count', 'taste-radius-mix', 'taste-primary-count', 'taste-measure', 'taste-heading-order', 'taste-nested-card', 'taste-rhythm', 'taste-focal', 'taste-placeholder', 'taste-empty-visual', 'taste-button-label']) assert.ok(rules.has(rule), rule);
   assert.ok(j.score < 40, `score ${j.score}`);
 });
 

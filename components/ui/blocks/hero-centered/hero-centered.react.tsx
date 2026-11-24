@@ -10,7 +10,7 @@ export function HeroCentered({ announcement, title, lede, primary, secondary, vi
   return (
     <section className={cx('lt-hero-centered', className)} aria-label={title}>
       {announcement && <a data-part="pill" href={announcement.href}><span>{announcement.label}</span>{announcement.text} <Icon name="arrow-right" /></a>}
-      <h2>{title}</h2>
+      <h1>{title}</h1>
       <p data-part="lede">{lede}</p>
       <div data-part="cta"><a className="lt-btn" data-variant="primary" data-size="lg" href={primary.href}>{primary.label}</a>{secondary && <a className="lt-btn" data-variant="secondary" data-size="lg" href={secondary.href}>{secondary.label}</a>}</div>
       {visual && <div data-part="shot">{visual}</div>}

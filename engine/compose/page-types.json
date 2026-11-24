@@ -26,7 +26,7 @@
      "id": "navbar-mega",
      "role": "Top bar",
      "copy": "Brand left, 3–5 links, one CTA right (\"Start free\").",
-     "rule": "Use navbar-simple instead when there is only one product area.",
+     "rule": "Use navbar-simple instead when there is only one product area. Its button is secondary (or a text link) when the hero carries the primary.",
      "alt": [
       "navbar-simple",
       "flyout-menu"
@@ -35,7 +35,7 @@
     {
      "id": "hero-split",
      "role": "Hero",
-     "copy": "Eyebrow (≤4 words) → headline that says the outcome (≤10 words) → one sentence of how → one CTA + one quiet link → one reassurance line (\"No card required\").",
+     "copy": "Eyebrow (≤4 words) → headline that says the outcome (≤10 words) → one sentence of how → one CTA + one quiet link → one reassurance line (\"No card required\"). The headline is the page’s h1.",
      "rule": "Show the real product on the right, not an illustration.",
      "alt": [
       "hero-centered"
@@ -51,7 +51,7 @@
     {
      "id": "feature-split",
      "role": "Main features",
-     "copy": "2–3 rows. Each: a heading that states a result, one sentence, 2–3 specific points, a real screenshot.",
+     "copy": "2–3 rows. Each: a heading that states a result, one sentence, 2–3 specific points, a real screenshot or a small live mockup built from catalog parts (stat-strip, data-table, a chart) inside a frame marked data-mock. Never a grey box or stock art.",
      "rule": "Alternate image left/right. Never more than three rows.",
      "alt": [
       "feature-grid"
@@ -71,7 +71,8 @@
      "id": "testimonial-grid",
      "role": "Social proof",
      "copy": "3 quotes with name, role and company; each quote names a concrete result.",
-     "rule": "Real people only; drop the section if you have none."
+     "rule": "Only real quotes you may use, with name, role and company. Without them, show a fact strip people can check (customers, uptime, years) or skip the section. Never invent people.",
+     "optional": true
     },
     {
      "id": "how-it-works",
@@ -128,7 +129,8 @@
     {
      "id": "navbar-simple",
      "role": "Top bar",
-     "copy": "Same as the rest of the site."
+     "copy": "Same as the rest of the site.",
+     "rule": "Its button is secondary (or a text link) when the hero carries the primary."
     },
     {
      "id": "billing-toggle",
@@ -314,7 +316,7 @@
     {
      "id": "sticky-action-bar",
      "role": "Unsaved changes",
-     "copy": "\"You have unsaved changes\" + Discard + Save.",
+     "copy": "\"You have unsaved changes\" + Discard + Save. Copy the save bar from the settings blueprint (#savebar); the sticky-action-bar component is a purchase bar.",
      "rule": "Only for fields that do not save instantly."
     }
    ],
@@ -608,7 +610,7 @@
     {
      "id": "hero-centered",
      "role": "Statement",
-     "copy": "One sentence about what you make and for whom."
+     "copy": "One sentence about what you make and for whom. The headline is the page’s h1."
     },
     {
      "id": "blog-grid",
@@ -622,7 +624,8 @@
      "id": "testimonial-grid",
      "role": "Clients",
      "copy": "2–3 short quotes.",
-     "optional": true
+     "optional": true,
+     "rule": "Only real quotes you may use, with name, role and company. Without them, show a fact strip people can check (customers, uptime, years) or skip the section. Never invent people."
     },
     {
      "id": "contact-section",
@@ -667,25 +670,30 @@
      "copy": "Brand centred, categories left, search + bag right.",
      "alt": [
       "navbar-mega"
-     ]
+     ],
+     "rule": "Its button is secondary (or a text link) when the hero carries the primary."
     },
     {
      "id": "breadcrumbs",
      "role": "Location"
     },
     {
-     "id": "image-compare",
+     "id": null,
      "role": "Gallery",
-     "copy": "4–6 photos, zoom on click.",
+     "copy": "4–6 photos with thumbnails that switch the main view (the store blueprint’s .sp-gallery), zoom on click.",
      "alt": [
       "carousel",
       "lightbox"
      ]
     },
     {
-     "id": "product-card",
+     "id": "radio-cards",
      "role": "Buy box",
-     "copy": "Name, price (was/now only if real), colour and size, delivery date, Add to bag."
+     "copy": "h1 name, tasting or key facts, price (was/now only if real), options as segmented control and chips, one-off vs subscription as radio cards, delivery date, Add to bag with the total on the button.",
+     "alt": [
+      "segmented-control",
+      "product-card"
+     ]
     },
     {
      "id": "review-summary",
@@ -1061,7 +1069,8 @@
    "sections": [
     {
      "id": "navbar-simple",
-     "role": "Top bar"
+     "role": "Top bar",
+     "rule": "Its button is secondary (or a text link) when the hero carries the primary."
     },
     {
      "id": "contact-section",
@@ -1108,12 +1117,13 @@
    "sections": [
     {
      "id": "navbar-simple",
-     "role": "Top bar"
+     "role": "Top bar",
+     "rule": "Its button is secondary (or a text link) when the hero carries the primary."
     },
     {
      "id": "hero-centered",
      "role": "Why we exist",
-     "copy": "One sentence of what you do and for whom; skip the mission statement."
+     "copy": "One sentence of what you do and for whom; skip the mission statement. The headline is the page’s h1."
     },
     {
      "id": "stats-band",
@@ -1541,5 +1551,30 @@
   "airy": {
    "density": "spacious"
   }
+ },
+ "restyle": {
+  "words": [
+   "restyle",
+   "redesign",
+   "re-design",
+   "reskin",
+   "make this look",
+   "make it look",
+   "existing page",
+   "existing site",
+   "this page",
+   "polish this",
+   "clean up this",
+   "improve the design"
+  ],
+  "notes": [
+   "Keep every piece of content, every link and every form field. Change how it looks, not what it says.",
+   "Add lumina.css and lumina.js (or the tokens) and the <html> data attributes from the install output; delete the old colours, gradients and shadows instead of overriding them.",
+   "Map each existing section onto the closest block below and copy its words in. Sections with no match keep their markup and get .lt-band and .lt-container.",
+   "One primary button per screen: keep every action, but make the others secondary or ghost.",
+   "Replace emoji used as icons with inline SVG icons; replace purple or rainbow gradients with a flat surface.",
+   "Every link must go somewhere: point in-page links (#pricing) at real ids, or turn them into plain text.",
+   "Run the audit on the old page first, then on yours, and say how the score changed."
+  ]
  }
 }

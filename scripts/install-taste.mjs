@@ -65,7 +65,7 @@ function fail(msg, code = 1) { console.error(`✗ ${msg}`); process.exit(code); 
 // ------------------------------------------------------------------ profile
 let current = null;
 if (existsSync(profilePath)) {
-  try { current = JSON.parse(readFileSync(profilePath, 'utf8')); } catch { fail(`${relative(process.cwd(), profilePath)} is not valid JSON.`); }
+  try { current = JSON.parse(readFileSync(profilePath, 'utf8')); } catch { fail(`${relative(projectDir, profilePath)} is not valid JSON.`); }
   const errs = validateProfile(current);
   if (errs.length) fail(`Existing profile is invalid:\n  ${errs.join('\n  ')}`);
 }
@@ -115,6 +115,8 @@ for (const [tok, val] of Object.entries(profile.overrides)) {
 
 // ------------------------------------------------------------------ file selection
 const want = { components: list(opts.components), charts: list(opts.charts), blueprints: list(opts.blueprints) };
+// A blueprint's markup uses catalog components: install them too, so pages built from its snippets are styled.
+for (const id of want.blueprints) for (const u of catalog.blueprints.find((b) => b.id === id)?.uses ?? []) if (catalog.ui.some((c) => c.id === u) && !want.components.includes(u)) want.components.push(u);
 const unknown = [
   ...want.components.filter((id) => !catalog.ui.some((c) => c.id === id)).map((id) => `component "${id}"`),
   ...want.charts.filter((id) => !catalog.charts.some((c) => c.id === id)).map((id) => `chart "${id}"`),
@@ -122,12 +124,38 @@ const unknown = [
 ];
 if (unknown.length) fail(`Unknown ${unknown.join(', ')}. Try: node scripts/search.mjs "<what you want>"`);
 
+// A component's markup may use another component's classes (a .lt-btn inside a dialog, a .lt-badge in a
+// table). Their CSS comes along automatically, so pasted markup never renders unstyled.
+const rootClass = new Map();
+for (const c of catalog.ui) {
+  // The classes a component styles are the roots of its @scope blocks (and its plain top-level selectors).
+  for (const f of c.files.filter((f) => f.endsWith('.css'))) {
+    const css = readFileSync(join(root, f), 'utf8');
+    for (const m of css.matchAll(/@scope\s*\(\.(lt-[a-z0-9-]+)\)/g)) if (!rootClass.has(m[1])) rootClass.set(m[1], c.id);
+  }
+}
+// Classes a blueprint uses in its own markup (an .lt-badge in a header) count as components it needs.
+for (const id of want.blueprints) {
+  const bp = catalog.blueprints.find((b) => b.id === id);
+  const html = bp && existsSync(join(root, bp.path, 'index.html')) ? readFileSync(join(root, bp.path, 'index.html'), 'utf8') : '';
+  for (const m of html.matchAll(/\blt-[a-z0-9-]+/g)) { const c = rootClass.get(m[0]); if (c && !want.components.includes(c)) want.components.push(c); }
+}
+function cssDeps(id, seen = new Set()) {
+  if (seen.has(id)) return seen;
+  seen.add(id);
+  const c = catalog.ui.find((x) => x.id === id);
+  for (const d of c?.deps ?? []) cssDeps(d, seen);
+  for (const f of (c?.files ?? []).filter((f) => /\.(html|react\.tsx)$/.test(f))) {
+    for (const m of readFileSync(join(root, f), 'utf8').matchAll(/\blt-[a-z0-9-]+/g)) { const dep = rootClass.get(m[0]); if (dep && dep !== id) cssDeps(dep, seen); }
+  }
+  return seen;
+}
 const entries = new Set();
 const addDir = (path, exts) => { for (const f of catalog.ui.concat(catalog.charts, catalog.blueprints).find((x) => x.path === path)?.files ?? []) if (exts.some((e) => f.endsWith(e))) entries.add(f); };
 for (const id of want.components) {
   const c = catalog.ui.find((x) => x.id === id);
   addDir(c.path, framework === 'react' ? ['.react.tsx', '.css'] : ['.html', '.css', '.ts']);
-  for (const d of c.deps ?? []) { const dep = catalog.ui.find((x) => x.id === d); if (dep) addDir(dep.path, ['.css']); }
+  for (const d of cssDeps(id)) { if (d === id) continue; const dep = catalog.ui.find((x) => x.id === d); if (dep) addDir(dep.path, ['.css']); }
 }
 for (const id of want.charts) addDir(catalog.charts.find((x) => x.id === id).path, framework === 'react' ? ['.react.tsx'] : [`${id}.ts`]);
 for (const id of want.blueprints) addDir(catalog.blueprints.find((x) => x.id === id).path, ['.html', '.css', '.ts']);
@@ -155,21 +183,21 @@ const visit = (f) => {
 };
 for (const e of entries) visit(e);
 // Blueprint boot imports tokens itself; everything else gets tokens explicitly below.
-const tokenFiles = ['tokens/base.css', 'tokens/typography/typography.css', ...(opts['all-palettes'] ? ['tokens/palettes/all.css'] : [`tokens/palettes/${profile.palette}.css`]), ...(profile.style !== 'none' ? ['tokens/styles/styles.css'] : [])];
+const tokenFiles = ['tokens/base.css', 'tokens/layout.css', 'tokens/typography/typography.css', ...(opts['all-palettes'] ? ['tokens/palettes/all.css'] : [`tokens/palettes/${profile.palette}.css`]), ...(profile.style !== 'none' ? ['tokens/styles/styles.css'] : [])];
 for (const f of [...files]) if (f.startsWith('tokens/palettes/') && f !== `tokens/palettes/${profile.palette}.css`) files.delete(f);
 const profileEngine = ['engine/profiles/profile.mjs', 'engine/profiles/profile.d.mts', 'engine/profiles/options.mjs', 'engine/profiles/options.d.mts'];
 
 // ------------------------------------------------------------------ write
 let copied = 0, skipped = 0, unchanged = 0;
-const write = (rel, content) => {
+const write = (rel, content, generated = false) => {
   const target = join(dest, rel);
-  if (existsSync(target)) {
+  if (existsSync(target) && !generated) {
     const old = readFileSync(target);
     if (Buffer.compare(old, Buffer.isBuffer(content) ? content : Buffer.from(content)) === 0) { unchanged++; return; }
-    if (!opts.overwrite) { skipped++; console.log(`  ! kept your edited ${relative(process.cwd(), target)} (use --overwrite to replace)`); return; }
+    if (!opts.overwrite) { skipped++; console.log(`  ! kept your edited ${relative(projectDir, target)} (use --overwrite to replace)`); return; }
   }
   copied++;
-  if (dry) { console.log(`  + ${relative(process.cwd(), target)}`); return; }
+  if (dry) { console.log(`  + ${relative(projectDir, target)}`); return; }
   mkdirSync(dirname(target), { recursive: true });
   writeFileSync(target, content);
 };
@@ -187,44 +215,53 @@ async function writeStatic() {
   want.components.forEach((id, i) => {
     const c = catalog.ui.find((x) => x.id === id);
     for (const f of c.files.filter((f) => f.endsWith('.css'))) imp.push(`import './${f}';`);
-    for (const d of c.deps ?? []) { const dep = catalog.ui.find((x) => x.id === d); for (const f of dep?.files.filter((f) => f.endsWith('.css')) ?? []) imp.push(`import './${f}';`); }
+    for (const d of cssDeps(id)) { if (d === id) continue; const dep = catalog.ui.find((x) => x.id === d); for (const f of dep?.files.filter((f) => f.endsWith('.css')) ?? []) imp.push(`import './${f}';`); }
     const ts = c.files.find((f) => f.endsWith(`${id}.ts`));
     const html = c.files.find((f) => f.endsWith('.html'));
     const name = html ? readFileSync(join(root, html), 'utf8').match(/data-lt="([^"]+)"/)?.[1] : null;
-    if (ts && name && /export function enhance\b/.test(readFileSync(join(root, ts), 'utf8'))) { imp.push(`import { enhance as e${i} } from './${ts.replace(/\.ts$/, '')}';`); reg.push(`  ${JSON.stringify(name)}: e${i},`); }
-    if (html) write(`snippets/${id}.html`, readFileSync(join(root, html)));
+    if (ts && name && /export function enhance\b/.test(readFileSync(join(root, ts), 'utf8'))) { imp.push(`import { enhance as e${i} } from './${ts.replace(/\.ts$/, '')}';`); reg.push(`  ${JSON.stringify(name)}: safe(${JSON.stringify(name)}, e${i}),`); }
+    if (html && !opts['no-snippets']) write(`snippets/${id}.html`, readFileSync(join(root, html)));
   });
   want.charts.forEach((id, i) => { const c = catalog.charts.find((x) => x.id === id); imp.push(`import { render as c${i} } from './${c.path}/${id}';`); charts.push(`  ${JSON.stringify(id)}: c${i},`); });
-  const entry = `${imp.join('\n')}\nconst registry = {\n${reg.join('\n')}\n};\nexport const charts = {\n${charts.join('\n')}\n};\nexport function enhanceAll(root = document) { return autoEnhance(root, registry); }\nif (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => enhanceAll()); else enhanceAll();\n`;
+  // One component failing to start never stops the others, or window.lumina.
+  const safe = "const safe = (name, fn) => (el) => { try { return fn(el); } catch (err) { console.error('[lumina] ' + name + ' could not start:', err); return () => {}; } };";
+  const entry = `${imp.join('\n')}\n${safe}\nconst registry = {\n${reg.join('\n')}\n};\nexport const charts = {\n${charts.join('\n')}\n};\nexport function enhanceAll(root = document) { return autoEnhance(root, registry); }\nif (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => enhanceAll()); else enhanceAll();\n`;
   const r = await esbuild.build({ stdin: { contents: entry, resolveDir: root, loader: 'ts', sourcefile: 'lumina-entry.ts' }, bundle: true, format: 'iife', globalName: 'lumina', target: 'es2022', minify: true, write: false, outdir: 'out', entryNames: 'lumina', logLevel: 'silent' });
-  for (const o of r.outputFiles) write(basename(o.path), Buffer.from(o.contents));
+  // lumina.css / lumina.js are generated from your component list: always rebuilt, never 'kept'.
+  for (const o of r.outputFiles) write(basename(o.path), Buffer.from(o.contents), true);
   for (const id of want.blueprints) {
     const bp = catalog.blueprints.find((x) => x.id === id);
-    const b = await esbuild.build({ entryPoints: [join(root, bp.path, 'main.ts')], bundle: true, format: 'iife', target: 'es2022', minify: true, write: false, outdir: 'out', entryNames: 'main', logLevel: 'silent' });
-    for (const o of b.outputFiles) write(`${id}/${basename(o.path)}`, Buffer.from(o.contents));
+    // Unminified on purpose: a blueprint is a starting point you edit.
+    const b = await esbuild.build({ entryPoints: [join(root, bp.path, 'main.ts')], bundle: true, format: 'iife', target: 'es2022', minify: false, legalComments: 'none', write: false, outdir: 'out', entryNames: 'main', logLevel: 'silent' });
+    for (const o of b.outputFiles) write(`${id}/${basename(o.path)}`, Buffer.from(o.contents), true);
     const html = readFileSync(join(root, bp.path, 'index.html'), 'utf8').replace(/<script type="module" src="\.\/main\.ts"><\/script>/, '<link rel="stylesheet" href="./main.css">\n  <script defer src="./main.js"></script>');
-    write(`${id}/index.html`, html);
+    // The page follows your profile, not the blueprint's demo theme.
+    const themed = html.replace(/<html([^>]*)>/, (_m, a) => `<html${a.replace(/\s+data-(palette|mode|type|density|radius|motion|style)="[^"]*"/g, '')} data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="${profile.radius}" data-motion="${profile.motion}"${profile.style !== 'none' ? ` data-style="${profile.style}"` : ''}>`);
+    write(`${id}/index.html`, themed);
   }
 }
 const tokenIndex = `/* lumina-taste tokens: import this once, before any component CSS. */\n${tokenFiles.map((f) => `@import "./${relative('tokens', f)}";`).join('\n')}\n`;
 if (framework !== 'static') write('tokens/index.css', tokenIndex);
 
 if (!opts['no-profile']) {
-  if (dry) console.log(`  ~ ${relative(process.cwd(), profilePath)}`);
+  if (dry) console.log(`  ~ ${relative(projectDir, profilePath)}`);
   else { mkdirSync(dirname(profilePath), { recursive: true }); writeFileSync(profilePath, serializeProfile(profile)); }
 }
 
 // ------------------------------------------------------------------ report
 const attrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="${profile.radius}" data-motion="${profile.motion}"${profile.style !== 'none' ? ` data-style="${profile.style}"` : ''}`;
-console.log(`${dry ? 'Dry run: would install' : 'Installed'} lumina-taste (${framework}) into ${relative(process.cwd(), dest) || '.'}`);
+console.log(`${dry ? 'Dry run: would install' : 'Installed'} lumina-taste (${framework}) into ${relative(projectDir, dest) || '.'} (in ${projectDir})`);
 console.log(`  ${copied} file(s) written, ${unchanged} already up to date${skipped ? `, ${skipped} kept` : ''}.`);
 if (applied.length) console.log(`  Profile updated: ${applied.join(', ')}.`);
 if (blocked.length) console.log(`  Locked, left unchanged: ${blocked.join(', ')}. Pass --force or --unlock <axis> if the user asked for it.`);
-console.log(`  Profile: ${relative(process.cwd(), profilePath)} (${profile.palette}, ${profile.mode}, ${profile.typography}, ${profile.density}, ${profile.radius}, ${profile.motion}${profile.style !== 'none' ? `, style ${profile.style}` : ''}${profile.locks.length ? `; locked: ${profile.locks.join(', ')}` : ''})`);
+console.log(`  Profile: ${relative(projectDir, profilePath)} (${profile.palette}, ${profile.mode}, ${profile.typography}, ${profile.density}, ${profile.radius}, ${profile.motion}${profile.style !== 'none' ? `, style ${profile.style}` : ''}${profile.locks.length ? `; locked: ${profile.locks.join(', ')}` : ''})`);
 console.log('\nNext:');
 if (framework === 'static') console.log(`  1. In each page: <link rel="stylesheet" href="${relative(projectDir, join(dest, 'lumina.css'))}"> and <script defer src="${relative(projectDir, join(dest, 'lumina.js'))}"></script>.\n     Paste markup from ${relative(projectDir, join(dest, 'snippets'))}/; it is enhanced on load. Charts: lumina.charts['line-chart'](el, data, options) after DOMContentLoaded. Works from file:// too.`);
 else console.log(`  1. Import ${relative(projectDir, join(dest, 'tokens/index.css'))} once, before component CSS.`);
 if (profile.installMode === 'attach') console.log(`  2. Put the attributes on your wrapper only (host styles stay untouched):\n     <div class="lt-root" ${attrs}>…</div>   (attachRoot: "${profile.attachRoot}")`);
 else console.log(`  2. Put the attributes on <html>:\n     <html ${attrs}>\n     or call applyProfile(profile) from engine/profiles/profile.mjs (bootstrapSnippet() avoids a flash).`);
+const webfont = JSON.parse(readFileSync(join(root, 'tokens/typography/source.json'), 'utf8')).pairings?.find?.((x) => x.id === profile.typography)?.webfont;
+if (framework === 'static' && want.blueprints.length) console.log(`  Blueprints: ${want.blueprints.map((b) => relative(projectDir, join(dest, b, 'index.html'))).join(', ')} ${want.blueprints.length > 1 ? 'are' : 'is'} a complete page:\n     main.css and main.js already hold the tokens and every component it uses, so it does not need lumina.css.\n     Move it where the page should live (or copy its markup into your page), then replace the sample words and data.`);
+if (webfont) console.log(`  Fonts: the stacks fall back to installed faces with the same character. For the exact faces add\n     <link rel="stylesheet" href="${webfont}">`);
 if (want.components.length && framework !== 'static') console.log(`  3. ${framework === 'react' ? 'Import the components from their .react.tsx files.' : 'Paste each .html snippet and call enhance(el) from its .ts file (or autoEnhance(document, { id: enhance }) from _shared/dom.ts).'}`);
 if (blocked.length && !opts.force) process.exit(3);

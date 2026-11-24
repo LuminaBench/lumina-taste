@@ -58,6 +58,7 @@ function hygiene(localDir, inputs = []) {
   let hex = 0;
   for (const f of mine.filter((f) => ['.css', '.html', '.tsx', '.jsx', '.vue', '.svelte'].includes(extname(f)))) {
     const src = readFileSync(f, 'utf8').replace(/<script[\s\S]*?<\/script>/gi, '');
+    if (/--accent-solid\s*:/.test(src)) continue; // a bundle of the kit's own tokens, not the agent's CSS
     const css = extname(f) === '.css' ? src : (src.match(/<style[\s\S]*?<\/style>|style="[^"]*"/gi) ?? []).join('\n');
     hex += (css.match(/(?<![\w&])#[0-9a-f]{3,8}\b|\brgba?\(\s*\d/gi) ?? []).length;
   }

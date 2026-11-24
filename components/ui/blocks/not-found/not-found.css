@@ -1,6 +1,7 @@
 @scope (.lt-not-found) {
-  :scope { container-type: inline-size; display: block; width: 100%; padding: 56px 40px; background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
-  @container (max-width: 640px) { :scope { padding: 36px 20px; } }
+  :scope { container-type: inline-size; display: block; width: 100%; padding: var(--block-y, var(--section-y)) var(--block-x, 24px); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  @container (max-width: 640px) { :scope { padding: var(--block-y-sm, var(--section-y)) var(--block-x-sm, 16px); } }
+  @media (max-width: 640px) { :scope { padding: var(--block-y-sm, var(--section-y)) var(--block-x-sm, 16px); } }
   .lt-eyebrow, [data-part="eyebrow"] { margin: 0 0 10px; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; color: var(--accent-text); }
   h2 { margin: 0; font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
   [data-part="lede"] { margin: 12px 0 0; max-width: 56ch; color: var(--text-secondary); font-size: var(--step-0); line-height: 1.55; text-wrap: pretty; }

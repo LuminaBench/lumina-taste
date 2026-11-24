@@ -1,11 +1,11 @@
 ---
 name: lumina-taste
-description: Make interfaces look designed, not generated. Use for any UI work (landing, pricing, dashboard, settings, docs, auth and onboarding pages) and for colour palettes, light/dark themes, type pairings, spacing, density, radius, motion and visual styles such as swiss, editorial, neobrutalism, glass or terminal. Use when someone describes a UI element loosely (rotating arrow, 9-dot menu, cmd-K box, OTP boxes, bottom sheet, speed dial, kanban, star rating, chat bubbles, carousel, lightbox) to get its real name and working code. Use for charts, including benchmark leaderboards, trade-off quadrants, Pareto frontiers, slope, dumbbell, waterfall, box plot, beeswarm, bump and small multiples. Use to audit a page for overflow, clipped or overlapping text, contrast, focus rings, dead buttons and AI slop (purple gradients, heavy shadows, emoji icons, hype copy), and to keep a product's look stable across edits with a lockable taste-profile.json. Vanilla HTML/CSS/TS and React, no dependencies.
+description: Make interfaces look designed, not generated. Use for any UI work (landing, pricing, dashboard, settings, docs, auth, store, checkout, admin, status pages): plan a page from a one-line brief, pick palettes, light/dark themes, type, density and visual styles (swiss, editorial, neobrutalism, glass, terminal…), and match an existing site or export to shadcn/ui and Tailwind. Use when a UI element is described loosely (rotating arrow, 9-dot menu, cmd-K box, OTP boxes, bottom sheet, kanban, carousel) to get its real name and working code. Use for charts, including leaderboards, trade-off quadrants, slope, waterfall, treemap and Gantt. Use to audit a page for overflow, clipped text, contrast, focus rings, dead buttons, AI slop (purple gradients, heavy shadows, emoji icons, hype copy) and page-level taste, and to keep a product's look stable with a lockable taste-profile.json. Vanilla HTML/CSS/TS and React, no dependencies.
 ---
 
 # Lumina Taste
 
-A design kit for coding agents: **18 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **35 visual styles**, **162 named UI patterns**, **42 chart engines**, **8 page blueprints**, a **lockable taste profile**, a **Playwright auditor** and a **copy lint**. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
+A design kit for coding agents: a **page composer** that turns a brief into a plan, **18 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **35 visual styles**, **162 named UI patterns**, **42 chart engines**, **13 page blueprints**, a **lockable taste profile**, a **Playwright auditor with a page-level taste critic**, a **copy lint** and **30 eval briefs** to measure the result. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
 
 Run commands from this skill's directory with Node.js 20+. Pass absolute paths (or run from the user's project with the absolute script path). Search, install and token scripts need nothing installed; the auditor needs Playwright; the gallery needs `npm install` once.
 
@@ -28,7 +28,7 @@ Components are rarely what makes a page look generated; the plan is. Run this lo
 1. **Compose.** `node scripts/compose.mjs "<the user's brief in one line>"` prints a page plan: the design brief (audience, product, primary action, reading pattern, layout, density), a taste profile chosen for the domain, the sections in order with real catalog ids and a copy formula for each, the states to build, what to avoid, and the install command. Add `--json` to read it as data, `--type <id>` to force a page type.
 2. **Confirm the brief.** If the user's request does not say who the page is for or what the one action is, ask once. Otherwise state your brief in two lines and go.
 3. **Install and build** exactly what the plan lists. Start from its blueprint when it names one. Follow the section order; skip optional sections you cannot fill with real content rather than inventing it.
-4. **Write real copy** with the plan's formulas: the product's name, real numbers, specific benefits. Never ship lorem ipsum, "Acme", "John Doe" or "Feature one"; the critic fails them.
+4. **Write real copy** with the plan's formulas and `references/copy-patterns.md` (headlines, buttons, empty states, errors, pricing, FAQ): the product's name, real numbers, specific benefits. Never ship lorem ipsum, "Acme", "John Doe" or "Feature one"; the critic fails them. For tables, charts and lists, `node scripts/sample-data.mjs users|invoices|orders|series|revenue|funnel|cohort|events` prints realistic, seeded data.
 5. **Build the states** the plan lists (loading, empty, error) as well as the happy path.
 6. **Critique.** `node scripts/audit-ui.mjs <url> --taste` checks the page like a designer would: type steps, accent hues, corner radii, one primary per screen, reading width, heading order, cards inside cards, section rhythm, a clear first thing to look at, placeholder copy and long button labels. Fix every error, then warnings, until the score is 90 or more. Then take screenshots at 390px and 1440px and look at them.
 
@@ -47,6 +47,7 @@ node scripts/search.mjs "dark finance palette" --kind palette
 node scripts/search.mjs "thick borders hard shadows" --kind style   # → neobrutal
 node scripts/search.mjs "login page with code" --json
 node scripts/install-taste.mjs --list               # every id, grouped
+node scripts/search.mjs --card dropdown-menu        # one item on one screen: when to pick it, parts, states, prompt, files
 ```
 
 When two elements sound alike (tooltip or popover, modal or drawer, checkbox or switch), read `references/which-one.md`: one rule per pair.
@@ -62,6 +63,16 @@ When two elements sound alike (tooltip or popover, modal or drawer, checkbox or 
    - Radius `sharp | balanced | soft`; motion `snappy | calm | reduced`.
    - Style (optional): one of 35 looks in `tokens/styles/source.json` (studio, swiss, editorial, neobrutal, terminal, glass, soft, clay, retro, blueprint, lucid, flat, minimal, paper, elevated, newsprint, mono, graphite, atelier, nordic, kraft, midnight, playful, enterprise, zen, tonal, system, noir, bauhaus, ticker, linen, signal, ledger, volt, civic). `--style swiss` brings its palette, mode, type and radius; explicit flags still win. Pick a style only when the brief names a mood; default is none.
 2. **Install only what the page needs** (writes `taste-profile.json`, copies tokens + chosen files + their imports, nothing else). `--framework static` is for plain HTML with no build step: it writes one `lumina.css`, one `lumina.js` (enhances every `[data-lt]` element on load, charts on `lumina.charts`) and `snippets/<id>.html` to paste; pages work from `file://`. `vanilla` copies the TypeScript sources for a bundler; `react` copies the `.react.tsx` wrappers.
+
+   Static page recipe:
+   ```html
+   <html data-palette="navy-sand" data-mode="light" data-type="financial" data-density="balanced" data-radius="balanced" data-motion="snappy">
+   <link rel="stylesheet" href="ui/lumina.css"><script defer src="ui/lumina.js"></script>
+   <main class="lt-container lt-stack"> … markup pasted from ui/snippets/ … <div id="mrr"></div> </main>
+   <script>addEventListener('DOMContentLoaded', () => lumina.charts['multi-line-chart'](document.getElementById('mrr'),
+     { x: ['Jan', 'Feb', 'Mar'], series: [{ name: 'Team', values: [12, 14, 18] }] }, { title: 'Team plan pulled ahead', subtitle: 'MRR, £k' }));</script>
+   ```
+   Only the charts you pass to `--charts` are in `lumina.charts`. `node scripts/search.mjs --card <chart-id>` prints its data shape. A blueprint installed this way is a complete page in `<dest>/<id>/` with its own `main.css` and `main.js`: move it into place and edit its words and data, or build your page from `snippets/` with `lumina.css`; do not mix the two on one page.
    ```sh
    node scripts/install-taste.mjs --project /abs/app --dest src/ui --framework react \
      --palette navy-sand --type swiss --density balanced \
@@ -81,7 +92,11 @@ node scripts/install-taste.mjs --project /abs/app --attach --root "#billing-pane
 
 - `installMode: "attach"` scopes tokens to the wrapper: `<div id="billing-panel" data-palette="…" data-mode="…" …>`.
 - Base styles use zero-specificity `:where()`, components use `@scope` and `lt-` / `data-part` names, so host CSS always wins and nothing leaks out.
-- Match the host: pick the palette whose accent and canvas are nearest the host's, or pass `--override accent-solid="oklch(…)"`. Overrides are contrast-checked and rejected with the failing pair named.
+- Match the host: `node scripts/sniff.mjs <url>` measures its canvas, text and accent colours, fonts, radii and control heights and prints the nearest palette, type, radius and density as an install command, keeping the brand accent as an `--override` when no palette is close. Overrides are contrast-checked and rejected with the failing pair named.
+
+### Already on Tailwind or shadcn/ui?
+
+Keep the stack and bring the taste: `node scripts/export-tokens.mjs --format shadcn --palette navy-sand --type financial > app/globals.css` fills every shadcn variable (background, card, primary, muted, accent, ring, chart-1…5, sidebar-*, radius, fonts) with the palette's contrast-checked OKLCH values for light and `.dark`. `--format tailwind4` prints an `@theme` block with semantic colours (`bg-canvas`, `bg-surface`, `text-ink`, `text-ink-muted`, `bg-accent`, `text-accent-text`, `border-line`…); `--format tailwind3` prints a preset. `--profile taste-profile.json` reads the axes from a profile. The rules in this file still apply: one accent, one primary per screen, tokens only, then `audit-ui.mjs --taste`.
 
 ## Workflow C · Change one thing, keep the rest
 
@@ -126,10 +141,17 @@ node scripts/install-taste.mjs --project /abs/app --attach --root "#billing-pane
 | Settings & workspace | `settings` | Sectioned forms, switches, danger zone with confirm, sticky unsaved-changes bar |
 | Directory / skills hub | `directory` | Search, filter pills, sort, preview cards, honest empty state |
 | Auth & onboarding | `auth` | Split layout, email → OTP → workspace → done |
+| Admin list | `admin` | Search, status filter, selectable rows, bulk bar, pagination, detail drawer; loading, empty and error states |
+| Status page | `status` | Overall status, 90-day uptime per service, incident history, subscribe; incident state |
+| Changelog | `changelog` | Tagged releases with dates and versions, filter, RSS and email |
+| Store product page | `store` | Gallery, size, grind and subscription options, price on the button, reviews, mobile buy bar; sold-out state |
+| Checkout | `checkout` | One column with sticky summary, delivery cards, Pay £X; declined-card state |
 
 ```sh
 node scripts/install-taste.mjs --project /abs/app --blueprints dashboard --dest src/pages
 ```
+
+Open any data blueprint with `?state=loading`, `?state=empty` or `?state=error` (status: `incident`, store: `sold-out`) to see the other states; blocks marked `data-view="…"` switch, and buttons with `data-set-state` switch live. Ship every state your page has, not just the happy path.
 
 Replace the sample copy and data with the user's; keep the anatomy. Blueprints use only components from the catalog, so every swap stays on-system.
 
@@ -164,9 +186,21 @@ node scripts/lint-copy.mjs src/                                # hype words, cli
 | `taste-rhythm` | Every band uses `--section-y`. |
 | `taste-focal` | Make one headline clearly larger than everything else in the first screen. |
 | `taste-placeholder` | Error: replace with real copy or realistic sample data. |
+| `taste-empty-visual` | A big frame with nothing inside reads as a missing image: put a real screenshot or a small live mockup in it, or remove it. CSS illustrations need `role="img"` and an `aria-label`. |
 | `taste-button-label` | Verb + object, five words at most. |
 
 Requires Playwright in the skill or the project (`npm i -D @playwright/test && npx playwright install chromium`). Exit code 1 on any error.
+
+## Workflow G · Restyle an existing page
+
+Use when the user has a working page that looks generated and wants it designed, keeping its content.
+
+1. Audit the page as it is: `node scripts/audit-ui.mjs <page> --taste`. Keep the score to compare.
+2. `node scripts/compose.mjs "restyle <what the page is>"` prints restyle notes plus the section plan for that page type.
+3. Install with `--framework static` (or your framework), add the `<html>` attributes, and delete the old colours, gradients, heavy shadows and emoji icons rather than overriding them.
+4. Map each existing section onto the nearest block (hero, feature rows, pricing, testimonials, FAQ, CTA, footer) and move its words in unchanged. Wrap anything without a match in `.lt-band` + `.lt-container`.
+5. Keep every action, but only one filled primary per screen; the rest become secondary or ghost. Point every `#anchor` at a real id.
+6. Audit again and report both scores.
 
 ## Component conventions
 
@@ -175,6 +209,7 @@ Requires Playwright in the skill or the project (`npm i -D @playwright/test && n
 - Vanilla: paste the HTML, then `enhance(el)` or `autoEnhance(document, { accordion: enhance })` for every `[data-lt]`.
 - Events: components emit `lt-change` (detail = new state); React wrappers surface it as `onChange` / `onX` props.
 - Overlays use native `<dialog>`, the Popover API and CSS anchor positioning with a JS fallback.
+- Settings and account panels (settings list, plan card, usage meters, team members, danger zone) share one width, `--lt-panel-max` (default 720px). Set it once on the page (`--lt-panel-max: none` to fill the column) so they line up.
 - Overriding a component's own spacing or size: component rules live in `@scope`, which wins ties against plain page CSS. Use two classes (`.lt-bulk.users-table { padding-bottom: 0 }`) or set the component's custom properties instead of fighting it with `!important`.
 - Families: controls (36), navigation (26), feedback (17), overlays (18), data (35), motion (10), sections (20: heroes, features, pricing, testimonials, FAQ, CTA, stats, newsletter, how it works, team, sign-in, 404, integrations, contact, blog, feature rows, logo cloud, article, before/after). Full list: `catalog.json` or `--list`.
 
@@ -211,7 +246,7 @@ evals/                       30 briefs (evals.json), fixtures and reference scor
 tokens/                      base.css, palettes/*.css (+ source.json), typography/, styles/
 components/ui/<family>/      162 patterns (html, css, ts, react.tsx)
 components/charts/           core/ + 42 chart engines (+ React wrappers)
-blueprints/                  8 page blueprints
-references/                  anti-slop-rules, page-flow, chart-selection, which-one, palettes, harvest-log
-scripts/                     compose, search, install-taste, audit-ui, audit-all, lint-copy, eval-score, eval-run, build-tokens, test-contrast, build, serve
+blueprints/                  13 page blueprints (states via ?state=loading|empty|error|incident|sold-out)
+references/                  anti-slop-rules, page-flow, copy-patterns, chart-selection, which-one, palettes, harvest-log
+scripts/                     compose, search, install-taste, sniff, export-tokens, sample-data, audit-ui, audit-all, lint-copy, eval-score, eval-run, build-tokens, test-contrast, build, serve
 ```

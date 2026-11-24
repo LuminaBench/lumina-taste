@@ -723,7 +723,7 @@ test.describe('sections', () => {
     expect(ids.length).toBeGreaterThanOrEqual(12);
     for (const id of ids) {
       await page.evaluate((i) => (location.hash = `#/ui/${i}`), id);
-      await expect(page.locator(`#ui-${id} [data-stage] :is(h2, h3)`).first()).toBeVisible();
+      await expect(page.locator(`#ui-${id} [data-stage] :is(h1, h2, h3)`).first()).toBeVisible();
     }
     expect(errors).toEqual([]);
   });

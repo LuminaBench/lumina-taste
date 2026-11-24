@@ -7,7 +7,8 @@ const x = '<svg class="lt-icon" width="12" height="12" viewBox="0 0 24 24" fill=
 /** One global filter bar for a whole dashboard (anti-slop: never one filter bar per card). Emits the active filter state. */
 export function enhance(root: HTMLElement): Cleanup {
   const range = root.querySelector<HTMLElement>('[data-part="range"]');
-  const chips = root.querySelector<HTMLElement>('[data-part="chips"]')!;
+  // Chips are optional: a bar with only a date range is valid.
+  const chips = root.querySelector<HTMLElement>('[data-part="chips"]') ?? document.createElement('div');
   const initial = chips.innerHTML;
   const state = () => ({
     range: range?.querySelector<HTMLElement>('[aria-checked="true"]')?.dataset.value,
