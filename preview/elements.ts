@@ -1,6 +1,6 @@
 // Elements: the index grid (live mini previews) and the element page (contained live demo,
 // anatomy pins, plain explanation, agent prompts, names in code).
-import { BLUEPRINTS, CHARTS, FAMILIES, STYLES, UI } from './generated/registry';
+import { BLUEPRINTS, CHARTS, COMPARE, FAMILIES, STYLES, UI } from './generated/registry';
 import { ICON, copyText, esc, fit, onTheme, syncRoots, themeAttrs } from './core';
 import { rank } from './search';
 
@@ -47,6 +47,26 @@ function card(c: Doc) {
 }
 
 /** Put a demo into its most telling state (an open menu, a typed query) so the preview shows the thing itself. */
+/**
+ * Show a top-layer popover (tooltip, popover, hover card) as a plain positioned box so thumbnails can
+ * picture it. `anchor` is a selector inside the demo; a leading "^" places the box above it. The
+ * static copy goes away the moment someone interacts, so the real component takes over.
+ */
+function staticOpen(inner: HTMLElement, sel: string, anchor?: string) {
+  for (const pop of inner.querySelectorAll<HTMLElement>(sel)) {
+    const root = pop.closest<HTMLElement>('[data-lt]') ?? pop.parentElement!;
+    if (getComputedStyle(root).position === 'static') root.style.position = 'relative';
+    const above = anchor?.startsWith('^');
+    const a = (anchor ? root.querySelector<HTMLElement>(anchor.replace(/^\^/, '')) : pop.previousElementSibling) as HTMLElement | null;
+    if (!a) continue;
+    pop.setAttribute('data-static-open', '');
+    pop.style.left = `${a.offsetLeft}px`;
+    pop.style.top = above ? `${a.offsetTop - pop.offsetHeight - 8}px` : `${a.offsetTop + a.offsetHeight + 8}px`;
+  }
+  const clear = () => inner.querySelectorAll<HTMLElement>('[data-static-open]').forEach((p) => { p.removeAttribute('data-static-open'); p.style.left = p.style.top = ''; });
+  for (const t of ['pointerdown', 'pointerover', 'focusin'] as const) inner.addEventListener(t, clear, { once: true });
+}
+
 export function runPreview(c: Doc, inner: HTMLElement) {
   for (const [kind, sel, text] of c.preview ?? []) {
     const el = inner.querySelector<HTMLElement>(sel);
@@ -54,6 +74,7 @@ export function runPreview(c: Doc, inner: HTMLElement) {
     if (kind === 'click') el.click();
     else if (kind === 'type' && (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) { el.value = text ?? ''; el.dispatchEvent(new Event('input', { bubbles: true })); }
     else if (kind === 'scroll') el.scrollTop = +(text ?? 0);
+    else if (kind === 'static') staticOpen(inner, sel, text);
   }
 }
 const codeTabs = (c: Doc) => [
@@ -79,8 +100,16 @@ function highlight(src: string) {
 
 const widthOf = (c: Doc) => (c.w ? `style="width:${c.w}px"` : '');
 
+/** A compact card for comparison rows: live thumbnail, name and a one-line "use it for". */
+export function miniCard(c: Doc, note: string) {
+  return `<article class="g-card g-cmp-card" data-id="${c.id}">
+    <div class="g-prev" data-stage data-theme-root data-contained inert ${themeAttrs()}><div class="g-prev-in" ${widthOf(c)}>${c.html}</div></div>
+    <div class="g-card-body"><div class="g-card-title"><h3><a class="g-stretch" href="#/ui/${c.id}">${esc(c.name)}</a></h3></div><p>${esc(note)}</p></div>
+  </article>`;
+}
+
 let mounted: Array<() => void> = [];
-function mountPreviews(scope: ParentNode) {
+export function mountPreviews(scope: ParentNode) {
   scope.querySelectorAll<HTMLElement>('.g-prev').forEach((box) => {
     const id = box.closest<HTMLElement>('[data-id]')!.dataset.id!;
     const c = byId(id)!;
@@ -154,6 +183,7 @@ export function viewElement(main: HTMLElement, id: string) {
 
         ${d.anatomy.length ? `<section class="g-sec"><h2>Anatomy</h2><ol class="g-anatomy">${d.anatomy.map((p, i) => `<li><span class="g-num">${i + 1}</span><div><b>${esc(p.name)}</b>${p.api ? `<code>${esc(p.api)}</code>` : ''}<p>${esc(p.text)}</p></div></li>`).join('')}</ol></section>` : ''}
 
+        ${COMPARE.pairs.filter((p) => p.ids.includes(c.id)).map((p) => `<section class="g-sec g-confused"><h2>Often confused with</h2><p class="g-rule">${esc(p.rule)}</p><div class="g-see">${p.ids.filter((x) => x !== c.id).map(byId).filter(Boolean).map((o) => `<a href="#/ui/${o!.id}"><b>${esc(o!.name)}</b><span>${esc(p.use[o!.id])}</span></a>`).join('')}</div><a class="g-more" href="#/compare/${p.id}">Compare side by side</a></section>`).join('')}
         <section class="g-sec"><h2>States</h2><div class="g-states">${c.states.map((s) => `<span>${esc(s)}</span>`).join('')}</div></section>
 
         <section class="g-sec"><div class="g-sec-head"><h2>Prompt for your agent</h2><button type="button" class="g-copy" data-copy-prompt>${ICON.copy}<span>Copy</span></button></div><pre class="g-prompt">${esc(d.prompt)}</pre></section>

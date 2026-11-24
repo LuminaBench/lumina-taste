@@ -1,4 +1,4 @@
-import { $$, combine, emit, on, part, type Cleanup } from '../../_shared/dom';
+import { $$, combine, emit, on, part, type Cleanup, revealInList } from '../../_shared/dom';
 
 /**
  * @-mentions in a textarea: typing "@" plus letters opens a filtered listbox under the caret;
@@ -17,7 +17,7 @@ export function enhance(root: HTMLElement): Cleanup {
     active = (i + v.length) % v.length;
     opts.forEach((o) => o.setAttribute('aria-selected', String(o === v[active])));
     ta.setAttribute('aria-activedescendant', v[active].id);
-    v[active].scrollIntoView({ block: 'nearest' });
+    revealInList(v[active]);
   };
   // Place the list under the caret using a mirror element.
   const caret = () => {

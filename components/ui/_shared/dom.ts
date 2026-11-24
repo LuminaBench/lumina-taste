@@ -64,6 +64,23 @@ export function focusQuietly(el: HTMLElement) {
   el.addEventListener('blur', clear);
 }
 
+/**
+ * Bring an item into view inside its own scrolling list only. Unlike scrollIntoView(), this never
+ * scrolls the page, so a highlighted option in a menu cannot yank the reader somewhere else.
+ */
+export function revealInList(el: HTMLElement) {
+  let box = el.parentElement;
+  while (box && box !== document.body) {
+    const o = getComputedStyle(box).overflowY;
+    if ((o === 'auto' || o === 'scroll') && box.scrollHeight > box.clientHeight) break;
+    box = box.parentElement;
+  }
+  if (!box || box === document.body) return;
+  const r = el.getBoundingClientRect(), b = box.getBoundingClientRect();
+  if (r.top < b.top) box.scrollTop -= b.top - r.top + 4;
+  else if (r.bottom > b.bottom) box.scrollTop += r.bottom - b.bottom + 4;
+}
+
 /** Move focus as a result of `e`: quietly when a pointer caused it, with a ring when a key did. */
 export function focusFor(e: Event | null | undefined, el: HTMLElement | null | undefined) {
   if (!el) return;

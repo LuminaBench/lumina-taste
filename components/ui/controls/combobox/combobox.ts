@@ -1,4 +1,4 @@
-import { combine, dismissable, emit, on, type Cleanup } from '../../_shared/dom';
+import { combine, dismissable, emit, on, type Cleanup, revealInList } from '../../_shared/dom';
 
 /** Searchable select (WAI-ARIA combobox with list autocomplete, aria-activedescendant). */
 export function enhance(root: HTMLElement): Cleanup {
@@ -16,7 +16,7 @@ export function enhance(root: HTMLElement): Cleanup {
     active = vis.length ? (i + vis.length) % vis.length : -1;
     options.forEach((o) => o.removeAttribute('data-active'));
     const el = vis[active];
-    if (el) { el.setAttribute('data-active', ''); input.setAttribute('aria-activedescendant', el.id); el.scrollIntoView({ block: 'nearest' }); }
+    if (el) { el.setAttribute('data-active', ''); input.setAttribute('aria-activedescendant', el.id); revealInList(el); }
     else input.removeAttribute('aria-activedescendant');
   };
   const filter = () => {

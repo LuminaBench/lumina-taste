@@ -687,3 +687,30 @@ test.describe('added in 1.0 (batch 2)', () => {
     await expect(s.locator('[data-part="row"]')).toHaveCount(1);
   });
 });
+
+test('Compare view: every pair shows live thumbnails and a rule', async ({ page }) => {
+  const errors = errorsOf(page);
+  await page.goto('/#/compare');
+  const pairs = page.locator('.g-cmp');
+  expect(await pairs.count()).toBeGreaterThanOrEqual(12);
+  const empty = await page.$$eval('.g-cmp', (els) => els.filter((s) => !s.querySelector('.g-rule')?.textContent?.trim() || s.querySelectorAll('.g-prev-in > *').length < 2).map((s) => s.id));
+  expect(empty).toEqual([]);
+  // Top-layer overlays are pictured open in thumbnails.
+  await expect(page.locator('#cmp-tooltip-popover-hover-card [data-static-open]')).toHaveCount(3);
+  expect(errors).toEqual([]);
+});
+
+test('element pages link to their comparison', async ({ page }) => {
+  await page.goto('/#/ui/tooltip');
+  await expect(page.locator('.g-confused .g-rule')).toContainText('tooltip');
+  await page.locator('.g-confused .g-more').click();
+  await expect(page).toHaveURL(/#\/compare\/tooltip-popover-hover-card/);
+});
+
+test('previews never scroll the page on load', async ({ page }) => {
+  for (const r of ['/#/', '/#/compare', '/#/charts']) {
+    await page.goto(r);
+    await page.waitForTimeout(900);
+    expect(await page.evaluate(() => scrollY), r).toBe(0);
+  }
+});

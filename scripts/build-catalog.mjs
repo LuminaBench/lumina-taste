@@ -65,4 +65,14 @@ const catalog = {
   styles,
 };
 writeFileSync(join(root, 'catalog.json'), JSON.stringify(catalog, null, 2) + '\n');
+// references/which-one.md: the comparison pairs as plain rules agents can follow.
+const cmp = read('components/ui/compare.json');
+const nameOf = (id) => ui.find((u) => u.id === id)?.name ?? id;
+let wo = `# Which one?\n\nGenerated from \`components/ui/compare.json\` by \`scripts/build-catalog.mjs\`. ${cmp.intro}\n`;
+for (const p of cmp.pairs) {
+  wo += `\n## ${p.title}\n\n${p.rule}\n\n| Element | id | Use it for |\n| --- | --- | --- |\n`;
+  for (const id of p.ids) wo += `| ${nameOf(id)} | \`${id}\` | ${p.use[id]} |\n`;
+}
+writeFileSync(join(root, 'references/which-one.md'), wo);
+
 console.log(`catalog.json: ${ui.length} UI patterns, ${charts.length} charts, ${blueprints.length} blueprints, ${pal.length} palettes, ${typo.length} type pairings, ${styles.length} styles`);

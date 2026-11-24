@@ -5,10 +5,11 @@ import '../tokens/typography/typography.css';
 import '../tokens/styles/styles.css';
 import '../components/ui/_shared/shared.css';
 import './gallery.css';
-import { BLUEPRINTS, CHARTS, STYLES, UI } from './generated/registry';
+import { BLUEPRINTS, CHARTS, COMPARE, STYLES, UI } from './generated/registry';
 import { PALETTES, TYPOGRAPHY } from '../engine/profiles/options.mjs';
 import { ICON, announce, copyText, ensureFont, esc, html, setTheme, syncRoots, theme, themeAttrs } from './core';
 import { byId, unmountPreviews, viewElement, viewIndex } from './elements';
+import { viewCompare } from './compare';
 import { rank } from './search';
 
 const main = document.getElementById('g-main')!;
@@ -75,6 +76,7 @@ const INDEX: Hit[] = [
   ...CHARTS.map((c) => ({ kind: 'Chart', id: c.meta.id, name: c.meta.name, summary: c.meta.summary, aliases: c.meta.aliases, href: `#/charts/${c.meta.id}` })),
   ...STYLES.map((s) => ({ kind: 'Style', id: s.id, name: s.name, summary: s.summary, aliases: s.aliases, href: `#/styles/${s.id}` })),
   ...BLUEPRINTS.map((b) => ({ kind: 'Page', id: b.id, name: b.name, summary: b.summary, aliases: b.aliases, href: `#/pages/${b.id}` })),
+  ...COMPARE.pairs.map((p) => ({ kind: 'Compare', id: p.id, name: p.title, summary: p.rule, aliases: p.ids, href: `#/compare/${p.id}` })),
   ...PALETTES.map((p) => ({ kind: 'Palette', id: p.id, name: p.name, summary: `${p.category} palette`, href: `#/palettes/${p.id}` })),
 ];
 let active = 0;
@@ -260,6 +262,7 @@ function render() {
   else if (r.name === 'styles') viewStyles(r.id);
   else if (r.name === 'pages' || r.name === 'blueprints') viewPages(r.id);
   else if (r.name === 'palettes') viewPalettes(r.id);
+  else if (r.name === 'compare') viewCompare(main, r.id);
   else if (r.id && byId(r.id)) viewElement(main, r.id);
   else viewIndex(main, q.value.trim(), state.family, state.sort);
 }

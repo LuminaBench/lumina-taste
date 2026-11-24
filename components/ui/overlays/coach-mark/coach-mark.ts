@@ -11,7 +11,7 @@ export function enhance(root: HTMLElement): Cleanup {
   const show = () => {
     const list = steps();
     const t = list[i];
-    t.scrollIntoView({ block: 'nearest' });
+    if (!t.closest('[data-contained]')) t.scrollIntoView({ block: 'nearest' });
     const t0 = t.getBoundingClientRect();
     const box = layer.getBoundingClientRect(); // the viewport, or the contained preview box
     const r = { left: t0.left - box.left, top: t0.top - box.top, width: t0.width, height: t0.height, bottom: t0.bottom - box.top };

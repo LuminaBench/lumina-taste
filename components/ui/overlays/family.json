@@ -152,6 +152,13 @@
           "<SelectionBubble>",
           "React"
         ]
+      ],
+      "preview": [
+        [
+          "static",
+          "[data-part=\"bubble\"]",
+          "^[data-part=\"editable\"]"
+        ]
       ]
     },
     {
@@ -519,6 +526,12 @@
           "<Tooltip content>",
           "React"
         ]
+      ],
+      "preview": [
+        [
+          "static",
+          "#lt-tt-1"
+        ]
       ]
     },
     {
@@ -544,7 +557,8 @@
       "w": 420,
       "preview": [
         [
-          "click",
+          "static",
+          ".lt-popover",
           "[data-part=\"anchor\"]"
         ]
       ],
@@ -641,6 +655,13 @@
           "lumina-taste",
           "<HoverCard>",
           "React"
+        ]
+      ],
+      "preview": [
+        [
+          "static",
+          ".lt-hovercard",
+          "[data-part=\"anchor\"]"
         ]
       ]
     },

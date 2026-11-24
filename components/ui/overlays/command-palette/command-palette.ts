@@ -1,4 +1,4 @@
-import { combine, emit, on, openDialog, type Cleanup } from '../../_shared/dom';
+import { combine, emit, on, openDialog, type Cleanup, revealInList } from '../../_shared/dom';
 
 /** ⌘K / Ctrl+K command palette in a modal <dialog>: fuzzy filter, grouped results, arrow keys + Enter. */
 export function enhance(root: HTMLElement): Cleanup {
@@ -17,7 +17,7 @@ export function enhance(root: HTMLElement): Cleanup {
     options.forEach((o) => o.setAttribute('aria-selected', 'false'));
     v[active].setAttribute('aria-selected', 'true');
     input.setAttribute('aria-activedescendant', v[active].id);
-    v[active].scrollIntoView({ block: 'nearest' });
+    revealInList(v[active]);
   };
   const match = (q: string, text: string) => {
     // Subsequence match: "gtr" finds "Go to Reports".

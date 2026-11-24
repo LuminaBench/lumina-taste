@@ -1,0 +1,153 @@
+{
+  "intro": "Pairs people mix up, with one rule to pick between them.",
+  "pairs": [
+    {
+      "id": "tooltip-popover-hover-card",
+      "title": "Tooltip, popover or hover card?",
+      "ids": ["tooltip", "popover", "hover-card"],
+      "rule": "If it only names something, it is a tooltip. If people act inside it, it is a popover. If it previews a person or link on hover, it is a hover card.",
+      "use": {
+        "tooltip": "A short label for an icon button. Text only, never links or buttons.",
+        "popover": "A small panel with controls (share, filter, quick edit). Opens on click.",
+        "hover-card": "A preview of a profile or link. Opens after a short hover or on focus."
+      }
+    },
+    {
+      "id": "modal-drawer-sheet",
+      "title": "Modal, drawer or bottom sheet?",
+      "ids": ["modal-dialog", "drawer", "bottom-sheet"],
+      "rule": "Ask for a decision in a modal, show detail or filters in a drawer, and offer actions on phones in a bottom sheet.",
+      "use": {
+        "modal-dialog": "One question that blocks progress: confirm, rename, delete.",
+        "drawer": "Detail or filters next to a list the user still wants to see.",
+        "bottom-sheet": "A short list of actions on mobile, within thumb reach."
+      }
+    },
+    {
+      "id": "toast-banner-callout",
+      "title": "Toast, banner or callout?",
+      "ids": ["toast-stack", "banner", "callout"],
+      "rule": "Confirm something that just happened with a toast, announce something about the whole product with a banner, and explain something on this page with a callout.",
+      "use": {
+        "toast-stack": "\"Saved\", \"Invite sent\". Disappears on its own; never the only record of an error.",
+        "banner": "Maintenance, a new release, a billing problem. One at a time, dismissible.",
+        "callout": "A tip or warning inside content. Stays put."
+      }
+    },
+    {
+      "id": "checkbox-switch",
+      "title": "Checkbox or toggle switch?",
+      "ids": ["checkbox", "toggle-switch"],
+      "rule": "A switch takes effect immediately; a checkbox waits for Save.",
+      "use": {
+        "checkbox": "Choices in a form that is submitted, or picking several items in a list.",
+        "toggle-switch": "Settings that apply the moment you flip them."
+      }
+    },
+    {
+      "id": "tabs-segmented",
+      "title": "Tabs or segmented control?",
+      "ids": ["tabs", "segmented-control"],
+      "rule": "Tabs switch between different content; a segmented control changes how the same content is shown.",
+      "use": {
+        "tabs": "Overview, Activity, Settings: separate panels.",
+        "segmented-control": "1D / 1W / 1M on one chart, or List / Grid on one list."
+      }
+    },
+    {
+      "id": "radio-select-combobox",
+      "title": "Radio group, radio cards or combobox?",
+      "ids": ["radio-group", "radio-cards", "combobox"],
+      "rule": "Up to five options: show them all as radios. Options that need a description or a price: radio cards. Long lists: a combobox people can type into.",
+      "use": {
+        "radio-group": "2–5 short options that all fit on screen.",
+        "radio-cards": "Plans or regions where each option needs a line of detail.",
+        "combobox": "Time zones, countries, people: too many to show."
+      }
+    },
+    {
+      "id": "accordion-disclosure",
+      "title": "Accordion or disclosure?",
+      "ids": ["accordion", "disclosure-chevron"],
+      "rule": "One hidden section is a disclosure; a stack of them is an accordion.",
+      "use": {
+        "accordion": "FAQs and grouped settings. Usually one open at a time.",
+        "disclosure-chevron": "A single \"Advanced options\" or \"Show details\"."
+      }
+    },
+    {
+      "id": "skeleton-loaders",
+      "title": "Skeleton or spinner?",
+      "ids": ["skeleton", "loaders"],
+      "rule": "If you know the layout that is coming, show a skeleton of it. If you do not, or the wait is a single action, use a spinner.",
+      "use": {
+        "skeleton": "Lists, cards and dashboards while data loads.",
+        "loaders": "A button that is saving, or a short wait with no known shape."
+      }
+    },
+    {
+      "id": "pagination-carousel",
+      "title": "Pagination or carousel?",
+      "ids": ["pagination", "carousel"],
+      "rule": "Use pagination when people need to find a specific item again; use a carousel only for a short, optional row of extras.",
+      "use": {
+        "pagination": "Search results, tables, archives: stable positions people can return to.",
+        "carousel": "Related posts or a few highlights. Never for content people must see."
+      }
+    },
+    {
+      "id": "dropdown-context-command",
+      "title": "Dropdown menu, context menu or command palette?",
+      "ids": ["dropdown-menu", "context-menu", "command-palette"],
+      "rule": "A dropdown holds actions for one visible button, a context menu repeats actions for the thing under the pointer, and a command palette reaches every action by typing.",
+      "use": {
+        "dropdown-menu": "\"Actions\" on a page header or row.",
+        "context-menu": "Right-click on a file or a row. Always also reachable another way.",
+        "command-palette": "Power users jumping anywhere with ⌘K."
+      }
+    },
+    {
+      "id": "progress-bar-ring-meter",
+      "title": "Progress bar, progress ring or meter?",
+      "ids": ["progress-bar", "progress-ring", "meter"],
+      "rule": "Progress is a task moving towards done; a meter is a level that can go up or down.",
+      "use": {
+        "progress-bar": "Uploads and multi-step tasks with room for a label.",
+        "progress-ring": "Compact progress in a card corner or avatar.",
+        "meter": "Storage used, quota, a score. Not a task."
+      }
+    },
+    {
+      "id": "sidebar-navbar-bottomnav",
+      "title": "Sidebar, top navbar or bottom nav?",
+      "ids": ["app-sidebar", "navbar-mega", "bottom-nav"],
+      "rule": "Marketing sites use a top navbar, apps with many sections use a sidebar, and phone apps with 3–5 destinations use a bottom nav.",
+      "use": {
+        "app-sidebar": "5–15 sections used every day.",
+        "navbar-mega": "A public site with a product menu and a few pages.",
+        "bottom-nav": "A mobile app's main destinations, always one tap away."
+      }
+    },
+    {
+      "id": "count-odometer-flip",
+      "title": "Count-up, odometer or flip clock?",
+      "ids": ["count-up", "odometer", "flip-clock"],
+      "rule": "Count up once to reveal a figure, roll digits when a live number changes, and flip for a countdown people watch.",
+      "use": {
+        "count-up": "A headline KPI the first time it scrolls into view.",
+        "odometer": "A live total that ticks up while people watch.",
+        "flip-clock": "A countdown to a launch or a deadline."
+      }
+    },
+    {
+      "id": "data-table-virtual-list",
+      "title": "Data table or virtual list?",
+      "ids": ["data-table", "virtual-list"],
+      "rule": "Compare values across columns in a table; scroll through thousands of single-line items in a virtual list.",
+      "use": {
+        "data-table": "Accounts, invoices, anything sorted and compared by column.",
+        "virtual-list": "Logs, messages, events: long and mostly read top to bottom."
+      }
+    }
+  ]
+}

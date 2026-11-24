@@ -74,7 +74,7 @@ npm install
 npm run preview
 ```
 
-Look up any element by describing it, see it live in a contained demo with its parts numbered, copy a prompt for your agent, and switch palette, mode, type and style from one panel. `npm test` runs the contrast checks, copy lint, unit tests, type checks, 113 browser tests and the full audit.
+Look up any element by describing it, see it live in a contained demo with its parts numbered, copy a prompt for your agent, and switch palette, mode, type and style from one panel. `npm test` runs the contrast checks, copy lint, unit tests, type checks, 116 browser tests and the full audit.
 
 </details>
 
