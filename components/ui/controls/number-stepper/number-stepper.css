@@ -1,8 +1,8 @@
 @scope (.lt-stepper) {
   :scope { display: grid; gap: 6px; font-size: var(--text-ui); }
   label { font-weight: 550; }
-  [data-part="control"] { display: inline-flex; align-items: stretch; height: var(--control-h); border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-1); overflow: hidden; width: max-content; }
-  [data-part="control"]:focus-within { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 1px; }
+  [data-part="control"] { display: inline-flex; align-items: stretch; height: var(--control-h); border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-1); overflow: hidden; width: max-content; transition: border-color var(--dur-1), box-shadow var(--dur-2); }
+  [data-part="control"]:has(input:focus-visible) { border-color: var(--focus-ring); box-shadow: var(--field-ring); }
   button { display: grid; place-items: center; width: var(--control-h); padding: 0; border: 0; background: none; color: var(--text-secondary); cursor: pointer; transition: background-color var(--dur-1), color var(--dur-1); }
   button:hover:not(:disabled) { background: var(--bg-surface-2); color: var(--text-primary); }
   button:active:not(:disabled) .lt-icon { scale: 0.85; }
@@ -12,5 +12,6 @@
     width: 5ch; border: 0; border-inline: var(--bw) var(--border-style) var(--border-hairline); background: none; color: var(--text-primary); text-align: center;
     font-size: var(--text-ui); font-weight: 600; font-variant-numeric: tabular-nums; outline: none; -moz-appearance: textfield; appearance: textfield;
   }
+  input:focus-visible { box-shadow: none; border-color: var(--border-hairline); }
   input::-webkit-inner-spin-button, input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 }

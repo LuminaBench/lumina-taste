@@ -5,8 +5,8 @@
     transition: border-color var(--dur-1), box-shadow var(--dur-1);
   }
   :scope:hover { border-color: var(--text-secondary); }
-  :scope:focus-within { border-color: var(--focus-ring); outline: var(--focus-width) solid var(--focus-ring); outline-offset: 0; }
-  input { flex: 1; min-width: 0; height: 100%; border: 0; background: none; outline: none; color: var(--text-primary); font-size: var(--text-ui); }
+  :scope:has(input:focus-visible) { border-color: var(--focus-ring); box-shadow: var(--field-ring); }
+  input { flex: 1; min-width: 0; height: 100%; border: 0; background: none; outline: none; color: var(--text-primary); font-size: var(--text-ui);  box-shadow: none; }
   input::placeholder { color: var(--text-muted); }
   input::-webkit-search-cancel-button { display: none; }
   [data-part="clear"] { display: grid; place-items: center; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: var(--bg-surface-3); color: var(--text-secondary); cursor: pointer; }

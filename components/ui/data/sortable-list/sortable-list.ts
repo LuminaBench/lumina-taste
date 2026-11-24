@@ -1,4 +1,4 @@
-import { combine, emit, on, type Cleanup } from '../../_shared/dom';
+import { focusQuietly, combine, emit, on, type Cleanup } from '../../_shared/dom';
 
 /** Drag-and-drop reorder with a pointer handle, plus a full keyboard alternative and live announcements. */
 export function enhance(root: HTMLElement): Cleanup {
@@ -46,7 +46,7 @@ export function enhance(root: HTMLElement): Cleanup {
       const li = h.closest('li') as HTMLElement;
       drag = { li, y0: e.clientY, startIndex: items().indexOf(li) };
       li.setAttribute('data-grabbed', '');
-      h.focus();
+      focusQuietly(h);
     }),
     on(document, 'pointermove', onMove),
     on(document, 'pointerup', onUp),

@@ -35,6 +35,26 @@ export const reducedMotion = () =>
 
 export const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 
+/**
+ * Focus an element in response to a pointer action without showing the keyboard ring.
+ * Browsers treat script focus after preventDefault() on pointerdown as keyboard-like; this marks
+ * the element so its ring stays hidden until the next key press.
+ */
+export function focusQuietly(el: HTMLElement) {
+  el.setAttribute('data-quiet-focus', '');
+  el.focus({ preventScroll: true });
+  const clear = () => { el.removeAttribute('data-quiet-focus'); el.removeEventListener('keydown', clear); el.removeEventListener('blur', clear); };
+  el.addEventListener('keydown', clear);
+  el.addEventListener('blur', clear);
+}
+
+/** Move focus as a result of `e`: quietly when a pointer caused it, with a ring when a key did. */
+export function focusFor(e: Event | null | undefined, el: HTMLElement | null | undefined) {
+  if (!el) return;
+  const pointer = e instanceof MouseEvent && e.detail > 0;
+  if (pointer) focusQuietly(el); else el.focus({ preventScroll: true });
+}
+
 /** Roving tabindex across a list of items with arrow keys, Home and End. */
 export function roving(
   container: HTMLElement,

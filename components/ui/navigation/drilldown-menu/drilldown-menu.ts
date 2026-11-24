@@ -1,4 +1,4 @@
-import { $$, combine, emit, on, type Cleanup } from '../../_shared/dom';
+import { $$, combine, emit, focusFor, on, type Cleanup } from '../../_shared/dom';
 
 /**
  * Drill-down menu (mobile navigation): each submenu replaces the list and slides in; a back row
@@ -7,12 +7,12 @@ import { $$, combine, emit, on, type Cleanup } from '../../_shared/dom';
 export function enhance(root: HTMLElement): Cleanup {
   const levels = $$<HTMLElement>(root, '[data-part="level"]');
   const stack: HTMLElement[] = [levels[0]];
-  const show = (next: HTMLElement, dir: 'in-right' | 'in-left') => {
+  const show = (next: HTMLElement, dir: 'in-right' | 'in-left', cause?: Event) => {
     levels.forEach((l) => { l.hidden = l !== next; l.removeAttribute('data-anim'); });
     void next.offsetWidth;
     next.setAttribute('data-anim', dir);
     const first = next.querySelector<HTMLElement>(dir === 'in-right' ? '[data-part="back"]' : 'a, button');
-    first?.focus({ preventScroll: true });
+    focusFor(cause, first);
     emit(root, { level: next.getAttribute('aria-label') });
   };
   return combine(
@@ -21,14 +21,14 @@ export function enhance(root: HTMLElement): Cleanup {
       const fwd = t.closest<HTMLElement>('[data-part="forward"]');
       if (fwd) {
         const next = root.querySelector<HTMLElement>(`#${fwd.getAttribute('aria-controls')}`);
-        if (next) { stack.push(next); show(next, 'in-right'); }
+        if (next) { stack.push(next); show(next, 'in-right', e); }
         return;
       }
       if (t.closest('[data-part="back"]') && stack.length > 1) {
         const from = stack.pop()!;
         const prev = stack[stack.length - 1];
-        show(prev, 'in-left');
-        prev.querySelector<HTMLElement>(`[aria-controls="${from.id}"]`)?.focus({ preventScroll: true });
+        show(prev, 'in-left', e);
+        focusFor(e, prev.querySelector<HTMLElement>(`[aria-controls="${from.id}"]`));
       }
     }),
     on(root, 'keydown', (e: KeyboardEvent) => {

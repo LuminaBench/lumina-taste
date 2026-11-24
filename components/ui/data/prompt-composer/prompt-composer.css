@@ -1,7 +1,7 @@
 @scope (.lt-composer) {
   :scope { container-type: inline-size; display: grid; gap: 6px; width: 100%; padding: 10px 10px 8px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-xl); background: var(--bg-surface-1); box-shadow: var(--field-shadow), var(--shadow-sm); font-size: var(--text-ui); transition: border-color var(--dur-1), box-shadow var(--dur-2); }
-  :scope:focus-within { border-color: var(--accent-solid); box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent-solid) 18%, transparent); }
-  textarea { display: block; width: 100%; min-height: 24px; max-height: calc(8 * 1.5em + 12px); padding: 4px 6px; border: 0; background: none; color: var(--text-primary); font: inherit; line-height: 1.5; resize: none; outline: none; field-sizing: content; overflow-y: auto; }
+  :scope:has(textarea:focus-visible) { border-color: var(--focus-ring); box-shadow: var(--field-ring), var(--shadow-sm); }
+  textarea { display: block; width: 100%; min-height: 24px; max-height: calc(8 * 1.5em + 12px); padding: 4px 6px; border: 0; background: none; color: var(--text-primary); font: inherit; line-height: 1.5; resize: none; outline: none; field-sizing: content; overflow-y: auto;  box-shadow: none; }
   textarea::placeholder { color: var(--text-muted); }
   [data-part="bar"] { display: flex; align-items: center; gap: 8px; }
   [data-part="attach"], [data-part="send"] { display: grid; place-items: center; flex: none; width: 32px; height: 32px; padding: 0; border: 0; border-radius: var(--radius-pill); cursor: pointer; transition: background-color var(--dur-1), color var(--dur-1), scale var(--dur-1) var(--ease-out); }

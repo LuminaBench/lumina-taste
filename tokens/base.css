@@ -64,6 +64,8 @@
   --measure: 68ch;
   --focus-width: 2px;
   --focus-offset: 2px;
+  /* Text fields: a soft halo hugging the border instead of a floating box. */
+  --field-ring: 0 0 0 3px color-mix(in oklab, var(--focus-ring) 24%, transparent);
 
   /* Style tokens: a data-style look overrides these (tokens/styles/styles.css). */
   --bw: 1px;
@@ -227,9 +229,17 @@
   background: var(--accent-soft);
   color: var(--text-primary);
 }
+/* Focus rings appear for keyboard focus only (:focus-visible), never on a mouse click. */
 :where([data-palette]) :where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
   outline: var(--focus-width) solid var(--focus-ring);
   outline-offset: var(--focus-offset);
+}
+/* Text entry always shows focus (you need to see where you type), so it gets the quiet version:
+   accent border plus a soft halo, no floating box. */
+:where([data-palette]) :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="button"], [type="submit"], [type="reset"], [type="color"], [type="file"]), textarea, select):focus-visible {
+  outline: none;
+  border-color: var(--focus-ring);
+  box-shadow: var(--field-ring);
 }
 
 /* ---------- type utilities ---------- */

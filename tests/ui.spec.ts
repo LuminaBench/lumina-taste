@@ -540,3 +540,37 @@ test.describe('added in 1.0', () => {
     await expect(s.locator('.lt-visually-hidden')).toContainText('dashboards, pricing pages, settings screens and onboarding flows');
   });
 });
+
+test('mouse clicks never leave a focus ring or outline box', async ({ page }) => {
+  test.setTimeout(300_000);
+  await page.goto('/#/ui');
+  const ids = await page.$$eval('.g-card', (c) => c.map((x) => x.getAttribute('data-id')!));
+  const bad: string[] = [];
+  for (const id of ids) {
+    await page.evaluate((i) => (location.hash = `#/ui/${i}`), id);
+    await expect(page.locator(`#ui-${id}`)).toBeVisible();
+    const stage = card(page, id);
+    const handles = (await stage.locator('button:visible, [role="tab"]:visible, [role="radio"]:visible, label:visible').elementHandles()).slice(0, 6);
+    for (const h of handles) {
+      const box = await h.boundingBox().catch(() => null);
+      if (!box || box.width < 4) continue;
+      await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+      await page.waitForTimeout(40);
+      const ring = await stage.evaluate((root) => {
+        const isText = (e: Element) => e.matches('input:not([type=checkbox],[type=radio],[type=range],[type=button],[type=submit]), textarea, select, [contenteditable]');
+        for (const e of root.querySelectorAll<HTMLElement>('*')) {
+          const cs = getComputedStyle(e);
+          if (cs.outlineStyle === 'none' || parseFloat(cs.outlineWidth) === 0 || cs.visibility === 'hidden') continue;
+          if (isText(e) || e.querySelector(':scope > input:focus-visible, :scope > textarea:focus-visible')) continue;
+          return `${e.tagName.toLowerCase()}.${e.className}`.slice(0, 80);
+        }
+        return null;
+      });
+      if (ring) bad.push(`${id}: ${ring}`);
+      await page.keyboard.press('Escape').catch(() => {});
+      // Escape is a keyboard event: blur so the next click starts from a mouse state.
+      await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur?.());
+    }
+  }
+  expect([...new Set(bad)]).toEqual([]);
+});

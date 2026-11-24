@@ -1,4 +1,4 @@
-import { $$, combine, dismissable, emit, on, part, type Cleanup } from '../../_shared/dom';
+import { $$, combine, dismissable, emit, focusFor, on, part, type Cleanup } from '../../_shared/dom';
 
 /**
  * Notification centre: a bell with an unread count that opens a panel. Clicking a row marks it read,
@@ -26,15 +26,15 @@ export function enhance(root: HTMLElement): Cleanup {
     empty.hidden = shown > 0;
     emit(root, { unread });
   };
-  const set = (open: boolean) => {
+  const set = (open: boolean, cause?: Event) => {
     panel.hidden = !open;
     bell.setAttribute('aria-expanded', String(open));
     undismiss?.(); undismiss = null;
-    if (open) { undismiss = dismissable(root, () => { set(false); }); tabs.find((t) => t.getAttribute('aria-selected') === 'true')?.focus(); }
+    if (open) { undismiss = dismissable(root, () => { set(false); }); focusFor(cause, tabs.find((t) => t.getAttribute('aria-selected') === 'true')); }
   };
   render();
   return combine(
-    on(bell, 'click', () => set(panel.hidden)),
+    on(bell, 'click', (e) => set(panel.hidden, e)),
     on(panel, 'keydown', (e: KeyboardEvent) => {
       if (e.key === 'Escape') { e.stopPropagation(); set(false); bell.focus(); }
       if ((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && (e.target as Element).getAttribute('role') === 'tab') {

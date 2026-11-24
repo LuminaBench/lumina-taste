@@ -9,7 +9,7 @@
     transition: border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1), scale var(--dur-2) var(--ease-spring);
   }
   input:hover { border-color: var(--text-secondary); }
-  input:focus-visible { outline: none; border-color: var(--focus-ring); box-shadow: 0 0 0 1px var(--focus-ring); }
+  input:focus-visible { outline: none; border-color: var(--focus-ring); box-shadow: var(--field-ring); outline: none; }
   input[data-filled] { scale: 1.04; }
   input:not(:placeholder-shown), input[data-filled] { scale: 1; border-color: var(--text-secondary); }
   [data-part="sep"] { width: 10px; height: 2px; border-radius: 1px; background: var(--border-strong); flex: none; }

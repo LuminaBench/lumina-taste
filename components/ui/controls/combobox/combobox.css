@@ -7,7 +7,7 @@
     background: var(--bg-surface-1); color: var(--text-primary); font-size: var(--text-ui); outline: none; transition: border-color var(--dur-1);
   }
   input:hover { border-color: var(--text-secondary); }
-  input:focus { border-color: var(--focus-ring); box-shadow: 0 0 0 1px var(--focus-ring); }
+  input:focus { border-color: var(--focus-ring); box-shadow: var(--field-ring); outline: none; }
   input::placeholder { color: var(--text-muted); }
   [data-part="toggle"] { position: absolute; right: 4px; top: 50%; translate: 0 -50%; display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-muted); cursor: pointer; }
   [data-part="listbox"], [data-part="empty"] {

@@ -7,7 +7,7 @@
     transition: border-color var(--dur-1), box-shadow var(--dur-1);
   }
   input:hover { border-color: var(--text-secondary); }
-  input:focus-visible, input:focus { border-color: var(--focus-ring); box-shadow: 0 0 0 1px var(--focus-ring); }
+  input:focus-visible, input:focus { border-color: var(--focus-ring); box-shadow: var(--field-ring); outline: none; }
   label {
     position: absolute; left: 13px; top: calc((var(--control-h) + 16px) / 2); translate: 0 -50%; transform-origin: left center;
     color: var(--text-muted); font-size: var(--text-ui); pointer-events: none;

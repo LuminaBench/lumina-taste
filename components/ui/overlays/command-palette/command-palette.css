@@ -7,7 +7,7 @@
   :scope[open] { display: flex; flex-direction: column; animation: lt-cmdk-in var(--dur-3) var(--ease-out); }
   :scope::backdrop { background: var(--scrim); animation: lt-fade var(--dur-2) var(--ease-out); }
   [data-part="search"] { display: flex; align-items: center; gap: 10px; padding: 0 14px; border-bottom: var(--bw) var(--border-style) var(--border-hairline); color: var(--text-muted); }
-  input { flex: 1; min-width: 0; height: 52px; border: 0; background: none; color: var(--text-primary); font-size: var(--step-0); outline: none; }
+  input { flex: 1; min-width: 0; height: 52px; border: 0; background: none; color: var(--text-primary); font-size: var(--step-0); outline: none;  box-shadow: none; }
   input::placeholder { color: var(--text-muted); }
   [data-part="list"] { flex: 1; overflow-y: auto; padding: 6px; scroll-padding: 6px; }
   [data-part="group"] { margin: 8px 10px 4px; font-size: var(--text-ui-xs); font-weight: 600; color: var(--text-muted); }
