@@ -2221,6 +2221,83 @@
         ]
       ],
       "added": 8
+    },
+    {
+      "id": "assistant-thread",
+      "name": "Assistant conversation",
+      "summary": "An AI chat thread: your message in a soft bubble, the answer as plain prose with lists, tables and code, then Copy and Retry; a caret while it streams.",
+      "pattern": "<ol> of turns + role=\"status\" live region",
+      "states": [
+        "complete",
+        "streaming",
+        "error",
+        "copied"
+      ],
+      "aliases": [
+        "ai chat messages",
+        "chatbot conversation",
+        "llm answer",
+        "assistant reply",
+        "chat with ai thread",
+        "streaming response",
+        "prompt and response"
+      ],
+      "react": "AssistantThread",
+      "api": "data-role, data-state=\"streaming\"",
+      "w": 760,
+      "preview": [
+        [
+          "click",
+          "[data-action=\"copy\"]"
+        ]
+      ],
+      "called": [
+        "the AI answer area",
+        "chatbot messages with copy button",
+        "streaming text with a blinking cursor",
+        "ChatGPT-style conversation"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-role=\"user\"]",
+          "name": "Your message",
+          "api": "data-role=\"user\"",
+          "text": "A soft bubble on the right, 80% wide at most."
+        },
+        {
+          "sel": "[data-role=\"assistant\"] [data-part=\"answer\"]",
+          "name": "Answer",
+          "api": "data-role=\"assistant\"",
+          "text": "Prose, lists, tables and code. Never a bubble."
+        },
+        {
+          "sel": "[data-part=\"actions\"]",
+          "name": "Actions",
+          "api": "data-action",
+          "text": "Copy and Retry, hidden while streaming."
+        },
+        {
+          "sel": "[data-part=\"caret\"]",
+          "name": "Streaming caret",
+          "api": "data-state=\"streaming\"",
+          "text": "Marks where text is arriving."
+        }
+      ],
+      "prompt": "Build an AI assistant conversation as an ordered list of turns: the user turn is a soft bubble aligned right; the assistant turn is plain prose on the left that renders paragraphs, ordered lists, a small table with right-aligned tabular numbers and a code block; under each finished answer put ghost Copy and Retry buttons and a quiet \"From …\" sources line. While an answer streams, set data-state=\"streaming\", show a blinking caret at the end of the text and hide the actions. Errors appear under the question with \"Try again\". Announce \"Answer copied\" in a live region. No avatars, sparkles or gradients.",
+      "debug": "Debug my assistant chat. Rule out: both sides in identical bubbles; answers as one wall of text with no lists or code blocks; actions visible while text is still streaming; the page jumping as tokens arrive (reserve space or stick to bottom); no live region for screen readers; an error that deletes the question. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<li data-role=\"assistant\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<AssistantThread turns>",
+          "React"
+        ]
+      ],
+      "added": 10
     }
   ]
 }

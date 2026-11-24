@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-24T21:19:44.144Z",
+ "generated": "2026-11-24T22:58:38.888Z",
  "mean": 99,
  "results": [
   {
@@ -612,6 +612,30 @@
    },
    "rules": {},
    "reference": "admin"
+  },
+  {
+   "slug": "ai-chat",
+   "url": "blueprints/assistant/",
+   "total": 100,
+   "audit": {
+    "errors": 0,
+    "warnings": 0,
+    "score": 100
+   },
+   "taste": 100,
+   "checks": {
+    "passed": 4,
+    "total": 4,
+    "failed": [],
+    "score": 100
+   },
+   "hygiene": {
+    "copy": 0,
+    "hex": 0,
+    "score": 100
+   },
+   "rules": {},
+   "reference": "assistant"
   },
   {
    "slug": "restyle-existing",

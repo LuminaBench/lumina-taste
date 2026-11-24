@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" data-palette="ice-cobalt" data-mode="light" data-type="geometric" data-density="balanced" data-radius="balanced" data-motion="snappy">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assistant · Halyard</title>
+  <meta name="description" content="Blueprint: an AI assistant chat with a history rail, a reading-width conversation, a pinned composer and empty, streaming and error states built with lumina-taste.">
+</head>
+<body>
+  <a class="bp-skip" href="#main">Skip to content</a>
+  <div class="as-shell">
+    <aside class="as-rail" id="as-rail" aria-label="Conversations">
+      <div class="as-rail-head"><a class="as-brand" href="#home">Halyard <span>Assistant</span></a><button type="button" class="as-icon" id="as-close" aria-label="Close conversations"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <button type="button" class="lt-btn as-new" data-variant="secondary" id="as-new"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span data-part="label">New chat</span></button>
+      <nav class="as-history" aria-label="History"><h2>Today</h2><ul><li><a href="#c" aria-current="page">Why did churn rise in October?</a></li><li><a href="#c">Draft the board update</a></li></ul><h2>Yesterday</h2><ul><li><a href="#c">Which plan grew fastest this year?</a></li><li><a href="#c">Compare trial conversion by channel</a></li></ul><h2>Earlier</h2><ul><li><a href="#c">Explain net revenue retention</a></li><li><a href="#c">Top 10 accounts by MRR</a></li><li><a href="#c">Forecast December revenue</a></li></ul></nav>
+    </aside>
+    <button type="button" class="as-scrim" id="as-scrim" aria-label="Close conversations" tabindex="-1" hidden></button>
+    <main id="main" class="as-main">
+      <header class="as-top">
+        <button type="button" class="as-icon as-menu" id="as-menu" aria-label="Open conversations" aria-controls="as-rail" aria-expanded="false"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <h1 id="as-title">Why did churn rise in October?</h1>
+        <span class="lt-badge" data-variant="outline">Read-only data</span>
+      </header>
+      <div class="as-scroll" id="as-scroll">
+        <div data-view="ready streaming error">
+<section class="lt-assistant" id="as-thread" data-lt="assistant-thread" aria-label="Conversation">
+  <ol data-part="turns">
+    <li data-role="user"><p>Why did churn rise in October?</p></li>
+    <li data-role="assistant">
+      <div data-part="answer">
+        <p>Churn rose from <strong>1.9% to 2.6%</strong> in October. Two things explain most of it:</p>
+        <ol><li><strong>Annual renewals.</strong> 14 annual plans came up for renewal and 5 did not renew, against 1 in a typical month.</li><li><strong>The Starter price change.</strong> 9 Starter accounts cancelled in the week after the email went out.</li></ol>
+        <table><thead><tr><th scope="col">Plan</th><th scope="col">Cancelled</th><th scope="col">Lost MRR</th></tr></thead><tbody><tr><td>Starter</td><td>9</td><td>£351</td></tr><tr><td>Team</td><td>4</td><td>£1,920</td></tr><tr><td>Scale</td><td>1</td><td>£2,450</td></tr></tbody></table>
+        <p>Without the renewals, October would have been 2.0%.</p>
+      </div>
+      <footer data-part="actions"><button type="button" data-action="copy"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6.5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2"/></svg><span>Copy</span></button><button type="button" data-action="retry"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6L20 8.5M20 4v4.5h-4.5"/></svg><span>Retry</span></button><span data-part="sources">From Billing ledger and Events</span></footer>
+    </li>
+    <li data-role="user"><p>Write the query for the Starter cancellations.</p></li>
+    <li data-role="assistant">
+      <div data-part="answer">
+        <p>This returns every Starter account that cancelled between 1 and 31 October:</p>
+        <pre tabindex="0"><code>select account_id, cancelled_at, mrr
+from subscriptions
+where plan = 'starter'
+  and cancelled_at >= '2026-10-01'
+  and cancelled_at <  '2026-11-01'
+order by cancelled_at;</code></pre>
+      </div>
+      <footer data-part="actions"><button type="button" data-action="copy"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6.5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2"/></svg><span>Copy</span></button><button type="button" data-action="retry"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6L20 8.5M20 4v4.5h-4.5"/></svg><span>Retry</span></button><span data-part="sources">From Billing ledger</span></footer>
+    </li>
+  </ol>
+  <p class="lt-visually-hidden" role="status" data-part="live"></p>
+</section>
+
+        </div>
+        <section class="as-empty" data-view="empty" aria-labelledby="as-empty-h" hidden>
+          <h2 id="as-empty-h">What do you want to know?</h2>
+          <p>Ask about revenue, customers or product usage. Answers come from your connected data and show where each number came from.</p>
+          <ul><li><button type="button" data-suggest>Why did churn rise in October?</button></li><li><button type="button" data-suggest>Which plan grew fastest this year?</button></li><li><button type="button" data-suggest>Summarise last week for the board</button></li><li><button type="button" data-suggest>Find accounts at risk of cancelling</button></li></ul>
+        </section>
+      </div>
+      <div class="as-dock">
+        <p class="as-stop" data-view="streaming" hidden><button type="button" class="lt-btn" data-variant="secondary" data-size="sm" id="as-stop"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5.5v13M15 5.5v13"/></svg><span data-part="label">Stop</span></button></p>
+        <form class="lt-composer" data-lt="prompt-composer" data-enter="send" aria-label="Message" id="as-composer">
+          <label for="as-input" class="lt-visually-hidden">Message</label>
+          <textarea id="as-input" rows="1" placeholder="Ask about your revenue, customers or usage" maxlength="4000" aria-describedby="as-hint"></textarea>
+          <div data-part="bar">
+            <button type="button" data-part="attach" aria-label="Attach a file"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m20 11.5-7.8 7.8a5 5 0 0 1-7.1-7.1l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8"/></svg></button>
+            <span id="as-hint" data-part="hint">Enter to send, Shift+Enter for a new line</span>
+            <button type="submit" data-part="send" aria-label="Send" disabled><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+          </div>
+        </form>
+        <p class="as-note">Answers can be wrong. Check the source before you act on a number.</p>
+      </div>
+    </main>
+  </div>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

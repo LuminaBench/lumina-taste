@@ -9,6 +9,7 @@
 //   node scripts/audit-ui.mjs <url-or-file> [more urls…]
 //     --viewports desktop,mobile   --modes light,dark   --focus-limit 250
 //     --json report.json           --screenshots dir    --strict (warnings fail too)   --quiet
+//     --product "Name"   implies --taste; also fails the page while the kit's sample brands and people are still on it
 //     --taste   page-level design checks (type scale, accent hues, radii, one primary per screen,
 //               reading measure, heading order, nested cards, section rhythm, focal point,
 //               placeholder copy, empty visual boxes, button labels) and a 0–100 taste score per run
@@ -44,7 +45,8 @@ const focusLimit = +flag('focus-limit', '250');
 const jsonOut = flag('json', null);
 const shotDir = flag('screenshots', null);
 const strict = bool('strict');
-const tasteOn = bool('taste');
+const product = flag('product', null);
+const tasteOn = bool('taste') || !!product;
 const quiet = bool('quiet');
 const targets = argv.filter((a) => !a.startsWith('--'));
 if (!targets.length) {
@@ -321,7 +323,7 @@ const PAGE_CHECKS = (copyRules = []) => {
 // Judges the page as a whole, the way a designer squints at it: how many type sizes, accent hues and
 // corner radii it uses, whether one thing leads, whether text lines are readable, whether headings
 // nest, whether cards nest, whether sections keep one rhythm, and whether placeholder copy is left in.
-const TASTE_CHECKS = () => {
+const TASTE_CHECKS = (product = null) => {
   const out = [];
   const add = (rule, el, message, severity = 'warning') => out.push({ rule, severity, selector: el ? sel(el) : null, message });
   function sel(el) { const p = []; for (let e = el; e && e.nodeType === 1 && p.length < 4; e = e.parentElement) { let s = e.tagName.toLowerCase(); if (e.id) { p.unshift(s + '#' + e.id); break; } const c = [...e.classList].filter((x) => !x.startsWith('is-')).slice(0, 2); if (c.length) s += '.' + c.join('.'); p.unshift(s); } return p.join(' > '); }
@@ -428,6 +430,14 @@ const TASTE_CHECKS = () => {
     if (new Set(tops).size > 3 && max < 28) add('taste-focal', tops[0], `${new Set(tops).size} text blocks share the largest size (${Math.round(max)}px) in the first screen. Make one headline clearly bigger so the eye knows where to start.`);
   }
 
+  // 9b. Leftover sample copy: with --product "Name", the kit's own demo brands and people must be gone.
+  if (product) {
+    const SAMPLES = ['Halyard', 'Kestrel Labs', 'Moss Studio', 'Juniper & Co', 'Juniper Coffee', 'Larkspur', 'Harbour & Co', 'Moss & Oak', 'Ana López', 'Kai Moreno', 'Riya Mehta', 'Lee Park', 'Made in Lisbon', 'Made in Bristol'];
+    const text = document.body.innerText;
+    const left = SAMPLES.filter((s) => text.includes(s) && !product.toLowerCase().includes(s.toLowerCase()));
+    if (left.length) add('taste-sample-copy', null, `Sample copy from the kit is still on the page: ${left.slice(0, 5).map((s) => `“${s}”`).join(', ')}${left.length > 5 ? ` and ${left.length - 5} more` : ''}. Replace it with ${product}’s own names, words and numbers.`, 'error');
+  }
+
   // 10. Placeholder and template content.
   const PH = /\blorem ipsum\b|\bdolor sit amet\b|\bjohn doe\b|\bjane doe\b|\bacme\b|\bfeature (one|two|three|1|2|3)\b|\byour (title|headline|text) here\b|\bproduct name\b|\bcompany name\b|\btodo\b|\bplaceholder\b|\bexample\.com\b|\b123 main st/i;
   for (const el of leaves) { if (el.closest('input, textarea, [data-audit-ignore]')) continue; const m = PH.exec(el.textContent); if (m) { add('taste-placeholder', el, `Placeholder content: “${m[0]}”. Replace it with real copy or realistic sample data.`, 'error'); break; } }
@@ -449,6 +459,8 @@ const TASTE_CHECKS = () => {
   // 11. Button labels: short verbs, not sentences.
   for (const el of document.querySelectorAll('button, a.lt-btn, [role="button"]')) {
     if (skip(el) || !shown(el) || el.hasAttribute('aria-expanded') || el.closest('summary, [role="tablist"], [role="listbox"], [role="menu"]')) continue; const words = el.textContent.trim().split(/\s+/).filter(Boolean);
+    // Example prompts and FAQ-style questions are sentences on purpose.
+    if (/\?\s*$/.test(el.textContent.trim()) || el.hasAttribute('data-suggest')) continue;
     if (words.length > 5) { add('taste-button-label', el, `Button label has ${words.length} words (“${el.textContent.trim().slice(0, 40)}”). Use a verb and an object: “Export report”.`); break; }
   }
   return out;
@@ -478,7 +490,7 @@ async function auditOne(browser, url, vpName, mode) {
   await page.goto(url, { waitUntil: 'load' });
   // Apply the mode to lumina-taste roots as well as prefers-color-scheme.
   await page.evaluate((m) => document.querySelectorAll('[data-mode]').forEach((e) => e.setAttribute('data-mode', m)), mode);
-  await page.addStyleTag({ content: '*,*::before,*::after{transition-duration:0s!important;animation-duration:0s!important;animation-delay:0s!important;caret-color:transparent!important}' });
+  await page.addStyleTag({ content: '*,*::before,*::after{transition-duration:0s!important;animation-duration:0s!important;animation-delay:0s!important;caret-color:transparent!important;scroll-behavior:auto!important}' });
   // Scroll through so lazy and reveal-on-scroll content is present, then return to the top.
   await page.evaluate(async () => {
     const h = document.documentElement.scrollHeight;
@@ -488,7 +500,7 @@ async function auditOne(browser, url, vpName, mode) {
   });
   if (process.env.LT_AUDIT_DEBUG) await page.evaluate(() => (window.__ltDebug = true));
   const findings = (await page.evaluate(PAGE_CHECKS, COPY_RULES.map(([re, why, fix]) => [re.source, re.flags, why, fix]))).map((f) => ({ ...f, viewport: vpName, mode }));
-  if (tasteOn) for (const f of await page.evaluate(TASTE_CHECKS)) findings.push({ ...f, viewport: vpName, mode });
+  if (tasteOn) for (const f of await page.evaluate(TASTE_CHECKS, product)) findings.push({ ...f, viewport: vpName, mode });
   for (const e of runtimeErrors) findings.push({ rule: 'runtime-error', severity: 'error', selector: null, message: e, viewport: vpName, mode });
 
   // Dead controls: no click/key/pointer listener on the control or any ancestor, no native behaviour.
@@ -602,6 +614,13 @@ function tasteScore(findings) {
   for (const f of findings) { const k = f.rule + f.message; if (seen.has(k)) continue; seen.add(k); s -= f.severity === 'error' ? 12 : f.rule.startsWith('taste-') ? 6 : 3; }
   return Math.max(0, s);
 }
+/** Why the score is not 100, in a few words: "2 errors −24, 1 taste warning −6". */
+function scoreNote(findings) {
+  const seen = new Set(); let e = 0, t = 0, w = 0;
+  for (const f of findings) { const k = f.rule + f.message; if (seen.has(k)) continue; seen.add(k); if (f.severity === 'error') e++; else if (f.rule.startsWith('taste-')) t++; else w++; }
+  const parts = [e && `${e} error${e > 1 ? 's' : ''} −${e * 12}`, t && `${t} taste warning${t > 1 ? 's' : ''} −${t * 6}`, w && `${w} other warning${w > 1 ? 's' : ''} −${w * 3}`].filter(Boolean);
+  return parts.length ? ` (${parts.join(', ')})` : '';
+}
 
 const shots = [];
 const browser = await chromium.launch();
@@ -619,7 +638,7 @@ for (const t of targets) {
     report.push({ url, viewport: vp, mode, controls: r.controls, focusChecked: r.focusChecked, score, findings: uniq });
     errors += e; warnings += w;
     if (!quiet || e || w) {
-      console.log(`${e ? '✗' : w ? '!' : '✓'} ${url}  [${vp} ${VIEWPORTS[vp].width}×${VIEWPORTS[vp].height}, ${mode}]  ${e} errors, ${w} warnings · ${r.controls} controls, ${r.focusChecked} focus rings checked${tasteOn ? ` · taste ${score}/100` : ''}`);
+      console.log(`${e ? '✗' : w ? '!' : '✓'} ${url}  [${vp} ${VIEWPORTS[vp].width}×${VIEWPORTS[vp].height}, ${mode}]  ${e} errors, ${w} warnings · ${r.controls} controls, ${r.focusChecked} focus rings checked${tasteOn ? ` · taste ${score}/100${scoreNote(uniq)}` : ''}`);
       const byRule = {};
       for (const f of uniq) (byRule[f.rule] ??= []).push(f);
       for (const [rule, list] of Object.entries(byRule)) {

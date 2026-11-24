@@ -5,8 +5,8 @@
   @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
   @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
   .lt-eyebrow, [data-part="eyebrow"] { margin: 0 0 10px; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; color: var(--accent-text); }
-  h2 { margin: 0; font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
-  [data-part="lede"] { margin: 12px 0 0; max-width: 56ch; color: var(--text-secondary); font-size: var(--step-0); line-height: 1.55; text-wrap: pretty; }
+  h2 { margin: 0; font-family: var(--font-display); font-size: max(var(--step-3), 1.625rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
+  [data-part="lede"] { margin: 12px 0 0; max-width: 56ch; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.55; text-wrap: pretty; }
 
   header { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
   h2 { font-size: var(--step-2); }
@@ -19,9 +19,6 @@
   [data-part="art"] { display: grid; align-content: end; aspect-ratio: 16 / 10; margin-bottom: 6px; padding: 18px 20px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-2); overflow: hidden; transition: opacity var(--dur-2); }
   [data-part="art"] b { color: var(--text-primary); font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
   [data-part="art"]:has(img) { padding: 0; }
-  [data-n="0"] { background: linear-gradient(160deg, var(--accent-soft), var(--bg-surface-2)); }
-  [data-n="1"] { background: repeating-linear-gradient(90deg, var(--bg-surface-2) 0 22px, var(--bg-surface-3) 22px 44px); }
-  [data-n="2"] { background: radial-gradient(circle at 30% 60%, color-mix(in oklab, var(--accent-solid) 22%, var(--bg-surface-2)) 0 26%, var(--bg-surface-2) 27%); }
   article:hover [data-part="art"] { opacity: 0.9; }
   [data-part="meta"] { display: flex; gap: 10px; margin: 0; color: var(--text-muted); font-size: var(--text-ui-xs); }
   [data-part="meta"] span { color: var(--accent-text); font-weight: 600; }

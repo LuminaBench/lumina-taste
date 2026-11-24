@@ -924,3 +924,22 @@ test.describe('settings and account', () => {
     await expect(s.locator('[data-part="msg"]')).toContainText('scheduled for deletion');
   });
 });
+
+test.describe('added in 1.0 (batch 5)', () => {
+  test('assistant thread: copy announces, retry emits, streaming hides actions', async ({ page }) => {
+    const s = await solo(page, 'assistant-thread');
+    await expect(s.locator('[data-state="streaming"] [data-part="actions"]')).toHaveCount(0);
+    const events = s.evaluate((el) => new Promise((r) => el.addEventListener('lt-change', (e) => r((e as CustomEvent).detail), { once: true })));
+    await s.locator('[data-action="copy"]').first().click();
+    await expect(s.locator('[data-part="live"]')).toHaveText('Answer copied.');
+    await s.locator('[data-action="retry"]').first().click();
+    expect(await events).toMatchObject({ action: 'retry' });
+  });
+  test('docs pager and project grid render their links', async ({ page }) => {
+    let s = await solo(page, 'doc-pager');
+    await expect(s.locator('a[rel="next"] strong')).toHaveText('Identify a user');
+    s = await solo(page, 'project-grid');
+    await expect(s.locator('li')).toHaveCount(6);
+    await expect(s.locator('[data-part="media"] b').first()).toHaveText('01');
+  });
+});

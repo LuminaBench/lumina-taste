@@ -41,7 +41,7 @@ function pickType() {
   }
   const scored = kb.pageTypes.map((t) => {
     let s = 0;
-    for (const a of [t.id.replace(/-/g, ' '), ...t.aliases]) if (has(a)) s += 2 + a.split(' ').length * 2;
+    for (const a of [t.id.replace(/-/g, ' '), ...t.aliases]) if (has(a)) s += 2 + a.split(' ').length * 2 + 3 * (1 - text.indexOf(` ${a.toLowerCase()} `) / text.length);
     return { t, s };
   }).sort((a, b) => b.s - a.s);
   if (scored[0].s > 0) return { type: scored[0].t, confident: true, runnerUp: scored[1].s > 0 ? scored[1].t : null };
@@ -81,11 +81,18 @@ const restyle = (kb.restyle?.words ?? []).some((w) => text.includes(` ${w} `) ||
 
 // ---------------------------------------------------------------- plan
 const sections = type.sections.map((s, i) => ({ n: i + 1, ...s, exists: !s.id || uiIds.has(s.id) }));
-const components = [...new Set(sections.filter((s) => s.id && !s.optional).map((s) => s.id))];
+// Developer products show code: a code-block figure takes the place of the hero's product frame.
+const wantsCode = type.kind === 'marketing' && (domain?.id === 'devtool' || has('code') || has('show code'));
+const components = [...new Set([...sections.filter((s) => s.id && !s.optional).map((s) => s.id), ...(wantsCode ? ['code-block'] : [])])].filter((id) => uiIds.has(id));
 const charts = type.charts ?? [];
 const blueprint = type.blueprint && blueprintIds.has(type.blueprint) ? type.blueprint : null;
 const flags = [`--palette ${profile.palette}`, `--mode ${profile.mode}`, `--type ${profile.typography}`, `--density ${profile.density}`, profile.style ? `--style ${profile.style}` : null].filter(Boolean).join(' ');
-const install = `node scripts/install-taste.mjs --project ${project} --framework ${framework} ${flags} \\\n  --components ${components.join(',')}${charts.length ? ` --charts ${charts.join(',')}` : ''}${blueprint ? ` --blueprints ${blueprint}` : ''}`;
+const base = `node scripts/install-taste.mjs --project ${project} --framework ${framework} ${flags}`;
+const installSnippets = `${base} \\\n  --components ${components.join(',')}${charts.length ? ` --charts ${charts.join(',')}` : ''}`;
+const installBlueprint = blueprint ? `${base} --blueprints ${blueprint}` : null;
+// One way to start, not two: a blueprint when it already is this page, snippets when the plan differs from it.
+const startWith = blueprint && type.start !== 'snippets' ? 'blueprint' : 'snippets';
+const install = startWith === 'blueprint' ? installBlueprint : installSnippets;
 const audience = domain ? { finance: 'people who check figures and need to trust them', trading: 'people watching numbers change who need speed and density', devtool: 'developers who want the facts, the code and the limits', analytics: 'people who need one answer fast, then the detail', health: 'people who may be anxious and need calm, plain steps', public: 'anyone, on any device, including people with low vision or little time', commerce: 'shoppers comparing, who need the price, delivery and returns up front', editorial: 'readers who came to read, so the text comes first', productivity: 'teams who want to see the product working, not adjectives', creative: 'clients judging taste, so the work leads and words stay short', playful: 'families and younger users who need big targets and friendly words', enterprise: 'buyers and admins who need proof, controls and compliance', travel: 'people planning, who need dates, prices and photos they trust' }[domain.id] : 'name them in one line before building';
 const plan = {
   brief,
@@ -100,7 +107,9 @@ const plan = {
   },
   profile,
   styleOffer,
+  startWith,
   install,
+  installAlternative: startWith === 'blueprint' ? installSnippets : installBlueprint,
   blueprint: blueprint ?? (type.blueprint ? `${type.blueprint} (not in this version; start from the sections below)` : null),
   sections,
   charts,
@@ -133,9 +142,12 @@ L.push(H('Profile and install'), '');
 L.push(`Palette \`${profile.palette}\` (${profile.mode}), type \`${profile.typography}\`, density \`${profile.density}\`${profile.style ? `, style \`${profile.style}\`` : ', no style'}.${domain ? ` Chosen for the ${domain.id} domain.` : ' No domain recognised, so these are the neutral defaults.'}`);
 if (styleOffer) L.push(`If the brief wants more character, add \`--style ${styleOffer}\`.`);
 L.push('', '```sh', install, '```', '');
-if (blueprint) {
+if (startWith === 'blueprint') {
   const bpMeta = cat.blueprints.find((b) => b.id === blueprint);
-  L.push(`Start from the \`${blueprint}\` blueprint and keep its anatomy; replace its copy and data. With \`--framework static\` it lands in \`<dest>/${blueprint}/index.html\` as a complete page (its own main.css and main.js), so move it where the page should live. It already uses ${(bpMeta?.uses ?? []).map((u) => `\`${u}\``).join(', ')}.`, '');
+  L.push(`**Start from the \`${blueprint}\` blueprint: it already is this page.** The command writes a complete page to \`<dest>/${blueprint}/\` (index.html, main.css, main.js; nothing else). Move those three files to where the page lives, then change the brand, words, numbers and currency. Keep its anatomy. It uses ${(bpMeta?.uses ?? []).map((u) => `\`${u}\``).join(', ')}.${bpMeta?.states?.length ? ` It also ships these states: ${bpMeta.states.map((s) => `\`?state=${s}\``).join(', ')}.` : ''}`, '');
+  L.push(`Need a section it lacks? Add \`--components <ids>\` to the same command and link \`lumina.css\` and \`lumina.js\` after \`main.css\`. To build from parts instead:`, '', '```sh', installSnippets, '```', '');
+} else {
+  L.push('Build the page from the snippets this writes, in the section order below.' + (installBlueprint ? ` The \`${blueprint}\` blueprint is a finished example of a similar page (\`--blueprints ${blueprint}\`) if you want to see one, but its sections differ from this plan.` : ''), '');
 }
 if (restyle) { L.push(H('Restyling an existing page'), ''); for (const n of kb.restyle.notes) L.push(`- ${n}`); L.push(''); }
 L.push(H('Sections, in order'), '');
@@ -145,6 +157,7 @@ for (const s of sections) {
   L.push(`${s.n}. **${s.role}**${s.optional ? ' _(optional)_' : ''}: ${id}${alt}`);
   if (s.copy) L.push(`   - Copy: ${s.copy}`);
   if (s.rule) L.push(`   - Rule: ${s.rule}`);
+  if (wantsCode && /^hero-/.test(s.id ?? '')) L.push('   - Code: this is a developer product, so replace the product frame with a `code-block` figure (a real request and its response, 8–14 lines). Use `code-block` again wherever a feature is easier to show than to describe.');
   if (s.tone) L.push(`   - Band: add \`data-tone="${s.tone}"\` to this block so the page alternates plain and tinted bands.`);
 }
 L.push('');

@@ -5,8 +5,8 @@
   @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
   @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
   .lt-eyebrow, [data-part="eyebrow"] { margin: 0 0 10px; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; color: var(--accent-text); }
-  h2 { margin: 0; font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
-  [data-part="lede"] { margin: 12px 0 0; max-width: 56ch; color: var(--text-secondary); font-size: var(--step-0); line-height: 1.55; text-wrap: pretty; }
+  h2 { margin: 0; font-family: var(--font-display); font-size: max(var(--step-3), 1.625rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
+  [data-part="lede"] { margin: 12px 0 0; max-width: 56ch; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.55; text-wrap: pretty; }
 
   [data-part="panel"] { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px 40px; padding: 40px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: radial-gradient(120% 140% at 100% 0%, var(--accent-soft), transparent 60%), var(--bg-surface-1); }
   @container (max-width: 640px) { [data-part="panel"] { padding: 28px 22px; } }

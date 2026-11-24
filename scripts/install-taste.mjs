@@ -115,8 +115,10 @@ for (const [tok, val] of Object.entries(profile.overrides)) {
 
 // ------------------------------------------------------------------ file selection
 const want = { components: list(opts.components), charts: list(opts.charts), blueprints: list(opts.blueprints) };
+// Asking only for blueprints means "give me that page": write the page and nothing else.
+const blueprintOnly = framework === 'static' && want.blueprints.length > 0 && !want.components.length && !want.charts.length;
 // A blueprint's markup uses catalog components: install them too, so pages built from its snippets are styled.
-for (const id of want.blueprints) for (const u of catalog.blueprints.find((b) => b.id === id)?.uses ?? []) if (catalog.ui.some((c) => c.id === u) && !want.components.includes(u)) want.components.push(u);
+if (!blueprintOnly) for (const id of want.blueprints) for (const u of catalog.blueprints.find((b) => b.id === id)?.uses ?? []) if (catalog.ui.some((c) => c.id === u) && !want.components.includes(u)) want.components.push(u);
 const unknown = [
   ...want.components.filter((id) => !catalog.ui.some((c) => c.id === id)).map((id) => `component "${id}"`),
   ...want.charts.filter((id) => !catalog.charts.some((c) => c.id === id)).map((id) => `chart "${id}"`),
@@ -135,7 +137,7 @@ for (const c of catalog.ui) {
   }
 }
 // Classes a blueprint uses in its own markup (an .lt-badge in a header) count as components it needs.
-for (const id of want.blueprints) {
+if (!blueprintOnly) for (const id of want.blueprints) {
   const bp = catalog.blueprints.find((b) => b.id === id);
   const html = bp && existsSync(join(root, bp.path, 'index.html')) ? readFileSync(join(root, bp.path, 'index.html'), 'utf8') : '';
   for (const m of html.matchAll(/\blt-[a-z0-9-]+/g)) { const c = rootClass.get(m[0]); if (c && !want.components.includes(c)) want.components.push(c); }
@@ -216,6 +218,7 @@ function snippetNote(c, html) {
   if (doc.anatomy?.length) lines.push(`Parts: ${doc.anatomy.map((a) => `${clean(a.name)} ${clean(a.sel)}`).join('; ')}.`);
   const demo = html.match(/^<[a-z]+ class="(lt-[a-z-]*demo[a-z-]*)"/)?.[1];
   if (demo) lines.push(`The outer .${demo} element is only a preview frame: keep what is inside it and drop the frame.`);
+  lines.push('Every part is optional: delete the ones this page does not need.');
   lines.push('Replace the sample words, names and numbers with the product\'s own before shipping.');
   return `<!-- ${lines.join('\n     ')} -->\n${html}`;
 }
@@ -237,12 +240,14 @@ async function writeStatic() {
     if (html && !opts['no-snippets']) write(`snippets/${id}.html`, snippetNote(c, readFileSync(join(root, html), 'utf8')), true); // reference copies: always current
   });
   want.charts.forEach((id, i) => { const c = catalog.charts.find((x) => x.id === id); imp.push(`import { render as c${i} } from './${c.path}/${id}';`); charts.push(`  ${JSON.stringify(id)}: c${i},`); });
+  if (!blueprintOnly) {
   // One component failing to start never stops the others, or window.lumina.
   const safe = "const safe = (name, fn) => (el) => { try { return fn(el); } catch (err) { console.error('[lumina] ' + name + ' could not start:', err); return () => {}; } };";
   const entry = `${imp.join('\n')}\n${safe}\nconst registry = {\n${reg.join('\n')}\n};\nexport const charts = {\n${charts.join('\n')}\n};\nexport function enhanceAll(root = document) { return autoEnhance(root, registry); }\nif (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => enhanceAll()); else enhanceAll();\n`;
   const r = await esbuild.build({ stdin: { contents: entry, resolveDir: root, loader: 'ts', sourcefile: 'lumina-entry.ts' }, bundle: true, format: 'iife', globalName: 'lumina', target: 'es2022', minify: true, write: false, outdir: 'out', entryNames: 'lumina', logLevel: 'silent' });
   // lumina.css / lumina.js are generated from your component list: always rebuilt, never 'kept'.
   for (const o of r.outputFiles) write(basename(o.path), Buffer.from(o.contents), true);
+  }
   for (const id of want.blueprints) {
     const bp = catalog.blueprints.find((x) => x.id === id);
     // Unminified on purpose: a blueprint is a starting point you edit.
@@ -270,12 +275,13 @@ if (applied.length) console.log(`  Profile updated: ${applied.join(', ')}.`);
 if (blocked.length) console.log(`  Locked, left unchanged: ${blocked.join(', ')}. Pass --force or --unlock <axis> if the user asked for it.`);
 console.log(`  Profile: ${relative(projectDir, profilePath)} (${profile.palette}, ${profile.mode}, ${profile.typography}, ${profile.density}, ${profile.radius}, ${profile.motion}${profile.style !== 'none' ? `, style ${profile.style}` : ''}${profile.locks.length ? `; locked: ${profile.locks.join(', ')}` : ''})`);
 console.log('\nNext:');
-if (framework === 'static') console.log(`  1. In each page: <link rel="stylesheet" href="${relative(projectDir, join(dest, 'lumina.css'))}"> and <script defer src="${relative(projectDir, join(dest, 'lumina.js'))}"></script>.\n     Paste markup from ${relative(projectDir, join(dest, 'snippets'))}/; it is enhanced on load. Charts: lumina.charts['line-chart'](el, data, options) after DOMContentLoaded. Works from file:// too.`);
+if (blueprintOnly) console.log(`  1. ${want.blueprints.map((b) => relative(projectDir, join(dest, b))).join(', ')} holds a complete page: index.html, main.css and main.js (tokens and every component it uses).\n     Move those three files to where the page lives, then change the brand, words, numbers and currency.\n     For a section it lacks, rerun with --components <ids> and link lumina.css and lumina.js after main.css.`);
+else if (framework === 'static') console.log(`  1. In each page: <link rel="stylesheet" href="${relative(projectDir, join(dest, 'lumina.css'))}"> and <script defer src="${relative(projectDir, join(dest, 'lumina.js'))}"></script>.\n     Paste markup from ${relative(projectDir, join(dest, 'snippets'))}/; it is enhanced on load. Charts: lumina.charts['line-chart'](el, data, options) after DOMContentLoaded. Works from file:// too.`);
 else console.log(`  1. Import ${relative(projectDir, join(dest, 'tokens/index.css'))} once, before component CSS.`);
 if (profile.installMode === 'attach') console.log(`  2. Put the attributes on your wrapper only (host styles stay untouched):\n     <div class="lt-root" ${attrs}>…</div>   (attachRoot: "${profile.attachRoot}")`);
-else console.log(`  2. Put the attributes on <html>:\n     <html ${attrs}>\n     or call applyProfile(profile) from engine/profiles/profile.mjs (bootstrapSnippet() avoids a flash).`);
+else if (!blueprintOnly) console.log(`  2. Put the attributes on <html>:\n     <html ${attrs}>\n     or call applyProfile(profile) from engine/profiles/profile.mjs (bootstrapSnippet() avoids a flash).`);
 const webfont = JSON.parse(readFileSync(join(root, 'tokens/typography/source.json'), 'utf8')).pairings?.find?.((x) => x.id === profile.typography)?.webfont;
-if (framework === 'static' && want.blueprints.length) console.log(`  Blueprints: ${want.blueprints.map((b) => relative(projectDir, join(dest, b, 'index.html'))).join(', ')} ${want.blueprints.length > 1 ? 'are' : 'is'} a complete page:\n     main.css and main.js already hold the tokens and every component it uses, so it does not need lumina.css.\n     Move it where the page should live (or copy its markup into your page), then replace the sample words and data.`);
+if (framework === 'static' && want.blueprints.length && !blueprintOnly) console.log(`  Blueprints: ${want.blueprints.map((b) => relative(projectDir, join(dest, b, 'index.html'))).join(', ')} ${want.blueprints.length > 1 ? 'are' : 'is'} a complete page:\n     main.css and main.js already hold the tokens and every component it uses, so it does not need lumina.css.\n     Move it where the page should live (or copy its markup into your page), then replace the sample words and data.`);
 if (webfont) console.log(`  Fonts: the stacks fall back to installed faces with the same character. For the exact faces add\n     <link rel="stylesheet" href="${webfont}">`);
 if (want.components.length && framework !== 'static') console.log(`  3. ${framework === 'react' ? 'Import the components from their .react.tsx files.' : 'Paste each .html snippet and call enhance(el) from its .ts file (or autoEnhance(document, { id: enhance }) from _shared/dom.ts).'}`);
 if (blocked.length && !opts.force) process.exit(3);

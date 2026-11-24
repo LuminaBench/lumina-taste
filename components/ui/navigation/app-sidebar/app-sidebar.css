@@ -3,7 +3,7 @@
 .lt-shell-demo-main p { margin: 6px 0 0; color: var(--text-secondary); font-size: var(--text-ui-sm); max-width: 40ch; }
 @scope (.lt-sidebar) {
   :scope {
-    --w: 232px; display: flex; flex-direction: column; flex: none; width: var(--w); padding: var(--gap-sm);
+    --w: var(--lt-sidebar-w, 232px); display: flex; flex-direction: column; flex: none; width: var(--w); padding: var(--gap-sm);
     background: var(--bg-surface-1); border-right: var(--bw) var(--border-style) var(--border-hairline); font-size: var(--text-ui);
     transition: width var(--dur-3) var(--ease-out); overflow: hidden;
   }

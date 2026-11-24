@@ -108,7 +108,8 @@
     "Three equal CTAs",
     "Stock illustrations of people",
     "Feature grids with 9+ icons"
-   ]
+   ],
+   "start": "snippets"
   },
   {
    "id": "pricing",
@@ -184,15 +185,16 @@
    "layout": "App shell: sidebar + scrolling main; KPI row then a two-up chart grid",
    "aliases": [
     "dashboard",
-    "analytics",
     "admin dashboard",
-    "metrics",
-    "reporting",
     "overview page",
     "kpi page",
-    "insights",
     "control panel",
-    "console"
+    "console",
+    "analytics dashboard",
+    "metrics page",
+    "reporting page",
+    "insights page",
+    "analytics page"
    ],
    "primary": "Top right of the page header (\"Export\", \"New report\").",
    "sections": [
@@ -341,14 +343,21 @@
    "pattern": "F",
    "layout": "Three columns: tree nav, article at 68ch, \"On this page\" rail",
    "aliases": [
-    "docs",
-    "documentation",
+    "api docs",
     "api reference",
     "developer docs",
+    "docs",
+    "docs page",
+    "documentation",
+    "documentation page",
+    "getting started guide",
     "guide",
-    "knowledge base",
     "help center",
-    "manual"
+    "knowledge base",
+    "manual",
+    "quickstart",
+    "reference page",
+    "tutorial"
    ],
    "primary": "None in the article; the top bar holds search and one CTA (\"Get API key\").",
    "sections": [
@@ -391,9 +400,12 @@
      "role": "On this page"
     },
     {
-     "id": "pagination",
+     "id": "doc-pager",
      "role": "Prev / next",
-     "copy": "Name the next page, not \"Next\"."
+     "copy": "Previous and next, each naming the page it opens.",
+     "alt": [
+      "pagination"
+     ]
     }
    ],
    "states": [
@@ -613,14 +625,16 @@
     {
      "id": "hero-centered",
      "role": "Statement",
-     "copy": "One sentence about what you make and for whom. The headline is the page’s h1."
+     "copy": "One sentence about what you make and for whom. The headline is the page’s h1.",
+     "rule": "Drop the announcement pill and the product mockup: a portfolio hero is the statement and one link."
     },
     {
-     "id": "blog-grid",
+     "id": "project-grid",
      "role": "Selected work",
-     "copy": "4–6 projects: client, what changed, one image each.",
+     "copy": "4–6 projects as large plates: name, type and place, year. Put a real photo or drawing in each plate; without images every plate keeps the same numbered style.",
      "alt": [
-      "masonry-grid"
+      "masonry-grid",
+      "blog-grid"
      ]
     },
     {
@@ -644,7 +658,8 @@
    "avoid": [
     "Skill bars with percentages",
     "Auto-playing showreels with sound"
-   ]
+   ],
+   "start": "snippets"
   },
   {
    "id": "store-product",
@@ -959,8 +974,71 @@
    ]
   },
   {
+   "id": "ai-chat",
+   "name": "AI assistant chat",
+   "kind": "app",
+   "blueprint": "assistant",
+   "density": "balanced",
+   "pattern": "single",
+   "layout": "History rail left (a drawer on phones), one reading column for the conversation (max 760px), composer pinned to the bottom",
+   "aliases": [
+    "ai chat",
+    "ai assistant",
+    "assistant chat",
+    "chatbot",
+    "chat interface",
+    "llm chat",
+    "copilot",
+    "prompt box",
+    "chat with ai",
+    "chat ui",
+    "conversation ui"
+   ],
+   "primary": "Send, in the composer. Enter sends, Shift+Enter adds a line.",
+   "sections": [
+    {
+     "id": "app-sidebar",
+     "role": "History",
+     "copy": "\"New chat\" on top, then conversations grouped by Today, Yesterday, Earlier, titled by their first question.",
+     "rule": "On phones it becomes a drawer behind a menu button, never a column of unlabelled icons.",
+     "alt": [
+      "drawer"
+     ]
+    },
+    {
+     "id": "assistant-thread",
+     "role": "Conversation",
+     "copy": "The person's turn in a soft bubble on the right; the assistant's answer as plain prose on the left with its actions (Copy, Retry) underneath.",
+     "rule": "Answers are text first: headings, lists, tables and code blocks render properly; never one wall of text in a bubble."
+    },
+    {
+     "id": "prompt-composer",
+     "role": "Composer",
+     "copy": "A placeholder that says what to ask (\"Ask about your revenue…\"), attach, model or mode picker only if it matters, Send.",
+     "rule": "Pinned to the bottom; grows to 6 lines; Stop replaces Send while an answer streams."
+    },
+    {
+     "id": "empty-state",
+     "role": "First screen",
+     "copy": "One line about what it can do and 3–4 example prompts as buttons that fill the composer.",
+     "rule": "No mascot, no sparkle icons, no gradient orb."
+    }
+   ],
+   "states": [
+    "empty: example prompts",
+    "streaming: text appears with a caret and a Stop button",
+    "error: say what failed under the turn and offer Retry; keep the question"
+   ],
+   "avoid": [
+    "Purple gradients and sparkle icons to signal AI",
+    "Both sides in identical bubbles",
+    "Read receipts and typing avatars from messaging apps",
+    "A disclaimer longer than the answer"
+   ]
+  },
+  {
    "id": "inbox",
-   "name": "Inbox or chat app",
+   "name": "Inbox or team chat",
    "kind": "app",
    "blueprint": null,
    "density": "balanced",
@@ -974,9 +1052,7 @@
     "email client",
     "messaging",
     "helpdesk",
-    "conversations",
-    "ai chat",
-    "assistant"
+    "conversations"
    ],
    "primary": "\"New message\" top of the list pane.",
    "sections": [

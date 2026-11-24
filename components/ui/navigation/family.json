@@ -1714,6 +1714,61 @@
         ]
       ],
       "added": 7
+    },
+    {
+      "id": "doc-pager",
+      "name": "Docs pager",
+      "summary": "Previous and next links at the end of a docs page, each showing the title of the page it opens.",
+      "pattern": "<nav> with rel=\"prev\" / rel=\"next\" links",
+      "states": [
+        "default",
+        "hover",
+        "focus-visible"
+      ],
+      "aliases": [
+        "prev next links",
+        "previous next page",
+        "docs footer navigation",
+        "next article link",
+        "page turner"
+      ],
+      "react": "DocPager",
+      "api": "rel=\"prev\" / rel=\"next\"",
+      "w": 620,
+      "called": [
+        "previous and next buttons under an article",
+        "next page link in docs",
+        "bottom navigation between guides"
+      ],
+      "anatomy": [
+        {
+          "sel": "a[rel=\"prev\"]",
+          "name": "Previous",
+          "api": "rel=\"prev\"",
+          "text": "Names the page, not just \"Previous\"."
+        },
+        {
+          "sel": "a[rel=\"next\"]",
+          "name": "Next",
+          "api": "rel=\"next\"",
+          "text": "Right-aligned; alone it keeps the right column."
+        }
+      ],
+      "prompt": "Add a docs pager at the end of the article: two bordered links in a two-column grid, \"Previous\" with a left chevron and \"Next\" with a right chevron as small labels, the title of the target page in bold below, rel=\"prev\" and rel=\"next\", stacking to one column on narrow containers.",
+      "debug": "Debug my docs pager. Rule out: links that say only \"Next\"; a missing rel attribute; the next link jumping to the left when there is no previous page; numbered pagination used for a linear guide. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<a rel=\"next\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<DocPager prev next>",
+          "React"
+        ]
+      ],
+      "added": 10
     }
   ]
 }

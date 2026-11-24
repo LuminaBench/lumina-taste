@@ -81,10 +81,11 @@ async function structure(browser, url, brief) {
   return { passed, total: results.length, failed: results.filter((r) => !r.ok).map((r) => `${r.name} (found ${r.found})`), score: results.length ? Math.round((passed / results.length) * 100) : 100 };
 }
 
-function audit(url) {
+function audit(url, product = null) {
   const out = join(mkdtempSync(join(tmpdir(), 'lt-eval-')), 'a.json');
   const extra = quick ? ['--viewports', 'desktop', '--modes', 'light'] : [];
-  spawnSync(process.execPath, [join(root, 'scripts/audit-ui.mjs'), url, '--taste', '--quiet', '--json', out, ...extra], { encoding: 'utf8' });
+  // With a product name the critic also fails pages that still carry the kit's sample brands and people.
+  spawnSync(process.execPath, [join(root, 'scripts/audit-ui.mjs'), url, '--taste', '--quiet', '--json', out, ...(product ? ['--product', product] : []), ...extra], { encoding: 'utf8' });
   const j = JSON.parse(readFileSync(out, 'utf8'));
   const rules = {};
   for (const r of j.report) for (const f of r.findings) rules[f.rule] = (rules[f.rule] ?? 0) + 1;
@@ -94,7 +95,8 @@ function audit(url) {
 async function scoreOne(browser, t, brief) {
   const url = toUrl(t);
   const local = !/^https?:/.test(t) ? (statSync(resolve(t)).isDirectory() ? resolve(t) : dirname(resolve(t))) : null;
-  const a = audit(url);
+  const named = brief.prompt.match(/["“]([^"”]{2,40})["”]/)?.[1];
+  const a = audit(url, reference ? null : (named ?? 'this product'));
   const s = await structure(browser, url, brief);
   const h = hygiene(local, brief.files ?? []);
   const auditScore = Math.max(0, 100 - a.errors * 10);

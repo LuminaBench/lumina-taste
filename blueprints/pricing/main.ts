@@ -15,11 +15,13 @@ boot({ 'segmented-control': segmented, accordion });
 // Prices count to their new value; width is reserved by tabular-nums + min-width, so cards never jump.
 const animate = (el: HTMLElement, to: number) => {
   const from = +(el.textContent ?? '0').replace(/\D/g, '');
-  if (reducedMotion() || from === to) { el.textContent = `£${to}`; return; }
+  // The currency is whatever the markup starts with (£, $, €…): change it in index.html only.
+  const sym = (el.textContent ?? '').match(/^[^\d]*/)?.[0] ?? '';
+  if (reducedMotion() || from === to) { el.textContent = `${sym}${to}`; return; }
   const t0 = performance.now();
   const step = (now: number) => {
     const t = Math.min(1, (now - t0) / 260);
-    el.textContent = `£${Math.round(from + (to - from) * (1 - (1 - t) ** 3))}`;
+    el.textContent = `${sym}${Math.round(from + (to - from) * (1 - (1 - t) ** 3))}`;
     if (t < 1) requestAnimationFrame(step);
   };
   requestAnimationFrame(step);

@@ -11,6 +11,7 @@ export function enhance(root: HTMLElement): Cleanup {
   const count = part(root, 'count');
   const sent = part(root, 'sent');
   const modes = $$<HTMLButtonElement>(root, '[data-part="mode"] [role="radio"]');
+  const modeGroup = part(root, 'mode');
   const max = ta.maxLength > 0 ? ta.maxLength : Infinity;
   const grow = () => {
     // field-sizing: content handles this where supported; this is the fallback.
@@ -36,14 +37,16 @@ export function enhance(root: HTMLElement): Cleanup {
   sync();
   return combine(
     on(ta, 'input', sync),
-    on(ta, 'keydown', (e: KeyboardEvent) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); submit(); } }),
+    // Default: ⌘/Ctrl+Enter sends and Enter adds a line. Chat apps set data-enter="send": Enter sends, Shift+Enter adds a line.
+    on(ta, 'keydown', (e: KeyboardEvent) => { if (e.key !== 'Enter' || e.isComposing) return; if (e.metaKey || e.ctrlKey || (root.dataset.enter === 'send' && !e.shiftKey)) { e.preventDefault(); submit(); } }),
     on(form, 'submit', (e) => { e.preventDefault(); submit(); }),
     ...modes.map((m) => on(m, 'click', () => modes.forEach((x) => { const on = x === m; x.setAttribute('aria-checked', String(on)); x.tabIndex = on ? 0 : -1; }))),
-    on(part(root, 'mode')!, 'keydown', (e: KeyboardEvent) => {
+    // The mode switch, the counter and the sent line are optional parts.
+    modeGroup ? on(modeGroup, 'keydown', (e: KeyboardEvent) => {
       if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
       const i = modes.findIndex((m) => m.getAttribute('aria-checked') === 'true');
       const next = modes[(i + 1) % modes.length];
       next.click(); next.focus();
-    }),
+    }) : () => {},
   );
 }

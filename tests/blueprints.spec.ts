@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ids = readdirSync(join(root, 'blueprints')).filter((d) => existsSync(join(root, 'blueprints', d, 'meta.json')));
 
-test('there are 13 blueprints', () => expect(ids.length).toBe(13));
+test('there are 14 blueprints', () => expect(ids.length).toBe(14));
 
 for (const id of ids) {
   for (const vp of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
@@ -114,7 +114,7 @@ test('admin: search, status filter, bulk bar and detail drawer', async ({ page }
   await expect(page.locator('#ad-d-role')).toHaveText('Viewer');
 });
 
-for (const [id, state, shows] of [['admin', 'loading', '[data-view="loading"]'], ['admin', 'empty', '[data-view="empty"]'], ['admin', 'error', '[data-view="error"]'], ['status', 'incident', '.sp-incident'], ['store', 'sold-out', '.sp-sold'], ['checkout', 'error', '.co-error']] as const) {
+for (const [id, state, shows] of [['admin', 'loading', '[data-view="loading"]'], ['admin', 'empty', '[data-view="empty"]'], ['admin', 'error', '[data-view="error"]'], ['status', 'incident', '.sp-incident'], ['store', 'sold-out', '.sp-sold'], ['checkout', 'error', '.co-error'], ['assistant', 'empty', '.as-empty'], ['assistant', 'streaming', '.as-stop'], ['assistant', 'error', '[data-part="error"]']] as const) {
   test(`${id} ?state=${state} shows its state and hides the ready view`, async ({ page }) => {
     await page.goto(`/blueprints/${id}/?state=${state}`);
     await expect(page.locator(shows)).toBeVisible();
@@ -164,4 +164,28 @@ test('gallery viewer switches a blueprint between its page states', async ({ pag
   await expect(page.frameLocator('iframe[data-blueprint]').locator('[data-view="empty"]')).toBeVisible();
   await page.click('[data-state=""]');
   await expect(page.frameLocator('iframe[data-blueprint]').locator('.ad-table')).toBeVisible();
+});
+
+test('assistant: a question streams an answer, Stop ends it, suggestions fill the composer', async ({ page }) => {
+  await page.goto('/blueprints/assistant/');
+  await page.fill('#as-input', 'How many trials converted?');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#as-thread [data-role="user"]').last()).toHaveText('How many trials converted?');
+  await expect(page.locator('#as-stop')).toBeVisible();
+  await page.click('#as-stop');
+  await expect(page.locator('#as-stop')).toBeHidden();
+  await page.click('#as-new');
+  await expect(page.locator('.as-empty')).toBeVisible();
+  await page.locator('[data-suggest]').first().click();
+  await expect(page.locator('#as-input')).toHaveValue('Why did churn rise in October?');
+});
+
+test('assistant: history is a drawer on phones and closes with Escape', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/blueprints/assistant/');
+  await expect(page.locator('#as-rail')).not.toBeInViewport();
+  await page.click('#as-menu');
+  await expect(page.locator('#as-rail')).toBeInViewport();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#as-menu')).toBeFocused();
 });

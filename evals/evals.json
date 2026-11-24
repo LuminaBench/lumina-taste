@@ -1125,10 +1125,10 @@
   {
    "id": 27,
    "slug": "ai-chat",
-   "pageType": "inbox",
+   "pageType": "ai-chat",
    "kind": "app",
    "prompt": "A chat interface for an AI assistant with a history sidebar and a prompt box. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete inbox page that passes the audit and the taste critic.",
+   "expected_output": "A complete ai chat page that passes the audit and the taste critic.",
    "files": [],
    "expectations": [
     "Ran compose.mjs (or followed its plan) before writing markup",

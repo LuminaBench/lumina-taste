@@ -186,6 +186,9 @@ import { UsageMeters } from '../../components/ui/data/usage-meters/usage-meters.
 import { PlanCard } from '../../components/ui/data/plan-card/plan-card.react';
 import { TeamMembers } from '../../components/ui/data/team-members/team-members.react';
 import { DangerZone } from '../../components/ui/controls/danger-zone/danger-zone.react';
+import { DocPager } from '../../components/ui/navigation/doc-pager/doc-pager.react';
+import { AssistantThread } from '../../components/ui/data/assistant-thread/assistant-thread.react';
+import { ProjectGrid } from '../../components/ui/blocks/project-grid/project-grid.react';
 import { Treemap } from '../../components/charts/treemap/treemap.react';
 import { GanttChart } from '../../components/charts/gantt-chart/gantt-chart.react';
 import { WaffleChart } from '../../components/charts/waffle-chart/waffle-chart.react';
@@ -410,6 +413,9 @@ function App() {
       <Case id="gantt"><GanttChart data={[{ label: 'Plan', start: '2026-11-02', end: '2026-11-20', done: 0.5 }]} options={{ title: 'Plan' }} /></Case>
       <Case id="waffle"><WaffleChart data={{ label: 'of teams', value: 68 }} options={{ title: 'Share' }} /></Case>
       <Case id="radial"><RadialBarChart data={[{ label: 'Goal', value: 70 }]} options={{ title: 'Goals' }} /></Case>
+      <Case id="doc-pager"><DocPager prev={{ title: 'Install', href: '#i' }} next={{ title: 'Identify a user', href: '#u' }} /></Case>
+      <Case id="assistant"><AssistantThread turns={[{ role: 'user', content: 'Why did churn rise?' }, { role: 'assistant', content: <p>Renewals.</p>, sources: 'From Billing' }, { role: 'assistant', content: 'It timed out.', state: 'error' }]} onRetry={(i) => log.push(`retry:${i}`)} /></Case>
+      <Case id="projects"><ProjectGrid title="Selected work" projects={[{ title: 'Harbour Library', meta: 'Public · Bristol', year: '2025', href: '#1', kind: 'Public' }]} /></Case>
       <Case id="stagger"><Stagger><span>One</span><span>Two</span></Stagger></Case>
     </ToastProvider>
   );

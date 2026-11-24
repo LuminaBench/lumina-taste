@@ -5,7 +5,7 @@ description: Make interfaces look designed, not generated. Use for any UI work (
 
 # Lumina Taste
 
-A design kit for coding agents: a **page composer** that turns a brief into a plan, **18 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **35 visual styles**, **162 named UI patterns**, **42 chart engines**, **13 page blueprints**, a **lockable taste profile**, a **Playwright auditor with a page-level taste critic**, a **copy lint** and **30 eval briefs** to measure the result. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
+A design kit for coding agents: a **page composer** that turns a brief into a plan, **18 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **35 visual styles**, **165 named UI patterns**, **42 chart engines**, **14 page blueprints**, a **lockable taste profile**, a **Playwright auditor with a page-level taste critic**, a **copy lint** and **30 eval briefs** to measure the result. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
 
 Run commands from this skill's directory with Node.js 20+. Pass absolute paths (or run from the user's project with the absolute script path). Search, install and token scripts need nothing installed; the auditor needs Playwright; the gallery needs `npm install` once.
 
@@ -30,7 +30,7 @@ Components are rarely what makes a page look generated; the plan is. Run this lo
 3. **Install and build** exactly what the plan lists. Start from its blueprint when it names one. Follow the section order; skip optional sections you cannot fill with real content rather than inventing it.
 4. **Write real copy** with the plan's formulas and `references/copy-patterns.md` (headlines, buttons, empty states, errors, pricing, FAQ): the product's name, real numbers, specific benefits. Never ship lorem ipsum, "Acme", "John Doe" or "Feature one"; the critic fails them. For tables, charts and lists, `node scripts/sample-data.mjs users|invoices|orders|series|revenue|funnel|cohort|events` prints realistic, seeded data.
 5. **Build the states** the plan lists (loading, empty, error) as well as the happy path.
-6. **Critique.** `node scripts/audit-ui.mjs <url> --taste` checks the page like a designer would: type steps, accent hues, corner radii, one primary per screen, reading width, heading order, cards inside cards, section rhythm, a clear first thing to look at, placeholder copy and long button labels. Fix every error, then warnings, until the score is 90 or more. Then take screenshots at 390px and 1440px and look at them.
+6. **Critique.** `node scripts/audit-ui.mjs <url> --product "<the product's name>"` (it implies `--taste`; add `--screenshots <dir>` for a first-screen and a full-page capture of every run) fails the page while the kit's sample brands and people (Halyard, Ana López…) are still on it, and checks it like a designer would: type steps, accent hues, corner radii, one primary per screen, reading width, heading order, cards inside cards, section rhythm, a clear first thing to look at, placeholder copy and long button labels. Fix every error, then warnings, until the score is 90 or more. Then take screenshots at 390px and 1440px and look at them.
 
 `evals/evals.json` holds 30 real briefs; `node scripts/eval-score.mjs <output> --brief <slug>` scores any page you build for one of them (audit, taste, brief checks and hygiene, out of 100). The blueprints score 99 on average as reference answers.
 
@@ -146,12 +146,15 @@ Keep the stack and bring the taste: `node scripts/export-tokens.mjs --format sha
 | Changelog | `changelog` | Tagged releases with dates and versions, filter, RSS and email |
 | Store product page | `store` | Gallery, size, grind and subscription options, price on the button, reviews, mobile buy bar; sold-out state |
 | Checkout | `checkout` | One column with sticky summary, delivery cards, Pay £X; declined-card state |
+| AI assistant chat | `assistant` | History rail (a drawer on phones), reading-width conversation with prose, tables and code, pinned composer; empty, streaming and error states |
 
 ```sh
 node scripts/install-taste.mjs --project /abs/app --blueprints dashboard --dest src/pages
 ```
 
 Open any data blueprint with `?state=loading`, `?state=empty` or `?state=error` (status: `incident`, store: `sold-out`) to see the other states; blocks marked `data-view="…"` switch, and buttons with `data-set-state` switch live. Ship every state your page has, not just the happy path.
+
+With `--framework static`, asking only for `--blueprints <id>` writes just that page (`<dest>/<id>/index.html`, `main.css`, `main.js`): move the three files to where the page lives and edit them. `compose.mjs` tells you whether to start from a blueprint or from snippets; use one, not both, unless you need a section the blueprint lacks (then add `--components` and link `lumina.css` after `main.css`).
 
 Replace the sample copy and data with the user's; keep the anatomy. Blueprints use only components from the catalog, so every swap stays on-system.
 
@@ -187,7 +190,8 @@ node scripts/lint-copy.mjs src/                                # hype words, cli
 | `taste-focal` | Make one headline clearly larger than everything else in the first screen. |
 | `taste-placeholder` | Error: replace with real copy or realistic sample data. |
 | `taste-empty-visual` | A big frame with nothing inside reads as a missing image: put a real screenshot or a small live mockup in it, or remove it. CSS illustrations need `role="img"` and an `aria-label`. |
-| `taste-button-label` | Verb + object, five words at most. |
+| `taste-button-label` | Verb + object, five words at most. Questions and example prompts (`data-suggest`) are exempt. |
+| `taste-sample-copy` (`--product`) | Error: the kit's demo brands or people are still on the page. Replace them with the product's own. |
 
 Requires Playwright in the skill or the project (`npm i -D @playwright/test && npx playwright install chromium`). Exit code 1 on any error.
 
@@ -213,7 +217,7 @@ Use when the user has a working page that looks generated and wants it designed,
 - Snippets from a static install start with a comment naming the parts. When it says the outer `-demo` element is a preview frame, keep what is inside and drop the frame (app-sidebar's `<aside>` goes straight into `.lt-shell`).
 - Settings and account panels (settings list, plan card, usage meters, team members, danger zone) share one width, `--lt-panel-max` (default 720px). Set it once on the page (`--lt-panel-max: none` to fill the column) so they line up.
 - Overriding a component's own spacing or size: component rules live in `@scope`, which wins ties against plain page CSS. Use two classes (`.lt-bulk.users-table { padding-bottom: 0 }`) or set the component's custom properties instead of fighting it with `!important`.
-- Families: controls (36), navigation (26), feedback (17), overlays (18), data (35), motion (10), sections (20: heroes, features, pricing, testimonials, FAQ, CTA, stats, newsletter, how it works, team, sign-in, 404, integrations, contact, blog, feature rows, logo cloud, article, before/after). Full list: `catalog.json` or `--list`.
+- Families: controls (36), navigation (27), feedback (17), overlays (18), data (36), motion (10), sections (21: heroes, features, pricing, testimonials, FAQ, CTA, stats, newsletter, how it works, team, sign-in, 404, integrations, contact, blog, feature rows, logo cloud, article, before/after, project grid). Full list: `catalog.json` or `--list`.
 
 ## Tokens at a glance
 
@@ -246,9 +250,9 @@ engine/profiles/             taste profile engine, schema, default profile
 engine/compose/              page types, domains and moods behind compose.mjs
 evals/                       30 briefs (evals.json), fixtures and reference scores
 tokens/                      base.css, palettes/*.css (+ source.json), typography/, styles/
-components/ui/<family>/      162 patterns (html, css, ts, react.tsx)
+components/ui/<family>/      165 patterns (html, css, ts, react.tsx)
 components/charts/           core/ + 42 chart engines (+ React wrappers)
-blueprints/                  13 page blueprints (states via ?state=loading|empty|error|incident|sold-out)
+blueprints/                  14 page blueprints (states via ?state=loading|empty|error|incident|sold-out|streaming)
 references/                  anti-slop-rules, page-flow, copy-patterns, chart-selection, which-one, palettes, harvest-log
 scripts/                     compose, search, install-taste, sniff, export-tokens, sample-data, audit-ui, audit-all, lint-copy, eval-score, eval-run, build-tokens, test-contrast, build, serve
 ```

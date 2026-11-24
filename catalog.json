@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
   "counts": {
-    "ui": 162,
+    "ui": 165,
     "charts": 42,
-    "blueprints": 13,
+    "blueprints": 14,
     "palettes": 18,
     "themes": 36,
     "typography": 12,
@@ -24,7 +24,7 @@
       "title": "Navigation & page chrome",
       "summary": "Headers, rails, menus and footers that tell people where they are and get out of the way.",
       "order": 2,
-      "count": 26
+      "count": 27
     },
     {
       "id": "feedback",
@@ -45,7 +45,7 @@
       "title": "Data & layout primitives",
       "summary": "Tables, lists, grids and blocks for showing real data cleanly, with tabular numbers everywhere.",
       "order": 5,
-      "count": 35
+      "count": 36
     },
     {
       "id": "motion",
@@ -59,7 +59,7 @@
       "title": "Sections for pages",
       "summary": "Whole page sections (heroes, pricing, FAQs, sign-in) built from the same tokens, so a page can be assembled in minutes and still look designed.",
       "order": 7,
-      "count": 20
+      "count": 21
     }
   ],
   "ui": [
@@ -609,6 +609,35 @@
         "components/ui/blocks/before-after/before-after.react.tsx"
       ],
       "path": "components/ui/blocks/before-after"
+    },
+    {
+      "id": "project-grid",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Project grid",
+      "summary": "A portfolio work grid: large 4:3 plates in two or three columns with the project name, type, place and year.",
+      "aliases": [
+        "portfolio grid",
+        "case study grid",
+        "selected work",
+        "work gallery",
+        "projects section",
+        "case studies"
+      ],
+      "pattern": "<ul> of linked cards",
+      "states": [
+        "default",
+        "hover",
+        "focus-visible"
+      ],
+      "react": "ProjectGrid",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/project-grid/project-grid.css",
+        "components/ui/blocks/project-grid/project-grid.html",
+        "components/ui/blocks/project-grid/project-grid.react.tsx"
+      ],
+      "path": "components/ui/blocks/project-grid"
     },
     {
       "id": "disclosure-chevron",
@@ -2696,6 +2725,38 @@
       "path": "components/ui/data/team-members"
     },
     {
+      "id": "assistant-thread",
+      "kind": "ui",
+      "family": "data",
+      "name": "Assistant conversation",
+      "summary": "An AI chat thread: your message in a soft bubble, the answer as plain prose with lists, tables and code, then Copy and Retry; a caret while it streams.",
+      "aliases": [
+        "ai chat messages",
+        "chatbot conversation",
+        "llm answer",
+        "assistant reply",
+        "chat with ai thread",
+        "streaming response",
+        "prompt and response"
+      ],
+      "pattern": "<ol> of turns + role=\"status\" live region",
+      "states": [
+        "complete",
+        "streaming",
+        "error",
+        "copied"
+      ],
+      "react": "AssistantThread",
+      "deps": [],
+      "files": [
+        "components/ui/data/assistant-thread/assistant-thread.css",
+        "components/ui/data/assistant-thread/assistant-thread.html",
+        "components/ui/data/assistant-thread/assistant-thread.react.tsx",
+        "components/ui/data/assistant-thread/assistant-thread.ts"
+      ],
+      "path": "components/ui/data/assistant-thread"
+    },
+    {
       "id": "count-up",
       "kind": "ui",
       "family": "feedback",
@@ -4205,6 +4266,34 @@
         "components/ui/navigation/footer-minimal/footer-minimal.react.tsx"
       ],
       "path": "components/ui/navigation/footer-minimal"
+    },
+    {
+      "id": "doc-pager",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Docs pager",
+      "summary": "Previous and next links at the end of a docs page, each showing the title of the page it opens.",
+      "aliases": [
+        "prev next links",
+        "previous next page",
+        "docs footer navigation",
+        "next article link",
+        "page turner"
+      ],
+      "pattern": "<nav> with rel=\"prev\" / rel=\"next\" links",
+      "states": [
+        "default",
+        "hover",
+        "focus-visible"
+      ],
+      "react": "DocPager",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/doc-pager/doc-pager.css",
+        "components/ui/navigation/doc-pager/doc-pager.html",
+        "components/ui/navigation/doc-pager/doc-pager.react.tsx"
+      ],
+      "path": "components/ui/navigation/doc-pager"
     },
     {
       "id": "command-palette",
@@ -6191,6 +6280,40 @@
         "blueprints/checkout/page.css"
       ],
       "path": "blueprints/checkout"
+    },
+    {
+      "id": "assistant",
+      "order": 14,
+      "name": "AI assistant chat",
+      "summary": "A history rail (a drawer on phones), a reading-width conversation with prose answers, tables and code, a pinned composer, and empty, streaming and error states.",
+      "anatomy": "History rail | title bar → conversation (max 760px) → Stop while streaming → composer + one-line caveat",
+      "aliases": [
+        "ai chat",
+        "chatbot page",
+        "assistant app",
+        "llm chat interface",
+        "copilot chat",
+        "chat with your data"
+      ],
+      "uses": [
+        "assistant-thread",
+        "prompt-composer",
+        "button",
+        "badge"
+      ],
+      "states": [
+        "empty",
+        "streaming",
+        "error"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/assistant/index.html",
+        "blueprints/assistant/main.ts",
+        "blueprints/assistant/meta.json",
+        "blueprints/assistant/page.css"
+      ],
+      "path": "blueprints/assistant"
     }
   ],
   "palettes": [

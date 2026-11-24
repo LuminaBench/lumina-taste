@@ -1242,6 +1242,69 @@
         ]
       ],
       "added": 7
+    },
+    {
+      "id": "project-grid",
+      "name": "Project grid",
+      "summary": "A portfolio work grid: large 4:3 plates in two or three columns with the project name, type, place and year.",
+      "pattern": "<ul> of linked cards",
+      "states": [
+        "default",
+        "hover",
+        "focus-visible"
+      ],
+      "aliases": [
+        "portfolio grid",
+        "case study grid",
+        "selected work",
+        "work gallery",
+        "projects section",
+        "case studies"
+      ],
+      "react": "ProjectGrid",
+      "api": "data-cols=\"2|3\"",
+      "w": 1000,
+      "called": [
+        "portfolio projects section",
+        "grid of case studies",
+        "selected work thumbnails",
+        "architecture projects list"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"media\"]",
+          "name": "Plate",
+          "api": "aspect-ratio: 4 / 3",
+          "text": "Holds an <img>; without one, a numbered plate."
+        },
+        {
+          "sel": "h3",
+          "name": "Project",
+          "api": "",
+          "text": "The name; the whole card is one link."
+        },
+        {
+          "sel": "time",
+          "name": "Year",
+          "api": "tabular-nums",
+          "text": "Right-aligned on the title line."
+        }
+      ],
+      "prompt": "Build a \"Selected work\" section for a portfolio: an eyebrow and heading, then a two-column grid of project cards (three with data-cols=\"3\"). Each card is one link with a 4:3 media plate holding the project photo, then the project name with the year right-aligned and a line for type and place. With no photo the plate shows a large two-digit index and the project type, in the same style for every card. One column on narrow containers.",
+      "debug": "Debug my project grid. Rule out: plates of mixed ratios; some cards with art and some blank; several links per card; titles longer than two lines; hover effects that scale the image past its frame. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ul> + aspect-ratio",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ProjectGrid projects>",
+          "React"
+        ]
+      ],
+      "added": 10
     }
   ]
 }
