@@ -1,0 +1,17 @@
+{
+  "id": "area-chart",
+  "order": 3,
+  "name": "Smooth area chart",
+  "group": "Trends",
+  "summary": "One series filled from zero, for volumes and totals.",
+  "bestFor": "Volumes where the area from zero is meaningful",
+  "avoidFor": "Series that do not start at zero (use a line)",
+  "dataShape": "x: dates; one non-negative series",
+  "aliases": [
+    "filled line chart",
+    "area graph",
+    "mountain chart"
+  ],
+  "react": "AreaChart",
+  "wide": false
+}

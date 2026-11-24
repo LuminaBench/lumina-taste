@@ -1,0 +1,18 @@
+{
+  "id": "line-chart",
+  "order": 1,
+  "name": "Line chart",
+  "group": "Trends",
+  "summary": "One measure over time, labelled with a clear headline.",
+  "bestFor": "Continuous change over time for one series",
+  "avoidFor": "Categories with no order (use a bar chart)",
+  "dataShape": "x: dates or ordered values; one numeric series",
+  "aliases": [
+    "trend line",
+    "time series",
+    "line graph",
+    "fps over time"
+  ],
+  "react": "LineChart",
+  "wide": false
+}

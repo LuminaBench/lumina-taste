@@ -1,0 +1,18 @@
+{
+  "id": "horizontal-bar-chart",
+  "order": 6,
+  "name": "Horizontal bar chart",
+  "group": "Comparison",
+  "summary": "Ranked categories with long labels, read top to bottom.",
+  "bestFor": "Long category names, rankings, top-N lists",
+  "avoidFor": "Time series (use a line or column)",
+  "dataShape": "items: label + value",
+  "aliases": [
+    "bar chart with long labels",
+    "ranking chart",
+    "top n list",
+    "sideways bars"
+  ],
+  "react": "HorizontalBarChart",
+  "wide": false
+}

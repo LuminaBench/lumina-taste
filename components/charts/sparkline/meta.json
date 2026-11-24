@@ -1,0 +1,18 @@
+{
+  "id": "sparkline",
+  "order": 13,
+  "name": "Sparkline (line + bar)",
+  "group": "Inline",
+  "summary": "Word-sized trend for tables and KPI cards.",
+  "bestFor": "Inline trends inside tables, lists and KPI tiles",
+  "avoidFor": "Anything needing axes or exact values",
+  "dataShape": "values: number[]",
+  "aliases": [
+    "tiny chart",
+    "inline trend",
+    "mini chart",
+    "spark bars"
+  ],
+  "react": "Sparkline",
+  "wide": false
+}

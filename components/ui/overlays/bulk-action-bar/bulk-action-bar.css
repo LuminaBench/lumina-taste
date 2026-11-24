@@ -13,11 +13,11 @@
   }
   [data-part="bar"][hidden] { display: none; }
   [data-part="count"] { padding: 0 10px; font-size: var(--text-ui-sm); font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
-  [data-part="sep"] { width: 1px; height: 20px; background: color-mix(in oklch, var(--bg-canvas) 30%, transparent); }
+  [data-part="sep"] { width: 1px; height: 20px; background: color-mix(in oklab, var(--bg-canvas) 30%, transparent); }
   button { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 10px; border: 0; border-radius: var(--radius-sm); background: none; color: inherit; font-size: var(--text-ui-sm); font-weight: 550; cursor: pointer; white-space: nowrap; transition: background-color var(--dur-1); }
-  button:hover { background: color-mix(in oklch, var(--bg-canvas) 16%, transparent); }
+  button:hover { background: color-mix(in oklab, var(--bg-canvas) 16%, transparent); }
   button:focus-visible { outline: 2px solid var(--bg-canvas); outline-offset: -2px; }
-  [data-tone="danger"] { color: color-mix(in oklch, var(--status-negative) 55%, var(--bg-canvas)); }
+  [data-tone="danger"] { color: color-mix(in oklab, var(--status-negative) 55%, var(--bg-canvas)); }
   [data-part="clear"] { width: 32px; justify-content: center; padding: 0; }
 }
 @container (max-width: 440px) { .lt-bulk [data-part="bar"] button > span { display: none; } }

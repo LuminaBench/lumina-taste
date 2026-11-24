@@ -1,0 +1,17 @@
+{
+  "id": "lollipop-chart",
+  "order": 10,
+  "name": "Lollipop chart",
+  "group": "Comparison",
+  "summary": "A lighter ranked bar: a stem and a dot.",
+  "bestFor": "Rankings with many similar values",
+  "avoidFor": "Small numbers of categories (a bar is clearer)",
+  "dataShape": "items: label + value",
+  "aliases": [
+    "dot plot",
+    "stick and ball chart",
+    "lollipop"
+  ],
+  "react": "LollipopChart",
+  "wide": false
+}

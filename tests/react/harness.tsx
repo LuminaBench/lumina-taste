@@ -98,6 +98,13 @@ import { Optical } from '../../components/ui/motion/optical-align/optical-align.
 import { PRESS } from '../../components/ui/motion/tactile-press/tactile-press.react';
 import { Stagger } from '../../components/ui/motion/stagger-in/stagger-in.react';
 
+import { LineChart } from '../../components/charts/line-chart/line-chart.react';
+import { BarChart } from '../../components/charts/bar-chart/bar-chart.react';
+import { DonutChart } from '../../components/charts/donut-chart/donut-chart.react';
+import { KpiCard } from '../../components/charts/kpi-card/kpi-card.react';
+import { Sparkline } from '../../components/charts/sparkline/sparkline.react';
+import { SankeyChart } from '../../components/charts/sankey-chart/sankey-chart.react';
+
 const log: string[] = [];
 (window as unknown as { __ltLog: string[] }).__ltLog = log;
 const record = (msg: string) => { log.push(msg); };
@@ -225,6 +232,12 @@ function App() {
       <Case id="spotlight"><SpotlightCard><h3>Card</h3></SpotlightCard></Case>
       <Case id="optical"><Optical trail>Docs →</Optical></Case>
       <Case id="press"><button type="button" className={PRESS}>Press</button></Case>
+      <Case id="chart-line"><LineChart data={{ x: ['2026-11-01', '2026-11-02', '2026-11-03', '2026-11-04'], values: [3, 5, 4, 6] }} options={{ title: 'Line', format: { suffix: ' fps' } }} /></Case>
+      <Case id="chart-bar"><BarChart data={[{ label: 'A', value: 3 }, { label: 'B', value: 5 }]} options={{ title: 'Bars' }} /></Case>
+      <Case id="chart-donut"><DonutChart data={[{ label: 'A', value: 3 }, { label: 'B', value: 5 }]} options={{ title: 'Donut' }} /></Case>
+      <Case id="chart-sankey"><SankeyChart data={{ nodes: [{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }], links: [{ source: 'a', target: 'b', value: 5 }] }} options={{ title: 'Flow' }} /></Case>
+      <Case id="chart-kpi"><KpiCard data={{ label: 'Revenue', value: 24400, previous: 21000, spark: [1, 2, 3, 2, 4] }} options={{ format: { prefix: '£', compact: true } }} /></Case>
+      <Case id="chart-spark">Trend <Sparkline values={[1, 3, 2, 5, 4]} label="Trend" /></Case>
       <Case id="stagger"><Stagger><span>One</span><span>Two</span></Stagger></Case>
     </ToastProvider>
   );

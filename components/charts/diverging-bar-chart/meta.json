@@ -1,0 +1,18 @@
+{
+  "id": "diverging-bar-chart",
+  "order": 9,
+  "name": "Diverging bar chart",
+  "group": "Comparison",
+  "summary": "Positive and negative deltas from a zero line, coloured by sign.",
+  "bestFor": "Changes, variances, sentiment above and below zero",
+  "avoidFor": "Values that are all positive",
+  "dataShape": "items: label + signed value",
+  "aliases": [
+    "positive negative bars",
+    "delta chart",
+    "variance chart",
+    "change from baseline"
+  ],
+  "react": "DivergingBarChart",
+  "wide": false
+}

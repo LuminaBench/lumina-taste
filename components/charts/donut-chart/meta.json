@@ -1,0 +1,18 @@
+{
+  "id": "donut-chart",
+  "order": 17,
+  "name": "Donut chart",
+  "group": "Composition",
+  "summary": "Share of a whole for at most four parts, total in the middle.",
+  "bestFor": "2\u20134 parts of one whole",
+  "avoidFor": "More than 4 slices, or comparing across groups",
+  "dataShape": "items: label + value (\u2264 4)",
+  "aliases": [
+    "pie chart",
+    "ring chart",
+    "share of total",
+    "doughnut"
+  ],
+  "react": "DonutChart",
+  "wide": false
+}

@@ -1,0 +1,17 @@
+{
+  "id": "bar-chart",
+  "order": 5,
+  "name": "Vertical bar chart",
+  "group": "Comparison",
+  "summary": "Ranked or ordered categories with short labels.",
+  "bestFor": "Comparing up to ~12 categories with short labels, or counts per period",
+  "avoidFor": "Long labels (use horizontal bar) or many categories",
+  "dataShape": "items: label + value",
+  "aliases": [
+    "column chart",
+    "bar graph",
+    "vertical bars"
+  ],
+  "react": "BarChart",
+  "wide": false
+}

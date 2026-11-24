@@ -1,7 +1,7 @@
 @scope (.lt-dock) {
   :scope {
     --base: 44px; display: inline-flex; align-items: flex-end; gap: 6px; height: calc(var(--base) + 16px); padding: 8px;
-    border-radius: calc(var(--radius-lg) + 6px); background: color-mix(in oklch, var(--bg-surface-1) 88%, transparent);
+    border-radius: calc(var(--radius-lg) + 6px); background: color-mix(in oklab, var(--bg-surface-1) 88%, transparent);
     box-shadow: var(--shadow-overlay); backdrop-filter: blur(8px);
   }
   a {

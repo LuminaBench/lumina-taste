@@ -1,0 +1,18 @@
+{
+  "id": "matrix-heatmap",
+  "order": 15,
+  "name": "Matrix heatmap",
+  "group": "Distribution",
+  "summary": "Rows \u00d7 columns of values, like a cohort or hour-by-day grid.",
+  "bestFor": "Two categorical dimensions with one value (cohorts, hour \u00d7 weekday)",
+  "avoidFor": "Exact comparison between cells",
+  "dataShape": "rows, cols, values[][]",
+  "aliases": [
+    "cohort table",
+    "heat grid",
+    "correlation matrix",
+    "hour by day grid"
+  ],
+  "react": "MatrixHeatmap",
+  "wide": false
+}

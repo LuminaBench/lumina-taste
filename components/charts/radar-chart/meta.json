@@ -1,0 +1,18 @@
+{
+  "id": "radar-chart",
+  "order": 21,
+  "name": "Radar comparison chart",
+  "group": "Comparison",
+  "summary": "Two or three profiles across 5\u20138 shared axes.",
+  "bestFor": "Comparing a few items across the same 5\u20138 attributes",
+  "avoidFor": "More than 3 series or precise reading",
+  "dataShape": "axes + 1\u20133 series",
+  "aliases": [
+    "spider chart",
+    "web chart",
+    "skill chart",
+    "star plot"
+  ],
+  "react": "RadarChart",
+  "wide": false
+}

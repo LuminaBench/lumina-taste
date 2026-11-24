@@ -1,0 +1,17 @@
+{
+  "id": "bubble-chart",
+  "order": 12,
+  "name": "Bubble chart",
+  "group": "Relationship",
+  "summary": "A scatter with size as a third measure and collision-free labels.",
+  "bestFor": "Three measures per item, up to ~40 items",
+  "avoidFor": "Precise size comparison (area is hard to judge)",
+  "dataShape": "points: x, y, size, label",
+  "aliases": [
+    "bubble plot",
+    "three variable scatter",
+    "bubble graph"
+  ],
+  "react": "BubbleChart",
+  "wide": false
+}

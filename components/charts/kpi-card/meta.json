@@ -1,0 +1,19 @@
+{
+  "id": "kpi-card",
+  "order": 22,
+  "name": "Publication KPI stat card",
+  "group": "Single value",
+  "summary": "Big tabular number, semantic delta pill and an embedded sparkline.",
+  "bestFor": "Headline metrics at the top of dashboards and reports",
+  "avoidFor": "Several numbers in one card",
+  "dataShape": "label, value, delta, spark[]",
+  "aliases": [
+    "stat card",
+    "metric tile",
+    "kpi tile",
+    "number card",
+    "scorecard"
+  ],
+  "react": "KpiCard",
+  "wide": false
+}

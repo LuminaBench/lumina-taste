@@ -4,7 +4,7 @@
   "generated": "scripts/build-catalog.mjs",
   "counts": {
     "ui": 84,
-    "charts": 0,
+    "charts": 22,
     "blueprints": 0,
     "palettes": 18,
     "themes": 36,
@@ -2519,7 +2519,530 @@
       "path": "components/ui/overlays/coach-mark"
     }
   ],
-  "charts": [],
+  "charts": [
+    {
+      "id": "line-chart",
+      "kind": "chart",
+      "name": "Line chart",
+      "group": "Trends",
+      "summary": "One measure over time, labelled with a clear headline.",
+      "aliases": [
+        "trend line",
+        "time series",
+        "line graph",
+        "fps over time"
+      ],
+      "bestFor": "Continuous change over time for one series",
+      "avoidFor": "Categories with no order (use a bar chart)",
+      "dataShape": "x: dates or ordered values; one numeric series",
+      "react": "LineChart",
+      "order": 1,
+      "files": [
+        "components/charts/line-chart/line-chart.react.tsx",
+        "components/charts/line-chart/line-chart.ts",
+        "components/charts/line-chart/meta.json"
+      ],
+      "path": "components/charts/line-chart"
+    },
+    {
+      "id": "multi-line-chart",
+      "kind": "chart",
+      "name": "Multi-series comparison",
+      "group": "Trends",
+      "summary": "Several series on one axis, labelled at their ends, with one highlighted.",
+      "aliases": [
+        "comparison line chart",
+        "multiple lines",
+        "spaghetti chart done right",
+        "highlight one line"
+      ],
+      "bestFor": "Comparing 2–6 series over the same time range",
+      "avoidFor": "More than 6 series (use small multiples)",
+      "dataShape": "x: dates; 2–6 numeric series",
+      "react": "MultiLineChart",
+      "order": 2,
+      "files": [
+        "components/charts/multi-line-chart/meta.json",
+        "components/charts/multi-line-chart/multi-line-chart.react.tsx",
+        "components/charts/multi-line-chart/multi-line-chart.ts"
+      ],
+      "path": "components/charts/multi-line-chart"
+    },
+    {
+      "id": "area-chart",
+      "kind": "chart",
+      "name": "Smooth area chart",
+      "group": "Trends",
+      "summary": "One series filled from zero, for volumes and totals.",
+      "aliases": [
+        "filled line chart",
+        "area graph",
+        "mountain chart"
+      ],
+      "bestFor": "Volumes where the area from zero is meaningful",
+      "avoidFor": "Series that do not start at zero (use a line)",
+      "dataShape": "x: dates; one non-negative series",
+      "react": "AreaChart",
+      "order": 3,
+      "files": [
+        "components/charts/area-chart/area-chart.react.tsx",
+        "components/charts/area-chart/area-chart.ts",
+        "components/charts/area-chart/meta.json"
+      ],
+      "path": "components/charts/area-chart"
+    },
+    {
+      "id": "stacked-area-chart",
+      "kind": "chart",
+      "name": "Stacked area chart",
+      "group": "Trends",
+      "summary": "Parts of a whole over time, stable layer at the bottom.",
+      "aliases": [
+        "stacked area",
+        "layered area",
+        "composition over time"
+      ],
+      "bestFor": "2–5 components adding up to a total over time",
+      "avoidFor": "Comparing individual layers precisely (use multi-line)",
+      "dataShape": "x: dates; 2–5 non-negative series",
+      "react": "StackedAreaChart",
+      "order": 4,
+      "files": [
+        "components/charts/stacked-area-chart/meta.json",
+        "components/charts/stacked-area-chart/stacked-area-chart.react.tsx",
+        "components/charts/stacked-area-chart/stacked-area-chart.ts"
+      ],
+      "path": "components/charts/stacked-area-chart"
+    },
+    {
+      "id": "bar-chart",
+      "kind": "chart",
+      "name": "Vertical bar chart",
+      "group": "Comparison",
+      "summary": "Ranked or ordered categories with short labels.",
+      "aliases": [
+        "column chart",
+        "bar graph",
+        "vertical bars"
+      ],
+      "bestFor": "Comparing up to ~12 categories with short labels, or counts per period",
+      "avoidFor": "Long labels (use horizontal bar) or many categories",
+      "dataShape": "items: label + value",
+      "react": "BarChart",
+      "order": 5,
+      "files": [
+        "components/charts/bar-chart/bar-chart.react.tsx",
+        "components/charts/bar-chart/bar-chart.ts",
+        "components/charts/bar-chart/meta.json"
+      ],
+      "path": "components/charts/bar-chart"
+    },
+    {
+      "id": "horizontal-bar-chart",
+      "kind": "chart",
+      "name": "Horizontal bar chart",
+      "group": "Comparison",
+      "summary": "Ranked categories with long labels, read top to bottom.",
+      "aliases": [
+        "bar chart with long labels",
+        "ranking chart",
+        "top n list",
+        "sideways bars"
+      ],
+      "bestFor": "Long category names, rankings, top-N lists",
+      "avoidFor": "Time series (use a line or column)",
+      "dataShape": "items: label + value",
+      "react": "HorizontalBarChart",
+      "order": 6,
+      "files": [
+        "components/charts/horizontal-bar-chart/horizontal-bar-chart.react.tsx",
+        "components/charts/horizontal-bar-chart/horizontal-bar-chart.ts",
+        "components/charts/horizontal-bar-chart/meta.json"
+      ],
+      "path": "components/charts/horizontal-bar-chart"
+    },
+    {
+      "id": "grouped-bar-chart",
+      "kind": "chart",
+      "name": "Grouped bar chart",
+      "group": "Comparison",
+      "summary": "Two or three series side by side per category.",
+      "aliases": [
+        "clustered bars",
+        "side by side bars",
+        "grouped columns"
+      ],
+      "bestFor": "Comparing 2–3 series across a few categories",
+      "avoidFor": "More than 3 series per group (use small multiples)",
+      "dataShape": "categories + 2–3 series",
+      "react": "GroupedBarChart",
+      "order": 7,
+      "files": [
+        "components/charts/grouped-bar-chart/grouped-bar-chart.react.tsx",
+        "components/charts/grouped-bar-chart/grouped-bar-chart.ts",
+        "components/charts/grouped-bar-chart/meta.json"
+      ],
+      "path": "components/charts/grouped-bar-chart"
+    },
+    {
+      "id": "stacked-bar-chart",
+      "kind": "chart",
+      "name": "Stacked bar chart",
+      "group": "Composition",
+      "summary": "Totals per category split into parts.",
+      "aliases": [
+        "stacked columns",
+        "100 percent bar",
+        "composition bars"
+      ],
+      "bestFor": "Totals plus composition across categories",
+      "avoidFor": "Comparing middle segments precisely",
+      "dataShape": "categories + 2–5 series",
+      "react": "StackedBarChart",
+      "order": 8,
+      "files": [
+        "components/charts/stacked-bar-chart/meta.json",
+        "components/charts/stacked-bar-chart/stacked-bar-chart.react.tsx",
+        "components/charts/stacked-bar-chart/stacked-bar-chart.ts"
+      ],
+      "path": "components/charts/stacked-bar-chart"
+    },
+    {
+      "id": "diverging-bar-chart",
+      "kind": "chart",
+      "name": "Diverging bar chart",
+      "group": "Comparison",
+      "summary": "Positive and negative deltas from a zero line, coloured by sign.",
+      "aliases": [
+        "positive negative bars",
+        "delta chart",
+        "variance chart",
+        "change from baseline"
+      ],
+      "bestFor": "Changes, variances, sentiment above and below zero",
+      "avoidFor": "Values that are all positive",
+      "dataShape": "items: label + signed value",
+      "react": "DivergingBarChart",
+      "order": 9,
+      "files": [
+        "components/charts/diverging-bar-chart/diverging-bar-chart.react.tsx",
+        "components/charts/diverging-bar-chart/diverging-bar-chart.ts",
+        "components/charts/diverging-bar-chart/meta.json"
+      ],
+      "path": "components/charts/diverging-bar-chart"
+    },
+    {
+      "id": "lollipop-chart",
+      "kind": "chart",
+      "name": "Lollipop chart",
+      "group": "Comparison",
+      "summary": "A lighter ranked bar: a stem and a dot.",
+      "aliases": [
+        "dot plot",
+        "stick and ball chart",
+        "lollipop"
+      ],
+      "bestFor": "Rankings with many similar values",
+      "avoidFor": "Small numbers of categories (a bar is clearer)",
+      "dataShape": "items: label + value",
+      "react": "LollipopChart",
+      "order": 10,
+      "files": [
+        "components/charts/lollipop-chart/lollipop-chart.react.tsx",
+        "components/charts/lollipop-chart/lollipop-chart.ts",
+        "components/charts/lollipop-chart/meta.json"
+      ],
+      "path": "components/charts/lollipop-chart"
+    },
+    {
+      "id": "scatter-plot",
+      "kind": "chart",
+      "name": "Scatter plot",
+      "group": "Relationship",
+      "summary": "Two measures per item, drawn on Canvas when there are hundreds of points.",
+      "aliases": [
+        "xy plot",
+        "correlation chart",
+        "dot chart",
+        "scatter graph"
+      ],
+      "bestFor": "Relationship between two numeric measures, outliers",
+      "avoidFor": "Time series (use a line)",
+      "dataShape": "points: x, y (+ group)",
+      "react": "ScatterPlot",
+      "order": 11,
+      "files": [
+        "components/charts/scatter-plot/meta.json",
+        "components/charts/scatter-plot/scatter-plot.react.tsx",
+        "components/charts/scatter-plot/scatter-plot.ts"
+      ],
+      "path": "components/charts/scatter-plot"
+    },
+    {
+      "id": "bubble-chart",
+      "kind": "chart",
+      "name": "Bubble chart",
+      "group": "Relationship",
+      "summary": "A scatter with size as a third measure and collision-free labels.",
+      "aliases": [
+        "bubble plot",
+        "three variable scatter",
+        "bubble graph"
+      ],
+      "bestFor": "Three measures per item, up to ~40 items",
+      "avoidFor": "Precise size comparison (area is hard to judge)",
+      "dataShape": "points: x, y, size, label",
+      "react": "BubbleChart",
+      "order": 12,
+      "files": [
+        "components/charts/bubble-chart/bubble-chart.react.tsx",
+        "components/charts/bubble-chart/bubble-chart.ts",
+        "components/charts/bubble-chart/meta.json"
+      ],
+      "path": "components/charts/bubble-chart"
+    },
+    {
+      "id": "sparkline",
+      "kind": "chart",
+      "name": "Sparkline (line + bar)",
+      "group": "Inline",
+      "summary": "Word-sized trend for tables and KPI cards.",
+      "aliases": [
+        "tiny chart",
+        "inline trend",
+        "mini chart",
+        "spark bars"
+      ],
+      "bestFor": "Inline trends inside tables, lists and KPI tiles",
+      "avoidFor": "Anything needing axes or exact values",
+      "dataShape": "values: number[]",
+      "react": "Sparkline",
+      "order": 13,
+      "files": [
+        "components/charts/sparkline/meta.json",
+        "components/charts/sparkline/sparkline.react.tsx",
+        "components/charts/sparkline/sparkline.ts"
+      ],
+      "path": "components/charts/sparkline"
+    },
+    {
+      "id": "calendar-heatmap",
+      "kind": "chart",
+      "name": "Calendar heatmap",
+      "group": "Distribution",
+      "summary": "A year of daily values as a grid of weeks.",
+      "aliases": [
+        "contribution graph",
+        "github style heatmap",
+        "activity calendar",
+        "year heatmap"
+      ],
+      "bestFor": "Daily activity across months, weekly rhythms",
+      "avoidFor": "Precise values or short ranges",
+      "dataShape": "days: date + value",
+      "react": "CalendarHeatmap",
+      "order": 14,
+      "files": [
+        "components/charts/calendar-heatmap/calendar-heatmap.react.tsx",
+        "components/charts/calendar-heatmap/calendar-heatmap.ts",
+        "components/charts/calendar-heatmap/meta.json"
+      ],
+      "path": "components/charts/calendar-heatmap"
+    },
+    {
+      "id": "matrix-heatmap",
+      "kind": "chart",
+      "name": "Matrix heatmap",
+      "group": "Distribution",
+      "summary": "Rows × columns of values, like a cohort or hour-by-day grid.",
+      "aliases": [
+        "cohort table",
+        "heat grid",
+        "correlation matrix",
+        "hour by day grid"
+      ],
+      "bestFor": "Two categorical dimensions with one value (cohorts, hour × weekday)",
+      "avoidFor": "Exact comparison between cells",
+      "dataShape": "rows, cols, values[][]",
+      "react": "MatrixHeatmap",
+      "order": 15,
+      "files": [
+        "components/charts/matrix-heatmap/matrix-heatmap.react.tsx",
+        "components/charts/matrix-heatmap/matrix-heatmap.ts",
+        "components/charts/matrix-heatmap/meta.json"
+      ],
+      "path": "components/charts/matrix-heatmap"
+    },
+    {
+      "id": "candlestick-chart",
+      "kind": "chart",
+      "name": "Candlestick / OHLC chart",
+      "group": "Financial",
+      "summary": "Open, high, low and close per period with a volume subplot.",
+      "aliases": [
+        "ohlc chart",
+        "stock chart",
+        "k line",
+        "trading chart",
+        "price candles"
+      ],
+      "bestFor": "Price action for markets and trading products",
+      "avoidFor": "Non-financial audiences (use a line)",
+      "dataShape": "bars: t, open, high, low, close, volume",
+      "react": "CandlestickChart",
+      "order": 16,
+      "files": [
+        "components/charts/candlestick-chart/candlestick-chart.react.tsx",
+        "components/charts/candlestick-chart/candlestick-chart.ts",
+        "components/charts/candlestick-chart/meta.json"
+      ],
+      "path": "components/charts/candlestick-chart"
+    },
+    {
+      "id": "donut-chart",
+      "kind": "chart",
+      "name": "Donut chart",
+      "group": "Composition",
+      "summary": "Share of a whole for at most four parts, total in the middle.",
+      "aliases": [
+        "pie chart",
+        "ring chart",
+        "share of total",
+        "doughnut"
+      ],
+      "bestFor": "2–4 parts of one whole",
+      "avoidFor": "More than 4 slices, or comparing across groups",
+      "dataShape": "items: label + value (≤ 4)",
+      "react": "DonutChart",
+      "order": 17,
+      "files": [
+        "components/charts/donut-chart/donut-chart.react.tsx",
+        "components/charts/donut-chart/donut-chart.ts",
+        "components/charts/donut-chart/meta.json"
+      ],
+      "path": "components/charts/donut-chart"
+    },
+    {
+      "id": "radial-gauge",
+      "kind": "chart",
+      "name": "Radial progress gauge",
+      "group": "Single value",
+      "summary": "One value against a target on a 240° arc.",
+      "aliases": [
+        "gauge",
+        "speedometer",
+        "radial progress",
+        "goal meter"
+      ],
+      "bestFor": "A single KPI against a goal or limit",
+      "avoidFor": "Comparing several values",
+      "dataShape": "value, max, target",
+      "react": "RadialGauge",
+      "order": 18,
+      "files": [
+        "components/charts/radial-gauge/meta.json",
+        "components/charts/radial-gauge/radial-gauge.react.tsx",
+        "components/charts/radial-gauge/radial-gauge.ts"
+      ],
+      "path": "components/charts/radial-gauge"
+    },
+    {
+      "id": "funnel-chart",
+      "kind": "chart",
+      "name": "Funnel chart",
+      "group": "Flow",
+      "summary": "Ordered steps with drop-off between each.",
+      "aliases": [
+        "conversion funnel",
+        "drop off chart",
+        "pipeline stages"
+      ],
+      "bestFor": "Conversion through 3–6 ordered steps",
+      "avoidFor": "Unordered categories",
+      "dataShape": "steps: label + value",
+      "react": "FunnelChart",
+      "order": 19,
+      "files": [
+        "components/charts/funnel-chart/funnel-chart.react.tsx",
+        "components/charts/funnel-chart/funnel-chart.ts",
+        "components/charts/funnel-chart/meta.json"
+      ],
+      "path": "components/charts/funnel-chart"
+    },
+    {
+      "id": "sankey-chart",
+      "kind": "chart",
+      "name": "Sankey flow chart",
+      "group": "Flow",
+      "summary": "Flows between stages, width proportional to volume.",
+      "aliases": [
+        "flow diagram",
+        "alluvial",
+        "traffic flow",
+        "budget flow"
+      ],
+      "bestFor": "Where volume goes between 2–4 stages",
+      "avoidFor": "Cyclic flows or more than ~20 links",
+      "dataShape": "nodes + links (source, target, value)",
+      "react": "SankeyChart",
+      "order": 20,
+      "files": [
+        "components/charts/sankey-chart/meta.json",
+        "components/charts/sankey-chart/sankey-chart.react.tsx",
+        "components/charts/sankey-chart/sankey-chart.ts"
+      ],
+      "path": "components/charts/sankey-chart"
+    },
+    {
+      "id": "radar-chart",
+      "kind": "chart",
+      "name": "Radar comparison chart",
+      "group": "Comparison",
+      "summary": "Two or three profiles across 5–8 shared axes.",
+      "aliases": [
+        "spider chart",
+        "web chart",
+        "skill chart",
+        "star plot"
+      ],
+      "bestFor": "Comparing a few items across the same 5–8 attributes",
+      "avoidFor": "More than 3 series or precise reading",
+      "dataShape": "axes + 1–3 series",
+      "react": "RadarChart",
+      "order": 21,
+      "files": [
+        "components/charts/radar-chart/meta.json",
+        "components/charts/radar-chart/radar-chart.react.tsx",
+        "components/charts/radar-chart/radar-chart.ts"
+      ],
+      "path": "components/charts/radar-chart"
+    },
+    {
+      "id": "kpi-card",
+      "kind": "chart",
+      "name": "Publication KPI stat card",
+      "group": "Single value",
+      "summary": "Big tabular number, semantic delta pill and an embedded sparkline.",
+      "aliases": [
+        "stat card",
+        "metric tile",
+        "kpi tile",
+        "number card",
+        "scorecard"
+      ],
+      "bestFor": "Headline metrics at the top of dashboards and reports",
+      "avoidFor": "Several numbers in one card",
+      "dataShape": "label, value, delta, spark[]",
+      "react": "KpiCard",
+      "order": 22,
+      "files": [
+        "components/charts/kpi-card/kpi-card.react.tsx",
+        "components/charts/kpi-card/kpi-card.ts",
+        "components/charts/kpi-card/meta.json"
+      ],
+      "path": "components/charts/kpi-card"
+    }
+  ],
   "blueprints": [],
   "palettes": [
     {

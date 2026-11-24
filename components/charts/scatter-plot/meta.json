@@ -1,0 +1,18 @@
+{
+  "id": "scatter-plot",
+  "order": 11,
+  "name": "Scatter plot",
+  "group": "Relationship",
+  "summary": "Two measures per item, drawn on Canvas when there are hundreds of points.",
+  "bestFor": "Relationship between two numeric measures, outliers",
+  "avoidFor": "Time series (use a line)",
+  "dataShape": "points: x, y (+ group)",
+  "aliases": [
+    "xy plot",
+    "correlation chart",
+    "dot chart",
+    "scatter graph"
+  ],
+  "react": "ScatterPlot",
+  "wide": false
+}

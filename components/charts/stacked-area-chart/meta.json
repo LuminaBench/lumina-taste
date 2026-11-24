@@ -1,0 +1,17 @@
+{
+  "id": "stacked-area-chart",
+  "order": 4,
+  "name": "Stacked area chart",
+  "group": "Trends",
+  "summary": "Parts of a whole over time, stable layer at the bottom.",
+  "bestFor": "2\u20135 components adding up to a total over time",
+  "avoidFor": "Comparing individual layers precisely (use multi-line)",
+  "dataShape": "x: dates; 2\u20135 non-negative series",
+  "aliases": [
+    "stacked area",
+    "layered area",
+    "composition over time"
+  ],
+  "react": "StackedAreaChart",
+  "wide": false
+}

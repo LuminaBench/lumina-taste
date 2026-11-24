@@ -1,0 +1,18 @@
+{
+  "id": "calendar-heatmap",
+  "order": 14,
+  "name": "Calendar heatmap",
+  "group": "Distribution",
+  "summary": "A year of daily values as a grid of weeks.",
+  "bestFor": "Daily activity across months, weekly rhythms",
+  "avoidFor": "Precise values or short ranges",
+  "dataShape": "days: date + value",
+  "aliases": [
+    "contribution graph",
+    "github style heatmap",
+    "activity calendar",
+    "year heatmap"
+  ],
+  "react": "CalendarHeatmap",
+  "wide": true
+}
