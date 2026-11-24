@@ -1134,6 +1134,130 @@
         ]
       ],
       "added": 2
+    },
+    {
+      "id": "masonry-grid",
+      "name": "Masonry grid",
+      "summary": "Cards of different heights packed into columns with no gaps, in plain CSS.",
+      "pattern": "CSS multi-column layout",
+      "states": [
+        "3 columns",
+        "2 columns",
+        "1 column"
+      ],
+      "aliases": [
+        "pinterest layout",
+        "waterfall grid",
+        "brick layout",
+        "staggered grid",
+        "uneven card grid"
+      ],
+      "react": "MasonryGrid",
+      "api": "columns: 3 160px",
+      "w": 560,
+      "called": [
+        "pinterest style grid",
+        "cards of different heights with no gaps",
+        "staggered card wall",
+        "brick layout"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:nth-child(1) [data-part=\"tile\"]",
+          "name": "Tile",
+          "api": "break-inside: avoid",
+          "text": "Never split across columns."
+        },
+        {
+          "sel": "li:nth-child(2) [data-part=\"art\"]",
+          "name": "Media",
+          "api": "",
+          "text": "Heights vary; widths are equal."
+        }
+      ],
+      "prompt": "Add a masonry grid with CSS columns: columns: 3 160px, column-gap 12px, each item break-inside: avoid with 12px bottom margin, tiles with media of varying height, a small tag and a title. Note that reading order runs down each column.",
+      "debug": "Debug my masonry grid. Rule out: cards split across columns (break-inside: avoid); JS masonry libraries re-laying out on every image load; order that matters (columns read down, not across, so use grid when order is important). The symptom:",
+      "code": [
+        [
+          "CSS",
+          "columns + break-inside: avoid",
+          ""
+        ],
+        [
+          "CSS (future)",
+          "grid-template-rows: masonry",
+          "experimental"
+        ],
+        [
+          "lumina-taste",
+          "<MasonryGrid>",
+          "React"
+        ]
+      ],
+      "added": 3
+    },
+    {
+      "id": "swipe-actions",
+      "name": "Swipe actions",
+      "summary": "Swipe a row right to archive or left to delete; buttons do the same for mouse and keyboard.",
+      "pattern": "Pointer drag + visible buttons",
+      "states": [
+        "idle",
+        "dragging right",
+        "dragging left",
+        "removed"
+      ],
+      "aliases": [
+        "swipe to delete",
+        "swipe to archive",
+        "swipeable list",
+        "slide row actions",
+        "mail swipe"
+      ],
+      "react": "SwipeActions",
+      "api": "touch-action: pan-y",
+      "w": 420,
+      "called": [
+        "swipe a row to delete like mail apps",
+        "slide left to reveal delete",
+        "swipe right to archive",
+        "swipeable inbox rows"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"row\"]:first-child [data-part=\"content\"]",
+          "name": "Row",
+          "api": "touch-action: pan-y",
+          "text": "Vertical scrolling still works; sideways drags move the row."
+        },
+        {
+          "sel": "[data-part=\"row\"]:first-child [data-part=\"menu\"]",
+          "name": "Buttons",
+          "api": "aria-label",
+          "text": "The same actions without swiping; hidden on touch-only devices."
+        },
+        {
+          "sel": "[data-part=\"live\"]",
+          "name": "Confirmation",
+          "api": "role=\"status\"",
+          "text": "Says what happened, so the change is not silent."
+        }
+      ],
+      "prompt": "Add swipe actions to inbox rows: drag right to archive (green underlay) or left to delete (red underlay), commit past 30% of the row width, snap back otherwise, keep vertical scrolling (touch-action: pan-y), show Archive/Delete icon buttons on hover and focus for mouse and keyboard users, and announce each action in a status line.",
+      "debug": "Debug my swipe rows. Rule out: no non-swipe way to act (buttons or a menu); swipes hijacking vertical scroll; deletes with no undo or confirmation; the row text staying selectable while dragging. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "pointer events + <button>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SwipeActions rows>",
+          "React"
+        ]
+      ],
+      "added": 3
     }
   ]
 }

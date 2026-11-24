@@ -831,6 +831,129 @@
           "React"
         ]
       ]
+    },
+    {
+      "id": "loaders",
+      "name": "Loaders",
+      "summary": "Spinner, three dots and an indeterminate bar for short waits, plus a busy button.",
+      "pattern": "role=\"status\" / progressbar",
+      "states": [
+        "loading",
+        "reduced motion"
+      ],
+      "aliases": [
+        "spinner",
+        "loading indicator",
+        "loading dots",
+        "throbber",
+        "indeterminate progress"
+      ],
+      "react": "Spinner",
+      "api": "role=\"status\"",
+      "w": 480,
+      "called": [
+        "spinning circle while loading",
+        "three bouncing dots",
+        "loading bar that slides",
+        "button that says saving"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-spinner:not([data-size])",
+          "name": "Spinner",
+          "api": "aria-label",
+          "text": "One accent arc on a faint ring."
+        },
+        {
+          "sel": ".lt-bar-loader",
+          "name": "Bar",
+          "api": "role=\"progressbar\"",
+          "text": "For page-level waits under a header."
+        },
+        {
+          "sel": "[aria-busy=\"true\"]",
+          "name": "Busy button",
+          "api": "aria-busy",
+          "text": "Keeps its width; the label says what is happening."
+        }
+      ],
+      "prompt": "Add loaders for short waits: a 22px spinner (faint ring, accent top arc), three pulsing dots, a 3px indeterminate bar, and a busy button with a small spinner and \"Saving\". All use role=\"status\" or progressbar with a label, and slow down or stop under reduced motion. Use skeletons instead when the layout is known.",
+      "debug": "Debug my loader. Rule out: a spinner with no accessible name; spinners shown for waits under 300ms (flicker); loaders that shift layout when they appear; full-screen spinners where a skeleton would do. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "@keyframes rotate",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<Spinner>, <LoadingDots>, <BarLoader>",
+          "React"
+        ]
+      ],
+      "added": 3
+    },
+    {
+      "id": "setup-checklist",
+      "name": "Setup checklist",
+      "summary": "Onboarding steps with round checkboxes, a progress ring and a running count.",
+      "pattern": "Checkbox list + progress",
+      "states": [
+        "not started",
+        "in progress",
+        "all done"
+      ],
+      "aliases": [
+        "onboarding checklist",
+        "getting started list",
+        "todo progress card",
+        "setup steps",
+        "activation checklist"
+      ],
+      "react": "SetupChecklist",
+      "api": "role=\"checkbox\" · ring",
+      "w": 380,
+      "called": [
+        "getting started list with ticks",
+        "onboarding steps with progress",
+        "todo card with a circle that fills",
+        "setup progress checklist"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"ring\"]",
+          "name": "Progress ring",
+          "api": "stroke-dashoffset",
+          "text": "Fills as steps are ticked; green means done."
+        },
+        {
+          "sel": "[data-done] [data-part=\"tick\"]",
+          "name": "Done step",
+          "api": "aria-checked=\"true\"",
+          "text": "Filled tick and a quiet strike-through."
+        },
+        {
+          "sel": "[data-part=\"count\"]",
+          "name": "Count",
+          "api": "aria-live",
+          "text": "\"2 of 5 done\", then a short line when finished."
+        }
+      ],
+      "prompt": "Add a setup checklist card: a title with a live \"2 of 5 done\" count and a small progress ring, then 3–6 steps each with a round role=\"checkbox\" tick, a title and one line of help. Done steps get a filled green tick and a quiet strike-through; the count changes to a short sentence when everything is done.",
+      "debug": "Debug my checklist. Rule out: ticks that are divs with no keyboard path; progress shown only by the ring; steps that cannot be unticked; celebrating with confetti instead of a quiet line. The symptom:",
+      "code": [
+        [
+          "WAI-ARIA",
+          "Checkbox",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SetupChecklist steps>",
+          "React"
+        ]
+      ],
+      "added": 3
     }
   ]
 }

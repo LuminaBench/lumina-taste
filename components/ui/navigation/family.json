@@ -1134,6 +1134,148 @@
         ]
       ],
       "added": 2
+    },
+    {
+      "id": "carousel",
+      "name": "Carousel",
+      "summary": "Cards that scroll sideways with snap points, arrow buttons and dots; it never moves on its own.",
+      "pattern": "WAI-ARIA Carousel (scroll-snap)",
+      "states": [
+        "start",
+        "middle",
+        "end",
+        "focus-visible"
+      ],
+      "aliases": [
+        "slider",
+        "image slider",
+        "horizontal scroller",
+        "card carousel",
+        "swiper"
+      ],
+      "react": "Carousel",
+      "api": "scroll-snap-type: x",
+      "w": 560,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"next\"]"
+        ]
+      ],
+      "called": [
+        "row of cards you swipe sideways",
+        "slider with arrows and dots",
+        "horizontal scrolling posts",
+        "swipe carousel"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"track\"]",
+          "name": "Track",
+          "api": "scroll-snap-type",
+          "text": "Real scrolling, so touch and trackpads just work."
+        },
+        {
+          "sel": "[data-part=\"next\"]",
+          "name": "Arrows",
+          "api": "disabled at the ends",
+          "text": "Fade out when there is nothing further."
+        },
+        {
+          "sel": "[data-part=\"dot\"][aria-current]",
+          "name": "Dots",
+          "api": "aria-current",
+          "text": "The current dot stretches; each dot jumps to a slide."
+        }
+      ],
+      "prompt": "Add a carousel of post cards: a horizontally scrolling list with scroll-snap, cards at min(78%, 240px), Previous/Next buttons that disable at the ends, dots that track the scroll position and jump on click, arrow keys on the focused track, no auto-advance, and smooth scrolling off under reduced motion.",
+      "debug": "Debug my carousel. Rule out: auto-advancing slides people cannot pause; translateX-based sliders that break touch scrolling; dots out of sync after a swipe; the page scrolling sideways instead of the track. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "scroll-snap-type: x mandatory",
+          ""
+        ],
+        [
+          "Embla",
+          "useEmblaCarousel()",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<Carousel slides>",
+          "React"
+        ]
+      ],
+      "added": 3
+    },
+    {
+      "id": "hamburger-menu",
+      "name": "Hamburger menu",
+      "summary": "Three lines that morph into a cross and open a full-height menu on small screens.",
+      "pattern": "Disclosure + focus trap",
+      "states": [
+        "closed",
+        "open",
+        "focus-visible"
+      ],
+      "aliases": [
+        "mobile menu",
+        "three lines menu",
+        "burger icon",
+        "off canvas menu",
+        "nav toggle"
+      ],
+      "react": "HamburgerMenu",
+      "api": "aria-expanded · trapFocus",
+      "w": 380,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"toggle\"]"
+        ]
+      ],
+      "called": [
+        "three lines icon that opens the menu",
+        "mobile nav button",
+        "burger menu that turns into an x",
+        "phone menu overlay"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"toggle\"]",
+          "name": "Toggle",
+          "api": "aria-expanded · aria-label",
+          "text": "Its name changes to \"Close menu\" when open."
+        },
+        {
+          "sel": "li:nth-child(1) a",
+          "name": "Current page",
+          "api": "aria-current=\"page\"",
+          "text": "Large, easy targets with the current page marked."
+        },
+        {
+          "sel": "[data-part=\"cta\"]",
+          "name": "Actions",
+          "api": "",
+          "text": "Sign in and the one primary action stay at the bottom."
+        }
+      ],
+      "prompt": "Add a mobile hamburger menu: a 56px bar with the brand and a 40px toggle whose three lines morph into an X, aria-expanded and a label that changes to \"Close menu\", a panel under the bar with large links (current page marked) and the two account actions at the bottom, focus trapped while open, Esc and link clicks close it.",
+      "debug": "Debug my hamburger menu. Rule out: the page behind still scrolling and focusable; a div with a click handler instead of a button; the icon morph ignoring reduced motion; the menu hiding the one primary action. The symptom:",
+      "code": [
+        [
+          "WAI-ARIA",
+          "Disclosure",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<HamburgerMenu links>",
+          "React"
+        ]
+      ],
+      "added": 3
     }
   ]
 }

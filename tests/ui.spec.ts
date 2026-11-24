@@ -597,3 +597,93 @@ test('Back returns to the same place in the element grid', async ({ page }) => {
   await page.goBack();
   await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(y - 40);
 });
+
+test.describe('added in 1.0 (batch 2)', () => {
+  test('filter chips: picking one turns All off, clearing turns it back on', async ({ page }) => {
+    const s = await solo(page, 'filter-chips');
+    const all = s.locator('[data-all]');
+    await s.locator('[data-part="chip"]', { hasText: 'Engineering' }).click();
+    await expect(all).toHaveAttribute('aria-pressed', 'true');
+    await s.locator('[data-part="chip"]', { hasText: 'Design' }).click();
+    await expect(all).toHaveAttribute('aria-pressed', 'false');
+  });
+  test('inline edit: Enter saves, Esc cancels', async ({ page }) => {
+    const s = await solo(page, 'inline-edit');
+    await s.locator('[data-part="edit"]').click();
+    await s.locator('input').fill('Q1 plan');
+    await page.keyboard.press('Enter');
+    await expect(s.locator('[data-part="value"]')).toHaveText('Q1 plan');
+    await s.locator('[data-part="edit"]').click();
+    await s.locator('input').fill('nope');
+    await page.keyboard.press('Escape');
+    await expect(s.locator('[data-part="value"]')).toHaveText('Q1 plan');
+    await expect(s.locator('[data-part="edit"]')).toBeFocused();
+  });
+  test('mention input inserts a handle', async ({ page }) => {
+    const s = await solo(page, 'mention-input');
+    await s.locator('textarea').pressSequentially('Thanks @ri');
+    await expect(s.locator('[role="listbox"]')).toBeVisible();
+    await page.keyboard.press('Enter');
+    await expect(s.locator('textarea')).toHaveValue('Thanks @riya ');
+  });
+  test('formatting toolbar: arrows move, aria-pressed toggles', async ({ page }) => {
+    const s = await solo(page, 'formatting-toolbar');
+    await s.locator('[data-cmd="bold"]').focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(s.locator('[data-cmd="italic"]')).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(s.locator('[data-cmd="italic"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(s.locator('[data-part="text"]')).toHaveAttribute('data-italic', '');
+  });
+  test('carousel: next scrolls and the dot follows', async ({ page }) => {
+    const s = await solo(page, 'carousel');
+    await expect(s.locator('[data-part="prev"]')).toBeDisabled();
+    await s.locator('[data-part="next"]').click();
+    await expect.poll(() => s.locator('[data-part="track"]').evaluate((n) => n.scrollLeft)).toBeGreaterThan(50);
+    await expect(s.locator('[data-part="dot"]').nth(1)).toHaveAttribute('aria-current', 'true');
+  });
+  test('hamburger opens, traps focus and closes on Escape', async ({ page }) => {
+    const s = await solo(page, 'hamburger-menu');
+    const t = s.locator('[data-part="toggle"]');
+    await t.click();
+    await expect(t).toHaveAttribute('aria-label', 'Close menu');
+    await expect(s.locator('[data-part="panel"]')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(s.locator('[data-part="panel"]')).toBeHidden();
+    await expect(t).toBeFocused();
+  });
+  test('lightbox: arrows step and count updates', async ({ page }) => {
+    const s = await solo(page, 'lightbox');
+    await s.locator('[data-i="1"]').click();
+    await expect(s.locator('[data-part="count"]')).toHaveText('2 / 6');
+    await page.keyboard.press('ArrowRight');
+    await expect(s.locator('[data-part="count"]')).toHaveText('3 / 6');
+    await page.keyboard.press('Escape');
+    await expect(s.locator('[data-i="2"]')).toBeFocused();
+  });
+  test('cookie consent: refusing is one click', async ({ page }) => {
+    const s = await solo(page, 'cookie-consent');
+    await s.locator('[data-choice="essential"]').click();
+    await expect(s.locator('[data-part="done"]')).toHaveText('Saved: essential cookies only.');
+  });
+  test('setup checklist counts ticks', async ({ page }) => {
+    const s = await solo(page, 'setup-checklist');
+    await s.locator('[data-part="tick"]').nth(2).click();
+    await expect(s.locator('[data-part="count"]')).toHaveText('3 of 5 done');
+  });
+  test('swipe actions: drag left past 30% deletes, buttons work too', async ({ page }) => {
+    const s = await solo(page, 'swipe-actions');
+    await expect(s.locator('[data-part="row"]')).toHaveCount(3);
+    const row = s.locator('[data-part="row"]').first().locator('[data-part="content"]');
+    const b = (await row.boundingBox())!;
+    await page.mouse.move(b.x + b.width * 0.8, b.y + b.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(b.x + b.width * 0.1, b.y + b.height / 2, { steps: 8 });
+    await page.mouse.up();
+    await expect(s.locator('[data-part="row"]')).toHaveCount(2);
+    await expect(s.locator('[data-part="live"]')).toContainText('Deleted');
+    await s.locator('[data-part="row"]').first().hover();
+    await s.locator('[data-part="row"]').first().locator('[data-act="archive"]').click();
+    await expect(s.locator('[data-part="row"]')).toHaveCount(1);
+  });
+});

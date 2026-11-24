@@ -1,0 +1,13 @@
+@scope (.lt-format) {
+  :scope { display: grid; gap: 10px; width: 100%; max-width: 440px; font-size: var(--text-ui); }
+  [data-part="toolbar"] { display: inline-flex; align-items: center; gap: 2px; width: max-content; padding: 3px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-md); background: var(--bg-surface-1); box-shadow: var(--shadow-sm); }
+  [data-part="align"] { display: inline-flex; gap: 2px; }
+  button { display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-secondary); cursor: pointer; transition: background-color var(--dur-1), color var(--dur-1); }
+  button:hover { background: var(--bg-surface-2); color: var(--text-primary); }
+  button[aria-pressed="true"], button[aria-checked="true"] { background: var(--bg-surface-3); color: var(--text-primary); }
+  [data-part="sep"] { width: 1px; height: 18px; margin: 0 4px; background: var(--border-hairline); }
+  [data-part="text"] { margin: 0; padding: 12px 14px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-md); line-height: 1.55; color: var(--text-primary); }
+  [data-part="text"][data-bold] { font-weight: 650; }
+  [data-part="text"][data-italic] { font-style: italic; }
+  [data-part="text"][data-align="center"] { text-align: center; }
+}

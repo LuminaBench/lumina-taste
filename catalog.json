@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
   "counts": {
-    "ui": 99,
+    "ui": 111,
     "charts": 38,
     "blueprints": 8,
     "palettes": 18,
@@ -17,35 +17,35 @@
       "title": "Controls & tactile inputs",
       "summary": "Buttons, toggles, pickers and fields with real pressed states and no layout jump.",
       "order": 1,
-      "count": 26
+      "count": 30
     },
     {
       "id": "navigation",
       "title": "Navigation & page chrome",
       "summary": "Headers, rails, menus and footers that tell people where they are and get out of the way.",
       "order": 2,
-      "count": 17
+      "count": 19
     },
     {
       "id": "feedback",
       "title": "Feedback, status & numbers",
       "summary": "Counters, progress, loading and messages that stay readable and never shift the layout.",
       "order": 3,
-      "count": 14
+      "count": 16
     },
     {
       "id": "overlays",
       "title": "Overlays & power-user patterns",
       "summary": "Palettes, menus, popovers and dialogs built on native <dialog>, the Popover API and CSS anchor positioning.",
       "order": 4,
-      "count": 14
+      "count": 16
     },
     {
       "id": "data",
       "title": "Data & layout primitives",
       "summary": "Tables, lists, grids and blocks for showing real data cleanly, with tabular numbers everywhere.",
       "order": 5,
-      "count": 18
+      "count": 20
     },
     {
       "id": "motion",
@@ -844,6 +844,125 @@
       "path": "components/ui/controls/time-slots"
     },
     {
+      "id": "filter-chips",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Filter chips",
+      "summary": "Toggle pills for picking several filters at once, with an All chip that clears them.",
+      "aliases": [
+        "filter pills",
+        "tag filters",
+        "multi select chips",
+        "category pills",
+        "choice chips"
+      ],
+      "pattern": "Toggle buttons (aria-pressed)",
+      "states": [
+        "off",
+        "on",
+        "all",
+        "focus-visible"
+      ],
+      "react": "FilterChips",
+      "deps": [],
+      "files": [
+        "components/ui/controls/filter-chips/filter-chips.css",
+        "components/ui/controls/filter-chips/filter-chips.html",
+        "components/ui/controls/filter-chips/filter-chips.react.tsx",
+        "components/ui/controls/filter-chips/filter-chips.ts"
+      ],
+      "path": "components/ui/controls/filter-chips"
+    },
+    {
+      "id": "inline-edit",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Inline edit",
+      "summary": "Text that turns into an input when you click its pencil; Enter saves, Esc cancels.",
+      "aliases": [
+        "click to edit",
+        "editable title",
+        "rename in place",
+        "edit in place",
+        "editable label"
+      ],
+      "pattern": "Button + swap to <form>",
+      "states": [
+        "view",
+        "editing",
+        "invalid",
+        "saved"
+      ],
+      "react": "InlineEdit",
+      "deps": [],
+      "files": [
+        "components/ui/controls/inline-edit/inline-edit.css",
+        "components/ui/controls/inline-edit/inline-edit.html",
+        "components/ui/controls/inline-edit/inline-edit.react.tsx",
+        "components/ui/controls/inline-edit/inline-edit.ts"
+      ],
+      "path": "components/ui/controls/inline-edit"
+    },
+    {
+      "id": "mention-input",
+      "kind": "ui",
+      "family": "controls",
+      "name": "@-mention input",
+      "summary": "Type @ in a comment box to get a list of people under the caret; Enter inserts the handle.",
+      "aliases": [
+        "mentions",
+        "at mention",
+        "tag a person",
+        "user autocomplete",
+        "@ autocomplete"
+      ],
+      "pattern": "WAI-ARIA Combobox on a textarea",
+      "states": [
+        "typing",
+        "suggestions open",
+        "no match",
+        "inserted"
+      ],
+      "react": "MentionInput",
+      "deps": [],
+      "files": [
+        "components/ui/controls/mention-input/mention-input.css",
+        "components/ui/controls/mention-input/mention-input.html",
+        "components/ui/controls/mention-input/mention-input.react.tsx",
+        "components/ui/controls/mention-input/mention-input.ts"
+      ],
+      "path": "components/ui/controls/mention-input"
+    },
+    {
+      "id": "formatting-toolbar",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Formatting toolbar",
+      "summary": "Bold, italic, alignment and link in one toolbar with a single tab stop and arrow-key travel.",
+      "aliases": [
+        "text toolbar",
+        "rich text buttons",
+        "bold italic bar",
+        "editor toolbar",
+        "format bar"
+      ],
+      "pattern": "WAI-ARIA Toolbar",
+      "states": [
+        "pressed",
+        "not pressed",
+        "focus-visible"
+      ],
+      "react": "FormattingToolbar",
+      "deps": [],
+      "files": [
+        "components/ui/controls/formatting-toolbar/formatting-toolbar.css",
+        "components/ui/controls/formatting-toolbar/formatting-toolbar.html",
+        "components/ui/controls/formatting-toolbar/formatting-toolbar.react.tsx",
+        "components/ui/controls/formatting-toolbar/formatting-toolbar.ts"
+      ],
+      "path": "components/ui/controls/formatting-toolbar"
+    },
+    {
       "id": "data-table",
       "kind": "ui",
       "family": "data",
@@ -1359,6 +1478,64 @@
       "path": "components/ui/data/image-compare"
     },
     {
+      "id": "masonry-grid",
+      "kind": "ui",
+      "family": "data",
+      "name": "Masonry grid",
+      "summary": "Cards of different heights packed into columns with no gaps, in plain CSS.",
+      "aliases": [
+        "pinterest layout",
+        "waterfall grid",
+        "brick layout",
+        "staggered grid",
+        "uneven card grid"
+      ],
+      "pattern": "CSS multi-column layout",
+      "states": [
+        "3 columns",
+        "2 columns",
+        "1 column"
+      ],
+      "react": "MasonryGrid",
+      "deps": [],
+      "files": [
+        "components/ui/data/masonry-grid/masonry-grid.css",
+        "components/ui/data/masonry-grid/masonry-grid.html",
+        "components/ui/data/masonry-grid/masonry-grid.react.tsx"
+      ],
+      "path": "components/ui/data/masonry-grid"
+    },
+    {
+      "id": "swipe-actions",
+      "kind": "ui",
+      "family": "data",
+      "name": "Swipe actions",
+      "summary": "Swipe a row right to archive or left to delete; buttons do the same for mouse and keyboard.",
+      "aliases": [
+        "swipe to delete",
+        "swipe to archive",
+        "swipeable list",
+        "slide row actions",
+        "mail swipe"
+      ],
+      "pattern": "Pointer drag + visible buttons",
+      "states": [
+        "idle",
+        "dragging right",
+        "dragging left",
+        "removed"
+      ],
+      "react": "SwipeActions",
+      "deps": [],
+      "files": [
+        "components/ui/data/swipe-actions/swipe-actions.css",
+        "components/ui/data/swipe-actions/swipe-actions.html",
+        "components/ui/data/swipe-actions/swipe-actions.react.tsx",
+        "components/ui/data/swipe-actions/swipe-actions.ts"
+      ],
+      "path": "components/ui/data/swipe-actions"
+    },
+    {
       "id": "count-up",
       "kind": "ui",
       "family": "feedback",
@@ -1751,6 +1928,62 @@
         "components/ui/feedback/kbd/kbd.react.tsx"
       ],
       "path": "components/ui/feedback/kbd"
+    },
+    {
+      "id": "loaders",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Loaders",
+      "summary": "Spinner, three dots and an indeterminate bar for short waits, plus a busy button.",
+      "aliases": [
+        "spinner",
+        "loading indicator",
+        "loading dots",
+        "throbber",
+        "indeterminate progress"
+      ],
+      "pattern": "role=\"status\" / progressbar",
+      "states": [
+        "loading",
+        "reduced motion"
+      ],
+      "react": "Spinner",
+      "deps": [],
+      "files": [
+        "components/ui/feedback/loaders/loaders.css",
+        "components/ui/feedback/loaders/loaders.html",
+        "components/ui/feedback/loaders/loaders.react.tsx"
+      ],
+      "path": "components/ui/feedback/loaders"
+    },
+    {
+      "id": "setup-checklist",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Setup checklist",
+      "summary": "Onboarding steps with round checkboxes, a progress ring and a running count.",
+      "aliases": [
+        "onboarding checklist",
+        "getting started list",
+        "todo progress card",
+        "setup steps",
+        "activation checklist"
+      ],
+      "pattern": "Checkbox list + progress",
+      "states": [
+        "not started",
+        "in progress",
+        "all done"
+      ],
+      "react": "SetupChecklist",
+      "deps": [],
+      "files": [
+        "components/ui/feedback/setup-checklist/setup-checklist.css",
+        "components/ui/feedback/setup-checklist/setup-checklist.html",
+        "components/ui/feedback/setup-checklist/setup-checklist.react.tsx",
+        "components/ui/feedback/setup-checklist/setup-checklist.ts"
+      ],
+      "path": "components/ui/feedback/setup-checklist"
     },
     {
       "id": "motion-tokens",
@@ -2529,6 +2762,65 @@
       "path": "components/ui/navigation/drilldown-menu"
     },
     {
+      "id": "carousel",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Carousel",
+      "summary": "Cards that scroll sideways with snap points, arrow buttons and dots; it never moves on its own.",
+      "aliases": [
+        "slider",
+        "image slider",
+        "horizontal scroller",
+        "card carousel",
+        "swiper"
+      ],
+      "pattern": "WAI-ARIA Carousel (scroll-snap)",
+      "states": [
+        "start",
+        "middle",
+        "end",
+        "focus-visible"
+      ],
+      "react": "Carousel",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/carousel/carousel.css",
+        "components/ui/navigation/carousel/carousel.html",
+        "components/ui/navigation/carousel/carousel.react.tsx",
+        "components/ui/navigation/carousel/carousel.ts"
+      ],
+      "path": "components/ui/navigation/carousel"
+    },
+    {
+      "id": "hamburger-menu",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Hamburger menu",
+      "summary": "Three lines that morph into a cross and open a full-height menu on small screens.",
+      "aliases": [
+        "mobile menu",
+        "three lines menu",
+        "burger icon",
+        "off canvas menu",
+        "nav toggle"
+      ],
+      "pattern": "Disclosure + focus trap",
+      "states": [
+        "closed",
+        "open",
+        "focus-visible"
+      ],
+      "react": "HamburgerMenu",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/hamburger-menu/hamburger-menu.css",
+        "components/ui/navigation/hamburger-menu/hamburger-menu.html",
+        "components/ui/navigation/hamburger-menu/hamburger-menu.react.tsx",
+        "components/ui/navigation/hamburger-menu/hamburger-menu.ts"
+      ],
+      "path": "components/ui/navigation/hamburger-menu"
+    },
+    {
       "id": "command-palette",
       "kind": "ui",
       "family": "overlays",
@@ -2959,6 +3251,65 @@
         "components/ui/overlays/notification-center/notification-center.ts"
       ],
       "path": "components/ui/overlays/notification-center"
+    },
+    {
+      "id": "lightbox",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Lightbox",
+      "summary": "Thumbnails that open a large photo viewer with arrows, caption and count.",
+      "aliases": [
+        "photo viewer",
+        "image gallery popup",
+        "gallery modal",
+        "zoom image",
+        "fullscreen photo"
+      ],
+      "pattern": "Modal dialog + gallery",
+      "states": [
+        "grid",
+        "open",
+        "first",
+        "last"
+      ],
+      "react": "Lightbox",
+      "deps": [],
+      "files": [
+        "components/ui/overlays/lightbox/lightbox.css",
+        "components/ui/overlays/lightbox/lightbox.html",
+        "components/ui/overlays/lightbox/lightbox.react.tsx",
+        "components/ui/overlays/lightbox/lightbox.ts"
+      ],
+      "path": "components/ui/overlays/lightbox"
+    },
+    {
+      "id": "cookie-consent",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Cookie consent",
+      "summary": "A small banner where \"Essential only\" and \"Accept all\" look the same, plus per-category choices.",
+      "aliases": [
+        "cookie banner",
+        "gdpr banner",
+        "consent popup",
+        "privacy notice",
+        "accept cookies bar"
+      ],
+      "pattern": "Region + disclosure",
+      "states": [
+        "shown",
+        "customising",
+        "saved"
+      ],
+      "react": "CookieConsent",
+      "deps": [],
+      "files": [
+        "components/ui/overlays/cookie-consent/cookie-consent.css",
+        "components/ui/overlays/cookie-consent/cookie-consent.html",
+        "components/ui/overlays/cookie-consent/cookie-consent.react.tsx",
+        "components/ui/overlays/cookie-consent/cookie-consent.ts"
+      ],
+      "path": "components/ui/overlays/cookie-consent"
     }
   ],
   "charts": [

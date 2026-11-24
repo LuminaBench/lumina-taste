@@ -1,11 +1,11 @@
 ---
 name: lumina-taste
-description: Make interfaces look designed, not generated. Use for any UI work (landing, pricing, dashboard, settings, docs, auth and onboarding pages) and for colour palettes, light/dark themes, type pairings, spacing, density, radius, motion and visual styles such as swiss, editorial, neobrutalism, glass or terminal. Use when someone describes a UI element loosely (rotating arrow, 9-dot menu, cmd-K box, OTP boxes, bottom sheet, speed dial, kanban, star rating, chat bubbles, prompt box) to get its real name and working code. Use for charts, including benchmark leaderboards, trade-off quadrants, Pareto frontiers, slope, dumbbell, waterfall, box plot, beeswarm, bump and small multiples. Use to audit a page for overflow, clipped or overlapping text, contrast, focus rings, dead buttons and AI slop (purple gradients, heavy shadows, emoji icons, hype copy), and to keep a product's look stable across edits with a lockable taste-profile.json. Vanilla HTML/CSS/TS and React, no dependencies.
+description: Make interfaces look designed, not generated. Use for any UI work (landing, pricing, dashboard, settings, docs, auth and onboarding pages) and for colour palettes, light/dark themes, type pairings, spacing, density, radius, motion and visual styles such as swiss, editorial, neobrutalism, glass or terminal. Use when someone describes a UI element loosely (rotating arrow, 9-dot menu, cmd-K box, OTP boxes, bottom sheet, speed dial, kanban, star rating, chat bubbles, carousel, lightbox) to get its real name and working code. Use for charts, including benchmark leaderboards, trade-off quadrants, Pareto frontiers, slope, dumbbell, waterfall, box plot, beeswarm, bump and small multiples. Use to audit a page for overflow, clipped or overlapping text, contrast, focus rings, dead buttons and AI slop (purple gradients, heavy shadows, emoji icons, hype copy), and to keep a product's look stable across edits with a lockable taste-profile.json. Vanilla HTML/CSS/TS and React, no dependencies.
 ---
 
 # Lumina Taste
 
-A design kit for coding agents: **18 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **16 visual styles**, **99 named UI patterns**, **38 chart engines**, **8 page blueprints**, a **lockable taste profile**, a **Playwright auditor** and a **copy lint**. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
+A design kit for coding agents: **18 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **16 visual styles**, **111 named UI patterns**, **38 chart engines**, **8 page blueprints**, a **lockable taste profile**, a **Playwright auditor** and a **copy lint**. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
 
 Run commands from this skill's directory with Node.js 20+. Pass absolute paths (or run from the user's project with the absolute script path). Search, install and token scripts need nothing installed; the auditor needs Playwright; the gallery needs `npm install` once.
 
@@ -149,7 +149,7 @@ Requires Playwright in the skill or the project (`npm i -D @playwright/test && n
 - Vanilla: paste the HTML, then `enhance(el)` or `autoEnhance(document, { accordion: enhance })` for every `[data-lt]`.
 - Events: components emit `lt-change` (detail = new state); React wrappers surface it as `onChange` / `onX` props.
 - Overlays use native `<dialog>`, the Popover API and CSS anchor positioning with a JS fallback.
-- Families: controls (26), navigation (17), feedback (14), overlays (14), data (18), motion (10). Full list: `catalog.json` or `--list`.
+- Families: controls (30), navigation (19), feedback (16), overlays (16), data (20), motion (10). Full list: `catalog.json` or `--list`.
 
 ## Tokens at a glance
 
@@ -180,7 +180,7 @@ SKILL.md                     this file
 catalog.json                 every pattern/chart/blueprint/palette with aliases
 engine/profiles/             taste profile engine, schema, default profile
 tokens/                      base.css, palettes/*.css (+ source.json), typography/, styles/
-components/ui/<family>/      99 patterns (html, css, ts, react.tsx)
+components/ui/<family>/      111 patterns (html, css, ts, react.tsx)
 components/charts/           core/ + 38 chart engines (+ React wrappers)
 blueprints/                  8 page blueprints
 references/                  anti-slop-rules, page-flow, chart-selection, palettes, harvest-log

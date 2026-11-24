@@ -1862,6 +1862,279 @@
         ]
       ],
       "added": 2
+    },
+    {
+      "id": "filter-chips",
+      "name": "Filter chips",
+      "summary": "Toggle pills for picking several filters at once, with an All chip that clears them.",
+      "pattern": "Toggle buttons (aria-pressed)",
+      "states": [
+        "off",
+        "on",
+        "all",
+        "focus-visible"
+      ],
+      "aliases": [
+        "filter pills",
+        "tag filters",
+        "multi select chips",
+        "category pills",
+        "choice chips"
+      ],
+      "react": "FilterChips",
+      "api": "aria-pressed",
+      "w": 460,
+      "called": [
+        "pills you tick to filter a list",
+        "category chips",
+        "tag filter buttons",
+        "select several filters"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"chip\"][aria-pressed=\"true\"]:not([data-all])",
+          "name": "Selected chip",
+          "api": "aria-pressed=\"true\"",
+          "text": "Tinted, and a check slides in so state is not colour alone."
+        },
+        {
+          "sel": "[data-all]",
+          "name": "All",
+          "api": "",
+          "text": "Clears the others; comes back on when nothing is picked."
+        }
+      ],
+      "prompt": "Add filter chips: a role=\"group\" of toggle buttons with aria-pressed, a check icon that slides in when on, an \"All\" chip that clears the rest and re-selects itself when nothing is picked, and a polite live summary of the selection.",
+      "debug": "Debug my filter chips. Rule out: checkboxes styled as chips with no visible state besides colour; \"All\" and specific chips both on; chips that wrap into a second row and shift the page under the pointer. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<button aria-pressed>",
+          ""
+        ],
+        [
+          "Material",
+          "FilterChip",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<FilterChips options>",
+          "React"
+        ]
+      ],
+      "added": 3
+    },
+    {
+      "id": "inline-edit",
+      "name": "Inline edit",
+      "summary": "Text that turns into an input when you click its pencil; Enter saves, Esc cancels.",
+      "pattern": "Button + swap to <form>",
+      "states": [
+        "view",
+        "editing",
+        "invalid",
+        "saved"
+      ],
+      "aliases": [
+        "click to edit",
+        "editable title",
+        "rename in place",
+        "edit in place",
+        "editable label"
+      ],
+      "react": "InlineEdit",
+      "api": "<form> swap",
+      "w": 360,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"edit\"]"
+        ]
+      ],
+      "called": [
+        "title you click to rename",
+        "edit text in place with a pencil",
+        "rename without opening a form",
+        "editable heading"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"edit\"]",
+          "name": "Pencil",
+          "api": "aria-describedby",
+          "text": "Says what it renames."
+        },
+        {
+          "sel": "input",
+          "name": "Field",
+          "api": "required",
+          "text": "Text selected so typing replaces it."
+        },
+        {
+          "sel": "[data-part=\"save\"]",
+          "name": "Save",
+          "api": "type=\"submit\"",
+          "text": "Explicit save; Enter does the same."
+        }
+      ],
+      "prompt": "Add inline edit for a project name: a value with a pencil button; clicking it swaps to a form with a pre-selected input plus Save and Cancel; Enter saves, Esc cancels and returns focus to the pencil; empty values are rejected; a short colour flash confirms the save.",
+      "debug": "Debug my inline edit. Rule out: contenteditable with no way to cancel; saving on blur so a mis-click commits a typo; focus lost after saving; the value jumping layout when the input appears. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<button> + <form>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<InlineEdit label defaultValue>",
+          "React"
+        ]
+      ],
+      "added": 3
+    },
+    {
+      "id": "mention-input",
+      "name": "@-mention input",
+      "summary": "Type @ in a comment box to get a list of people under the caret; Enter inserts the handle.",
+      "pattern": "WAI-ARIA Combobox on a textarea",
+      "states": [
+        "typing",
+        "suggestions open",
+        "no match",
+        "inserted"
+      ],
+      "aliases": [
+        "mentions",
+        "at mention",
+        "tag a person",
+        "user autocomplete",
+        "@ autocomplete"
+      ],
+      "react": "MentionInput",
+      "api": "role=\"combobox\" + caret mirror",
+      "w": 460,
+      "preview": [
+        [
+          "type",
+          "textarea",
+          "Can you check the numbers @k"
+        ]
+      ],
+      "called": [
+        "type @ to tag someone",
+        "mention people in a comment",
+        "autocomplete names after @",
+        "tag a teammate box"
+      ],
+      "anatomy": [
+        {
+          "sel": "textarea",
+          "name": "Text area",
+          "api": "aria-activedescendant",
+          "text": "Keeps focus; the list follows the caret."
+        },
+        {
+          "sel": "[role=\"option\"]:not([hidden])",
+          "name": "Suggestion",
+          "api": "role=\"option\"",
+          "text": "Name plus handle so people with the same name differ."
+        },
+        {
+          "sel": "[data-part=\"hint\"]",
+          "name": "Keys",
+          "api": "aria-describedby",
+          "text": "How to choose without a mouse."
+        }
+      ],
+      "prompt": "Add @-mentions to the comment box: typing \"@\" plus letters opens a listbox of matching people positioned under the caret (use a mirror element to find it), arrows move via aria-activedescendant, Enter or Tab inserts \"@handle \", Esc closes, and the textarea keeps focus the whole time.",
+      "debug": "Debug my mentions. Rule out: the list opening at the textarea corner instead of the caret; Enter submitting the form while the list is open; focus moving into the list; \"@\" inside an email address triggering it. The symptom:",
+      "code": [
+        [
+          "Tiptap",
+          "Mention extension",
+          ""
+        ],
+        [
+          "WAI-ARIA",
+          "Combobox",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<MentionInput people>",
+          "React"
+        ]
+      ],
+      "added": 3
+    },
+    {
+      "id": "formatting-toolbar",
+      "name": "Formatting toolbar",
+      "summary": "Bold, italic, alignment and link in one toolbar with a single tab stop and arrow-key travel.",
+      "pattern": "WAI-ARIA Toolbar",
+      "states": [
+        "pressed",
+        "not pressed",
+        "focus-visible"
+      ],
+      "aliases": [
+        "text toolbar",
+        "rich text buttons",
+        "bold italic bar",
+        "editor toolbar",
+        "format bar"
+      ],
+      "react": "FormattingToolbar",
+      "api": "role=\"toolbar\" · aria-pressed",
+      "w": 440,
+      "called": [
+        "bold italic buttons above a text box",
+        "editor toolbar",
+        "row of formatting icons",
+        "rich text controls"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-cmd=\"bold\"]",
+          "name": "Toggle button",
+          "api": "aria-pressed",
+          "text": "Pressed state is a filled tile, not just a colour."
+        },
+        {
+          "sel": "[data-part=\"align\"]",
+          "name": "Alignment",
+          "api": "role=\"radiogroup\"",
+          "text": "Only one can be on."
+        },
+        {
+          "sel": "[data-part=\"sep\"]",
+          "name": "Separator",
+          "api": "aria-hidden",
+          "text": "Groups related controls."
+        }
+      ],
+      "prompt": "Add a formatting toolbar: role=\"toolbar\" with one tab stop and arrow-key travel, Bold and Italic as aria-pressed toggle buttons with labels and shortcut titles, Left/Centre as a radiogroup, a Link button, hairline separators between groups, and ⌘B/⌘I shortcuts.",
+      "debug": "Debug my toolbar. Rule out: every button a tab stop; icon buttons without aria-label; pressed state shown only by colour; shortcuts that fire while focus is elsewhere on the page. The symptom:",
+      "code": [
+        [
+          "WAI-ARIA",
+          "Toolbar",
+          ""
+        ],
+        [
+          "Tiptap",
+          "editor.chain().toggleBold()",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<FormattingToolbar>",
+          "React"
+        ]
+      ],
+      "added": 3
     }
   ]
 }

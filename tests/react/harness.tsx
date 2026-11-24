@@ -26,6 +26,18 @@ import { RankedColumns } from '../../components/charts/ranked-columns/ranked-col
 import { LeaderboardTable } from '../../components/charts/leaderboard-table/leaderboard-table.react';
 import { TradeoffScatter } from '../../components/charts/tradeoff-scatter/tradeoff-scatter.react';
 import { WaterfallChart } from '../../components/charts/waterfall-chart/waterfall-chart.react';
+import { FilterChips } from '../../components/ui/controls/filter-chips/filter-chips.react';
+import { InlineEdit } from '../../components/ui/controls/inline-edit/inline-edit.react';
+import { MentionInput } from '../../components/ui/controls/mention-input/mention-input.react';
+import { FormattingToolbar } from '../../components/ui/controls/formatting-toolbar/formatting-toolbar.react';
+import { Carousel } from '../../components/ui/navigation/carousel/carousel.react';
+import { HamburgerMenu } from '../../components/ui/navigation/hamburger-menu/hamburger-menu.react';
+import { Lightbox } from '../../components/ui/overlays/lightbox/lightbox.react';
+import { CookieConsent } from '../../components/ui/overlays/cookie-consent/cookie-consent.react';
+import { Spinner, LoadingDots, BarLoader } from '../../components/ui/feedback/loaders/loaders.react';
+import { SetupChecklist } from '../../components/ui/feedback/setup-checklist/setup-checklist.react';
+import { MasonryGrid } from '../../components/ui/data/masonry-grid/masonry-grid.react';
+import { SwipeActions } from '../../components/ui/data/swipe-actions/swipe-actions.react';
 import { Disclosure } from '../../components/ui/controls/disclosure-chevron/disclosure-chevron.react';
 import { Accordion } from '../../components/ui/controls/accordion/accordion.react';
 import { TreeView } from '../../components/ui/controls/tree-view/tree-view.react';
@@ -276,6 +288,18 @@ function App() {
       <Case id="chart-leader"><LeaderboardTable data={{ columns: [{ name: 'Score' }, { name: 'Price', better: 'low' }], rows: [{ label: 'A', group: 'X', values: [3, 1] }, { label: 'B', group: 'Y', values: [2, 2] }] }} options={{ title: 'Board' }} /></Case>
       <Case id="chart-tradeoff"><TradeoffScatter data={[{ label: 'A', x: 1, y: 3 }, { label: 'B', x: 2, y: 5 }, { label: 'C', x: 3, y: 4 }]} options={{ title: 'Trade-off', quadrant: true }} /></Case>
       <Case id="chart-waterfall"><WaterfallChart data={[{ label: 'Start', value: 10 }, { label: 'Up', value: 4 }, { label: 'End', value: 0, total: true }]} options={{ title: 'Bridge' }} /></Case>
+      <Case id="filter-chips"><FilterChips label="Team" options={['Design', 'Sales']} onChange={(x) => log.push(`chips:${x.join('+')}`)} /></Case>
+      <Case id="inline-edit"><InlineEdit label="Name" defaultValue="Atlas" onSave={(v) => log.push(`rename:${v}`)} /></Case>
+      <Case id="mention"><MentionInput label="Comment" people={[{ name: 'Ana López', handle: 'ana' }]} onMention={(h) => log.push(`mention:${h}`)} /></Case>
+      <Case id="toolbar"><FormattingToolbar text="Hello" onChange={(st) => log.push(`bold:${st.bold}`)} /></Case>
+      <Case id="carousel"><Carousel label="Posts" slides={[{ kicker: 'Guide', title: 'One', href: '#1', meta: '2 min' }, { kicker: 'Guide', title: 'Two', href: '#2', meta: '3 min' }]} /></Case>
+      <Case id="burger"><HamburgerMenu brand="Halyard" links={[{ label: 'Product', href: '#p', current: true }]} cta={{ label: 'Start', href: '#s' }} /></Case>
+      <Case id="lightbox"><Lightbox label="Photos" photos={[{ title: 'One', alt: 'First photo' }, { title: 'Two', alt: 'Second photo' }]} /></Case>
+      <Case id="consent"><div style={{ position: 'relative', height: 200, contain: 'layout paint' }}><CookieConsent text="Essential cookies only unless you agree." onChoice={(c) => log.push(`consent:${c.analytics}`)} /></div></Case>
+      <Case id="loaders"><Spinner /><LoadingDots /><BarLoader /></Case>
+      <Case id="checklist"><SetupChecklist title="Get set up" steps={[{ title: 'One', done: true }, { title: 'Two' }]} onChange={(d) => log.push(`done:${d}`)} /></Case>
+      <Case id="masonry"><MasonryGrid label="Boards">{[<p key="a">A</p>, <p key="b">B</p>]}</MasonryGrid></Case>
+      <Case id="swipe"><SwipeActions label="Inbox" rows={[{ id: '1', from: 'Kai', subject: 'Hi', time: '09:00' }]} onAction={(a) => log.push(`swipe:${a}`)} /></Case>
       <Case id="stagger"><Stagger><span>One</span><span>Two</span></Stagger></Case>
     </ToastProvider>
   );

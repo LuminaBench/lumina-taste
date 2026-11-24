@@ -1018,6 +1018,142 @@
         ]
       ],
       "added": 2
+    },
+    {
+      "id": "lightbox",
+      "name": "Lightbox",
+      "summary": "Thumbnails that open a large photo viewer with arrows, caption and count.",
+      "pattern": "Modal dialog + gallery",
+      "states": [
+        "grid",
+        "open",
+        "first",
+        "last"
+      ],
+      "aliases": [
+        "photo viewer",
+        "image gallery popup",
+        "gallery modal",
+        "zoom image",
+        "fullscreen photo"
+      ],
+      "react": "Lightbox",
+      "api": "<dialog> · ArrowLeft/Right",
+      "w": 520,
+      "preview": [
+        [
+          "click",
+          "[data-i=\"2\"]"
+        ]
+      ],
+      "called": [
+        "click a photo to see it big",
+        "image popup with arrows",
+        "gallery that opens fullscreen",
+        "photo zoom overlay"
+      ],
+      "anatomy": [
+        {
+          "sel": "dialog [data-part=\"next\"]",
+          "name": "Next",
+          "api": "ArrowRight",
+          "text": "Arrow keys step through; it wraps at the ends."
+        },
+        {
+          "sel": "dialog [data-part=\"close\"]",
+          "name": "Close",
+          "api": "Esc",
+          "text": "Focus goes back to the thumbnail you were on."
+        },
+        {
+          "sel": "figcaption",
+          "name": "Caption and count",
+          "api": "tabular-nums",
+          "text": "Where you are, in words and numbers."
+        }
+      ],
+      "prompt": "Add a lightbox: a 3-column grid of thumbnail buttons with descriptive labels; clicking opens a <dialog> with the photo, a caption, a \"3 / 6\" count, round Previous/Next/Close buttons, arrow-key navigation that wraps, Esc to close, and focus returned to the thumbnail of the photo last shown.",
+      "debug": "Debug my lightbox. Rule out: thumbnails as images with click handlers (no keyboard); focus not returning to the thumbnail; the page scrolling behind the viewer; images with no alt text. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<dialog> + <button>",
+          ""
+        ],
+        [
+          "PhotoSwipe",
+          "new PhotoSwipeLightbox()",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<Lightbox photos>",
+          "React"
+        ]
+      ],
+      "added": 3
+    },
+    {
+      "id": "cookie-consent",
+      "name": "Cookie consent",
+      "summary": "A small banner where \"Essential only\" and \"Accept all\" look the same, plus per-category choices.",
+      "pattern": "Region + disclosure",
+      "states": [
+        "shown",
+        "customising",
+        "saved"
+      ],
+      "aliases": [
+        "cookie banner",
+        "gdpr banner",
+        "consent popup",
+        "privacy notice",
+        "accept cookies bar"
+      ],
+      "react": "CookieConsent",
+      "api": "role=\"region\"",
+      "w": 460,
+      "called": [
+        "accept cookies bar at the bottom",
+        "gdpr popup",
+        "cookie notice with settings",
+        "privacy banner"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-choice=\"essential\"]",
+          "name": "Equal choices",
+          "api": "",
+          "text": "Refusing is as easy and as visible as accepting."
+        },
+        {
+          "sel": "[data-part=\"customise\"]",
+          "name": "Customise",
+          "api": "aria-expanded",
+          "text": "Opens per-category switches; essential is always on."
+        },
+        {
+          "sel": "[data-part=\"main\"] p",
+          "name": "Plain text",
+          "api": "",
+          "text": "What you collect and why, in two sentences."
+        }
+      ],
+      "prompt": "Add a cookie banner: a card pinned to the bottom with a two-sentence plain explanation, \"Essential only\" and \"Accept all\" as equal-weight buttons, a Customise toggle revealing per-category checkboxes (essential locked on), and a status line confirming the choice. It must not block the page.",
+      "debug": "Debug my cookie banner. Rule out: a bright Accept and a grey link for Reject (a dark pattern); analytics loading before consent; a full-screen wall blocking reading; the banner covering the page footer links on mobile. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<section role=\"region\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<CookieConsent onChoice>",
+          "React"
+        ]
+      ],
+      "added": 3
     }
   ]
 }

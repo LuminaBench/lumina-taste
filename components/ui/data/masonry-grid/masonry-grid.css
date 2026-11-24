@@ -1,0 +1,11 @@
+/* Masonry with CSS columns: items keep reading order top-to-bottom per column, no JS needed. */
+@scope (.lt-masonry) {
+  :scope { columns: 3 160px; column-gap: 12px; width: 100%; margin: 0; padding: 0; list-style: none; }
+  li { break-inside: avoid; margin-bottom: 12px; }
+  [data-part="tile"] { display: grid; gap: 6px; padding: 10px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
+  [data-part="art"] { height: calc(var(--h) * 34px + 20px); border-radius: var(--radius-md); background: var(--bg-surface-3); }
+  li:nth-child(3n + 1) [data-part="art"] { background: linear-gradient(160deg, var(--accent-soft), var(--bg-surface-3)); }
+  li:nth-child(4n + 2) [data-part="art"] { background: repeating-linear-gradient(0deg, var(--bg-surface-3) 0 12px, var(--bg-surface-2) 12px 24px); }
+  [data-part="tag"] { margin: 2px 0 0; font-size: var(--text-ui-xs); font-weight: 600; color: var(--text-muted); }
+  h4 { margin: 0; font-size: var(--text-ui-sm); font-weight: 600; line-height: 1.35; text-wrap: balance; }
+}

@@ -1,0 +1,19 @@
+@scope (.lt-checklist) {
+  :scope { --p: 40; display: grid; gap: 12px; width: 100%; max-width: 380px; padding: 16px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); font-size: var(--text-ui); }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  h4 { margin: 0; font-size: var(--step-0); font-weight: 650; }
+  p { margin: 0; }
+  [data-part="count"] { font-size: var(--text-ui-xs); color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  [data-part="ring"] { width: 36px; height: 36px; rotate: -90deg; }
+  [data-part="ring"] circle { fill: none; stroke: var(--bg-surface-3); stroke-width: 3.5; }
+  [data-part="ring"] [data-part="arc"] { stroke: var(--status-positive); stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: calc(100 - var(--p)); transition: stroke-dashoffset var(--dur-4) var(--ease-out); }
+  ol { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+  [data-part="step"] { display: flex; align-items: flex-start; gap: 12px; padding: 8px; border-radius: var(--radius-md); }
+  [data-part="step"]:hover { background: var(--bg-surface-2); }
+  [data-part="tick"] { display: grid; place-items: center; flex: none; width: 22px; height: 22px; margin-top: 1px; padding: 0; border: 1.5px solid var(--border-strong); border-radius: 50%; background: var(--bg-surface-1); color: transparent; cursor: pointer; transition: background-color var(--dur-2), border-color var(--dur-2), color var(--dur-2), scale var(--dur-3) var(--ease-spring); }
+  [data-part="tick"][aria-checked="true"] { border-color: var(--status-positive); background: var(--status-positive); color: var(--bg-canvas); }
+  [data-part="tick"]:active { scale: 0.88; }
+  [data-part="title"] { font-weight: 600; font-size: var(--text-ui-sm); }
+  [data-part="sub"] { font-size: var(--text-ui-xs); color: var(--text-muted); }
+  [data-done] [data-part="title"] { color: var(--text-muted); text-decoration: line-through; text-decoration-color: var(--border-strong); }
+}
