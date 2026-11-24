@@ -115,7 +115,9 @@
         "midnight",
         "playful",
         "enterprise",
-        "zen"
+        "zen",
+        "tonal",
+        "system"
       ],
       "description": "Visual style layer. 'none' is the plain kit."
     },

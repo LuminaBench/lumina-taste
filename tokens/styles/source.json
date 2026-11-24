@@ -794,6 +794,72 @@
     "cta": "Begin",
     "badge": "Daily"
    }
+  },
+  {
+   "id": "tonal",
+   "name": "Tonal",
+   "kind": "Tinted surfaces",
+   "palette": "porcelain-teal",
+   "mode": "light",
+   "type": "geometric",
+   "radius": "soft",
+   "aliases": [
+    "material you look",
+    "tinted cards",
+    "tonal buttons",
+    "android modern ui"
+   ],
+   "summary": "Surfaces tinted with the accent instead of grey, pill buttons, big corners and no borders.",
+   "signals": [
+    "accent-tinted surfaces",
+    "pill-shaped buttons",
+    "large corners",
+    "no borders",
+    "secondary buttons filled with a tint"
+   ],
+   "useFor": "Mobile-first apps, Android-leaning products, friendly consumer tools.",
+   "notTo": "Nordic, which uses neutral grey fills; tonal tints everything with the accent.",
+   "brief": "Tint every surface slightly with the accent and make buttons pills.",
+   "sample": {
+    "eyebrow": "Today",
+    "title": "Two tasks left",
+    "body": "Due before 17:00",
+    "cta": "Open list",
+    "badge": "2"
+   }
+  },
+  {
+   "id": "system",
+   "name": "System",
+   "kind": "Native app",
+   "palette": "ice-cobalt",
+   "mode": "light",
+   "type": "precision",
+   "radius": "soft",
+   "aliases": [
+    "ios style",
+    "apple settings look",
+    "native app ui",
+    "grouped list design"
+   ],
+   "summary": "Grouped, inset lists on a grey ground, translucent bars, quiet separators and bold large titles.",
+   "signals": [
+    "grey grouped background",
+    "white inset groups with rounded corners",
+    "hairline separators inset from the left",
+    "translucent blurred bars",
+    "large bold titles"
+   ],
+   "useFor": "Settings screens, mobile web apps, companion apps for native products.",
+   "notTo": "Enterprise, which is denser and squarer; system follows phone conventions.",
+   "brief": "Group related rows into rounded white blocks on a grey ground.",
+   "sample": {
+    "eyebrow": "Settings",
+    "title": "Notifications",
+    "body": "Allow · Sounds · Badges",
+    "cta": "Turn on",
+    "badge": "On"
+   }
   }
  ]
 }

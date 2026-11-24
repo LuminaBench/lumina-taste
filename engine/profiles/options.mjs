@@ -378,5 +378,23 @@ export const STYLES = [
     "mode": "light",
     "typography": "bookish",
     "radius": "soft"
+  },
+  {
+    "id": "tonal",
+    "name": "Tonal",
+    "kind": "Tinted surfaces",
+    "palette": "porcelain-teal",
+    "mode": "light",
+    "typography": "geometric",
+    "radius": "soft"
+  },
+  {
+    "id": "system",
+    "name": "System",
+    "kind": "Native app",
+    "palette": "ice-cobalt",
+    "mode": "light",
+    "typography": "precision",
+    "radius": "soft"
   }
 ];

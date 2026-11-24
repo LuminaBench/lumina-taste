@@ -1,0 +1,18 @@
+@scope (.lt-tracker) {
+  :scope { display: grid; gap: 20px; width: 100%; max-width: 620px; padding: 20px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); font-size: var(--text-ui); }
+  header { display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: 12px; }
+  h3 { margin: 0; font-size: var(--step-1); font-weight: 650; }
+  header p { margin: 4px 0 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  ol { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0; padding: 0; list-style: none; }
+  li { position: relative; display: grid; gap: 2px; padding-top: 22px; }
+  li::before { content: ""; position: absolute; top: 6px; left: 0; right: 0; height: 3px; background: var(--bg-surface-3); }
+  li[data-done]::before { background: var(--status-positive); }
+  li:first-child::before { border-radius: 3px 0 0 3px; } li:last-child::before { border-radius: 0 3px 3px 0; }
+  [data-part="mark"] { position: absolute; top: 0; left: 0; width: 15px; height: 15px; border: 3px solid var(--bg-surface-1); border-radius: 50%; background: var(--bg-surface-3); }
+  li[data-done] [data-part="mark"] { background: var(--status-positive); }
+  li[aria-current="step"] [data-part="mark"] { box-shadow: 0 0 0 4px color-mix(in oklab, var(--status-positive) 25%, transparent); }
+  strong { font-size: var(--text-ui-sm); font-weight: 600; }
+  li > span:last-child { color: var(--text-muted); font-size: var(--text-ui-xs); }
+  li:not([data-done]) strong { color: var(--text-secondary); }
+  @container (max-width: 480px) { ol { grid-template-columns: 1fr; gap: 14px; } li { padding: 0 0 0 26px; } li::before { top: 0; bottom: -14px; left: 6px; right: auto; width: 3px; height: auto; } }
+}

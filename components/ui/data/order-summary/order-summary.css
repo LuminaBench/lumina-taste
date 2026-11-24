@@ -1,0 +1,25 @@
+@scope (.lt-order) {
+  :scope { display: grid; gap: 14px; width: 100%; max-width: 380px; padding: 20px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); font-size: var(--text-ui); }
+  h3 { margin: 0; font-size: var(--step-0); font-weight: 650; }
+  ul { display: grid; gap: 12px; margin: 0; padding: 0 0 14px; list-style: none; border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
+  li { display: flex; justify-content: space-between; gap: 12px; }
+  li > span { display: grid; }
+  li strong { font-size: var(--text-ui-sm); font-weight: 600; }
+  li strong + span { color: var(--text-muted); font-size: var(--text-ui-xs); }
+  data { font-variant-numeric: tabular-nums; font-size: var(--text-ui-sm); }
+  [data-part="promo"] { display: flex; gap: 8px; }
+  [data-part="promo"] input { flex: 1; min-width: 0; height: var(--control-h-sm); padding: 0 10px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-sm); background: var(--bg-surface-1); color: var(--text-primary); font-size: var(--text-ui-sm); text-transform: uppercase; }
+  [data-part="promo-msg"] { margin: -8px 0 0; min-height: 0; font-size: var(--text-ui-xs); color: var(--text-muted); }
+  [data-part="promo-msg"]:empty { display: none; }
+  [data-part="promo-msg"][data-ok] { color: var(--status-positive); }
+  dl { display: grid; gap: 8px; margin: 0; }
+  dl > div { display: flex; justify-content: space-between; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  dl > div[hidden] { display: none; }
+  dd { margin: 0; font-variant-numeric: tabular-nums; }
+  [data-part="discount"] { color: var(--status-positive); }
+  [data-part="total-row"] { padding-top: 10px; border-top: var(--bw) var(--border-style) var(--border-hairline); color: var(--text-primary); font-size: var(--text-ui); font-weight: 650; }
+  [data-part="total-row"] dd { font-size: var(--step-1); }
+  :scope > .lt-btn { width: 100%; }
+  [data-part="note"] { display: flex; gap: 6px; margin: 0; color: var(--text-muted); font-size: var(--text-ui-xs); }
+  [data-part="note"] .lt-icon { flex: none; width: 14px; height: 14px; margin-top: 1px; }
+}

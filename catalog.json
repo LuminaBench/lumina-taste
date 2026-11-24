@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
   "counts": {
-    "ui": 137,
+    "ui": 146,
     "charts": 38,
     "blueprints": 8,
     "palettes": 18,
     "themes": 36,
     "typography": 12,
-    "styles": 25
+    "styles": 27
   },
   "families": [
     {
@@ -17,7 +17,7 @@
       "title": "Controls & tactile inputs",
       "summary": "Buttons, toggles, pickers and fields with real pressed states and no layout jump.",
       "order": 1,
-      "count": 32
+      "count": 33
     },
     {
       "id": "navigation",
@@ -38,14 +38,14 @@
       "title": "Overlays & power-user patterns",
       "summary": "Palettes, menus, popovers and dialogs built on native <dialog>, the Popover API and CSS anchor positioning.",
       "order": 4,
-      "count": 17
+      "count": 18
     },
     {
       "id": "data",
       "title": "Data & layout primitives",
       "summary": "Tables, lists, grids and blocks for showing real data cleanly, with tabular numbers everywhere.",
       "order": 5,
-      "count": 25
+      "count": 32
     },
     {
       "id": "motion",
@@ -1470,6 +1470,36 @@
       "path": "components/ui/controls/select-menu"
     },
     {
+      "id": "pricing-calculator",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Pricing calculator",
+      "summary": "Sliders for seats and usage, a monthly/yearly switch, and the total with the sum written out.",
+      "aliases": [
+        "price estimator",
+        "cost calculator",
+        "usage pricing slider",
+        "how much will it cost",
+        "quote calculator"
+      ],
+      "pattern": "Range inputs + <output>",
+      "states": [
+        "monthly",
+        "yearly",
+        "min",
+        "max"
+      ],
+      "react": "PricingCalculator",
+      "deps": [],
+      "files": [
+        "components/ui/controls/pricing-calculator/pricing-calculator.css",
+        "components/ui/controls/pricing-calculator/pricing-calculator.html",
+        "components/ui/controls/pricing-calculator/pricing-calculator.react.tsx",
+        "components/ui/controls/pricing-calculator/pricing-calculator.ts"
+      ],
+      "path": "components/ui/controls/pricing-calculator"
+    },
+    {
       "id": "data-table",
       "kind": "ui",
       "family": "data",
@@ -2181,6 +2211,209 @@
         "components/ui/data/json-viewer/json-viewer.ts"
       ],
       "path": "components/ui/data/json-viewer"
+    },
+    {
+      "id": "month-calendar",
+      "kind": "ui",
+      "family": "data",
+      "name": "Month calendar",
+      "summary": "A month grid with colour-tagged events per day; arrows move by day and week, Enter shows the day.",
+      "aliases": [
+        "event calendar",
+        "month view",
+        "schedule grid",
+        "calendar with events",
+        "planner"
+      ],
+      "pattern": "WAI-ARIA Grid",
+      "states": [
+        "today",
+        "selected day",
+        "busy day",
+        "narrow (dots)"
+      ],
+      "react": "MonthCalendar",
+      "deps": [],
+      "files": [
+        "components/ui/data/month-calendar/month-calendar.css",
+        "components/ui/data/month-calendar/month-calendar.html",
+        "components/ui/data/month-calendar/month-calendar.react.tsx",
+        "components/ui/data/month-calendar/month-calendar.ts"
+      ],
+      "path": "components/ui/data/month-calendar"
+    },
+    {
+      "id": "order-summary",
+      "kind": "ui",
+      "family": "data",
+      "name": "Order summary",
+      "summary": "Line items, a promo code that recalculates VAT and total, and one clear action.",
+      "aliases": [
+        "checkout summary",
+        "cart total",
+        "basket summary",
+        "invoice preview",
+        "price breakdown"
+      ],
+      "pattern": "<dl> totals + <form> promo",
+      "states": [
+        "default",
+        "code applied",
+        "invalid code"
+      ],
+      "react": "OrderSummary",
+      "deps": [],
+      "files": [
+        "components/ui/data/order-summary/order-summary.css",
+        "components/ui/data/order-summary/order-summary.html",
+        "components/ui/data/order-summary/order-summary.react.tsx",
+        "components/ui/data/order-summary/order-summary.ts"
+      ],
+      "path": "components/ui/data/order-summary"
+    },
+    {
+      "id": "product-card",
+      "kind": "ui",
+      "family": "data",
+      "name": "Product card",
+      "summary": "Shop card with image, favourite, sale price, colour swatches that recolour the item and Add to basket.",
+      "aliases": [
+        "shop card",
+        "ecommerce product tile",
+        "item card",
+        "store listing",
+        "product thumbnail"
+      ],
+      "pattern": "<article> + radio swatches",
+      "states": [
+        "default",
+        "favourited",
+        "added",
+        "on sale"
+      ],
+      "react": "ProductCard",
+      "deps": [],
+      "files": [
+        "components/ui/data/product-card/product-card.css",
+        "components/ui/data/product-card/product-card.html",
+        "components/ui/data/product-card/product-card.react.tsx",
+        "components/ui/data/product-card/product-card.ts"
+      ],
+      "path": "components/ui/data/product-card"
+    },
+    {
+      "id": "comment-thread",
+      "kind": "ui",
+      "family": "data",
+      "name": "Comment thread",
+      "summary": "Comments with one level of replies on a thin rail, +1 reactions and an inline reply box.",
+      "aliases": [
+        "comments section",
+        "discussion thread",
+        "replies",
+        "threaded comments",
+        "feedback thread"
+      ],
+      "pattern": "Nested lists + forms",
+      "states": [
+        "default",
+        "reacted",
+        "replying",
+        "new comment"
+      ],
+      "react": "CommentThread",
+      "deps": [],
+      "files": [
+        "components/ui/data/comment-thread/comment-thread.css",
+        "components/ui/data/comment-thread/comment-thread.html",
+        "components/ui/data/comment-thread/comment-thread.react.tsx",
+        "components/ui/data/comment-thread/comment-thread.ts"
+      ],
+      "path": "components/ui/data/comment-thread"
+    },
+    {
+      "id": "activity-feed",
+      "kind": "ui",
+      "family": "data",
+      "name": "Activity feed",
+      "summary": "Recent events as one-line sentences on a thin rail, with an icon per kind and the time on the right.",
+      "aliases": [
+        "activity log",
+        "recent activity",
+        "audit trail",
+        "event feed",
+        "history list"
+      ],
+      "pattern": "<ol> timeline",
+      "states": [
+        "default",
+        "status event"
+      ],
+      "react": "ActivityFeed",
+      "deps": [],
+      "files": [
+        "components/ui/data/activity-feed/activity-feed.css",
+        "components/ui/data/activity-feed/activity-feed.html",
+        "components/ui/data/activity-feed/activity-feed.react.tsx"
+      ],
+      "path": "components/ui/data/activity-feed"
+    },
+    {
+      "id": "delivery-tracker",
+      "kind": "ui",
+      "family": "data",
+      "name": "Delivery tracker",
+      "summary": "The arrival promise as the heading, then order steps on one progress line with times.",
+      "aliases": [
+        "order tracking",
+        "shipping progress",
+        "package status",
+        "delivery steps",
+        "order timeline"
+      ],
+      "pattern": "<ol> + aria-current=\"step\"",
+      "states": [
+        "in transit",
+        "delivered",
+        "vertical on narrow"
+      ],
+      "react": "DeliveryTracker",
+      "deps": [],
+      "files": [
+        "components/ui/data/delivery-tracker/delivery-tracker.css",
+        "components/ui/data/delivery-tracker/delivery-tracker.html",
+        "components/ui/data/delivery-tracker/delivery-tracker.react.tsx"
+      ],
+      "path": "components/ui/data/delivery-tracker"
+    },
+    {
+      "id": "search-results",
+      "kind": "ui",
+      "family": "data",
+      "name": "Search results",
+      "summary": "The query and count as the heading, kind filters, and rows with the matched words highlighted.",
+      "aliases": [
+        "search page",
+        "results list",
+        "search hits",
+        "find results",
+        "site search results"
+      ],
+      "pattern": "<ol> of links + <mark>",
+      "states": [
+        "results",
+        "filtered",
+        "few results"
+      ],
+      "react": "SearchResults",
+      "deps": [],
+      "files": [
+        "components/ui/data/search-results/search-results.css",
+        "components/ui/data/search-results/search-results.html",
+        "components/ui/data/search-results/search-results.react.tsx",
+        "components/ui/data/search-results/search-results.ts"
+      ],
+      "path": "components/ui/data/search-results"
     },
     {
       "id": "count-up",
@@ -4043,6 +4276,35 @@
         "components/ui/overlays/confirm-popover/confirm-popover.ts"
       ],
       "path": "components/ui/overlays/confirm-popover"
+    },
+    {
+      "id": "shortcuts-sheet",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Shortcuts sheet",
+      "summary": "Press ? for every keyboard shortcut, grouped and filterable, in a calm dialog.",
+      "aliases": [
+        "keyboard shortcuts help",
+        "hotkeys list",
+        "press question mark",
+        "cheat sheet dialog",
+        "shortcut reference"
+      ],
+      "pattern": "Modal dialog + filter",
+      "states": [
+        "closed",
+        "open",
+        "filtered"
+      ],
+      "react": "ShortcutsSheet",
+      "deps": [],
+      "files": [
+        "components/ui/overlays/shortcuts-sheet/shortcuts-sheet.css",
+        "components/ui/overlays/shortcuts-sheet/shortcuts-sheet.html",
+        "components/ui/overlays/shortcuts-sheet/shortcuts-sheet.react.tsx",
+        "components/ui/overlays/shortcuts-sheet/shortcuts-sheet.ts"
+      ],
+      "path": "components/ui/overlays/shortcuts-sheet"
     }
   ],
   "charts": [
@@ -6546,6 +6808,48 @@
       "radius": "soft",
       "useFor": "Journaling, meditation, reading apps, personal sites.",
       "notTo": "Minimal, which keeps borders and normal weights; zen removes both.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "tonal",
+      "kind": "style",
+      "name": "Tonal",
+      "summary": "Surfaces tinted with the accent instead of grey, pill buttons, big corners and no borders.",
+      "aliases": [
+        "material you look",
+        "tinted cards",
+        "tonal buttons",
+        "android modern ui"
+      ],
+      "palette": "porcelain-teal",
+      "mode": "light",
+      "typography": "geometric",
+      "radius": "soft",
+      "useFor": "Mobile-first apps, Android-leaning products, friendly consumer tools.",
+      "notTo": "Nordic, which uses neutral grey fills; tonal tints everything with the accent.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "system",
+      "kind": "style",
+      "name": "System",
+      "summary": "Grouped, inset lists on a grey ground, translucent bars, quiet separators and bold large titles.",
+      "aliases": [
+        "ios style",
+        "apple settings look",
+        "native app ui",
+        "grouped list design"
+      ],
+      "palette": "ice-cobalt",
+      "mode": "light",
+      "typography": "precision",
+      "radius": "soft",
+      "useFor": "Settings screens, mobile web apps, companion apps for native products.",
+      "notTo": "Enterprise, which is denser and squarer; system follows phone conventions.",
       "files": [
         "tokens/styles/styles.css"
       ]

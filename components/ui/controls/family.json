@@ -2285,6 +2285,75 @@
         ]
       ],
       "added": 5
+    },
+    {
+      "id": "pricing-calculator",
+      "name": "Pricing calculator",
+      "summary": "Sliders for seats and usage, a monthly/yearly switch, and the total with the sum written out.",
+      "pattern": "Range inputs + <output>",
+      "states": [
+        "monthly",
+        "yearly",
+        "min",
+        "max"
+      ],
+      "aliases": [
+        "price estimator",
+        "cost calculator",
+        "usage pricing slider",
+        "how much will it cost",
+        "quote calculator"
+      ],
+      "react": "PricingCalculator",
+      "api": "<input type=\"range\"> + <output>",
+      "w": 400,
+      "preview": [
+        [
+          "click",
+          "input[value=\"m\"]"
+        ]
+      ],
+      "called": [
+        "slider that shows how much it costs",
+        "pricing estimator with seats",
+        "usage based price calculator",
+        "cost slider on pricing page"
+      ],
+      "anatomy": [
+        {
+          "sel": "label[for=\"lt-pc-seats\"] output",
+          "name": "Live value",
+          "api": "<output for>",
+          "text": "The number next to its label, not on the thumb."
+        },
+        {
+          "sel": "[data-part=\"total\"]",
+          "name": "Total",
+          "api": "aria-live",
+          "text": "Large and tabular; updates as you drag."
+        },
+        {
+          "sel": "[data-part=\"breakdown\"]",
+          "name": "The sum",
+          "api": "",
+          "text": "How the total was worked out, so it can be trusted."
+        }
+      ],
+      "prompt": "Add a pricing calculator: two labelled range sliders (seats, usage) with live <output> values beside the labels, a monthly/yearly pill switch with the saving shown, and a result area with a large tabular total, the period, and the sum written out (\"12 seats × £19 + 5m rows × £17\").",
+      "debug": "Debug my price calculator. Rule out: totals that jump width while dragging; a total with no breakdown; VAT surprises; sliders with no visible value or keyboard step. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<input type=\"range\"> + <output>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<PricingCalculator>",
+          "React"
+        ]
+      ],
+      "added": 6
     }
   ]
 }

@@ -1243,6 +1243,74 @@
         ]
       ],
       "added": 5
+    },
+    {
+      "id": "shortcuts-sheet",
+      "name": "Shortcuts sheet",
+      "summary": "Press ? for every keyboard shortcut, grouped and filterable, in a calm dialog.",
+      "pattern": "Modal dialog + filter",
+      "states": [
+        "closed",
+        "open",
+        "filtered"
+      ],
+      "aliases": [
+        "keyboard shortcuts help",
+        "hotkeys list",
+        "press question mark",
+        "cheat sheet dialog",
+        "shortcut reference"
+      ],
+      "react": "ShortcutsSheet",
+      "api": "\"?\" opens · <kbd>",
+      "w": 560,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"open\"]"
+        ]
+      ],
+      "called": [
+        "press question mark to see shortcuts",
+        "list of keyboard shortcuts popup",
+        "hotkeys help dialog",
+        "shortcut cheat sheet"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"filter\"]",
+          "name": "Filter",
+          "api": "type=\"search\"",
+          "text": "Type \"save\" to find it."
+        },
+        {
+          "sel": "section:first-child h4",
+          "name": "Group",
+          "api": "",
+          "text": "General, Navigation, Editing."
+        },
+        {
+          "sel": "section:first-child dd",
+          "name": "Keys",
+          "api": "<kbd>",
+          "text": "One cap per key, sequences spaced."
+        }
+      ],
+      "prompt": "Add a keyboard shortcuts sheet: \"?\" (ignored while typing in a field) opens a dialog with a filter box and shortcuts grouped in two columns (General, Navigation, Editing), each row a label and <kbd> caps; filtering hides empty groups; Esc closes and returns focus.",
+      "debug": "Debug my shortcuts sheet. Rule out: \"?\" firing while typing in a text field; shortcuts listed that do not exist; Ctrl vs ⌘ not matched to the platform; no way to find the sheet without knowing \"?\". The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<dialog> + <kbd>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ShortcutsSheet groups>",
+          "React"
+        ]
+      ],
+      "added": 6
     }
   ]
 }

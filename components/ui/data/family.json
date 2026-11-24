@@ -1567,6 +1567,465 @@
         ]
       ],
       "added": 5
+    },
+    {
+      "id": "month-calendar",
+      "name": "Month calendar",
+      "summary": "A month grid with colour-tagged events per day; arrows move by day and week, Enter shows the day.",
+      "pattern": "WAI-ARIA Grid",
+      "states": [
+        "today",
+        "selected day",
+        "busy day",
+        "narrow (dots)"
+      ],
+      "aliases": [
+        "event calendar",
+        "month view",
+        "schedule grid",
+        "calendar with events",
+        "planner"
+      ],
+      "react": "MonthCalendar",
+      "api": "role=\"grid\"",
+      "w": 760,
+      "called": [
+        "calendar month with meetings in the boxes",
+        "schedule view",
+        "monthly planner grid",
+        "events calendar"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-today] [data-part=\"day\"]",
+          "name": "Today",
+          "api": "aria-current=\"date\"",
+          "text": "Filled circle; the only accent fill."
+        },
+        {
+          "sel": "td ul li",
+          "name": "Event",
+          "api": "",
+          "text": "Coloured edge plus the title; dots when narrow."
+        },
+        {
+          "sel": "[data-part=\"sel\"]",
+          "name": "Day summary",
+          "api": "aria-live",
+          "text": "Reads the selected day's events aloud."
+        }
+      ],
+      "prompt": "Add a month calendar: a header with month and Previous/Today/Next, a 7-column table with weekday headers, out-of-month cells tinted, today as a filled accent circle with aria-current=\"date\", events as small rows with a coloured left edge (dots under 560px), one tab stop with arrows by day/week, and a live line summarising the selected day.",
+      "debug": "Debug my calendar. Rule out: every day a tab stop; events cut off with no way to see them; weeks starting on Sunday when users expect Monday (make it a setting); colour as the only event label. The symptom:",
+      "code": [
+        [
+          "FullCalendar",
+          "dayGridMonth",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<MonthCalendar events>",
+          "React"
+        ]
+      ],
+      "added": 6
+    },
+    {
+      "id": "order-summary",
+      "name": "Order summary",
+      "summary": "Line items, a promo code that recalculates VAT and total, and one clear action.",
+      "pattern": "<dl> totals + <form> promo",
+      "states": [
+        "default",
+        "code applied",
+        "invalid code"
+      ],
+      "aliases": [
+        "checkout summary",
+        "cart total",
+        "basket summary",
+        "invoice preview",
+        "price breakdown"
+      ],
+      "react": "OrderSummary",
+      "api": "<data value> · tabular-nums",
+      "w": 380,
+      "preview": [
+        [
+          "type",
+          "#lt-os-code",
+          "team10"
+        ],
+        [
+          "click",
+          "[data-part=\"promo\"] button"
+        ]
+      ],
+      "called": [
+        "checkout box with subtotal and total",
+        "cart summary with promo code",
+        "price breakdown before paying",
+        "order total card"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:first-child",
+          "name": "Line item",
+          "api": "<data value>",
+          "text": "Name, what it is, price; machine-readable value."
+        },
+        {
+          "sel": "[data-part=\"promo\"]",
+          "name": "Promo code",
+          "api": "",
+          "text": "Optional and quiet; says clearly if a code fails."
+        },
+        {
+          "sel": "[data-part=\"total-row\"]",
+          "name": "Total",
+          "api": "tabular-nums",
+          "text": "Biggest number, with the period it covers."
+        }
+      ],
+      "prompt": "Add an order summary card: line items with a detail line and right-aligned tabular prices, a small promo-code form that explains failures and shows the discount as its own row, subtotal, VAT and a large total (\"per month\"), one full-width primary button and a reassurance line about when payment is taken.",
+      "debug": "Debug my order summary. Rule out: totals that change width as they update (tabular-nums); VAT hidden until the last step; a promo field more prominent than the pay button; floating-point rounding in money (use integer pence). The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<dl> + <data value>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<OrderSummary items>",
+          "React"
+        ]
+      ],
+      "added": 6
+    },
+    {
+      "id": "product-card",
+      "name": "Product card",
+      "summary": "Shop card with image, favourite, sale price, colour swatches that recolour the item and Add to basket.",
+      "pattern": "<article> + radio swatches",
+      "states": [
+        "default",
+        "favourited",
+        "added",
+        "on sale"
+      ],
+      "aliases": [
+        "shop card",
+        "ecommerce product tile",
+        "item card",
+        "store listing",
+        "product thumbnail"
+      ],
+      "react": "ProductCard",
+      "api": "<article> + <s> price",
+      "w": 280,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"sw\"]:nth-of-type(3) input"
+        ]
+      ],
+      "called": [
+        "product box in an online shop",
+        "item card with price and add to cart",
+        "shop tile with colour dots",
+        "ecommerce card"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"fav\"]",
+          "name": "Favourite",
+          "api": "aria-pressed",
+          "text": "Names the product it saves."
+        },
+        {
+          "sel": "[data-part=\"price\"]",
+          "name": "Price",
+          "api": "<s aria-label>",
+          "text": "Sale price first; the old one struck through and announced as \"was\"."
+        },
+        {
+          "sel": "fieldset",
+          "name": "Colours",
+          "api": "radio group",
+          "text": "Swatches change the picture and say the colour name."
+        }
+      ],
+      "prompt": "Add a product card: square image area with a \"New\" tag and a round favourite button (aria-pressed), the product name as a link, a one-line spec, price with a struck-through old price announced as \"was £60\", colour swatches as radios that recolour the image and show the colour name, and a full-width secondary \"Add to basket\" that confirms in place.",
+      "debug": "Debug my product card. Rule out: the whole card and the button both being links; prices with no \"was\" for screen readers; swatches with no names; favourite icons with no accessible name. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<article> + <input type=\"radio\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ProductCard>",
+          "React"
+        ]
+      ],
+      "added": 6
+    },
+    {
+      "id": "comment-thread",
+      "name": "Comment thread",
+      "summary": "Comments with one level of replies on a thin rail, +1 reactions and an inline reply box.",
+      "pattern": "Nested lists + forms",
+      "states": [
+        "default",
+        "reacted",
+        "replying",
+        "new comment"
+      ],
+      "aliases": [
+        "comments section",
+        "discussion thread",
+        "replies",
+        "threaded comments",
+        "feedback thread"
+      ],
+      "react": "CommentThread",
+      "api": "<ul> nested once",
+      "w": 520,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"reply\"]"
+        ]
+      ],
+      "called": [
+        "comments with replies indented",
+        "discussion under a document",
+        "thread with reply buttons",
+        "comment section with likes"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"replies\"]",
+          "name": "Replies",
+          "api": "",
+          "text": "One level only, on a thin rail."
+        },
+        {
+          "sel": "[data-part=\"react\"]",
+          "name": "+1",
+          "api": "aria-pressed",
+          "text": "A count, not a heart; toggles."
+        },
+        {
+          "sel": "[data-part=\"new\"]",
+          "name": "New comment",
+          "api": "",
+          "text": "At the end, where the conversation continues."
+        }
+      ],
+      "prompt": "Add a comment thread: a heading with the count, comments with avatar, name, relative time and text, replies one level deep on a 2px left rail, +1 reaction toggles with counts, Reply opening an inline form under that comment, and a new-comment box at the bottom. Escape all user text.",
+      "debug": "Debug my comments. Rule out: replies nested five levels deep; user text inserted as HTML (XSS); reactions with no count or pressed state; a Reply that opens a modal. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "nested <ul>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<CommentThread comments>",
+          "React"
+        ]
+      ],
+      "added": 6
+    },
+    {
+      "id": "activity-feed",
+      "name": "Activity feed",
+      "summary": "Recent events as one-line sentences on a thin rail, with an icon per kind and the time on the right.",
+      "pattern": "<ol> timeline",
+      "states": [
+        "default",
+        "status event"
+      ],
+      "aliases": [
+        "activity log",
+        "recent activity",
+        "audit trail",
+        "event feed",
+        "history list"
+      ],
+      "react": "ActivityFeed",
+      "api": "<ol> + rail",
+      "w": 460,
+      "called": [
+        "recent activity list",
+        "who did what feed",
+        "audit log on a dashboard",
+        "event history"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:first-child [data-part=\"dot\"]",
+          "name": "Event icon",
+          "api": "aria-hidden",
+          "text": "Kind of event; status events tinted."
+        },
+        {
+          "sel": "li:nth-child(2) p",
+          "name": "Sentence",
+          "api": "",
+          "text": "Who did what to which thing; nouns in bold."
+        },
+        {
+          "sel": "li:first-child time",
+          "name": "Time",
+          "api": "<time>",
+          "text": "Relative, aligned right."
+        }
+      ],
+      "prompt": "Add an activity feed: heading with \"View all\", then an ordered list on a thin vertical rail; each event has a 28px round icon (status events tinted green or amber), one sentence with the actor and object in bold, and a right-aligned relative time.",
+      "debug": "Debug my activity feed. Rule out: every event a card; colour as the only status signal; absolute timestamps everywhere; sentences without the object (\"Ana edited\"). The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ol>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ActivityFeed items>",
+          "React"
+        ]
+      ],
+      "added": 6
+    },
+    {
+      "id": "delivery-tracker",
+      "name": "Delivery tracker",
+      "summary": "The arrival promise as the heading, then order steps on one progress line with times.",
+      "pattern": "<ol> + aria-current=\"step\"",
+      "states": [
+        "in transit",
+        "delivered",
+        "vertical on narrow"
+      ],
+      "aliases": [
+        "order tracking",
+        "shipping progress",
+        "package status",
+        "delivery steps",
+        "order timeline"
+      ],
+      "react": "DeliveryTracker",
+      "api": "aria-current=\"step\"",
+      "w": 620,
+      "called": [
+        "where is my order progress bar",
+        "shipping status steps",
+        "package tracking timeline",
+        "order progress with dots"
+      ],
+      "anatomy": [
+        {
+          "sel": "h3",
+          "name": "Promise",
+          "api": "",
+          "text": "The answer first: when it arrives."
+        },
+        {
+          "sel": "li[aria-current]",
+          "name": "Current step",
+          "api": "aria-current=\"step\"",
+          "text": "Ringed dot, filled line up to it."
+        },
+        {
+          "sel": "li:last-child span:last-child",
+          "name": "Expected time",
+          "api": "",
+          "text": "A window, not a vague \"soon\"."
+        }
+      ],
+      "prompt": "Add a delivery tracker: the heading states the arrival (\"Arriving today\") with the time window and order number below and a secondary \"Track on map\"; then four steps on one horizontal line (vertical when narrow) with filled green segments up to the current step, a ringed current dot (aria-current=\"step\") and a time under each label.",
+      "debug": "Debug my tracker. Rule out: the arrival time hidden under the steps; progress shown only in colour; no time window; the horizontal line overflowing on phones. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ol>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<DeliveryTracker steps>",
+          "React"
+        ]
+      ],
+      "added": 6
+    },
+    {
+      "id": "search-results",
+      "name": "Search results",
+      "summary": "The query and count as the heading, kind filters, and rows with the matched words highlighted.",
+      "pattern": "<ol> of links + <mark>",
+      "states": [
+        "results",
+        "filtered",
+        "few results"
+      ],
+      "aliases": [
+        "search page",
+        "results list",
+        "search hits",
+        "find results",
+        "site search results"
+      ],
+      "react": "SearchResults",
+      "api": "<mark>",
+      "w": 560,
+      "called": [
+        "list of search results with highlighted words",
+        "results page with filters",
+        "search hits with snippets",
+        "found results list"
+      ],
+      "anatomy": [
+        {
+          "sel": "h3",
+          "name": "Query and count",
+          "api": "",
+          "text": "Echoes exactly what was searched."
+        },
+        {
+          "sel": "li:first-child mark",
+          "name": "Match",
+          "api": "<mark>",
+          "text": "Highlights the words that matched."
+        },
+        {
+          "sel": "[data-part=\"empty-hint\"]",
+          "name": "Next tries",
+          "api": "",
+          "text": "Suggests other words before the list ends."
+        }
+      ],
+      "prompt": "Add a search results view: heading \"3 results for “forecast”\", pill tabs filtering by kind with counts, then a list where each whole row is a link with a kind label, title, meta line and a one-line snippet with matches in <mark>; end with suggested alternative queries.",
+      "debug": "Debug my results. Rule out: the query not echoed; highlights by colour only without <mark>; several links per row; no suggestion when results are few. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ol> + <mark>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SearchResults hits>",
+          "React"
+        ]
+      ],
+      "added": 6
     }
   ]
 }

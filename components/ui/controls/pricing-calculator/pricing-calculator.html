@@ -1,0 +1,9 @@
+<section class="lt-calc" data-lt="pricing-calculator" aria-labelledby="lt-pc-title">
+  <h3 id="lt-pc-title">Estimate your bill</h3>
+  <label for="lt-pc-seats"><span>Seats</span><output data-part="seats-out" for="lt-pc-seats">12</output></label>
+  <input id="lt-pc-seats" type="range" min="1" max="100" value="12" data-part="seats">
+  <label for="lt-pc-rows"><span>Rows synced per month</span><output data-part="rows-out" for="lt-pc-rows">5 million</output></label>
+  <input id="lt-pc-rows" type="range" min="1" max="50" value="5" data-part="rows">
+  <fieldset data-part="period"><legend class="lt-visually-hidden">Billing</legend><label><input type="radio" name="lt-pc-p" value="m"> Monthly</label><label><input type="radio" name="lt-pc-p" value="y" checked> Yearly <span>−20%</span></label></fieldset>
+  <div data-part="result" aria-live="polite"><p><b data-part="total">£313</b><span>per month</span></p><p data-part="breakdown">12 seats × £19 + 5m rows × £17</p></div>
+</section>

@@ -804,3 +804,46 @@ test.describe('added in 1.0 (batch 3)', () => {
     await expect(s.locator('[data-part="msg"]')).toContainText('Please fill in: name, work email, message');
   });
 });
+
+test.describe('added in 1.0 (batch 4)', () => {
+  test('month calendar: arrows move by week, click reads the day', async ({ page }) => {
+    const s = await solo(page, 'month-calendar');
+    const days = s.locator('[data-part="day"]');
+    await days.nth(0).focus();
+    await page.keyboard.press('ArrowDown');
+    await expect(days.nth(7)).toBeFocused();
+    await days.nth(8).click();
+    await expect(s.locator('[data-part="sel"]')).toContainText('Board meeting');
+  });
+  test('order summary: valid code adds a discount row and lowers the total', async ({ page }) => {
+    const s = await solo(page, 'order-summary');
+    await s.locator('#lt-os-code').fill('team10');
+    await s.locator('[data-part="promo"] button').click();
+    await expect(s.locator('[data-part="discount-row"]')).toBeVisible();
+    await expect(s.locator('[data-part="total"]')).toHaveText('£354.24');
+  });
+  test('pricing calculator updates the total and the sum', async ({ page }) => {
+    const s = await solo(page, 'pricing-calculator');
+    await s.locator('input[value="m"]').check({ force: true });
+    await expect(s.locator('[data-part="total"]')).toHaveText('£373');
+    await expect(s.locator('[data-part="breakdown"]')).toContainText('12 seats × £24');
+  });
+  test('comment thread: reply posts under the comment, text is escaped', async ({ page }) => {
+    const s = await solo(page, 'comment-thread');
+    await s.locator('[data-part="reply"]').first().click();
+    await s.locator('[data-part="reply-form"] textarea').fill('<b>ok</b>');
+    await s.locator('[data-part="reply-form"] button').click();
+    await expect(s.locator('[data-part="replies"]').first()).toContainText('<b>ok</b>');
+  });
+  test('shortcuts sheet filters rows', async ({ page }) => {
+    const s = await solo(page, 'shortcuts-sheet');
+    await s.locator('[data-part="open"]').click();
+    await s.locator('dialog input').fill('save');
+    await expect(s.locator('dialog dl > div:visible')).toHaveCount(1);
+  });
+  test('search results tabs filter by kind', async ({ page }) => {
+    const s = await solo(page, 'search-results');
+    await s.locator('[data-kind="chart"]').click();
+    await expect(s.locator('ol > li:visible')).toHaveCount(1);
+  });
+});

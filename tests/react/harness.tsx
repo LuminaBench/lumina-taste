@@ -64,6 +64,15 @@ import { ConfirmPopover } from '../../components/ui/overlays/confirm-popover/con
 import { IntegrationsGrid } from '../../components/ui/blocks/integrations-grid/integrations-grid.react';
 import { ContactSection } from '../../components/ui/blocks/contact-section/contact-section.react';
 import { BlogGrid } from '../../components/ui/blocks/blog-grid/blog-grid.react';
+import { MonthCalendar } from '../../components/ui/data/month-calendar/month-calendar.react';
+import { OrderSummary } from '../../components/ui/data/order-summary/order-summary.react';
+import { ProductCard } from '../../components/ui/data/product-card/product-card.react';
+import { CommentThread } from '../../components/ui/data/comment-thread/comment-thread.react';
+import { ActivityFeed } from '../../components/ui/data/activity-feed/activity-feed.react';
+import { DeliveryTracker } from '../../components/ui/data/delivery-tracker/delivery-tracker.react';
+import { PricingCalculator } from '../../components/ui/controls/pricing-calculator/pricing-calculator.react';
+import { ShortcutsSheet } from '../../components/ui/overlays/shortcuts-sheet/shortcuts-sheet.react';
+import { SearchResults } from '../../components/ui/data/search-results/search-results.react';
 import { Disclosure } from '../../components/ui/controls/disclosure-chevron/disclosure-chevron.react';
 import { Accordion } from '../../components/ui/controls/accordion/accordion.react';
 import { TreeView } from '../../components/ui/controls/tree-view/tree-view.react';
@@ -352,6 +361,15 @@ function App() {
       <Case id="integrations"><IntegrationsGrid title="Integrations" items={[{ name: 'Postgres', kind: 'Database', href: '#pg' }]} /></Case>
       <Case id="contact"><ContactSection email="hello@example.com" onSend={() => log.push('sent')} /></Case>
       <Case id="blog"><BlogGrid posts={[{ kind: 'Guide', title: 'Post', href: '#p', date: '1 Nov', read: '3 min' }]} /></Case>
+      <Case id="month"><MonthCalendar title="December 2026" startWeekday={1} days={31} today={1} events={[{ day: 9, title: 'Board' }]} onSelect={(d) => log.push(`day:${d}`)} /></Case>
+      <Case id="order"><OrderSummary items={[{ name: 'Team plan', detail: '12 seats', amount: 288 }]} /></Case>
+      <Case id="product"><ProductCard name="Tote" href="#t" price="£48" was="£60" colours={[{ name: 'Sand', value: 'oklch(0.86 0.04 80)' }]} /></Case>
+      <Case id="comments"><CommentThread comments={[{ id: '1', name: 'Ana', initials: 'AL', time: '2h', text: 'Looks good.' }]} onComment={(t) => log.push(`comment:${t}`)} /></Case>
+      <Case id="activity"><ActivityFeed items={[{ id: '1', icon: 'check-circle', tone: 'pos', text: 'Deploy finished', time: '09:41' }]} /></Case>
+      <Case id="tracker"><DeliveryTracker title="Arriving today" steps={[{ label: 'Ordered', when: '2 Dec', done: true }, { label: 'Delivered', when: 'Today', current: true }]} /></Case>
+      <Case id="calc"><PricingCalculator onChange={(t) => log.push(`total:${t.total}`)} /></Case>
+      <Case id="shortcuts"><ShortcutsSheet open={false} onClose={() => {}} groups={[{ title: 'General', items: [{ label: 'Search', keys: ['⌘', 'K'] }] }]} /><span>closed</span></Case>
+      <Case id="results"><SearchResults query="forecast" hits={[{ kind: 'Doc', title: 'Q4', meta: 'Finance', snippet: 'the forecast', href: '#q' }]} /></Case>
       <Case id="stagger"><Stagger><span>One</span><span>Two</span></Stagger></Case>
     </ToastProvider>
   );

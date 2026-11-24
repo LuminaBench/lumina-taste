@@ -1,0 +1,23 @@
+.lt-shortcuts-demo .lt-btn .lt-kbd { margin-right: 2px; }
+@scope (.lt-shortcuts) {
+  :scope { width: min(560px, calc(100vw - 32px)); max-height: min(520px, calc(100dvh - 80px)); padding: 0; border: 0; border-radius: var(--radius-xl); background: var(--bg-surface-1); color: var(--text-primary); box-shadow: var(--shadow-overlay); overflow: hidden; }
+  :scope[open] { display: flex; flex-direction: column; animation: lt-ks-in var(--dur-3) var(--ease-out); }
+  :scope::backdrop { background: var(--scrim); }
+  header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 8px; }
+  h3 { margin: 0; font-size: var(--step-0); font-weight: 650; }
+  [data-part="close"] { display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-secondary); cursor: pointer; }
+  [data-part="close"]:hover { background: var(--bg-surface-2); }
+  [data-part="filter"] { display: flex; align-items: center; gap: 8px; margin: 0 16px 8px; padding: 0 10px; height: var(--control-h-sm); border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-md); color: var(--text-muted); }
+  [data-part="filter"]:has(input:focus-visible) { border-color: var(--focus-ring); box-shadow: var(--field-ring); }
+  [data-part="filter"] input { flex: 1; min-width: 0; border: 0; background: none; color: var(--text-primary); font-size: var(--text-ui-sm); outline: none; box-shadow: none; }
+  [data-part="groups"] { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 24px; padding: 4px 16px 16px; overflow-y: auto; }
+  @container (max-width: 480px) { [data-part="groups"] { grid-template-columns: 1fr; } }
+  section[hidden] { display: none; }
+  h4 { margin: 10px 0 4px; color: var(--text-muted); font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; }
+  dl { display: grid; margin: 0; }
+  dl > div { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: var(--bw) var(--border-style) var(--border-hairline); font-size: var(--text-ui-sm); }
+  dl > div[hidden] { display: none; }
+  dd { display: flex; gap: 3px; margin: 0; }
+}
+@keyframes lt-ks-in { from { opacity: 0; scale: 0.98; } }
+[data-contained] .lt-shortcuts[data-contained-open] { position: absolute; inset: 0; margin: auto; height: max-content; }

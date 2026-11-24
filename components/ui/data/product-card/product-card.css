@@ -1,0 +1,27 @@
+@scope (.lt-product) {
+  :scope { --c: oklch(0.86 0.04 80); position: relative; display: grid; width: 100%; max-width: 280px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); overflow: hidden; font-size: var(--text-ui); }
+  [data-part="media"] { position: relative; display: grid; place-items: center; aspect-ratio: 1; background: var(--bg-surface-2); }
+  [data-part="shape"] { width: 52%; aspect-ratio: 0.85; border-radius: 10px 10px 18px 18px; background: var(--c); box-shadow: inset 0 -12px 0 color-mix(in oklab, var(--c) 80%, black); transition: background-color var(--dur-3) var(--ease-out), scale var(--dur-3) var(--ease-out); }
+  :scope:hover [data-part="shape"] { scale: 1.04; }
+  [data-part="tag"] { position: absolute; top: 12px; left: 12px; padding: 3px 8px; border-radius: var(--radius-pill); background: var(--bg-surface-1); font-size: var(--text-ui-xs); font-weight: 650; }
+  [data-part="fav"] { position: absolute; top: 10px; right: 10px; display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 0; border-radius: 50%; background: var(--bg-surface-1); color: var(--text-secondary); cursor: pointer; box-shadow: var(--shadow-sm); }
+  [data-part="fav"][aria-pressed="true"] { color: var(--accent-solid); }
+  [data-part="fav"][aria-pressed="true"] svg { fill: currentColor; }
+  [data-part="body"] { display: grid; gap: 6px; padding: 14px 16px 16px; }
+  h3 { margin: 0; font-size: var(--text-ui); font-weight: 650; }
+  h3 a { color: inherit; text-decoration: none; }
+  h3 a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  [data-part="sub"] { margin: 0; color: var(--text-muted); font-size: var(--text-ui-xs); }
+  [data-part="price"] { display: flex; align-items: baseline; gap: 8px; margin: 2px 0; }
+  [data-part="price"] b { font-size: var(--step-1); font-weight: 700; font-variant-numeric: tabular-nums; }
+  s { color: var(--text-muted); font-size: var(--text-ui-sm); }
+  fieldset { display: flex; align-items: center; gap: 8px; margin: 0 0 6px; padding: 0; border: 0; }
+  [data-part="sw"] { position: relative; width: 20px; height: 20px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px oklch(0 0 0 / 0.15); cursor: pointer; }
+  [data-part="sw"] input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+  /* Chosen = a ring drawn with box-shadow; the outline is kept for keyboard focus only. */
+  [data-part="sw"]:has(:checked) { box-shadow: inset 0 0 0 1px oklch(0 0 0 / 0.15), 0 0 0 2px var(--bg-surface-1), 0 0 0 4px var(--text-primary); }
+  [data-part="sw"]:has(:focus-visible) { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 5px; }
+  [data-part="colname"] { margin-left: 4px; color: var(--text-secondary); font-size: var(--text-ui-xs); }
+  [data-part="add"] { width: 100%; }
+  [data-part="add"][data-done] { color: var(--status-positive); }
+}
