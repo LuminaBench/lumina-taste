@@ -1,9 +1,9 @@
 // Taste Profiles 1.0 — one small, deterministic JSON file that pins a product's look.
 // Works in Node (CLI, installers) and in the browser (applyProfile). Zero dependencies.
-import { PALETTES, TYPOGRAPHY } from './options.mjs';
+import { PALETTES, STYLES, TYPOGRAPHY } from './options.mjs';
 
 export const PROFILE_VERSION = 1;
-export const AXES = ['palette', 'mode', 'typography', 'density', 'radius', 'motion', 'overrides', 'installMode', 'attachRoot'];
+export const AXES = ['palette', 'mode', 'typography', 'density', 'radius', 'motion', 'style', 'overrides', 'installMode', 'attachRoot'];
 export const CHOICES = {
   palette: PALETTES.map((p) => p.id),
   mode: ['light', 'dark'],
@@ -11,6 +11,8 @@ export const CHOICES = {
   density: ['spacious', 'balanced', 'dense'],
   radius: ['sharp', 'balanced', 'soft'],
   motion: ['snappy', 'calm', 'reduced'],
+  /** Visual style layer (surfaces, borders, shadows). 'none' is the plain kit. */
+  style: ['none', ...STYLES.map((s) => s.id)],
   installMode: ['greenfield', 'attach'],
 };
 
@@ -22,6 +24,7 @@ export const DEFAULT_PROFILE = Object.freeze({
   density: 'balanced',
   radius: 'balanced',
   motion: 'snappy',
+  style: 'none',
   locks: [],
   overrides: {},
   installMode: 'greenfield',
@@ -62,7 +65,7 @@ export function normalizeProfile(p = {}) {
   n.locks = [...new Set(n.locks ?? [])].sort();
   n.overrides = Object.fromEntries(Object.entries(n.overrides ?? {}).sort(([a], [b]) => a.localeCompare(b)));
   const ordered = {};
-  for (const k of ['profileVersion', 'palette', 'mode', 'typography', 'density', 'radius', 'motion', 'locks', 'overrides', 'installMode', 'attachRoot'])
+  for (const k of ['profileVersion', 'palette', 'mode', 'typography', 'density', 'radius', 'motion', 'style', 'locks', 'overrides', 'installMode', 'attachRoot'])
     ordered[k] = n[k];
   return ordered;
 }
@@ -116,7 +119,18 @@ export function profileAttributes(p) {
     'data-density': n.density,
     'data-radius': n.radius,
     'data-motion': n.motion,
+    ...(n.style !== 'none' ? { 'data-style': n.style } : {}),
   };
+}
+
+/**
+ * Start a profile from a named style: its palette, mode, typography and radius come with it.
+ * Locked axes in `current` are kept.
+ */
+export function profileFromStyle(styleId, current = {}) {
+  const st = STYLES.find((s) => s.id === styleId);
+  if (!st) throw new Error(`Unknown style "${styleId}". Choose one of: ${STYLES.map((s) => s.id).join(', ')}.`);
+  return mergeProfile(current, { style: st.id, palette: st.palette, mode: st.mode, typography: st.typography, radius: st.radius });
 }
 
 /** Browser: apply a profile to <html> (greenfield) or to its attach root. Returns the element. */

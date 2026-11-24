@@ -27,3 +27,15 @@ test('validation rejects unknown values and unsafe overrides', () => {
   const errs = validateProfile({ ...DEFAULT_PROFILE, palette: 'purple-haze', overrides: { 'x': 'red; } body{display:none' }, locks: ['vibes'] });
   assert.equal(errs.length, 3);
 });
+
+test('style axis: defaults to none, a style brings its preset, locks still win', async () => {
+  const { profileFromStyle, profileAttributes, CHOICES } = await import('../../engine/profiles/profile.mjs');
+  assert.equal(DEFAULT_PROFILE.style, 'none');
+  assert.ok(CHOICES.style.includes('swiss') && CHOICES.style.length >= 17);
+  assert.equal(profileAttributes(DEFAULT_PROFILE)['data-style'], undefined);
+  const { profile } = profileFromStyle('neobrutal', { ...DEFAULT_PROFILE, palette: 'navy-sand', locks: ['palette'] });
+  assert.equal(profile.style, 'neobrutal');
+  assert.equal(profile.palette, 'navy-sand');
+  assert.equal(profileAttributes(profile)['data-style'], 'neobrutal');
+  assert.equal(validateProfile({ ...DEFAULT_PROFILE, style: 'vaporwave' }).length, 1);
+});

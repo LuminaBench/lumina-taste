@@ -88,6 +88,28 @@
         "reduced"
       ]
     },
+    "style": {
+      "enum": [
+        "none",
+        "studio",
+        "swiss",
+        "editorial",
+        "neobrutal",
+        "terminal",
+        "glass",
+        "soft",
+        "clay",
+        "retro",
+        "blueprint",
+        "lucid",
+        "flat",
+        "minimal",
+        "paper",
+        "elevated",
+        "newsprint"
+      ],
+      "description": "Visual style layer. 'none' is the plain kit."
+    },
     "locks": {
       "type": "array",
       "uniqueItems": true,

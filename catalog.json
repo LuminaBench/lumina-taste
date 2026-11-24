@@ -8,7 +8,8 @@
     "blueprints": 8,
     "palettes": 18,
     "themes": 36,
-    "typography": 12
+    "typography": 12,
+    "styles": 16
   },
   "families": [
     {
@@ -4952,6 +4953,328 @@
       "webfont": "https://fonts.googleapis.com/css2?family=Nunito:wght@400..800&display=swap",
       "files": [
         "tokens/typography/typography.css"
+      ]
+    }
+  ],
+  "styles": [
+    {
+      "id": "studio",
+      "kind": "style",
+      "name": "Studio",
+      "summary": "Hairline borders, soft surfaces, one accent and almost no shadow. The calm default for products people use all day.",
+      "aliases": [
+        "clean modern app",
+        "calm saas look",
+        "default product ui"
+      ],
+      "palette": "slate-forest",
+      "mode": "light",
+      "typography": "precision",
+      "radius": "balanced",
+      "useFor": "Dashboards, settings, admin tools, most SaaS products.",
+      "notTo": "Minimal, which removes the borders and most of the chrome as well.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "swiss",
+      "kind": "style",
+      "name": "Swiss",
+      "summary": "Square corners, strong black rules, a tight grid and one signal red. Type does the work, decoration does none.",
+      "aliases": [
+        "international typographic style",
+        "big grotesk type and red",
+        "grid poster look"
+      ],
+      "palette": "arctic-red",
+      "mode": "light",
+      "typography": "swiss",
+      "radius": "sharp",
+      "useFor": "Agencies, portfolios, conference sites, editorial product pages.",
+      "notTo": "Brutalism, which also drops decoration but keeps browser-default parts and ignores the grid.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "editorial",
+      "kind": "style",
+      "name": "Editorial",
+      "summary": "Serif display type, thin rules instead of boxes, generous margins. Reads like a well-set magazine.",
+      "aliases": [
+        "magazine look",
+        "serif newspaper style",
+        "long read layout"
+      ],
+      "palette": "paper-ink",
+      "mode": "light",
+      "typography": "editorial",
+      "radius": "sharp",
+      "useFor": "Publications, essays, portfolios, research and annual reports.",
+      "notTo": "Newsprint, which is denser, uses double rules and packs more columns.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "neobrutal",
+      "kind": "style",
+      "name": "Neobrutalism",
+      "summary": "Thick ink outlines, hard offset shadows with zero blur, flat saturated blocks. Buttons physically press down.",
+      "aliases": [
+        "bright blocks with black outlines and hard shadows",
+        "thick borders offset shadow",
+        "gumroad style"
+      ],
+      "palette": "black-signal",
+      "mode": "light",
+      "typography": "geometric",
+      "radius": "balanced",
+      "useFor": "Creator tools, playful consumer apps, launches that want to be remembered.",
+      "notTo": "Brutalism, which uses raw browser defaults and no colour at all.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "terminal",
+      "kind": "style",
+      "name": "Terminal",
+      "summary": "Monospace everywhere, dashed rules, square corners and a phosphor accent on near-black.",
+      "aliases": [
+        "hacker console look",
+        "monospace green on black",
+        "command line ui"
+      ],
+      "palette": "terminal-phosphor",
+      "mode": "dark",
+      "typography": "technical",
+      "radius": "sharp",
+      "useFor": "CLIs, developer tools, infra status pages, changelogs.",
+      "notTo": "Blueprint, which is technical too but uses a drawn grid and blue lines.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "glass",
+      "kind": "style",
+      "name": "Glass",
+      "summary": "Translucent, blurred panels over a soft single-hue glow, with a thin light edge. Calm, not rainbow.",
+      "aliases": [
+        "frosted cards over a soft background",
+        "glassmorphism done calmly",
+        "translucent panels"
+      ],
+      "palette": "charcoal-sky",
+      "mode": "dark",
+      "typography": "geometric",
+      "radius": "soft",
+      "useFor": "Media apps, dashboards over imagery, consumer widgets.",
+      "notTo": "The purple-to-pink gradient hero, which this deliberately avoids.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "soft",
+      "kind": "style",
+      "name": "Soft UI",
+      "summary": "Surfaces share the page colour and lift out of it with paired light and dark shadows. Fields press in.",
+      "aliases": [
+        "soft buttons pushed out of the background",
+        "neumorphism but readable",
+        "pillowy surfaces"
+      ],
+      "palette": "cream-charcoal",
+      "mode": "light",
+      "typography": "humanist",
+      "radius": "soft",
+      "useFor": "Calm consumer apps, smart-home and wellness controls.",
+      "notTo": "Clay, which is puffier, more colourful and uses inner highlights.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "clay",
+      "kind": "style",
+      "name": "Clay",
+      "summary": "Puffy rounded objects with an inner highlight, an inner shade and a soft drop, like modelling clay.",
+      "aliases": [
+        "puffy 3d buttons like play-doh",
+        "claymorphism",
+        "squishy cards"
+      ],
+      "palette": "sage-clay",
+      "mode": "light",
+      "typography": "rounded",
+      "radius": "soft",
+      "useFor": "Kids, habits, games, playful onboarding.",
+      "notTo": "Soft UI, which stays the page colour and avoids inner highlights.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "retro",
+      "kind": "style",
+      "name": "Classic Desktop",
+      "summary": "Bevelled buttons, inset fields and square windows from 1990s desktop software, kept crisp.",
+      "aliases": [
+        "old mac os window",
+        "windows 98 bevel buttons",
+        "platinum ui"
+      ],
+      "palette": "charcoal-sky",
+      "mode": "light",
+      "typography": "dense",
+      "radius": "sharp",
+      "useFor": "Nostalgic products, games, utilities, playful internal tools.",
+      "notTo": "Skeuomorphism, which imitates real materials rather than old software.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "blueprint",
+      "kind": "style",
+      "name": "Blueprint",
+      "summary": "A faint drawn grid behind everything, dashed construction lines and mono labels. Looks measured.",
+      "aliases": [
+        "engineering drawing grid",
+        "technical schematic look",
+        "graph paper ui"
+      ],
+      "palette": "ice-cobalt",
+      "mode": "dark",
+      "typography": "technical",
+      "radius": "sharp",
+      "useFor": "Hardware, infrastructure, API references, architecture diagrams.",
+      "notTo": "Terminal, which has no grid and is all text.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "lucid",
+      "kind": "style",
+      "name": "Lucid Dark",
+      "summary": "Near-black panels with a faint top highlight and a 1px inner edge. Dense, quiet and precise.",
+      "aliases": [
+        "linear style dark app",
+        "premium dark dashboard",
+        "subtle top highlight panels"
+      ],
+      "palette": "charcoal-sky",
+      "mode": "dark",
+      "typography": "precision",
+      "radius": "balanced",
+      "useFor": "Developer tools, issue trackers, pro dashboards.",
+      "notTo": "Glass, which is translucent and blurred.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "flat",
+      "kind": "style",
+      "name": "Flat",
+      "summary": "Solid fills, no borders on surfaces, no shadows, no gradients. Hierarchy comes from colour blocks.",
+      "aliases": [
+        "everything is just solid colors with no shadows",
+        "metro style",
+        "flat design"
+      ],
+      "palette": "ice-cobalt",
+      "mode": "light",
+      "typography": "geometric",
+      "radius": "balanced",
+      "useFor": "Public services, kiosks, simple consumer apps.",
+      "notTo": "Minimal, which keeps borders thin and uses mostly white space.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "minimal",
+      "kind": "style",
+      "name": "Minimal",
+      "summary": "Very few elements, wide spacing, underline fields and text-like buttons. Empty space is the material.",
+      "aliases": [
+        "the page with almost nothing on it",
+        "lots of white space",
+        "quiet luxury website"
+      ],
+      "palette": "cream-charcoal",
+      "mode": "light",
+      "typography": "swiss",
+      "radius": "sharp",
+      "useFor": "Luxury, architecture, fashion, single-product sites.",
+      "notTo": "Flat, which fills areas with solid colour blocks.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "paper",
+      "kind": "style",
+      "name": "Paper",
+      "summary": "A faint paper grain, warm ink and pressed-in labels. Tactile without imitating leather or wood.",
+      "aliases": [
+        "looks like real paper",
+        "letterpress card",
+        "stationery feel"
+      ],
+      "palette": "linen-oxblood",
+      "mode": "light",
+      "typography": "bookish",
+      "radius": "balanced",
+      "useFor": "Invitations, journals, stationery, recipe and hospitality sites.",
+      "notTo": "Skeuomorphism, which copies specific real objects in detail.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "elevated",
+      "kind": "style",
+      "name": "Elevated",
+      "summary": "Borderless cards lifted by layered soft shadows, rounded corners and plenty of room.",
+      "aliases": [
+        "cards that float",
+        "material design shadows",
+        "raised panels no borders"
+      ],
+      "palette": "navy-sand",
+      "mode": "light",
+      "typography": "geometric",
+      "radius": "soft",
+      "useFor": "Consumer apps, mobile-first products, marketplaces.",
+      "notTo": "Soft UI, where surfaces share the page colour.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "newsprint",
+      "kind": "style",
+      "name": "Newsprint",
+      "summary": "Dense serif text, double rules, tight columns and almost no colour. Information first.",
+      "aliases": [
+        "old newspaper layout",
+        "dense columns with rules",
+        "broadsheet style"
+      ],
+      "palette": "arctic-red",
+      "mode": "light",
+      "typography": "bookish",
+      "radius": "sharp",
+      "useFor": "News, data journalism, archives, long dense reference pages.",
+      "notTo": "Editorial, which is airier and uses single thin rules.",
+      "files": [
+        "tokens/styles/styles.css"
       ]
     }
   ]

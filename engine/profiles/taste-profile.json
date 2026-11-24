@@ -6,6 +6,7 @@
   "density": "balanced",
   "radius": "balanced",
   "motion": "snappy",
+  "style": "none",
   "locks": [],
   "overrides": {},
   "installMode": "greenfield",

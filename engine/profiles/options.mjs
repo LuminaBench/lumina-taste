@@ -153,3 +153,149 @@ export const TYPOGRAPHY = [
     "webfont": "https://fonts.googleapis.com/css2?family=Nunito:wght@400..800&display=swap"
   }
 ];
+export const STYLES = [
+  {
+    "id": "studio",
+    "name": "Studio",
+    "kind": "Product default",
+    "palette": "slate-forest",
+    "mode": "light",
+    "typography": "precision",
+    "radius": "balanced"
+  },
+  {
+    "id": "swiss",
+    "name": "Swiss",
+    "kind": "Graphic design movement",
+    "palette": "arctic-red",
+    "mode": "light",
+    "typography": "swiss",
+    "radius": "sharp"
+  },
+  {
+    "id": "editorial",
+    "name": "Editorial",
+    "kind": "Print-inspired",
+    "palette": "paper-ink",
+    "mode": "light",
+    "typography": "editorial",
+    "radius": "sharp"
+  },
+  {
+    "id": "neobrutal",
+    "name": "Neobrutalism",
+    "kind": "Industry trend",
+    "palette": "black-signal",
+    "mode": "light",
+    "typography": "geometric",
+    "radius": "balanced"
+  },
+  {
+    "id": "terminal",
+    "name": "Terminal",
+    "kind": "Developer aesthetic",
+    "palette": "terminal-phosphor",
+    "mode": "dark",
+    "typography": "technical",
+    "radius": "sharp"
+  },
+  {
+    "id": "glass",
+    "name": "Glass",
+    "kind": "Industry trend",
+    "palette": "charcoal-sky",
+    "mode": "dark",
+    "typography": "geometric",
+    "radius": "soft"
+  },
+  {
+    "id": "soft",
+    "name": "Soft UI",
+    "kind": "Industry trend",
+    "palette": "cream-charcoal",
+    "mode": "light",
+    "typography": "humanist",
+    "radius": "soft"
+  },
+  {
+    "id": "clay",
+    "name": "Clay",
+    "kind": "Industry trend",
+    "palette": "sage-clay",
+    "mode": "light",
+    "typography": "rounded",
+    "radius": "soft"
+  },
+  {
+    "id": "retro",
+    "name": "Classic Desktop",
+    "kind": "Retrospective",
+    "palette": "charcoal-sky",
+    "mode": "light",
+    "typography": "dense",
+    "radius": "sharp"
+  },
+  {
+    "id": "blueprint",
+    "name": "Blueprint",
+    "kind": "Technical",
+    "palette": "ice-cobalt",
+    "mode": "dark",
+    "typography": "technical",
+    "radius": "sharp"
+  },
+  {
+    "id": "lucid",
+    "name": "Lucid Dark",
+    "kind": "Product trend",
+    "palette": "charcoal-sky",
+    "mode": "dark",
+    "typography": "precision",
+    "radius": "balanced"
+  },
+  {
+    "id": "flat",
+    "name": "Flat",
+    "kind": "Design movement",
+    "palette": "ice-cobalt",
+    "mode": "light",
+    "typography": "geometric",
+    "radius": "balanced"
+  },
+  {
+    "id": "minimal",
+    "name": "Minimal",
+    "kind": "Design approach",
+    "palette": "cream-charcoal",
+    "mode": "light",
+    "typography": "swiss",
+    "radius": "sharp"
+  },
+  {
+    "id": "paper",
+    "name": "Paper",
+    "kind": "Material-inspired",
+    "palette": "linen-oxblood",
+    "mode": "light",
+    "typography": "bookish",
+    "radius": "balanced"
+  },
+  {
+    "id": "elevated",
+    "name": "Elevated",
+    "kind": "Product approach",
+    "palette": "navy-sand",
+    "mode": "light",
+    "typography": "geometric",
+    "radius": "soft"
+  },
+  {
+    "id": "newsprint",
+    "name": "Newsprint",
+    "kind": "Print-inspired",
+    "palette": "arctic-red",
+    "mode": "light",
+    "typography": "bookish",
+    "radius": "sharp"
+  }
+];

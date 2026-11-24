@@ -47,19 +47,22 @@ const pal = read('tokens/palettes/palettes.json').palettes.map((p) => ({
   minTextContrast: { light: p.modes.light.minRatios.textPrimary, dark: p.modes.dark.minRatios.textPrimary },
   files: [`tokens/palettes/${p.id}.css`],
 }));
+const stSrc = read('tokens/styles/source.json');
+const styles = (stSrc.styles ?? stSrc).map((st) => ({ id: st.id, kind: 'style', name: st.name, summary: st.summary, aliases: st.aliases ?? [], palette: st.palette, mode: st.mode, typography: st.type, radius: st.radius, useFor: st.useFor, notTo: st.notTo, files: ['tokens/styles/styles.css'] }));
 const typo = read('tokens/typography/source.json').pairings.map((t) => ({ id: t.id, kind: 'typography', name: t.name, summary: t.use, aliases: [t.name.toLowerCase()], webfont: t.webfont, files: ['tokens/typography/typography.css'] }));
 
 const catalog = {
   name: 'lumina-taste',
   version: read('package.json').version,
   generated: 'scripts/build-catalog.mjs',
-  counts: { ui: ui.length, charts: charts.length, blueprints: blueprints.length, palettes: pal.length, themes: pal.length * 2, typography: typo.length },
+  counts: { ui: ui.length, charts: charts.length, blueprints: blueprints.length, palettes: pal.length, themes: pal.length * 2, typography: typo.length, styles: styles.length },
   families,
   ui,
   charts,
   blueprints,
   palettes: pal,
   typography: typo,
+  styles,
 };
 writeFileSync(join(root, 'catalog.json'), JSON.stringify(catalog, null, 2) + '\n');
-console.log(`catalog.json: ${ui.length} UI patterns, ${charts.length} charts, ${blueprints.length} blueprints, ${pal.length} palettes, ${typo.length} type pairings`);
+console.log(`catalog.json: ${ui.length} UI patterns, ${charts.length} charts, ${blueprints.length} blueprints, ${pal.length} palettes, ${typo.length} type pairings, ${styles.length} styles`);

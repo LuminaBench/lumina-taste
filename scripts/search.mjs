@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Fast local search across UI patterns, charts, blueprints, palettes and type pairings.
+// Fast local search across UI patterns, charts, blueprints, palettes, type pairings and styles.
 // BM25 over names, ids, sloppy aliases and summaries, plus trigram fuzzy matching for typos.
 //
 //   node scripts/search.mjs "rotating arrow"
@@ -19,7 +19,7 @@ const limit = +opt('limit', '8');
 const asJson = flag('json');
 const query = args.join(' ').trim();
 if (!query) {
-  console.error('Usage: node scripts/search.mjs "<words>" [--kind ui|chart|blueprint|palette|typography] [--limit 8] [--json]');
+  console.error('Usage: node scripts/search.mjs "<words>" [--kind ui|chart|blueprint|palette|typography|style] [--limit 8] [--json]');
   process.exit(2);
 }
 
@@ -30,6 +30,7 @@ const docs = [
   ...cat.blueprints.map((d) => ({ ...d, kind: 'blueprint', extra: `${d.anatomy} ${(d.uses ?? []).join(' ')}` })),
   ...cat.palettes.map((d) => ({ ...d, kind: 'palette', extra: d.category })),
   ...cat.typography.map((d) => ({ ...d, kind: 'typography', extra: '' })),
+  ...(cat.styles ?? []).map((d) => ({ ...d, kind: 'style', extra: `${d.useFor ?? ''}` })),
 ].filter((d) => !kind || d.kind === kind);
 
 const STOP = new Set(['a', 'an', 'the', 'and', 'or', 'of', 'to', 'for', 'with', 'in', 'on', 'that', 'when', 'i', 'my', 'me', 'it', 'is', 'like', 'thing', 'one']);
@@ -81,6 +82,7 @@ const installHint = (d) => ({
   blueprint: `node scripts/install-taste.mjs --blueprints ${d.id}`,
   palette: `node scripts/install-taste.mjs --palette ${d.id}`,
   typography: `node scripts/install-taste.mjs --type ${d.id}`,
+  style: `node scripts/install-taste.mjs --style ${d.id}`,
 })[d.kind];
 
 if (asJson) {

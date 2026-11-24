@@ -7,6 +7,7 @@
 //   node scripts/install-taste.mjs --framework react --charts line-chart,kpi-card --dest ./src/ui
 //   node scripts/install-taste.mjs --attach --root "#app" --components toast-stack      (existing app)
 //   node scripts/install-taste.mjs --density dense                (change one axis; locked axes are kept)
+//   node scripts/install-taste.mjs --style swiss                  (a style brings its palette, mode, type and radius)
 //   node scripts/install-taste.mjs --override accent-solid="oklch(0.5 0.15 30)"   (contrast-checked)
 //   node scripts/install-taste.mjs --list | --dry-run | --force (ignore locks) | --overwrite
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -15,6 +16,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const { mergeProfile, normalizeProfile, serializeProfile, validateProfile, CHOICES, AXES } = await import(pathToFileURL(join(root, 'engine/profiles/profile.mjs')).href);
+const { STYLES } = await import(pathToFileURL(join(root, 'engine/profiles/options.mjs')).href);
 const { contrast, parseOklch } = await import(pathToFileURL(join(root, 'scripts/lib/color.mjs')).href);
 const { RULES } = await import(pathToFileURL(join(root, 'scripts/lib/contrast-rules.mjs')).href);
 const catalog = JSON.parse(readFileSync(join(root, 'catalog.json'), 'utf8'));
@@ -41,7 +43,8 @@ if (opts.list) {
   const pad = (s, n) => String(s).padEnd(n);
   console.log(`Palettes (${CHOICES.palette.length}): ${CHOICES.palette.join(', ')}`);
   console.log(`Typography (${CHOICES.typography.length}): ${CHOICES.typography.join(', ')}`);
-  console.log(`Density: ${CHOICES.density.join(', ')} · Radius: ${CHOICES.radius.join(', ')} · Motion: ${CHOICES.motion.join(', ')}\n`);
+  console.log(`Density: ${CHOICES.density.join(', ')} · Radius: ${CHOICES.radius.join(', ')} · Motion: ${CHOICES.motion.join(', ')}`);
+  console.log(`Styles (${STYLES.length}): ${STYLES.map((x) => x.id).join(', ')}\n`);
   console.log(`UI patterns (${catalog.ui.length}):`);
   for (const f of catalog.families) console.log(`  ${pad(f.title, 32)} ${catalog.ui.filter((c) => c.family === f.id).map((c) => c.id).join(', ')}`);
   console.log(`\nCharts (${catalog.charts.length}): ${catalog.charts.map((c) => c.id).join(', ')}`);
@@ -65,7 +68,13 @@ if (existsSync(profilePath)) {
   if (errs.length) fail(`Existing profile is invalid:\n  ${errs.join('\n  ')}`);
 }
 const patch = {};
-const map = { palette: 'palette', mode: 'mode', type: 'typography', typography: 'typography', density: 'density', radius: 'radius', motion: 'motion', root: 'attachRoot' };
+// A style is a starting point: it brings its palette, mode, type and radius. Explicit flags still win.
+if (opts.style && opts.style !== true && opts.style !== 'none') {
+  const st = STYLES.find((x) => x.id === opts.style);
+  if (!st) fail(`Unknown style "${opts.style}". Choose one of: none, ${STYLES.map((x) => x.id).join(', ')}`);
+  Object.assign(patch, { palette: st.palette, mode: st.mode, typography: st.typography, radius: st.radius });
+}
+const map = { palette: 'palette', mode: 'mode', type: 'typography', typography: 'typography', density: 'density', radius: 'radius', motion: 'motion', style: 'style', root: 'attachRoot' };
 for (const [flag, axis] of Object.entries(map)) if (opts[flag] !== undefined && opts[flag] !== true) patch[axis] = opts[flag];
 if (opts.attach) patch.installMode = 'attach';
 if (opts.greenfield) patch.installMode = 'greenfield';
@@ -144,7 +153,7 @@ const visit = (f) => {
 };
 for (const e of entries) visit(e);
 // Blueprint boot imports tokens itself; everything else gets tokens explicitly below.
-const tokenFiles = ['tokens/base.css', 'tokens/typography/typography.css', ...(opts['all-palettes'] ? ['tokens/palettes/all.css'] : [`tokens/palettes/${profile.palette}.css`])];
+const tokenFiles = ['tokens/base.css', 'tokens/typography/typography.css', ...(opts['all-palettes'] ? ['tokens/palettes/all.css'] : [`tokens/palettes/${profile.palette}.css`]), ...(profile.style !== 'none' ? ['tokens/styles/styles.css'] : [])];
 for (const f of [...files]) if (f.startsWith('tokens/palettes/') && f !== `tokens/palettes/${profile.palette}.css`) files.delete(f);
 const profileEngine = ['engine/profiles/profile.mjs', 'engine/profiles/profile.d.mts', 'engine/profiles/options.mjs', 'engine/profiles/options.d.mts'];
 
@@ -172,12 +181,12 @@ if (!opts['no-profile']) {
 }
 
 // ------------------------------------------------------------------ report
-const attrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="${profile.radius}" data-motion="${profile.motion}"`;
+const attrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="${profile.radius}" data-motion="${profile.motion}"${profile.style !== 'none' ? ` data-style="${profile.style}"` : ''}`;
 console.log(`${dry ? 'Dry run: would install' : 'Installed'} lumina-taste (${framework}) into ${relative(process.cwd(), dest) || '.'}`);
 console.log(`  ${copied} file(s) written, ${unchanged} already up to date${skipped ? `, ${skipped} kept` : ''}.`);
 if (applied.length) console.log(`  Profile updated: ${applied.join(', ')}.`);
 if (blocked.length) console.log(`  Locked, left unchanged: ${blocked.join(', ')}. Pass --force or --unlock <axis> if the user asked for it.`);
-console.log(`  Profile: ${relative(process.cwd(), profilePath)} (${profile.palette}, ${profile.mode}, ${profile.typography}, ${profile.density}, ${profile.radius}, ${profile.motion}${profile.locks.length ? `; locked: ${profile.locks.join(', ')}` : ''})`);
+console.log(`  Profile: ${relative(process.cwd(), profilePath)} (${profile.palette}, ${profile.mode}, ${profile.typography}, ${profile.density}, ${profile.radius}, ${profile.motion}${profile.style !== 'none' ? `, style ${profile.style}` : ''}${profile.locks.length ? `; locked: ${profile.locks.join(', ')}` : ''})`);
 console.log('\nNext:');
 console.log(`  1. Import ${relative(projectDir, join(dest, 'tokens/index.css'))} once, before component CSS.`);
 if (profile.installMode === 'attach') console.log(`  2. Put the attributes on your wrapper only (host styles stay untouched):\n     <div class="lt-root" ${attrs}>…</div>   (attachRoot: "${profile.attachRoot}")`);
