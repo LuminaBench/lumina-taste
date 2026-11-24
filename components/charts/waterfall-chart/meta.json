@@ -1,0 +1,19 @@
+{
+  "id": "waterfall-chart",
+  "order": 38,
+  "name": "Waterfall chart",
+  "group": "Composition",
+  "summary": "A start total, the steps that raise or lower it, and the end total.",
+  "bestFor": "Explaining how one number became another: revenue bridges, budget changes",
+  "avoidFor": "Unordered parts of a whole (use a stacked bar)",
+  "dataShape": "items: label + value (+ total: true for subtotals)",
+  "aliases": [
+    "bridge chart",
+    "revenue bridge",
+    "cascade chart",
+    "walk chart",
+    "mario chart"
+  ],
+  "react": "WaterfallChart",
+  "wide": true
+}

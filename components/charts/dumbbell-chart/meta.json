@@ -1,0 +1,18 @@
+{
+  "id": "dumbbell-chart",
+  "order": 36,
+  "name": "Dumbbell chart",
+  "group": "Comparison",
+  "summary": "Two dots per row joined by a bar, sorted by the gap between them.",
+  "bestFor": "Gaps between two measures per item: plan vs actual, men vs women, p50 vs p95",
+  "avoidFor": "More than two measures per row",
+  "dataShape": "aName, bName + items: label + a + b",
+  "aliases": [
+    "dot plot comparison",
+    "connected dot plot",
+    "gap chart",
+    "barbell chart"
+  ],
+  "react": "DumbbellChart",
+  "wide": false
+}

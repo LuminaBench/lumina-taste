@@ -1,0 +1,18 @@
+{
+  "id": "bullet-chart",
+  "order": 37,
+  "name": "Bullet chart",
+  "group": "Single value",
+  "summary": "A thin bar against grey bands and a target tick: a gauge that fits in a row.",
+  "bestFor": "Several KPIs against targets in little space",
+  "avoidFor": "Showing change over time",
+  "dataShape": "items: label + value + target + bands [poor, ok, good]",
+  "aliases": [
+    "target bar",
+    "kpi bar against goal",
+    "progress against target",
+    "linear gauge"
+  ],
+  "react": "BulletChart",
+  "wide": false
+}

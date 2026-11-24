@@ -1,0 +1,18 @@
+{
+  "id": "histogram",
+  "order": 40,
+  "name": "Histogram",
+  "group": "Distribution",
+  "summary": "Values grouped into equal bins with no gaps, and a line at the median.",
+  "bestFor": "The shape of one measure: response times, order sizes, ages",
+  "avoidFor": "Comparing more than two distributions (use a box plot)",
+  "dataShape": "values: number[]",
+  "aliases": [
+    "distribution chart",
+    "frequency chart",
+    "bins chart",
+    "value spread"
+  ],
+  "react": "Histogram",
+  "wide": false
+}

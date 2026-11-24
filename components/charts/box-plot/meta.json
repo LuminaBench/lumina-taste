@@ -1,0 +1,18 @@
+{
+  "id": "box-plot",
+  "order": 41,
+  "name": "Box plot",
+  "group": "Distribution",
+  "summary": "Median, middle half and whiskers for each group, with outliers as rings.",
+  "bestFor": "Comparing the spread of 3\u201310 groups",
+  "avoidFor": "Audiences new to statistics (use a beeswarm or range bars)",
+  "dataShape": "groups: label + values[]",
+  "aliases": [
+    "box and whisker",
+    "candlestick distribution",
+    "quartile chart",
+    "spread chart"
+  ],
+  "react": "BoxPlot",
+  "wide": false
+}

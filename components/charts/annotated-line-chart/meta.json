@@ -1,0 +1,13 @@
+{
+  "id": "annotated-line-chart",
+  "order": 45,
+  "name": "Annotated line chart",
+  "group": "Trends",
+  "summary": "A trend with dashed rules and short notes where something happened.",
+  "bestFor": "Explaining jumps and dips: releases, incidents, campaigns, price changes",
+  "avoidFor": "More than about six notes (move them to a table under the chart)",
+  "dataShape": "x + series + annotations: at + label",
+  "aliases": ["line chart with events", "timeline chart", "event markers", "annotated trend", "chart with notes"],
+  "react": "AnnotatedLineChart",
+  "wide": true
+}

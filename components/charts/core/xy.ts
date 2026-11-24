@@ -15,6 +15,8 @@ export interface XYOptions extends ChartOptions {
   zero?: boolean;
   /** Show markers at each point (for short series). */
   markers?: boolean;
+  /** Event notes pinned to x positions: a dashed rule and a short label above the plot. */
+  annotations?: Array<{ at: string | number; label: string }>;
 }
 
 export function renderXY(host: HTMLElement, data: SeriesData, opts: XYOptions = {}): ChartInstance<SeriesData> {
@@ -33,7 +35,8 @@ export function renderXY(host: HTMLElement, data: SeriesData, opts: XYOptions = 
     const dom = niceDomain(lo, hi, 5, kind !== 'line' || !!o.zero);
     const direct = (o.directLabels ?? d.series.length > 1) && width > 420;
     const labelW = direct ? Math.min(150, Math.max(...d.series.map((s) => textWidth(s.name, '600 11.5px system-ui'))) + 22) : 6;
-    const m = { t: 18, r: labelW, b: 26, l: 0 };
+    const notes = (o.annotations ?? []).map((a) => ({ ...a, i: typeof a.at === 'number' && !d.x.includes(a.at) ? a.at : d.x.findIndex((x) => String(x) === String(a.at)) })).filter((a) => a.i >= 0 && a.i < n);
+    const m = { t: notes.length ? 46 : 18, r: labelW, b: 26, l: 0 };
     const y = linear(dom, [height - m.b, m.t]);
     m.l = gutter(y, fmt);
     const xs = points(n, [m.l + 4, width - m.r - 4]);
@@ -56,6 +59,23 @@ export function renderXY(host: HTMLElement, data: SeriesData, opts: XYOptions = 
       if (o.markers) upper.forEach(([px, py]) => g.append(el('circle', { cx: r(px), cy: r(py), r: 2.5, style: `fill: ${c}` })));
     }
     svg.append(g);
+
+    // Annotations: alternate two label rows so neighbours never collide.
+    if (notes.length) {
+      const ag = el('g', { class: 'lt-notes' });
+      const lastEnd = [-Infinity, -Infinity];
+      notes.forEach((a) => {
+        const px = xs(a.i), w = textWidth(a.label, '600 11px system-ui') + 14;
+        const anchorX = Math.min(Math.max(px - w / 2, m.l), width - m.r - w);
+        const row = anchorX > lastEnd[0] + 6 ? 0 : 1;
+        lastEnd[row] = anchorX + w;
+        const ty = row === 0 ? 4 : 24;
+        ag.append(el('line', { x1: r(px), x2: r(px), y1: ty + 18, y2: height - m.b, style: 'stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 3 3' }));
+        ag.append(el('rect', { x: r(anchorX), y: ty, width: r(w), height: 18, rx: 9, style: 'fill: var(--bg-surface-2); stroke: var(--border-hairline)' }));
+        ag.append(el('text', { x: r(anchorX + w / 2), y: ty + 13, 'text-anchor': 'middle', style: 'fill: var(--text-primary); font-size: 11px; font-weight: 600' }, [a.label]));
+      });
+      svg.insertBefore(ag, g);
+    }
 
     // Direct labels at the end of each series, relaxed so they never collide.
     if (direct) {

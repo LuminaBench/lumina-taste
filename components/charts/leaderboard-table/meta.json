@@ -1,0 +1,19 @@
+{
+  "id": "leaderboard-table",
+  "order": 31,
+  "name": "Leaderboard table",
+  "group": "Leaderboards",
+  "summary": "Rank, name and group, an inline bar for the main score and heat cells for the rest.",
+  "bestFor": "Ranking many entries on one score while showing 2\u20134 supporting metrics",
+  "avoidFor": "Exact lookup of dozens of columns (use a data table)",
+  "dataShape": "columns (name, format, better) + rows (label, group, values)",
+  "aliases": [
+    "leaderboard",
+    "ranking table",
+    "table with bars",
+    "heat table",
+    "scoreboard"
+  ],
+  "react": "LeaderboardTable",
+  "wide": true
+}

@@ -1,0 +1,19 @@
+{
+  "id": "frontier-chart",
+  "order": 34,
+  "name": "Pareto frontier",
+  "group": "Leaderboards",
+  "summary": "A stepped line through the entries nothing else beats on both axes; everything behind it is muted.",
+  "bestFor": "Picking the efficient options in a two-way trade-off",
+  "avoidFor": "When one axis does not matter",
+  "dataShape": "points: label + x + y + group",
+  "aliases": [
+    "efficient frontier",
+    "pareto chart",
+    "best value line",
+    "trade-off curve",
+    "frontier line"
+  ],
+  "react": "FrontierChart",
+  "wide": true
+}

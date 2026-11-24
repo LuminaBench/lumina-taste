@@ -1,0 +1,19 @@
+{
+  "id": "small-multiples",
+  "order": 44,
+  "name": "Small multiples",
+  "group": "Trends",
+  "summary": "One small area chart per series on a shared scale, with the others ghosted behind.",
+  "bestFor": "Six or more series that would tangle in one line chart",
+  "avoidFor": "Two or three series (one line chart is clearer)",
+  "dataShape": "x + series: name + values",
+  "aliases": [
+    "trellis chart",
+    "facet grid",
+    "panel chart",
+    "grid of mini charts",
+    "sparkline grid"
+  ],
+  "react": "SmallMultiples",
+  "wide": true
+}
