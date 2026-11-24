@@ -21,6 +21,16 @@ test('a component never restyles its own root only inside its own container quer
   assert.deepEqual(bad, []);
 });
 
+test('every component that uses @container declares itself a container', () => {
+  // Without container-type on the root, its queries look for an outer container and never fire on a plain page.
+  const bad = [];
+  for (const f of walk(join(root, 'components/ui'))) {
+    const css = readFileSync(f, 'utf8');
+    if (/@container\b/.test(css) && !/container-type\s*:|container\s*:/.test(css)) bad.push(f.replace(root + '/', ''));
+  }
+  assert.deepEqual(bad, []);
+});
+
 test('section blocks pad with --section-y, not fixed pixels', () => {
   for (const f of walk(join(root, 'components/ui/blocks'))) assert.ok(!/padding: 56px 40px/.test(readFileSync(f, 'utf8')), f);
 });

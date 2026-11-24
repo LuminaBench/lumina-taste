@@ -1,5 +1,5 @@
 @scope (.lt-nav-simple) {
-  :scope { container-type: inline-size; position: relative; display: flex; align-items: center; gap: 28px; width: 100%; height: 60px; padding: 0 20px; border-bottom: var(--bw) var(--border-style) var(--border-hairline); background: color-mix(in oklab, var(--bg-canvas) 88%, transparent); backdrop-filter: blur(8px); font-size: var(--text-ui); }
+  :scope { container-type: inline-size; position: relative; display: flex; align-items: center; gap: 28px; width: 100%; height: 60px; padding: 0 max(20px, calc((100% - var(--container, 1180px)) / 2)); border-bottom: var(--bw) var(--border-style) var(--border-hairline); background: color-mix(in oklab, var(--bg-canvas) 88%, transparent); backdrop-filter: blur(8px); font-size: var(--text-ui); }
   [data-part="brand"] { display: inline-flex; align-items: center; gap: 8px; color: var(--text-primary); font-weight: 750; letter-spacing: -0.02em; text-decoration: none; }
   [data-part="mark"] { width: 20px; height: 20px; border-radius: 6px; background: var(--text-primary); box-shadow: inset -6px -6px 0 var(--accent-solid); }
   nav { flex: 1; }

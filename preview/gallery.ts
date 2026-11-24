@@ -210,6 +210,7 @@ function viewPages(id?: string) {
       <label class="lt-visually-hidden" for="g-bp-switch">Page</label>
       <span class="g-select"><select id="g-bp-switch">${BLUEPRINTS.map((b) => `<option value="${b.id}"${b.id === bp.id ? ' selected' : ''}>${esc(b.name)}</option>`).join('')}</select></span>
       <div class="g-seg" role="radiogroup" aria-label="Viewport"><button type="button" role="radio" aria-checked="true" data-vp="100%">Desktop</button><button type="button" role="radio" aria-checked="false" data-vp="390px">Mobile</button></div>
+      ${bp.states?.length ? `<div class="g-seg" role="radiogroup" aria-label="Page state"><button type="button" role="radio" aria-checked="true" data-state="">Ready</button>${bp.states.map((s: string) => `<button type="button" role="radio" aria-checked="false" data-state="${esc(s)}">${esc(s[0].toUpperCase() + s.slice(1).replace('-', ' '))}</button>`).join('')}</div>` : ''}
       <a class="g-back g-push" href="./blueprints/${bp.id}/" target="_blank" rel="noopener">${ICON.external}<span>Open full page</span></a></div>
       <div class="g-frame"><iframe data-blueprint title="${esc(bp.name)}" src="./blueprints/${bp.id}/"></iframe></div>`;
     const frame = main.querySelector<HTMLIFrameElement>('iframe')!;
@@ -219,10 +220,15 @@ function viewPages(id?: string) {
       main.querySelectorAll('[data-vp]').forEach((x) => x.setAttribute('aria-checked', String(x === b)));
       frame.style.width = b.dataset.vp!;
     }));
+    // Page states: the blueprint reads ?state=… and shows its loading, empty or error view.
+    main.querySelectorAll<HTMLElement>('[data-state]').forEach((b) => b.addEventListener('click', () => {
+      main.querySelectorAll('[data-state]').forEach((x) => x.setAttribute('aria-checked', String(x === b)));
+      frame.src = `./blueprints/${bp.id}/${b.dataset.state ? `?state=${b.dataset.state}` : ''}`;
+    }));
     return;
   }
   main.innerHTML = `<section class="g-hero g-hero-sm"><p class="g-kicker">${BLUEPRINTS.length} pages</p><h1>Whole pages, already laid out</h1><p class="g-sub">Each one follows the page-flow rules: one primary action, a 4px rhythm, the right navigation for the job. They follow your theme.</p></section>
-    <div class="g-page-grid">${BLUEPRINTS.map((b) => `<a class="g-page-card" href="#/pages/${b.id}"><div class="g-page-thumb"><iframe data-blueprint tabindex="-1" aria-hidden="true" loading="lazy" title="${esc(b.name)} thumbnail" src="./blueprints/${b.id}/"></iframe></div><div class="g-card-body"><div class="g-card-title"><h3>${esc(b.name)}</h3></div><p>${esc(b.summary)}</p></div></a>`).join('')}</div>`;
+    <div class="g-page-grid">${BLUEPRINTS.map((b) => `<a class="g-page-card" href="#/pages/${b.id}"><div class="g-page-thumb"><iframe data-blueprint tabindex="-1" aria-hidden="true" loading="lazy" title="${esc(b.name)} thumbnail" src="./blueprints/${b.id}/"></iframe></div><div class="g-card-body"><div class="g-card-title"><h3>${esc(b.name)}</h3>${b.states?.length ? `<span class="g-new">${b.states.length + 1} states</span>` : ''}</div><p>${esc(b.summary)}</p></div></a>`).join('')}</div>`;
   main.querySelectorAll<HTMLIFrameElement>('iframe').forEach((f) => f.addEventListener('load', () => syncRoots()));
   const ro = new ResizeObserver((entries) => entries.forEach((en) => (en.target as HTMLElement).style.setProperty('--s', String(en.contentRect.width / 1440))));
   main.querySelectorAll<HTMLElement>('.g-page-thumb').forEach((t) => ro.observe(t));

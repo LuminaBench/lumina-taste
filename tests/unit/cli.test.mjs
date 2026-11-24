@@ -48,6 +48,24 @@ test('static install bundles css, js and snippets that work without a build step
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
+test('a page assembled from section blocks passes the taste critic with no warnings', () => {
+  // What an agent does: static install, paste snippets into <main>, add a tone band or two.
+  const dir = mkdtempSync(join(tmpdir(), 'lt-compose-page-'));
+  try {
+    writeFileSync(join(dir, 'package.json'), '{}');
+    const blocks = ['navbar-simple', 'hero-split', 'logo-cloud', 'feature-split', 'stats-band', 'testimonial-grid', 'how-it-works', 'pricing-tiers', 'faq-section', 'blog-grid', 'cta-band', 'site-footer'];
+    const r = node([join(root, 'scripts/install-taste.mjs'), '--project', dir, '--dest', 'ui', '--framework', 'static', '--density', 'spacious', '--components', blocks.join(',')]);
+    assert.equal(r.status, 0, r.stderr);
+    const sn = (id) => readFileSync(join(dir, 'ui/snippets', `${id}.html`), 'utf8');
+    const tone = (html) => html.replace('<section class="lt-', '<section data-tone="well" class="lt-');
+    const body = blocks.slice(1, -1).map((b) => (['stats-band', 'how-it-works'].includes(b) ? tone(sn(b)) : sn(b))).join('\n');
+    writeFileSync(join(dir, 'index.html'), `<!doctype html><html lang="en" data-palette="slate-forest" data-mode="light" data-type="precision" data-density="spacious" data-radius="balanced" data-motion="snappy"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Composed</title><link rel="stylesheet" href="ui/lumina.css"><script defer src="ui/lumina.js"></script></head><body>${sn(blocks[0])}<main>${body}</main>${sn(blocks.at(-1))}</body></html>`);
+    const a = node([join(root, 'scripts/audit-ui.mjs'), join(dir, 'index.html'), '--taste', '--strict', '--modes', 'light']);
+    assert.equal(a.status, 0, a.stdout);
+    assert.match(a.stdout, /taste score 100\/100/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
 test('audit-ui flags every slop rule on the fixture', () => {
   const out = join(mkdtempSync(join(tmpdir(), 'lt-audit-')), 'r.json');
   const r = node([join(root, 'scripts/audit-ui.mjs'), join(root, 'tests/fixtures/slop.html'), '--viewports', 'desktop', '--modes', 'light', '--json', out, '--quiet']);

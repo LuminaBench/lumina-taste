@@ -145,8 +145,10 @@ for (const s of sections) {
   L.push(`${s.n}. **${s.role}**${s.optional ? ' _(optional)_' : ''}: ${id}${alt}`);
   if (s.copy) L.push(`   - Copy: ${s.copy}`);
   if (s.rule) L.push(`   - Rule: ${s.rule}`);
+  if (s.tone) L.push(`   - Band: add \`data-tone="${s.tone}"\` to this block so the page alternates plain and tinted bands.`);
 }
 L.push('');
+if (type.kind === 'marketing') L.push('Section blocks go straight inside `<main>`, one after another. Each centres its content in a 1180px container and pads itself by half of `--section-y`, so the gap between two sections is always `--section-y`; never wrap them in another band or container. Never tint two bands in a row.', '');
 if (charts.length) L.push(H('Charts'), '', `Start with ${charts.map((c) => `\`${c}\``).join(', ')}. Write each title as the takeaway first; check the pick in references/chart-selection.md.`, '');
 if (type.states.length) { L.push(H('States to build'), ''); for (const s of type.states) L.push(`- ${s}`); L.push(''); }
 L.push(H('Avoid'), ''); for (const a of type.avoid) L.push(`- ${a}`); L.push('');

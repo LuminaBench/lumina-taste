@@ -156,3 +156,12 @@ test('changelog filter and status bars', async ({ page }) => {
   await expect(page.locator('.lt-uptime ol').first().locator('li')).toHaveCount(90);
   await expect(page.locator('.lt-uptime li[data-s="down"]')).toHaveCount(1);
 });
+
+test('gallery viewer switches a blueprint between its page states', async ({ page }) => {
+  await page.goto('/#/pages/admin');
+  await page.click('[data-state="empty"]');
+  await expect(page.locator('iframe[data-blueprint]')).toHaveAttribute('src', /\?state=empty$/);
+  await expect(page.frameLocator('iframe[data-blueprint]').locator('[data-view="empty"]')).toBeVisible();
+  await page.click('[data-state=""]');
+  await expect(page.frameLocator('iframe[data-blueprint]').locator('.ad-table')).toBeVisible();
+});

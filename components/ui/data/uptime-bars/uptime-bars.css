@@ -1,5 +1,5 @@
 @scope (.lt-uptime) {
-  :scope { display: grid; gap: 18px; width: 100%; padding: 20px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); font-size: var(--text-ui); }
+  :scope { container-type: inline-size; display: grid; gap: 18px; width: 100%; padding: 20px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); font-size: var(--text-ui); }
   header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
   h3 { margin: 0; font-size: var(--step-0); font-weight: 650; }
   [data-part="now"] { display: inline-flex; align-items: center; gap: 8px; margin: 0; padding: 4px 10px; border-radius: var(--radius-pill); background: var(--status-positive-soft); color: var(--status-positive); font-size: var(--text-ui-sm); font-weight: 600; }

@@ -10,7 +10,7 @@ Where things go, and how a page breathes. Use this before placing a single compo
 
 ### Layout recipes
 
-Every install ships these as classes in `tokens/layout.css` (zero specificity, so your CSS wins): `.lt-container`, `.lt-narrow`, `.lt-prose`, `.lt-band` (+ `data-tone="well"`), `.lt-stack`, `.lt-cluster`, `.lt-page-head`, `.lt-grid` (`--min` sets the card width), `.lt-split` (`data-ratio="half"`), `.lt-shell`, `.lt-settings`, `.lt-dash` (`.wide` spans both columns) and `.lt-skip`. Section blocks (heroes, features, FAQ, CTA bands…) already bring their own band padding and background: put them straight inside `<main>`, never inside another `.lt-band`.
+Every install ships these as classes in `tokens/layout.css` (zero specificity, so your CSS wins): `.lt-container`, `.lt-narrow`, `.lt-prose`, `.lt-band` (+ `data-tone="well"`), `.lt-stack`, `.lt-cluster`, `.lt-page-head`, `.lt-grid` (`--min` sets the card width), `.lt-split` (`data-ratio="half"`), `.lt-shell`, `.lt-settings`, `.lt-dash` (`.wide` spans both columns) and `.lt-skip`. Section blocks (heroes, features, FAQ, CTA bands…) are complete bands: each centres its content in the 1180px container, pads itself by half of `--section-y` (so two neighbours are exactly `--section-y` apart) and accepts `data-tone="well"` for a tinted background. Put them straight inside `<main>`, never inside another `.lt-band` or `.lt-container`, and alternate plain and tinted bands. `.lt-shell` keeps its rail sticky and full height; `.lt-stack` and every grid here use `minmax(0, 1fr)` so wide tables shrink instead of widening the page.
 
 The same recipes as plain CSS, if you prefer to write your own. All use `--space-*` / `--gap-*` and work at 390px.
 

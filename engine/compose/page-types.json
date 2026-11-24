@@ -65,7 +65,8 @@
      "alt": [
       "before-after"
      ],
-     "optional": true
+     "optional": true,
+     "tone": "well"
     },
     {
      "id": "testimonial-grid",
@@ -78,7 +79,8 @@
      "id": "how-it-works",
      "role": "How it works",
      "copy": "3 steps, verb-first headings (\"Connect\", \"Set targets\", \"Share\").",
-     "optional": true
+     "optional": true,
+     "tone": "well"
     },
     {
      "id": "faq-section",
@@ -559,7 +561,8 @@
     {
      "id": "blog-grid",
      "role": "More to read",
-     "copy": "3 related pieces with dates."
+     "copy": "3 related pieces with dates.",
+     "tone": "well"
     },
     {
      "id": "newsletter-signup",
@@ -1129,7 +1132,8 @@
      "id": "stats-band",
      "role": "Facts",
      "copy": "Founded, team size, customers.",
-     "optional": true
+     "optional": true,
+     "tone": "well"
     },
     {
      "id": "team-grid",

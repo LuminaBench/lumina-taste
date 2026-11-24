@@ -1,5 +1,5 @@
 @scope (.lt-footer-min) {
-  :scope { container-type: inline-size; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; width: 100%; padding: 22px 24px; border-top: var(--bw) var(--border-style) var(--border-hairline); background: var(--bg-canvas); color: var(--text-muted); font-size: var(--text-ui-sm); }
+  :scope { container-type: inline-size; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; width: 100%; padding: 22px max(24px, calc((100% - var(--container, 1180px)) / 2)); border-top: var(--bw) var(--border-style) var(--border-hairline); background: var(--bg-canvas); color: var(--text-muted); font-size: var(--text-ui-sm); }
   p { margin: 0; }
   ul { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 0; padding: 0; list-style: none; }
   a { color: var(--text-secondary); text-decoration: none; }

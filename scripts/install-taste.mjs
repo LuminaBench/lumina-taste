@@ -206,6 +206,20 @@ else for (const f of [...tokenFiles, ...profileEngine, ...[...files].sort()]) wr
 
 // Static: no build step in the project. One lumina.css (tokens + component CSS) and one lumina.js that
 // enhances every [data-lt] element on load and exposes the charts, plus each component's HTML to paste.
+
+/** A short comment at the top of a snippet: what it is, its parts, and what to change before shipping it. */
+function snippetNote(c, html) {
+  let doc = {};
+  try { const fam = JSON.parse(readFileSync(join(root, 'components/ui', c.family, 'family.json'), 'utf8')); doc = (fam.components ?? []).find((x) => x.id === c.id) ?? {}; } catch { /* no docs */ }
+  const clean = (s) => String(s).replace(/--/g, '–').replace(/\s+/g, ' ').trim();
+  const lines = [`${c.name} (${c.id}): ${clean(c.summary)}`];
+  if (doc.anatomy?.length) lines.push(`Parts: ${doc.anatomy.map((a) => `${clean(a.name)} ${clean(a.sel)}`).join('; ')}.`);
+  const demo = html.match(/^<[a-z]+ class="(lt-[a-z-]*demo[a-z-]*)"/)?.[1];
+  if (demo) lines.push(`The outer .${demo} element is only a preview frame: keep what is inside it and drop the frame.`);
+  lines.push('Replace the sample words, names and numbers with the product\'s own before shipping.');
+  return `<!-- ${lines.join('\n     ')} -->\n${html}`;
+}
+
 async function writeStatic() {
   let esbuild;
   try { esbuild = await import(pathToFileURL(createRequire(import.meta.url).resolve('esbuild')).href); } catch { fail('--framework static bundles with esbuild. Run `npm install` once in the skill folder, then try again.'); }
@@ -220,7 +234,7 @@ async function writeStatic() {
     const html = c.files.find((f) => f.endsWith('.html'));
     const name = html ? readFileSync(join(root, html), 'utf8').match(/data-lt="([^"]+)"/)?.[1] : null;
     if (ts && name && /export function enhance\b/.test(readFileSync(join(root, ts), 'utf8'))) { imp.push(`import { enhance as e${i} } from './${ts.replace(/\.ts$/, '')}';`); reg.push(`  ${JSON.stringify(name)}: safe(${JSON.stringify(name)}, e${i}),`); }
-    if (html && !opts['no-snippets']) write(`snippets/${id}.html`, readFileSync(join(root, html)));
+    if (html && !opts['no-snippets']) write(`snippets/${id}.html`, snippetNote(c, readFileSync(join(root, html), 'utf8')), true); // reference copies: always current
   });
   want.charts.forEach((id, i) => { const c = catalog.charts.find((x) => x.id === id); imp.push(`import { render as c${i} } from './${c.path}/${id}';`); charts.push(`  ${JSON.stringify(id)}: c${i},`); });
   // One component failing to start never stops the others, or window.lumina.

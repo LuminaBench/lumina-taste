@@ -1,6 +1,6 @@
 .lt-footer { container: lt-footer / inline-size; width: 100%; }
 @scope (.lt-footer) {
-  :scope { padding: var(--gap-xl) var(--gap-lg) var(--gap-lg); background: var(--bg-surface-2); border-top: var(--bw) var(--border-style) var(--border-hairline); font-size: var(--text-ui-sm); color: var(--text-secondary); }
+  :scope { padding: var(--gap-xl) max(var(--gap-lg), calc((100% - var(--container, 1180px)) / 2)) var(--gap-lg); background: var(--bg-surface-2); border-top: var(--bw) var(--border-style) var(--border-hairline); font-size: var(--text-ui-sm); color: var(--text-secondary); }
   [data-part="top"] { display: grid; grid-template-columns: minmax(180px, 1.2fr) 3fr; gap: var(--gap-xl); }
   [data-part="brand"] { font-family: var(--font-display); font-weight: 650; font-size: 1.0625rem; letter-spacing: -0.02em; color: var(--text-primary); text-decoration: none; }
   [data-part="about"] p { margin: 8px 0 0; max-width: 32ch; }

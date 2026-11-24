@@ -1,6 +1,6 @@
 .lt-shortcuts-demo .lt-btn .lt-kbd { margin-right: 2px; }
 @scope (.lt-shortcuts) {
-  :scope { width: min(560px, calc(100vw - 32px)); max-height: min(520px, calc(100dvh - 80px)); padding: 0; border: 0; border-radius: var(--radius-xl); background: var(--bg-surface-1); color: var(--text-primary); box-shadow: var(--shadow-overlay); overflow: hidden; }
+  :scope { container-type: inline-size; width: min(560px, calc(100vw - 32px)); max-height: min(520px, calc(100dvh - 80px)); padding: 0; border: 0; border-radius: var(--radius-xl); background: var(--bg-surface-1); color: var(--text-primary); box-shadow: var(--shadow-overlay); overflow: hidden; }
   :scope[open] { display: flex; flex-direction: column; animation: lt-ks-in var(--dur-3) var(--ease-out); }
   :scope::backdrop { background: var(--scrim); }
   header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 8px; }

@@ -1,5 +1,5 @@
 @scope (.lt-reviews) {
-  :scope { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 28px; width: 100%; max-width: 520px; font-size: var(--text-ui); }
+  :scope { container-type: inline-size; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 28px; width: 100%; max-width: 520px; font-size: var(--text-ui); }
   @container (max-width: 420px) { :scope { grid-template-columns: 1fr; } }
   @media (max-width: 420px) { :scope { grid-template-columns: 1fr; } }
   [data-part="score"] { display: grid; justify-items: start; gap: 4px; }

@@ -255,9 +255,9 @@ function App() {
       <Case id="dropzone"><FileDropzone /></Case>
       <Case id="stepper"><NumberStepper label="Seats" min={1} max={5} defaultValue={2} /></Case>
 
-      <Case id="navbar"><NavbarMega brand="Acme" megaLabel="Product" columns={[{ label: 'P', links: [{ label: 'Analytics', description: 'Charts', href: '#a', icon: 'chart' }] }]} links={[{ label: 'Docs', href: '#d' }]} cta={{ label: 'Start', href: '#s' }} /></Case>
+      <Case id="navbar"><NavbarMega brand="Halyard" megaLabel="Product" columns={[{ label: 'P', links: [{ label: 'Analytics', description: 'Charts', href: '#a', icon: 'chart' }] }]} links={[{ label: 'Docs', href: '#d' }]} cta={{ label: 'Start', href: '#s' }} /></Case>
       <Case id="autohide"><HideOnScrollHeader><strong>Header</strong></HideOnScrollHeader></Case>
-      <Case id="sidebar"><div style={{ display: 'flex', width: 700 }}><AppSidebar workspace="Acme" sections={[{ items: [{ label: 'Home', href: '#h', icon: 'home', current: true }] }]} /></div></Case>
+      <Case id="sidebar"><div style={{ display: 'flex', width: 700 }}><AppSidebar workspace="Halyard" sections={[{ items: [{ label: 'Home', href: '#h', icon: 'home', current: true }] }]} /></div></Case>
       <Case id="bottom-nav"><BottomNav current="#h" items={[{ label: 'Home', href: '#h', icon: 'home' }, { label: 'Inbox', href: '#i', icon: 'inbox', badge: 2 }]} /></Case>
       <Case id="dock"><MagnifyDock items={[{ label: 'Mail', href: '#m', icon: 'mail' }, { label: 'Files', href: '#f', icon: 'folder', divider: true }]} /></Case>
       <Case id="waffle"><WaffleLauncher apps={[{ label: 'Mail', href: '#m', icon: 'mail' }]} /></Case>
@@ -266,7 +266,7 @@ function App() {
       <Case id="crumbs"><Breadcrumbs items={[{ label: 'Home', href: '#' }, { label: 'Projects', href: '#p' }, { label: 'Atlas' }]} /></Case>
       <Case id="wizard"><StepperWizard steps={['Account', 'Team', 'Done']} initialStep={2} /></Case>
       <Case id="pagination"><Pagination total={12} page={3} onPageChange={(p) => record(`page:${p}`)} /></Case>
-      <Case id="footer"><SiteFooter brand="Acme" blurb="Analytics." columns={[{ title: 'Product', links: [{ label: 'Pricing', href: '#p' }] }]} legal={['© 2026 Acme']} /></Case>
+      <Case id="footer"><SiteFooter brand="Halyard" blurb="Analytics." columns={[{ title: 'Product', links: [{ label: 'Pricing', href: '#p' }] }]} legal={['© 2026 Halyard']} /></Case>
       <Case id="pillnav"><FloatingPillNav links={[{ label: 'Work', href: '#w' }, { label: 'About', href: '#a' }]} current="#w" cta={{ label: 'Contact', href: '#c' }} /></Case>
       <Case id="tabs"><Tabs label="Views" tabs={[{ label: 'One', content: 'A' }, { label: 'Two', content: 'B', count: 3 }]} /></Case>
 

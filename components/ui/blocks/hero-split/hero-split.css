@@ -1,7 +1,9 @@
 @scope (.lt-hero-split) {
-  :scope { container-type: inline-size; display: block; width: 100%; padding: var(--block-y, var(--section-y)) var(--block-x, 24px); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
-  @container (max-width: 640px) { :scope { padding: var(--block-y-sm, var(--section-y)) var(--block-x-sm, 16px); } }
-  @media (max-width: 640px) { :scope { padding: var(--block-y-sm, var(--section-y)) var(--block-x-sm, 16px); } }
+  :scope { container-type: inline-size; display: block; width: 100%; padding: var(--block-y, calc(var(--section-y) / 2)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  /* Blocks pad by half of --section-y, so the gap between two sections is exactly --section-y. data-tone="well" makes a tinted band. */
+  :scope[data-tone="well"] { background: var(--bg-surface-2); }
+  @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
   .lt-eyebrow, [data-part="eyebrow"] { margin: 0 0 10px; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; color: var(--accent-text); }
   :is(h1, h2) { margin: 0; font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
   [data-part="lede"] { margin: 12px 0 0; max-width: 56ch; color: var(--text-secondary); font-size: var(--step-0); line-height: 1.55; text-wrap: pretty; }
@@ -9,7 +11,8 @@
   :scope { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); align-items: center; gap: 48px; }
   @container (max-width: 760px) { :scope { grid-template-columns: 1fr; gap: 32px; } }
   @media (max-width: 760px) { :scope { grid-template-columns: 1fr; gap: 32px; } }
-  :is(h1, h2) { font-size: var(--step-4); }
+  :scope { padding-block: var(--block-y, calc(var(--section-y) * 0.75)); }
+  :is(h1, h2) { font-size: var(--step-5); max-width: 15ch; }
   [data-part="cta"] { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
   [data-part="note"] { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 16px 0 0; color: var(--text-muted); font-size: var(--text-ui-sm); }
   [data-part="note"] .lt-icon { width: 14px; height: 14px; color: var(--status-positive); }

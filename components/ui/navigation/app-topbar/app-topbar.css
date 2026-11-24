@@ -7,9 +7,9 @@
   [data-part="workspace"] strong + span { color: var(--text-muted); font-size: var(--text-ui-xs); }
   [data-part="workspace"] > .lt-icon { color: var(--text-muted); }
   [data-part="ws-mark"] { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 7px; background: var(--accent-solid); color: var(--accent-ink); font-weight: 800; font-size: 12px; }
-  [data-part="search"] { display: flex; flex: 1; align-items: center; gap: 8px; max-width: 460px; height: 36px; margin: 0 auto; padding: 0 10px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-md); background: var(--bg-surface-2); color: var(--text-muted); }
+  [data-part="search"] { display: flex; flex: 1; align-items: center; gap: 8px; min-width: 0; max-width: 460px; height: 36px; margin: 0 auto; padding: 0 10px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-md); background: var(--bg-surface-2); color: var(--text-muted); }
   [data-part="search"]:has(input:focus-visible) { border-color: var(--focus-ring); box-shadow: var(--field-ring); background: var(--bg-surface-1); }
-  [data-part="search"] input { flex: 1; min-width: 0; border: 0; background: none; color: var(--text-primary); font-size: var(--text-ui-sm); outline: none; box-shadow: none; }
+  [data-part="search"] input { flex: 1; width: 100%; min-width: 0; border: 0; background: none; color: var(--text-primary); font-size: var(--text-ui-sm); outline: none; box-shadow: none; }
   [data-part="tools"] { display: flex; align-items: center; gap: 2px; }
   [data-part="tools"] a { position: relative; display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--radius-md); color: var(--text-secondary); }
   [data-part="tools"] a:hover { background: var(--bg-surface-2); color: var(--text-primary); }

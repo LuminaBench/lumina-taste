@@ -67,6 +67,7 @@ function printCard(id) {
   }
   if (kind === 'chart') L.push(`Best for: ${d.bestFor}`, `Avoid for: ${d.avoidFor}`, `Data: ${d.dataShape}`, `React: <${d.react} />`);
   if (kind === 'blueprint') L.push(`Anatomy: ${d.anatomy}`, `Uses: ${(d.uses ?? []).join(', ')}`);
+  if (kind === 'blueprint' && d.states?.length) L.push(`Other states: open with ?state=${d.states.join(' | ?state=')}`);
   if (kind === 'style') L.push(`Palette ${d.palette} (${d.mode}), type ${d.typography}, radius ${d.radius}`, `Use for: ${d.useFor}`, `Not: ${d.notTo}`);
   if (d.files?.length) L.push('', `Files: ${d.files.join(', ')}`);
   L.push(`Install: ${installHint({ ...d, kind })}`);

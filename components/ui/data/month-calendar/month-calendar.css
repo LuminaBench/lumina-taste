@@ -1,5 +1,5 @@
 @scope (.lt-month) {
-  :scope { width: 100%; max-width: 760px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); overflow: hidden; font-size: var(--text-ui); }
+  :scope { container-type: inline-size; width: 100%; max-width: 760px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); overflow: hidden; font-size: var(--text-ui); }
   header { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; }
   h3 { margin: 0; font-size: var(--step-0); font-weight: 650; }
   [data-part="nav"] { display: flex; gap: 4px; }

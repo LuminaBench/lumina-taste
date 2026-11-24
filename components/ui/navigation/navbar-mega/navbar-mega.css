@@ -1,7 +1,7 @@
 .lt-navbar { container: lt-navbar / inline-size; position: relative; width: 100%; }
 @scope (.lt-navbar) {
   :scope { background: var(--bg-canvas); border-bottom: var(--bw) var(--border-style) var(--border-hairline); font-size: var(--text-ui); }
-  [data-part="bar"] { display: flex; align-items: center; gap: var(--gap-lg); height: 60px; padding: 0 var(--gap-md); }
+  [data-part="bar"] { display: flex; align-items: center; gap: var(--gap-lg); height: 60px; padding: 0 max(var(--gap-md), calc((100% - var(--container, 1180px)) / 2)); }
   [data-part="brand"] { font-family: var(--font-display); font-weight: 650; font-size: 1.0625rem; letter-spacing: -0.02em; color: var(--text-primary); text-decoration: none; }
   [data-part="links"] { display: flex; align-items: center; flex: 1; gap: var(--gap-md); }
   ul { display: flex; gap: 2px; margin: 0; padding: 0; list-style: none; }
