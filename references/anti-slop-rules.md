@@ -88,9 +88,23 @@ See [chart-selection.md](chart-selection.md). The short version: no 3D, no pies 
 
 ## 9. Copy
 
+Interface text should read like a careful person wrote it for this product. `node scripts/lint-copy.mjs <dir>` and the auditor's `slop-copy` rule flag the patterns below.
+
 | Ban | Do instead |
 | --- | --- |
-| "Unlock the power of…", "Supercharge your…", "Seamlessly…" | Say what it does, for whom, in one sentence. |
+| Hype verbs: unlock, supercharge, elevate, empower, unleash, revolutionise | Say what it does: "Export any report to CSV." |
+| Empty adjectives: seamless, effortless, robust, world-class, cutting-edge, next-gen, state-of-the-art | A number or a fact: "Syncs in under 2 seconds." |
+| Generated tics: delve into, dive into, a testament to, tapestry, embark on, navigate the complexity | Start with the point. |
+| Filler openers: "In today's fast-paced world…", "Whether you're a startup or an enterprise…" | Delete the sentence. The next one is usually the real start. |
+| "Take your X to the next level", "transform the way you work", "at your fingertips" | Describe the before and after in plain words. |
+| Exclamation marks in UI strings | Calm, specific sentences. |
 | Lorem ipsum in shipped previews | Realistic, short, domain-appropriate sample content. |
 | Placeholder text as the only label | A visible label. Placeholder shows format only. |
-| Exclamation marks in UI strings | Calm, specific sentences. |
+
+Five habits that fix most copy:
+
+1. **Lead with the noun people are looking for.** "Invoices", not "Manage your billing documents".
+2. **One idea per sentence, under 20 words.** Headlines under 12 words.
+3. **Buttons are verbs plus objects.** "Export CSV", "Invite teammate", never "Submit" or "Click here".
+4. **Numbers beat adjectives.** "Answers in 200 ms" beats "blazing fast".
+5. **Sentence case everywhere.** Title Case Reads Like An Advert.

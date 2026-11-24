@@ -1,6 +1,6 @@
 # Lumina Taste
 
-Interfaces that look designed, not generated. A taste kit for coding agents: 18 verified palettes, 84 named UI patterns, 22 publication-grade charts and 8 page blueprints, plus an auditor that catches slop before your users do.
+Interfaces that look designed, not generated. A taste kit for coding agents: 18 verified palettes, 16 visual styles, 99 named UI patterns, 38 publication-grade charts and 8 page blueprints, plus an auditor and a copy lint that catch slop before your users do.
 
 ## Install
 
@@ -43,11 +43,12 @@ npx skills remove lumina-taste -g
 | --- | ---: | --- |
 | **Palettes** | 18 × light/dark | Cream & Charcoal, Deep Navy & Warm Sand, Matte Black & Signal Orange, Lab Monochrome & Acid Lime… Every text, control and chart pair is checked: primary text ≥ 7:1, all other text ≥ 4.5:1, UI marks ≥ 3:1. |
 | **Type pairings** | 12 | Editorial serif + grotesque, precision dev sans + mono, financial condensed, warm humanist… Fluid `clamp()` scales, tabular numbers everywhere they matter. |
-| **UI patterns** | 84 | Rotating chevrons, sliding pill toggles, OTP input, ⌘K palette, bulk action bar, query builder, flip clock, stacking cards… Vanilla HTML/CSS/TS **and** React, keyboard-complete, `@scope`-isolated. |
-| **Charts** | 22 | Line, area, bars, diverging, lollipop, scatter (Canvas at scale), bubble, sparkline, heatmaps, candlestick, donut, gauge, funnel, Sankey, radar, KPI card. Magnetic crosshair, direct labels, SVG/PNG export. |
+| **Visual styles** | 16 | Swiss, editorial, neobrutalism, terminal, glass, soft, clay, retro, blueprint, paper, newsprint… One attribute restyles borders, surfaces, shadows and fields across every component. |
+| **UI patterns** | 99 | Rotating chevrons, sliding pill toggles, OTP input, ⌘K palette, bulk action bar, kanban board, chat thread, prompt composer, star rating, speed dial… Vanilla HTML/CSS/TS **and** React, keyboard-complete, `@scope`-isolated. |
+| **Charts** | 38 | Benchmark leaderboards (ranked columns, leaderboard table, range bars, trade-off quadrant, Pareto frontier), line, area, bars, slope, dumbbell, waterfall, histogram, box plot, beeswarm, bump, small multiples, heatmaps, candlestick, Sankey, radar… Magnetic crosshair, direct labels, keyboard navigation. |
 | **Page blueprints** | 8 | Landing, dashboard, editorial, docs, pricing, settings, directory, auth. |
-| **Taste profile** | 1 file | `taste-profile.json` pins palette, mode, type, density, radius and motion. Lock what you love; agents leave locked parts alone. |
-| **Auditor** | 11 rules | Overflow, clipped or overlapping text, contrast, focus rings, tabular numbers, dead controls, purple gradients, heavy shadows, emoji icons. Desktop + mobile, light + dark. |
+| **Taste profile** | 1 file | `taste-profile.json` pins palette, mode, type, density, radius, motion and style. Lock what you love; agents leave locked parts alone. |
+| **Auditor** | 12 rules | Overflow, clipped or overlapping text, contrast, focus rings, tabular numbers, dead controls, purple gradients, heavy shadows, emoji icons, hype copy. Desktop + mobile, light + dark. |
 
 Ask for things the way you'd describe them: "the rotating arrow", "the 9 dots menu", "the bar that appears when I tick rows". The catalog knows them by those names.
 
@@ -73,7 +74,7 @@ npm install
 npm run preview
 ```
 
-Switch all 18 palettes, light/dark, density, radius, type and motion in real time, try every pattern, hover every chart and open each blueprint full-screen. `npm test` runs the contrast checks, unit tests, type checks, 87 browser tests and the full audit.
+Look up any element by describing it, see it live in a contained demo with its parts numbered, copy a prompt for your agent, and switch palette, mode, type and style from one panel. `npm test` runs the contrast checks, copy lint, unit tests, type checks, 100 browser tests and the full audit.
 
 </details>
 

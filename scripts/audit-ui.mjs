@@ -14,6 +14,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { createRequire } from 'node:module';
 import { pathToFileURL } from 'node:url';
+import { COPY_RULES } from './lib/copy-rules.mjs';
 
 // Playwright is looked up next to this script first, then in the project you run it from,
 // so a globally installed skill can audit a project that already has Playwright.
@@ -50,7 +51,7 @@ const toUrl = (t) => (/^(https?|file):/.test(t) ? t : existsSync(t) ? pathToFile
 
 // ------------------------------------------------------------------ in-page checks
 // Runs inside the page. Returns findings for everything that can be judged from the DOM alone.
-const PAGE_CHECKS = () => {
+const PAGE_CHECKS = (copyRules = []) => {
   const out = [];
   const W = innerWidth;
   const add = (rule, severity, el, message) => out.push({ rule, severity, selector: el ? sel(el) : null, message });
@@ -267,7 +268,8 @@ const PAGE_CHECKS = () => {
       const purples = chroma.filter((h) => PURPLE(h.h));
       const spread = chroma.length > 1 ? Math.max(...chroma.map((h) => h.h)) - Math.min(...chroma.map((h) => h.h)) : 0;
       if (purples.length && chroma.length >= 2 && spread > 25 && visible(el)) add('slop-gradient', 'error', el, 'Generic purple/blue/pink gradient. Use a flat surface or a single-hue, low-chroma tint.');
-      if ((cs.webkitBackgroundClip === 'text' || cs.backgroundClip === 'text') && visible(el)) add('slop-gradient-text', 'error', el, 'Gradient-filled text. Use solid --text-primary and emphasise with weight or --accent-text.');
+      // Neutral shimmer (grey to ink) is a loading state; coloured gradient text is the slop.
+      if ((cs.webkitBackgroundClip === 'text' || cs.backgroundClip === 'text') && chroma.length && visible(el)) add('slop-gradient-text', 'error', el, 'Gradient-filled text. Use solid --text-primary and emphasise with weight or --accent-text.');
     }
     if (cs.boxShadow && cs.boxShadow !== 'none') {
       for (const sh of cs.boxShadow.split(/,(?![^(]*\))/)) {
@@ -277,6 +279,19 @@ const PAGE_CHECKS = () => {
         const blur = lens[2] ?? 0;
         if ((blur >= 32 && color[3] >= 0.08) || (blur >= 16 && color[3] >= 0.35)) { if (visible(el)) add('slop-shadow', 'error', el, `Heavy blurry shadow (${blur}px blur at ${Math.round(color[3] * 100)}% opacity). Use --shadow-sm / --shadow-overlay.`); break; }
       }
+    }
+  }
+  // Hype words, clichés and generated tics in visible copy (same list as scripts/lint-copy.mjs).
+  const copyRes = copyRules.map(([src, flags, why, fix]) => [new RegExp(src, flags), why, fix]);
+  const seenCopy = new Set();
+  for (const l of leaves) {
+    if (l.el.closest('pre, code, kbd, samp, textarea, script, [contenteditable]')) continue;
+    for (const [re, why, fix] of copyRes) {
+      const m = re.exec(l.text);
+      if (!m || seenCopy.has(m[0].toLowerCase())) continue;
+      if (why === 'Exclamation mark' && !/[a-z]!(\s|$)/i.test(l.text)) continue;
+      seenCopy.add(m[0].toLowerCase());
+      add('slop-copy', 'error', l.el, `Copy: “${m[0]}” (${why.toLowerCase()}). ${fix}`);
     }
   }
   const EMOJI = /\p{Emoji_Presentation}|\p{Extended_Pictographic}️/u;
@@ -321,7 +336,7 @@ async function auditOne(browser, url, vpName, mode) {
     await new Promise((r) => setTimeout(r, 150));
   });
   if (process.env.LT_AUDIT_DEBUG) await page.evaluate(() => (window.__ltDebug = true));
-  const findings = (await page.evaluate(PAGE_CHECKS)).map((f) => ({ ...f, viewport: vpName, mode }));
+  const findings = (await page.evaluate(PAGE_CHECKS, COPY_RULES.map(([re, why, fix]) => [re.source, re.flags, why, fix]))).map((f) => ({ ...f, viewport: vpName, mode }));
   for (const e of runtimeErrors) findings.push({ rule: 'runtime-error', severity: 'error', selector: null, message: e, viewport: vpName, mode });
 
   // Dead controls: no click/key/pointer listener on the control or any ancestor, no native behaviour.

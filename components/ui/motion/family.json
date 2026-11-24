@@ -523,7 +523,7 @@
           "sel": "[data-part=\"row\"][aria-hidden]",
           "name": "Duplicate row",
           "api": "aria-hidden",
-          "text": "Makes the loop seamless; hidden from screen readers."
+          "text": "Lets the loop join without a jump; hidden from screen readers."
         }
       ],
       "prompt": "Add a logo marquee under the hero: a muted \"Trusted by teams at\" line, then two identical rows of wordmarks (the second aria-hidden) translating -100% over 32s linear infinite, edges faded with mask-image, paused on hover and focus, and a static centred wrap under reduced motion.",

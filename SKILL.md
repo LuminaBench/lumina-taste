@@ -1,11 +1,11 @@
 ---
 name: lumina-taste
-description: Build interfaces that look designed, not generated. Use for any UI, landing page, dashboard, settings screen, pricing page, docs site, portfolio, login or onboarding flow, and for picking colour palettes, light/dark themes, typography, spacing, density, border radius and motion. Use for named UI elements (rotating chevron, accordion, tree view, dark mode toggle, segmented pill toggle, slider with snapping, OTP code input, tag input, combobox, date range picker, file dropzone, mega menu, sidebar, bottom tab bar, mac dock, 9-dot app launcher, breadcrumbs, stepper, pagination, footer, count-up, odometer, flip clock, toast, skeleton, empty state, badge, ⌘K command palette, text selection toolbar, bulk action bar, query builder, context menu, tooltip, popover, hover card, drawer, modal, bottom sheet, product tour, sortable table, virtual list, bento grid, stacking cards, comparison table, changelog, resizable split pane, drag to reorder, code block, KPI strip) and for charts (line, area, stacked, bar, horizontal bar, grouped, diverging, lollipop, scatter, bubble, sparkline, calendar heatmap, cohort heatmap, candlestick/OHLC, donut, gauge, funnel, Sankey, radar, KPI card). Use to audit any page for overflow, clipped or overlapping text, contrast, focus rings, tabular numbers, dead buttons and AI-slop (purple gradients, heavy shadows, emoji icons), and to keep a product's look consistent across edits with a lockable taste-profile.json. Vanilla HTML/CSS/TS and React, no dependencies.
+description: Make interfaces look designed, not generated. Use for any UI work (landing, pricing, dashboard, settings, docs, auth and onboarding pages) and for colour palettes, light/dark themes, type pairings, spacing, density, radius, motion and visual styles such as swiss, editorial, neobrutalism, glass or terminal. Use when someone describes a UI element loosely (rotating arrow, 9-dot menu, cmd-K box, OTP boxes, bottom sheet, speed dial, kanban, star rating, chat bubbles, prompt box) to get its real name and working code. Use for charts, including benchmark leaderboards, trade-off quadrants, Pareto frontiers, slope, dumbbell, waterfall, box plot, beeswarm, bump and small multiples. Use to audit a page for overflow, clipped or overlapping text, contrast, focus rings, dead buttons and AI slop (purple gradients, heavy shadows, emoji icons, hype copy), and to keep a product's look stable across edits with a lockable taste-profile.json. Vanilla HTML/CSS/TS and React, no dependencies.
 ---
 
 # Lumina Taste
 
-An anti-slop design kit for coding agents: **18 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **84 named UI patterns**, **22 chart engines**, **8 page blueprints**, a **lockable taste profile** and a **Playwright auditor**. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
+A design kit for coding agents: **18 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **16 visual styles**, **99 named UI patterns**, **38 chart engines**, **8 page blueprints**, a **lockable taste profile**, a **Playwright auditor** and a **copy lint**. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
 
 Run commands from this skill's directory with Node.js 20+. Pass absolute paths (or run from the user's project with the absolute script path). Search, install and token scripts need nothing installed; the auditor needs Playwright; the gallery needs `npm install` once.
 
@@ -18,7 +18,8 @@ Read `references/anti-slop-rules.md` once per session. The short version:
 3. **No slop:** no purple→blue/pink gradients, no gradient headline text, no blurry 40px shadows, no emoji as icons, no 5-badge headers, no duplicated filter bars per card, no rotated axis labels, no pies with 5+ slices, no 3D.
 4. **Numbers are tabular** (`font-variant-numeric: tabular-nums`) in tables, KPIs, timers, prices and axes.
 5. **Every control works by keyboard** and shows a `:focus-visible` ring. Motion uses `--dur-*` / `--ease-*` and collapses under reduced motion.
-6. **Finish with the auditor.** `node scripts/audit-ui.mjs <url>` must report 0 errors.
+6. **Plain copy.** No hype words, clichés or exclamation marks; `node scripts/lint-copy.mjs <dir>` must pass. Say what the thing does in one short sentence.
+7. **Finish with the auditor.** `node scripts/audit-ui.mjs <url>` must report 0 errors.
 
 ## Find the right thing first
 
@@ -30,11 +31,12 @@ node scripts/search.mjs "9 dots menu"               # → waffle-launcher
 node scripts/search.mjs "bar when ticking rows"     # → bulk-action-bar
 node scripts/search.mjs "chart with long labels"    # → horizontal-bar-chart
 node scripts/search.mjs "dark finance palette" --kind palette
+node scripts/search.mjs "thick borders hard shadows" --kind style   # → neobrutal
 node scripts/search.mjs "login page with code" --json
 node scripts/install-taste.mjs --list               # every id, grouped
 ```
 
-`catalog.json` holds every pattern, chart, blueprint, palette and type pairing with its aliases, ARIA pattern, states, files and dependencies.
+`catalog.json` holds every pattern, chart, blueprint, palette, type pairing and style with its aliases, ARIA pattern, states, files and dependencies.
 
 ## Workflow A · Greenfield app
 
@@ -43,6 +45,7 @@ node scripts/install-taste.mjs --list               # every id, grouped
    - Typography: `tokens/typography/source.json` `use` field. Default `precision`.
    - Density: `spacious` for marketing/onboarding, `balanced` for products, `dense` for admin/trading.
    - Radius `sharp | balanced | soft`; motion `snappy | calm | reduced`.
+   - Style (optional): one of 16 looks in `tokens/styles/source.json` (studio, swiss, editorial, neobrutal, terminal, glass, soft, clay, retro, blueprint, lucid, flat, minimal, paper, elevated, newsprint). `--style swiss` brings its palette, mode, type and radius; explicit flags still win. Pick a style only when the brief names a mood; default is none.
 2. **Install only what the page needs** (writes `taste-profile.json`, copies tokens + chosen files + their imports, nothing else):
    ```sh
    node scripts/install-taste.mjs --project /abs/app --dest src/ui --framework react \
@@ -50,7 +53,7 @@ node scripts/install-taste.mjs --list               # every id, grouped
      --components navbar-mega,button,accordion --charts multi-line-chart --lock palette
    ```
 3. **Wire it:** import `src/ui/tokens/index.css` once; put the attributes on `<html>` (the installer prints them) or call `applyProfile()` / inline `bootstrapSnippet()` from `engine/profiles/profile.mjs` to avoid a theme flash.
-4. **Lay out the page** with `references/page-flow.md` (F/Z patterns, one CTA, nav choice, footer anatomy, density). Start from the closest blueprint (Workflow E).
+4. **Lay out the page** with `references/page-flow.md`: answer its three questions, copy one of its seven layout recipes, then place components. Start from the closest blueprint (Workflow E) when one fits.
 5. **Audit** (Workflow F) at 390px and 1440px, light and dark.
 
 ## Workflow B · Attach to an existing app
@@ -71,7 +74,7 @@ node scripts/install-taste.mjs --project /abs/app --attach --root "#billing-pane
 
 ```json
 { "profileVersion": 1, "palette": "navy-sand", "mode": "light", "typography": "swiss",
-  "density": "balanced", "radius": "soft", "motion": "snappy",
+  "density": "balanced", "radius": "soft", "motion": "snappy", "style": "none",
   "locks": ["palette", "overrides.accent-solid"], "overrides": {}, "installMode": "greenfield", "attachRoot": ".lt-root" }
 ```
 
@@ -92,8 +95,9 @@ node scripts/install-taste.mjs --project /abs/app --attach --root "#billing-pane
        format: { prefix: '£', suffix: 'k' }, source: 'Source: billing ledger' });
    ```
    React: `<MultiLineChart data={…} options={…} />` from the `.react.tsx` file.
-4. Built in, never re-implement: gutter labels with dashed horizontal grid only, direct end labels, magnetic crosshair + fixed tooltip, arrow-key navigation, hidden data table, SVG/PNG export, theme-derived colours (`--chart-1…8`, `seqColor`, `divColor`), Canvas above 300 scatter points, re-render on theme change.
-5. Formats: `formatNumber(v, { prefix: '£', compact: true })` → `£24.4k`; `{ suffix: ' fps', decimals: 1 }` → `60.1 fps`; `{ percent: true, sign: true }` → `+12.4%`; dates → `Nov 24`.
+4. Benchmark and leaderboard pages: `ranked-columns` (sorted, value on top, colour by group, hatched when missing), `leaderboard-table` (inline bar plus heat cells), `range-bar-chart` (p5–p95 with median), `tradeoff-scatter` (better-on-both quadrant) and `frontier-chart` (Pareto line). Pass `groups` so each group keeps its colour across every chart on the page.
+5. Built in, never re-implement: gutter labels with dashed horizontal grid only, direct end labels, magnetic crosshair + fixed tooltip, arrow-key navigation, hidden data table, SVG/PNG export, theme-derived colours (`--chart-1…8`, `seqColor`, `divColor`), Canvas above 300 scatter points, re-render on theme change.
+6. Formats: `formatNumber(v, { prefix: '£', compact: true })` → `£24.4k`; `{ suffix: ' fps', decimals: 1 }` → `60.1 fps`; `{ percent: true, sign: true }` → `+12.4%`; dates → `Nov 24`.
 
 ## Workflow E · Whole pages from blueprints
 
@@ -120,6 +124,7 @@ Replace the sample copy and data with the user's; keep the anatomy. Blueprints u
 node scripts/audit-ui.mjs http://localhost:5173/            # desktop 1440×900 + mobile 390×844, light + dark
 node scripts/audit-ui.mjs ./dist/index.html --viewports mobile --modes dark
 node scripts/audit-ui.mjs <url> --json report.json --screenshots qa/shots --strict
+node scripts/lint-copy.mjs src/                                # hype words, clichés, generated tics in source
 ```
 
 | Rule | Fix |
@@ -132,6 +137,7 @@ node scripts/audit-ui.mjs <url> --json report.json --screenshots qa/shots --stri
 | `tabular-nums` | Add `.lt-num` or `font-variant-numeric: tabular-nums`. |
 | `dead-control` | Give it a handler, a real `href`, or make it a non-interactive element. |
 | `covered-control` | Something sits on top of it: z-index, `pointer-events`, sticky headers. |
+| `slop-copy` | Rewrite the sentence plainly: what it does, for whom, with a number if you have one. See section 9 of `references/anti-slop-rules.md`. |
 | `slop-*` | See `references/anti-slop-rules.md`. |
 
 Requires Playwright in the skill or the project (`npm i -D @playwright/test && npx playwright install chromium`). Exit code 1 on any error.
@@ -143,7 +149,7 @@ Requires Playwright in the skill or the project (`npm i -D @playwright/test && n
 - Vanilla: paste the HTML, then `enhance(el)` or `autoEnhance(document, { accordion: enhance })` for every `[data-lt]`.
 - Events: components emit `lt-change` (detail = new state); React wrappers surface it as `onChange` / `onX` props.
 - Overlays use native `<dialog>`, the Popover API and CSS anchor positioning with a JS fallback.
-- Families: controls (22), navigation (14), feedback (14), overlays (13), data (14), motion (7). Full list: `catalog.json` or `--list`.
+- Families: controls (26), navigation (17), feedback (14), overlays (14), data (18), motion (10). Full list: `catalog.json` or `--list`.
 
 ## Tokens at a glance
 
@@ -165,7 +171,7 @@ Palettes are generated by `node scripts/build-tokens.mjs` from `tokens/palettes/
 npm install && npm run preview      # builds preview/dist and opens http://127.0.0.1:4321/
 ```
 
-Switch palette, mode, density, radius, type and motion live; try every pattern, hover every chart, open any blueprint full-screen at desktop or mobile width.
+Five views: Elements (every pattern with a live, contained demo, numbered parts, plain-language aliases and a copyable agent prompt), Charts, Styles, Pages and Palettes. Switch palette, mode, type and style from the Theme panel. Demos never take over the page and never download anything.
 
 ## Map
 
@@ -173,10 +179,10 @@ Switch palette, mode, density, radius, type and motion live; try every pattern, 
 SKILL.md                     this file
 catalog.json                 every pattern/chart/blueprint/palette with aliases
 engine/profiles/             taste profile engine, schema, default profile
-tokens/                      base.css, palettes/*.css (+ source.json), typography/
-components/ui/<family>/      84 patterns (html, css, ts, react.tsx)
-components/charts/           core/ + 22 chart engines (+ React wrappers)
+tokens/                      base.css, palettes/*.css (+ source.json), typography/, styles/
+components/ui/<family>/      99 patterns (html, css, ts, react.tsx)
+components/charts/           core/ + 38 chart engines (+ React wrappers)
 blueprints/                  8 page blueprints
 references/                  anti-slop-rules, page-flow, chart-selection, palettes, harvest-log
-scripts/                     search, install-taste, audit-ui, audit-all, build-tokens, test-contrast, build, serve
+scripts/                     search, install-taste, audit-ui, audit-all, lint-copy, build-tokens, test-contrast, build, serve
 ```

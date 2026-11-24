@@ -28,6 +28,22 @@ Pick the chart from the **shape of the data** and the **one sentence the reader 
 | Volume moving between stages | Where does it go? | Sankey | `sankey-chart` | Cycles; > ~20 links |
 | 1–3 profiles over 5–8 attributes | How do the profiles differ? | Radar | `radar-chart` | > 3 series; attributes with different units |
 | One headline metric | What's the number and is it good? | KPI stat card | `kpi-card` | Two numbers fighting in one card |
+| Entries ranked on one score, some missing | Who leads, and who is untested? | Ranked columns, colour by group, hatched gaps | `ranked-columns` | Unsorted bars; hiding missing entries |
+| Ranking plus 2–4 supporting metrics | Who leads, and at what cost? | Leaderboard table: inline bar + heat cells | `leaderboard-table` | A plain table with no visual ranking |
+| A spread per item (p5–p95, min–max) | How variable is each one? | Range bars with a median dot | `range-bar-chart` | Error bars on columns |
+| Two measures where both matter (quality vs price) | Which entries win on both? | Trade-off quadrant | `tradeoff-scatter` | Unlabelled dots |
+| Efficient options in a two-way trade-off | Which ones are not beaten on both? | Pareto frontier | `frontier-chart` | A line through every point |
+| Before and after for 4–12 items | What rose and what fell? | Slope | `slope-chart` | Grouped bars for two periods |
+| Two values per item (plan vs actual) | How big is each gap? | Dumbbell | `dumbbell-chart` | Two bar series side by side |
+| Several KPIs against targets | Are we on plan? | Bullet | `bullet-chart` | A row of gauges |
+| A total explained step by step | How did we get from A to B? | Waterfall | `waterfall-chart` | Stacked bars |
+| Mix of parts across categories (survey answers) | How does the mix differ? | 100% stacked bar | `stacked-100-bar` | Comparing totals with it |
+| The shape of one measure | Where do most values sit? | Histogram with a median line | `histogram` | Bars with gaps between bins |
+| Spread of 3–10 groups | Which group is wider or higher? | Box plot | `box-plot` | Audiences new to statistics (use beeswarm) |
+| Individual values per group, up to a few hundred | Where does each value fall? | Beeswarm | `beeswarm-chart` | Thousands of points (use histogram) |
+| Rank over time for 4–10 entries | Who overtook whom? | Bump | `bump-chart` | When gap size matters |
+| Six or more series over time | How does each one move? | Small multiples on a shared scale | `small-multiples` | One tangled line chart |
+| A trend with events that explain it | Why did it jump? | Annotated line | `annotated-line-chart` | More than six notes |
 
 When two rows fit, prefer the one higher in this list: simpler charts are read faster.
 
@@ -36,7 +52,7 @@ When two rows fit, prefer the one higher in this list: simpler charts are read f
 - **No 3D** of any kind: no 3D pies, bars or extruded areas.
 - **No pie or donut with more than 4 slices.** The donut engine folds extras into "Other" automatically.
 - **No rotated x-axis labels.** If labels collide, thin them (`tickIndices`) or switch to a horizontal bar.
-- **No vertical gridlines.** Dashed horizontal gridlines only, labels in a gutter. Bars carry their own values.
+- **No vertical gridlines on time or category axes.** Dashed horizontal gridlines only, labels in a gutter. Bars carry their own values. Charts whose x axis is a continuous value (scatter, ranges, distributions) keep light dashed value guides.
 - **No dual y-axes.** Use two charts stacked with a shared x axis.
 - **No legend when a direct label fits.** Label lines at their ends, bars at their tips, donut parts beside the ring.
 - **No rainbow or sequential palettes for categories.** Use `--chart-1…8` in order (the order is colour-vision-deficiency safe).

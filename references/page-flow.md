@@ -2,6 +2,54 @@
 
 Where things go, and how a page breathes. Use this before placing a single component. Every rule here is implemented by at least one blueprint in `blueprints/`.
 
+## 0. Pick a layout in three questions
+
+1. **Is it read once or used every day?** Read once (landing, pricing, article) → a single centred column with full-width bands. Used daily (app, dashboard, settings) → a fixed shell with a sidebar or top bar and a scrolling content area.
+2. **How many things compete for attention?** One → centre it. Two → split 60/40, the important one left. Three or more → a grid of equal cards, then make one card wider.
+3. **What is the one action?** Put it top-right in apps, under the headline on marketing pages. If you cannot name it, the page is not ready.
+
+### Layout recipes
+
+Copy these; they cover almost every page. All use `--space-*` / `--gap-*` and work at 390px.
+
+```css
+/* 1. Centred page column: landing, pricing, docs article */
+.page { width: min(1180px, 100% - 32px); margin-inline: auto; }
+.prose { max-width: var(--measure); }                         /* 68ch */
+.band { padding-block: var(--section-y); }                    /* one band per idea */
+
+/* 2. App shell: sidebar + scrolling main */
+.shell { display: grid; grid-template-columns: auto minmax(0, 1fr); min-height: 100dvh; }
+.shell > main { min-width: 0; padding: var(--space-6); }
+
+/* 3. Page header: title left, one action right */
+.page-head { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-md); flex-wrap: wrap; }
+
+/* 4. Card grid that never needs a breakpoint */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: var(--gap-lg); }
+
+/* 5. Split: content and aside, stacks on narrow screens */
+.split { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: var(--space-7); }
+@media (max-width: 860px) { .split { grid-template-columns: 1fr; } }
+
+/* 6. Settings: section nav + one form column */
+.settings { display: grid; grid-template-columns: 200px minmax(0, 420px); gap: var(--space-7); }
+@media (max-width: 720px) { .settings { grid-template-columns: 1fr; } }
+
+/* 7. Dashboard: KPI row, then a two-up chart grid where the main story spans both */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--gap-md); }
+.charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap-lg); }
+.charts > .wide { grid-column: 1 / -1; }
+@media (max-width: 860px) { .charts { grid-template-columns: 1fr; } }
+```
+
+Rules that keep these simple:
+
+- `minmax(0, 1fr)`, not `1fr`, for any column holding tables, code or charts, so they shrink instead of pushing the page wide.
+- One container width per page. Bands can be full-bleed; text never is.
+- Space between sections is larger than space inside them. If a page feels busy, add space before removing things; if it still feels busy, remove things.
+- Do not nest cards inside cards. Use a divider or a heading instead.
+
 ## 1. Reading patterns
 
 | Page type | Pattern | What it means for layout |

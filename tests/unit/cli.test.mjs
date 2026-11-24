@@ -40,5 +40,15 @@ test('audit-ui flags every slop rule on the fixture', () => {
   const r = node([join(root, 'scripts/audit-ui.mjs'), join(root, 'tests/fixtures/slop.html'), '--viewports', 'desktop', '--modes', 'light', '--json', out, '--quiet']);
   assert.equal(r.status, 1);
   const rules = new Set(JSON.parse(readFileSync(out, 'utf8')).report[0].findings.map((f) => f.rule));
-  for (const rule of ['overflow', 'clipped-text', 'overlap', 'contrast', 'tabular-nums', 'slop-gradient', 'slop-gradient-text', 'slop-shadow', 'slop-emoji', 'dead-control', 'focus-visible']) assert.ok(rules.has(rule), rule);
+  for (const rule of ['overflow', 'clipped-text', 'overlap', 'contrast', 'tabular-nums', 'slop-gradient', 'slop-gradient-text', 'slop-shadow', 'slop-emoji', 'slop-copy', 'dead-control', 'focus-visible']) assert.ok(rules.has(rule), rule);
+});
+
+test('copy lint flags hype and passes plain sentences', () => {
+  const bad = node([join(root, 'scripts/lint-copy.mjs'), 'Seamlessly unlock the power of your data!']);
+  assert.equal(bad.status, 1);
+  assert.match(bad.stdout, /Seamlessly/);
+  const ok = node([join(root, 'scripts/lint-copy.mjs'), 'Export any report to CSV in one click.']);
+  assert.equal(ok.status, 0);
+  const repo = node([join(root, 'scripts/lint-copy.mjs'), join(root, 'components'), join(root, 'blueprints'), join(root, 'SKILL.md'), join(root, 'references')]);
+  assert.equal(repo.status, 0, repo.stdout);
 });
