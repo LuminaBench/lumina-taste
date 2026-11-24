@@ -2354,6 +2354,212 @@
         ]
       ],
       "added": 6
+    },
+    {
+      "id": "settings-list",
+      "name": "Settings list",
+      "summary": "A titled card of settings rows: label and help on the left, a switch or select on the right; saves on change.",
+      "pattern": "List of labelled controls",
+      "states": [
+        "on",
+        "off",
+        "saved"
+      ],
+      "aliases": [
+        "settings page rows",
+        "preferences list",
+        "notification settings",
+        "account settings",
+        "toggle list"
+      ],
+      "react": "SettingsList",
+      "api": "role=\"switch\" · aria-labelledby",
+      "w": 620,
+      "preview": [
+        [
+          "click",
+          "li:nth-child(3) input"
+        ]
+      ],
+      "called": [
+        "settings rows with toggles on the right",
+        "notification preferences card",
+        "list of settings with switches",
+        "account preferences"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:first-child [data-part=\"label\"]",
+          "name": "Label and help",
+          "api": "aria-labelledby",
+          "text": "What it does, then one line on when it applies."
+        },
+        {
+          "sel": "li:first-child .lt-switch-mini",
+          "name": "Switch",
+          "api": "role=\"switch\"",
+          "text": "Applies at once; no Save button."
+        },
+        {
+          "sel": "li:last-child select",
+          "name": "Other controls",
+          "api": "",
+          "text": "Selects sit in the same column."
+        }
+      ],
+      "prompt": "Add a settings card: a heading and one-line description, then rows with a bold label and muted help text on the left and a compact switch (role=\"switch\") or select on the right, hairline dividers, changes saved immediately with a short \"Saved: Weekly digest turned off.\" status line.",
+      "debug": "Debug my settings rows. Rule out: switches that need a separate Save; labels not connected to their controls; help text longer than one line; a switch for something that is really a choice of three. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<input type=\"checkbox\" role=\"switch\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SettingsList rows>",
+          "React"
+        ]
+      ],
+      "added": 8
+    },
+    {
+      "id": "api-key-field",
+      "name": "API key field",
+      "summary": "A masked secret with reveal and copy, who made it and when it was used, and a two-step Roll.",
+      "pattern": "Masked value + actions",
+      "states": [
+        "masked",
+        "revealed",
+        "copied",
+        "roll armed",
+        "rolled"
+      ],
+      "aliases": [
+        "secret key field",
+        "token display",
+        "api token copy",
+        "credentials field",
+        "reveal secret"
+      ],
+      "react": "ApiKeyField",
+      "api": "aria-pressed · clipboard",
+      "w": 460,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"roll\"]"
+        ]
+      ],
+      "called": [
+        "api key box with eye and copy buttons",
+        "secret token field",
+        "show and copy api key",
+        "developer key settings"
+      ],
+      "anatomy": [
+        {
+          "sel": "code",
+          "name": "Masked key",
+          "api": "",
+          "text": "Prefix and last four visible, so people can tell keys apart."
+        },
+        {
+          "sel": "[data-part=\"reveal\"]",
+          "name": "Reveal",
+          "api": "aria-pressed",
+          "text": "Label switches to \"Hide key\"."
+        },
+        {
+          "sel": "[data-part=\"roll\"]",
+          "name": "Roll",
+          "api": "two-step",
+          "text": "First click explains, second click rotates."
+        }
+      ],
+      "prompt": "Add an API key field: the key masked except its prefix and last four characters in a mono, tinted row with reveal (aria-pressed) and copy buttons; a meta line with creator and last use; a \"Roll key…\" button that first explains the consequence and turns red, and rotates on the second click; a status line for copy and roll messages.",
+      "debug": "Debug my API key field. Rule out: the full key in the DOM before reveal (fetch on demand in production); copy with no confirmation; rotating without warning about the old key; keys indistinguishable when masked. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<code> + buttons",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ApiKeyField value>",
+          "React"
+        ]
+      ],
+      "added": 8
+    },
+    {
+      "id": "danger-zone",
+      "name": "Danger zone",
+      "summary": "A red-edged settings card for irreversible actions; deleting needs the name typed in an inline confirm.",
+      "pattern": "Section + inline confirm form",
+      "states": [
+        "default",
+        "confirming",
+        "confirmed"
+      ],
+      "aliases": [
+        "delete account section",
+        "destructive settings",
+        "type to confirm",
+        "delete workspace",
+        "irreversible actions"
+      ],
+      "react": "DangerZone",
+      "api": "type-the-name confirm",
+      "w": 620,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"open\"]"
+        ]
+      ],
+      "called": [
+        "delete account box at the bottom of settings",
+        "type the name to confirm delete",
+        "danger zone card",
+        "destructive settings section"
+      ],
+      "anatomy": [
+        {
+          "sel": "h3",
+          "name": "Title",
+          "api": "",
+          "text": "Red text and a red-tinted border; nothing else red until confirming."
+        },
+        {
+          "sel": "[data-part=\"row\"]:nth-of-type(2) p:last-child",
+          "name": "Impact",
+          "api": "",
+          "text": "Says exactly what goes and for how many people."
+        },
+        {
+          "sel": "label",
+          "name": "Type to confirm",
+          "api": "button disabled until it matches",
+          "text": "Slows people down for the one action that cannot be undone."
+        }
+      ],
+      "prompt": "Add a danger zone at the bottom of settings: a card with a red-tinted border and red title, one row per irreversible action with what it removes (counts included) and a destructive button; deleting opens an inline form asking to type the workspace name, enabling a filled red \"Delete for everyone\" only when it matches, plus Cancel.",
+      "debug": "Debug my danger zone. Rule out: red everywhere so nothing stands out; delete enabled before the name matches; vague impact text; no grace period or restore path. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<form> + disabled submit",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<DangerZone name>",
+          "React"
+        ]
+      ],
+      "added": 8
     }
   ]
 }

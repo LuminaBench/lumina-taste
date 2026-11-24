@@ -1,0 +1,19 @@
+{
+  "id": "radial-bar-chart",
+  "order": 53,
+  "name": "Radial bars",
+  "group": "Single value",
+  "summary": "Concentric rings that fill toward a target, with values in a legend beside them.",
+  "bestFor": "Two to four goals tracked together, like activity rings",
+  "avoidFor": "Comparing values precisely (rings of different radius mislead; use bars)",
+  "dataShape": "items: label + value + max",
+  "aliases": [
+    "activity rings",
+    "progress rings chart",
+    "circular progress",
+    "goal rings",
+    "concentric bars"
+  ],
+  "react": "RadialBarChart",
+  "wide": false
+}

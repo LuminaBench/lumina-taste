@@ -1025,6 +1025,108 @@
     "cta": "Start now",
     "badge": "Beta"
    }
+  },
+  {
+   "id": "ledger",
+   "name": "Ledger",
+   "kind": "Precise financial",
+   "palette": "navy-sand",
+   "mode": "light",
+   "type": "dense",
+   "radius": "sharp",
+   "aliases": [
+    "accounting look",
+    "finance app style",
+    "banking dashboard",
+    "ruled table design",
+    "invoice style"
+   ],
+   "summary": "Ruled rows, tabular figures and navy ink on a warm sand page, like a well-kept account book.",
+   "signals": [
+    "hairline ruled rows",
+    "tabular numbers everywhere",
+    "navy ink on sand",
+    "small caps labels",
+    "no shadows"
+   ],
+   "useFor": "Accounting, invoicing, banking and any product where people check figures.",
+   "notTo": "Ticker, which is a dark trading screen; ledger is calm, light and printed.",
+   "brief": "Rule every row with a hairline, set all numbers in tabular figures and keep the page flat.",
+   "sample": {
+    "eyebrow": "Statement",
+    "title": "November closed",
+    "body": "Income · Costs · Net",
+    "cta": "Reconcile",
+    "badge": "Balanced"
+   }
+  },
+  {
+   "id": "volt",
+   "name": "Volt",
+   "kind": "Electric dark",
+   "palette": "mono-lime",
+   "mode": "dark",
+   "type": "geometric",
+   "radius": "balanced",
+   "aliases": [
+    "lime on black",
+    "developer tool dark",
+    "neon accent dark ui",
+    "api platform style",
+    "dark devtools"
+   ],
+   "summary": "Near-black surfaces, one lime accent for actions and live states, and crisp geometric type.",
+   "signals": [
+    "near-black layers",
+    "single lime accent",
+    "thin bright borders",
+    "mono for code and ids",
+    "no gradients"
+   ],
+   "useFor": "Developer platforms, API products, infrastructure and observability tools.",
+   "notTo": "Terminal, which is green text on black throughout; volt keeps normal type and saves lime for actions.",
+   "brief": "Keep everything neutral and dark, and spend the lime only on actions and live status.",
+   "sample": {
+    "eyebrow": "Edge",
+    "title": "Deploy at the edge",
+    "body": "Functions · Queues · Logs",
+    "cta": "New project",
+    "badge": "Live"
+   }
+  },
+  {
+   "id": "civic",
+   "name": "Civic",
+   "kind": "Plain public",
+   "palette": "ochre-indigo",
+   "mode": "light",
+   "type": "humanist",
+   "radius": "balanced",
+   "aliases": [
+    "government website",
+    "public service design",
+    "accessible plain site",
+    "council website",
+    "education portal"
+   ],
+   "summary": "Large readable text, underlined links, thick focus outlines and solid, plain buttons.",
+   "signals": [
+    "19px body text",
+    "underlined links",
+    "thick yellow-black focus",
+    "one column, wide margins",
+    "plain words"
+   ],
+   "useFor": "Public services, councils, health, education and forms anyone might need to fill in.",
+   "notTo": "Minimal, which hides affordances for looks; civic makes every link and control obvious.",
+   "brief": "Raise body text to 19px, underline every link and give buttons a solid fill with a firm edge.",
+   "sample": {
+    "eyebrow": "Apply",
+    "title": "Renew a permit",
+    "body": "Takes about 10 minutes",
+    "cta": "Start now",
+    "badge": "Open"
+   }
   }
  ]
 }

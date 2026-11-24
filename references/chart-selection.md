@@ -26,6 +26,10 @@ Pick the chart from the **shape of the data** and the **one sentence the reader 
 | One value vs. a goal | Are we on target? | Radial gauge | `radial-gauge` | Several gauges side by side (use bars with a target line) |
 | Ordered steps with drop-off | Where do we lose people? | Funnel | `funnel-chart` | Unordered categories |
 | Volume moving between stages | Where does it go? | Sankey | `sankey-chart` | Cycles; > ~20 links |
+| Many parts of one total | What takes the most? | Treemap | `treemap` | Precise comparison of similar values (use sorted bars) |
+| Tasks over calendar time | What is late, what is next? | Gantt chart | `gantt-chart` | Heavy dependencies (use a real planner) |
+| One share people should feel | How many in 100? | Waffle chart | `waffle-chart` | More than two categories |
+| Two to four goals together | How close is each? | Radial bars | `radial-bar-chart` | Precise comparison (ring radius distorts; use bars) |
 | 1–3 profiles over 5–8 attributes | How do the profiles differ? | Radar | `radar-chart` | > 3 series; attributes with different units |
 | One headline metric | What's the number and is it good? | KPI stat card | `kpi-card` | Two numbers fighting in one card |
 | Entries ranked on one score, some missing | Who leads, and who is untested? | Ranked columns, colour by group, hatched gaps | `ranked-columns` | Unsorted bars; hiding missing entries |

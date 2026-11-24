@@ -1,0 +1,10 @@
+<section class="lt-danger" data-lt="danger-zone" aria-labelledby="lt-dz-title">
+  <h3 id="lt-dz-title">Danger zone</h3>
+  <div data-part="row"><div><p><strong>Transfer ownership</strong></p><p>Give this workspace to another admin.</p></div><button type="button" class="lt-btn" data-variant="secondary" data-size="sm">Transfer</button></div>
+  <div data-part="row"><div><p><strong>Delete workspace</strong></p><p>Removes 38 dashboards and all history for 12 people. This cannot be undone.</p></div><button type="button" class="lt-btn" data-variant="destructive" data-size="sm" data-part="open">Delete workspace</button></div>
+  <form data-part="confirm" hidden>
+    <label for="lt-dz-input">Type <code>halyard</code> to confirm</label>
+    <div><input id="lt-dz-input" autocomplete="off" spellcheck="false"><button type="submit" class="lt-btn" data-variant="primary" data-tone="danger" data-size="sm" disabled>Delete for everyone</button><button type="button" class="lt-btn" data-variant="ghost" data-size="sm" data-part="cancel">Cancel</button></div>
+  </form>
+  <p data-part="msg" role="status"></p>
+</section>

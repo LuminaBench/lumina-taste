@@ -122,7 +122,10 @@
         "bauhaus",
         "ticker",
         "linen",
-        "signal"
+        "signal",
+        "ledger",
+        "volt",
+        "civic"
       ],
       "description": "Visual style layer. 'none' is the plain kit."
     },

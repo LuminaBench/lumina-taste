@@ -1,6 +1,6 @@
 # Lumina Taste
 
-Interfaces that look designed, not generated. A taste kit for coding agents: 18 verified palettes, 32 visual styles, 156 named UI patterns, 38 publication-grade charts and 8 page blueprints, plus an auditor and a copy lint that catch slop before your users do.
+Interfaces that look designed, not generated. A taste kit for coding agents: 18 verified palettes, 35 visual styles, 162 named UI patterns, 42 publication-grade charts and 8 page blueprints, plus an auditor and a copy lint that catch slop before your users do.
 
 ## Install
 
@@ -44,8 +44,8 @@ npx skills remove lumina-taste -g
 | **Palettes** | 18 × light/dark | Cream & Charcoal, Deep Navy & Warm Sand, Matte Black & Signal Orange, Lab Monochrome & Acid Lime… Every text, control and chart pair is checked: primary text ≥ 7:1, all other text ≥ 4.5:1, UI marks ≥ 3:1. |
 | **Type pairings** | 12 | Editorial serif + grotesque, precision dev sans + mono, financial condensed, warm humanist… Fluid `clamp()` scales, tabular numbers everywhere they matter. |
 | **Visual styles** | 32 | Monochrome, graphite, atelier, nordic, kraft, midnight, playful, enterprise, zen, swiss, editorial, neobrutalism, terminal, glass, soft, clay, retro, blueprint, paper, newsprint… One attribute restyles borders, surfaces, shadows and fields across every component. |
-| **UI patterns** | 156 | Rotating chevrons, sliding pill toggles, OTP input, ⌘K palette, bulk action bar, kanban board, chat thread, prompt composer, carousel, lightbox, swipe actions, @-mentions, plus ready page sections: heroes, pricing, FAQ, testimonials, sign-in, 404… Vanilla HTML/CSS/TS **and** React, keyboard-complete, `@scope`-isolated. |
-| **Charts** | 38 | Benchmark leaderboards (ranked columns, leaderboard table, range bars, trade-off quadrant, Pareto frontier), line, area, bars, slope, dumbbell, waterfall, histogram, box plot, beeswarm, bump, small multiples, heatmaps, candlestick, Sankey, radar… Magnetic crosshair, direct labels, keyboard navigation. |
+| **UI patterns** | 162 | Rotating chevrons, sliding pill toggles, OTP input, ⌘K palette, bulk action bar, kanban board, chat thread, prompt composer, carousel, lightbox, swipe actions, @-mentions, plus ready page sections: heroes, pricing, FAQ, testimonials, sign-in, 404… Vanilla HTML/CSS/TS **and** React, keyboard-complete, `@scope`-isolated. |
+| **Charts** | 42 | Benchmark leaderboards (ranked columns, leaderboard table, range bars, trade-off quadrant, Pareto frontier), line, area, bars, slope, dumbbell, waterfall, histogram, box plot, beeswarm, bump, small multiples, heatmaps, candlestick, Sankey, treemap, Gantt, waffle, radar… Magnetic crosshair, direct labels, keyboard navigation. |
 | **Page blueprints** | 8 | Landing, dashboard, editorial, docs, pricing, settings, directory, auth. |
 | **Taste profile** | 1 file | `taste-profile.json` pins palette, mode, type, density, radius, motion and style. Lock what you love; agents leave locked parts alone. |
 | **Auditor** | 12 rules | Overflow, clipped or overlapping text, contrast, focus rings, tabular numbers, dead controls, purple gradients, heavy shadows, emoji icons, hype copy. Desktop + mobile, light + dark. |
@@ -74,7 +74,7 @@ npm install
 npm run preview
 ```
 
-Look up any element by describing it, see it live in a contained demo with its parts numbered, copy a prompt for your agent, and switch palette, mode, type and style from one panel. `npm test` runs the contrast checks, copy lint, unit tests, type checks, 135 browser tests and the full audit.
+Look up any element by describing it, see it live in a contained demo with its parts numbered, copy a prompt for your agent, and switch palette, mode, type and style from one panel. `npm test` runs the contrast checks, copy lint, unit tests, type checks, 140 browser tests and the full audit.
 
 </details>
 

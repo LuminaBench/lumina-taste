@@ -180,6 +180,16 @@ import { DonutChart } from '../../components/charts/donut-chart/donut-chart.reac
 import { KpiCard } from '../../components/charts/kpi-card/kpi-card.react';
 import { Sparkline } from '../../components/charts/sparkline/sparkline.react';
 import { SankeyChart } from '../../components/charts/sankey-chart/sankey-chart.react';
+import { SettingsList } from '../../components/ui/controls/settings-list/settings-list.react';
+import { ApiKeyField } from '../../components/ui/controls/api-key-field/api-key-field.react';
+import { UsageMeters } from '../../components/ui/data/usage-meters/usage-meters.react';
+import { PlanCard } from '../../components/ui/data/plan-card/plan-card.react';
+import { TeamMembers } from '../../components/ui/data/team-members/team-members.react';
+import { DangerZone } from '../../components/ui/controls/danger-zone/danger-zone.react';
+import { Treemap } from '../../components/charts/treemap/treemap.react';
+import { GanttChart } from '../../components/charts/gantt-chart/gantt-chart.react';
+import { WaffleChart } from '../../components/charts/waffle-chart/waffle-chart.react';
+import { RadialBarChart } from '../../components/charts/radial-bar-chart/radial-bar-chart.react';
 
 const log: string[] = [];
 (window as unknown as { __ltLog: string[] }).__ltLog = log;
@@ -390,6 +400,16 @@ function App() {
       <Case id="logo-cloud"><LogoCloud lead="Used by" logos={[{ name: 'Halyard' }, { name: 'Moss' }]} /></Case>
       <Case id="article"><ArticleLayout title="Define a metric" toc={[{ id: 'why', label: 'Why' }]}><p>Body</p></ArticleLayout></Case>
       <Case id="before-after"><BeforeAfter title="Week one" before={['Three numbers']} after={['One number']} /></Case>
+      <Case id="settings"><SettingsList title="Notifications" rows={[{ id: 'a', label: 'Weekly digest', defaultOn: true }]} onChange={(k, v) => log.push(`setting:${k}=${v}`)} /></Case>
+      <Case id="api-key"><ApiKeyField label="Secret key" value="hy_demo_key_1234" meta="Created 2 Nov" /></Case>
+      <Case id="usage"><UsageMeters items={[{ label: 'Seats', used: '18', limit: '20', percent: 90 }]} /></Case>
+      <Case id="plan"><PlanCard plan="Team" period="Monthly" price="£240" facts={[{ term: 'Seats', value: '20' }]} /></Case>
+      <Case id="members"><TeamMembers members={[{ name: 'Ana Lopes', email: 'ana@halyard.io', role: 'Admin', status: 'Active' }]} /></Case>
+      <Case id="danger"><DangerZone name="halyard" impact="Deletes all reports." onDelete={() => log.push('deleted')} /></Case>
+      <Case id="treemap"><Treemap data={[{ label: 'A', value: 3, group: 'X' }, { label: 'B', value: 1, group: 'Y' }]} options={{ title: 'Spend' }} /></Case>
+      <Case id="gantt"><GanttChart data={[{ label: 'Plan', start: '2026-11-02', end: '2026-11-20', done: 0.5 }]} options={{ title: 'Plan' }} /></Case>
+      <Case id="waffle"><WaffleChart data={{ label: 'of teams', value: 68 }} options={{ title: 'Share' }} /></Case>
+      <Case id="radial"><RadialBarChart data={[{ label: 'Goal', value: 70 }]} options={{ title: 'Goals' }} /></Case>
       <Case id="stagger"><Stagger><span>One</span><span>Two</span></Stagger></Case>
     </ToastProvider>
   );

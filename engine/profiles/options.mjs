@@ -441,5 +441,32 @@ export const STYLES = [
     "mode": "light",
     "typography": "swiss",
     "radius": "sharp"
+  },
+  {
+    "id": "ledger",
+    "name": "Ledger",
+    "kind": "Precise financial",
+    "palette": "navy-sand",
+    "mode": "light",
+    "typography": "dense",
+    "radius": "sharp"
+  },
+  {
+    "id": "volt",
+    "name": "Volt",
+    "kind": "Electric dark",
+    "palette": "mono-lime",
+    "mode": "dark",
+    "typography": "geometric",
+    "radius": "balanced"
+  },
+  {
+    "id": "civic",
+    "name": "Civic",
+    "kind": "Plain public",
+    "palette": "ochre-indigo",
+    "mode": "light",
+    "typography": "humanist",
+    "radius": "balanced"
   }
 ];

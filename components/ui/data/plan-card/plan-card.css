@@ -1,0 +1,15 @@
+@scope (.lt-plan) {
+  :scope { display: grid; gap: 18px; width: 100%; max-width: 560px; padding: 22px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); font-size: var(--text-ui); }
+  [data-part="top"] { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
+  [data-part="eyebrow"] { margin: 0 0 4px; color: var(--text-muted); font-size: var(--text-ui-xs); font-weight: 600; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; }
+  h3 { display: flex; align-items: center; gap: 8px; margin: 0; font-family: var(--font-display); font-size: var(--step-2); font-weight: 650; }
+  h3 span { padding: 2px 8px; border-radius: var(--radius-pill); background: var(--accent-soft); color: var(--accent-text); font-family: var(--font-body); font-size: var(--text-ui-xs); font-weight: 650; }
+  [data-part="price"] { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  [data-part="price"] b { color: var(--text-primary); font-size: var(--step-1); font-variant-numeric: tabular-nums; }
+  dl { display: grid; margin: 0; border-top: var(--bw) var(--border-style) var(--border-hairline); }
+  dl > div { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: var(--bw) var(--border-style) var(--border-hairline); font-size: var(--text-ui-sm); }
+  dt { color: var(--text-secondary); }
+  dd { margin: 0; font-variant-numeric: tabular-nums; text-align: right; }
+  dd a { color: var(--accent-text); text-underline-offset: 3px; }
+  [data-part="actions"] { display: flex; flex-wrap: wrap; gap: 8px; }
+}

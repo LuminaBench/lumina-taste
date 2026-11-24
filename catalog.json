@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
   "counts": {
-    "ui": 156,
-    "charts": 38,
+    "ui": 162,
+    "charts": 42,
     "blueprints": 8,
     "palettes": 18,
     "themes": 36,
     "typography": 12,
-    "styles": 32
+    "styles": 35
   },
   "families": [
     {
@@ -17,7 +17,7 @@
       "title": "Controls & tactile inputs",
       "summary": "Buttons, toggles, pickers and fields with real pressed states and no layout jump.",
       "order": 1,
-      "count": 33
+      "count": 36
     },
     {
       "id": "navigation",
@@ -45,7 +45,7 @@
       "title": "Data & layout primitives",
       "summary": "Tables, lists, grids and blocks for showing real data cleanly, with tabular numbers everywhere.",
       "order": 5,
-      "count": 32
+      "count": 35
     },
     {
       "id": "motion",
@@ -1608,6 +1608,95 @@
       "path": "components/ui/controls/pricing-calculator"
     },
     {
+      "id": "settings-list",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Settings list",
+      "summary": "A titled card of settings rows: label and help on the left, a switch or select on the right; saves on change.",
+      "aliases": [
+        "settings page rows",
+        "preferences list",
+        "notification settings",
+        "account settings",
+        "toggle list"
+      ],
+      "pattern": "List of labelled controls",
+      "states": [
+        "on",
+        "off",
+        "saved"
+      ],
+      "react": "SettingsList",
+      "deps": [],
+      "files": [
+        "components/ui/controls/settings-list/settings-list.css",
+        "components/ui/controls/settings-list/settings-list.html",
+        "components/ui/controls/settings-list/settings-list.react.tsx",
+        "components/ui/controls/settings-list/settings-list.ts"
+      ],
+      "path": "components/ui/controls/settings-list"
+    },
+    {
+      "id": "api-key-field",
+      "kind": "ui",
+      "family": "controls",
+      "name": "API key field",
+      "summary": "A masked secret with reveal and copy, who made it and when it was used, and a two-step Roll.",
+      "aliases": [
+        "secret key field",
+        "token display",
+        "api token copy",
+        "credentials field",
+        "reveal secret"
+      ],
+      "pattern": "Masked value + actions",
+      "states": [
+        "masked",
+        "revealed",
+        "copied",
+        "roll armed",
+        "rolled"
+      ],
+      "react": "ApiKeyField",
+      "deps": [],
+      "files": [
+        "components/ui/controls/api-key-field/api-key-field.css",
+        "components/ui/controls/api-key-field/api-key-field.html",
+        "components/ui/controls/api-key-field/api-key-field.react.tsx",
+        "components/ui/controls/api-key-field/api-key-field.ts"
+      ],
+      "path": "components/ui/controls/api-key-field"
+    },
+    {
+      "id": "danger-zone",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Danger zone",
+      "summary": "A red-edged settings card for irreversible actions; deleting needs the name typed in an inline confirm.",
+      "aliases": [
+        "delete account section",
+        "destructive settings",
+        "type to confirm",
+        "delete workspace",
+        "irreversible actions"
+      ],
+      "pattern": "Section + inline confirm form",
+      "states": [
+        "default",
+        "confirming",
+        "confirmed"
+      ],
+      "react": "DangerZone",
+      "deps": [],
+      "files": [
+        "components/ui/controls/danger-zone/danger-zone.css",
+        "components/ui/controls/danger-zone/danger-zone.html",
+        "components/ui/controls/danger-zone/danger-zone.react.tsx",
+        "components/ui/controls/danger-zone/danger-zone.ts"
+      ],
+      "path": "components/ui/controls/danger-zone"
+    },
+    {
       "id": "data-table",
       "kind": "ui",
       "family": "data",
@@ -2522,6 +2611,89 @@
         "components/ui/data/search-results/search-results.ts"
       ],
       "path": "components/ui/data/search-results"
+    },
+    {
+      "id": "usage-meters",
+      "kind": "ui",
+      "family": "data",
+      "name": "Usage meters",
+      "summary": "One labelled bar per plan limit; turns amber at 90% and offers a way to add capacity.",
+      "aliases": [
+        "plan usage",
+        "quota bars",
+        "limits meter",
+        "billing usage",
+        "storage used"
+      ],
+      "pattern": "role=\"meter\"",
+      "states": [
+        "normal",
+        "near limit"
+      ],
+      "react": "UsageMeters",
+      "deps": [],
+      "files": [
+        "components/ui/data/usage-meters/usage-meters.css",
+        "components/ui/data/usage-meters/usage-meters.html",
+        "components/ui/data/usage-meters/usage-meters.react.tsx"
+      ],
+      "path": "components/ui/data/usage-meters"
+    },
+    {
+      "id": "plan-card",
+      "kind": "ui",
+      "family": "data",
+      "name": "Plan card",
+      "summary": "Current plan and price, seats, next invoice and card on file, with one upgrade action.",
+      "aliases": [
+        "billing overview",
+        "subscription card",
+        "current plan box",
+        "account plan",
+        "billing summary"
+      ],
+      "pattern": "<section> + <dl>",
+      "states": [
+        "default"
+      ],
+      "react": "PlanCard",
+      "deps": [],
+      "files": [
+        "components/ui/data/plan-card/plan-card.css",
+        "components/ui/data/plan-card/plan-card.html",
+        "components/ui/data/plan-card/plan-card.react.tsx"
+      ],
+      "path": "components/ui/data/plan-card"
+    },
+    {
+      "id": "team-members",
+      "kind": "ui",
+      "family": "data",
+      "name": "Team members",
+      "summary": "Invite by email, change roles in place, remove people; the owner row is protected.",
+      "aliases": [
+        "members table",
+        "user management",
+        "team settings",
+        "invite users",
+        "roles and permissions"
+      ],
+      "pattern": "<table> + inline controls",
+      "states": [
+        "active",
+        "invited",
+        "role changed",
+        "removed"
+      ],
+      "react": "TeamMembers",
+      "deps": [],
+      "files": [
+        "components/ui/data/team-members/team-members.css",
+        "components/ui/data/team-members/team-members.html",
+        "components/ui/data/team-members/team-members.react.tsx",
+        "components/ui/data/team-members/team-members.ts"
+      ],
+      "path": "components/ui/data/team-members"
     },
     {
       "id": "count-up",
@@ -5499,6 +5671,106 @@
         "components/charts/annotated-line-chart/meta.json"
       ],
       "path": "components/charts/annotated-line-chart"
+    },
+    {
+      "id": "treemap",
+      "kind": "chart",
+      "name": "Treemap",
+      "group": "Composition",
+      "summary": "Nested rectangles sized by value: parts of a whole when there are too many for a bar chart.",
+      "aliases": [
+        "tree map",
+        "rectangles chart",
+        "spend breakdown",
+        "area chart of parts",
+        "mosaic"
+      ],
+      "bestFor": "10–40 parts of one total, such as spend by team or revenue by product",
+      "avoidFor": "Comparing similar values precisely (use sorted bars)",
+      "dataShape": "items: label + value + group",
+      "react": "Treemap",
+      "order": 50,
+      "files": [
+        "components/charts/treemap/meta.json",
+        "components/charts/treemap/treemap.react.tsx",
+        "components/charts/treemap/treemap.ts"
+      ],
+      "path": "components/charts/treemap"
+    },
+    {
+      "id": "gantt-chart",
+      "kind": "chart",
+      "name": "Gantt chart",
+      "group": "Trends",
+      "summary": "Tasks as bars along a calendar, filled by progress, with diamonds for milestones and a today line.",
+      "aliases": [
+        "project timeline",
+        "roadmap chart",
+        "schedule bars",
+        "timeline chart",
+        "project plan"
+      ],
+      "bestFor": "Project plans and roadmaps with up to ~20 tasks",
+      "avoidFor": "Dependencies-heavy planning (use a real planner)",
+      "dataShape": "tasks: label + start + end (+ done, milestone)",
+      "react": "GanttChart",
+      "order": 51,
+      "files": [
+        "components/charts/gantt-chart/gantt-chart.react.tsx",
+        "components/charts/gantt-chart/gantt-chart.ts",
+        "components/charts/gantt-chart/meta.json"
+      ],
+      "path": "components/charts/gantt-chart"
+    },
+    {
+      "id": "waffle-chart",
+      "kind": "chart",
+      "name": "Waffle chart",
+      "group": "Single value",
+      "summary": "A 10×10 grid of squares with a share filled in, next to the number in large type.",
+      "aliases": [
+        "100 squares chart",
+        "percentage grid",
+        "unit chart",
+        "pictogram",
+        "dot grid share"
+      ],
+      "bestFor": "One share of a whole that people should feel, like \"68 in 100 teams\"",
+      "avoidFor": "More than one or two categories (use a stacked bar)",
+      "dataShape": "label + value (+ total)",
+      "react": "WaffleChart",
+      "order": 52,
+      "files": [
+        "components/charts/waffle-chart/meta.json",
+        "components/charts/waffle-chart/waffle-chart.react.tsx",
+        "components/charts/waffle-chart/waffle-chart.ts"
+      ],
+      "path": "components/charts/waffle-chart"
+    },
+    {
+      "id": "radial-bar-chart",
+      "kind": "chart",
+      "name": "Radial bars",
+      "group": "Single value",
+      "summary": "Concentric rings that fill toward a target, with values in a legend beside them.",
+      "aliases": [
+        "activity rings",
+        "progress rings chart",
+        "circular progress",
+        "goal rings",
+        "concentric bars"
+      ],
+      "bestFor": "Two to four goals tracked together, like activity rings",
+      "avoidFor": "Comparing values precisely (rings of different radius mislead; use bars)",
+      "dataShape": "items: label + value + max",
+      "react": "RadialBarChart",
+      "order": 53,
+      "files": [
+        "components/charts/radial-bar-chart/meta.json",
+        "components/charts/radial-bar-chart/radial-bar-chart.react.tsx",
+        "components/charts/radial-bar-chart/radial-bar-chart.ts"
+      ],
+      "path": "components/charts/radial-bar-chart"
     }
   ],
   "blueprints": [
@@ -7232,6 +7504,72 @@
       "radius": "sharp",
       "useFor": "Developer platforms, fintech, product launches that need to feel decisive.",
       "notTo": "Neobrutalism, which uses black outlines and offsets; signal stays clean.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "ledger",
+      "kind": "style",
+      "name": "Ledger",
+      "summary": "Ruled rows, tabular figures and navy ink on a warm sand page, like a well-kept account book.",
+      "aliases": [
+        "accounting look",
+        "finance app style",
+        "banking dashboard",
+        "ruled table design",
+        "invoice style"
+      ],
+      "palette": "navy-sand",
+      "mode": "light",
+      "typography": "dense",
+      "radius": "sharp",
+      "useFor": "Accounting, invoicing, banking and any product where people check figures.",
+      "notTo": "Ticker, which is a dark trading screen; ledger is calm, light and printed.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "volt",
+      "kind": "style",
+      "name": "Volt",
+      "summary": "Near-black surfaces, one lime accent for actions and live states, and crisp geometric type.",
+      "aliases": [
+        "lime on black",
+        "developer tool dark",
+        "neon accent dark ui",
+        "api platform style",
+        "dark devtools"
+      ],
+      "palette": "mono-lime",
+      "mode": "dark",
+      "typography": "geometric",
+      "radius": "balanced",
+      "useFor": "Developer platforms, API products, infrastructure and observability tools.",
+      "notTo": "Terminal, which is green text on black throughout; volt keeps normal type and saves lime for actions.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "civic",
+      "kind": "style",
+      "name": "Civic",
+      "summary": "Large readable text, underlined links, thick focus outlines and solid, plain buttons.",
+      "aliases": [
+        "government website",
+        "public service design",
+        "accessible plain site",
+        "council website",
+        "education portal"
+      ],
+      "palette": "ochre-indigo",
+      "mode": "light",
+      "typography": "humanist",
+      "radius": "balanced",
+      "useFor": "Public services, councils, health, education and forms anyone might need to fill in.",
+      "notTo": "Minimal, which hides affordances for looks; civic makes every link and control obvious.",
       "files": [
         "tokens/styles/styles.css"
       ]

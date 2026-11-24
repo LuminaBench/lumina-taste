@@ -1,0 +1,19 @@
+{
+  "id": "waffle-chart",
+  "order": 52,
+  "name": "Waffle chart",
+  "group": "Single value",
+  "summary": "A 10\u00d710 grid of squares with a share filled in, next to the number in large type.",
+  "bestFor": "One share of a whole that people should feel, like \"68 in 100 teams\"",
+  "avoidFor": "More than one or two categories (use a stacked bar)",
+  "dataShape": "label + value (+ total)",
+  "aliases": [
+    "100 squares chart",
+    "percentage grid",
+    "unit chart",
+    "pictogram",
+    "dot grid share"
+  ],
+  "react": "WaffleChart",
+  "wide": false
+}

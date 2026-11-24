@@ -2026,6 +2026,201 @@
         ]
       ],
       "added": 6
+    },
+    {
+      "id": "usage-meters",
+      "name": "Usage meters",
+      "summary": "One labelled bar per plan limit; turns amber at 90% and offers a way to add capacity.",
+      "pattern": "role=\"meter\"",
+      "states": [
+        "normal",
+        "near limit"
+      ],
+      "aliases": [
+        "plan usage",
+        "quota bars",
+        "limits meter",
+        "billing usage",
+        "storage used"
+      ],
+      "react": "UsageMeters",
+      "api": "role=\"meter\"",
+      "w": 560,
+      "called": [
+        "usage bars on a billing page",
+        "how much of my plan is used",
+        "quota meters",
+        "limits with progress bars"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:first-child p",
+          "name": "Numbers",
+          "api": "tabular-nums",
+          "text": "\"12 of 15\": used first, limit second."
+        },
+        {
+          "sel": "[data-level=\"warn\"] [data-part=\"bar\"]",
+          "name": "Near limit",
+          "api": "role=\"meter\"",
+          "text": "Amber from 90%, never red until it stops working."
+        },
+        {
+          "sel": "[data-part=\"note\"]",
+          "name": "Way out",
+          "api": "",
+          "text": "Says what to do, with a link."
+        }
+      ],
+      "prompt": "Add a usage card: heading and reset date, then a two-column grid of meters (one per plan limit) each with label, \"12 of 15\" in tabular figures and a 6px bar with role=\"meter\"; at 90% or more the bar turns amber and a note offers \"Add capacity\".",
+      "debug": "Debug my usage meters. Rule out: progressbar role for levels (use meter); red for \"almost full\" (keep red for blocked); percentages without the real numbers; no reset date. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<meter>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<UsageMeters items>",
+          "React"
+        ]
+      ],
+      "added": 8
+    },
+    {
+      "id": "plan-card",
+      "name": "Plan card",
+      "summary": "Current plan and price, seats, next invoice and card on file, with one upgrade action.",
+      "pattern": "<section> + <dl>",
+      "states": [
+        "default"
+      ],
+      "aliases": [
+        "billing overview",
+        "subscription card",
+        "current plan box",
+        "account plan",
+        "billing summary"
+      ],
+      "react": "PlanCard",
+      "api": "<dl>",
+      "w": 560,
+      "called": [
+        "current plan box on billing page",
+        "subscription overview card",
+        "plan and next invoice",
+        "billing settings card"
+      ],
+      "anatomy": [
+        {
+          "sel": "h3",
+          "name": "Plan",
+          "api": "",
+          "text": "Name and period as a small pill."
+        },
+        {
+          "sel": "dl > div:nth-child(2)",
+          "name": "Next invoice",
+          "api": "tabular-nums",
+          "text": "Amount and date: no surprises."
+        },
+        {
+          "sel": "[data-part=\"actions\"] .lt-btn[data-variant=\"primary\"]",
+          "name": "Upgrade",
+          "api": "",
+          "text": "The one action; invoices stay quiet."
+        }
+      ],
+      "prompt": "Add a plan card for billing settings: eyebrow \"Current plan\", the plan name with a period pill and the price on the right, a hairline description list (seats used, next invoice amount and date, card on file with an Update link), and one primary upgrade action plus a ghost \"View invoices\".",
+      "debug": "Debug my plan card. Rule out: hiding the next charge; a cancel button styled as the main action; dates without a year; card numbers beyond the last four. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<dl>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<PlanCard facts>",
+          "React"
+        ]
+      ],
+      "added": 8
+    },
+    {
+      "id": "team-members",
+      "name": "Team members",
+      "summary": "Invite by email, change roles in place, remove people; the owner row is protected.",
+      "pattern": "<table> + inline controls",
+      "states": [
+        "active",
+        "invited",
+        "role changed",
+        "removed"
+      ],
+      "aliases": [
+        "members table",
+        "user management",
+        "team settings",
+        "invite users",
+        "roles and permissions"
+      ],
+      "react": "TeamMembers",
+      "api": "<table> + <select>",
+      "w": 720,
+      "preview": [
+        [
+          "type",
+          "#lt-tm-email",
+          "riya@halyard.dev"
+        ],
+        [
+          "click",
+          "[data-part=\"invite\"] button"
+        ]
+      ],
+      "called": [
+        "team members list with roles",
+        "invite people by email table",
+        "user management page",
+        "change member role dropdown"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"invite\"]",
+          "name": "Invite",
+          "api": "type=\"email\"",
+          "text": "Right where the list is; validated on submit."
+        },
+        {
+          "sel": "tbody tr:nth-child(2) select",
+          "name": "Role",
+          "api": "aria-label per row",
+          "text": "Changes in place and says so."
+        },
+        {
+          "sel": "[data-s=\"invited\"]",
+          "name": "Invited",
+          "api": "",
+          "text": "Neutral pill until they join."
+        }
+      ],
+      "prompt": "Add a team members table: header with seat count and an inline invite form, rows with avatar, name and email, a status pill (Active green, Invited neutral), a role select labelled per person (owner shown as fixed text), and a remove button; each change is announced in a status line.",
+      "debug": "Debug my members table. Rule out: role selects without per-row labels; removing the last owner; invites with no validation; destructive remove with no undo or confirmation in production. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<table> + <select>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<TeamMembers members>",
+          "React"
+        ]
+      ],
+      "added": 8
     }
   ]
 }

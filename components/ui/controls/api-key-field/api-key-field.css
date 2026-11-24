@@ -1,0 +1,12 @@
+@scope (.lt-apikey) {
+  :scope { display: grid; gap: 8px; width: 100%; max-width: 460px; font-size: var(--text-ui); }
+  p { margin: 0; }
+  [data-part="label"] { font-size: var(--text-ui-sm); font-weight: 600; }
+  [data-part="row"] { display: flex; align-items: center; gap: 4px; height: var(--control-h); padding: 0 4px 0 12px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-2); }
+  code { flex: 1; min-width: 0; overflow: hidden; font: 13px/1 var(--font-mono); text-overflow: ellipsis; white-space: nowrap; color: var(--text-primary); }
+  [data-part="row"] button { display: grid; place-items: center; flex: none; width: 30px; height: 30px; padding: 0; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-secondary); cursor: pointer; }
+  [data-part="row"] button:hover { background: var(--bg-surface-3); color: var(--text-primary); }
+  [data-part="row"] button[aria-pressed="true"], [data-part="copy"][data-done] { color: var(--accent-text); }
+  [data-part="meta"] { color: var(--text-muted); font-size: var(--text-ui-xs); }
+  [data-part="msg"] { min-height: 1.2em; color: var(--text-secondary); font-size: var(--text-ui-xs); }
+}

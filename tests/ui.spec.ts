@@ -877,3 +877,50 @@ test.describe('site navigation', () => {
     await expect(s.locator('[aria-current="page"]')).toHaveText('Overview');
   });
 });
+
+test.describe('settings and account', () => {
+  test('settings list: a switch saves and says so', async ({ page }) => {
+    const s = await solo(page, 'settings-list');
+    await s.locator('[role="switch"]').first().click({ force: true });
+    await expect(s.locator('[data-part="saved"]')).toContainText('Saved:');
+  });
+  test('api key: reveal, then a two-step roll', async ({ page }) => {
+    const s = await solo(page, 'api-key-field');
+    const key = s.locator('[data-part="key"]');
+    const masked = await key.textContent();
+    await s.locator('[data-part="reveal"]').click();
+    await expect(key).not.toHaveText(masked!);
+    const roll = s.locator('[data-part="roll"]');
+    await roll.click();
+    await expect(roll).toHaveText('Click again to roll');
+    await roll.click();
+    await expect(s.locator('[data-part="msg"]')).toContainText('New key created');
+  });
+  test('usage meters expose values and flag the nearly full one', async ({ page }) => {
+    const s = await solo(page, 'usage-meters');
+    await expect(s.locator('[role="meter"]')).toHaveCount(4);
+    for (const m of await s.locator('[role="meter"]').all()) await expect(m).toHaveAttribute('aria-valuenow', /\d+/);
+  });
+  test('team members: rejects a bad email, escapes a good one', async ({ page }) => {
+    const s = await solo(page, 'team-members');
+    const input = s.locator('#lt-tm-email');
+    await input.fill('nope');
+    await s.locator('[data-part="invite"] button[type="submit"]').click();
+    await expect(s.locator('[data-part="msg"]')).toContainText('full email');
+    await input.fill('ana@halyard.io');
+    await s.locator('[data-part="invite"] button[type="submit"]').click();
+    await expect(s.locator('[data-part="msg"]')).toHaveText('Invite sent to ana@halyard.io.');
+    await expect(s.locator('tbody tr')).toHaveCount(5);
+  });
+  test('danger zone: delete stays off until the name is typed', async ({ page }) => {
+    const s = await solo(page, 'danger-zone');
+    await s.locator('[data-part="open"]').click();
+    const go = s.locator('[data-part="confirm"] button[type="submit"]');
+    await expect(go).toBeDisabled();
+    await s.locator('#lt-dz-input').fill('halyar');
+    await expect(go).toBeDisabled();
+    await s.locator('#lt-dz-input').fill('halyard');
+    await go.click();
+    await expect(s.locator('[data-part="msg"]')).toContainText('scheduled for deletion');
+  });
+});

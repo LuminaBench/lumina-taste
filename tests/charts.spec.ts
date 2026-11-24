@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test';
 const noInteract = new Set(['radial-gauge', 'sparkline', 'kpi-card']);
 // Vertical gridlines are banned on time and category axes (no cage). Charts whose x axis is a
 // continuous value scale (scatter, ranges, distributions) keep light value guides.
-const valueX = new Set(['range-bar-chart', 'dumbbell-chart', 'box-plot', 'beeswarm-chart', 'tradeoff-scatter', 'frontier-chart']);
+const valueX = new Set(['range-bar-chart', 'dumbbell-chart', 'box-plot', 'beeswarm-chart', 'tradeoff-scatter', 'frontier-chart', 'gantt-chart']);
 
 for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile', width: 390, height: 844 }]) {
   test(`all charts render cleanly (${vp.name})`, async ({ page }) => {

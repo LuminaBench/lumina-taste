@@ -1,0 +1,19 @@
+{
+  "id": "gantt-chart",
+  "order": 51,
+  "name": "Gantt chart",
+  "group": "Trends",
+  "summary": "Tasks as bars along a calendar, filled by progress, with diamonds for milestones and a today line.",
+  "bestFor": "Project plans and roadmaps with up to ~20 tasks",
+  "avoidFor": "Dependencies-heavy planning (use a real planner)",
+  "dataShape": "tasks: label + start + end (+ done, milestone)",
+  "aliases": [
+    "project timeline",
+    "roadmap chart",
+    "schedule bars",
+    "timeline chart",
+    "project plan"
+  ],
+  "react": "GanttChart",
+  "wide": true
+}
