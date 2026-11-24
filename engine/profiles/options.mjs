@@ -396,5 +396,50 @@ export const STYLES = [
     "mode": "light",
     "typography": "precision",
     "radius": "soft"
+  },
+  {
+    "id": "noir",
+    "name": "Noir",
+    "kind": "Dark luxury",
+    "palette": "paper-ink",
+    "mode": "dark",
+    "typography": "didone",
+    "radius": "sharp"
+  },
+  {
+    "id": "bauhaus",
+    "name": "Bauhaus",
+    "kind": "Geometric modernism",
+    "palette": "arctic-red",
+    "mode": "light",
+    "typography": "geometric",
+    "radius": "sharp"
+  },
+  {
+    "id": "ticker",
+    "name": "Ticker",
+    "kind": "Dense terminal data",
+    "palette": "carbon-amber",
+    "mode": "dark",
+    "typography": "technical",
+    "radius": "sharp"
+  },
+  {
+    "id": "linen",
+    "name": "Linen",
+    "kind": "Warm refined",
+    "palette": "linen-oxblood",
+    "mode": "light",
+    "typography": "bookish",
+    "radius": "soft"
+  },
+  {
+    "id": "signal",
+    "name": "Signal",
+    "kind": "Bold confident",
+    "palette": "ice-cobalt",
+    "mode": "light",
+    "typography": "swiss",
+    "radius": "sharp"
   }
 ];

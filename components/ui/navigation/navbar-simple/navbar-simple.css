@@ -1,0 +1,19 @@
+@scope (.lt-nav-simple) {
+  :scope { container-type: inline-size; position: relative; display: flex; align-items: center; gap: 28px; width: 100%; height: 60px; padding: 0 20px; border-bottom: var(--bw) var(--border-style) var(--border-hairline); background: color-mix(in oklab, var(--bg-canvas) 88%, transparent); backdrop-filter: blur(8px); font-size: var(--text-ui); }
+  [data-part="brand"] { display: inline-flex; align-items: center; gap: 8px; color: var(--text-primary); font-weight: 750; letter-spacing: -0.02em; text-decoration: none; }
+  [data-part="mark"] { width: 20px; height: 20px; border-radius: 6px; background: var(--text-primary); box-shadow: inset -6px -6px 0 var(--accent-solid); }
+  nav { flex: 1; }
+  ul { display: flex; gap: 4px; margin: 0; padding: 0; list-style: none; }
+  ul a { display: block; padding: 6px 10px; border-radius: var(--radius-sm); color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 550; text-decoration: none; transition: color var(--dur-1), background-color var(--dur-1); }
+  ul a:hover { color: var(--text-primary); background: var(--bg-surface-2); }
+  ul a[aria-current="page"] { color: var(--text-primary); }
+  [data-part="actions"] { display: flex; align-items: center; gap: 14px; }
+  [data-part="signin"] { color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 550; text-decoration: none; }
+  [data-part="signin"]:hover { color: var(--text-primary); }
+  [data-part="toggle"] { display: none; place-items: center; width: 38px; height: 38px; margin-left: auto; padding: 0; border: 0; border-radius: var(--radius-md); background: none; color: var(--text-primary); cursor: pointer; }
+  [data-part="panel"] { position: absolute; top: 100%; left: 0; right: 0; z-index: var(--z-dropdown, 30); display: grid; gap: 4px; padding: 10px 14px 16px; border-bottom: var(--bw) var(--border-style) var(--border-hairline); background: var(--bg-canvas); box-shadow: var(--shadow-md); }
+  [data-part="panel"][hidden] { display: none; }
+  [data-part="panel"] ul { display: grid; }
+  [data-part="panel"] ul a, [data-part="panel"] > a { padding: 10px 6px; font-size: var(--text-ui); color: var(--text-primary); text-decoration: none; }
+  @container (max-width: 680px) { nav, [data-part="signin"] { display: none; } [data-part="toggle"] { display: grid; } [data-part="actions"] { margin-left: auto; } [data-part="toggle"] { margin-left: 0; } }
+}

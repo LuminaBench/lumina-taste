@@ -73,6 +73,16 @@ import { DeliveryTracker } from '../../components/ui/data/delivery-tracker/deliv
 import { PricingCalculator } from '../../components/ui/controls/pricing-calculator/pricing-calculator.react';
 import { ShortcutsSheet } from '../../components/ui/overlays/shortcuts-sheet/shortcuts-sheet.react';
 import { SearchResults } from '../../components/ui/data/search-results/search-results.react';
+import { NavbarSimple } from '../../components/ui/navigation/navbar-simple/navbar-simple.react';
+import { FlyoutMenu } from '../../components/ui/navigation/flyout-menu/flyout-menu.react';
+import { NavbarCentered } from '../../components/ui/navigation/navbar-centered/navbar-centered.react';
+import { AppTopbar } from '../../components/ui/navigation/app-topbar/app-topbar.react';
+import { Subnav } from '../../components/ui/navigation/subnav/subnav.react';
+import { FooterMinimal } from '../../components/ui/navigation/footer-minimal/footer-minimal.react';
+import { FeatureSplit } from '../../components/ui/blocks/feature-split/feature-split.react';
+import { LogoCloud } from '../../components/ui/blocks/logo-cloud/logo-cloud.react';
+import { ArticleLayout } from '../../components/ui/blocks/article-layout/article-layout.react';
+import { BeforeAfter } from '../../components/ui/blocks/before-after/before-after.react';
 import { Disclosure } from '../../components/ui/controls/disclosure-chevron/disclosure-chevron.react';
 import { Accordion } from '../../components/ui/controls/accordion/accordion.react';
 import { TreeView } from '../../components/ui/controls/tree-view/tree-view.react';
@@ -370,6 +380,16 @@ function App() {
       <Case id="calc"><PricingCalculator onChange={(t) => log.push(`total:${t.total}`)} /></Case>
       <Case id="shortcuts"><ShortcutsSheet open={false} onClose={() => {}} groups={[{ title: 'General', items: [{ label: 'Search', keys: ['⌘', 'K'] }] }]} /><span>closed</span></Case>
       <Case id="results"><SearchResults query="forecast" hits={[{ kind: 'Doc', title: 'Q4', meta: 'Finance', snippet: 'the forecast', href: '#q' }]} /></Case>
+      <Case id="nav-simple"><NavbarSimple brand="Halyard" links={[{ label: 'Pricing', href: '#p', current: true }]} cta={{ label: 'Start', href: '#s' }} /></Case>
+      <Case id="flyout"><FlyoutMenu brand="Halyard" groups={[{ label: 'Product', items: [{ icon: 'chart', label: 'Analytics', description: 'Numbers', href: '#a' }] }]} cta={{ label: 'Start', href: '#s' }} /></Case>
+      <Case id="nav-centered"><NavbarCentered brand="NORD" links={[{ label: 'New in', href: '#n' }]} /></Case>
+      <Case id="topbar"><AppTopbar workspace="Halyard" plan="Team" initials="AL" unread={3} /></Case>
+      <Case id="subnav"><Subnav title="Q4 revenue" links={[{ label: 'Overview', href: '#o', current: true }, { label: 'Reports', href: '#r', count: 12 }]} /></Case>
+      <Case id="footer-min"><FooterMinimal owner="Halyard Labs" links={[{ label: 'Privacy', href: '#p' }]} note="Made in Lisbon" /></Case>
+      <Case id="feature-split"><FeatureSplit label="Features" rows={[{ title: 'Connect', text: 'Read only.', points: ['Encrypted'], visual: <span /> }]} /></Case>
+      <Case id="logo-cloud"><LogoCloud lead="Used by" logos={[{ name: 'Halyard' }, { name: 'Moss' }]} /></Case>
+      <Case id="article"><ArticleLayout title="Define a metric" toc={[{ id: 'why', label: 'Why' }]}><p>Body</p></ArticleLayout></Case>
+      <Case id="before-after"><BeforeAfter title="Week one" before={['Three numbers']} after={['One number']} /></Case>
       <Case id="stagger"><Stagger><span>One</span><span>Two</span></Stagger></Case>
     </ToastProvider>
   );

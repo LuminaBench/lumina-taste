@@ -1337,6 +1337,383 @@
         ]
       ],
       "added": 5
+    },
+    {
+      "id": "navbar-simple",
+      "name": "Navbar, simple",
+      "summary": "Brand, four links, Sign in and one primary button; a menu button and panel on narrow screens.",
+      "pattern": "<header> + <nav> + disclosure",
+      "states": [
+        "wide",
+        "narrow closed",
+        "narrow open",
+        "current page"
+      ],
+      "aliases": [
+        "top navigation bar",
+        "website header",
+        "site nav",
+        "header with logo and links",
+        "navbar"
+      ],
+      "react": "NavbarSimple",
+      "api": "<nav aria-label> · aria-current",
+      "w": 980,
+      "preview": [],
+      "called": [
+        "bar at the top of a website with logo and links",
+        "site header with sign in button",
+        "simple navigation bar",
+        "top menu"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"brand\"]",
+          "name": "Brand",
+          "api": "",
+          "text": "Links home; a mark plus the name."
+        },
+        {
+          "sel": "[aria-current=\"page\"]",
+          "name": "Current page",
+          "api": "aria-current=\"page\"",
+          "text": "Primary ink, not a loud underline."
+        },
+        {
+          "sel": "[data-part=\"actions\"] .lt-btn",
+          "name": "Primary action",
+          "api": "",
+          "text": "One filled button; Sign in stays a text link."
+        }
+      ],
+      "prompt": "Add a simple site header: 60px tall with a translucent background and hairline bottom border, brand mark and name on the left, 3–5 nav links (current page in primary ink via aria-current), a text \"Sign in\" and one small primary button on the right; under 680px of container width the links fold into a menu button that opens a panel below the bar.",
+      "debug": "Debug my navbar. Rule out: two primary buttons; links that wrap onto two lines at tablet widths; the mobile menu not closing after a link is chosen; a sticky header covering anchor targets (scroll-margin-top). The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<header><nav>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<NavbarSimple links cta>",
+          "React"
+        ]
+      ],
+      "added": 7
+    },
+    {
+      "id": "flyout-menu",
+      "name": "Flyout menus",
+      "summary": "A top navbar whose items open neat dropdown panels: icon, title and one line each, with a footer row of quick links.",
+      "pattern": "Disclosure navigation (click to open)",
+      "states": [
+        "closed",
+        "one menu open",
+        "keyboard inside"
+      ],
+      "aliases": [
+        "navbar dropdowns",
+        "dropdown menus at the top of a website",
+        "flyout navigation",
+        "product menu dropdown",
+        "header dropdown"
+      ],
+      "react": "FlyoutMenu",
+      "api": "aria-expanded + aria-controls",
+      "w": 980,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"trigger\"]"
+        ]
+      ],
+      "called": [
+        "dropdown menus in the website header",
+        "product menu that drops down",
+        "navbar with menus that open",
+        "top nav dropdown with descriptions"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"trigger\"][aria-expanded=\"true\"]",
+          "name": "Trigger",
+          "api": "aria-expanded",
+          "text": "Click to open (not hover); the chevron flips."
+        },
+        {
+          "sel": "[role=\"menuitem\"]:first-child",
+          "name": "Item",
+          "api": "<a>",
+          "text": "Icon tile, title, one-line description."
+        },
+        {
+          "sel": "[data-part=\"foot\"]",
+          "name": "Footer row",
+          "api": "",
+          "text": "Two quick actions on a tinted strip."
+        }
+      ],
+      "prompt": "Add a navbar with flyout menus: Product and Resources are buttons (aria-expanded, chevron that flips) that open a 360px panel under them on click; each panel lists links with a 34px icon tile, title and one-line description, plus a tinted footer row with one or two quick links. One panel open at a time; Down enters the panel, arrows move, Esc closes and returns focus; outside clicks close.",
+      "debug": "Debug my dropdown navbar. Rule out: menus that open on hover only (no keyboard or touch); a gap between trigger and panel that closes it as the pointer crosses; two panels open at once; panels off-screen on the right edge. The symptom:",
+      "code": [
+        [
+          "Headless UI",
+          "Popover",
+          ""
+        ],
+        [
+          "WAI-ARIA",
+          "Disclosure Navigation",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<FlyoutMenu groups>",
+          "React"
+        ]
+      ],
+      "added": 7
+    },
+    {
+      "id": "navbar-centered",
+      "name": "Navbar, centred logo",
+      "summary": "Shop and brand header: small uppercase links left, a spaced wordmark centred, icon actions right.",
+      "pattern": "<header> 3-column grid",
+      "states": [
+        "wide",
+        "narrow (links hidden)"
+      ],
+      "aliases": [
+        "centered logo header",
+        "fashion site nav",
+        "shop header",
+        "luxury brand navbar",
+        "logo in the middle nav"
+      ],
+      "react": "NavbarCentered",
+      "api": "grid 1fr auto 1fr",
+      "w": 980,
+      "called": [
+        "logo in the middle of the header",
+        "fashion store navigation",
+        "brand header with bag icon",
+        "centered wordmark nav"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"brand\"]",
+          "name": "Wordmark",
+          "api": "",
+          "text": "Centred by a 1fr auto 1fr grid, so it stays centred."
+        },
+        {
+          "sel": "nav li:first-child a",
+          "name": "Category link",
+          "api": "",
+          "text": "Small, spaced uppercase."
+        },
+        {
+          "sel": "[data-part=\"bag\"]",
+          "name": "Bag",
+          "api": "aria-label",
+          "text": "\"Bag, 2 items\": the count in words."
+        }
+      ],
+      "prompt": "Add a centred-logo header for a brand or shop: a 3-column grid (1fr auto 1fr) with small spaced uppercase category links on the left, a letter-spaced wordmark centred, and search, account and bag icon links on the right (bag shows a count and says it in its label); links hide under 640px.",
+      "debug": "Debug my centred header. Rule out: centring the logo with absolute positioning (overlaps links); icon links without names; the count only shown visually; the logo jumping when the link list changes length. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "grid-template-columns: 1fr auto 1fr",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<NavbarCentered>",
+          "React"
+        ]
+      ],
+      "added": 7
+    },
+    {
+      "id": "app-topbar",
+      "name": "App top bar",
+      "summary": "The header inside a product: workspace switcher, a central search, help, notifications and the account.",
+      "pattern": "<header> + search",
+      "states": [
+        "default",
+        "unread",
+        "narrow"
+      ],
+      "aliases": [
+        "app header",
+        "dashboard top bar",
+        "workspace switcher header",
+        "admin navbar",
+        "application toolbar"
+      ],
+      "react": "AppTopbar",
+      "api": "<header> · type=\"search\"",
+      "w": 980,
+      "called": [
+        "top bar inside a web app",
+        "header with search in the middle",
+        "workspace switcher at the top left",
+        "dashboard header with avatar"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"workspace\"]",
+          "name": "Workspace switcher",
+          "api": "aria-haspopup=\"menu\"",
+          "text": "Name and plan; opens the workspace menu."
+        },
+        {
+          "sel": "[data-part=\"search\"]",
+          "name": "Search",
+          "api": "⌘K",
+          "text": "Centred and generous: the main way around."
+        },
+        {
+          "sel": "[data-part=\"bell\"]",
+          "name": "Notifications",
+          "api": "aria-label with count",
+          "text": "A dot for sight, the count in words."
+        }
+      ],
+      "prompt": "Add an app top bar: 56px, surface background with a hairline bottom border; a workspace switcher button (mark, name, plan, up-down chevrons) on the left, a central search field with a ⌘K hint (max 460px), and on the right help, notifications (red dot plus count in the label) and an avatar button. Hide the plan text and ⌘K hint when narrow.",
+      "debug": "Debug my app header. Rule out: icon buttons without names; a notification dot with no text alternative; search hidden behind an icon on desktop; the bar scrolling away in an app shell (it should stay). The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<header> + <input type=\"search\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<AppTopbar workspace initials>",
+          "React"
+        ]
+      ],
+      "added": 7
+    },
+    {
+      "id": "subnav",
+      "name": "Page header with sub-navigation",
+      "summary": "Breadcrumb, page title and actions, then underline links to the sections of this page.",
+      "pattern": "<nav> of links + aria-current",
+      "states": [
+        "current section",
+        "hover",
+        "scrolls when narrow"
+      ],
+      "aliases": [
+        "secondary navigation",
+        "section tabs under title",
+        "page tabs",
+        "sub nav",
+        "project header"
+      ],
+      "react": "Subnav",
+      "api": "aria-current=\"page\"",
+      "w": 900,
+      "called": [
+        "tabs under the page title that are links",
+        "project header with sections",
+        "secondary nav bar",
+        "page heading with tabs and buttons"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"crumb\"]",
+          "name": "Breadcrumb",
+          "api": "",
+          "text": "Where this page sits."
+        },
+        {
+          "sel": "[data-part=\"actions\"]",
+          "name": "Page actions",
+          "api": "",
+          "text": "One primary, the rest secondary."
+        },
+        {
+          "sel": "ul a[aria-current]",
+          "name": "Current section",
+          "api": "aria-current=\"page\"",
+          "text": "Underline in ink; these are links, not ARIA tabs."
+        }
+      ],
+      "prompt": "Add a page header with sub-navigation: a breadcrumb line, a display-type title, Share and one primary action on the right, then a row of underline links to the sections of this page (current one marked with aria-current=\"page\", optional count pills) sitting on the bottom hairline of the header; the link row scrolls sideways on narrow screens.",
+      "debug": "Debug my sub-navigation. Rule out: role=\"tab\" on links that change the URL; the active underline doubling the border; the row wrapping into two lines; counts with no context. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<nav><a aria-current=\"page\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<Subnav title links>",
+          "React"
+        ]
+      ],
+      "added": 7
+    },
+    {
+      "id": "footer-minimal",
+      "name": "Footer, minimal",
+      "summary": "One quiet line: copyright, four links and a short note. For apps and small sites.",
+      "pattern": "<footer> + <nav>",
+      "states": [
+        "one line",
+        "stacked"
+      ],
+      "aliases": [
+        "simple footer",
+        "small footer",
+        "copyright bar",
+        "app footer",
+        "one line footer"
+      ],
+      "react": "FooterMinimal",
+      "api": "<footer>",
+      "w": 900,
+      "called": [
+        "small footer with copyright and links",
+        "one line footer",
+        "minimal page footer",
+        "bottom bar with privacy and terms"
+      ],
+      "anatomy": [
+        {
+          "sel": "nav ul",
+          "name": "Links",
+          "api": "<nav aria-label=\"Footer\">",
+          "text": "Privacy, Terms, Status, Contact."
+        },
+        {
+          "sel": "p:first-child",
+          "name": "Copyright",
+          "api": "",
+          "text": "Muted; the current year."
+        }
+      ],
+      "prompt": "Add a minimal footer: one row with a hairline top border, muted copyright on the left, four secondary links (Privacy, Terms, Status, Contact) in the middle and a short note on the right; stacks under 560px.",
+      "debug": "Debug my footer. Rule out: links in the same colour as body text with no hover cue; a hard-coded old year; social icons without names; a footer taller than the content it closes. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<footer><nav>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<FooterMinimal links>",
+          "React"
+        ]
+      ],
+      "added": 7
     }
   ]
 }

@@ -117,7 +117,12 @@
         "enterprise",
         "zen",
         "tonal",
-        "system"
+        "system",
+        "noir",
+        "bauhaus",
+        "ticker",
+        "linen",
+        "signal"
       ],
       "description": "Visual style layer. 'none' is the plain kit."
     },

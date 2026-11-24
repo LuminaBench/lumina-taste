@@ -860,6 +860,171 @@
     "cta": "Turn on",
     "badge": "On"
    }
+  },
+  {
+   "id": "noir",
+   "name": "Noir",
+   "kind": "Dark luxury",
+   "palette": "paper-ink",
+   "mode": "dark",
+   "type": "didone",
+   "radius": "sharp",
+   "aliases": [
+    "black and white dark luxury",
+    "fashion dark site",
+    "high contrast serif dark",
+    "film poster look"
+   ],
+   "summary": "Near-black, white serif headlines and no colour at all. Dramatic, quiet and expensive.",
+   "signals": [
+    "near-black ground",
+    "white high-contrast serif",
+    "accent turned to white ink",
+    "thin light rules",
+    "square corners"
+   ],
+   "useFor": "Fashion, film, hospitality, galleries, launch pages for premium products.",
+   "notTo": "Graphite, which is a working tool UI; noir is for brands and stories.",
+   "brief": "Remove colour, keep contrast, and let a serif carry the drama.",
+   "sample": {
+    "eyebrow": "Collection 07",
+    "title": "After dark",
+    "body": "Opens 12 December",
+    "cta": "Reserve",
+    "badge": "Limited"
+   }
+  },
+  {
+   "id": "bauhaus",
+   "name": "Bauhaus",
+   "kind": "Geometric modernism",
+   "palette": "arctic-red",
+   "mode": "light",
+   "type": "geometric",
+   "radius": "sharp",
+   "aliases": [
+    "geometric primary colours",
+    "modernist poster",
+    "circles and squares design",
+    "bauhaus school look"
+   ],
+   "summary": "Geometric type, thick ink rules, square blocks and one red circle as the signature.",
+   "signals": [
+    "geometric sans",
+    "2px ink rules",
+    "square everything",
+    "red circle marker on labels",
+    "no shadows"
+   ],
+   "useFor": "Design studios, architecture, museums, events, bold portfolios.",
+   "notTo": "Swiss, which relies on grid and grotesk type; bauhaus adds geometric marks.",
+   "brief": "Draw structure with 2px ink lines and mark labels with a red circle.",
+   "sample": {
+    "eyebrow": "Exhibition",
+    "title": "Form and function",
+    "body": "Gallery 3 · until March",
+    "cta": "Book entry",
+    "badge": "Open"
+   }
+  },
+  {
+   "id": "ticker",
+   "name": "Ticker",
+   "kind": "Dense terminal data",
+   "palette": "carbon-amber",
+   "mode": "dark",
+   "type": "technical",
+   "radius": "sharp",
+   "aliases": [
+    "trading terminal",
+    "bloomberg style",
+    "dense data dark",
+    "market dashboard"
+   ],
+   "summary": "Black, amber accents, mono numbers, tight rows and hairline grids. Built for screens full of data.",
+   "signals": [
+    "mono tabular numbers",
+    "amber accent",
+    "tight rows",
+    "hairline grid lines",
+    "no rounded corners"
+   ],
+   "useFor": "Trading, monitoring, operations rooms, analytics power users.",
+   "notTo": "Terminal, which is green and text-first; ticker is for tables and numbers.",
+   "brief": "Set density to dense and use mono for every number.",
+   "sample": {
+    "eyebrow": "EUR/USD",
+    "title": "1.0842 +0.12%",
+    "body": "Vol 1.2bn · 14:32:08",
+    "cta": "Trade",
+    "badge": "Live"
+   }
+  },
+  {
+   "id": "linen",
+   "name": "Linen",
+   "kind": "Warm refined",
+   "palette": "linen-oxblood",
+   "mode": "light",
+   "type": "bookish",
+   "radius": "soft",
+   "aliases": [
+    "warm elegant website",
+    "book publisher look",
+    "refined warm minimal",
+    "literary design"
+   ],
+   "summary": "Warm off-white, a bookish serif, an oxblood accent and soft corners. Calm and well-read.",
+   "signals": [
+    "warm off-white ground",
+    "bookish serif headings",
+    "oxblood accent",
+    "soft low shadows",
+    "generous line height"
+   ],
+   "useFor": "Publishers, writing tools, education, considered consumer brands.",
+   "notTo": "Paper, which adds a texture and print shadows; linen stays smooth.",
+   "brief": "Raise the line height, use the serif for headings, and keep the accent for links.",
+   "sample": {
+    "eyebrow": "Chapter 3",
+    "title": "The long afternoon",
+    "body": "12 min read · Essays",
+    "cta": "Keep reading",
+    "badge": "New"
+   }
+  },
+  {
+   "id": "signal",
+   "name": "Signal",
+   "kind": "Bold confident",
+   "palette": "ice-cobalt",
+   "mode": "light",
+   "type": "swiss",
+   "radius": "sharp",
+   "aliases": [
+    "bold blue brand",
+    "confident product site",
+    "strong cta design",
+    "big type and blue"
+   ],
+   "summary": "Large tight headlines, a saturated cobalt for every action and square, heavy buttons.",
+   "signals": [
+    "big tight headlines",
+    "saturated cobalt actions",
+    "heavy square buttons",
+    "uppercase small labels",
+    "strong contrast"
+   ],
+   "useFor": "Developer platforms, fintech, product launches that need to feel decisive.",
+   "notTo": "Neobrutalism, which uses black outlines and offsets; signal stays clean.",
+   "brief": "Make headlines bigger and tighter and give every action the cobalt.",
+   "sample": {
+    "eyebrow": "Launch",
+    "title": "Ship in a day",
+    "body": "Deploys · Previews · Rollbacks",
+    "cta": "Start now",
+    "badge": "Beta"
+   }
   }
  ]
 }

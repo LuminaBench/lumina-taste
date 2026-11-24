@@ -5,7 +5,7 @@ description: Make interfaces look designed, not generated. Use for any UI work (
 
 # Lumina Taste
 
-A design kit for coding agents: **18 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **27 visual styles**, **146 named UI patterns**, **38 chart engines**, **8 page blueprints**, a **lockable taste profile**, a **Playwright auditor** and a **copy lint**. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
+A design kit for coding agents: **18 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **32 visual styles**, **156 named UI patterns**, **38 chart engines**, **8 page blueprints**, a **lockable taste profile**, a **Playwright auditor** and a **copy lint**. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
 
 Run commands from this skill's directory with Node.js 20+. Pass absolute paths (or run from the user's project with the absolute script path). Search, install and token scripts need nothing installed; the auditor needs Playwright; the gallery needs `npm install` once.
 
@@ -47,7 +47,7 @@ When two elements sound alike (tooltip or popover, modal or drawer, checkbox or 
    - Typography: `tokens/typography/source.json` `use` field. Default `precision`.
    - Density: `spacious` for marketing/onboarding, `balanced` for products, `dense` for admin/trading.
    - Radius `sharp | balanced | soft`; motion `snappy | calm | reduced`.
-   - Style (optional): one of 25 looks in `tokens/styles/source.json` (studio, swiss, editorial, neobrutal, terminal, glass, soft, clay, retro, blueprint, lucid, flat, minimal, paper, elevated, newsprint, mono, graphite, atelier, nordic, kraft, midnight, playful, enterprise, zen, tonal, system). `--style swiss` brings its palette, mode, type and radius; explicit flags still win. Pick a style only when the brief names a mood; default is none.
+   - Style (optional): one of 25 looks in `tokens/styles/source.json` (studio, swiss, editorial, neobrutal, terminal, glass, soft, clay, retro, blueprint, lucid, flat, minimal, paper, elevated, newsprint, mono, graphite, atelier, nordic, kraft, midnight, playful, enterprise, zen, tonal, system, noir, bauhaus, ticker, linen, signal). `--style swiss` brings its palette, mode, type and radius; explicit flags still win. Pick a style only when the brief names a mood; default is none.
 2. **Install only what the page needs** (writes `taste-profile.json`, copies tokens + chosen files + their imports, nothing else):
    ```sh
    node scripts/install-taste.mjs --project /abs/app --dest src/ui --framework react \
@@ -151,7 +151,7 @@ Requires Playwright in the skill or the project (`npm i -D @playwright/test && n
 - Vanilla: paste the HTML, then `enhance(el)` or `autoEnhance(document, { accordion: enhance })` for every `[data-lt]`.
 - Events: components emit `lt-change` (detail = new state); React wrappers surface it as `onChange` / `onX` props.
 - Overlays use native `<dialog>`, the Popover API and CSS anchor positioning with a JS fallback.
-- Families: controls (33), navigation (20), feedback (17), overlays (18), data (32), motion (10), sections (16: heroes, features, pricing, testimonials, FAQ, CTA, stats, newsletter, how it works, team, sign-in, 404, integrations, contact, blog). Full list: `catalog.json` or `--list`.
+- Families: controls (33), navigation (26), feedback (17), overlays (18), data (32), motion (10), sections (20: heroes, features, pricing, testimonials, FAQ, CTA, stats, newsletter, how it works, team, sign-in, 404, integrations, contact, blog, feature rows, logo cloud, article, before/after). Full list: `catalog.json` or `--list`.
 
 ## Tokens at a glance
 
@@ -182,7 +182,7 @@ SKILL.md                     this file
 catalog.json                 every pattern/chart/blueprint/palette with aliases
 engine/profiles/             taste profile engine, schema, default profile
 tokens/                      base.css, palettes/*.css (+ source.json), typography/, styles/
-components/ui/<family>/      146 patterns (html, css, ts, react.tsx)
+components/ui/<family>/      156 patterns (html, css, ts, react.tsx)
 components/charts/           core/ + 38 chart engines (+ React wrappers)
 blueprints/                  8 page blueprints
 references/                  anti-slop-rules, page-flow, chart-selection, which-one, palettes, harvest-log

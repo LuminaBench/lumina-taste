@@ -53,7 +53,7 @@ function derive(seed, mode) {
   t['border-strong'] = solve([light ? cl - 0.3 : cl + 0.28, nC * 1.5, nH], dir, surfaces.slice(0, 2), 3);
   t['text-primary'] = solve([light ? 0.2 : 0.965, inkC, nH], dir, surfaces, 7);
   t['text-secondary'] = solve([light ? 0.42 : 0.8, inkC, nH], dir, surfaces, 4.5);
-  t['text-muted'] = solve([light ? 0.53 : 0.7, inkC * 0.9, nH], dir, reading, 4.5);
+  t['text-muted'] = solve([light ? 0.53 : 0.7, inkC * 0.9, nH], dir, surfaces, 4.5);
 
   // Accent: find the lightness nearest the seed where ink-on-accent and accent-on-page both pass.
   const [aL, aC, aH] = seed.accent;
@@ -80,7 +80,7 @@ function derive(seed, mode) {
   t['accent-ink'] = best.ink;
   const softC = seed.ink ? Math.min(seed.ink[1] * 0.3, 0.06) : Math.min(aC * 0.32, 0.05);
   t['accent-soft'] = fix([light ? Math.min(cl - 0.025, 0.945) : cl + 0.075, softC, seed.ink ? seed.ink[2] : aH]);
-  t['accent-text'] = solve([best.solid[0], Math.max(aC, 0.02), aH], dir, [...reading, t['accent-soft']], 4.5);
+  t['accent-text'] = solve([best.solid[0], Math.max(aC, 0.02), aH], dir, [...surfaces, t['accent-soft']], 4.5);
   t['focus-ring'] = t['accent-text'];
 
   for (const s of STATUS_NAMES) {

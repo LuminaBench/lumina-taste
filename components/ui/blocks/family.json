@@ -1010,6 +1010,238 @@
         ]
       ],
       "added": 5
+    },
+    {
+      "id": "feature-split",
+      "name": "Feature rows, alternating",
+      "summary": "Text and a product picture side by side, swapping sides each row, with two ticked details.",
+      "pattern": "<article> rows",
+      "states": [
+        "alternating",
+        "stacked"
+      ],
+      "aliases": [
+        "zig zag features",
+        "alternating sections",
+        "feature with image left right",
+        "feature deep dive",
+        "text image rows"
+      ],
+      "react": "FeatureSplit",
+      "api": "order: 2 on odd rows",
+      "w": 1000,
+      "called": [
+        "features with pictures alternating left and right",
+        "zigzag sections",
+        "text beside image rows",
+        "feature explanations with screenshots"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"row\"]:first-child h3",
+          "name": "Claim",
+          "api": "",
+          "text": "What it does, as a short sentence."
+        },
+        {
+          "sel": "[data-part=\"row\"]:first-child ul",
+          "name": "Details",
+          "api": "",
+          "text": "Two concrete facts with ticks."
+        },
+        {
+          "sel": "[data-flip] [data-part=\"visual\"]",
+          "name": "Picture",
+          "api": "order",
+          "text": "Swaps sides each row; stacks under the text on phones."
+        }
+      ],
+      "prompt": "Build alternating feature rows: each row is text (eyebrow, display heading, one paragraph under 48ch, two ticked details) beside a framed product picture; odd rows swap sides using order, and everything stacks text-first under 760px. Keep 64px between rows.",
+      "debug": "Debug my feature rows. Rule out: pictures before text on mobile; stock illustrations instead of product; rows of different heights that feel random; more than three rows in a row. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "grid + order",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<FeatureSplit rows>",
+          "React"
+        ]
+      ],
+      "added": 7
+    },
+    {
+      "id": "logo-cloud",
+      "name": "Logo cloud",
+      "summary": "One muted line, then six customer logos in an even grid, all in one ink.",
+      "pattern": "<ul> grid",
+      "states": [
+        "six across",
+        "three by two"
+      ],
+      "aliases": [
+        "trusted by logos",
+        "customer logos",
+        "client logos row",
+        "as seen in",
+        "logo wall"
+      ],
+      "react": "LogoCloud",
+      "api": "filter: grayscale",
+      "w": 1000,
+      "called": [
+        "row of company logos under the hero",
+        "used by these companies",
+        "customer logo grid",
+        "client logos"
+      ],
+      "anatomy": [
+        {
+          "sel": "h2",
+          "name": "Lead line",
+          "api": "",
+          "text": "Says who, not \"trusted by thousands\"."
+        },
+        {
+          "sel": "li:first-child",
+          "name": "Logo",
+          "api": "grayscale",
+          "text": "One ink, equal visual weight, no colour logos."
+        }
+      ],
+      "prompt": "Add a logo cloud under the hero: one muted line (\"Used by finance and data teams at\") and six customer logos in an even 6-column grid (3×2 when narrow), all monochrome at the same visual weight.",
+      "debug": "Debug my logo cloud. Rule out: full-colour logos fighting the hero; logos of wildly different sizes; more than two rows; logos without permission. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ul> grid",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<LogoCloud logos>",
+          "React"
+        ]
+      ],
+      "added": 7
+    },
+    {
+      "id": "article-layout",
+      "name": "Article layout",
+      "summary": "One comfortable reading column with a pull quote, and a sticky \"On this page\" list beside it.",
+      "pattern": "<article> + <aside> TOC",
+      "states": [
+        "two columns",
+        "stacked with TOC first"
+      ],
+      "aliases": [
+        "blog post layout",
+        "docs page layout",
+        "reading layout",
+        "long form article",
+        "post with table of contents"
+      ],
+      "react": "ArticleLayout",
+      "api": "max-width: var(--measure)",
+      "w": 960,
+      "called": [
+        "blog post page layout",
+        "article with table of contents on the side",
+        "docs page with on this page",
+        "long read layout"
+      ],
+      "anatomy": [
+        {
+          "sel": "article",
+          "name": "Measure",
+          "api": "68ch",
+          "text": "Lines short enough to read comfortably."
+        },
+        {
+          "sel": "blockquote",
+          "name": "Pull quote",
+          "api": "",
+          "text": "One per article, in the display face."
+        },
+        {
+          "sel": "aside",
+          "name": "On this page",
+          "api": "position: sticky",
+          "text": "Follows you down; links to every heading."
+        }
+      ],
+      "prompt": "Build an article layout: a reading column capped at --measure (68ch) with eyebrow, big title, a larger lede, h3 sections with scroll-margin-top, body at 1.7 line-height and one accent-ruled pull quote; beside it a 200px sticky \"On this page\" list on a hairline rail. Under 760px the list moves above the article.",
+      "debug": "Debug my article layout. Rule out: lines longer than 80 characters; headings hidden under a sticky header when linked; a TOC that does not scroll with the page; body text below 16px. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<article> + <aside>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ArticleLayout toc>",
+          "React"
+        ]
+      ],
+      "added": 7
+    },
+    {
+      "id": "before-after",
+      "name": "Before and after",
+      "summary": "The old way, muted, beside the new way, outlined in the accent: three concrete lines each.",
+      "pattern": "Two lists side by side",
+      "states": [
+        "side by side",
+        "stacked"
+      ],
+      "aliases": [
+        "old way new way",
+        "problem solution section",
+        "vs section",
+        "without with comparison",
+        "pain points vs benefits"
+      ],
+      "react": "BeforeAfter",
+      "api": "two <ul>",
+      "w": 900,
+      "called": [
+        "old way vs new way boxes",
+        "problem and solution section",
+        "without us vs with us",
+        "before and after comparison"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"old\"]",
+          "name": "Before",
+          "api": "",
+          "text": "Muted surface and crosses; specific pains."
+        },
+        {
+          "sel": "[data-part=\"new\"]",
+          "name": "After",
+          "api": "",
+          "text": "Accent outline and ticks; each line answers the one opposite."
+        }
+      ],
+      "prompt": "Add a before/after section: a centred heading, then two columns; \"Before\" on a muted surface with three specific pains marked with crosses, \"With <product>\" outlined in the accent with three matching outcomes marked with green ticks. Each line on the right answers the line on the left.",
+      "debug": "Debug my before/after. Rule out: vague pains (\"inefficient workflows\"); lines that do not pair up; red and green as the only difference; competitors named in a way you cannot back up. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "two <ul>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<BeforeAfter before after>",
+          "React"
+        ]
+      ],
+      "added": 7
     }
   ]
 }

@@ -723,7 +723,7 @@ test.describe('sections', () => {
     expect(ids.length).toBeGreaterThanOrEqual(12);
     for (const id of ids) {
       await page.evaluate((i) => (location.hash = `#/ui/${i}`), id);
-      await expect(page.locator(`#ui-${id} [data-stage] h2`).first()).toBeVisible();
+      await expect(page.locator(`#ui-${id} [data-stage] :is(h2, h3)`).first()).toBeVisible();
     }
     expect(errors).toEqual([]);
   });
@@ -845,5 +845,35 @@ test.describe('added in 1.0 (batch 4)', () => {
     const s = await solo(page, 'search-results');
     await s.locator('[data-kind="chart"]').click();
     await expect(s.locator('ol > li:visible')).toHaveCount(1);
+  });
+});
+
+test.describe('site navigation', () => {
+  test('flyout menu: click opens one panel, Down enters, Esc returns focus', async ({ page }) => {
+    const s = await solo(page, 'flyout-menu');
+    const product = s.locator('[data-part="trigger"]').first();
+    await product.click();
+    await expect(s.locator('#lt-fo-product')).toBeVisible();
+    await s.locator('[data-part="trigger"]').nth(1).click();
+    await expect(s.locator('#lt-fo-product')).toBeHidden();
+    await expect(s.locator('#lt-fo-resources')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(s.locator('[data-part="trigger"]').nth(1)).toBeFocused();
+    await product.focus();
+    await page.keyboard.press('ArrowDown');
+    await expect(s.locator('#lt-fo-product [role="menuitem"]').first()).toBeFocused();
+  });
+  test('simple navbar collapses into a menu button when narrow', async ({ page }) => {
+    const s = await solo(page, 'navbar-simple');
+    await s.locator('.lt-nav-simple').evaluate((n) => ((n as HTMLElement).style.width = '420px'));
+    const toggle = s.locator('[data-part="toggle"]');
+    await expect(toggle).toBeVisible();
+    await toggle.click();
+    await expect(s.locator('[data-part="panel"]')).toBeVisible();
+    await expect(toggle).toHaveAttribute('aria-label', 'Close menu');
+  });
+  test('sub-navigation marks the current section with aria-current', async ({ page }) => {
+    const s = await solo(page, 'subnav');
+    await expect(s.locator('[aria-current="page"]')).toHaveText('Overview');
   });
 });

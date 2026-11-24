@@ -1,0 +1,12 @@
+@scope (.lt-nav-centered) {
+  :scope { container-type: inline-size; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; width: 100%; height: 64px; padding: 0 24px; border-bottom: var(--bw) var(--border-style) var(--border-hairline); background: var(--bg-canvas); font-size: var(--text-ui); }
+  ul { display: flex; gap: 22px; margin: 0; padding: 0; list-style: none; }
+  ul a { color: var(--text-secondary); font-size: var(--text-ui-xs); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; }
+  ul a:hover { color: var(--text-primary); }
+  [data-part="brand"] { color: var(--text-primary); font-family: var(--font-display); font-size: var(--step-1); font-weight: 700; letter-spacing: 0.18em; text-decoration: none; white-space: nowrap; }
+  [data-part="actions"] { display: flex; justify-content: flex-end; gap: 4px; }
+  [data-part="actions"] a { position: relative; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; color: var(--text-primary); }
+  [data-part="actions"] a:hover { background: var(--bg-surface-2); }
+  [data-part="bag"] span { position: absolute; top: 4px; right: 2px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: var(--radius-pill); background: var(--text-primary); color: var(--bg-canvas); font-size: 10px; font-weight: 700; line-height: 16px; text-align: center; }
+  @container (max-width: 640px) { nav { display: none; } :scope { grid-template-columns: auto 1fr; } [data-part="brand"] { font-size: var(--step-0); } }
+}

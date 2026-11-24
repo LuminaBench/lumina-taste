@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
   "counts": {
-    "ui": 146,
+    "ui": 156,
     "charts": 38,
     "blueprints": 8,
     "palettes": 18,
     "themes": 36,
     "typography": 12,
-    "styles": 27
+    "styles": 32
   },
   "families": [
     {
@@ -24,7 +24,7 @@
       "title": "Navigation & page chrome",
       "summary": "Headers, rails, menus and footers that tell people where they are and get out of the way.",
       "order": 2,
-      "count": 20
+      "count": 26
     },
     {
       "id": "feedback",
@@ -59,7 +59,7 @@
       "title": "Sections for pages",
       "summary": "Whole page sections (heroes, pricing, FAQs, sign-in) built from the same tokens, so a page can be assembled in minutes and still look designed.",
       "order": 7,
-      "count": 16
+      "count": 20
     }
   ],
   "ui": [
@@ -501,6 +501,114 @@
         "components/ui/blocks/blog-grid/blog-grid.react.tsx"
       ],
       "path": "components/ui/blocks/blog-grid"
+    },
+    {
+      "id": "feature-split",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Feature rows, alternating",
+      "summary": "Text and a product picture side by side, swapping sides each row, with two ticked details.",
+      "aliases": [
+        "zig zag features",
+        "alternating sections",
+        "feature with image left right",
+        "feature deep dive",
+        "text image rows"
+      ],
+      "pattern": "<article> rows",
+      "states": [
+        "alternating",
+        "stacked"
+      ],
+      "react": "FeatureSplit",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/feature-split/feature-split.css",
+        "components/ui/blocks/feature-split/feature-split.html",
+        "components/ui/blocks/feature-split/feature-split.react.tsx"
+      ],
+      "path": "components/ui/blocks/feature-split"
+    },
+    {
+      "id": "logo-cloud",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Logo cloud",
+      "summary": "One muted line, then six customer logos in an even grid, all in one ink.",
+      "aliases": [
+        "trusted by logos",
+        "customer logos",
+        "client logos row",
+        "as seen in",
+        "logo wall"
+      ],
+      "pattern": "<ul> grid",
+      "states": [
+        "six across",
+        "three by two"
+      ],
+      "react": "LogoCloud",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/logo-cloud/logo-cloud.css",
+        "components/ui/blocks/logo-cloud/logo-cloud.html",
+        "components/ui/blocks/logo-cloud/logo-cloud.react.tsx"
+      ],
+      "path": "components/ui/blocks/logo-cloud"
+    },
+    {
+      "id": "article-layout",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Article layout",
+      "summary": "One comfortable reading column with a pull quote, and a sticky \"On this page\" list beside it.",
+      "aliases": [
+        "blog post layout",
+        "docs page layout",
+        "reading layout",
+        "long form article",
+        "post with table of contents"
+      ],
+      "pattern": "<article> + <aside> TOC",
+      "states": [
+        "two columns",
+        "stacked with TOC first"
+      ],
+      "react": "ArticleLayout",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/article-layout/article-layout.css",
+        "components/ui/blocks/article-layout/article-layout.html",
+        "components/ui/blocks/article-layout/article-layout.react.tsx"
+      ],
+      "path": "components/ui/blocks/article-layout"
+    },
+    {
+      "id": "before-after",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Before and after",
+      "summary": "The old way, muted, beside the new way, outlined in the accent: three concrete lines each.",
+      "aliases": [
+        "old way new way",
+        "problem solution section",
+        "vs section",
+        "without with comparison",
+        "pain points vs benefits"
+      ],
+      "pattern": "Two lists side by side",
+      "states": [
+        "side by side",
+        "stacked"
+      ],
+      "react": "BeforeAfter",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/before-after/before-after.css",
+        "components/ui/blocks/before-after/before-after.html",
+        "components/ui/blocks/before-after/before-after.react.tsx"
+      ],
+      "path": "components/ui/blocks/before-after"
     },
     {
       "id": "disclosure-chevron",
@@ -3758,6 +3866,175 @@
       "path": "components/ui/navigation/sticky-action-bar"
     },
     {
+      "id": "navbar-simple",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Navbar, simple",
+      "summary": "Brand, four links, Sign in and one primary button; a menu button and panel on narrow screens.",
+      "aliases": [
+        "top navigation bar",
+        "website header",
+        "site nav",
+        "header with logo and links",
+        "navbar"
+      ],
+      "pattern": "<header> + <nav> + disclosure",
+      "states": [
+        "wide",
+        "narrow closed",
+        "narrow open",
+        "current page"
+      ],
+      "react": "NavbarSimple",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/navbar-simple/navbar-simple.css",
+        "components/ui/navigation/navbar-simple/navbar-simple.html",
+        "components/ui/navigation/navbar-simple/navbar-simple.react.tsx",
+        "components/ui/navigation/navbar-simple/navbar-simple.ts"
+      ],
+      "path": "components/ui/navigation/navbar-simple"
+    },
+    {
+      "id": "flyout-menu",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Flyout menus",
+      "summary": "A top navbar whose items open neat dropdown panels: icon, title and one line each, with a footer row of quick links.",
+      "aliases": [
+        "navbar dropdowns",
+        "dropdown menus at the top of a website",
+        "flyout navigation",
+        "product menu dropdown",
+        "header dropdown"
+      ],
+      "pattern": "Disclosure navigation (click to open)",
+      "states": [
+        "closed",
+        "one menu open",
+        "keyboard inside"
+      ],
+      "react": "FlyoutMenu",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/flyout-menu/flyout-menu.css",
+        "components/ui/navigation/flyout-menu/flyout-menu.html",
+        "components/ui/navigation/flyout-menu/flyout-menu.react.tsx",
+        "components/ui/navigation/flyout-menu/flyout-menu.ts"
+      ],
+      "path": "components/ui/navigation/flyout-menu"
+    },
+    {
+      "id": "navbar-centered",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Navbar, centred logo",
+      "summary": "Shop and brand header: small uppercase links left, a spaced wordmark centred, icon actions right.",
+      "aliases": [
+        "centered logo header",
+        "fashion site nav",
+        "shop header",
+        "luxury brand navbar",
+        "logo in the middle nav"
+      ],
+      "pattern": "<header> 3-column grid",
+      "states": [
+        "wide",
+        "narrow (links hidden)"
+      ],
+      "react": "NavbarCentered",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/navbar-centered/navbar-centered.css",
+        "components/ui/navigation/navbar-centered/navbar-centered.html",
+        "components/ui/navigation/navbar-centered/navbar-centered.react.tsx"
+      ],
+      "path": "components/ui/navigation/navbar-centered"
+    },
+    {
+      "id": "app-topbar",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "App top bar",
+      "summary": "The header inside a product: workspace switcher, a central search, help, notifications and the account.",
+      "aliases": [
+        "app header",
+        "dashboard top bar",
+        "workspace switcher header",
+        "admin navbar",
+        "application toolbar"
+      ],
+      "pattern": "<header> + search",
+      "states": [
+        "default",
+        "unread",
+        "narrow"
+      ],
+      "react": "AppTopbar",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/app-topbar/app-topbar.css",
+        "components/ui/navigation/app-topbar/app-topbar.html",
+        "components/ui/navigation/app-topbar/app-topbar.react.tsx"
+      ],
+      "path": "components/ui/navigation/app-topbar"
+    },
+    {
+      "id": "subnav",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Page header with sub-navigation",
+      "summary": "Breadcrumb, page title and actions, then underline links to the sections of this page.",
+      "aliases": [
+        "secondary navigation",
+        "section tabs under title",
+        "page tabs",
+        "sub nav",
+        "project header"
+      ],
+      "pattern": "<nav> of links + aria-current",
+      "states": [
+        "current section",
+        "hover",
+        "scrolls when narrow"
+      ],
+      "react": "Subnav",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/subnav/subnav.css",
+        "components/ui/navigation/subnav/subnav.html",
+        "components/ui/navigation/subnav/subnav.react.tsx"
+      ],
+      "path": "components/ui/navigation/subnav"
+    },
+    {
+      "id": "footer-minimal",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Footer, minimal",
+      "summary": "One quiet line: copyright, four links and a short note. For apps and small sites.",
+      "aliases": [
+        "simple footer",
+        "small footer",
+        "copyright bar",
+        "app footer",
+        "one line footer"
+      ],
+      "pattern": "<footer> + <nav>",
+      "states": [
+        "one line",
+        "stacked"
+      ],
+      "react": "FooterMinimal",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/footer-minimal/footer-minimal.css",
+        "components/ui/navigation/footer-minimal/footer-minimal.html",
+        "components/ui/navigation/footer-minimal/footer-minimal.react.tsx"
+      ],
+      "path": "components/ui/navigation/footer-minimal"
+    },
+    {
       "id": "command-palette",
       "kind": "ui",
       "family": "overlays",
@@ -6850,6 +7127,111 @@
       "radius": "soft",
       "useFor": "Settings screens, mobile web apps, companion apps for native products.",
       "notTo": "Enterprise, which is denser and squarer; system follows phone conventions.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "noir",
+      "kind": "style",
+      "name": "Noir",
+      "summary": "Near-black, white serif headlines and no colour at all. Dramatic, quiet and expensive.",
+      "aliases": [
+        "black and white dark luxury",
+        "fashion dark site",
+        "high contrast serif dark",
+        "film poster look"
+      ],
+      "palette": "paper-ink",
+      "mode": "dark",
+      "typography": "didone",
+      "radius": "sharp",
+      "useFor": "Fashion, film, hospitality, galleries, launch pages for premium products.",
+      "notTo": "Graphite, which is a working tool UI; noir is for brands and stories.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "bauhaus",
+      "kind": "style",
+      "name": "Bauhaus",
+      "summary": "Geometric type, thick ink rules, square blocks and one red circle as the signature.",
+      "aliases": [
+        "geometric primary colours",
+        "modernist poster",
+        "circles and squares design",
+        "bauhaus school look"
+      ],
+      "palette": "arctic-red",
+      "mode": "light",
+      "typography": "geometric",
+      "radius": "sharp",
+      "useFor": "Design studios, architecture, museums, events, bold portfolios.",
+      "notTo": "Swiss, which relies on grid and grotesk type; bauhaus adds geometric marks.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "ticker",
+      "kind": "style",
+      "name": "Ticker",
+      "summary": "Black, amber accents, mono numbers, tight rows and hairline grids. Built for screens full of data.",
+      "aliases": [
+        "trading terminal",
+        "bloomberg style",
+        "dense data dark",
+        "market dashboard"
+      ],
+      "palette": "carbon-amber",
+      "mode": "dark",
+      "typography": "technical",
+      "radius": "sharp",
+      "useFor": "Trading, monitoring, operations rooms, analytics power users.",
+      "notTo": "Terminal, which is green and text-first; ticker is for tables and numbers.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "linen",
+      "kind": "style",
+      "name": "Linen",
+      "summary": "Warm off-white, a bookish serif, an oxblood accent and soft corners. Calm and well-read.",
+      "aliases": [
+        "warm elegant website",
+        "book publisher look",
+        "refined warm minimal",
+        "literary design"
+      ],
+      "palette": "linen-oxblood",
+      "mode": "light",
+      "typography": "bookish",
+      "radius": "soft",
+      "useFor": "Publishers, writing tools, education, considered consumer brands.",
+      "notTo": "Paper, which adds a texture and print shadows; linen stays smooth.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "signal",
+      "kind": "style",
+      "name": "Signal",
+      "summary": "Large tight headlines, a saturated cobalt for every action and square, heavy buttons.",
+      "aliases": [
+        "bold blue brand",
+        "confident product site",
+        "strong cta design",
+        "big type and blue"
+      ],
+      "palette": "ice-cobalt",
+      "mode": "light",
+      "typography": "swiss",
+      "radius": "sharp",
+      "useFor": "Developer platforms, fintech, product launches that need to feel decisive.",
+      "notTo": "Neobrutalism, which uses black outlines and offsets; signal stays clean.",
       "files": [
         "tokens/styles/styles.css"
       ]

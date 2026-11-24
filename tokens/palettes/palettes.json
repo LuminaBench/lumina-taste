@@ -42,8 +42,8 @@
               "hex": "#504d47"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.009 85)",
-              "hex": "#6e6b66"
+              "oklch": "oklch(0.51 0.009 85)",
+              "hex": "#686660"
             },
             "accent-solid": {
               "oklch": "oklch(0.29 0.012 60)",
@@ -314,8 +314,8 @@
               "hex": "#514c45"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.013 80)",
-              "hex": "#706b64"
+              "oklch": "oklch(0.51 0.013 80)",
+              "hex": "#6a655e"
             },
             "accent-solid": {
               "oklch": "oklch(0.33 0.085 262)",
@@ -586,8 +586,8 @@
               "hex": "#504c46"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.01 78)",
-              "hex": "#6f6b65"
+              "oklch": "oklch(0.51 0.01 78)",
+              "hex": "#696560"
             },
             "accent-solid": {
               "oklch": "oklch(0.47 0.085 122)",
@@ -858,8 +858,8 @@
               "hex": "#4f4c4a"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.004 60)",
-              "hex": "#6e6b69"
+              "oklch": "oklch(0.52 0.004 60)",
+              "hex": "#6b6867"
             },
             "accent-solid": {
               "oklch": "oklch(0.64 0.19 42)",
@@ -878,12 +878,12 @@
               "hex": "#ffe7de"
             },
             "accent-text": {
-              "oklch": "oklch(0.54 0.163 42)",
-              "hex": "#b84400"
+              "oklch": "oklch(0.535 0.161 42)",
+              "hex": "#b64301"
             },
             "focus-ring": {
-              "oklch": "oklch(0.54 0.163 42)",
-              "hex": "#b84400"
+              "oklch": "oklch(0.535 0.161 42)",
+              "hex": "#b64301"
             },
             "status-positive-soft": {
               "oklch": "oklch(0.955 0.035 150)",
@@ -1130,8 +1130,8 @@
               "hex": "#4f4d46"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.01 90)",
-              "hex": "#6e6c65"
+              "oklch": "oklch(0.51 0.01 90)",
+              "hex": "#686660"
             },
             "accent-solid": {
               "oklch": "oklch(0.37 0.11 262)",
@@ -1402,8 +1402,8 @@
               "hex": "#484e54"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.012 250)",
-              "hex": "#676c73"
+              "oklch": "oklch(0.51 0.012 250)",
+              "hex": "#61676d"
             },
             "accent-solid": {
               "oklch": "oklch(0.43 0.09 155)",
@@ -1674,8 +1674,8 @@
               "hex": "#424f55"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.017 225)",
-              "hex": "#626e73"
+              "oklch": "oklch(0.51 0.017 225)",
+              "hex": "#5c686d"
             },
             "accent-solid": {
               "oklch": "oklch(0.49 0.19 262)",
@@ -1946,8 +1946,8 @@
               "hex": "#534c45"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.013 65)",
-              "hex": "#716a64"
+              "oklch": "oklch(0.51 0.013 65)",
+              "hex": "#6c655e"
             },
             "accent-solid": {
               "oklch": "oklch(0.55 0.13 38)",
@@ -1966,12 +1966,12 @@
               "hex": "#ffe7e0"
             },
             "accent-text": {
-              "oklch": "oklch(0.535 0.13 38)",
-              "hex": "#aa4d30"
+              "oklch": "oklch(0.525 0.13 38)",
+              "hex": "#a74a2d"
             },
             "focus-ring": {
-              "oklch": "oklch(0.535 0.13 38)",
-              "hex": "#aa4d30"
+              "oklch": "oklch(0.525 0.13 38)",
+              "hex": "#a74a2d"
             },
             "status-positive-soft": {
               "oklch": "oklch(0.955 0.035 150)",
@@ -2218,8 +2218,8 @@
               "hex": "#4d4d4d"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0 0)",
-              "hex": "#6c6c6c"
+              "oklch": "oklch(0.515 0 0)",
+              "hex": "#676767"
             },
             "accent-solid": {
               "oklch": "oklch(0.2 0.005 125)",
@@ -2490,8 +2490,8 @@
               "hex": "#494d53"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.009 255)",
-              "hex": "#686c71"
+              "oklch": "oklch(0.515 0.009 255)",
+              "hex": "#64686d"
             },
             "accent-solid": {
               "oklch": "oklch(0.5 0.13 152)",
@@ -2762,8 +2762,8 @@
               "hex": "#474f4f"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.009 200)",
-              "hex": "#666d6e"
+              "oklch": "oklch(0.515 0.009 200)",
+              "hex": "#626969"
             },
             "accent-solid": {
               "oklch": "oklch(0.5 0.085 195)",
@@ -3034,8 +3034,8 @@
               "hex": "#4a4f48"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.012 135)",
-              "hex": "#696d67"
+              "oklch": "oklch(0.51 0.012 135)",
+              "hex": "#636861"
             },
             "accent-solid": {
               "oklch": "oklch(0.54 0.1 45)",
@@ -3054,12 +3054,12 @@
               "hex": "#ffe7dd"
             },
             "accent-text": {
-              "oklch": "oklch(0.53 0.1 45)",
-              "hex": "#9b5738"
+              "oklch": "oklch(0.52 0.1 45)",
+              "hex": "#985535"
             },
             "focus-ring": {
-              "oklch": "oklch(0.53 0.1 45)",
-              "hex": "#9b5738"
+              "oklch": "oklch(0.52 0.1 45)",
+              "hex": "#985535"
             },
             "status-positive-soft": {
               "oklch": "oklch(0.955 0.035 150)",
@@ -3306,8 +3306,8 @@
               "hex": "#4f4d48"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.007 85)",
-              "hex": "#6e6b67"
+              "oklch": "oklch(0.515 0.007 85)",
+              "hex": "#696763"
             },
             "accent-solid": {
               "oklch": "oklch(0.52 0.119 62)",
@@ -3578,8 +3578,8 @@
               "hex": "#514c45"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.012 75)",
-              "hex": "#706b64"
+              "oklch": "oklch(0.51 0.012 75)",
+              "hex": "#6a655f"
             },
             "accent-solid": {
               "oklch": "oklch(0.41 0.12 20)",
@@ -3850,8 +3850,8 @@
               "hex": "#4b4d50"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.004 250)",
-              "hex": "#6a6c6e"
+              "oklch": "oklch(0.52 0.004 250)",
+              "hex": "#67696b"
             },
             "accent-solid": {
               "oklch": "oklch(0.55 0.2 27)",
@@ -4122,8 +4122,8 @@
               "hex": "#46504c"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.013 170)",
-              "hex": "#656e6b"
+              "oklch": "oklch(0.51 0.013 170)",
+              "hex": "#5f6965"
             },
             "accent-solid": {
               "oklch": "oklch(0.4 0.081 232)",
@@ -4394,8 +4394,8 @@
               "hex": "#484e53"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.01 240)",
-              "hex": "#676d71"
+              "oklch": "oklch(0.515 0.01 240)",
+              "hex": "#63686d"
             },
             "accent-solid": {
               "oklch": "oklch(0.53 0.114 236)",
@@ -4414,12 +4414,12 @@
               "hex": "#dbf1ff"
             },
             "accent-text": {
-              "oklch": "oklch(0.52 0.111 236)",
-              "hex": "#0371a0"
+              "oklch": "oklch(0.51 0.109 236)",
+              "hex": "#036e9c"
             },
             "focus-ring": {
-              "oklch": "oklch(0.52 0.111 236)",
-              "hex": "#0371a0"
+              "oklch": "oklch(0.51 0.109 236)",
+              "hex": "#036e9c"
             },
             "status-positive-soft": {
               "oklch": "oklch(0.955 0.035 150)",
@@ -4666,8 +4666,8 @@
               "hex": "#524c40"
             },
             "text-muted": {
-              "oklch": "oklch(0.53 0.019 85)",
-              "hex": "#716b60"
+              "oklch": "oklch(0.51 0.019 85)",
+              "hex": "#6b655a"
             },
             "accent-solid": {
               "oklch": "oklch(0.38 0.12 272)",

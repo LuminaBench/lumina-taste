@@ -9,12 +9,12 @@
   --border-strong: oklch(0.645 0.013 65);
   --text-primary: oklch(0.2 0.014 65);
   --text-secondary: oklch(0.42 0.014 65);
-  --text-muted: oklch(0.53 0.013 65);
+  --text-muted: oklch(0.51 0.013 65);
   --accent-solid: oklch(0.55 0.13 38);
   --accent-hover: oklch(0.505 0.13 38);
   --accent-ink: oklch(0.985 0.007 38);
   --accent-soft: oklch(0.945 0.028 38);
-  --accent-text: oklch(0.535 0.13 38);
+  --accent-text: oklch(0.525 0.13 38);
   --focus-ring: var(--accent-text);
   --status-positive-soft: oklch(0.955 0.035 150);
   --status-positive: oklch(0.515 0.13 150);
