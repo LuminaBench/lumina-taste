@@ -36,6 +36,22 @@ export const reducedMotion = () =>
 export const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 
 /**
+ * Input modality on <html data-modality="pointer|keyboard">. Components move focus with script
+ * (opening a dialog focuses its first button, closing a menu returns focus to its trigger). Browsers
+ * may show a ring for script focus even after a mouse click; base.css hides non-text rings while the
+ * last input was a pointer, so rings mean "keyboard user here" and nothing else.
+ */
+export function trackModality(doc: Document = document) {
+  const html = doc.documentElement;
+  if (html.dataset.modality) return;
+  html.dataset.modality = 'pointer';
+  const set = (m: 'pointer' | 'keyboard') => () => { if (html.dataset.modality !== m) html.dataset.modality = m; };
+  doc.addEventListener('pointerdown', set('pointer'), true);
+  doc.addEventListener('keydown', (e) => { if (!e.metaKey && !e.ctrlKey && e.key !== 'Meta' && e.key !== 'Control') set('keyboard')(); }, true);
+}
+if (typeof document !== 'undefined') trackModality();
+
+/**
  * Focus an element in response to a pointer action without showing the keyboard ring.
  * Browsers treat script focus after preventDefault() on pointerdown as keyboard-like; this marks
  * the element so its ring stays hidden until the next key press.

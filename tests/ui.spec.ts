@@ -49,6 +49,8 @@ test('every pattern re-skins across all 36 palette × mode themes', async ({ pag
 test('keyboard focus is visible on the first control of every stage', async ({ page }) => {
   await page.goto('/#/ui');
   await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important} .g-prev-in{transform:none!important;width:auto!important} .g-prev{aspect-ratio:auto!important;min-height:220px;contain:none!important} .g-stretch::after{display:none}' });
+  // Rings are for keyboard users: switch the page into keyboard modality.
+  await page.keyboard.press('Shift');
   // Grid previews are inert thumbnails; make them live for this check.
   await page.evaluate(() => document.querySelectorAll('[inert]').forEach((n) => n.removeAttribute('inert')));
   // Tag the first keyboard-focusable control of each stage, then compare pixels before/after focus.
@@ -573,4 +575,25 @@ test('mouse clicks never leave a focus ring or outline box', async ({ page }) =>
     }
   }
   expect([...new Set(bad)]).toEqual([]);
+});
+
+test('element pages show the real source in Code tabs', async ({ page }) => {
+  await page.goto('/#/ui/rating');
+  const code = page.locator('.g-src code');
+  await expect(code).toContainText('lt-rating');
+  await page.locator('.g-code-tabs [data-ext="ts"]').click();
+  await expect(code).toContainText('export function enhance');
+  await page.locator('.g-code-tabs [data-ext="react.tsx"]').click();
+  await expect(code).toContainText('export function Rating');
+});
+
+test('Back returns to the same place in the element grid', async ({ page }) => {
+  await page.goto('/#/');
+  await page.evaluate(() => scrollTo(0, 1800));
+  await page.waitForTimeout(150);
+  const y = await page.evaluate(() => scrollY);
+  await page.evaluate(() => (location.hash = '#/ui/kanban-board'));
+  await expect(page.locator('#ui-kanban-board')).toBeVisible();
+  await page.goBack();
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(y - 40);
 });

@@ -277,5 +277,17 @@ main.addEventListener('click', (e) => {
   const cg = t.closest<HTMLElement>('[data-cgroup]');
   if (cg) { state.chartGroup = cg.dataset.cgroup!; return render(); }
 });
-window.addEventListener('hashchange', () => { render(); main.focus({ preventScroll: true }); scrollTo({ top: 0 }); });
+// Remember where each list was scrolled, so Back returns to the same card instead of the top.
+const scrollMemory = new Map<string, number>();
+let lastHash = location.hash;
+addEventListener('scroll', () => scrollMemory.set(lastHash, scrollY), { passive: true });
+window.addEventListener('hashchange', () => {
+  lastHash = location.hash;
+  render();
+  main.focus({ preventScroll: true });
+  const y = scrollMemory.get(location.hash) ?? 0;
+  scrollTo({ top: 0 });
+  // Previews fit themselves over a couple of frames; restore once layout has settled.
+  if (y) requestAnimationFrame(() => requestAnimationFrame(() => scrollTo({ top: y })));
+});
 render();

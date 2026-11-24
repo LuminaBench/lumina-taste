@@ -75,6 +75,18 @@ const common = { bundle: true, format: 'esm', target: 'es2022', loader: { '.html
 await build({ ...common, entryPoints: { gallery: join(root, 'preview/gallery.ts') }, outdir: dist });
 cpSync(join(root, 'preview/index.html'), join(dist, 'index.html'));
 
+// Component sources, fetched on demand by the element page's Code tabs (never bundled).
+for (const fam of families) for (const c of fam.components) {
+  const from = join(root, 'components/ui', fam.dir, c.id);
+  if (!existsSync(from)) continue;
+  const to = join(dist, 'src', c.id);
+  mkdirSync(to, { recursive: true });
+  for (const ext of ['html', 'css', 'ts', 'react.tsx']) {
+    const f = join(from, `${c.id}.${ext}`);
+    if (existsSync(f)) writeFileSync(join(to, `${c.id}.${ext}.txt`), readFileSync(f, 'utf8'));
+  }
+}
+
 // Blueprints: each is a standalone page bundled with its own CSS + TS.
 for (const bp of blueprints) {
   const src = join(bpDir, bp.id);

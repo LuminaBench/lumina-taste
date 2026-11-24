@@ -398,6 +398,8 @@ async function auditOne(browser, url, vpName, mode) {
   for (const c of covered) findings.push({ rule: 'covered-control', severity: 'error', selector: c, message: 'Control is covered by another element at its centre (cannot be clicked).', viewport: vpName, mode });
 
   // Focus rings: pixel-diff each focusable control before and after keyboard focus.
+  // Focus rings are for keyboard users: put the page in keyboard modality first (a plain Shift press).
+  await page.keyboard.press('Shift');
   const focusIdx = await page.evaluate((limit) => window.__ltAudit.controls.map((e, i) => [e, i]).filter(([e]) => e.tabIndex >= 0 && !e.disabled).slice(0, limit).map(([, i]) => i), focusLimit);
   for (const i of focusIdx) {
     const box = await page.evaluate((k) => {

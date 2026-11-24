@@ -16,7 +16,7 @@
   [role^="menuitem"] > .lt-icon:first-child { color: var(--text-muted); }
   [role^="menuitem"] > span:not([data-part]) { flex: 1; }
   [role^="menuitem"]:hover, [role^="menuitem"]:focus-visible, [role="menuitem"][aria-expanded="true"] { background: var(--bg-surface-3); }
-  [role^="menuitem"]:focus-visible { box-shadow: inset 0 0 0 var(--focus-width) var(--focus-ring); }
+  [role^="menuitem"]:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: calc(var(--focus-width) * -1); }
   [data-tone="danger"], [data-tone="danger"] > .lt-icon:first-child { color: var(--status-negative) !important; }
   kbd { font: 500 var(--text-ui-xs) var(--font-mono); color: var(--text-muted); }
   [role="separator"] { height: 1px; margin: 4px 6px; background: var(--border-hairline); }

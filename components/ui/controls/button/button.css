@@ -16,6 +16,8 @@
   :scope[data-variant="ghost"] { --btn-bg: transparent; --btn-border: transparent; --btn-hover: var(--bg-surface-2); color: var(--text-secondary); }
   :scope[data-variant="ghost"]:hover { color: var(--text-primary); }
   :scope[data-variant="destructive"] { --btn-bg: var(--bg-surface-1); --btn-fg: var(--status-negative); --btn-border: var(--border-strong); --btn-hover: var(--status-negative-soft); }
+  /* The confirm step of a destructive action: filled red, ink chosen so it passes on both modes. */
+  :scope[data-variant="primary"][data-tone="danger"] { --btn-bg: var(--status-negative); --btn-fg: var(--bg-canvas); --btn-hover: color-mix(in oklab, var(--status-negative) 86%, var(--text-primary)); }
   :scope[data-size="sm"] { height: var(--control-h-sm); padding: 0 calc(var(--control-px) - 4px); font-size: var(--text-ui-sm); }
   :scope[data-size="lg"] { height: var(--control-h-lg); padding: 0 calc(var(--control-px) + 6px); font-size: var(--step-0); }
   :scope[data-icon-only] { width: var(--control-h); padding: 0; }

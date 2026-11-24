@@ -7,6 +7,8 @@ import './button.css';
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'destructive';
   size?: 'sm' | 'md' | 'lg';
+  /** 'danger' with variant="primary" is the filled confirm button of a destructive action. */
+  tone?: 'danger';
   icon?: IconName;
   /** Icon-only buttons must pass aria-label. */
   iconOnly?: boolean;
@@ -14,13 +16,14 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
 }
 
-export function Button({ variant = 'secondary', size = 'md', icon, iconOnly, loading, className, children, type = 'button', ...rest }: ButtonProps) {
+export function Button({ variant = 'secondary', size = 'md', tone, icon, iconOnly, loading, className, children, type = 'button', ...rest }: ButtonProps) {
   return (
     <button
       type={type}
       className={cx('lt-btn', className)}
       data-variant={variant}
       data-size={size === 'md' ? undefined : size}
+      data-tone={tone}
       data-icon-only={iconOnly || undefined}
       data-loading={loading || undefined}
       aria-busy={loading || undefined}

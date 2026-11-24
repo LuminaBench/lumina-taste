@@ -9,7 +9,7 @@ import { exec } from 'node:child_process';
 const root = join(dirname(fileURLToPath(import.meta.url)), '../preview/dist');
 const args = process.argv.slice(2);
 const port = +(args[args.indexOf('--port') + 1] || 0) || +(process.env.PORT || 4321);
-const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png' };
+const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.txt': 'text/plain; charset=utf-8' };
 
 if (!existsSync(root)) { console.error('preview/dist is missing. Run `npm run build` first.'); process.exit(1); }
 createServer((req, res) => {

@@ -234,6 +234,9 @@
   outline: var(--focus-width) solid var(--focus-ring);
   outline-offset: var(--focus-offset);
 }
+/* After a mouse or touch interaction, script-moved focus (dialogs, menus, returning focus to a trigger)
+   shows no ring; the next key press brings rings back. Set by trackModality() in components/ui/_shared/dom.ts. */
+:root[data-modality="pointer"] :focus-visible:not(input, textarea, select, [contenteditable]) { outline: none; }
 /* Text entry always shows focus (you need to see where you type), so it gets the quiet version:
    accent border plus a soft halo, no floating box. */
 :where([data-palette]) :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="button"], [type="submit"], [type="reset"], [type="color"], [type="file"]), textarea, select):focus-visible {

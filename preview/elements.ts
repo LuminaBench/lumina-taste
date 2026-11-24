@@ -56,6 +56,27 @@ export function runPreview(c: Doc, inner: HTMLElement) {
     else if (kind === 'scroll') el.scrollTop = +(text ?? 0);
   }
 }
+const codeTabs = (c: Doc) => [
+  { ext: 'html', label: 'HTML' }, { ext: 'css', label: 'CSS' },
+  ...(c.enhance ? [{ ext: 'ts', label: 'TypeScript' }] : []),
+  { ext: 'react.tsx', label: 'React' },
+];
+const srcCache = new Map<string, string>();
+async function loadSource(id: string, ext: string) {
+  const key = `${id}.${ext}`;
+  if (!srcCache.has(key)) {
+    const res = await fetch(`./src/${id}/${key}.txt`);
+    srcCache.set(key, res.ok ? await res.text() : '// Not available');
+  }
+  return srcCache.get(key)!;
+}
+/** Tiny highlighter: comments muted, strings and attribute values in accent ink. Escapes first. */
+function highlight(src: string) {
+  const e = src.replace(/[&<>]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[ch]!);
+  return e.replace(/(\/\*[\s\S]*?\*\/|\/\/[^\n]*|&lt;!--[\s\S]*?--&gt;)|("(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'|`(?:[^`\\]|\\.)*`)/g,
+    (_m, com, str) => (com ? `<span class="g-tk-c">${com}</span>` : `<span class="g-tk-s">${str}</span>`));
+}
+
 const widthOf = (c: Doc) => (c.w ? `style="width:${c.w}px"` : '');
 
 let mounted: Array<() => void> = [];
@@ -136,6 +157,10 @@ export function viewElement(main: HTMLElement, id: string) {
         <section class="g-sec"><h2>States</h2><div class="g-states">${c.states.map((s) => `<span>${esc(s)}</span>`).join('')}</div></section>
 
         <section class="g-sec"><div class="g-sec-head"><h2>Prompt for your agent</h2><button type="button" class="g-copy" data-copy-prompt>${ICON.copy}<span>Copy</span></button></div><pre class="g-prompt">${esc(d.prompt)}</pre></section>
+        <section class="g-sec g-code-sec"><div class="g-sec-head"><h2>Code</h2><button type="button" class="g-copy" data-copy-code>${ICON.copy}<span>Copy</span></button></div>
+          <div class="g-code-tabs" role="tablist" aria-label="Source files">${codeTabs(c).map((t, i) => `<button type="button" role="tab" id="g-tab-${t.ext.replace('.', '-')}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-ext="${t.ext}">${t.label}</button>`).join('')}</div>
+          <pre class="g-src" role="tabpanel" tabindex="0" aria-live="polite"><code>Loading…</code></pre>
+        </section>
         <section class="g-sec"><div class="g-sec-head"><h2>When it misbehaves</h2><button type="button" class="g-copy" data-copy-debug>${ICON.copy}<span>Copy</span></button></div><pre class="g-prompt">${esc(d.debug)}</pre></section>
 
         <section class="g-sec"><h2>In code</h2><table class="g-code-table"><tbody>${d.code.map(([lib, name, note]) => `<tr><th scope="row">${esc(lib)}</th><td><code>${esc(name)}</code></td><td>${esc(note)}</td></tr>`).join('')}</tbody></table></section>
@@ -168,16 +193,39 @@ export function viewElement(main: HTMLElement, id: string) {
     pinsLayer.innerHTML = '';
     if (!showPins()) return;
     const box = stage.getBoundingClientRect();
+    const placed: Array<{ x: number; y: number }> = [];
+    const clearOfPins = (x: number, y: number) => placed.every((p) => Math.abs(p.x - x) > 22 || Math.abs(p.y - y) > 22);
+    // A spot is good when no demo text sits under the pin's centre or corners.
+    const overText = (x: number, y: number) => [[10, 10], [3, 3], [17, 3], [3, 17], [17, 17]].some(([dx, dy]) =>
+      document.elementsFromPoint(box.left + x + dx, box.top + y + dy).some((el) => inner.contains(el) && (el instanceof SVGElement || el.matches('input, img, canvas') || [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent!.trim()))));
+    const free = (x: number, y: number) => clearOfPins(x, y) && !overText(x, y);
     d.anatomy.forEach((p, i) => {
       const el = inner.querySelector<HTMLElement>(p.sel);
       if (!el) return;
       const r = el.getBoundingClientRect();
       if (r.width === 0 && r.height === 0) return;
+      // Prefer just outside the element's left edge, centred; then above its top-left corner;
+      // then nudge down until the pin does not sit on another pin.
+      const L = r.left - box.left, T = r.top - box.top;
+      const left: [number, number] = [L - 26, T + Math.min(r.height, 40) / 2 - 10];
+      const above: [number, number] = [L + Math.min(r.width, 40) / 2 - 10, T - 26];
+      const right: [number, number] = [L + r.width + 6, T + Math.min(r.height, 40) / 2 - 10];
+      // Small inline targets (a star, a chip) have neighbours on both sides: go above them.
+      const below: [number, number] = [L + Math.min(r.width, 40) / 2 - 10, T + r.height + 6];
+      const corner: [number, number] = [L - 10, T - 10];
+      const far: Array<[number, number]> = [[above[0], T - 48], [L - 48, left[1]], [L + r.width + 28, right[1]], [below[0], T + r.height + 28]];
+      const tries: Array<[number, number]> = [...(r.width < 120 ? [above, left, right, below] : [left, above, right, below]), ...far, corner];
+      const inBox = ([tx, ty]: [number, number]) => tx >= 4 && ty >= 4 && tx <= box.width - 24 && ty <= box.height - 24;
+      let [x, y] = tries.find((t) => inBox(t) && free(t[0], t[1])) ?? tries.find((t) => inBox(t) && clearOfPins(t[0], t[1])) ?? corner;
+      x = Math.max(4, Math.min(box.width - 24, x));
+      y = Math.max(4, Math.min(box.height - 24, y));
+      for (let k = 0; k < 8 && !clearOfPins(x, y); k++) y = Math.min(box.height - 24, y + 22);
+      placed.push({ x, y });
       const pin = document.createElement('span');
       pin.className = 'g-pin';
       pin.textContent = String(i + 1);
-      pin.style.left = `${Math.max(4, Math.min(box.width - 24, r.left - box.left - 10))}px`;
-      pin.style.top = `${Math.max(4, Math.min(box.height - 24, r.top - box.top - 10))}px`;
+      pin.style.left = `${x}px`;
+      pin.style.top = `${y}px`;
       pinsLayer.append(pin);
     });
   }
@@ -213,6 +261,26 @@ export function viewElement(main: HTMLElement, id: string) {
   });
   main.querySelector('[data-replay]')!.addEventListener('click', () => { delete stage.dataset.lock; syncRoots(main); mount(false); });
   main.querySelector('[data-copy-prompt]')!.addEventListener('click', (e) => copyText(d.prompt, e.currentTarget as HTMLElement));
+  // Code tabs: fetch the real source files on demand.
+  const src = main.querySelector<HTMLElement>('.g-src code')!;
+  const tabs = [...main.querySelectorAll<HTMLButtonElement>('.g-code-tabs [role="tab"]')];
+  let currentExt = tabs[0]?.dataset.ext ?? 'html';
+  const showTab = async (t: HTMLButtonElement) => {
+    tabs.forEach((x) => { const on = x === t; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; });
+    currentExt = t.dataset.ext!;
+    src.parentElement!.setAttribute('aria-labelledby', t.id);
+    src.innerHTML = highlight(await loadSource(c.id, currentExt));
+  };
+  tabs.forEach((t) => t.addEventListener('click', () => showTab(t)));
+  main.querySelector('.g-code-tabs')?.addEventListener('keydown', (e) => {
+    const k = (e as KeyboardEvent).key;
+    if (k !== 'ArrowRight' && k !== 'ArrowLeft') return;
+    const i = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+    const next = tabs[(i + (k === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+    next.focus(); void showTab(next);
+  });
+  if (tabs[0]) void showTab(tabs[0]);
+  main.querySelector('[data-copy-code]')!.addEventListener('click', async (e) => copyText(await loadSource(c.id, currentExt), e.currentTarget as HTMLElement));
   main.querySelector('[data-copy-debug]')!.addEventListener('click', (e) => copyText(d.debug, e.currentTarget as HTMLElement));
   main.querySelector('[data-copy-install]')!.addEventListener('click', (e) => copyText(`node scripts/install-taste.mjs --components ${c.id}`, e.currentTarget as HTMLElement));
   // Links inside demos are samples: keep them from changing the gallery route.
