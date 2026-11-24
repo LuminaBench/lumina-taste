@@ -6,7 +6,7 @@
   input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
   [data-part="box"] {
     display: grid; place-items: center; flex: none; width: 18px; height: 18px;
-    border: 1.5px solid var(--border-strong); border-radius: min(var(--radius-xs), 6px); background: var(--bg-surface-1);
+    border: var(--bw-strong) var(--border-style) var(--border-strong); border-radius: min(var(--radius-xs), 6px); background: var(--bg-surface-1);
     transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1), scale var(--dur-1) var(--ease-out);
   }
   svg { width: 14px; height: 14px; fill: none; stroke: var(--accent-ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }

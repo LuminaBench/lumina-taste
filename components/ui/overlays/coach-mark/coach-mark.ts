@@ -12,12 +12,15 @@ export function enhance(root: HTMLElement): Cleanup {
     const list = steps();
     const t = list[i];
     t.scrollIntoView({ block: 'nearest' });
-    const r = t.getBoundingClientRect();
+    const t0 = t.getBoundingClientRect();
+    const box = layer.getBoundingClientRect(); // the viewport, or the contained preview box
+    const r = { left: t0.left - box.left, top: t0.top - box.top, width: t0.width, height: t0.height, bottom: t0.bottom - box.top };
+    const W = box.width, H = box.height;
     const pad = 6;
     spot.style.cssText = `--x:${r.left - pad}px;--y:${r.top - pad}px;--w:${r.width + pad * 2}px;--h:${r.height + pad * 2}px`;
-    const cw = Math.min(300, innerWidth - 24);
-    const below = r.bottom + 14 + 180 < innerHeight;
-    card.style.setProperty('--cx', `${Math.min(Math.max(12, r.left), innerWidth - cw - 12)}px`);
+    const cw = Math.min(300, W - 24);
+    const below = r.bottom + 14 + 180 < H;
+    card.style.setProperty('--cx', `${Math.min(Math.max(12, r.left), W - cw - 12)}px`);
     card.style.setProperty('--cy', `${below ? r.bottom + 14 : Math.max(12, r.top - 14 - card.offsetHeight)}px`);
     card.querySelector('[data-part="step"]')!.textContent = `Step ${i + 1} of ${list.length}`;
     card.querySelector('h3')!.textContent = t.dataset.title ?? '';

@@ -1,4 +1,4 @@
-import { combine, emit, on, type Cleanup } from '../../_shared/dom';
+import { combine, emit, on, openDialog, type Cleanup } from '../../_shared/dom';
 
 /** ⌘K / Ctrl+K command palette in a modal <dialog>: fuzzy filter, grouped results, arrow keys + Enter. */
 export function enhance(root: HTMLElement): Cleanup {
@@ -35,11 +35,17 @@ export function enhance(root: HTMLElement): Cleanup {
     if (empty) empty.hidden = visible().length > 0;
     setActive(0);
   };
-  const open = () => { if (dialog.open) return; input.value = ''; filter(); dialog.showModal(); input.focus(); };
+  const open = () => { if (dialog.open) return; input.value = ''; filter(); openDialog(dialog); input.focus(); };
   const run = (o: HTMLElement) => { dialog.close(); emit(root, { command: o.querySelector('span')?.textContent }); };
   return combine(
     openBtn ? on(openBtn, 'click', open) : () => {},
-    on(document, 'keydown', (e: KeyboardEvent) => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k' && !e.defaultPrevented) { e.preventDefault(); dialog.open ? dialog.close() : open(); } }),
+    on(document, 'keydown', (e: KeyboardEvent) => {
+      if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== 'k' || e.defaultPrevented) return;
+      // In a contained preview, only answer when focus is inside the preview.
+      const box = root.closest('[data-contained]');
+      if (box && !box.contains(document.activeElement)) return;
+      e.preventDefault(); dialog.open ? dialog.close() : open();
+    }),
     on(input, 'input', filter),
     on(input, 'keydown', (e: KeyboardEvent) => {
       if (e.key === 'ArrowDown') { e.preventDefault(); setActive(active + 1); }

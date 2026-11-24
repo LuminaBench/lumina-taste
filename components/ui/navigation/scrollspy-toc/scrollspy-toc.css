@@ -8,7 +8,7 @@
 @scope (.lt-toc) {
   :scope { position: relative; align-self: start; font-size: var(--text-ui-sm); }
   [data-part="title"] { margin: 0 0 8px; font-size: var(--text-ui-xs); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
-  ol { position: relative; margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--border-hairline); }
+  ol { position: relative; margin: 0; padding: 0; list-style: none; border-left: var(--bw) var(--border-style) var(--border-hairline); }
   a { display: block; padding: 4px 0 4px 12px; color: var(--text-secondary); text-decoration: none; transition: color var(--dur-1); }
   a:hover { color: var(--text-primary); }
   a[aria-current="location"] { color: var(--accent-text); font-weight: 550; }

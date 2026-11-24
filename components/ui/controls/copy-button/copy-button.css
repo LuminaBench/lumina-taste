@@ -1,9 +1,9 @@
-.lt-copy-field { display: flex; align-items: center; gap: var(--gap-sm); max-width: 100%; padding: 4px 4px 4px var(--gap-md); border: 1px solid var(--border-hairline); border-radius: var(--radius-md); background: var(--bg-surface-1); }
+.lt-copy-field { display: flex; align-items: center; gap: var(--gap-sm); max-width: 100%; padding: 4px 4px 4px var(--gap-md); border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-md); background: var(--bg-surface-1); }
 .lt-copy-field code { min-width: 0; overflow-x: auto; white-space: nowrap; font-family: var(--font-mono); font-size: var(--text-ui-sm); color: var(--text-primary); scrollbar-width: none; }
 @scope (.lt-copy) {
   :scope {
     display: inline-flex; align-items: center; gap: 6px; flex: none; height: var(--control-h-sm); padding: 0 10px;
-    border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); background: var(--bg-surface-2); color: var(--text-secondary);
+    border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-sm); background: var(--bg-surface-2); color: var(--text-secondary);
     font-size: var(--text-ui-xs); font-weight: 600; cursor: pointer;
     transition: background-color var(--dur-1), color var(--dur-1), scale var(--dur-1) var(--ease-out);
   }

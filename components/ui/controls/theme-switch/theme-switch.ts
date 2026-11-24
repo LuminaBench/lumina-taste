@@ -22,7 +22,7 @@ export function enhance(root: HTMLElement): Cleanup {
       target.dataset.mode = next;
       sync();
     };
-    try { localStorage.setItem('lt-mode', next); } catch { /* storage unavailable */ }
+    if (target === document.documentElement) try { localStorage.setItem('lt-mode', next); } catch { /* storage unavailable */ }
     const doc = document as VTDocument;
     if (doc.startViewTransition && !reducedMotion() && target === document.documentElement) {
       const r = root.getBoundingClientRect();
@@ -34,7 +34,11 @@ export function enhance(root: HTMLElement): Cleanup {
       html.style.setProperty('--lt-vt-r', `${Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))}px`);
       html.classList.add('lt-theme-transition');
       doc.startViewTransition(apply).finished.finally(() => html.classList.remove('lt-theme-transition'));
-    } else apply();
+    } else {
+      // Local switch (a preview box or panel): cross-fade colours instead of a page-wide transition.
+      if (!reducedMotion()) { target.classList.add('lt-mode-fade'); setTimeout(() => target.classList.remove('lt-mode-fade'), 420); }
+      apply();
+    }
     emit(root, { mode: next });
   });
   return () => { off(); obs.disconnect(); };

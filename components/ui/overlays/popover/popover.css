@@ -8,9 +8,9 @@
   @starting-style { :scope:popover-open { opacity: 0; translate: 0 -4px; } }
   h3 { margin: 0 0 var(--gap-sm); font-size: var(--text-ui); font-weight: 600; }
   [data-part="row"] { display: flex; gap: var(--gap-sm); }
-  input { flex: 1; min-width: 0; height: var(--control-h-sm); padding: 0 10px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--bg-surface-1); color: var(--text-primary); font-size: var(--text-ui-sm); outline: none; }
+  input { flex: 1; min-width: 0; height: var(--control-h-sm); padding: 0 10px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-sm); background: var(--bg-surface-1); color: var(--text-primary); font-size: var(--text-ui-sm); outline: none; }
   input:focus-visible { border-color: var(--focus-ring); box-shadow: 0 0 0 1px var(--focus-ring); }
-  [data-part="link"] { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-sm); margin-top: var(--gap-md); padding-top: var(--gap-sm); border-top: 1px solid var(--border-hairline); font-size: var(--text-ui-xs); color: var(--text-secondary); }
+  [data-part="link"] { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-sm); margin-top: var(--gap-md); padding-top: var(--gap-sm); border-top: var(--bw) var(--border-style) var(--border-hairline); font-size: var(--text-ui-xs); color: var(--text-secondary); }
   [data-part="link"] > span { display: inline-flex; align-items: center; gap: 6px; }
 }
 @supports (anchor-name: --a) { .lt-popover { position-area: bottom span-right; margin-top: 8px; position-try-fallbacks: flip-block, flip-inline; } }

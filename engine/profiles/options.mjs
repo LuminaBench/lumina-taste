@@ -94,50 +94,62 @@ export const PALETTES = [
 export const TYPOGRAPHY = [
   {
     "id": "editorial",
-    "name": "Editorial Serif + Grotesque Sans"
+    "name": "Editorial Serif + Grotesque Sans",
+    "webfont": "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter+Tight:wght@400..600&display=swap"
   },
   {
     "id": "precision",
-    "name": "Precision Dev Sans + Mono"
+    "name": "Precision Dev Sans + Mono",
+    "webfont": "https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap"
   },
   {
     "id": "financial",
-    "name": "Financial Condensed"
+    "name": "Financial Condensed",
+    "webfont": "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap"
   },
   {
     "id": "humanist",
-    "name": "Warm Humanist"
+    "name": "Warm Humanist",
+    "webfont": "https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400..700&family=Source+Code+Pro&display=swap"
   },
   {
     "id": "swiss",
-    "name": "Swiss Neo-Grotesk"
+    "name": "Swiss Neo-Grotesk",
+    "webfont": "https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap"
   },
   {
     "id": "bookish",
-    "name": "Classic Book Serif"
+    "name": "Classic Book Serif",
+    "webfont": "https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..600&family=Source+Serif+4:opsz,wght@8..60,400..600&display=swap"
   },
   {
     "id": "geometric",
-    "name": "Geometric Product"
+    "name": "Geometric Product",
+    "webfont": "https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=DM+Mono&display=swap"
   },
   {
     "id": "technical",
-    "name": "Technical Mono Display"
+    "name": "Technical Mono Display",
+    "webfont": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
   },
   {
     "id": "didone",
-    "name": "Luxury Didone + Geometric"
+    "name": "Luxury Didone + Geometric",
+    "webfont": "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..600&family=Jost:wght@400..600&display=swap"
   },
   {
     "id": "slab",
-    "name": "Modern Slab + Sans"
+    "name": "Modern Slab + Sans",
+    "webfont": "https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600&family=Inter:wght@400..600&display=swap"
   },
   {
     "id": "dense",
-    "name": "Data-Dense Condensed Sans"
+    "name": "Data-Dense Condensed Sans",
+    "webfont": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono&display=swap"
   },
   {
     "id": "rounded",
-    "name": "Friendly Rounded"
+    "name": "Friendly Rounded",
+    "webfont": "https://fonts.googleapis.com/css2?family=Nunito:wght@400..800&display=swap"
   }
 ];

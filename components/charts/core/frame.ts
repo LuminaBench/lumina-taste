@@ -48,6 +48,8 @@ let seq = 0;
 
 export function chart<D, O extends ChartOptions>(host: HTMLElement, data: D, opts: O, draw: (ctx: DrawContext, data: D, opts: O) => DrawResult): ChartInstance<D> {
   const id = `lt-chart-${++seq}`;
+  // Previews can switch export off for every chart inside them with [data-no-export].
+  if (host.closest('[data-no-export]')) opts = { ...opts, export: false };
   const fig = document.createElement('figure');
   fig.className = 'lt-chart';
   fig.innerHTML = `

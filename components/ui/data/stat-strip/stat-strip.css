@@ -1,6 +1,6 @@
 .lt-stat-strip { container: lt-stats / inline-size; width: 100%; }
 @scope (.lt-stat-strip) {
-  :scope { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); margin: 0; border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); overflow: hidden; }
+  :scope { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); margin: 0; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); overflow: hidden; }
   /* Each cell draws a hairline on its left and top; the outer ones are clipped by the rounded box. */
   :scope > div { display: grid; gap: 4px; padding: var(--gap-md) var(--gap-lg); box-shadow: -1px 0 0 var(--border-hairline), 0 -1px 0 var(--border-hairline); }
   dt { font-size: var(--text-ui-xs); font-weight: 550; color: var(--text-muted); }

@@ -3,18 +3,940 @@
   "summary": "Palettes, menus, popovers and dialogs built on native <dialog>, the Popover API and CSS anchor positioning.",
   "order": 4,
   "components": [
-    { "id": "command-palette", "name": "Command palette (⌘K)", "summary": "A searchable list of every action, opened with ⌘K and driven entirely by keyboard.", "pattern": "Modal dialog + WAI-ARIA Combobox/Listbox", "states": ["closed", "open", "filtered", "empty", "active option"], "aliases": ["cmd k", "command menu", "spotlight search", "quick actions", "kbar", "omnibar"], "react": "CommandPalette", "deps": ["button", "kbd"] },
-    { "id": "selection-bubble", "name": "Selection bubble menu", "summary": "A small format toolbar that appears above selected text.", "pattern": "WAI-ARIA Toolbar in a manual popover", "states": ["hidden", "shown", "focus-visible"], "aliases": ["text selection toolbar", "floating format bar", "highlight menu", "medium style toolbar", "inline toolbar"], "react": "SelectionBubble", "fill": true },
-    { "id": "bulk-action-bar", "name": "Bulk action bar", "summary": "A dark floating bar that appears when rows are ticked, with count, actions and clear.", "pattern": "region landmark + live count", "states": ["hidden", "visible", "focus-visible"], "aliases": ["bar when ticking rows", "selection toolbar", "batch actions", "multi select actions", "contextual action bar"], "react": "BulkActionTable", "fill": true, "wide": true, "deps": ["checkbox"] },
-    { "id": "query-builder", "name": "Rule query builder", "summary": "Build AND/OR filter rules with field, operator and value rows, one nested group deep.", "pattern": "Form with grouped selects", "states": ["empty", "rules", "nested group"], "aliases": ["filter builder", "condition builder", "predicate editor", "segment builder", "where clause builder", "rule editor"], "react": "QueryBuilder", "fill": true, "wide": true, "deps": ["segmented-control"] },
-    { "id": "dropdown-menu", "name": "Dropdown menu with submenu", "summary": "A menu button with shortcuts, checkbox items and a cascading submenu.", "pattern": "WAI-ARIA Menu Button + Menu", "states": ["closed", "open", "submenu open", "checked", "focus-visible"], "aliases": ["actions menu", "more menu", "cascading menu", "nested dropdown", "flyout menu"], "react": "DropdownMenu", "deps": ["button"] },
-    { "id": "context-menu", "name": "Context menu", "summary": "A right-click (or long-press, or Shift+F10) menu that opens at the pointer.", "pattern": "WAI-ARIA Menu", "states": ["closed", "open", "submenu open"], "aliases": ["right click menu", "long press menu", "contextual menu", "secondary click menu"], "react": "ContextMenu", "fill": true, "deps": ["dropdown-menu"] },
-    { "id": "tooltip", "name": "Anchored tooltip", "summary": "Short labels that appear on hover and keyboard focus, anchored with CSS anchor positioning.", "pattern": "WAI-ARIA Tooltip", "states": ["hidden", "delayed", "shown"], "aliases": ["hover hint", "title popup", "info tip", "hover label"], "react": "Tooltip", "deps": ["button"] },
-    { "id": "popover", "name": "Anchored popover", "summary": "A small interactive panel on the native Popover API, with light dismiss and focus handling.", "pattern": "Popover API (non-modal dialog)", "states": ["closed", "open"], "aliases": ["popup panel", "share popover", "floating panel", "click popup"], "react": "Popover", "deps": ["button"] },
-    { "id": "hover-card", "name": "Hover preview card", "summary": "A profile or link preview that appears after a short hover or on focus.", "pattern": "Manual popover (supplementary)", "states": ["hidden", "shown"], "aliases": ["profile hover card", "link preview", "user card on hover", "peek card"], "react": "HoverCard", "deps": ["status-dot"] },
-    { "id": "drawer", "name": "Slide-over drawer", "summary": "A panel that slides in from the right over a scrim, for filters or detail views.", "pattern": "Modal dialog", "states": ["closed", "opening", "open"], "aliases": ["side panel", "slide over", "off canvas", "sheet from right", "filter panel"], "react": "Drawer", "deps": ["button"] },
-    { "id": "modal-dialog", "name": "Modal dialog", "summary": "A focused confirmation dialog with a clean scrim and a clear destructive action.", "pattern": "WAI-ARIA Dialog (Modal) on <dialog>", "states": ["closed", "open"], "aliases": ["popup", "confirm dialog", "are you sure box", "lightbox", "alert dialog"], "react": "ConfirmDialog", "deps": ["button"] },
-    { "id": "bottom-sheet", "name": "Mobile bottom sheet", "summary": "An action sheet that rises from the bottom and drags down to dismiss.", "pattern": "Modal dialog", "states": ["closed", "open", "dragging"], "aliases": ["action sheet", "drawer from bottom", "swipe up panel", "mobile sheet"], "react": "BottomSheet", "deps": ["button"] },
-    { "id": "coach-mark", "name": "Coach-mark product tour", "summary": "A spotlight that walks people through key parts of the screen, one step at a time.", "pattern": "Modal dialog over spotlight", "states": ["idle", "step n", "done", "skipped"], "aliases": ["product tour", "onboarding tour", "walkthrough", "spotlight tour", "feature highlight"], "react": "CoachMarkTour", "fill": true, "deps": ["button"] }
+    {
+      "id": "command-palette",
+      "name": "Command palette (⌘K)",
+      "summary": "A searchable list of every action, opened with ⌘K and driven entirely by keyboard.",
+      "pattern": "Modal dialog + WAI-ARIA Combobox/Listbox",
+      "states": [
+        "closed",
+        "open",
+        "filtered",
+        "empty",
+        "active option"
+      ],
+      "aliases": [
+        "cmd k",
+        "command menu",
+        "spotlight search",
+        "quick actions",
+        "kbar",
+        "omnibar"
+      ],
+      "react": "CommandPalette",
+      "deps": [
+        "button",
+        "kbd"
+      ],
+      "api": "role=\"combobox\" + role=\"listbox\"",
+      "w": 640,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"open\"]"
+        ],
+        [
+          "type",
+          ".lt-cmdk input",
+          "go"
+        ]
+      ],
+      "called": [
+        "search everything with cmd k",
+        "spotlight style popup to run commands",
+        "quick actions menu with a search box",
+        "the box that opens when you press command k"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-cmdk [data-part=\"search\"]",
+          "name": "Query field",
+          "api": "role=\"combobox\"",
+          "text": "Focus stays here; arrows move the highlight."
+        },
+        {
+          "sel": ".lt-cmdk [data-part=\"group\"]",
+          "name": "Group heading",
+          "api": "role=\"group\"",
+          "text": "Suggestions, navigation, recent."
+        },
+        {
+          "sel": ".lt-cmdk [aria-selected=\"true\"]",
+          "name": "Active result",
+          "api": "aria-activedescendant",
+          "text": "Enter runs it."
+        },
+        {
+          "sel": ".lt-cmdk [data-part=\"foot\"]",
+          "name": "Key hints",
+          "api": "<kbd>",
+          "text": "How to navigate, shown once."
+        }
+      ],
+      "prompt": "Add a command palette: ⌘K / Ctrl+K opens a modal dialog with a role=\"combobox\" input and a grouped role=\"listbox\". Filter by substring and subsequence (\"gtr\" finds \"Go to Reports\") including keywords, move with arrows via aria-activedescendant, Enter runs, Esc closes and returns focus.",
+      "debug": "Debug my command palette. Rule out: ⌘K swallowed by the browser before your handler (preventDefault on keydown); focus moving into the list; groups left visible with no matches; the dialog opening twice from a held key. The symptom:",
+      "code": [
+        [
+          "cmdk",
+          "<Command>",
+          "React"
+        ],
+        [
+          "kbar",
+          "<KBarProvider>",
+          "React"
+        ],
+        [
+          "lumina-taste",
+          "<CommandPalette groups>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "selection-bubble",
+      "name": "Selection bubble menu",
+      "summary": "A small format toolbar that appears above selected text.",
+      "pattern": "WAI-ARIA Toolbar in a manual popover",
+      "states": [
+        "hidden",
+        "shown",
+        "focus-visible"
+      ],
+      "aliases": [
+        "text selection toolbar",
+        "floating format bar",
+        "highlight menu",
+        "medium style toolbar",
+        "inline toolbar"
+      ],
+      "react": "SelectionBubble",
+      "fill": true,
+      "api": "popover=\"manual\" · role=\"toolbar\"",
+      "w": 480,
+      "called": [
+        "toolbar that appears over highlighted text",
+        "bold italic link popup when selecting",
+        "medium style highlight menu",
+        "floating format bar"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"editable\"]",
+          "name": "Editable text",
+          "api": "contenteditable",
+          "text": "Select any words to summon the bubble."
+        },
+        {
+          "sel": "[data-part=\"bubble\"]",
+          "name": "Bubble",
+          "api": "role=\"toolbar\"",
+          "text": "Sits above the selection; Alt+F10 moves focus into it."
+        }
+      ],
+      "prompt": "Add a selection bubble menu: on selectionchange inside the editor, show a manual popover toolbar (role=\"toolbar\", roving tabindex) above the selection rect with bold, italic, link and comment; keep the selection when clicking buttons (preventDefault on pointerdown); Alt+F10 focuses it.",
+      "debug": "Debug my bubble menu. Rule out: clicking a button clearing the selection; the bubble positioned with page coordinates inside a scrolled container; it staying open after the selection collapses. The symptom:",
+      "code": [
+        [
+          "Tiptap",
+          "<BubbleMenu editor>",
+          ""
+        ],
+        [
+          "Lexical",
+          "FloatingTextFormatToolbar",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SelectionBubble>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "bulk-action-bar",
+      "name": "Bulk action bar",
+      "summary": "A dark floating bar that appears when rows are ticked, with count, actions and clear.",
+      "pattern": "region landmark + live count",
+      "states": [
+        "hidden",
+        "visible",
+        "focus-visible"
+      ],
+      "aliases": [
+        "bar when ticking rows",
+        "selection toolbar",
+        "batch actions",
+        "multi select actions",
+        "contextual action bar"
+      ],
+      "react": "BulkActionTable",
+      "fill": true,
+      "wide": true,
+      "deps": [
+        "checkbox"
+      ],
+      "api": "role=\"region\" aria-live",
+      "w": 620,
+      "preview": [
+        [
+          "click",
+          "tbody tr:nth-child(1) input"
+        ],
+        [
+          "click",
+          "tbody tr:nth-child(3) input"
+        ]
+      ],
+      "called": [
+        "the bar that appears when I tick rows",
+        "actions for selected items",
+        "selection toolbar at the bottom of a table",
+        "2 selected delete export bar"
+      ],
+      "anatomy": [
+        {
+          "sel": "tr:has(input:checked)",
+          "name": "Selected row",
+          "api": "input:checked",
+          "text": "Tinted so the selection is visible."
+        },
+        {
+          "sel": "[data-part=\"count\"]",
+          "name": "Count",
+          "api": "aria-live=\"polite\"",
+          "text": "\"2 selected\", announced."
+        },
+        {
+          "sel": "[data-part=\"clear\"]",
+          "name": "Clear",
+          "api": "Esc",
+          "text": "Esc also clears."
+        }
+      ],
+      "prompt": "Add a bulk action bar: when rows are checked, show a floating dark bar with \"n selected\" (aria-live), the actions that apply to many rows, and a clear button. Select-all goes indeterminate when some rows are ticked; Esc clears; focus returns to the table.",
+      "debug": "Debug my bulk action bar. Rule out: the bar covering the last row (add bottom padding); select-all not reflecting partial selection; focus lost when the bar disappears. The symptom:",
+      "code": [
+        [
+          "Material",
+          "Contextual action bar",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<BulkActionTable actions>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "query-builder",
+      "name": "Rule query builder",
+      "summary": "Build AND/OR filter rules with field, operator and value rows, one nested group deep.",
+      "pattern": "Form with grouped selects",
+      "states": [
+        "empty",
+        "rules",
+        "nested group"
+      ],
+      "aliases": [
+        "filter builder",
+        "condition builder",
+        "predicate editor",
+        "segment builder",
+        "where clause builder",
+        "rule editor"
+      ],
+      "react": "QueryBuilder",
+      "fill": true,
+      "wide": true,
+      "deps": [
+        "segmented-control"
+      ],
+      "api": "<select> rows · AND/OR",
+      "w": 640,
+      "called": [
+        "rows of dropdowns with plus and minus",
+        "filter builder with and or",
+        "add condition button",
+        "segment rules editor"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"logic\"]",
+          "name": "Combinator",
+          "api": "role=\"radiogroup\"",
+          "text": "All (AND) or Any (OR) for the group."
+        },
+        {
+          "sel": "[data-part=\"rule\"]",
+          "name": "Rule",
+          "api": "field · operator · value",
+          "text": "Operators change with the field type."
+        },
+        {
+          "sel": "[data-part=\"add-group\"]",
+          "name": "Add group",
+          "api": "",
+          "text": "One nested level is plenty."
+        },
+        {
+          "sel": "[data-part=\"preview\"]",
+          "name": "Query preview",
+          "api": "<output>",
+          "text": "The rules as one readable line."
+        }
+      ],
+      "prompt": "Add a rule builder: a group with an AND/OR toggle, rows of field, operator and value (operators depend on field type), remove buttons per row, an \"Add rule\" and one level of nested groups, and a live readable query preview.",
+      "debug": "Debug my query builder. Rule out: operators not resetting when the field changes; value inputs of the wrong type; removing the last rule leaving an empty broken group; deep nesting nobody can read. The symptom:",
+      "code": [
+        [
+          "AppKit",
+          "NSPredicateEditor",
+          "macOS"
+        ],
+        [
+          "react-querybuilder",
+          "<QueryBuilder>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<QueryBuilder>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "dropdown-menu",
+      "name": "Dropdown menu with submenu",
+      "summary": "A menu button with shortcuts, checkbox items and a cascading submenu.",
+      "pattern": "WAI-ARIA Menu Button + Menu",
+      "states": [
+        "closed",
+        "open",
+        "submenu open",
+        "checked",
+        "focus-visible"
+      ],
+      "aliases": [
+        "actions menu",
+        "more menu",
+        "cascading menu",
+        "nested dropdown",
+        "flyout menu"
+      ],
+      "react": "DropdownMenu",
+      "deps": [
+        "button"
+      ],
+      "api": "role=\"menu\" · aria-haspopup",
+      "w": 360,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"trigger\"]"
+        ]
+      ],
+      "called": [
+        "actions menu with a submenu",
+        "dropdown with move to arrow",
+        "three dots menu with options",
+        "menu with checkmarks"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-dropdown > [data-part=\"trigger\"]",
+          "name": "Trigger",
+          "api": "aria-haspopup=\"menu\"",
+          "text": "Down opens on the first item."
+        },
+        {
+          "sel": "[data-part=\"sub\"] > [aria-haspopup]",
+          "name": "Submenu item",
+          "api": "aria-expanded",
+          "text": "Right opens the cascade, Left closes it."
+        },
+        {
+          "sel": "[role=\"menuitemcheckbox\"]",
+          "name": "Checkbox item",
+          "api": "aria-checked",
+          "text": "Toggles without closing the menu."
+        },
+        {
+          "sel": "[data-tone=\"danger\"]",
+          "name": "Destructive item",
+          "api": "",
+          "text": "Last, after a separator."
+        }
+      ],
+      "prompt": "Add a dropdown menu: a menu button opening role=\"menu\" with menuitems (icons and shortcut hints), menuitemcheckbox items that toggle without closing, a submenu opened with Right or a 120ms hover, and the destructive item last after a separator.",
+      "debug": "Debug my dropdown. Rule out: submenus closing as the pointer moves diagonally (hover delay); checkbox items closing the menu; Esc closing everything instead of one level; the submenu clipped at the viewport edge. The symptom:",
+      "code": [
+        [
+          "WAI-ARIA",
+          "Menu + Menu Button",
+          ""
+        ],
+        [
+          "Radix",
+          "<DropdownMenu.Sub>",
+          ""
+        ],
+        [
+          "AppKit",
+          "NSMenu",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<DropdownMenu entries>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "context-menu",
+      "name": "Context menu",
+      "summary": "A right-click (or long-press, or Shift+F10) menu that opens at the pointer.",
+      "pattern": "WAI-ARIA Menu",
+      "states": [
+        "closed",
+        "open",
+        "submenu open"
+      ],
+      "aliases": [
+        "right click menu",
+        "long press menu",
+        "contextual menu",
+        "secondary click menu"
+      ],
+      "react": "ContextMenu",
+      "fill": true,
+      "deps": [
+        "dropdown-menu"
+      ],
+      "api": "contextmenu event",
+      "w": 420,
+      "called": [
+        "right click menu",
+        "menu when you long press",
+        "options when right clicking a file",
+        "secondary click menu"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"area\"]",
+          "name": "Target",
+          "api": "Shift+F10",
+          "text": "Right-click, long-press, or Shift+F10 from the keyboard."
+        },
+        {
+          "sel": ".lt-context [data-part=\"menu\"]",
+          "name": "Menu",
+          "api": "role=\"menu\"",
+          "text": "Opens at the pointer, nudged to stay on screen."
+        }
+      ],
+      "prompt": "Add a context menu: on contextmenu (and long-press, Shift+F10 or the Menu key) open role=\"menu\" at the pointer, kept inside the viewport, with the same keyboard model as a dropdown menu.",
+      "debug": "Debug my context menu. Rule out: no keyboard path; the menu off-screen near edges; the native menu still appearing (preventDefault); long-press triggering on scroll. The symptom:",
+      "code": [
+        [
+          "Radix",
+          "<ContextMenu.Root>",
+          ""
+        ],
+        [
+          "AppKit",
+          "NSMenu (contextual)",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ContextMenu entries>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "tooltip",
+      "name": "Anchored tooltip",
+      "summary": "Short labels that appear on hover and keyboard focus, anchored with CSS anchor positioning.",
+      "pattern": "WAI-ARIA Tooltip",
+      "states": [
+        "hidden",
+        "delayed",
+        "shown"
+      ],
+      "aliases": [
+        "hover hint",
+        "title popup",
+        "info tip",
+        "hover label"
+      ],
+      "react": "Tooltip",
+      "deps": [
+        "button"
+      ],
+      "api": "role=\"tooltip\" · anchor-name",
+      "w": 300,
+      "called": [
+        "little label when you hover an icon",
+        "hover hint",
+        "text that appears above a button",
+        "title popup"
+      ],
+      "anatomy": [
+        {
+          "sel": "[aria-describedby=\"lt-tt-1\"]",
+          "name": "Anchor",
+          "api": "aria-describedby",
+          "text": "The tooltip describes it; it still needs its own name."
+        },
+        {
+          "sel": "#lt-tt-1",
+          "name": "Tooltip",
+          "api": "popover=\"manual\"",
+          "text": "Shows after a hover delay or immediately on keyboard focus."
+        }
+      ],
+      "prompt": "Add tooltips: role=\"tooltip\" in a manual popover, linked by aria-describedby, positioned with CSS anchor positioning (position-area: top, flip-block fallback), shown after 450ms hover or on focus-visible, hidden on Esc and pointerdown, never containing interactive content.",
+      "debug": "Debug my tooltip. Rule out: tooltips as the only label of an icon button; hover-only display; tooltips that trap clicks; clipping inside overflow: hidden (use the top layer). The symptom:",
+      "code": [
+        [
+          "CSS",
+          "anchor-name · position-area",
+          ""
+        ],
+        [
+          "HTML",
+          "popover=\"manual\"",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<Tooltip content>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "popover",
+      "name": "Anchored popover",
+      "summary": "A small interactive panel on the native Popover API, with light dismiss and focus handling.",
+      "pattern": "Popover API (non-modal dialog)",
+      "states": [
+        "closed",
+        "open"
+      ],
+      "aliases": [
+        "popup panel",
+        "share popover",
+        "floating panel",
+        "click popup"
+      ],
+      "react": "Popover",
+      "deps": [
+        "button"
+      ],
+      "api": "popover · popovertarget",
+      "w": 420,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"anchor\"]"
+        ]
+      ],
+      "called": [
+        "small panel that opens under a button",
+        "share popup",
+        "click to open a little box",
+        "floating panel"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"anchor\"]",
+          "name": "Invoker",
+          "api": "popovertarget",
+          "text": "No JavaScript needed to open it."
+        },
+        {
+          "sel": ".lt-popover",
+          "name": "Panel",
+          "api": "popover=\"auto\"",
+          "text": "Light dismiss and Esc come from the browser."
+        }
+      ],
+      "prompt": "Add a popover with the native Popover API: popovertarget on the button, popover=\"auto\" on the panel (light dismiss and Esc for free), anchored with CSS anchor positioning, focus moved into it on open and back to the button on close.",
+      "debug": "Debug my popover. Rule out: positioning against the viewport because anchor positioning is unsupported (add a fallback); focus not returning; nested popovers closing their parent. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "popover + popovertarget",
+          ""
+        ],
+        [
+          "Radix",
+          "<Popover.Root>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<Popover>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "hover-card",
+      "name": "Hover preview card",
+      "summary": "A profile or link preview that appears after a short hover or on focus.",
+      "pattern": "Manual popover (supplementary)",
+      "states": [
+        "hidden",
+        "shown"
+      ],
+      "aliases": [
+        "profile hover card",
+        "link preview",
+        "user card on hover",
+        "peek card"
+      ],
+      "react": "HoverCard",
+      "deps": [
+        "status-dot"
+      ],
+      "api": "popover=\"manual\"",
+      "w": 420,
+      "called": [
+        "profile card when hovering a name",
+        "preview card on hover",
+        "link preview popup",
+        "user card on hover"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"anchor\"]",
+          "name": "Link",
+          "api": "aria-describedby",
+          "text": "Still a normal link that works on click."
+        },
+        {
+          "sel": ".lt-hovercard",
+          "name": "Card",
+          "api": "popover=\"manual\"",
+          "text": "Opens after 350ms, stays while the pointer is over it."
+        }
+      ],
+      "prompt": "Add a hover card: a link that, after 350ms hover or on focus, shows a manual popover with a profile preview; it stays open while the pointer moves onto it and closes on leave, blur and Esc. Everything in it must also be on the destination page.",
+      "debug": "Debug my hover card. Rule out: the card closing as the pointer travels to it (close delay); opening on touch scroll; important actions only inside the card. The symptom:",
+      "code": [
+        [
+          "Radix",
+          "<HoverCard.Root>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<HoverCard>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "drawer",
+      "name": "Slide-over drawer",
+      "summary": "A panel that slides in from the right over a scrim, for filters or detail views.",
+      "pattern": "Modal dialog",
+      "states": [
+        "closed",
+        "opening",
+        "open"
+      ],
+      "aliases": [
+        "side panel",
+        "slide over",
+        "off canvas",
+        "sheet from right",
+        "filter panel"
+      ],
+      "react": "Drawer",
+      "deps": [
+        "button"
+      ],
+      "api": "<dialog> · inset: 0 0 0 auto",
+      "w": 620,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"open\"]"
+        ]
+      ],
+      "called": [
+        "panel that slides in from the right",
+        "filters side panel",
+        "slide over",
+        "off canvas menu"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-drawer [data-part=\"head\"]",
+          "name": "Header",
+          "api": "aria-labelledby",
+          "text": "Title and a close button."
+        },
+        {
+          "sel": ".lt-drawer [data-part=\"body\"]",
+          "name": "Body",
+          "api": "overflow: auto",
+          "text": "Scrolls on its own."
+        },
+        {
+          "sel": ".lt-drawer [data-part=\"foot\"]",
+          "name": "Footer",
+          "api": "",
+          "text": "The primary action, pinned at the bottom."
+        }
+      ],
+      "prompt": "Add a slide-over drawer on a modal <dialog>: anchored right, full height, slides in with @starting-style, scrim behind, closes on Esc, scrim click and a close button, returns focus to the opener, and pins its actions to the bottom.",
+      "debug": "Debug my drawer. Rule out: page scrolling behind the drawer; focus not returning; the slide animation not playing because display changes instantly (use transition-behavior: allow-discrete); actions scrolled out of view. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<dialog>.showModal()",
+          ""
+        ],
+        [
+          "Radix",
+          "<Dialog> (side)",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<Drawer open>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "modal-dialog",
+      "name": "Modal dialog",
+      "summary": "A focused confirmation dialog with a clean scrim and a clear destructive action.",
+      "pattern": "WAI-ARIA Dialog (Modal) on <dialog>",
+      "states": [
+        "closed",
+        "open"
+      ],
+      "aliases": [
+        "popup",
+        "confirm dialog",
+        "are you sure box",
+        "lightbox",
+        "alert dialog"
+      ],
+      "react": "ConfirmDialog",
+      "deps": [
+        "button"
+      ],
+      "api": "<dialog> · showModal()",
+      "w": 620,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"open\"]"
+        ]
+      ],
+      "called": [
+        "popup asking are you sure",
+        "confirm delete dialog",
+        "the dark layer behind a popup",
+        "modal window"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-modal [data-part=\"icon\"]",
+          "name": "Tone icon",
+          "api": "",
+          "text": "Only for destructive or warning dialogs."
+        },
+        {
+          "sel": ".lt-modal h2",
+          "name": "Title",
+          "api": "aria-labelledby",
+          "text": "Names the exact thing: \"Delete Atlas?\""
+        },
+        {
+          "sel": ".lt-modal [data-part=\"foot\"]",
+          "name": "Actions",
+          "api": "<form method=\"dialog\">",
+          "text": "Cancel first and focused; the destructive action says what it does."
+        }
+      ],
+      "prompt": "Add a confirmation dialog on <dialog>.showModal(): a title naming the thing (\"Delete Atlas?\"), one sentence on consequences, Cancel focused by default, a destructive button that repeats the verb, scrim click and Esc to cancel, and focus returned to the opener.",
+      "debug": "Debug my modal. Rule out: a hand-rolled div without focus trapping; the destructive button focused by default; \"OK\" instead of a verb; focus lost after close. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<dialog>.showModal()",
+          ""
+        ],
+        [
+          "WAI-ARIA",
+          "Alert Dialog",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ConfirmDialog>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "bottom-sheet",
+      "name": "Mobile bottom sheet",
+      "summary": "An action sheet that rises from the bottom and drags down to dismiss.",
+      "pattern": "Modal dialog",
+      "states": [
+        "closed",
+        "open",
+        "dragging"
+      ],
+      "aliases": [
+        "action sheet",
+        "drawer from bottom",
+        "swipe up panel",
+        "mobile sheet"
+      ],
+      "react": "BottomSheet",
+      "deps": [
+        "button"
+      ],
+      "api": "<dialog> · inset: auto 0 0",
+      "w": 440,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"open\"]"
+        ]
+      ],
+      "called": [
+        "panel that slides up from the bottom",
+        "action sheet on a phone",
+        "swipe down to close menu",
+        "mobile sheet"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-sheet [data-part=\"grab\"]",
+          "name": "Grabber",
+          "api": "pointer drag",
+          "text": "Drag down or flick to dismiss."
+        },
+        {
+          "sel": ".lt-sheet [data-part=\"actions\"]",
+          "name": "Actions",
+          "api": "",
+          "text": "Large rows, the destructive one last."
+        },
+        {
+          "sel": ".lt-sheet [data-part=\"cancel\"]",
+          "name": "Cancel",
+          "api": "",
+          "text": "Separate and always there."
+        }
+      ],
+      "prompt": "Add a bottom sheet on <dialog>: slides up from the bottom, a grab handle that drags it down (dismiss past 30% or on a quick flick), large action rows, a separate Cancel, and padding for the home indicator.",
+      "debug": "Debug my bottom sheet. Rule out: drag fighting with page scroll (touch-action: none on the handle only); no Cancel for keyboard users; content under the home indicator. The symptom:",
+      "code": [
+        [
+          "UIKit",
+          "UISheetPresentationController",
+          ""
+        ],
+        [
+          "SwiftUI",
+          ".sheet + presentationDetents",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<BottomSheet open actions>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "coach-mark",
+      "name": "Coach-mark product tour",
+      "summary": "A spotlight that walks people through key parts of the screen, one step at a time.",
+      "pattern": "Modal dialog over spotlight",
+      "states": [
+        "idle",
+        "step n",
+        "done",
+        "skipped"
+      ],
+      "aliases": [
+        "product tour",
+        "onboarding tour",
+        "walkthrough",
+        "spotlight tour",
+        "feature highlight"
+      ],
+      "react": "CoachMarkTour",
+      "fill": true,
+      "deps": [
+        "button"
+      ],
+      "api": "spotlight + role=\"dialog\"",
+      "w": 560,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"start\"]"
+        ]
+      ],
+      "called": [
+        "walkthrough that dims the page and highlights one button",
+        "product tour with next and back",
+        "onboarding spotlight",
+        "feature tour"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-tour [data-part=\"spot\"]",
+          "name": "Spotlight",
+          "api": "box-shadow: 0 0 0 100vmax",
+          "text": "A cut-out over the target; the rest dims."
+        },
+        {
+          "sel": ".lt-tour [data-part=\"card\"]",
+          "name": "Step card",
+          "api": "role=\"dialog\"",
+          "text": "Step count, title, one sentence, Back, Next, Skip."
+        }
+      ],
+      "prompt": "Add a product tour: a spotlight cut-out (a box with a huge box-shadow scrim) that moves between targets, a step card beside it with \"Step 1 of 3\", Back, Next and Skip, focus trapped in the card, Esc to skip.",
+      "debug": "Debug my tour. Rule out: targets scrolled off screen; the spotlight measured before layout settles; no Skip; tours longer than four steps. The symptom:",
+      "code": [
+        [
+          "Shepherd",
+          "new Shepherd.Tour()",
+          ""
+        ],
+        [
+          "Driver.js",
+          "driver()",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<CoachMarkTour>",
+          "React"
+        ]
+      ]
+    }
   ]
 }

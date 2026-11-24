@@ -4,8 +4,8 @@
 .bp-hero .lt-display em { font-style: normal; color: var(--accent-text); }
 .bp-hero-cta { margin-top: var(--space-2); }
 .bp-hero-note { margin: 0; font-size: var(--text-ui-sm); color: var(--text-muted); }
-.bp-frame { border: 1px solid var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); box-shadow: var(--shadow-md); overflow: hidden; }
-.bp-frame-bar { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-bottom: 1px solid var(--border-hairline); background: var(--bg-surface-2); }
+.bp-frame { border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); box-shadow: var(--shadow-md); overflow: hidden; }
+.bp-frame-bar { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-bottom: var(--bw) var(--border-style) var(--border-hairline); background: var(--bg-surface-2); }
 .bp-frame-bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--border-hairline); }
 .bp-frame-bar span { margin-left: 12px; font: var(--text-ui-xs) var(--font-mono); color: var(--text-muted); }
 .bp-frame-body { display: grid; gap: var(--space-5); padding: var(--space-5); }

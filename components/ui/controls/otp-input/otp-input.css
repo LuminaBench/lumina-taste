@@ -4,7 +4,7 @@
   [data-part="fields"] { display: flex; align-items: center; gap: var(--gap-sm); }
   input {
     width: calc(var(--control-h) + 6px); height: calc(var(--control-h) + 14px); padding: 0; flex: none;
-    border: 1px solid var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-1);
+    border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-1);
     color: var(--text-primary); font: 600 var(--step-1) / 1 var(--font-mono); font-variant-numeric: tabular-nums; text-align: center; caret-color: var(--accent-solid);
     transition: border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1), scale var(--dur-2) var(--ease-spring);
   }

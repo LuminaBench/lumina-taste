@@ -1,7 +1,7 @@
 @scope (.lt-tree) {
   :scope, [role="group"] { list-style: none; margin: 0; padding: 0; }
   :scope { font-size: var(--text-ui); color: var(--text-primary); }
-  [role="group"] { padding-left: 18px; margin-left: 9px; border-left: 1px solid var(--border-hairline); }
+  [role="group"] { padding-left: 18px; margin-left: 9px; border-left: var(--bw) var(--border-style) var(--border-hairline); }
   [role="treeitem"][aria-expanded="false"] > [role="group"] { display: none; }
   [role="treeitem"] { outline: none; }
   [data-part="row"] {

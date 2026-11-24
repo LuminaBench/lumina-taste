@@ -1,4 +1,4 @@
-import { combine, emit, on, type Cleanup } from '../../_shared/dom';
+import { combine, emit, on, openDialog, type Cleanup } from '../../_shared/dom';
 
 /** Mobile bottom sheet on <dialog>: drag the grabber down (or flick) to dismiss; scrim, Esc and Cancel close. */
 export function enhance(root: HTMLElement): Cleanup {
@@ -14,7 +14,7 @@ export function enhance(root: HTMLElement): Cleanup {
     sheet.style.removeProperty('--drag');
   };
   return combine(
-    opener ? on(opener, 'click', () => sheet.showModal()) : () => {},
+    opener ? on(opener, 'click', () => openDialog(sheet)) : () => {},
     on(grab, 'pointerdown', (e: PointerEvent) => { y0 = e.clientY; t0 = e.timeStamp; dy = 0; grab.setPointerCapture(e.pointerId); sheet.setAttribute('data-dragging', ''); }),
     on(grab, 'pointermove', (e: PointerEvent) => { if (!sheet.hasAttribute('data-dragging')) return; dy = Math.max(0, e.clientY - y0); sheet.style.setProperty('--drag', `${dy}px`); }),
     on(grab, 'pointerup', end),

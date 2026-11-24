@@ -23,7 +23,65 @@
         "caret toggle",
         "collapsible section"
       ],
-      "react": "Disclosure"
+      "react": "Disclosure",
+      "api": "aria-expanded",
+      "w": 360,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"trigger\"]"
+        ]
+      ],
+      "called": [
+        "the little arrow that turns when you open it",
+        "show more toggle with a triangle",
+        "caret that points down when the section is open",
+        "arrow next to advanced settings"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"trigger\"]",
+          "name": "Trigger",
+          "api": "<button aria-expanded>",
+          "text": "The whole row is the button, not just the arrow. It announces open or closed."
+        },
+        {
+          "sel": "[data-part=\"chevron\"]",
+          "name": "Chevron",
+          "api": "transform: rotate(90deg)",
+          "text": "Points right when closed and down when open, turning in about 140ms."
+        },
+        {
+          "sel": "[data-part=\"panel\"]",
+          "name": "Panel",
+          "api": "aria-controls",
+          "text": "The hidden content. It animates its height and leaves the tab order when closed."
+        }
+      ],
+      "prompt": "Add a disclosure: a <button aria-expanded aria-controls> with a chevron that rotates 90° in 140ms ease-out, and a panel that animates height with grid-template-rows 0fr → 1fr. Hide the closed panel with visibility: hidden so its links leave the tab order.",
+      "debug": "Debug my disclosure. Rule out: aria-expanded not updating; a closed panel at height 0 that still takes focus; a chevron rotating around the wrong origin; a transition on height: auto that snaps instead of animating; the click handler on the icon instead of the whole button. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<details><summary>",
+          "native, no height animation"
+        ],
+        [
+          "WAI-ARIA",
+          "aria-expanded + aria-controls",
+          "the disclosure pattern"
+        ],
+        [
+          "lumina-taste",
+          "<Disclosure label>",
+          "React"
+        ],
+        [
+          "Radix",
+          "<Collapsible.Root>",
+          "same idea"
+        ]
+      ]
     },
     {
       "id": "accordion",
@@ -44,7 +102,59 @@
         "faq list",
         "question list that opens"
       ],
-      "react": "Accordion"
+      "react": "Accordion",
+      "api": "aria-expanded · role=\"region\"",
+      "w": 520,
+      "called": [
+        "faq where clicking a question shows the answer",
+        "stacked sections that open one at a time",
+        "questions with a plus that expands",
+        "collapsible list of headings"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"heading\"]",
+          "name": "Header",
+          "api": "<h3><button aria-expanded>",
+          "text": "Each question is a real heading with a button inside, so screen readers can jump between them."
+        },
+        {
+          "sel": "[data-part=\"trigger\"] .lt-icon",
+          "name": "Indicator",
+          "api": "rotate(180deg)",
+          "text": "The chevron flips when its panel opens."
+        },
+        {
+          "sel": "[data-part=\"panel\"]",
+          "name": "Panel",
+          "api": "role=\"region\" aria-labelledby",
+          "text": "The answer. Opening one closes the others unless the accordion allows several."
+        }
+      ],
+      "prompt": "Add an accordion: each item is an <h3> containing a <button aria-expanded aria-controls>, and a panel with role=\"region\" aria-labelledby the button. One panel open at a time by default; Up and Down arrows move between headers, Home and End jump. Animate height with grid-template-rows.",
+      "debug": "Debug my accordion. Rule out: buttons not inside headings; every panel opening because state is shared; arrow keys scrolling the page instead of moving focus; panel content still focusable while closed; layout jumping because the panel height is animated with max-height guesses. The symptom:",
+      "code": [
+        [
+          "WAI-ARIA",
+          "Accordion pattern",
+          "headings + buttons + regions"
+        ],
+        [
+          "lumina-taste",
+          "<Accordion items multiple>",
+          "React"
+        ],
+        [
+          "Radix",
+          "<Accordion.Root type=\"single\">",
+          ""
+        ],
+        [
+          "HTML",
+          "<details name=\"faq\">",
+          "exclusive groups, no arrow keys"
+        ]
+      ]
     },
     {
       "id": "tree-view",
@@ -65,7 +175,65 @@
         "file explorer",
         "outline tree"
       ],
-      "react": "TreeView"
+      "react": "TreeView",
+      "api": "role=\"tree\" · aria-expanded",
+      "w": 340,
+      "called": [
+        "file explorer list with folders that open",
+        "nested folders with little arrows",
+        "sidebar that shows files inside folders",
+        "indented list you can expand"
+      ],
+      "anatomy": [
+        {
+          "sel": "[role=\"treeitem\"][aria-expanded]",
+          "name": "Branch",
+          "api": "role=\"treeitem\" aria-expanded",
+          "text": "An item with children. Right opens it, Left closes it."
+        },
+        {
+          "sel": "[data-part=\"twisty\"]",
+          "name": "Twisty",
+          "api": "rotate(90deg)",
+          "text": "The small arrow that shows whether a branch is open."
+        },
+        {
+          "sel": "[role=\"group\"]",
+          "name": "Group",
+          "api": "role=\"group\"",
+          "text": "The indented children, drawn against a thin guide line."
+        },
+        {
+          "sel": "[aria-selected=\"true\"] > [data-part=\"row\"]",
+          "name": "Selected item",
+          "api": "aria-selected=\"true\"",
+          "text": "The current item, tinted with the accent."
+        }
+      ],
+      "prompt": "Add a tree view: role=\"tree\" on the list, role=\"treeitem\" on items, role=\"group\" on nested lists, aria-expanded on branches and aria-selected on the current item. Up and Down move through visible items, Right expands or steps in, Left collapses or steps out, Enter selects. Use a roving tabindex.",
+      "debug": "Debug my tree view. Rule out: every item having tabindex 0; arrow keys moving into collapsed branches; aria-expanded on leaves; nested lists without role=\"group\"; the twisty as the only clickable area. The symptom:",
+      "code": [
+        [
+          "WAI-ARIA",
+          "Tree View pattern",
+          "roving tabindex"
+        ],
+        [
+          "lumina-taste",
+          "<TreeView nodes>",
+          "React"
+        ],
+        [
+          "AppKit",
+          "NSOutlineView",
+          "macOS"
+        ],
+        [
+          "SwiftUI",
+          "OutlineGroup",
+          ""
+        ]
+      ]
     },
     {
       "id": "theme-switch",
@@ -86,7 +254,59 @@
         "night mode",
         "theme toggle"
       ],
-      "react": "ThemeSwitch"
+      "react": "ThemeSwitch",
+      "api": "role=\"switch\" · aria-checked",
+      "w": 200,
+      "called": [
+        "sun and moon toggle for dark mode",
+        "night mode switch in the corner",
+        "the button that flips the site dark",
+        "light dark slider"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"track\"]",
+          "name": "Track",
+          "api": "role=\"switch\"",
+          "text": "The pill behind the thumb. It turns accent-coloured in dark mode."
+        },
+        {
+          "sel": "[data-part=\"thumb\"]",
+          "name": "Thumb",
+          "api": "transform: translateX",
+          "text": "Slides across on a slight spring and widens while pressed."
+        },
+        {
+          "sel": "[data-part=\"glyph\"][data-glyph=\"moon\"]",
+          "name": "Idle glyph",
+          "api": "opacity, rotate",
+          "text": "The mode you are not in rests faintly on the far side."
+        }
+      ],
+      "prompt": "Add a light/dark switch: a <button role=\"switch\" aria-checked aria-label=\"Dark mode\"> with a track and a thumb that slides on cubic-bezier(0.3, 1.4, 0.5, 1). Set data-mode on <html>, persist the choice, apply it from an inline head script before paint, and reveal the new theme with a circular View Transition from the switch where supported.",
+      "debug": "Debug my theme switch. Rule out: a flash of the wrong theme on load (apply it in an inline head script); the switch state not matching the page after reload; localStorage throwing in private mode; the reveal running under reduced motion; icons rotating around the wrong centre. The symptom:",
+      "code": [
+        [
+          "WAI-ARIA",
+          "role=\"switch\"",
+          ""
+        ],
+        [
+          "CSS",
+          "color-scheme · prefers-color-scheme",
+          ""
+        ],
+        [
+          "JS",
+          "document.startViewTransition",
+          "the circular reveal"
+        ],
+        [
+          "lumina-taste",
+          "<ThemeSwitch />",
+          "React"
+        ]
+      ]
     },
     {
       "id": "segmented-control",
@@ -108,7 +328,59 @@
         "toggle group",
         "time range picker"
       ],
-      "react": "SegmentedControl"
+      "react": "SegmentedControl",
+      "api": "role=\"radiogroup\"",
+      "w": 340,
+      "called": [
+        "pill buttons where one is highlighted",
+        "1D 1W 1M time range switcher",
+        "monthly yearly toggle",
+        "the sliding background behind the selected tab"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"indicator\"]",
+          "name": "Indicator",
+          "api": "transform: translateX",
+          "text": "One raised pill that glides to the selected option on a spring."
+        },
+        {
+          "sel": "[role=\"radio\"][aria-checked=\"true\"]",
+          "name": "Selected segment",
+          "api": "aria-checked=\"true\"",
+          "text": "The current choice. Arrow keys move and select in one step."
+        },
+        {
+          "sel": "[role=\"radio\"]:not([aria-checked=\"true\"])",
+          "name": "Segment",
+          "api": "role=\"radio\"",
+          "text": "Each option is a short label, never more than about five of them."
+        }
+      ],
+      "prompt": "Add a segmented control: role=\"radiogroup\" with buttons role=\"radio\", one indicator element that moves with transform to the selected button (spring easing), arrow keys that move and select, roving tabindex, and tabular numbers for time ranges.",
+      "debug": "Debug my segmented control. Rule out: the indicator measured before fonts load (re-measure with a ResizeObserver); every segment in the tab order; the indicator animating on first paint; labels wrapping and changing height. The symptom:",
+      "code": [
+        [
+          "UIKit",
+          "UISegmentedControl",
+          "iOS"
+        ],
+        [
+          "SwiftUI",
+          "Picker(.segmented)",
+          ""
+        ],
+        [
+          "WAI-ARIA",
+          "Radio Group",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SegmentedControl options>",
+          "React"
+        ]
+      ]
     },
     {
       "id": "toggle-switch",
@@ -129,7 +401,59 @@
         "enable toggle",
         "lightswitch"
       ],
-      "react": "ToggleSwitch"
+      "react": "ToggleSwitch",
+      "api": "<input type=\"checkbox\" role=\"switch\">",
+      "w": 320,
+      "called": [
+        "ios style on off switch",
+        "the toggle for email notifications",
+        "little pill switch in settings",
+        "enable disable slider"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-switch [data-part=\"track\"]",
+          "name": "Track",
+          "api": "input:checked + span",
+          "text": "Turns accent-coloured when on."
+        },
+        {
+          "sel": ".lt-switch [data-part=\"thumb\"]",
+          "name": "Thumb",
+          "api": "translateX",
+          "text": "Slides with a small overshoot and squashes while held."
+        },
+        {
+          "sel": ".lt-switch [data-part=\"label\"]",
+          "name": "Label",
+          "api": "<label>",
+          "text": "Says what turns on. Clicking it toggles too."
+        }
+      ],
+      "prompt": "Add a settings switch: a native <input type=\"checkbox\" role=\"switch\"> inside a <label>, visually hidden, with a styled track and thumb. The change applies immediately; never pair a switch with a Save button.",
+      "debug": "Debug my switch. Rule out: the input set to display: none (it loses focus and form submission); clicks on the label not toggling; the thumb transition on left instead of transform; a switch that only applies after Save. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<input type=\"checkbox\" switch>",
+          "Safari only so far"
+        ],
+        [
+          "UIKit",
+          "UISwitch",
+          ""
+        ],
+        [
+          "SwiftUI",
+          "Toggle",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ToggleSwitch label>",
+          "React"
+        ]
+      ]
     },
     {
       "id": "checkbox",
@@ -151,7 +475,59 @@
         "mixed checkbox",
         "check mark box"
       ],
-      "react": "Checkbox"
+      "react": "Checkbox",
+      "api": ":indeterminate",
+      "w": 300,
+      "called": [
+        "tick box",
+        "select all box with a dash",
+        "checkbox that is half checked",
+        "square you click to agree"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"all\"] [data-part=\"box\"]",
+          "name": "Parent box",
+          "api": "input.indeterminate = true",
+          "text": "Shows a dash when only some children are ticked."
+        },
+        {
+          "sel": ".lt-check:not([data-part=\"all\"]) input:checked + [data-part=\"box\"]",
+          "name": "Checked box",
+          "api": "stroke-dashoffset",
+          "text": "The tick draws itself in about 200ms."
+        },
+        {
+          "sel": ".lt-check:has(input:disabled)",
+          "name": "Disabled item",
+          "api": ":disabled",
+          "text": "Dimmed and skipped by Tab."
+        }
+      ],
+      "prompt": "Add checkboxes on native <input type=\"checkbox\"> with a drawn SVG tick (stroke-dashoffset animation) and a select-all parent that sets input.indeterminate when some, but not all, children are checked.",
+      "debug": "Debug my checkbox. Rule out: indeterminate set as an HTML attribute (it only exists as a property); the input hidden with display: none; the tick path not getting stroke-dasharray; focus ring drawn on the hidden input instead of the visible box. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<input type=\"checkbox\">",
+          ""
+        ],
+        [
+          "JS",
+          "input.indeterminate",
+          "mixed state"
+        ],
+        [
+          "WAI-ARIA",
+          "aria-checked=\"mixed\"",
+          "custom checkboxes"
+        ],
+        [
+          "lumina-taste",
+          "<Checkbox indeterminate>",
+          "React"
+        ]
+      ]
     },
     {
       "id": "radio-group",
@@ -170,7 +546,54 @@
         "pick one list",
         "radio buttons"
       ],
-      "react": "RadioGroup"
+      "react": "RadioGroup",
+      "api": "<input type=\"radio\">",
+      "w": 300,
+      "called": [
+        "round buttons where you pick one",
+        "pick one option list",
+        "circles next to choices",
+        "option buttons"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-radio-group legend",
+          "name": "Legend",
+          "api": "<fieldset><legend>",
+          "text": "Names the question the options answer."
+        },
+        {
+          "sel": ".lt-radio input:checked + [data-part=\"dot\"]",
+          "name": "Selected dot",
+          "api": ":checked",
+          "text": "The ring thickens into a dot."
+        },
+        {
+          "sel": ".lt-radio",
+          "name": "Option",
+          "api": "<label>",
+          "text": "The whole row is clickable."
+        }
+      ],
+      "prompt": "Add a radio group: native radios sharing a name inside a <fieldset> with a <legend>. Arrow keys move the selection natively. Style the dot by growing the border width with a spring.",
+      "debug": "Debug my radio group. Rule out: radios with different name attributes; a missing legend; inputs hidden with display: none; a default selection missing when one option is the sensible default. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<input type=\"radio\" name>",
+          ""
+        ],
+        [
+          "WAI-ARIA",
+          "Radio Group pattern",
+          "custom radios"
+        ],
+        [
+          "lumina-taste",
+          "<RadioGroup options>",
+          "React"
+        ]
+      ]
     },
     {
       "id": "radio-cards",
@@ -191,7 +614,54 @@
         "choose a plan cards"
       ],
       "react": "RadioCards",
-      "fill": true
+      "fill": true,
+      "api": "label:has(input:checked)",
+      "w": 560,
+      "called": [
+        "plan picker cards",
+        "cards you click to choose a plan",
+        "selectable tiles with a check",
+        "pricing option boxes"
+      ],
+      "anatomy": [
+        {
+          "sel": "label:has(input:checked)",
+          "name": "Selected card",
+          "api": ":has(input:checked)",
+          "text": "Gets an accent outline and a filled check badge."
+        },
+        {
+          "sel": "label:has(input:checked) [data-part=\"check\"]",
+          "name": "Check badge",
+          "api": "scale",
+          "text": "Pops in on selection."
+        },
+        {
+          "sel": "[data-part=\"price\"]",
+          "name": "Price",
+          "api": "tabular-nums",
+          "text": "Numbers line up across cards."
+        }
+      ],
+      "prompt": "Add radio cards: each card is a <label> around a visually hidden radio, styled with :has(input:checked) for the selected outline and a check badge. Keep the whole card clickable and show the focus ring on the card.",
+      "debug": "Debug my radio cards. Rule out: clicks on inner text not selecting (the card must be the label); focus ring missing because it is on the hidden input; cards changing height when selected; :has() unsupported fallbacks. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<label><input type=\"radio\">",
+          ""
+        ],
+        [
+          "CSS",
+          ":has(input:checked)",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<RadioCards options>",
+          "React"
+        ]
+      ]
     },
     {
       "id": "otp-input",
@@ -212,7 +682,66 @@
         "one time password",
         "sms code"
       ],
-      "react": "OtpInput"
+      "react": "OtpInput",
+      "api": "autocomplete=\"one-time-code\"",
+      "w": 420,
+      "preview": [
+        [
+          "type",
+          "input",
+          "482"
+        ]
+      ],
+      "called": [
+        "boxes for a verification code",
+        "six separate boxes for the sms code",
+        "enter the code we sent you",
+        "pin code squares"
+      ],
+      "anatomy": [
+        {
+          "sel": "input:first-of-type",
+          "name": "First box",
+          "api": "autocomplete=\"one-time-code\"",
+          "text": "Lets the phone offer the code from the SMS."
+        },
+        {
+          "sel": "[data-part=\"sep\"]",
+          "name": "Divider",
+          "api": "aria-hidden",
+          "text": "Splits six digits into two easy groups of three."
+        },
+        {
+          "sel": "[data-part=\"status\"]",
+          "name": "Status",
+          "api": "role=\"status\"",
+          "text": "Says when the code is accepted or wrong."
+        }
+      ],
+      "prompt": "Add a one-time-code input: six inputs with inputmode=\"numeric\", the first with autocomplete=\"one-time-code\". Typing advances, Backspace on an empty box goes back, arrow keys move, and pasting a full code fills every box. Announce success or error in a role=\"status\".",
+      "debug": "Debug my OTP input. Rule out: paste only filling the first box; autocomplete=\"one-time-code\" missing so iOS does not offer the code; maxlength stopping a pasted string from arriving; focus jumping on every keystroke including Shift. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "autocomplete=\"one-time-code\"",
+          ""
+        ],
+        [
+          "UIKit",
+          "UITextContentType.oneTimeCode",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<OtpInput length expected>",
+          "React"
+        ],
+        [
+          "input-otp",
+          "<OTPInput>",
+          "popular React library"
+        ]
+      ]
     },
     {
       "id": "range-slider",
@@ -234,7 +763,59 @@
         "snap slider",
         "detent slider"
       ],
-      "react": "RangeSlider"
+      "react": "RangeSlider",
+      "api": "<input type=\"range\">",
+      "w": 360,
+      "called": [
+        "the dot you drag to change the volume",
+        "slider that snaps to steps",
+        "value bubble above a slider",
+        "drag bar with tick marks"
+      ],
+      "anatomy": [
+        {
+          "sel": "input[type=\"range\"]",
+          "name": "Track and thumb",
+          "api": "<input type=\"range\">",
+          "text": "Native, so keyboard, touch and screen readers work for free."
+        },
+        {
+          "sel": "[data-part=\"ticks\"]",
+          "name": "Detents",
+          "api": "data-detents",
+          "text": "Values the thumb snaps to when dragged close."
+        },
+        {
+          "sel": "[data-part=\"readout\"]",
+          "name": "Readout",
+          "api": "<output>",
+          "text": "The current value in tabular numbers."
+        }
+      ],
+      "prompt": "Add a range slider on <input type=\"range\"> with a filled track (a gradient at --pct), tick marks at detents that the thumb snaps to while dragging, and a value bubble shown on hover, focus and drag. Keep keyboard steps exact.",
+      "debug": "Debug my slider. Rule out: snapping applied to keyboard steps too; the fill not updating on input (only on change); Firefox needing ::-moz-range-progress; the bubble positioned without accounting for thumb width. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<input type=\"range\">",
+          ""
+        ],
+        [
+          "UIKit",
+          "UISlider",
+          ""
+        ],
+        [
+          "WAI-ARIA",
+          "Slider pattern",
+          "custom sliders"
+        ],
+        [
+          "lumina-taste",
+          "<RangeSlider detents>",
+          "React"
+        ]
+      ]
     },
     {
       "id": "dual-range-slider",
@@ -252,7 +833,54 @@
         "two handle slider",
         "range filter"
       ],
-      "react": "DualRangeSlider"
+      "react": "DualRangeSlider",
+      "api": "two <input type=\"range\">",
+      "w": 380,
+      "called": [
+        "price range slider with two handles",
+        "min and max slider",
+        "slider with two dots",
+        "filter between two values"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"fill\"]",
+          "name": "Selected range",
+          "api": "left / right",
+          "text": "The accent band between the two thumbs."
+        },
+        {
+          "sel": "input[type=\"range\"]:first-of-type",
+          "name": "Minimum thumb",
+          "api": "aria-label=\"Minimum\"",
+          "text": "Cannot pass the maximum; the gap is enforced."
+        },
+        {
+          "sel": "[data-part=\"readout\"]",
+          "name": "Readout",
+          "api": "<output>",
+          "text": "Both values, formatted with the currency."
+        }
+      ],
+      "prompt": "Add a dual-thumb range slider: two overlapping range inputs with pointer-events only on their thumbs, a fill between them, a minimum gap so they never cross, and aria-valuetext with formatted values.",
+      "debug": "Debug my dual slider. Rule out: the top input swallowing clicks for the bottom thumb (set pointer-events: none on the inputs, auto on thumbs); thumbs crossing; the last-moved thumb not raised when both meet. The symptom:",
+      "code": [
+        [
+          "WAI-ARIA",
+          "Multi-Thumb Slider",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<DualRangeSlider>",
+          "React"
+        ],
+        [
+          "Radix",
+          "<Slider.Root> with two thumbs",
+          ""
+        ]
+      ]
     },
     {
       "id": "button",
@@ -275,7 +903,72 @@
         "loading button",
         "danger button"
       ],
-      "react": "Button"
+      "react": "Button",
+      "api": "<button>",
+      "w": 400,
+      "preview": [
+        [
+          "click",
+          "[data-demo-load]"
+        ]
+      ],
+      "called": [
+        "the main call to action",
+        "button that shows a spinner when saving",
+        "outline button",
+        "red delete button",
+        "square button with just an icon"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-variant=\"primary\"]",
+          "name": "Primary",
+          "api": "data-variant=\"primary\"",
+          "text": "One per view. Accent fill, ink text."
+        },
+        {
+          "sel": "[data-variant=\"ghost\"]",
+          "name": "Ghost",
+          "api": "data-variant=\"ghost\"",
+          "text": "The quiet option, for Cancel and back."
+        },
+        {
+          "sel": "[data-icon-only]",
+          "name": "Icon button",
+          "api": "aria-label",
+          "text": "Square, with an accessible name."
+        },
+        {
+          "sel": "[data-demo-load]",
+          "name": "Loading",
+          "api": "aria-busy=\"true\"",
+          "text": "The label keeps its space so the button never changes width."
+        }
+      ],
+      "prompt": "Add a button set: primary (accent fill), secondary (outline), ghost, destructive and icon-only (square, aria-label). Press scales to 0.97 in 90ms. Loading keeps the label in the layout with visibility: hidden and overlays a spinner, so the width never jumps.",
+      "debug": "Debug my button. Rule out: width changing when the spinner replaces the label; disabled buttons still firing; the press scale applied while disabled; icon-only buttons without a name; two primary buttons in one view. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<button type=\"button\">",
+          ""
+        ],
+        [
+          "UIKit",
+          "UIButton.Configuration",
+          ""
+        ],
+        [
+          "SwiftUI",
+          "Button(.borderedProminent)",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<Button variant loading>",
+          "React"
+        ]
+      ]
     },
     {
       "id": "split-button",
@@ -297,6 +990,59 @@
       "react": "SplitButton",
       "deps": [
         "button"
+      ],
+      "api": "aria-haspopup=\"menu\"",
+      "w": 320,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"toggle\"]"
+        ]
+      ],
+      "called": [
+        "button with a dropdown arrow on the side",
+        "merge button with more options",
+        "save and the little arrow next to it",
+        "main action with a caret"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"main\"]",
+          "name": "Main action",
+          "api": "<button>",
+          "text": "The default thing most people want."
+        },
+        {
+          "sel": "[data-part=\"toggle\"]",
+          "name": "Menu toggle",
+          "api": "aria-haspopup=\"menu\"",
+          "text": "Opens related actions. Down arrow opens it from the keyboard."
+        },
+        {
+          "sel": "[data-part=\"menu\"]",
+          "name": "Menu",
+          "api": "role=\"menu\"",
+          "text": "Alternatives to the main action, each with a short explanation."
+        }
+      ],
+      "prompt": "Add a split button: a main <button> joined to a second button with aria-haspopup=\"menu\" aria-expanded that opens role=\"menu\" with role=\"menuitem\" options. Down opens on the first item, Up on the last, Esc closes and returns focus.",
+      "debug": "Debug my split button. Rule out: the toggle with no accessible name; the menu closing before a click registers (use pointerdown outside); focus not returning to the toggle on Esc; the two halves with different heights. The symptom:",
+      "code": [
+        [
+          "AppKit",
+          "NSSegmentedControl with menu",
+          ""
+        ],
+        [
+          "WAI-ARIA",
+          "Menu Button pattern",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SplitButton actions>",
+          "React"
+        ]
       ]
     },
     {
@@ -315,7 +1061,55 @@
         "copy icon that turns into tick",
         "clipboard button"
       ],
-      "react": "CopyButton"
+      "react": "CopyButton",
+      "api": "navigator.clipboard.writeText",
+      "w": 420,
+      "preview": [
+        [
+          "click",
+          ".lt-copy"
+        ]
+      ],
+      "called": [
+        "click to copy icon that turns into a tick",
+        "copy command button",
+        "clipboard icon next to a code",
+        "copy link button"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-copy [data-part=\"icons\"]",
+          "name": "Icon morph",
+          "api": "scale, rotate",
+          "text": "The copy icon turns into a tick for about 1.6s."
+        },
+        {
+          "sel": ".lt-copy [data-part=\"text\"]",
+          "name": "Label",
+          "api": "min-width",
+          "text": "Reserved width, so \"Copy\" to \"Copied\" never shifts layout."
+        },
+        {
+          "sel": ".lt-copy-field code",
+          "name": "Copied text",
+          "api": "data-copy",
+          "text": "What lands on the clipboard."
+        }
+      ],
+      "prompt": "Add a copy button: navigator.clipboard.writeText with a textarea fallback, morph the copy icon into a check for 1.6s, swap the label to \"Copied\" without changing width, and announce it in a polite live region.",
+      "debug": "Debug my copy button. Rule out: clipboard blocked on http or in iframes without permission; the label change shifting layout; repeated clicks stacking timers; no announcement for screen readers. The symptom:",
+      "code": [
+        [
+          "JS",
+          "navigator.clipboard.writeText()",
+          "secure contexts"
+        ],
+        [
+          "lumina-taste",
+          "<CopyButton value>",
+          "React"
+        ]
+      ]
     },
     {
       "id": "tag-input",
@@ -335,7 +1129,54 @@
         "email recipients field",
         "token input"
       ],
-      "react": "TagInput"
+      "react": "TagInput",
+      "api": "role=\"list\" + <input>",
+      "w": 420,
+      "called": [
+        "chips in a text box",
+        "email recipients field",
+        "type and press enter to add tags",
+        "pills with x inside an input"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"tag\"]",
+          "name": "Chip",
+          "api": "<li>",
+          "text": "One value, with its own remove button."
+        },
+        {
+          "sel": "[data-part=\"more\"]",
+          "name": "Overflow count",
+          "api": "+n",
+          "text": "Extra chips collapse until the field is focused."
+        },
+        {
+          "sel": ".lt-tags input",
+          "name": "Entry",
+          "api": "Enter, comma",
+          "text": "Enter or comma adds; Backspace on empty removes the last chip."
+        }
+      ],
+      "prompt": "Add a tag input: chips as a list with remove buttons (aria-label \"Remove x\"), a text input that adds on Enter or comma and removes the last chip on Backspace when empty, and a +n count that collapses extras while unfocused.",
+      "debug": "Debug my tag input. Rule out: Enter submitting the form; duplicates; remove buttons without names; Backspace deleting a chip while the input still has text; focus lost after removing a chip. The symptom:",
+      "code": [
+        [
+          "lumina-taste",
+          "<TagInput defaultValues>",
+          "React"
+        ],
+        [
+          "UIKit",
+          "UISearchTextField tokens",
+          ""
+        ],
+        [
+          "Material",
+          "Chip input",
+          ""
+        ]
+      ]
     },
     {
       "id": "search-input",
@@ -353,7 +1194,54 @@
         "filter field",
         "search with clear x"
       ],
-      "react": "SearchInput"
+      "react": "SearchInput",
+      "api": "<input type=\"search\">",
+      "w": 360,
+      "called": [
+        "search box with a keyboard shortcut hint",
+        "search bar with an x to clear",
+        "filter field at the top of a list",
+        "search with ⌘K badge"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-search input",
+          "name": "Field",
+          "api": "type=\"search\"",
+          "text": "Esc clears it; the browser cancel button is replaced."
+        },
+        {
+          "sel": "[data-part=\"shortcut\"]",
+          "name": "Shortcut badge",
+          "api": "<kbd>",
+          "text": "Shows the key that focuses the field from anywhere."
+        },
+        {
+          "sel": ".lt-search > .lt-icon",
+          "name": "Leading icon",
+          "api": "aria-hidden",
+          "text": "Decoration; the label is visually hidden but present."
+        }
+      ],
+      "prompt": "Add a search field: <input type=\"search\"> with a visually hidden label, a leading search icon, a clear button that appears with text, Esc to clear, and a ⌘/Ctrl + key shortcut (shown as a <kbd> badge) that focuses it.",
+      "debug": "Debug my search field. Rule out: the shortcut firing while typing in another input; the clear button not refocusing the field; a missing label; the native cancel button showing twice. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<input type=\"search\">",
+          ""
+        ],
+        [
+          "UIKit",
+          "UISearchBar",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SearchInput shortcut>",
+          "React"
+        ]
+      ]
     },
     {
       "id": "text-field",
@@ -375,7 +1263,54 @@
         "material input",
         "email field"
       ],
-      "react": "TextField"
+      "react": "TextField",
+      "api": "aria-invalid · aria-describedby",
+      "w": 380,
+      "called": [
+        "input where the label floats up when you type",
+        "email field with a red error under it",
+        "form field with helper text",
+        "material style input"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-field label",
+          "name": "Floating label",
+          "api": ":placeholder-shown",
+          "text": "Sits in the field, then shrinks above it on focus or once filled."
+        },
+        {
+          "sel": ".lt-field [data-part=\"message\"]",
+          "name": "Helper or error",
+          "api": "aria-describedby",
+          "text": "Help text that turns into a specific error after you leave the field."
+        },
+        {
+          "sel": ".lt-field [data-part=\"valid\"]",
+          "name": "Valid tick",
+          "api": "data-state=\"valid\"",
+          "text": "Confirms a field is fine, quietly."
+        }
+      ],
+      "prompt": "Add text fields with a floating label (placeholder=\" \" and :placeholder-shown), helper text linked by aria-describedby, and validation on blur that sets aria-invalid and replaces the helper with a specific message (\"Use a full address, like name@company.com\").",
+      "debug": "Debug my text field. Rule out: validating on every keystroke before the first blur; placeholder used as the only label; aria-invalid left true after fixing; error text not linked by aria-describedby; label overlapping autofilled values. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "required, type, minlength",
+          "constraint validation"
+        ],
+        [
+          "WAI-ARIA",
+          "aria-invalid + aria-describedby",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<TextField> + <ValidatedForm>",
+          "React"
+        ]
+      ]
     },
     {
       "id": "date-range-picker",
@@ -396,7 +1331,71 @@
         "date range",
         "check in check out"
       ],
-      "react": "DateRangePicker"
+      "react": "DateRangePicker",
+      "api": "role=\"dialog\" + role=\"grid\"",
+      "w": 380,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"trigger\"]"
+        ]
+      ],
+      "called": [
+        "calendar popup to pick from and to dates",
+        "booking dates picker",
+        "check in check out calendar",
+        "date range dropdown"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"trigger\"]",
+          "name": "Trigger",
+          "api": "aria-haspopup=\"dialog\"",
+          "text": "Shows the chosen range in tabular numbers."
+        },
+        {
+          "sel": "td button[data-start]",
+          "name": "Range start",
+          "api": "aria-selected",
+          "text": "First click sets the start; the second sets the end."
+        },
+        {
+          "sel": "td button[data-in-range]",
+          "name": "Range band",
+          "api": "data-in-range",
+          "text": "The days between, tinted with the accent."
+        },
+        {
+          "sel": "[data-part=\"apply\"]",
+          "name": "Apply",
+          "api": "<button>",
+          "text": "Commits the range and closes the calendar."
+        }
+      ],
+      "prompt": "Add a date range picker: a trigger button opening a non-modal dialog with a role=\"grid\" calendar. Arrow keys move by day and week, PageUp/PageDown by month, Enter picks start then end, hovering previews the range, Esc closes and returns focus.",
+      "debug": "Debug my date range picker. Rule out: timezone shifts turning 10 Nov into 9 Nov (construct dates at noon); weeks starting on Sunday when users expect Monday; arrow keys scrolling the page; the end date allowed before the start. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<input type=\"date\">",
+          "single date, native"
+        ],
+        [
+          "WAI-ARIA",
+          "Date Picker Dialog",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<DateRangePicker>",
+          "React"
+        ],
+        [
+          "react-day-picker",
+          "<DayPicker mode=\"range\">",
+          ""
+        ]
+      ]
     },
     {
       "id": "combobox",
@@ -417,7 +1416,66 @@
         "select with search",
         "country picker"
       ],
-      "react": "Combobox"
+      "react": "Combobox",
+      "api": "role=\"combobox\" · aria-activedescendant",
+      "w": 340,
+      "preview": [
+        [
+          "type",
+          "input",
+          "lo"
+        ]
+      ],
+      "called": [
+        "dropdown you can type in to search",
+        "select with a search box",
+        "autocomplete list under an input",
+        "country picker that filters"
+      ],
+      "anatomy": [
+        {
+          "sel": "[role=\"combobox\"]",
+          "name": "Input",
+          "api": "aria-expanded, aria-activedescendant",
+          "text": "Focus stays here while arrows move through options."
+        },
+        {
+          "sel": "[role=\"listbox\"]",
+          "name": "Listbox",
+          "api": "role=\"listbox\"",
+          "text": "The filtered options."
+        },
+        {
+          "sel": "[role=\"option\"] mark",
+          "name": "Match highlight",
+          "api": "<mark>",
+          "text": "The typed letters, underlined in each option."
+        }
+      ],
+      "prompt": "Add a combobox: <input role=\"combobox\" aria-expanded aria-controls aria-autocomplete=\"list\"> with a role=\"listbox\". Filter as the user types, move the active option with arrows using aria-activedescendant (focus stays in the input), Enter chooses, Esc closes.",
+      "debug": "Debug my combobox. Rule out: moving real focus into the list; aria-activedescendant pointing at a hidden option; the list closing on mousedown before the click lands; no empty state. The symptom:",
+      "code": [
+        [
+          "WAI-ARIA",
+          "Combobox pattern",
+          "list autocomplete"
+        ],
+        [
+          "HTML",
+          "<input list> + <datalist>",
+          "basic, unstyled"
+        ],
+        [
+          "lumina-taste",
+          "<Combobox options>",
+          "React"
+        ],
+        [
+          "Headless UI",
+          "<Combobox>",
+          ""
+        ]
+      ]
     },
     {
       "id": "file-dropzone",
@@ -436,7 +1494,54 @@
         "drop files here",
         "file uploader"
       ],
-      "react": "FileDropzone"
+      "react": "FileDropzone",
+      "api": "<input type=\"file\">",
+      "w": 420,
+      "called": [
+        "drag and drop upload box",
+        "drop files here area",
+        "dashed box for uploading",
+        "browse files button area"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"zone\"]",
+          "name": "Drop zone",
+          "api": "dragenter / drop",
+          "text": "Highlights while a file is dragged over it."
+        },
+        {
+          "sel": "[data-part=\"zone\"] u",
+          "name": "Browse link",
+          "api": "<input type=\"file\">",
+          "text": "The whole zone is a label for a native file input."
+        },
+        {
+          "sel": "[data-part=\"meta\"]",
+          "name": "Rules",
+          "api": "accept",
+          "text": "Says which file types and sizes are allowed, before anyone tries."
+        }
+      ],
+      "prompt": "Add a file dropzone: a <label> wrapping a native <input type=\"file\" multiple accept>, a dashed zone that highlights on dragenter (count enter/leave to avoid flicker), and a list of chosen files with sizes and remove buttons.",
+      "debug": "Debug my dropzone. Rule out: highlight flickering because dragleave fires on children; the browser opening the dropped file (call preventDefault on dragover and drop); the same file not re-selectable (reset input.value). The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<input type=\"file\" multiple>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<FileDropzone accept>",
+          "React"
+        ],
+        [
+          "react-dropzone",
+          "useDropzone()",
+          ""
+        ]
+      ]
     },
     {
       "id": "number-stepper",
@@ -455,7 +1560,54 @@
         "counter input",
         "increment decrement"
       ],
-      "react": "NumberStepper"
+      "react": "NumberStepper",
+      "api": "<input type=\"number\">",
+      "w": 260,
+      "called": [
+        "quantity picker with plus and minus",
+        "number box with buttons on each side",
+        "counter for seats",
+        "increment decrement input"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"dec\"]",
+          "name": "Decrease",
+          "api": "aria-label",
+          "text": "Disabled at the minimum. Hold to repeat."
+        },
+        {
+          "sel": ".lt-stepper input",
+          "name": "Value",
+          "api": "min, max, step",
+          "text": "Typed values are clamped on change."
+        },
+        {
+          "sel": "[data-part=\"inc\"]",
+          "name": "Increase",
+          "api": "aria-label",
+          "text": "Disabled at the maximum."
+        }
+      ],
+      "prompt": "Add a number stepper: − and + buttons around a native number input with min, max and step. Buttons repeat while held, accelerating; typed values clamp on change; buttons disable at the limits.",
+      "debug": "Debug my stepper. Rule out: the repeat timer never cleared on pointerup outside the button; typed values outside the range accepted; spin buttons from the browser showing; non-numeric input on mobile (inputmode). The symptom:",
+      "code": [
+        [
+          "UIKit",
+          "UIStepper",
+          ""
+        ],
+        [
+          "WAI-ARIA",
+          "Spinbutton",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<NumberStepper>",
+          "React"
+        ]
+      ]
     }
   ]
 }

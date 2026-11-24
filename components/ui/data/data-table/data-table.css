@@ -1,8 +1,8 @@
-.lt-table-wrap { position: relative; width: 100%; max-height: 360px; overflow: auto; overscroll-behavior: contain; border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
+.lt-table-wrap { position: relative; width: 100%; max-height: 360px; overflow: auto; overscroll-behavior: contain; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
 .lt-table-wrap:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
 @scope (.lt-table) {
   :scope { width: 100%; border-collapse: separate; border-spacing: 0; font-size: var(--text-ui); font-variant-numeric: tabular-nums; }
-  thead th { position: sticky; top: 0; z-index: 1; padding: 0 var(--cell-px); height: 38px; background: var(--bg-surface-2); border-bottom: 1px solid var(--border-hairline); text-align: left; font-weight: 600; font-size: var(--text-ui-xs); color: var(--text-secondary); white-space: nowrap; }
+  thead th { position: sticky; top: 0; z-index: 1; padding: 0 var(--cell-px); height: 38px; background: var(--bg-surface-2); border-bottom: var(--bw) var(--border-style) var(--border-hairline); text-align: left; font-weight: 600; font-size: var(--text-ui-xs); color: var(--text-secondary); white-space: nowrap; }
   th button { display: inline-flex; align-items: center; gap: 4px; height: 26px; margin: 0 -6px; padding: 0 6px; border: 0; border-radius: var(--radius-xs); background: none; color: inherit; font: inherit; cursor: pointer; }
   th button:hover { background: var(--bg-surface-3); color: var(--text-primary); }
   [data-num] { text-align: right; }
@@ -14,7 +14,7 @@
   [aria-sort="ascending"] [data-part="sort"], [aria-sort="descending"] [data-part="sort"] { opacity: 1; color: var(--accent-text); }
   [aria-sort="ascending"] [data-part="sort"]::after, [aria-sort="descending"] [data-part="sort"]::before { opacity: 0.25; }
   [aria-sort="ascending"] button, [aria-sort="descending"] button { color: var(--text-primary); }
-  tbody td { height: calc(var(--cell-py) * 2 + 20px); padding: 0 var(--cell-px); border-bottom: 1px solid var(--border-hairline); color: var(--text-primary); white-space: nowrap; }
+  tbody td { height: calc(var(--cell-py) * 2 + 20px); padding: 0 var(--cell-px); border-bottom: var(--bw) var(--border-style) var(--border-hairline); color: var(--text-primary); white-space: nowrap; }
   tbody tr[data-row]:hover td { background: var(--bg-surface-2); }
   tbody tr:last-child td { border-bottom: 0; }
   [data-part="expander-col"], td:first-child { width: 36px; padding-right: 0; }

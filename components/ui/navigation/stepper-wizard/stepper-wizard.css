@@ -10,7 +10,7 @@
   }
   [data-part="step"][data-state="done"]::before, [data-part="step"][data-state="current"]::before { --fill: 100%; }
   [data-part="dot"] {
-    position: relative; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border-strong);
+    position: relative; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: var(--bw-strong) var(--border-style) var(--border-strong);
     background: var(--bg-surface-1); color: var(--text-secondary); font-size: var(--text-ui-xs); font-weight: 650; font-variant-numeric: tabular-nums;
     transition: background-color var(--dur-2), border-color var(--dur-2), color var(--dur-2), scale var(--dur-3) var(--ease-spring);
   }

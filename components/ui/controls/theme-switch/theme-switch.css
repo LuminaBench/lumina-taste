@@ -44,3 +44,4 @@
   from { clip-path: circle(0 at var(--lt-vt-x, 50%) var(--lt-vt-y, 0)); }
   to { clip-path: circle(var(--lt-vt-r, 150vmax) at var(--lt-vt-x, 50%) var(--lt-vt-y, 0)); }
 }
+.lt-mode-fade, .lt-mode-fade * { transition: background-color 360ms ease, color 360ms ease, border-color 360ms ease, fill 360ms ease, stroke 360ms ease, box-shadow 360ms ease !important; }

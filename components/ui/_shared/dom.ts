@@ -100,3 +100,36 @@ export function autoEnhance(root: ParentNode, registry: Record<string, Enhancer>
   }
   return combine(...cleanups);
 }
+
+/**
+ * Contained mode. Inside an element with [data-contained] (a preview box, an embedded widget),
+ * overlays open inside that box instead of taking over the page: dialogs open non-modally and are
+ * positioned in the box, focus is trapped, Esc and outside clicks close them.
+ */
+export const containerOf = (el: Element) => el.closest<HTMLElement>('[data-contained]');
+
+export function openDialog(dialog: HTMLDialogElement): Cleanup {
+  const box = containerOf(dialog);
+  if (!box) { dialog.showModal(); return () => {}; }
+  dialog.show();
+  dialog.setAttribute('data-contained-open', '');
+  const first = dialog.querySelector<HTMLElement>('[autofocus]') ?? focusables(dialog)[0];
+  first?.focus();
+  const offs = [
+    trapFocus(dialog),
+    on(dialog, 'keydown', (e: KeyboardEvent) => { if (e.key === 'Escape') { e.preventDefault(); dialog.close('cancel'); } }),
+    on(box, 'pointerdown', (e: PointerEvent) => { if (!dialog.contains(e.target as Node)) dialog.close('cancel'); }),
+  ];
+  const done = () => { dialog.removeAttribute('data-contained-open'); offs.forEach((f) => f()); dialog.removeEventListener('close', done); };
+  dialog.addEventListener('close', done);
+  return done;
+}
+
+/** Offset of the containing block that position: fixed children resolve against (viewport or a contained box). */
+export function fixedOrigin(el: HTMLElement) {
+  const prev = { l: el.style.left, t: el.style.top, p: el.style.position };
+  el.style.position = 'fixed'; el.style.left = '0px'; el.style.top = '0px';
+  const r = el.getBoundingClientRect();
+  Object.assign(el.style, { left: prev.l, top: prev.t, position: prev.p });
+  return { x: r.left, y: r.top };
+}

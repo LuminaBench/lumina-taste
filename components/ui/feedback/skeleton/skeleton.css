@@ -1,4 +1,4 @@
-.lt-skeleton-card { display: grid; gap: 10px; width: min(100%, 340px); padding: var(--gap-md); border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
+.lt-skeleton-card { display: grid; gap: 10px; width: min(100%, 340px); padding: var(--gap-md); border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
 .lt-skeleton-card [data-part="row"] { display: flex; align-items: center; gap: 12px; }
 .lt-skeleton-card [data-part="lines"] { flex: 1; display: grid; gap: 8px; }
 @scope (.lt-skeleton) {

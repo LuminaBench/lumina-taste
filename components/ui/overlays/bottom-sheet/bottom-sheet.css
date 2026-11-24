@@ -12,7 +12,7 @@
   [data-part="grab"] span { width: 36px; height: 4px; border-radius: 2px; background: var(--border-strong); }
   h2 { margin: 0 0 4px; font-size: var(--text-ui); font-weight: 600; text-align: center; color: var(--text-secondary); }
   [data-part="actions"] { display: grid; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--bg-surface-2); overflow: hidden; }
-  [data-part="actions"] li + li { border-top: 1px solid var(--border-hairline); }
+  [data-part="actions"] li + li { border-top: var(--bw) var(--border-style) var(--border-hairline); }
   [data-part="actions"] button { display: flex; align-items: center; gap: 12px; width: 100%; height: 52px; padding: 0 var(--gap-md); border: 0; background: none; color: var(--text-primary); font-size: var(--step-0); cursor: pointer; }
   [data-part="actions"] button:hover { background: var(--bg-surface-3); }
   [data-part="actions"] button:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -2px; }
@@ -20,3 +20,4 @@
   [data-tone="danger"], [data-tone="danger"] .lt-icon { color: var(--status-negative) !important; }
   [data-part="cancel"] { width: 100%; height: 48px; }
 }
+[data-contained] .lt-sheet[data-contained-open] { position: absolute; inset: auto 0 0 0; width: 100%; max-height: 90%; }

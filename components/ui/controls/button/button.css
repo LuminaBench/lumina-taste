@@ -3,13 +3,13 @@
   :scope {
     --btn-bg: var(--bg-surface-1); --btn-fg: var(--text-primary); --btn-border: var(--border-strong); --btn-hover: var(--bg-surface-2);
     position: relative; display: inline-flex; align-items: center; justify-content: center; gap: var(--gap-sm);
-    height: var(--control-h); padding: 0 var(--control-px); border: 1px solid var(--btn-border); border-radius: var(--radius-md);
+    height: var(--control-h); padding: 0 var(--control-px); border: var(--bw) var(--border-style) var(--btn-border); border-radius: var(--radius-md); box-shadow: var(--control-shadow);
     background: var(--btn-bg); color: var(--btn-fg); font-size: var(--text-ui); font-weight: 550; line-height: 1; white-space: nowrap;
     text-decoration: none; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
-    transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1), color var(--dur-1), scale var(--dur-1) var(--ease-out);
+    transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1), color var(--dur-1), scale var(--dur-1) var(--ease-out), translate var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
   }
-  :scope:hover { background: var(--btn-hover); }
-  :scope:active:not(:disabled, [aria-disabled="true"], [data-loading]) { scale: var(--press-scale); }
+  :scope:hover { background: var(--btn-hover); box-shadow: var(--control-shadow-hover); }
+  :scope:active:not(:disabled, [aria-disabled="true"], [data-loading]) { scale: var(--press-scale); translate: var(--press-translate); box-shadow: var(--control-shadow-active); }
   :scope:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: var(--focus-offset); }
   :scope[data-variant="primary"] { --btn-bg: var(--accent-solid); --btn-fg: var(--accent-ink); --btn-border: transparent; --btn-hover: var(--accent-hover); }
   :scope[data-variant="secondary"] { --btn-border: var(--border-strong); }

@@ -2,7 +2,7 @@
 @scope (.lt-field) {
   :scope { position: relative; display: grid; }
   input {
-    height: calc(var(--control-h) + 16px); padding: 18px 36px 0 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-md);
+    height: calc(var(--control-h) + 16px); padding: 18px 36px 0 12px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-md);
     background: var(--bg-surface-1); color: var(--text-primary); font-size: var(--text-ui); outline: none;
     transition: border-color var(--dur-1), box-shadow var(--dur-1);
   }

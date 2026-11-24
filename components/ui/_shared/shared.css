@@ -10,3 +10,11 @@
   gap: 0.4em;
   vertical-align: middle;
 }
+
+/* Contained mode: a box that keeps its overlays, toasts and tours inside itself.
+   contain: paint makes it the containing block for position: fixed descendants. */
+[data-contained] { position: relative; overflow: hidden; contain: layout paint; isolation: isolate; }
+[data-contained] dialog[data-contained-open] {
+  position: absolute; z-index: 50;
+  box-shadow: 0 0 0 100vmax var(--scrim), var(--shadow-overlay);
+}

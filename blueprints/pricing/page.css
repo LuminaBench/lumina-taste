@@ -10,7 +10,7 @@
 .pr-hero .lt-segmented .lt-badge { height: 18px; margin-left: 4px; padding: 0 6px; }
 .pr-center { text-align: center; margin: 0 0 var(--space-6); }
 .pr-tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); align-items: stretch; }
-.pr-tier { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-6) var(--space-5); border: 1px solid var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); }
+.pr-tier { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-6) var(--space-5); border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); }
 .pr-tier[data-featured] { border-color: var(--accent-solid); box-shadow: 0 0 0 1px var(--accent-solid), var(--shadow-md); }
 .pr-tier-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
 .pr-tier h2 { margin: 0; font-size: var(--step-1); font-weight: 650; }
@@ -19,7 +19,7 @@
 .pr-price data { font-family: var(--font-display); font-size: var(--step-4); font-weight: var(--weight-display); letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; min-width: 3.2ch; }
 .pr-price span { color: var(--text-muted); font-size: var(--text-ui-sm); }
 .pr-tier .lt-btn { width: 100%; }
-.pr-tier ul { display: grid; gap: 10px; margin: var(--space-3) 0 0; padding: var(--space-4) 0 0; border-top: 1px solid var(--border-hairline); list-style: none; font-size: var(--text-ui); }
+.pr-tier ul { display: grid; gap: 10px; margin: var(--space-3) 0 0; padding: var(--space-4) 0 0; border-top: var(--bw) var(--border-style) var(--border-hairline); list-style: none; font-size: var(--text-ui); }
 .pr-tier li { display: flex; align-items: center; gap: 10px; }
 .pr-tier li .lt-icon { color: var(--status-positive); }
 .pr-billnote { margin-top: var(--space-4); text-align: center; color: var(--text-muted); font-size: var(--text-ui-sm); }

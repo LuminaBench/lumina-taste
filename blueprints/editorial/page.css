@@ -3,7 +3,7 @@
 .ed-intro { display: grid; gap: var(--space-5); padding-block: var(--space-9) var(--space-6); }
 .ed-intro .lt-display { max-width: 18ch; }
 .ed-intro .lt-display em { font-style: italic; color: var(--accent-text); }
-.ed-section-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-6); padding-bottom: var(--space-3); border-bottom: 1px solid var(--border-hairline); }
+.ed-section-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-6); padding-bottom: var(--space-3); border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
 .ed-section-head h2 { margin: 0; }
 .ed-grid { display: grid; grid-template-columns: 1.4fr 1fr; grid-template-rows: auto auto; gap: var(--space-5); }
 .ed-grid .ed-feature { grid-row: span 2; }
@@ -14,8 +14,8 @@
 .ed-body { margin: 0; font-family: var(--font-display); font-size: var(--step-1); line-height: 1.6; max-width: var(--measure); color: var(--text-primary); text-wrap: pretty; }
 .ed-pull { margin: var(--space-3) 0; padding: var(--space-2) 0 var(--space-2) var(--space-5); border-left: 3px solid var(--accent-solid); }
 .ed-pull p { margin: 0; font-family: var(--font-display); font-size: var(--step-3); font-style: italic; line-height: 1.25; letter-spacing: var(--tracking-display); text-wrap: balance; }
-.ed-contact { display: grid; justify-items: start; gap: var(--space-4); border-top: 1px solid var(--border-hairline); }
+.ed-contact { display: grid; justify-items: start; gap: var(--space-4); border-top: var(--bw) var(--border-style) var(--border-hairline); }
 .ed-contact p { margin: 0; }
-.ed-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); padding-block: var(--space-6); border-top: 1px solid var(--border-hairline); color: var(--text-muted); font-size: var(--text-ui-sm); }
+.ed-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); padding-block: var(--space-6); border-top: var(--bw) var(--border-style) var(--border-hairline); color: var(--text-muted); font-size: var(--text-ui-sm); }
 .ed-footer a { color: var(--text-secondary); }
 @media (max-width: 760px) { .ed-grid { grid-template-columns: 1fr; } .ed-grid .ed-feature { grid-row: auto; } .ed-intro { padding-block: var(--space-7) var(--space-5); } .ed-header .lt-pillnav a:not([data-part="cta"]):nth-child(n + 4) { display: none; } }

@@ -9,8 +9,9 @@
   [data-part="icon"] { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--status-negative-soft); color: var(--status-negative); }
   h2 { margin: 0; font-size: var(--step-1); font-weight: 600; letter-spacing: -0.01em; }
   p { margin: 6px 0 0; color: var(--text-secondary); font-size: var(--text-ui); text-wrap: pretty; }
-  [data-part="foot"] { display: flex; justify-content: flex-end; gap: var(--gap-sm); padding: var(--gap-md) var(--gap-lg); border-top: 1px solid var(--border-hairline); background: var(--bg-surface-2); border-radius: 0 0 var(--radius-xl) var(--radius-xl); }
+  [data-part="foot"] { display: flex; justify-content: flex-end; gap: var(--gap-sm); padding: var(--gap-md) var(--gap-lg); border-top: var(--bw) var(--border-style) var(--border-hairline); background: var(--bg-surface-2); border-radius: 0 0 var(--radius-xl) var(--radius-xl); }
   .lt-btn[data-tone="danger"] { --btn-bg: var(--status-negative); --btn-hover: color-mix(in oklab, var(--status-negative) 88%, black); --btn-fg: var(--bg-surface-1); }
 }
 @keyframes lt-modal-in { from { opacity: 0; scale: 0.96; translate: 0 8px; } }
 @keyframes lt-fade { from { opacity: 0; } }
+[data-contained] .lt-modal[data-contained-open] { inset: 0; margin: auto; height: fit-content; max-height: calc(100% - 32px); overflow: auto; }

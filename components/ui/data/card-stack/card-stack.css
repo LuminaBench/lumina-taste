@@ -3,7 +3,7 @@
 @scope (.lt-card-stack) {
   :scope { display: grid; gap: var(--gap-md); margin: 0; padding: 0 0 120px; list-style: none; }
   li {
-    position: sticky; top: calc(8px + var(--i) * 14px); display: grid; gap: 4px; min-height: 150px; padding: var(--gap-lg); border: 1px solid var(--border-hairline);
+    position: sticky; top: calc(8px + var(--i) * 14px); display: grid; gap: 4px; min-height: 150px; padding: var(--gap-lg); border: var(--bw) var(--border-style) var(--border-hairline);
     border-radius: var(--radius-xl); background: var(--bg-surface-1); box-shadow: var(--shadow-md); transform-origin: top center;
     scale: calc(1 - (var(--depth, 0) * 0.04)); filter: brightness(calc(1 - var(--depth, 0) * 0.04)); transition: scale var(--dur-2) var(--ease-out);
   }

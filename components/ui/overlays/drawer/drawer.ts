@@ -1,4 +1,4 @@
-import { combine, emit, on, type Cleanup } from '../../_shared/dom';
+import { combine, emit, on, openDialog, type Cleanup } from '../../_shared/dom';
 
 /** Slide-over drawer on a modal <dialog>: slides from the right, scrim click / Esc / ✕ close, focus returns. */
 export function enhance(root: HTMLElement): Cleanup {
@@ -6,7 +6,7 @@ export function enhance(root: HTMLElement): Cleanup {
   const opener = root.querySelector<HTMLElement>('[data-part="open"]');
   const close = () => dialog.close();
   return combine(
-    opener ? on(opener, 'click', () => dialog.showModal()) : () => {},
+    opener ? on(opener, 'click', () => openDialog(dialog)) : () => {},
     on(dialog, 'click', (e: MouseEvent) => {
       if (e.target === dialog) close();
       const t = e.target as Element;

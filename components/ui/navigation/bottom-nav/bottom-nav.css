@@ -1,10 +1,10 @@
-.lt-phone-demo { display: flex; flex-direction: column; width: min(100%, 360px); height: 300px; margin: 0 auto; border: 1px solid var(--border-hairline); border-radius: calc(var(--radius-xl) + 6px); overflow: hidden; background: var(--bg-canvas); }
+.lt-phone-demo { display: flex; flex-direction: column; width: min(100%, 360px); height: 300px; margin: 0 auto; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: calc(var(--radius-xl) + 6px); overflow: hidden; background: var(--bg-canvas); }
 .lt-phone-demo-screen { flex: 1; padding: var(--gap-lg); }
 .lt-phone-demo-screen p { margin: 6px 0 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
 @scope (.lt-bottom-nav) {
   :scope {
     position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
-    background: var(--bg-surface-1); border-top: 1px solid var(--border-hairline);
+    background: var(--bg-surface-1); border-top: var(--bw) var(--border-style) var(--border-hairline);
   }
   a {
     position: relative; z-index: 1; display: grid; justify-items: center; gap: 2px; padding: 6px 0 4px; border-radius: var(--radius-md);

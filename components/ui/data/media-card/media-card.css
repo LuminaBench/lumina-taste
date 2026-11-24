@@ -1,6 +1,6 @@
 .lt-media-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--gap-md); width: 100%; }
 @scope (.lt-media-card) {
-  :scope { display: flex; flex-direction: column; border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); color: var(--text-primary); text-decoration: none; overflow: hidden; transition: border-color var(--dur-1), translate var(--dur-2) var(--ease-out); }
+  :scope { display: flex; flex-direction: column; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); color: var(--text-primary); text-decoration: none; overflow: hidden; transition: border-color var(--dur-1), translate var(--dur-2) var(--ease-out); }
   :scope:hover { border-color: var(--border-strong); translate: 0 -2px; }
   :scope:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
   [data-part="media"] { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--bg-surface-3); }

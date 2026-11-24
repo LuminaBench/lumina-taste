@@ -1,6 +1,6 @@
 @scope (.lt-code) {
-  :scope { width: 100%; margin: 0; border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-2); overflow: hidden; }
-  [data-part="bar"] { display: flex; align-items: center; gap: var(--gap-sm); height: 40px; padding: 0 6px 0 4px; border-bottom: 1px solid var(--border-hairline); background: var(--bg-surface-1); }
+  :scope { width: 100%; margin: 0; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-2); overflow: hidden; }
+  [data-part="bar"] { display: flex; align-items: center; gap: var(--gap-sm); height: 40px; padding: 0 6px 0 4px; border-bottom: var(--bw) var(--border-style) var(--border-hairline); background: var(--bg-surface-1); }
   [data-part="tabs"] { display: flex; gap: 2px; }
   [role="tab"] { height: 28px; padding: 0 10px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-muted); font-size: var(--text-ui-xs); font-weight: 600; cursor: pointer; }
   [role="tab"]:hover { color: var(--text-primary); }

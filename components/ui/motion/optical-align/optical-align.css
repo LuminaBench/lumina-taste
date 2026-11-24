@@ -11,7 +11,7 @@
 
 .lt-optical-demo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-lg); width: min(100%, 420px); }
 .lt-optical-demo [data-part="col"] { display: grid; justify-items: start; gap: var(--gap-sm); }
-.lt-optical-demo button, .lt-optical-demo a, .lt-optical-demo [data-big] { height: 34px; padding: 0 12px; border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); background: var(--bg-surface-1); color: var(--text-primary); font-size: var(--text-ui); text-decoration: none; cursor: pointer; }
+.lt-optical-demo button, .lt-optical-demo a, .lt-optical-demo [data-big] { height: 34px; padding: 0 12px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-sm); background: var(--bg-surface-1); color: var(--text-primary); font-size: var(--text-ui); text-decoration: none; cursor: pointer; }
 .lt-optical-demo [data-big] { font-size: var(--step-1); height: 44px; cursor: default; }
 .lt-optical-demo [data-naive] { display: inline-block; line-height: 32px; }
 .lt-optical-demo [data-naive] .lt-icon { display: inline; vertical-align: baseline; }

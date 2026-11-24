@@ -1,7 +1,7 @@
 @scope (.lt-context) {
   :scope { width: 100%; }
   [data-part="area"] {
-    display: grid; justify-items: center; gap: 6px; padding: var(--gap-xl) var(--gap-md); border: 1.5px dashed var(--border-strong); border-radius: var(--radius-lg);
+    display: grid; justify-items: center; gap: 6px; padding: var(--gap-xl) var(--gap-md); border: var(--bw-strong) dashed var(--border-strong); border-radius: var(--radius-lg);
     color: var(--text-secondary); text-align: center; cursor: context-menu; user-select: none; -webkit-touch-callout: none;
   }
   [data-part="area"] strong { color: var(--text-primary); }

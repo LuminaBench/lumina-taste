@@ -1,6 +1,6 @@
 @scope (.lt-tabs) {
   :scope { width: 100%; font-size: var(--text-ui); }
-  [data-part="list"] { position: relative; display: flex; gap: var(--gap-md); border-bottom: 1px solid var(--border-hairline); overflow-x: auto; scrollbar-width: none; }
+  [data-part="list"] { position: relative; display: flex; gap: var(--gap-md); border-bottom: var(--bw) var(--border-style) var(--border-hairline); overflow-x: auto; scrollbar-width: none; }
   [role="tab"] {
     display: inline-flex; align-items: center; gap: 6px; flex: none; height: 40px; padding: 0 2px; border: 0; background: none;
     color: var(--text-secondary); font-weight: 550; cursor: pointer; transition: color var(--dur-1);

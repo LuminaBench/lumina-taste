@@ -3,19 +3,862 @@
   "summary": "Tables, lists, grids and blocks for showing real data cleanly, with tabular numbers everywhere.",
   "order": 5,
   "components": [
-    { "id": "data-table", "name": "Sortable data table", "summary": "Sticky header, sort chevrons with aria-sort, expandable detail rows and tabular numbers.", "pattern": "Table with sortable columns (APG Sortable Table)", "states": ["unsorted", "ascending", "descending", "row expanded", "hover"], "aliases": ["sortable table", "grid table", "admin table", "table with expandable rows", "sticky header table"], "react": "DataTable", "fill": true, "wide": true, "deps": ["badge"] },
-    { "id": "virtual-list", "name": "Virtualised list", "summary": "Renders only the visible rows of 10,000 so scrolling stays smooth.", "pattern": "WAI-ARIA Listbox with aria-activedescendant", "states": ["idle", "scrolling", "active row"], "aliases": ["infinite list", "windowed list", "long log list", "virtual scroll", "big list"], "react": "VirtualList", "fill": true },
-    { "id": "bento-grid", "name": "Bento grid", "summary": "Asymmetric feature tiles that collapse to one column on narrow containers.", "pattern": "Section of articles", "states": ["default", "single column"], "aliases": ["bento box", "feature grid", "tile grid", "apple style grid"], "react": "BentoGrid", "fill": true, "wide": true },
-    { "id": "card-stack", "name": "Scroll-stacking cards", "summary": "Sticky cards that pile on top of each other as you scroll, earlier ones receding.", "pattern": "Ordered list", "states": ["flat", "stacking"], "aliases": ["stacked cards on scroll", "sticky card pile", "card deck scroll", "stacking sections"], "react": "CardStack", "fill": true },
-    { "id": "comparison-table", "name": "Comparison table", "summary": "Plan-by-feature matrix with a highlighted column and grouped rows.", "pattern": "Table with row groups", "states": ["default"], "aliases": ["feature matrix", "plan comparison", "pricing table", "compare plans grid"], "react": "ComparisonTable", "fill": true, "wide": true, "deps": ["badge"] },
-    { "id": "timeline", "name": "Timeline / changelog", "summary": "Dated entries on a quiet rail, the newest marked with the accent.", "pattern": "Ordered list with <time>", "states": ["default", "latest"], "aliases": ["changelog list", "release notes", "activity timeline", "history list"], "react": "Timeline", "deps": ["badge"] },
-    { "id": "split-pane", "name": "Resizable split pane", "summary": "Two panes and a grip you can drag or move with the arrow keys.", "pattern": "WAI-ARIA Window Splitter", "states": ["rest", "hover", "dragging", "focus-visible"], "aliases": ["resize handle", "split view", "draggable divider", "panel resizer"], "react": "SplitPane", "fill": true },
-    { "id": "sortable-list", "name": "Drag-to-reorder list", "summary": "Reorder rows by dragging a handle or with Space and the arrow keys.", "pattern": "List + live region (keyboard-accessible drag and drop)", "states": ["rest", "grabbed", "moving", "dropped"], "aliases": ["drag and drop list", "reorder handle", "draggable rows", "sortable items", "six dots handle"], "react": "SortableList", "deps": ["badge"] },
-    { "id": "code-block", "name": "Code block", "summary": "Monospace code with language tabs, a filename and a copy button.", "pattern": "Figure + WAI-ARIA Tabs", "states": ["default", "copied"], "aliases": ["code snippet", "copyable code", "syntax block", "install command box"], "react": "CodeBlock", "fill": true, "deps": ["tabs", "copy-button"] },
-    { "id": "stat-strip", "name": "Stat strip", "summary": "A row of KPIs with tabular values and semantic delta arrows.", "pattern": "Description list", "states": ["default", "two-up"], "aliases": ["kpi row", "metrics bar", "stats row", "numbers strip"], "react": "StatStrip", "fill": true, "wide": true },
-    { "id": "media-card", "name": "Media card", "summary": "Image cards locked to an aspect ratio so a grid of them always lines up.", "pattern": "Link card", "states": ["default", "hover", "focus-visible"], "aliases": ["blog card", "article card", "thumbnail card", "image card"], "react": "MediaCard", "fill": true },
-    { "id": "avatar-stack", "name": "Avatar stack", "summary": "Overlapping initials with a +n counter for collaborators.", "pattern": "List with accessible count", "states": ["default", "hover"], "aliases": ["facepile", "people stack", "collaborators", "avatar group"], "react": "AvatarStack" },
-    { "id": "description-list", "name": "Description list", "summary": "Clean key–value rows for settings and record details.", "pattern": "<dl>", "states": ["default", "stacked"], "aliases": ["key value list", "details list", "properties panel", "info rows"], "react": "DescriptionList", "fill": true },
-    { "id": "filter-bar", "name": "Global filter bar", "summary": "One filter bar per dashboard: date range, removable chips, add and reset.", "pattern": "WAI-ARIA Toolbar", "states": ["default", "filtered", "reset"], "aliases": ["dashboard filters", "filter chips", "global filters", "date range filter bar"], "react": "FilterBar", "fill": true, "wide": true, "deps": ["segmented-control"] }
+    {
+      "id": "data-table",
+      "name": "Sortable data table",
+      "summary": "Sticky header, sort chevrons with aria-sort, expandable detail rows and tabular numbers.",
+      "pattern": "Table with sortable columns (APG Sortable Table)",
+      "states": [
+        "unsorted",
+        "ascending",
+        "descending",
+        "row expanded",
+        "hover"
+      ],
+      "aliases": [
+        "sortable table",
+        "grid table",
+        "admin table",
+        "table with expandable rows",
+        "sticky header table"
+      ],
+      "react": "DataTable",
+      "fill": true,
+      "wide": true,
+      "deps": [
+        "badge"
+      ],
+      "api": "<table> · aria-sort",
+      "w": 760,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"expand\"]"
+        ]
+      ],
+      "called": [
+        "rows and columns you can sort by clicking the header",
+        "table with arrows on column names",
+        "admin table with expandable rows",
+        "sticky header table"
+      ],
+      "anatomy": [
+        {
+          "sel": "th[aria-sort=\"descending\"]",
+          "name": "Sorted column",
+          "api": "aria-sort",
+          "text": "The arrow shows direction; numbers right-aligned."
+        },
+        {
+          "sel": "thead th",
+          "name": "Sticky header",
+          "api": "position: sticky",
+          "text": "Stays visible while the body scrolls."
+        },
+        {
+          "sel": "[data-part=\"expand\"]",
+          "name": "Row expander",
+          "api": "aria-expanded",
+          "text": "Opens a detail row below."
+        },
+        {
+          "sel": "td[data-num]",
+          "name": "Numeric cell",
+          "api": "tabular-nums",
+          "text": "Right-aligned, digits lined up."
+        }
+      ],
+      "prompt": "Add a data table: real <table> with a caption, sticky <th> headers containing sort buttons, aria-sort on the sorted column, numbers right-aligned in tabular figures, expandable detail rows (aria-expanded), and a scrolling wrapper with role=\"region\" tabindex=\"0\" so the page never scrolls sideways.",
+      "debug": "Debug my table. Rule out: divs instead of a table; aria-sort on the button instead of the th; the page scrolling sideways on mobile; numbers left-aligned in proportional figures; sticky headers hidden behind the app header. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<table> + <th aria-sort>",
+          ""
+        ],
+        [
+          "TanStack",
+          "useReactTable()",
+          "headless"
+        ],
+        [
+          "AppKit",
+          "NSTableView",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<DataTable columns rows>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "virtual-list",
+      "name": "Virtualised list",
+      "summary": "Renders only the visible rows of 10,000 so scrolling stays smooth.",
+      "pattern": "WAI-ARIA Listbox with aria-activedescendant",
+      "states": [
+        "idle",
+        "scrolling",
+        "active row"
+      ],
+      "aliases": [
+        "infinite list",
+        "windowed list",
+        "long log list",
+        "virtual scroll",
+        "big list"
+      ],
+      "react": "VirtualList",
+      "fill": true,
+      "api": "role=\"listbox\" · aria-setsize",
+      "w": 460,
+      "called": [
+        "list with ten thousand rows that stays fast",
+        "infinite scrolling log",
+        "windowed list",
+        "long list that only renders what you see"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-vlist [data-part=\"spacer\"]",
+          "name": "Spacer",
+          "api": "height = rows × rowHeight",
+          "text": "Gives the scrollbar its true length."
+        },
+        {
+          "sel": ".lt-vlist [data-part=\"window\"]",
+          "name": "Window",
+          "api": "translateY",
+          "text": "Only visible rows plus a few above and below."
+        },
+        {
+          "sel": ".lt-vlist [role=\"option\"]:first-child",
+          "name": "Row",
+          "api": "aria-posinset · aria-setsize",
+          "text": "Tells screen readers where it sits in the whole list."
+        }
+      ],
+      "prompt": "Add a virtualised list: a fixed-height scroll container, a spacer of count × rowHeight, and a window translated to the first visible row that renders only visible rows plus overscan. Keep keyboard navigation with aria-activedescendant and aria-posinset/aria-setsize.",
+      "debug": "Debug my virtual list. Rule out: rows of variable height with a fixed rowHeight; re-rendering on every scroll event without rAF; focus lost when the focused row unmounts; the scrollbar length wrong. The symptom:",
+      "code": [
+        [
+          "TanStack",
+          "useVirtualizer()",
+          ""
+        ],
+        [
+          "react-window",
+          "<FixedSizeList>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<VirtualList count renderRow>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "bento-grid",
+      "name": "Bento grid",
+      "summary": "Asymmetric feature tiles that collapse to one column on narrow containers.",
+      "pattern": "Section of articles",
+      "states": [
+        "default",
+        "single column"
+      ],
+      "aliases": [
+        "bento box",
+        "feature grid",
+        "tile grid",
+        "apple style grid"
+      ],
+      "react": "BentoGrid",
+      "fill": true,
+      "wide": true,
+      "api": "grid-template-columns",
+      "w": 760,
+      "called": [
+        "apple style grid of feature boxes",
+        "tiles of different sizes",
+        "feature grid with one big box",
+        "bento box layout"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-bento > [data-span=\"wide\"]",
+          "name": "Wide tile",
+          "api": "grid-column: span 2",
+          "text": "The headline feature."
+        },
+        {
+          "sel": ".lt-bento > [data-span=\"tall\"]",
+          "name": "Tall tile",
+          "api": "grid-row: span 2",
+          "text": "A supporting story."
+        },
+        {
+          "sel": ".lt-bento > article:nth-child(3)",
+          "name": "Small tile",
+          "api": "",
+          "text": "One fact each."
+        }
+      ],
+      "prompt": "Add a bento grid: a 3-column grid with one wide and one tall tile, each tile one idea (eyebrow, short heading, one line, a small visual), collapsing to one column when its container is under 620px.",
+      "debug": "Debug my bento grid. Rule out: every tile the same size (that is a card grid); tiles with paragraphs; container queries on the grid itself (style its children); holes from spans on narrow screens. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "grid + span",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<BentoGrid> + <BentoTile span>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "card-stack",
+      "name": "Scroll-stacking cards",
+      "summary": "Sticky cards that pile on top of each other as you scroll, earlier ones receding.",
+      "pattern": "Ordered list",
+      "states": [
+        "flat",
+        "stacking"
+      ],
+      "aliases": [
+        "stacked cards on scroll",
+        "sticky card pile",
+        "card deck scroll",
+        "stacking sections"
+      ],
+      "react": "CardStack",
+      "fill": true,
+      "api": "position: sticky",
+      "w": 460,
+      "called": [
+        "cards that stack as you scroll",
+        "pile of cards on scroll",
+        "sticky stacking sections",
+        "cards sliding over each other"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-card-stack > li:first-child",
+          "name": "Sticky card",
+          "api": "top: calc(8px + i × 14px)",
+          "text": "Each card sticks a little lower than the last."
+        },
+        {
+          "sel": ".lt-card-stack > li:last-child",
+          "name": "Front card",
+          "api": "--depth",
+          "text": "Cards underneath shrink and dim slightly."
+        }
+      ],
+      "prompt": "Add scroll-stacking cards: list items with position: sticky and increasing top offsets so they pile up, and buried cards scaled down by a few percent based on how many cards cover them. Plain stacking under reduced motion.",
+      "debug": "Debug my card stack. Rule out: an ancestor with overflow: hidden breaking sticky; cards without solid backgrounds showing through; scale updates on every scroll without rAF. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "position: sticky",
+          ""
+        ],
+        [
+          "CSS",
+          "animation-timeline: view()",
+          "scroll-driven variant"
+        ],
+        [
+          "lumina-taste",
+          "<CardStack cards>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "comparison-table",
+      "name": "Comparison table",
+      "summary": "Plan-by-feature matrix with a highlighted column and grouped rows.",
+      "pattern": "Table with row groups",
+      "states": [
+        "default"
+      ],
+      "aliases": [
+        "feature matrix",
+        "plan comparison",
+        "pricing table",
+        "compare plans grid"
+      ],
+      "react": "ComparisonTable",
+      "fill": true,
+      "wide": true,
+      "deps": [
+        "badge"
+      ],
+      "api": "<table> · scope=\"rowgroup\"",
+      "w": 620,
+      "called": [
+        "feature table comparing plans",
+        "plans side by side with ticks",
+        "pricing comparison grid",
+        "compare features matrix"
+      ],
+      "anatomy": [
+        {
+          "sel": "th[data-featured]",
+          "name": "Featured column",
+          "api": "data-featured",
+          "text": "One column tinted, never more."
+        },
+        {
+          "sel": "[data-group] th",
+          "name": "Row group",
+          "api": "scope=\"rowgroup\"",
+          "text": "Groups like Usage and Security."
+        },
+        {
+          "sel": "[data-yes]",
+          "name": "Included mark",
+          "api": "visually hidden text",
+          "text": "A tick for sight, \"Included\" for screen readers."
+        }
+      ],
+      "prompt": "Add a comparison table: a real <table> with plans as columns, grouped feature rows (scope=\"rowgroup\"), one featured column tinted, ticks and dashes with visually hidden \"Included\"/\"Not included\", and a horizontal scroll container on mobile.",
+      "debug": "Debug my comparison table. Rule out: ticks with no text alternative; the featured column tinted with low-contrast text; the page scrolling sideways on mobile. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<table>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ComparisonTable plans groups>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "timeline",
+      "name": "Timeline / changelog",
+      "summary": "Dated entries on a quiet rail, the newest marked with the accent.",
+      "pattern": "Ordered list with <time>",
+      "states": [
+        "default",
+        "latest"
+      ],
+      "aliases": [
+        "changelog list",
+        "release notes",
+        "activity timeline",
+        "history list"
+      ],
+      "react": "Timeline",
+      "deps": [
+        "badge"
+      ],
+      "api": "<ol> + <time>",
+      "w": 520,
+      "called": [
+        "vertical line with dots and dates",
+        "changelog list",
+        "release history",
+        "activity feed with a line"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-timeline li[data-tone=\"accent\"]",
+          "name": "Latest entry",
+          "api": "",
+          "text": "The newest dot is filled with the accent."
+        },
+        {
+          "sel": ".lt-timeline time",
+          "name": "Date",
+          "api": "<time datetime>",
+          "text": "Machine-readable date, human label."
+        }
+      ],
+      "prompt": "Add a timeline: an ordered list where each item has a <time datetime>, a title and a short line; a thin rail with dots; the newest entry marked with the accent and a \"Latest\" badge.",
+      "debug": "Debug my timeline. Rule out: dates without datetime attributes; the rail misaligned with the dots at different text sizes; reverse order without saying so. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ol> + <time>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<Timeline items>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "split-pane",
+      "name": "Resizable split pane",
+      "summary": "Two panes and a grip you can drag or move with the arrow keys.",
+      "pattern": "WAI-ARIA Window Splitter",
+      "states": [
+        "rest",
+        "hover",
+        "dragging",
+        "focus-visible"
+      ],
+      "aliases": [
+        "resize handle",
+        "split view",
+        "draggable divider",
+        "panel resizer"
+      ],
+      "react": "SplitPane",
+      "fill": true,
+      "api": "role=\"separator\" · aria-valuenow",
+      "w": 560,
+      "called": [
+        "drag handle between two panels",
+        "resizable split view",
+        "panel resizer",
+        "divider you can drag"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"grip\"]",
+          "name": "Grip",
+          "api": "role=\"separator\"",
+          "text": "Drag it, or focus it and use the arrow keys."
+        }
+      ],
+      "prompt": "Add a resizable split pane: two panes with a role=\"separator\" grip (aria-orientation, aria-valuenow/min/max), drag with pointer capture, arrows ±2% and Shift+arrows ±10%, Home/End to limits, double-click to reset.",
+      "debug": "Debug my split pane. Rule out: dragging selecting text (pointer capture and user-select: none); no keyboard path; panes shrinking below usable sizes. The symptom:",
+      "code": [
+        [
+          "WAI-ARIA",
+          "Window Splitter",
+          ""
+        ],
+        [
+          "react-resizable-panels",
+          "<PanelResizeHandle>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SplitPane>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "sortable-list",
+      "name": "Drag-to-reorder list",
+      "summary": "Reorder rows by dragging a handle or with Space and the arrow keys.",
+      "pattern": "List + live region (keyboard-accessible drag and drop)",
+      "states": [
+        "rest",
+        "grabbed",
+        "moving",
+        "dropped"
+      ],
+      "aliases": [
+        "drag and drop list",
+        "reorder handle",
+        "draggable rows",
+        "sortable items",
+        "six dots handle"
+      ],
+      "react": "SortableList",
+      "deps": [
+        "badge"
+      ],
+      "api": "aria-live=\"assertive\"",
+      "w": 420,
+      "called": [
+        "drag handle with six dots to reorder",
+        "drag and drop list",
+        "reorder rows by dragging",
+        "sortable items"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-sortable li:first-child [data-part=\"handle\"]",
+          "name": "Handle",
+          "api": "<button aria-label>",
+          "text": "Drag it, or press Space, arrows, Space."
+        },
+        {
+          "sel": ".lt-sortable-wrap [data-part=\"help\"]",
+          "name": "Instructions",
+          "api": "aria-describedby",
+          "text": "How to move items without a mouse."
+        }
+      ],
+      "prompt": "Add a reorderable list: a six-dot handle button per row; pointer drag with live reordering; a keyboard alternative (Space to pick up, arrows to move, Space to drop, Esc to cancel); every move announced in an assertive live region.",
+      "debug": "Debug my sortable list. Rule out: no keyboard path; announcements missing; the whole row draggable so text cannot be selected; jank from layout reads during drag. The symptom:",
+      "code": [
+        [
+          "dnd-kit",
+          "useSortable()",
+          ""
+        ],
+        [
+          "SortableJS",
+          "Sortable.create()",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SortableList>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "code-block",
+      "name": "Code block",
+      "summary": "Monospace code with language tabs, a filename and a copy button.",
+      "pattern": "Figure + WAI-ARIA Tabs",
+      "states": [
+        "default",
+        "copied"
+      ],
+      "aliases": [
+        "code snippet",
+        "copyable code",
+        "syntax block",
+        "install command box"
+      ],
+      "react": "CodeBlock",
+      "fill": true,
+      "deps": [
+        "tabs",
+        "copy-button"
+      ],
+      "api": "<figure> + role=\"tablist\"",
+      "w": 560,
+      "called": [
+        "code snippet with a copy button",
+        "install command box",
+        "code with language tabs",
+        "copyable code block"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-code [data-part=\"tabs\"]",
+          "name": "Language tabs",
+          "api": "role=\"tab\"",
+          "text": "Switch between languages or files."
+        },
+        {
+          "sel": ".lt-code [data-part=\"copy\"]",
+          "name": "Copy",
+          "api": "clipboard",
+          "text": "Copies only the visible panel."
+        },
+        {
+          "sel": ".lt-code pre",
+          "name": "Code",
+          "api": "tabindex=\"0\"",
+          "text": "Scrolls sideways on its own, never the page."
+        }
+      ],
+      "prompt": "Add a code block: a <figure> with a caption bar holding language tabs, a filename and a copy button that copies the visible panel; the <pre> scrolls horizontally on its own and is focusable.",
+      "debug": "Debug my code block. Rule out: the page scrolling sideways on long lines; copy grabbing the hidden tab; syntax colours under 4.5:1 in one of the modes. The symptom:",
+      "code": [
+        [
+          "Shiki",
+          "codeToHtml()",
+          "highlighting"
+        ],
+        [
+          "lumina-taste",
+          "<CodeBlock snippets>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "stat-strip",
+      "name": "Stat strip",
+      "summary": "A row of KPIs with tabular values and semantic delta arrows.",
+      "pattern": "Description list",
+      "states": [
+        "default",
+        "two-up"
+      ],
+      "aliases": [
+        "kpi row",
+        "metrics bar",
+        "stats row",
+        "numbers strip"
+      ],
+      "react": "StatStrip",
+      "fill": true,
+      "wide": true,
+      "api": "<dl> · tabular-nums",
+      "w": 760,
+      "called": [
+        "row of numbers at the top of a dashboard",
+        "kpi bar",
+        "four metrics in a row",
+        "stats with up arrows"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-stat-strip > div:first-child dt",
+          "name": "Label",
+          "api": "<dt>",
+          "text": "Above the number, quiet."
+        },
+        {
+          "sel": ".lt-stat-strip > div:first-child data",
+          "name": "Value",
+          "api": "<data value>",
+          "text": "Large, tabular."
+        },
+        {
+          "sel": ".lt-stat-strip > div:nth-child(3) [data-tone]",
+          "name": "Delta",
+          "api": "good or bad, not up or down",
+          "text": "Churn going up is red."
+        }
+      ],
+      "prompt": "Add a stat strip: a <dl> of 3–5 metrics with labels above large tabular values, deltas coloured by whether the change is good (churn up is red), and hairline dividers; wraps to two per row on narrow containers.",
+      "debug": "Debug my stat strip. Rule out: deltas coloured by direction instead of meaning; proportional digits; more than five metrics fighting for attention. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<dl>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<StatStrip stats>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "media-card",
+      "name": "Media card",
+      "summary": "Image cards locked to an aspect ratio so a grid of them always lines up.",
+      "pattern": "Link card",
+      "states": [
+        "default",
+        "hover",
+        "focus-visible"
+      ],
+      "aliases": [
+        "blog card",
+        "article card",
+        "thumbnail card",
+        "image card"
+      ],
+      "react": "MediaCard",
+      "fill": true,
+      "api": "aspect-ratio",
+      "w": 520,
+      "called": [
+        "blog post card with an image",
+        "article thumbnail card",
+        "case study card",
+        "image card grid"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-media-card:first-child [data-part=\"media\"]",
+          "name": "Media",
+          "api": "aspect-ratio: 16/10",
+          "text": "Cropped to a fixed ratio so a grid lines up."
+        },
+        {
+          "sel": ".lt-media-card:first-child [data-part=\"meta\"]",
+          "name": "Meta",
+          "api": "<time>",
+          "text": "Read time and date, tabular."
+        }
+      ],
+      "prompt": "Add media cards: the whole card is one link, the image cropped with aspect-ratio and object-fit: cover, a 1.03 zoom on hover inside its frame, an eyebrow, a balanced title and a meta line.",
+      "debug": "Debug my media cards. Rule out: images of different ratios breaking the grid; the zoom escaping its frame (overflow: hidden on the media); nested links inside the card. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "aspect-ratio + object-fit",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<MediaCard>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "avatar-stack",
+      "name": "Avatar stack",
+      "summary": "Overlapping initials with a +n counter for collaborators.",
+      "pattern": "List with accessible count",
+      "states": [
+        "default",
+        "hover"
+      ],
+      "aliases": [
+        "facepile",
+        "people stack",
+        "collaborators",
+        "avatar group"
+      ],
+      "react": "AvatarStack",
+      "api": "<ul aria-label>",
+      "w": 340,
+      "called": [
+        "overlapping profile pictures",
+        "facepile",
+        "people avatars with +3",
+        "collaborators circles"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-avatars li:first-child",
+          "name": "Avatar",
+          "api": "title",
+          "text": "Overlaps the next by 8px with a ring in the page colour."
+        },
+        {
+          "sel": ".lt-avatars [data-part=\"more\"]",
+          "name": "Overflow",
+          "api": "aria-label",
+          "text": "\"and 3 more\"."
+        }
+      ],
+      "prompt": "Add an avatar stack: a list with an aria-label of the total, overlapping circles with a 2px ring in the page colour, initials as fallback, and a \"+n\" item for the rest.",
+      "debug": "Debug my avatar stack. Rule out: no accessible count; rings in a fixed colour that clash in dark mode; images without alt. The symptom:",
+      "code": [
+        [
+          "lumina-taste",
+          "<AvatarStack people>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "description-list",
+      "name": "Description list",
+      "summary": "Clean key–value rows for settings and record details.",
+      "pattern": "<dl>",
+      "states": [
+        "default",
+        "stacked"
+      ],
+      "aliases": [
+        "key value list",
+        "details list",
+        "properties panel",
+        "info rows"
+      ],
+      "react": "DescriptionList",
+      "fill": true,
+      "api": "<dl>",
+      "w": 480,
+      "called": [
+        "key value rows",
+        "details panel with labels on the left",
+        "properties list",
+        "settings info rows"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-dl > div:first-child dt",
+          "name": "Term",
+          "api": "<dt>",
+          "text": "Muted, left."
+        },
+        {
+          "sel": ".lt-dl > div:first-child dd",
+          "name": "Value",
+          "api": "<dd>",
+          "text": "Primary text; inline action links allowed."
+        }
+      ],
+      "prompt": "Add a description list: a <dl> of term/value rows with hairline dividers, terms muted on the left, values on the right, stacking on narrow containers.",
+      "debug": "Debug my description list. Rule out: divs instead of dt/dd; long values overflowing (overflow-wrap: anywhere); terms wrapping into two lines at common widths. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<dl><dt><dd>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<DescriptionList items>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "filter-bar",
+      "name": "Global filter bar",
+      "summary": "One filter bar per dashboard: date range, removable chips, add and reset.",
+      "pattern": "WAI-ARIA Toolbar",
+      "states": [
+        "default",
+        "filtered",
+        "reset"
+      ],
+      "aliases": [
+        "dashboard filters",
+        "filter chips",
+        "global filters",
+        "date range filter bar"
+      ],
+      "react": "FilterBar",
+      "fill": true,
+      "wide": true,
+      "deps": [
+        "segmented-control"
+      ],
+      "api": "role=\"toolbar\"",
+      "w": 760,
+      "called": [
+        "one filter bar for the whole dashboard",
+        "date range and filter chips",
+        "add filter button with chips",
+        "global filters"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-filterbar [data-part=\"range\"]",
+          "name": "Date range",
+          "api": "role=\"radiogroup\"",
+          "text": "The filter people change most."
+        },
+        {
+          "sel": ".lt-filterbar [data-part=\"chip\"]",
+          "name": "Filter chip",
+          "api": "<button>",
+          "text": "Click to remove."
+        },
+        {
+          "sel": ".lt-filterbar [data-part=\"reset\"]",
+          "name": "Reset",
+          "api": "",
+          "text": "Back to the defaults."
+        }
+      ],
+      "prompt": "Add one global filter bar for a dashboard: a date-range segmented control, removable filter chips, an \"Add filter\" button and Reset, emitting one state object every card reads. Never repeat filter bars inside cards.",
+      "debug": "Debug my filter bar. Rule out: cards with their own filters disagreeing with the global ones; chip remove buttons without names; focus lost after removing a chip. The symptom:",
+      "code": [
+        [
+          "lumina-taste",
+          "<FilterBar ranges filters>",
+          "React"
+        ]
+      ]
+    }
   ]
 }

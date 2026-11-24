@@ -1,11 +1,11 @@
 .lt-shortcuts { display: grid; gap: 2px; width: min(100%, 320px); margin: 0; font-size: var(--text-ui-sm); }
-.lt-shortcuts > div { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-hairline); }
+.lt-shortcuts > div { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
 .lt-shortcuts dt { color: var(--text-secondary); }
 .lt-shortcuts dd { display: flex; align-items: center; gap: 4px; margin: 0; }
 .lt-shortcuts dd span { color: var(--text-muted); font-size: var(--text-ui-xs); padding: 0 2px; }
 @scope (.lt-kbd) {
   :scope {
-    display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; border: 1px solid var(--border-hairline); border-bottom-width: 2px;
+    display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; border: var(--bw) var(--border-style) var(--border-hairline); border-bottom-width: 2px;
     border-radius: 5px; background: var(--bg-surface-1); color: var(--text-primary); font: 600 11px / 1 var(--font-mono); box-shadow: 0 1px 0 var(--border-hairline);
   }
 }

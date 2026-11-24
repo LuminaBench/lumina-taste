@@ -5,7 +5,7 @@
   input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
   [data-part="dot"] {
     position: relative; flex: none; width: 18px; height: 18px; border-radius: 50%;
-    border: 1.5px solid var(--border-strong); background: var(--bg-surface-1);
+    border: var(--bw-strong) var(--border-style) var(--border-strong); background: var(--bg-surface-1);
     transition: border-color var(--dur-1) var(--ease-out), border-width var(--dur-2) var(--ease-spring);
   }
   :scope:hover [data-part="dot"] { border-color: var(--text-secondary); }

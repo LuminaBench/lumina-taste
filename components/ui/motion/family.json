@@ -1,14 +1,378 @@
 {
-  "title": "Micro-motion & CSS craft",
+  "title": "Motion & CSS craft",
   "summary": "Curves, transitions and small details that make an interface feel made, all collapsing under reduced motion.",
   "order": 6,
   "components": [
-    { "id": "motion-tokens", "name": "Motion tokens & curves", "summary": "Side-by-side ease-out, spring and in-out at 90–320ms, the only curves this kit uses.", "pattern": "CSS custom properties", "states": ["snappy", "calm", "reduced"], "aliases": ["easing curves", "animation timing", "spring easing", "transition presets", "durations"], "react": "MOTION", "deps": ["button"] },
-    { "id": "view-transition", "name": "View Transition helper", "summary": "Morph elements between layouts with the View Transitions API and a no-op fallback.", "pattern": "View Transitions API", "states": ["grid", "list", "transitioning"], "aliases": ["page transition", "shared element transition", "layout morph", "magic move"], "react": "useViewTransition", "deps": ["segmented-control"] },
-    { "id": "scroll-reveal", "name": "Scroll reveal", "summary": "Sections fade up once as they enter view, with no scroll-jacking.", "pattern": "IntersectionObserver utility", "states": ["armed", "revealed"], "aliases": ["animate on scroll", "fade in on scroll", "aos", "reveal on scroll"], "react": "ScrollReveal", "fill": true },
-    { "id": "cursor-spotlight", "name": "Cursor-follow spotlight", "summary": "A soft single-hue glow and border light that follow the pointer across a card.", "pattern": "Pointer-driven CSS variables", "states": ["rest", "lit"], "aliases": ["spotlight card", "glow on hover", "mouse follow gradient", "linear style card hover"], "react": "SpotlightCard", "fill": true },
-    { "id": "optical-align", "name": "Optical icon alignment", "summary": "Icons centred on cap height, play triangles nudged, trailing arrows tightened.", "pattern": "CSS utility", "states": ["default", "hover"], "aliases": ["icon alignment", "vertically center icon with text", "icon baseline fix", "optical centering"], "react": "Optical" },
-    { "id": "tactile-press", "name": "Tactile press", "summary": "Press-down scale on :active with a spring release, for any clickable surface.", "pattern": "CSS utility", "states": ["rest", "pressed"], "aliases": ["press scale", "button squish", "click feedback", "tap animation"], "react": "PRESS" },
-    { "id": "stagger-in", "name": "Staggered entrance", "summary": "List items enter 40ms apart, capped so long lists never drag.", "pattern": "CSS utility", "states": ["entering", "settled"], "aliases": ["stagger animation", "cascade in", "list entrance", "sequential fade"], "react": "Stagger", "deps": ["button"] }
+    {
+      "id": "motion-tokens",
+      "name": "Motion tokens & curves",
+      "summary": "Side-by-side ease-out, spring and in-out at 90–320ms, the only curves this kit uses.",
+      "pattern": "CSS custom properties",
+      "states": [
+        "snappy",
+        "calm",
+        "reduced"
+      ],
+      "aliases": [
+        "easing curves",
+        "animation timing",
+        "spring easing",
+        "transition presets",
+        "durations"
+      ],
+      "react": "MOTION",
+      "deps": [
+        "button"
+      ],
+      "api": "--ease-out · --ease-spring · --dur-*",
+      "w": 420,
+      "called": [
+        "easing curves",
+        "animation timing values",
+        "spring easing for toggles",
+        "how long should animations be"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"lane\"]:nth-child(1)",
+          "name": "Ease-out",
+          "api": "cubic-bezier(0.2, 0.9, 0.3, 1)",
+          "text": "Entrances and most state changes."
+        },
+        {
+          "sel": "[data-part=\"lane\"]:nth-child(2)",
+          "name": "Spring",
+          "api": "cubic-bezier(0.3, 1.4, 0.5, 1)",
+          "text": "Small indicators only: thumbs, pills, checks."
+        },
+        {
+          "sel": "[data-part=\"lane\"]:nth-child(4)",
+          "name": "Linear",
+          "api": "avoid",
+          "text": "Feels mechanical for UI."
+        }
+      ],
+      "prompt": "Use motion tokens only: --dur-1 (90ms) to --dur-3 (200ms) for controls, --dur-4 (320ms) for sheets and drawers, --ease-out for entrances, --ease-in-out for swaps, --ease-spring for small indicators. All durations collapse to 1ms under prefers-reduced-motion.",
+      "debug": "Debug my motion. Rule out: hard-coded durations that ignore reduced motion; ease-in on entrances; spring overshoot on large surfaces; transitions over 300ms on small controls. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "transition: scale var(--dur-1) var(--ease-out)",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "MOTION, transition()",
+          "TypeScript helpers"
+        ]
+      ]
+    },
+    {
+      "id": "view-transition",
+      "name": "View Transition helper",
+      "summary": "Morph elements between layouts with the View Transitions API and a no-op fallback.",
+      "pattern": "View Transitions API",
+      "states": [
+        "grid",
+        "list",
+        "transitioning"
+      ],
+      "aliases": [
+        "page transition",
+        "shared element transition",
+        "layout morph",
+        "magic move"
+      ],
+      "react": "useViewTransition",
+      "deps": [
+        "segmented-control"
+      ],
+      "api": "document.startViewTransition",
+      "w": 460,
+      "called": [
+        "smooth morph between grid and list",
+        "page transition",
+        "shared element animation",
+        "magic move"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:first-child",
+          "name": "Named element",
+          "api": "view-transition-name",
+          "text": "Each moving element needs a unique name."
+        }
+      ],
+      "prompt": "Animate layout changes with the View Transitions API: give moving elements unique view-transition-name values, wrap the DOM update in document.startViewTransition, and skip it under reduced motion or when unsupported.",
+      "debug": "Debug my view transition. Rule out: duplicate view-transition-name values (the transition is skipped); React updates not flushed inside the callback (flushSync); transitions running under reduced motion. The symptom:",
+      "code": [
+        [
+          "JS",
+          "document.startViewTransition()",
+          ""
+        ],
+        [
+          "React",
+          "flushSync inside the callback",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "useViewTransition()",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "scroll-reveal",
+      "name": "Scroll reveal",
+      "summary": "Sections fade up once as they enter view, with no scroll-jacking.",
+      "pattern": "IntersectionObserver utility",
+      "states": [
+        "armed",
+        "revealed"
+      ],
+      "aliases": [
+        "animate on scroll",
+        "fade in on scroll",
+        "aos",
+        "reveal on scroll"
+      ],
+      "react": "ScrollReveal",
+      "fill": true,
+      "api": "IntersectionObserver",
+      "w": 460,
+      "called": [
+        "fade in when you scroll down",
+        "animate on scroll",
+        "sections appear as you scroll",
+        "reveal animation"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-reveal",
+          "name": "Revealed section",
+          "api": "data-revealed",
+          "text": "Fades up 12px once, then stays put."
+        }
+      ],
+      "prompt": "Add a one-time scroll reveal: sections fade up 12px the first time they enter the viewport (IntersectionObserver, 15% threshold), hidden only after the script arms them so content is never lost, and visible immediately under reduced motion.",
+      "debug": "Debug my scroll reveal. Rule out: content hidden in CSS before JS runs; elements re-animating every time; reveals that never fire near the bottom of the page. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "animation-timeline: view()",
+          "pure CSS"
+        ],
+        [
+          "JS",
+          "IntersectionObserver",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ScrollReveal>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "cursor-spotlight",
+      "name": "Cursor-follow spotlight",
+      "summary": "A soft single-hue glow and border light that follow the pointer across a card.",
+      "pattern": "Pointer-driven CSS variables",
+      "states": [
+        "rest",
+        "lit"
+      ],
+      "aliases": [
+        "spotlight card",
+        "glow on hover",
+        "mouse follow gradient",
+        "linear style card hover"
+      ],
+      "react": "SpotlightCard",
+      "fill": true,
+      "api": "--mx · --my",
+      "w": 520,
+      "called": [
+        "glow that follows the mouse on a card",
+        "spotlight hover effect",
+        "linear style card hover",
+        "border light that follows cursor"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-spotlight:first-child",
+          "name": "Card",
+          "api": "radial-gradient at --mx --my",
+          "text": "A single-hue glow and a lit border edge."
+        }
+      ],
+      "prompt": "Add a cursor spotlight: on pointermove (mouse only) set --mx/--my on the card; draw a soft radial gradient of --accent-soft at that point and a masked border highlight; fade out on leave; off under reduced motion.",
+      "debug": "Debug my spotlight. Rule out: multi-colour gradients; effects on touch; the glow covering text contrast. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "radial-gradient + mask-composite",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SpotlightCard>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "optical-align",
+      "name": "Optical icon alignment",
+      "summary": "Icons centred on cap height, play triangles nudged, trailing arrows tightened.",
+      "pattern": "CSS utility",
+      "states": [
+        "default",
+        "hover"
+      ],
+      "aliases": [
+        "icon alignment",
+        "vertically center icon with text",
+        "icon baseline fix",
+        "optical centering"
+      ],
+      "react": "Optical",
+      "api": ".lt-optical",
+      "w": 440,
+      "called": [
+        "icon not centred with text",
+        "play icon looks off centre",
+        "arrow too far from text",
+        "icon baseline fix"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-shift=\"play\"]",
+          "name": "Play triangle",
+          "api": "translate: 1px 0",
+          "text": "Nudged right because its weight sits left."
+        },
+        {
+          "sel": "[data-trail]",
+          "name": "Trailing arrow",
+          "api": "gap: 0.3em",
+          "text": "Closer than a leading icon."
+        }
+      ],
+      "prompt": "Align icons optically: inline-flex with align-items: center, icons sized in em, play triangles nudged 1px right, trailing arrows with a smaller gap than leading icons.",
+      "debug": "Debug my icon alignment. Rule out: icons as inline images on the text baseline; fixed pixel icons in scaling text; play icons centred geometrically. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "display: inline-flex; align-items: center",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<Optical trail>",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "tactile-press",
+      "name": "Tactile press",
+      "summary": "Press-down scale on :active with a spring release, for any clickable surface.",
+      "pattern": "CSS utility",
+      "states": [
+        "rest",
+        "pressed"
+      ],
+      "aliases": [
+        "press scale",
+        "button squish",
+        "click feedback",
+        "tap animation"
+      ],
+      "react": "PRESS",
+      "api": ":active { scale }",
+      "w": 400,
+      "called": [
+        "button squish when clicked",
+        "press animation",
+        "tap feedback",
+        "button that shrinks a bit when pressed"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-press:first-child",
+          "name": "Pressable",
+          "api": "--press-scale",
+          "text": "Down fast with ease-out, back with a spring."
+        }
+      ],
+      "prompt": "Add tactile press feedback: on :active scale to --press-scale (0.97) in 90ms ease-out, release on a spring; 1 under reduced motion.",
+      "debug": "Debug my press effect. Rule out: scale on disabled controls; long transitions that feel laggy; scale on large surfaces. The symptom:",
+      "code": [
+        [
+          "CSS",
+          ":active { scale: 0.97 }",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "className={PRESS}",
+          "React"
+        ]
+      ]
+    },
+    {
+      "id": "stagger-in",
+      "name": "Staggered entrance",
+      "summary": "List items enter 40ms apart, capped so long lists never drag.",
+      "pattern": "CSS utility",
+      "states": [
+        "entering",
+        "settled"
+      ],
+      "aliases": [
+        "stagger animation",
+        "cascade in",
+        "list entrance",
+        "sequential fade"
+      ],
+      "react": "Stagger",
+      "deps": [
+        "button"
+      ],
+      "api": "animation-delay: calc(var(--i) × 40ms)",
+      "w": 360,
+      "called": [
+        "items appearing one after another",
+        "cascade animation",
+        "staggered list entrance",
+        "sequential fade in"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-stagger > li:first-child",
+          "name": "Item",
+          "api": "--i",
+          "text": "Delay grows 40ms per item, capped at six."
+        }
+      ],
+      "prompt": "Stagger list entrances: each item fades up with animation-delay calc(min(var(--i), 6) * 40ms) so long lists never drag; none under reduced motion.",
+      "debug": "Debug my stagger. Rule out: uncapped delays making long lists slow; stagger replaying on every re-render; animations under reduced motion. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "animation-delay with --i",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<Stagger>",
+          "React"
+        ]
+      ]
+    }
   ]
 }

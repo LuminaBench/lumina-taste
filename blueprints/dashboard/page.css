@@ -1,13 +1,13 @@
 .bp-app { display: flex; min-height: 100dvh; }
 .bp-app > .lt-sidebar { position: sticky; top: 0; height: 100dvh; }
 .bp-app-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.bp-topbar { position: sticky; top: 0; z-index: var(--z-sticky); display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); height: 60px; padding: 0 var(--space-5); background: color-mix(in oklab, var(--bg-canvas) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border-hairline); }
+.bp-topbar { position: sticky; top: 0; z-index: var(--z-sticky); display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); height: 60px; padding: 0 var(--space-5); background: color-mix(in oklab, var(--bg-canvas) 92%, transparent); backdrop-filter: blur(8px); border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
 .bp-dash { display: grid; gap: var(--space-5); width: 100%; max-width: 1320px; padding: var(--space-6) var(--space-5) var(--space-8); }
 .bp-dash-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--space-3); }
 .bp-dash-head p { margin: 4px 0 0; font-size: var(--text-ui-sm); }
 .bp-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
 .bp-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
-.bp-card { min-width: 0; padding: var(--space-5); border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
+.bp-card { min-width: 0; padding: var(--space-5); border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
 .bp-span-2 { grid-column: span 2; }
 .bp-card-title { margin: 0 0 var(--space-4); font-size: var(--step-0); font-weight: 650; }
 .bp-card .lt-table-wrap { border: 0; max-height: none; }

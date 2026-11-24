@@ -187,7 +187,7 @@ console.log(`Built ${out.length} palettes × 2 modes and ${pairings.length} typo
 // ---------- profile option lists (consumed by engine/profiles and the CLI) ----------
 const opts = {
   palettes: out.map((p) => ({ id: p.id, name: p.name, category: p.category })),
-  typography: pairings.map((t) => ({ id: t.id, name: t.name })),
+  typography: pairings.map((t) => ({ id: t.id, name: t.name, webfont: t.webfont })),
 };
 writeFileSync(
   join(root, 'engine/profiles/options.mjs'),

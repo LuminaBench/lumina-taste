@@ -1,5 +1,5 @@
 .au { display: grid; grid-template-columns: minmax(320px, 0.9fr) 1.1fr; min-height: 100dvh; }
-.au-side { display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-6); padding: var(--space-6); background: var(--bg-surface-2); border-right: 1px solid var(--border-hairline); }
+.au-side { display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-6); padding: var(--space-6); background: var(--bg-surface-2); border-right: var(--bw) var(--border-style) var(--border-hairline); }
 .au-brand { font-weight: 700; font-size: 1.125rem; letter-spacing: -0.02em; color: var(--text-primary); text-decoration: none; }
 .au-quote { margin: 0; max-width: 40ch; }
 .au-quote blockquote { margin: 0; }

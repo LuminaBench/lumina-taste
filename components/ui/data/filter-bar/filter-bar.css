@@ -1,8 +1,8 @@
 @scope (.lt-filterbar) {
-  :scope { display: flex; flex-wrap: wrap; align-items: center; gap: var(--gap-sm); width: 100%; padding: 6px; border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); font-size: var(--text-ui-sm); }
+  :scope { display: flex; flex-wrap: wrap; align-items: center; gap: var(--gap-sm); width: 100%; padding: 6px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); font-size: var(--text-ui-sm); }
   .lt-segmented button { height: 26px; min-width: 0; padding: 0 10px; font-size: var(--text-ui-xs); }
   [data-part="chips"] { display: contents; }
-  [data-part="chip"] { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px 0 10px; border: 1px solid var(--border-hairline); border-radius: var(--radius-pill); background: var(--accent-soft); color: var(--text-primary); font-size: var(--text-ui-xs); font-weight: 550; cursor: pointer; animation: lt-chip-in var(--dur-2) var(--ease-spring); }
+  [data-part="chip"] { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px 0 10px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-pill); background: var(--accent-soft); color: var(--text-primary); font-size: var(--text-ui-xs); font-weight: 550; cursor: pointer; animation: lt-chip-in var(--dur-2) var(--ease-spring); }
   [data-part="chip"] .lt-icon { color: var(--text-muted); }
   [data-part="chip"]:hover .lt-icon { color: var(--status-negative); }
   [data-part="add"] { display: inline-flex; align-items: center; gap: 4px; height: 28px; padding: 0 10px; border: 1px dashed var(--border-strong); border-radius: var(--radius-pill); background: none; color: var(--text-secondary); font-size: var(--text-ui-xs); font-weight: 550; cursor: pointer; }

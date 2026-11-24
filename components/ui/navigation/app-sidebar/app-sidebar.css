@@ -1,10 +1,10 @@
-.lt-shell-demo { display: flex; width: 100%; min-height: 340px; border: 1px solid var(--border-hairline); border-radius: var(--radius-md); overflow: hidden; background: var(--bg-canvas); }
+.lt-shell-demo { display: flex; width: 100%; min-height: 340px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-md); overflow: hidden; background: var(--bg-canvas); }
 .lt-shell-demo-main { flex: 1; min-width: 0; padding: var(--gap-lg); }
 .lt-shell-demo-main p { margin: 6px 0 0; color: var(--text-secondary); font-size: var(--text-ui-sm); max-width: 40ch; }
 @scope (.lt-sidebar) {
   :scope {
     --w: 232px; display: flex; flex-direction: column; flex: none; width: var(--w); padding: var(--gap-sm);
-    background: var(--bg-surface-1); border-right: 1px solid var(--border-hairline); font-size: var(--text-ui);
+    background: var(--bg-surface-1); border-right: var(--bw) var(--border-style) var(--border-hairline); font-size: var(--text-ui);
     transition: width var(--dur-3) var(--ease-out); overflow: hidden;
   }
   :scope[data-collapsed] { --w: 60px; }

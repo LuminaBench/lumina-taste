@@ -65,6 +65,22 @@
   --focus-width: 2px;
   --focus-offset: 2px;
 
+  /* Style tokens: a data-style look overrides these (tokens/styles/styles.css). */
+  --bw: 1px;
+  --bw-strong: 1.5px;
+  --border-style: solid;
+  --surface-shadow: none;
+  --surface-image: none;
+  --surface-blur: none;
+  --control-shadow: none;
+  --control-shadow-hover: var(--control-shadow);
+  --control-shadow-active: var(--control-shadow);
+  --press-translate: 0 0;
+  --field-shadow: none;
+  --canvas-image: none;
+  --heading-transform: none;
+  --eyebrow-tracking: 0.08em;
+
   /* Typography fallbacks if no data-type is set. */
   --font-display: system-ui, sans-serif;
   --font-body: system-ui, sans-serif;
@@ -184,13 +200,14 @@
   accent-color: var(--accent-solid);
 }
 :where(html[data-palette]) {
-  background: var(--bg-canvas);
+  background: var(--canvas-image), var(--bg-canvas);
+  background-attachment: fixed;
   scrollbar-gutter: stable;
   scroll-padding-top: 88px;
 }
 :where(html[data-palette]) :where(body) {
   margin: 0;
-  background: var(--bg-canvas);
+  background: transparent;
 }
 :where([data-palette]) :where(*, *::before, *::after) {
   box-sizing: border-box;
@@ -236,7 +253,7 @@
 .lt-eyebrow {
   font-size: var(--text-ui-xs);
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--eyebrow-tracking);
   text-transform: uppercase;
   color: var(--text-muted);
 }

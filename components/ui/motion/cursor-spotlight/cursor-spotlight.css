@@ -2,7 +2,7 @@
 @scope (.lt-spotlight) {
   :scope {
     --mx: 50%; --my: 0%; --o: 0; position: relative; display: grid; gap: 6px; padding: var(--gap-lg); border-radius: var(--radius-xl); background: var(--bg-surface-1);
-    border: 1px solid var(--border-hairline); isolation: isolate; overflow: hidden;
+    border: var(--bw) var(--border-style) var(--border-hairline); isolation: isolate; overflow: hidden;
   }
   /* A soft wash of the accent follows the pointer. Single hue, low opacity: never a rainbow gradient. */
   :scope::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(260px circle at var(--mx) var(--my), var(--accent-soft), transparent 70%); opacity: var(--o); transition: opacity var(--dur-3) var(--ease-out); }

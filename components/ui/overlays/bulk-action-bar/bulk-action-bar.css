@@ -2,8 +2,8 @@
 @scope (.lt-bulk) {
   :scope { position: relative; width: 100%; padding-bottom: 64px; font-size: var(--text-ui); }
   table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-  th { text-align: left; padding: 8px var(--cell-px); font-size: var(--text-ui-xs); font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border-hairline); }
-  td { padding: var(--cell-py) var(--cell-px); border-bottom: 1px solid var(--border-hairline); color: var(--text-primary); }
+  th { text-align: left; padding: 8px var(--cell-px); font-size: var(--text-ui-xs); font-weight: 600; color: var(--text-muted); border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
+  td { padding: var(--cell-py) var(--cell-px); border-bottom: var(--bw) var(--border-style) var(--border-hairline); color: var(--text-primary); }
   th:first-child, td:first-child { width: 40px; padding-right: 0; }
   [data-num] { text-align: right; }
   tr:has(input:checked) td { background: var(--accent-soft); }

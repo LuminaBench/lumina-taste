@@ -1,7 +1,7 @@
 @scope (.lt-stepper) {
   :scope { display: grid; gap: 6px; font-size: var(--text-ui); }
   label { font-weight: 550; }
-  [data-part="control"] { display: inline-flex; align-items: stretch; height: var(--control-h); border: 1px solid var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-1); overflow: hidden; width: max-content; }
+  [data-part="control"] { display: inline-flex; align-items: stretch; height: var(--control-h); border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-1); overflow: hidden; width: max-content; }
   [data-part="control"]:focus-within { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 1px; }
   button { display: grid; place-items: center; width: var(--control-h); padding: 0; border: 0; background: none; color: var(--text-secondary); cursor: pointer; transition: background-color var(--dur-1), color var(--dur-1); }
   button:hover:not(:disabled) { background: var(--bg-surface-2); color: var(--text-primary); }
@@ -9,7 +9,7 @@
   button:disabled { color: var(--text-muted); opacity: 0.5; cursor: not-allowed; }
   button:focus-visible { outline: none; background: var(--bg-surface-3); }
   input {
-    width: 5ch; border: 0; border-inline: 1px solid var(--border-hairline); background: none; color: var(--text-primary); text-align: center;
+    width: 5ch; border: 0; border-inline: var(--bw) var(--border-style) var(--border-hairline); background: none; color: var(--text-primary); text-align: center;
     font-size: var(--text-ui); font-weight: 600; font-variant-numeric: tabular-nums; outline: none; -moz-appearance: textfield; appearance: textfield;
   }
   input::-webkit-inner-spin-button, input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }

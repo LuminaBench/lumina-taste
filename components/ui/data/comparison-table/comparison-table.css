@@ -5,8 +5,8 @@
   thead th { padding: var(--gap-sm) var(--gap-md) var(--gap-md); text-align: center; font-size: var(--step-0); font-weight: 650; white-space: nowrap; }
   thead th .lt-badge { margin-left: 6px; vertical-align: middle; }
   tbody th[scope="row"] { padding: 0 var(--gap-md) 0 0; text-align: left; font-weight: 500; color: var(--text-secondary); }
-  tbody td { height: 44px; padding: 0 var(--gap-md); text-align: center; border-bottom: 1px solid var(--border-hairline); }
-  tbody th[scope="row"] { border-bottom: 1px solid var(--border-hairline); }
+  tbody td { height: 44px; padding: 0 var(--gap-md); text-align: center; border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
+  tbody th[scope="row"] { border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
   [data-group] th { padding: var(--gap-lg) 0 var(--gap-sm); text-align: left; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
   [data-featured] { background: var(--accent-soft); }
   thead [data-featured] { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }

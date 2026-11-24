@@ -1,4 +1,4 @@
-import { combine, emit, on, type Cleanup } from '../../_shared/dom';
+import { combine, emit, on, openDialog, type Cleanup } from '../../_shared/dom';
 
 /**
  * Modal dialog on native <dialog>: focus trap, Esc, inert page and top layer come from the browser.
@@ -9,7 +9,7 @@ export function enhance(root: HTMLElement): Cleanup {
   const opener = root.querySelector<HTMLElement>('[data-part="open"]');
   let last: HTMLElement | null = null;
   return combine(
-    opener ? on(opener, 'click', () => { last = opener; dialog.returnValue = ''; dialog.showModal(); }) : () => {},
+    opener ? on(opener, 'click', () => { last = opener; dialog.returnValue = ''; openDialog(dialog); }) : () => {},
     on(dialog, 'click', (e: MouseEvent) => {
       if (e.target !== dialog) return;
       const r = dialog.getBoundingClientRect();

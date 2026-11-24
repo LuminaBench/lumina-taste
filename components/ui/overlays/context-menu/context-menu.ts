@@ -1,4 +1,4 @@
-import { combine, dismissable, emit, on, roving, type Cleanup } from '../../_shared/dom';
+import { combine, dismissable, emit, fixedOrigin, on, roving, type Cleanup } from '../../_shared/dom';
 import { menuExtras } from '../dropdown-menu/dropdown-menu';
 
 /** Context menu at the pointer (right-click, long-press) or at the element (Shift+F10 / ContextMenu key). */
@@ -19,9 +19,11 @@ export function enhance(root: HTMLElement): Cleanup {
   const open = (x: number, y: number) => {
     menu.hidden = false;
     area.setAttribute('aria-expanded', 'true');
+    const o = fixedOrigin(menu);
     const r = menu.getBoundingClientRect();
-    menu.style.left = `${Math.min(x, innerWidth - r.width - 8)}px`;
-    menu.style.top = `${Math.min(y, innerHeight - r.height - 8)}px`;
+    const box = root.closest('[data-contained]')?.getBoundingClientRect() ?? { right: innerWidth, bottom: innerHeight };
+    menu.style.left = `${Math.min(x, box.right - r.width - 8) - o.x}px`;
+    menu.style.top = `${Math.min(y, box.bottom - r.height - 8) - o.y}px`;
     const list = items();
     list.forEach((i, k) => (i.tabIndex = k === 0 ? 0 : -1));
     list[0]?.focus();
