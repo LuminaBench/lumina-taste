@@ -11,7 +11,7 @@
 //   node scripts/install-taste.mjs --style swiss                  (a style brings its palette, mode, type and radius)
 //   node scripts/install-taste.mjs --override accent-solid="oklch(0.5 0.15 30)"   (contrast-checked)
 //   node scripts/install-taste.mjs --list | --dry-run | --force (ignore locks) | --overwrite
-import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -115,6 +115,15 @@ for (const [tok, val] of Object.entries(profile.overrides)) {
 
 // ------------------------------------------------------------------ file selection
 const want = { components: list(opts.components), charts: list(opts.charts), blueprints: list(opts.blueprints) };
+// A static install bundles everything into one lumina.css and lumina.js. Running it again with fewer parts must
+// not drop the ones already there: keep every part that already has a snippet in this folder (--fresh starts over).
+const kept = [];
+if (framework === 'static' && !opts.fresh && existsSync(join(dest, 'snippets'))) {
+  for (const f of readdirSync(join(dest, 'snippets'))) {
+    const id = f.replace(/\.html$/, '');
+    if (f.endsWith('.html') && catalog.ui.some((c) => c.id === id) && !want.components.includes(id)) { want.components.push(id); kept.push(id); }
+  }
+}
 // Asking only for blueprints means "give me that page": write the page and nothing else.
 const blueprintOnly = framework === 'static' && want.blueprints.length > 0 && !want.components.length && !want.charts.length;
 // One blueprint and nothing else is "give me that page": it is written where the page lives (the project
@@ -303,6 +312,27 @@ if (!opts['no-profile']) {
 // ------------------------------------------------------------------ report
 const attrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="${profile.radius}" data-motion="${profile.motion}"${profile.style !== 'none' ? ` data-style="${profile.style}"` : ''}`;
 console.log(`${dry ? 'Dry run: would install' : 'Installed'} lumina-taste (${framework}) into ${relative(projectDir, dest) || '.'} (in ${projectDir})`);
+// A page the kit drafted (compose --write) or a blueprint page next to this install follows a changed profile:
+// its <html> theme attributes are rewritten, so a new palette or typeface shows without editing the page by hand.
+const retheme = [];
+if (!dry && !opts['no-profile']) for (const f of [join(projectDir, 'index.html'), join(projectDir, 'index.draft.html'), join(dest, '..', 'index.html')]) {
+  if (!existsSync(f) || retheme.includes(f)) continue;
+  const page = readFileSync(f, 'utf8');
+  if (!/<!-- lumina-taste (draft for|blueprint):/.test(page)) continue;
+  const next = page.replace(/<html([^>]*)>/, (_m, a) => `<html${a.replace(/\s+data-(palette|mode|type|density|radius|motion|style)="[^"]*"/g, '')} data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="${profile.radius}" data-motion="${profile.motion}"${profile.style && profile.style !== 'none' ? ` data-style="${profile.style}"` : ''}>`);
+  if (next !== page) { writeFileSync(f, next); retheme.push(f); }
+  // A flat blueprint page carries one palette and one style in its main.css: add the new ones beside it.
+  const css = join(dirname(f), 'main.css');
+  if (/<!-- lumina-taste blueprint:/.test(page) && existsSync(css)) {
+    let add = '';
+    const have = readFileSync(css, 'utf8');
+    if (!new RegExp(`\\[data-palette="?${profile.palette}"?\\]`).test(have)) add += `\n/* tokens/palettes/${profile.palette}.css */\n${readFileSync(join(root, `tokens/palettes/${profile.palette}.css`), 'utf8')}`;
+    if (profile.style && profile.style !== 'none' && !new RegExp(`\\[data-style="?${profile.style}"?\\]`).test(have)) add += `\n/* tokens/styles/styles.css: ${profile.style} */\n${oneStyle(profile.style)}`;
+    if (add) { writeFileSync(css, have + add); if (!retheme.includes(f)) retheme.push(f); }
+  }
+}
+if (retheme.length) console.log(`  Re-themed ${retheme.map((f) => relative(projectDir, f) || f).join(', ')} to this profile.`);
+if (kept.length) console.log(`  Kept ${kept.length} part(s) already installed here (${kept.slice(0, 6).join(', ')}${kept.length > 6 ? '…' : ''}). Pass --fresh to start over.`);
 console.log(`  ${copied} file(s) written, ${unchanged} already up to date${skipped ? `, ${skipped} kept` : ''}${opts['no-profile'] || dry ? '' : `, plus ${relative(projectDir, profilePath)}`}.`);
 if (applied.length) console.log(`  Profile updated: ${applied.join(', ')}.`);
 if (blocked.length) console.log(`  Locked, left unchanged: ${blocked.join(', ')}. Pass --force or --unlock <axis> if the user asked for it.`);

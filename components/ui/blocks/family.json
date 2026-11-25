@@ -177,7 +177,7 @@
           "text": "One sentence with a concrete detail."
         }
       ],
-      "prompt": "Build a feature grid: eyebrow and a two-line heading, then six features in three columns (two, then one on narrow containers), each with a 36px outlined icon tile, a short title and one concrete sentence. No cards, no shadows: whitespace does the grouping.",
+      "prompt": "Build a feature grid: a two-line heading, then six features in three columns (two, then one on narrow containers), each with a short title and one concrete sentence (an icon only where it says something the title cannot, outlined, never in a tinted tile). No cards, no shadows: whitespace does the grouping.",
       "debug": "Debug my feature grid. Rule out: emoji icons; every feature in its own heavy card; paragraphs instead of one sentence; uneven icon styles. The symptom:",
       "code": [
         [
@@ -294,7 +294,7 @@
           "text": "Name and role; pinned to the bottom so all three line up."
         }
       ],
-      "prompt": "Build a testimonial grid: eyebrow and heading, then three quote cards in a row (stacked when narrow), each a <figure> with a short <blockquote> about a concrete outcome and a <figcaption> with an initials avatar, name and role pinned to the bottom so names align. No star ratings, no carousels.",
+      "prompt": "Build a testimonial grid: a heading, then three quote cards in a row (stacked when narrow), each a <figure> with a short <blockquote> about a concrete outcome and a <figcaption> with an initials avatar, name and role pinned to the bottom so names align. No star ratings, no carousels.",
       "debug": "Debug my testimonials. Rule out: quotes so long they become paragraphs; names at different heights; star ratings on B2B quotes; a carousel hiding two of the three. The symptom:",
       "code": [
         [
@@ -605,7 +605,7 @@
           "text": "One sentence with the concrete action."
         }
       ],
-      "prompt": "Build a \"How it works\" section: eyebrow and heading, then an <ol> of three steps each with a 35px numbered circle, a short title and one sentence, joined by a single hairline behind the circles; the line and list turn vertical under 760px. First step circle in the accent.",
+      "prompt": "Build a \"How it works\" section: a heading, then an <ol> of three steps each with a 35px numbered circle, a short title and one sentence, joined by a single hairline behind the circles; the line and list turn vertical under 760px. First step circle in the accent.",
       "debug": "Debug my steps section. Rule out: numbers as decorative divs in an unordered list; the connector line drawn through the text on mobile; more than four steps; icons and numbers competing. The symptom:",
       "code": [
         [
@@ -871,7 +871,7 @@
           "text": "The whole tile is one link."
         }
       ],
-      "prompt": "Build an integrations section: eyebrow, heading and a lede with a \"see all\" link, then a 4-column grid (2, then 1 when narrow) of whole-tile links each with a 36px monochrome mark, the tool name, a one-word purpose and an arrow; tiles lift 1px on hover.",
+      "prompt": "Build an integrations section: a heading and a lede with a \"see all\" link, then a 4-column grid (2, then 1 when narrow) of whole-tile links each with a 36px monochrome mark, the tool name, a one-word purpose and an arrow; tiles lift 1px on hover.",
       "debug": "Debug my integrations grid. Rule out: full-colour logos shouting over the page; tiles that are not links; mixed logo sizes; dozens of tiles with no search. The symptom:",
       "code": [
         [
@@ -939,7 +939,7 @@
           "text": "Lists what is missing, then confirms."
         }
       ],
-      "prompt": "Build a contact section: left column with eyebrow, heading, reply-time promise and a description list (email, status page, office); right column a card form with name and work email side by side, a topic select, a message textarea and one primary button; validate on submit, mark invalid fields, list what is missing, confirm in place.",
+      "prompt": "Build a contact section: left column with a heading, reply-time promise and a description list (email, status page, office); right column a card form with name and work email side by side, a topic select, a message textarea and one primary button; validate on submit, mark invalid fields, list what is missing, confirm in place.",
       "debug": "Debug my contact form. Rule out: placeholder-only labels; validation on every keystroke; a CAPTCHA before anything is typed; no confirmation of what happens next. The symptom:",
       "code": [
         [
@@ -1061,7 +1061,7 @@
           "text": "Swaps sides each row; stacks under the text on phones."
         }
       ],
-      "prompt": "Build alternating feature rows: each row is text (eyebrow, display heading, one paragraph under 48ch, two ticked details) beside a framed product picture; odd rows swap sides using order, and everything stacks text-first under 760px. Keep 64px between rows.",
+      "prompt": "Build alternating feature rows: each row is text (a display heading, one paragraph under 48ch, two ticked details) beside a framed product picture; odd rows swap sides using order, and everything stacks text-first under 760px. Keep 64px between rows.",
       "debug": "Debug my feature rows. Rule out: pictures before text on mobile; stock illustrations instead of product; rows of different heights that feel random; more than three rows in a row. The symptom:",
       "code": [
         [
@@ -1296,7 +1296,7 @@
           "text": "Right-aligned on the title line."
         }
       ],
-      "prompt": "Build a \"Selected work\" section for a portfolio: an eyebrow and heading, then a two-column grid of project cards (three with data-cols=\"3\"). Each card is one link with a 4:3 media plate holding the project photo, then the project name with the year right-aligned and a line for type and place. With no photo the plate shows a large two-digit index and the project type, in the same style for every card. One column on narrow containers.",
+      "prompt": "Build a \"Selected work\" section for a portfolio: a heading, then a two-column grid of project cards (three with data-cols=\"3\"). Each card is one link with a 4:3 media plate holding the project photo, then the project name with the year right-aligned and a line for type and place. With no photo the plate shows a large two-digit index and the project type, in the same style for every card. One column on narrow containers.",
       "debug": "Debug my project grid. Rule out: plates of mixed ratios; some cards with art and some blank; several links per card; titles longer than two lines; hover effects that scale the image past its frame. The symptom:",
       "code": [
         [

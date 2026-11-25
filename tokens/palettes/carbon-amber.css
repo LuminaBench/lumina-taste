@@ -33,6 +33,23 @@
   --chart-7: oklch(0.6 0.123 95);
   --chart-8: oklch(0.54 0.09 290);
 }
+[data-palette="carbon-amber"][data-mode="light"] :is(section, header, footer, aside)[data-tone="accent"] {
+  --bg-canvas: oklch(0.52 0.119 62);
+  --bg-surface-1: color-mix(in oklab, oklch(0.985 0.008 62) 10%, oklch(0.52 0.119 62));
+  --bg-surface-2: color-mix(in oklab, oklch(0.985 0.008 62) 14%, oklch(0.52 0.119 62));
+  --bg-surface-3: color-mix(in oklab, oklch(0.985 0.008 62) 20%, oklch(0.52 0.119 62));
+  --text-primary: oklch(0.985 0.008 62);
+  --text-secondary: oklch(0.985 0.008 62);
+  --text-muted: oklch(0.985 0.008 62);
+  --border-hairline: color-mix(in oklab, oklch(0.985 0.008 62) 26%, oklch(0.52 0.119 62));
+  --border-strong: color-mix(in oklab, oklch(0.985 0.008 62) 60%, oklch(0.52 0.119 62));
+  --accent-solid: oklch(0.985 0.008 62);
+  --accent-hover: color-mix(in oklab, oklch(0.985 0.008 62) 88%, oklch(0.52 0.119 62));
+  --accent-ink: oklch(0.52 0.119 62);
+  --accent-text: oklch(0.985 0.008 62);
+  --accent-soft: color-mix(in oklab, oklch(0.985 0.008 62) 16%, oklch(0.52 0.119 62));
+  --focus-ring: oklch(0.985 0.008 62);
+}
 [data-palette="carbon-amber"][data-mode="dark"] {
   color-scheme: dark;
   --bg-canvas: oklch(0.145 0.006 70);
@@ -66,6 +83,23 @@
   --chart-6: oklch(0.72 0.12 345);
   --chart-7: oklch(0.88 0.062 290);
   --chart-8: oklch(0.78 0 0);
+}
+[data-palette="carbon-amber"][data-mode="dark"] :is(section, header, footer, aside)[data-tone="accent"] {
+  --bg-canvas: oklch(0.81 0.16 75);
+  --bg-surface-1: color-mix(in oklab, oklch(0.17 0.02 75) 10%, oklch(0.81 0.16 75));
+  --bg-surface-2: color-mix(in oklab, oklch(0.17 0.02 75) 14%, oklch(0.81 0.16 75));
+  --bg-surface-3: color-mix(in oklab, oklch(0.17 0.02 75) 20%, oklch(0.81 0.16 75));
+  --text-primary: oklch(0.17 0.02 75);
+  --text-secondary: oklch(0.17 0.02 75);
+  --text-muted: oklch(0.17 0.02 75);
+  --border-hairline: color-mix(in oklab, oklch(0.17 0.02 75) 26%, oklch(0.81 0.16 75));
+  --border-strong: color-mix(in oklab, oklch(0.17 0.02 75) 60%, oklch(0.81 0.16 75));
+  --accent-solid: oklch(0.17 0.02 75);
+  --accent-hover: color-mix(in oklab, oklch(0.17 0.02 75) 88%, oklch(0.81 0.16 75));
+  --accent-ink: oklch(0.81 0.16 75);
+  --accent-text: oklch(0.17 0.02 75);
+  --accent-soft: color-mix(in oklab, oklch(0.17 0.02 75) 16%, oklch(0.81 0.16 75));
+  --focus-ring: oklch(0.17 0.02 75);
 }
 [data-palette="carbon-amber"] [data-tone="dark"] {
   color-scheme: dark;

@@ -351,8 +351,9 @@ const TASTE_CHECKS = (arg = null) => {
   // Sizes used once (a badge, a footnote) do not make a scale; count the ones used repeatedly.
   // Sizes within 8% of each other (13 and 14px) read as one step.
   const used = [...sizes].filter(([, n]) => n > 1).map(([s]) => s).sort((a, b) => a - b);
-  const steps = used.reduce((acc, s) => { const last = acc.at(-1); if (last && s / last.at(-1) < 1.08) last.push(s); else acc.push([s]); return acc; }, []);
-  if (steps.length > 8) add('taste-type-scale', null, `${steps.length} distinct type steps in repeated use (${used.join(', ')}px). Use 5–7 steps from --text-* and drop the rest.`);
+  // Sizes of 40px and more are display type (a headline, a figure set large): they count as one step together.
+  const steps = used.reduce((acc, s) => { const last = acc.at(-1); if (last && (s / last.at(-1) < 1.08 || (s >= 40 && last.at(-1) >= 40))) last.push(s); else acc.push([s]); return acc; }, []);
+  if (steps.length > 8) add('taste-type-scale', null, `${steps.length} distinct type steps in repeated use (${used.join(', ')}px). Use 5–7 steps for reading and interface text (--step-*, --text-ui*) and drop the rest; display sizes of 40px and more count as one.`);
 
   // 2. Accent hues: one accent plus status colours. Count saturated hues used on text, fills and borders outside charts.
   const hues = new Map();
@@ -540,18 +541,113 @@ const TASTE_CHECKS = (arg = null) => {
       const accent = getComputedStyle(probe).color; probe.remove();
       if (accent && accent !== 'rgba(0, 0, 0, 0)') {
         const page = document.documentElement.scrollWidth * document.documentElement.scrollHeight;
+        const bands = [...document.querySelectorAll(':is(section, header, footer, aside)[data-tone="accent"]')].filter((b) => shown(b));
+        const firstBand = bands[0] ?? null;
+        if (bands.length > 1) add('taste-accent-budget', bands[1], `${bands.length} bands in the brand colour. One is a moment; two make it wallpaper. Keep the strongest and give the others a plain or tinted ground.`);
         let area = 0;
         for (const el of document.querySelectorAll('body *')) {
           if (skip(el)) continue;
           const c = getComputedStyle(el);
           if (c.backgroundColor !== accent || !shown(el)) continue;
           if (el.parentElement && getComputedStyle(el.parentElement).backgroundColor === accent) continue;
+          // One band in the brand's own colour is a design decision (data-tone="accent" on a section); it does not count.
+          if (el === firstBand) continue;
           const r = rectOf(el); area += r.width * r.height;
         }
-        if (page > 0 && area / page > 0.12) add('taste-accent-budget', null, `The accent colour fills ${Math.round((area / page) * 100)}% of the page. Keep it for the primary action, small labels and one thing in the hero; use ink, hairlines and tinted bands for the rest.`);
+        if (page > 0 && area / page > 0.12) add('taste-accent-budget', null, `The accent colour fills ${Math.round((area / page) * 100)}% of the page. Keep it for the primary action, one thing in the hero and at most one band in the brand colour (data-tone="accent"); use ink, space and tinted bands for the rest.`);
       }
     }
   }
+
+    // 9f. AI defaults (references/ai-defaults.md): the looks a model falls back on when nothing pushes it
+    // elsewhere. A page may keep one deliberately by saying why on its root: <html data-look-reason="…">.
+    {
+      const rectOf = (e) => e.getBoundingClientRect();
+      const cv = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+      const rgba = (c) => { cv.clearRect(0, 0, 1, 1); cv.fillStyle = '#000'; cv.fillStyle = c; cv.fillRect(0, 0, 1, 1); const d = cv.getImageData(0, 0, 1, 1).data; return [d[0], d[1], d[2], d[3] / 255]; };
+      const lin = (v) => { v /= 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+      const oklch = (c) => {
+        const [R, G, B, a] = rgba(c); const r = lin(R), g = lin(G), b = lin(B);
+        const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b), m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b), s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+        const L = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, A = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, Bb = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
+        return { L, C: Math.hypot(A, Bb), H: (Math.atan2(Bb, A) * 180 / Math.PI + 360) % 360, a };
+      };
+      const groundOf = () => { for (const e of [document.body, document.documentElement]) { const c = getComputedStyle(e).backgroundColor; if (rgba(c)[3] > 0.5) return oklch(c); } return oklch('#fff'); };
+      const ground = groundOf();
+      // The accent: the most common saturated fill on links and buttons in the first two screens.
+      const fills = [...document.querySelectorAll('a, button, [class*="btn"]')].filter((e) => shown(e) && !skip(e) && rectOf(e).top < innerHeight * 2).map((e) => getComputedStyle(e).backgroundColor).filter((c) => rgba(c)[3] > 0.8).map(oklch).filter((o) => o.C >= 0.05);
+      const accent = fills.sort((x, y) => fills.filter((f) => Math.abs(f.H - y.H) < 12).length - fills.filter((f) => Math.abs(f.H - x.H) < 12).length)[0] ?? null;
+      const h1 = [...document.querySelectorAll('h1')].find((h) => shown(h) && !skip(h));
+      const fam = (el) => (el ? getComputedStyle(el).fontFamily : '').toLowerCase();
+      const first = (f) => f.split(',')[0].replace(/["']/g, '').trim();
+      const STOCK_SANS = /^(inter|inter display|geist|roboto|arial|helvetica|helvetica neue|system-ui|-apple-system|blinkmacsystemfont|segoe ui|space grotesk|open sans|poppins|montserrat)$/;
+      const BOOK_SERIF = /playfair|newsreader|fraunces|instrument serif|cormorant|garamond|didot|bodoni|caslon|dm serif|lora|merriweather|crimson|source serif|iowan|charter|georgia|tiempos|canela|libre baskerville|baskerville|times/;
+      const reason = document.documentElement.getAttribute('data-look-reason');
+      const hero = document.querySelector('[class*="hero"]');
+      const authored = document.documentElement.getAttribute('data-authored-mode');
+      const asBuilt = !authored || authored === (document.documentElement.getAttribute('data-mode') ?? authored);
+      const inHue = (o, a, b) => o && o.H >= a && o.H <= b;
+      if (!reason && hero && accent && asBuilt) {
+        const h1f = fam(h1);
+        let look = null;
+        if (inHue(accent, 262, 305) && accent.C >= 0.12 && STOCK_SANS.test(first(h1f))) look = ['the 2023 SaaS default', `an indigo or violet accent with ${first(h1f)} headlines`];
+        else if (ground.L >= 0.93 && ground.C >= 0.006 && ground.C <= 0.045 && ground.H >= 55 && ground.H <= 100 && BOOK_SERIF.test(first(h1f)) && ((inHue(accent, 12, 58) && accent.C >= 0.06) || (inHue(accent, 125, 178) && accent.C >= 0.04))) look = ['the 2025 "tasteful" default', `a cream ground, a book serif headline and a ${inHue(accent, 12, 58) ? 'terracotta or rust' : 'forest green'} accent`];
+        else if (ground.L <= 0.24 && accent.C >= 0.15 && (inHue(accent, 105, 150) || inHue(accent, 18, 52))) look = ['black with one acid colour', `a near-black ground and one ${inHue(accent, 105, 150) ? 'acid green' : 'vermilion'} accent`];
+        if (look) add('taste-default-look', null, `This page is ${look[0]}: ${look[1]}. It is the look models produce when nothing in the brief pushes them elsewhere. Take the palette and type from the subject (references/ai-defaults.md §3), or, if the subject really asks for this look, say so on the page root: <html data-look-reason="…">.`);
+      }
+      // One stock sans for headlines and body alike, on a page with a hero.
+      if (hero && h1 && STOCK_SANS.test(first(fam(h1))) && first(fam(h1)) === first(fam(document.querySelector('main p, p')))) add('taste-default-font', h1, `Headlines and body are both ${first(fam(h1))}, the default face of most generated pages. Choose a pairing for the subject from tokens/typography, with real weight contrast between headline and body.`);
+      // Icons in tinted rounded tiles, three or more in a row: the generated feature grid.
+      const tiles = [...document.querySelectorAll('svg, img, i')].filter((ic) => { const p = ic.parentElement; if (!p || !shown(ic)) return false; const r = rectOf(p), cs = getComputedStyle(p); return r.width >= 32 && r.width <= 76 && Math.abs(r.width - r.height) < 6 && rgba(cs.backgroundColor)[3] > 0.1 && parseFloat(cs.borderTopLeftRadius) >= 6 && rectOf(ic).width <= r.width * 0.75; }).map((ic) => ic.parentElement);
+      const byList = new Map();
+      for (const t of tiles) { const list = t.closest('ul, ol, [class*="grid"], [class*="features"], section'); if (list) byList.set(list, (byList.get(list) ?? 0) + 1); }
+      const tileList = [...byList.entries()].find(([, n]) => n >= 3);
+      if (tileList) add('taste-icon-tiles', tileList[0], `${tileList[1]} items each lead with an icon in a tinted rounded tile: the generated feature grid. Show each feature instead (a screen fragment, a document, a figure), or drop the icons and let the headings carry it.`);
+      // Coloured glow on a dark ground.
+      if (ground.L < 0.35) {
+        const glow = [...document.querySelectorAll('body *')].find((e) => { if (!shown(e) || skip(e)) return false; const cs = getComputedStyle(e); return [cs.boxShadow, cs.textShadow].some((sh) => sh && sh !== 'none' && [...sh.matchAll(/((?:rgba?|oklch|oklab|color|hsla?)\([^)]*\))\s+(-?[\d.]+)px\s+(-?[\d.]+)px\s+([\d.]+)px/g)].some((m) => +m[4] >= 12 && oklch(m[1]).C >= 0.1 && rgba(m[1])[3] >= 0.25)); });
+        if (glow) add('taste-glow', glow, 'A coloured glow on a dark ground, the neon look of generated dark pages. Use surface steps and one hairline of light on the top edge for depth.');
+      }
+      // Cards that grow on hover.
+      let scaled = 0;
+      for (const sheet of document.styleSheets) { let rules; try { rules = sheet.cssRules; } catch { continue; } for (const r of rules ?? []) { if (!r.selectorText || !r.selectorText.includes(':hover')) continue; const t = `${r.style.transform} ${r.style.scale}`; const m = /scale\(\s*([\d.]+)|^\s*([\d.]+)/.exec(t.replace(/^\s*none/, '')); const v = m ? +(m[1] ?? m[2]) : 1; if (v >= 1.03) { try { scaled += [...document.querySelectorAll(r.selectorText.replace(/:hover/g, ''))].filter((e) => shown(e) && rectOf(e).width >= 160).length; } catch { /* odd selector */ } } } }
+      if (scaled >= 3) add('taste-hover-scale', null, `${scaled} cards grow on hover (scale 1.03 or more). Hover should answer the pointer quietly: a 1 to 2px lift, a border or a shadow step.`);
+      // Figures models invent.
+      const stat = [...document.querySelectorAll('dd, b, strong, [data-part="figure"], [class*="stat"] *, p, span')].find((e) => shown(e) && !skip(e) && e.children.length === 0 && /^(\d+x|10x faster|99\.9+%|100%|24\/7|#1|\d+k\+|\d+m\+)$/i.test((e.textContent ?? '').trim()) && !/(month|year|week|day|since|over the last|in 20\d\d|per )/i.test(e.parentElement?.parentElement?.textContent ?? ''));
+      if (stat) add('taste-invented-stat', stat, `“${stat.textContent.trim()}” is one of the figures generated pages invent. Keep it only if it is true and the page says over what period; otherwise remove it.`);
+      // Faces and pictures from stock or placeholder services.
+      const stock = [...document.querySelectorAll('img, source')].find((im) => /pravatar|randomuser|dicebear|ui-avatars|unsplash|pexels|picsum|placehold|placeholder|loremflickr|via\.placeholder/i.test(im.getAttribute('src') ?? im.getAttribute('srcset') ?? ''));
+      if (stock) add('taste-stock-face', stock, 'A picture from a stock or placeholder service. Use the subject\'s own photograph, an art panel with data-shot (the brief for the photograph), or nothing.', 'error');
+    }
+
+    // 9g. Generated hallmarks on a marketing page: a small label over every section heading, and thin rules in
+    // every direction. Both make a page read as a template. Sections should differ by scale, ground and picture.
+    if (document.querySelector('[class*="hero"]')) {
+      const rectOf = (e) => e.getBoundingClientRect();
+      const heads = [...document.querySelectorAll('main h2')].filter((h) => shown(h) && !skip(h) && !h.closest('[class*="hero"]'));
+      const labelled = heads.filter((h) => {
+        const prev = h.previousElementSibling;
+        if (!prev || !shown(prev)) return false;
+        const cs = getComputedStyle(prev), words = (prev.textContent ?? '').trim().split(/\s+/).length;
+        return words <= 6 && parseFloat(cs.fontSize) <= 14 && (cs.textTransform === 'uppercase' || parseFloat(cs.letterSpacing) >= 0.6 || /mono/i.test(cs.fontFamily));
+      });
+      if (heads.length >= 3 && labelled.length >= 3 && labelled.length / heads.length >= 0.6) add('taste-label-every-section', labelled[0], `${labelled.length} of ${heads.length} section headings have a small label over them (“${(labelled[0].previousElementSibling.textContent ?? '').trim().slice(0, 24)}”). Over every heading it is a template's habit, not information. Keep one where it says something the heading cannot (a date, a place); let the headings stand alone.`);
+      // Thin rules: visible 1px edges at least 160px long, counted per screen of page.
+      const main = document.querySelector('main') ?? document.body;
+      let lines = 0;
+      for (const e of main.querySelectorAll('*')) {
+        if (!shown(e) || skip(e) || e.closest('table, pre, [role="grid"]')) continue;
+        const cs = getComputedStyle(e), r = rectOf(e);
+        for (const [side, len] of [['Top', r.width], ['Bottom', r.width], ['Left', r.height], ['Right', r.height]]) {
+          if (len < 160 || cs[`border${side}Style`] === 'none' || parseFloat(cs[`border${side}Width`]) === 0 || parseFloat(cs[`border${side}Width`]) > 1.5) continue;
+          if (side === 'Left' || side === 'Right') { if (parseFloat(cs.borderTopWidth) > 0 && cs.borderTopStyle !== 'none') continue; } // a box's sides count once, as its top
+          lines++;
+        }
+      }
+      const screens = Math.max(1, document.documentElement.scrollHeight / innerHeight);
+      const perScreen = lines / screens;
+      if (perScreen > 10) add('taste-hairlines', null, `About ${Math.round(perScreen)} thin rules per screen (${lines} on the page). Lines everywhere read as a generated broadsheet. Separate with space and a change of ground; keep rules for tables and the few rows people compare.`);
+    }
 
   // 9b. Leftover sample copy: with --product "Name", the kit's own demo brands and people must be gone.
   if (product) {
@@ -641,6 +737,8 @@ async function auditOne(browser, url, vpName, mode) {
   page.on('console', (m) => { if (m.type() === 'error') runtimeErrors.push(m.text()); });
   await page.goto(url, { waitUntil: 'load' });
   // Apply the mode to lumina-taste roots as well as prefers-color-scheme.
+  // Remember the mode the page was written in: the default-look rule judges the look as built, not a mode the audit switched to.
+  await page.evaluate(() => { const r = document.documentElement; if (!r.hasAttribute('data-authored-mode')) r.setAttribute('data-authored-mode', r.getAttribute('data-mode') ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')); });
   await page.evaluate((m) => document.querySelectorAll('[data-mode]').forEach((e) => e.setAttribute('data-mode', m)), mode);
   await page.addStyleTag({ content: '*,*::before,*::after{transition-duration:0s!important;animation-duration:0s!important;animation-delay:0s!important;caret-color:transparent!important;scroll-behavior:auto!important}' });
   // Scroll through so lazy and reveal-on-scroll content is present, then return to the top.

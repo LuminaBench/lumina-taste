@@ -15,7 +15,7 @@
   <button type="button" data-part="toggle" aria-expanded="false" aria-controls="lt-ns-panel" aria-label="Menu"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   <div id="lt-ns-panel" data-part="panel" hidden><ul><li><a href="#get-food">Get food</a></li><li><a href="#money">Where money goes</a></li><li><a href="#help">Ways to help</a></li><li><a href="#questions">Questions</a></li></ul></div>
 </header>
-  <main id="main" data-separators="rules" data-numbered data-scroll>
+  <main id="main" data-scroll>
     <section class="lt-hero-statement" id="top" data-entrance aria-labelledby="cs-h">
       <p data-part="eyebrow">Community food bank · Armley, Leeds</p>
       <h1 id="cs-h">Food for 410 households a week, from one church hall</h1>
@@ -29,7 +29,7 @@
     </section>
 
     <section class="lt-visit" id="get-food" data-lt="visit-info" aria-labelledby="cs-gf-h">
-      <header><p data-part="eyebrow">Get food</p><h2 id="cs-gf-h">Need food this week? Come to the hall</h2></header>
+      <header><h2 id="cs-gf-h">Need food this week? Come to the hall</h2></header>
       <div data-part="cols">
         <div data-part="where">
           <h3>Where</h3>
@@ -52,7 +52,7 @@
     </section>
 
     <section class="lt-section" id="money" data-layout="rail" aria-labelledby="cs-mo-h">
-      <header><p data-part="eyebrow">Where money goes</p><h2 id="cs-mo-h">Of every £1 given, 82p becomes food</h2><p data-part="lede">Figures for the year to 31 March 2026, from our <a href="/accounts-2026.pdf">independently examined accounts</a> (PDF, 14 pages).</p></header>
+      <header><h2 id="cs-mo-h">Of every £1 given, 82p becomes food</h2><p data-part="lede">Figures for the year to 31 March 2026, from our <a href="/accounts-2026.pdf">independently examined accounts</a> (PDF, 14 pages).</p></header>
       <figure class="cs-money">
         <div class="cs-bar" role="img" aria-label="Of every pound: 82 pence on food, 11 pence on the van and the hall, 7 pence on running the charity">
           <span style="flex: 82" data-k="food">82p</span><span style="flex: 11" data-k="van">11p</span><span style="flex: 7" data-k="run">7p</span>
@@ -66,7 +66,7 @@
     </section>
 
     <section class="lt-section" id="help" aria-labelledby="cs-he-h">
-      <header><p data-part="eyebrow">Ways to help</p><h2 id="cs-he-h">Money, food or three hours a week</h2></header>
+      <header><h2 id="cs-he-h">Money, food or three hours a week</h2></header>
       <div class="lt-bento" aria-label="Ways to help">
         <article data-span="wide" data-tone="accent"><span class="lt-eyebrow">Give monthly</span><h3>Fresh food, ordered ahead</h3><p>Gift Aid adds 25p to every pound. <a href="/give/monthly">Give monthly</a></p><p data-part="figure"><small>from</small>£5</p></article>
         <article data-span="tall"><span class="lt-eyebrow">Volunteer</span><h3>Sort, serve or drive the van</h3><p>We train you and pay bus fares. <a href="/volunteer">Volunteer</a></p><p data-part="figure">3<small>hrs</small></p></article>
@@ -80,7 +80,7 @@
       <div data-part="list"><details open><summary>Do I need a referral to get food?<span data-part="chev" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><p>No. Come to any session. We ask your postcode and how many people you are feeding, and nothing else.</p></details><details><summary>Can I claim Gift Aid on my donation?<span data-part="chev" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><p>Yes, if you pay UK income tax. Tick the box when you give and we claim 25p for every £1.</p></details><details><summary>Is the food safe?<span data-part="chev" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><p>Yes. Everything is within its use-by date, chilled food stays chilled from shop to shelf, and the council inspects us every year.</p></details><details><summary>Do you take fresh or home-cooked food?<span data-part="chev" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><p>Fresh fruit and vegetables, yes. Home-cooked food, no: we cannot check how it was made.</p></details></div>
     </section>
 
-    <section class="lt-cta-band" id="give" aria-labelledby="cs-cta-h">
+    <section class="lt-cta-band" id="give" aria-labelledby="cs-cta-h" data-tone="accent" data-variant="bold">
       <div data-part="panel">
         <div><h2 id="cs-cta-h">£12 fills one household's gap for a week</h2><p data-part="lede">Give once or monthly. You get one email a year saying what your money bought.</p></div>
         <div data-part="cta"><a class="lt-btn" data-variant="primary" data-size="lg" href="/give">Donate</a><a class="lt-btn" data-variant="ghost" data-size="lg" href="/give/monthly">Give monthly</a></div>

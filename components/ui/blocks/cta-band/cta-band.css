@@ -13,4 +13,10 @@
   h2 { font-size: var(--step-2); max-width: 22ch; }
   [data-part="lede"] { margin-top: 8px; }
   [data-part="cta"] { display: flex; flex-wrap: wrap; gap: 10px; }
+  /* data-variant="bold" (with data-tone="accent" or "dark" on the section): no card; the band is the colour and
+     the line is set large, with the buttons under it. The page ends on one sentence, not on a box. */
+  :scope[data-variant="bold"] { padding-block: calc(var(--block-y, calc(var(--section-y) / 2)) * 1.6); }
+  :scope[data-variant="bold"] [data-part="panel"] { display: grid; justify-items: start; gap: clamp(24px, 4cqi, 40px); padding: 0; border: 0; border-radius: 0; background: none; }
+  :scope[data-variant="bold"] h2 { max-width: 16ch; font-size: clamp(2.5rem, 1rem + 5.4cqi, 5.75rem); line-height: 1.02; letter-spacing: calc(var(--tracking-display) * 1.3); }
+  :scope[data-variant="bold"] [data-part="lede"] { font-size: var(--step-1); }
 }

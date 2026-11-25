@@ -22,4 +22,6 @@
   @container (max-width: 480px) { [data-part="facts"] { grid-template-columns: minmax(0, 1fr); gap: 0; } [data-part="facts"] > div { flex-direction: row; align-items: baseline; justify-content: space-between; padding: 12px 0; border-left: 0; border-top: var(--bw) var(--border-style) var(--border-hairline); } [data-part="facts"] > div:first-child { border-top: 0; } }
   dd { margin: 0; font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
   dt { color: var(--text-secondary); font-size: var(--text-ui-sm); line-height: 1.4; }
+  /* The line over the headline is context (what, where), in sentence case at reading size: not a small stamp. */
+  [data-part="eyebrow"] { font-size: max(var(--text-ui), 0.95rem); font-weight: 550; letter-spacing: 0; text-transform: none; color: var(--text-secondary); }
 }

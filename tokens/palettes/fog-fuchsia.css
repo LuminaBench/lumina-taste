@@ -33,6 +33,23 @@
   --chart-7: oklch(0.6 0.123 95);
   --chart-8: oklch(0.54 0.09 290);
 }
+[data-palette="fog-fuchsia"][data-mode="light"] :is(section, header, footer, aside)[data-tone="accent"] {
+  --bg-canvas: oklch(0.55 0.21 355);
+  --bg-surface-1: color-mix(in oklab, oklch(0.985 0.008 355) 10%, oklch(0.55 0.21 355));
+  --bg-surface-2: color-mix(in oklab, oklch(0.985 0.008 355) 14%, oklch(0.55 0.21 355));
+  --bg-surface-3: color-mix(in oklab, oklch(0.985 0.008 355) 20%, oklch(0.55 0.21 355));
+  --text-primary: oklch(0.985 0.008 355);
+  --text-secondary: oklch(0.985 0.008 355);
+  --text-muted: oklch(0.985 0.008 355);
+  --border-hairline: color-mix(in oklab, oklch(0.985 0.008 355) 26%, oklch(0.55 0.21 355));
+  --border-strong: color-mix(in oklab, oklch(0.985 0.008 355) 60%, oklch(0.55 0.21 355));
+  --accent-solid: oklch(0.985 0.008 355);
+  --accent-hover: color-mix(in oklab, oklch(0.985 0.008 355) 88%, oklch(0.55 0.21 355));
+  --accent-ink: oklch(0.55 0.21 355);
+  --accent-text: oklch(0.985 0.008 355);
+  --accent-soft: color-mix(in oklab, oklch(0.985 0.008 355) 16%, oklch(0.55 0.21 355));
+  --focus-ring: oklch(0.985 0.008 355);
+}
 [data-palette="fog-fuchsia"][data-mode="dark"] {
   color-scheme: dark;
   --bg-canvas: oklch(0.16 0.008 260);
@@ -66,6 +83,23 @@
   --chart-6: oklch(0.72 0.09 222);
   --chart-7: oklch(0.88 0.13 95);
   --chart-8: oklch(0.78 0.09 290);
+}
+[data-palette="fog-fuchsia"][data-mode="dark"] :is(section, header, footer, aside)[data-tone="accent"] {
+  --bg-canvas: oklch(0.72 0.19 355);
+  --bg-surface-1: color-mix(in oklab, oklch(0.17 0.02 355) 10%, oklch(0.72 0.19 355));
+  --bg-surface-2: color-mix(in oklab, oklch(0.17 0.02 355) 14%, oklch(0.72 0.19 355));
+  --bg-surface-3: color-mix(in oklab, oklch(0.17 0.02 355) 20%, oklch(0.72 0.19 355));
+  --text-primary: oklch(0.17 0.02 355);
+  --text-secondary: oklch(0.17 0.02 355);
+  --text-muted: oklch(0.17 0.02 355);
+  --border-hairline: color-mix(in oklab, oklch(0.17 0.02 355) 26%, oklch(0.72 0.19 355));
+  --border-strong: color-mix(in oklab, oklch(0.17 0.02 355) 60%, oklch(0.72 0.19 355));
+  --accent-solid: oklch(0.17 0.02 355);
+  --accent-hover: color-mix(in oklab, oklch(0.17 0.02 355) 88%, oklch(0.72 0.19 355));
+  --accent-ink: oklch(0.72 0.19 355);
+  --accent-text: oklch(0.17 0.02 355);
+  --accent-soft: color-mix(in oklab, oklch(0.17 0.02 355) 16%, oklch(0.72 0.19 355));
+  --focus-ring: oklch(0.17 0.02 355);
 }
 [data-palette="fog-fuchsia"] [data-tone="dark"] {
   color-scheme: dark;

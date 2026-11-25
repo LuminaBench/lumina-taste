@@ -129,6 +129,13 @@ for (const p of palettes) {
     css += `[data-palette="${p.id}"][data-mode="${mode}"] {\n  color-scheme: ${mode};\n`;
     for (const [k, v] of Object.entries(t)) css += k === 'focus-ring' ? `  --${k}: var(--accent-text);\n` : `  --${k}: ${toCss(v)};\n`;
     css += `}\n`;
+    // A band in the brand's own colour (data-tone="accent"): the accent is the ground, its ink the text, and
+    // buttons invert (ink fill, accent label) so they stay the one solid thing in the band.
+    {
+      const solid = toCss(t['accent-solid']), ink = toCss(t['accent-ink']);
+      // Sections only: badges and art panels use data-tone="accent" for their own small tint.
+      css += `[data-palette="${p.id}"][data-mode="${mode}"] :is(section, header, footer, aside)[data-tone="accent"] {\n  --bg-canvas: ${solid};\n  --bg-surface-1: color-mix(in oklab, ${ink} 10%, ${solid});\n  --bg-surface-2: color-mix(in oklab, ${ink} 14%, ${solid});\n  --bg-surface-3: color-mix(in oklab, ${ink} 20%, ${solid});\n  --text-primary: ${ink};\n  --text-secondary: ${ink};\n  --text-muted: ${ink};\n  --border-hairline: color-mix(in oklab, ${ink} 26%, ${solid});\n  --border-strong: color-mix(in oklab, ${ink} 60%, ${solid});\n  --accent-solid: ${ink};\n  --accent-hover: color-mix(in oklab, ${ink} 88%, ${solid});\n  --accent-ink: ${solid};\n  --accent-text: ${ink};\n  --accent-soft: color-mix(in oklab, ${ink} 16%, ${solid});\n  --focus-ring: ${ink};\n}\n`;
+    }
     // A dark band inside a light page (data-tone="dark" on a section): the same palette's dark tokens, scoped.
     if (mode === 'dark') {
       css += `[data-palette="${p.id}"] [data-tone="dark"] {\n  color-scheme: dark;\n`;

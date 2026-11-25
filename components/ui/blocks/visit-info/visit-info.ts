@@ -17,7 +17,17 @@ export function enhance(root: HTMLElement): Cleanup {
     const t = now.getHours() * 60 + now.getMinutes();
     if (hours && t >= mins(hours[1]) && t < mins(hours[2])) { out.textContent = `Open now, until ${hours[2]}`; out.setAttribute('data-open', ''); }
     else if (hours && t < mins(hours[1])) out.textContent = `Opens today at ${hours[1]}`;
-    else out.textContent = 'Closed now';
+    else {
+      // Closed: say when it opens next, from the hours table.
+      const names = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      let next = '';
+      for (let i = 1; i <= 7 && !next; i++) {
+        const d = ((day - 1 + i) % 7) + 1;
+        const h = root.querySelector(`tr[data-day="${d}"] td`)?.textContent?.match(/(\d{1,2}(?::\d{2})?)\s*(?:to|–|-)/);
+        if (h) next = `${i === 1 ? 'tomorrow' : names[d]} at ${h[1]}`;
+      }
+      out.textContent = next ? `Closed now. Opens ${next}` : 'Closed now';
+    }
   }
   return () => { row?.removeAttribute('data-today'); if (out) { out.textContent = ''; out.removeAttribute('data-open'); } };
 }

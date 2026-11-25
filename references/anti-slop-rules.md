@@ -60,6 +60,8 @@ Treat every rule as a ban unless the user explicitly asks for the banned thing. 
 | Fixed headers taller than 64px on mobile | 56px max, hide on scroll down, reveal on scroll up (`hide-on-scroll-header`). |
 | Mobile bottom navs with more than 5 items | 3 to 5 items. Move the rest to a "More" sheet. |
 | Footers with 8 link columns of uneven length | 3 to 5 balanced columns, a single legal line, nothing else. |
+| ★ A small uppercase label over every section heading, "01 / SECTION" numbering | Headings that stand alone; a label only where it says something the heading cannot (a date, a place) |
+| ★ Thin rules in every direction: between sections, under every row, around every box | Space, scale and a change of ground; rules only for tables and rows people compare |
 
 ## 6. Motion
 

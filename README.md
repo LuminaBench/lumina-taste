@@ -1,6 +1,10 @@
 # Lumina Taste
 
-Interfaces that look designed, not generated. A taste kit for coding agents: 24 verified palettes, 39 visual styles, 204 named UI patterns, 46 publication-grade charts and 25 page blueprints, a page composer that turns a one-line brief into a plan, and an auditor with a page-level taste critic that catches slop before your users do.
+**Pages that look designed, not generated.** A design skill for coding agents: it plans a page from a one-line brief, builds it from a library of tasteful parts, and critiques the result the way a designer would, including the habits that make AI-built pages recognisable.
+
+- **Plans before it builds.** `compose.mjs` turns "website for my bakery" into a page type, a look taken from the subject, sections in order with copy formulas, and a first draft.
+- **Shows instead of tells.** Picture-led sections, figures set large, scroll statements, stacking cards, dark media bands, and openly licensed photographs found and credited for you.
+- **Catches the defaults.** A Playwright critic flags indigo-and-Inter, cream-serif-and-terracotta, labels over every heading, walls of words, invented stats and stock faces, and scores the page out of 100.
 
 ## Install
 
@@ -41,24 +45,27 @@ npx skills remove lumina-taste -g
 
 ## What's inside
 
-| | Count | Highlights |
+| | | |
 | --- | ---: | --- |
-| **Palettes** | 24 × light/dark | Cream & Charcoal, Deep Navy & Warm Sand, Matte Black & Signal Orange, Lab Monochrome & Acid Lime, Bone & Plum, Deep Forest & Brass, Graphite & Violet, Petrol & Peach… Every text, control and chart pair is checked: primary text ≥ 7:1, all other text ≥ 4.5:1, UI marks ≥ 3:1. |
-| **Type pairings** | 12 | Editorial serif + grotesque, precision dev sans + mono, financial condensed, warm humanist… Fluid `clamp()` scales, tabular numbers everywhere they matter. |
-| **Visual styles** | 39 | Monochrome, graphite, atelier, nordic, kraft, midnight, playful, enterprise, zen, swiss, editorial, neobrutalism, terminal, glass, soft, clay, retro, blueprint, paper, newsprint, and four that bring their own backdrop (trace, graph, ember, pixel)… One attribute restyles borders, surfaces, shadows and fields across every component. |
-| **UI patterns** | 204 | Rotating chevrons, grouped switcher menus, session lists, install-command chips, announcement pills, a typed terminal, device frames, a date picker that takes typing, a money field, hold-to-confirm, an audio player, API endpoint rows, phone app bars and row lists, sliding pill toggles, OTP input, ⌘K palette, bulk action bar, kanban board, chat thread, prompt composer, carousel, lightbox, swipe actions, @-mentions, plus ready page sections: heroes, pricing, FAQ, testimonials, sign-in, 404… Vanilla HTML/CSS/TS **and** React, keyboard-complete, `@scope`-isolated. |
-| **Backdrops** | 9 | `data-backdrop="grid spot"` on a hero or a band: graph paper, dot grid, ruled lines, registration ticks, a single-hue wash, a spotlight, film grain, a pixel dither field and circuit traces that route around the text. One hue, faded before the text, themed by the palette. |
-| **Charts** | 46 | Benchmark leaderboards (ranked columns, leaderboard table, range bars, trade-off quadrant, Pareto frontier), line, area, bars, slope, dumbbell, waterfall, histogram, box plot, beeswarm, bump, small multiples, forecast with a range, step, ridgeline, retention cohorts, heatmaps, candlestick, Sankey, treemap, Gantt, waffle, radar… Magnetic crosshair, direct labels, keyboard navigation. |
-| **Page blueprints** | 25 | Landing, dashboard, editorial, docs, pricing, settings, directory, auth, admin list, status page, changelog, store product page, checkout, AI assistant chat, developer tool landing, agent workspace, phone app screen, place or venue, support inbox, calculator, episode page, and four pages for subjects that are not software: a local service practice, a charity, a maker's shop, an event. Data pages ship loading, empty and error states. |
-| **Motion** | 3 layers | `tokens/scroll.css`: a hero entrance, sections that rise into place, pictures that settle as they scroll in, plus word-by-word statements and stacking cards. Plain CSS scroll-driven animations; still under reduced motion |
-| **Page composer** | 27 page types | `compose.mjs "landing page for an invoicing tool"` prints the design brief, a profile chosen for the domain, the sections in order with real ids and a copy formula for each, the states to build, the install command and the few questions worth asking. `directions.mjs "<brief>"` renders three fitting looks on the same content so you choose by eye. |
-| **Composition** | 6 attributes | `data-layout="rail|centre|split"`, `data-space`, `data-numbered` and `data-separators="rules"` recompose the same blocks so no two neighbouring sections share a shape. The composer assigns them from the brief, with one signature per subject; `references/composition.md` has the rules and a sixteen-step detail pass. |
-| **Taste profile** | 1 file | `taste-profile.json` pins palette, mode, type, density, radius, motion and style. Lock what you love; agents leave locked parts alone. |
-| **Auditor** | 12 + 13 rules | Overflow, clipped or overlapping text, contrast, focus rings, tabular numbers, dead controls, purple gradients, heavy shadows, emoji icons, hype copy. `--taste` adds a page-level critic (type steps, accent hues, radii, one primary per screen, reading width, heading order, nested cards, section rhythm, focal point, placeholder copy, button labels) and a score out of 100. Desktop + mobile, light + dark. |
-| **Evals** | 36 briefs | `eval-score.mjs` scores any page an agent builds for a brief; `eval-run.mjs` runs your agent over all of them. In ten pilot runs across ten page types, every agent following the skill finished with 0 audit errors under the rules of the day, most on the first or second audit; the generated-looking fixture page scores 26. Each round made the critic stricter: it now also fails empty placeholder visuals and the kit's own sample names left on a page, which puts the latest round at 90 on average when re-scored. |
-| **Adapters** | 3 | `sniff.mjs <url>` matches an existing site to a profile; `export-tokens.mjs` writes shadcn/ui variables or a Tailwind 4 / 3 theme; `--framework static` installs one CSS and one JS file for plain HTML. |
+| **Page blueprints** | 25 | Complete pages to start from: landing, developer tool, practice, venue, shop, charity, event, dashboard, docs, checkout, assistant chat, agent workspace and more, each with its empty, loading and error states |
+| **UI patterns** | 204 | Sections, controls, data views and motion parts, in vanilla TypeScript and React, found by describing them ("the bar that appears when I tick rows") |
+| **Charts** | 46 | From leaderboards and Pareto frontiers to forecasts with ranges, all theme-aware and readable in both modes |
+| **Palettes** | 24 × 2 | Light and dark, every text, control and chart pair contrast-checked |
+| **Type pairings** | 12 | Fluid scales with tabular figures where numbers matter |
+| **Styles** | 39 | Whole-page looks, each with its own radius, density and surface treatment |
+| **Motion** | 3 layers | A hero entrance, sections that rise into place, pictures that settle as they scroll in. Plain CSS, still under reduced motion |
+| **Composer** | 27 page types | Brief → plan → draft, with a look taken from the subject rather than a default |
+| **Critic** | `--taste` | Layout, type, colour, rhythm, words against pictures, and the looks models fall back on |
+| **Pictures** | `find-images.mjs` | Public-domain and CC0 photographs for a page's picture slots, downloaded with a credits file |
+| **Evals** | 36 briefs | Score any page an agent builds; run your agent over all of them |
 
-Ask for things the way you'd describe them: "the rotating arrow", "the 9 dots menu", "the bar that appears when I tick rows". The catalog knows them by those names.
+## How an agent uses it
+
+1. **Compose**: `node scripts/compose.mjs "<brief>"` prints the plan; `--write` drafts the page.
+2. **Choose the look from the subject**: three nouns from its world decide the palette and typeface (`references/ai-defaults.md`).
+3. **Build and write**: real copy, something to look at in every section, no invented customers or figures.
+4. **Look at it**: screenshots at 1440px and 390px, then the detail pass in `references/composition.md`.
+5. **Critique**: `node scripts/audit-ui.mjs <page> --product "<name>"` until it reports no errors.
 
 <details>
 <summary>CLI commands for search, install, audit and the live gallery</summary>
@@ -77,6 +84,7 @@ node scripts/audit-ui.mjs http://localhost:3000 --taste
 node scripts/sniff.mjs http://localhost:3000
 node scripts/export-tokens.mjs --format shadcn --palette navy-sand > app/globals.css
 node scripts/sample-data.mjs invoices --rows 20 --format csv
+node scripts/find-images.mjs --fill index.html --subject "bakery"     # openly licensed photographs, credited
 node scripts/eval-score.mjs ./out --brief saas-landing-invoicing
 ```
 
@@ -89,7 +97,7 @@ npm install
 npm run preview
 ```
 
-Look up any element by describing it, see it live in a contained demo with its parts numbered, copy a prompt for your agent, and switch palette, mode, type and style from one panel. `npm test` runs the contrast checks, copy lint, unit tests, type checks, 177 browser tests and the full audit.
+Look up any element by describing it, see it live in a contained demo with its parts numbered, copy a prompt for your agent, and switch palette, mode, type and style from one panel. `npm test` runs the contrast checks, copy lint, unit tests, type checks, the browser tests and the full audit.
 
 </details>
 

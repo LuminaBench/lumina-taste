@@ -5178,40 +5178,40 @@
         "light": {
           "tokens": {
             "bg-canvas": {
-              "oklch": "oklch(0.975 0.008 95)",
-              "hex": "#f8f7f1"
+              "oklch": "oklch(0.975 0.01 150)",
+              "hex": "#f2f9f3"
             },
             "bg-surface-1": {
-              "oklch": "oklch(0.991 0.004 95)",
-              "hex": "#fdfcf9"
+              "oklch": "oklch(0.991 0.005 150)",
+              "hex": "#fafdfa"
             },
             "bg-surface-2": {
-              "oklch": "oklch(0.951 0.009 95)",
-              "hex": "#f0efe8"
+              "oklch": "oklch(0.951 0.011 150)",
+              "hex": "#eaf1eb"
             },
             "bg-surface-3": {
-              "oklch": "oklch(0.925 0.01 95)",
-              "hex": "#e8e6df"
+              "oklch": "oklch(0.925 0.013 150)",
+              "hex": "#e0e9e2"
             },
             "border-hairline": {
-              "oklch": "oklch(0.89 0.01 95)",
-              "hex": "#dddbd3"
+              "oklch": "oklch(0.89 0.013 150)",
+              "hex": "#d5ddd6"
             },
             "border-strong": {
-              "oklch": "oklch(0.645 0.012 95)",
-              "hex": "#908e86"
+              "oklch": "oklch(0.645 0.015 150)",
+              "hex": "#889089"
             },
             "text-primary": {
-              "oklch": "oklch(0.2 0.013 95)",
-              "hex": "#18160f"
+              "oklch": "oklch(0.2 0.016 150)",
+              "hex": "#111812"
             },
             "text-secondary": {
-              "oklch": "oklch(0.42 0.013 95)",
-              "hex": "#4f4d45"
+              "oklch": "oklch(0.42 0.016 150)",
+              "hex": "#475048"
             },
             "text-muted": {
-              "oklch": "oklch(0.51 0.012 95)",
-              "hex": "#68665e"
+              "oklch": "oklch(0.51 0.014 150)",
+              "hex": "#616862"
             },
             "accent-solid": {
               "oklch": "oklch(0.36 0.07 160)",
@@ -5266,8 +5266,8 @@
               "hex": "#e4f2fe"
             },
             "status-info": {
-              "oklch": "oklch(0.525 0.11 245)",
-              "hex": "#2870a5"
+              "oklch": "oklch(0.53 0.11 245)",
+              "hex": "#2971a7"
             },
             "chart-1": {
               "oklch": "oklch(0.52 0.07 160)",
@@ -5303,7 +5303,7 @@
             }
           },
           "minRatios": {
-            "textPrimary": 14.49,
+            "textPrimary": 14.55,
             "accentInk": 10.12
           }
         },
@@ -5717,45 +5717,45 @@
       "id": "petrol-peach",
       "name": "Petrol & Peach",
       "category": "consumer",
-      "mood": "Reassuring and warm. Petrol blue on sand by day, peach on deep petrol by night.",
+      "mood": "Reassuring and calm. Petrol blue on a cool, faintly blue ground by day, peach on deep petrol by night.",
       "modes": {
         "light": {
           "tokens": {
             "bg-canvas": {
-              "oklch": "oklch(0.976 0.008 75)",
-              "hex": "#faf6f1"
+              "oklch": "oklch(0.976 0.008 218)",
+              "hex": "#f1f9fb"
             },
             "bg-surface-1": {
-              "oklch": "oklch(0.992 0.004 75)",
-              "hex": "#fefcf9"
+              "oklch": "oklch(0.992 0.004 218)",
+              "hex": "#fafdfe"
             },
             "bg-surface-2": {
-              "oklch": "oklch(0.952 0.009 75)",
-              "hex": "#f3eee9"
+              "oklch": "oklch(0.952 0.009 218)",
+              "hex": "#e9f1f3"
             },
             "bg-surface-3": {
-              "oklch": "oklch(0.926 0.01 75)",
-              "hex": "#ebe6df"
+              "oklch": "oklch(0.926 0.01 218)",
+              "hex": "#e0e8eb"
             },
             "border-hairline": {
-              "oklch": "oklch(0.891 0.01 75)",
-              "hex": "#dfdad4"
+              "oklch": "oklch(0.891 0.01 218)",
+              "hex": "#d4dddf"
             },
             "border-strong": {
-              "oklch": "oklch(0.646 0.012 75)",
-              "hex": "#928d86"
+              "oklch": "oklch(0.646 0.012 218)",
+              "hex": "#869093"
             },
             "text-primary": {
-              "oklch": "oklch(0.2 0.013 75)",
-              "hex": "#1a1510"
+              "oklch": "oklch(0.2 0.013 218)",
+              "hex": "#0f181a"
             },
             "text-secondary": {
-              "oklch": "oklch(0.42 0.013 75)",
-              "hex": "#514c45"
+              "oklch": "oklch(0.42 0.013 218)",
+              "hex": "#464f52"
             },
             "text-muted": {
-              "oklch": "oklch(0.51 0.012 75)",
-              "hex": "#6a655f"
+              "oklch": "oklch(0.51 0.012 218)",
+              "hex": "#5f686b"
             },
             "accent-solid": {
               "oklch": "oklch(0.42 0.075 218)",
@@ -5810,8 +5810,8 @@
               "hex": "#e4f2fe"
             },
             "status-info": {
-              "oklch": "oklch(0.525 0.11 245)",
-              "hex": "#2870a5"
+              "oklch": "oklch(0.53 0.11 245)",
+              "hex": "#2971a7"
             },
             "chart-1": {
               "oklch": "oklch(0.52 0.08 218)",
@@ -5847,7 +5847,7 @@
             }
           },
           "minRatios": {
-            "textPrimary": 14.6,
+            "textPrimary": 14.51,
             "accentInk": 7.98
           }
         },

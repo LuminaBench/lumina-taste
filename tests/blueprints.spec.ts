@@ -362,8 +362,9 @@ test('cause: the money bar adds up to a pound and sections are numbered', async 
   expect(parts.reduce((a, b) => a + b, 0)).toBe(100);
   const widths = await page.$$eval('.cs-bar span', (els) => els.map((e) => e.getBoundingClientRect().width));
   expect(widths[0]).toBeGreaterThan(widths[1] * 5);
-  const label = await page.locator('#money [data-part="eyebrow"]').evaluate((el) => getComputedStyle(el, '::before').content);
-  expect(label).toContain('counter(lt-section');
+  // Sections stand on their own: no small label over the headings, no rules between sections.
+  await expect(page.locator('main > section:not([class*="hero"]) > header > [data-part="eyebrow"]')).toHaveCount(0);
+  expect(await page.locator('main').getAttribute('data-separators')).toBeNull();
   await expect(page.locator('h1')).toHaveText(/410 households/);
   expect(await deadAnchors(page)).toEqual([]);
 });

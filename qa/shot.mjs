@@ -1,3 +1,4 @@
+// Dev helper: one screenshot (FULL=1 for the whole page, at rest; MOTION=1 keeps motion). Usage: node qa/shot.mjs <url> <out.png> [width] [height] [mode]
 import { chromium } from '@playwright/test';
 const [,, url, out, w = '1440', h = '900', mode = 'light'] = process.argv;
 const b = await chromium.launch();

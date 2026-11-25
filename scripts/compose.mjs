@@ -19,7 +19,9 @@ const opt = (name, def) => { const i = args.indexOf(`--${name}`); if (i < 0) ret
 const flag = (name) => { const i = args.indexOf(`--${name}`); if (i < 0) return false; args.splice(i, 1); return true; };
 const asJson = flag('json');
 const writeDraft = flag('write');
-const forceType = opt('type', null);
+// --type is the page type. A typeface is --typeface (or --font); --palette, --mode and --style set the look.
+const forceTypeRaw = opt('type', null);
+const lookFlags = { palette: opt('palette', null), typography: opt('typeface', null) ?? opt('font', null), mode: opt('mode', null), style: opt('style', null) };
 const framework = opt('framework', 'static');
 const project = opt('project', '/abs/app');
 const brief = args.join(' ').trim();
@@ -29,6 +31,12 @@ if (!brief && !forceType) {
 }
 
 const kb = JSON.parse(readFileSync(join(root, 'engine/compose/page-types.json'), 'utf8'));
+const TYPEFACES = new Set(JSON.parse(readFileSync(join(root, 'tokens/typography/source.json'), 'utf8')).pairings.map((t) => t.id));
+let forceType = forceTypeRaw;
+if (forceTypeRaw && !kb.pageTypes.some((t) => t.id === forceTypeRaw) && TYPEFACES.has(forceTypeRaw)) {
+  // "--type editorial" from the installer's vocabulary: the person meant the typeface.
+  lookFlags.typography ??= forceTypeRaw; forceType = null;
+}
 const cat = JSON.parse(readFileSync(join(root, 'catalog.json'), 'utf8'));
 const uiIds = new Set(cat.ui.map((u) => u.id));
 const blueprintIds = new Set(cat.blueprints.map((b) => b.id));
@@ -88,7 +96,8 @@ const moodHits = Object.entries(kb.moods).filter(([w]) => has(w));
 const mood = Object.assign({}, ...moodHits.map(([, v]) => v));
 // A style is applied only when the brief names a mood; the domain's style is offered, not imposed.
 const explicitStyle = Object.prototype.hasOwnProperty.call(mood, 'style') ? mood.style : search(cat, brief, { kind: 'style', limit: 1 }).find((x) => x.s > 14)?.d.id ?? null;
-const defaults = { marketing: ['slate-forest', 'precision'], app: ['slate-forest', 'precision'], reading: ['paper-ink', 'editorial'], flow: ['slate-forest', 'precision'] }[type.kind];
+// A marketing page with no recognisable subject still gets a headline face distinct from the stock sans.
+const defaults = { marketing: ['slate-forest', 'geometric'], app: ['slate-forest', 'precision'], reading: ['paper-ink', 'editorial'], flow: ['slate-forest', 'precision'] }[type.kind];
 const profile = {
   palette: domain?.palette ?? defaults[0],
   mode: mood.mode ?? domain?.mode ?? 'light',
@@ -96,6 +105,7 @@ const profile = {
   density: mood.density ?? type.density,
   style: explicitStyle ?? null,
 };
+for (const [k, v] of Object.entries(lookFlags)) if (v) profile[k] = v;
 const styleOffer = !profile.style && domain?.style ? domain.style : null;
 
 // ---------------------------------------------------------------- product name for copy
@@ -325,8 +335,9 @@ if (startWith === 'blueprint') {
 if (restyle) { L.push(H('Restyling an existing page'), ''); for (const n of kb.restyle.notes) L.push(`- ${n}`); L.push(''); }
 L.push(H('Art direction (what makes this page this page)'), '');
 L.push(`- **Signature: ${art.signature.name}.** ${art.signature.how}`);
-if (art.mainAttrs.length) L.push(`- **Page:** \`<main ${art.mainAttrs.join(' ')}>\`: ${art.printlike ? 'hairlines between sections and numbered labels, like a well-set document, and each section rises into place as it scrolls in. Do not tint bands as well.' : 'each section rises into place as it scrolls in.'}`);
+if (art.mainAttrs.length) L.push(`- **Page:** \`<main ${art.mainAttrs.join(' ')}>\`: each section rises into place as it scrolls in. Sections are set apart by space and a change of ground, not by rules or small labels over every heading.`);
 L.push(`- **Rhythm:** ${art.rhythm}`);
+L.push(`- **Look:** before you install, name three nouns from the subject's world and check that the palette and typeface come from them. If the result is a default look (indigo and Inter; cream, a book serif and terracotta; black and one acid colour), choose again or state why on the root: \`<html data-look-reason="…">\`. See references/ai-defaults.md.`);
 L.push(`- **Words:** ${art.words}`);
 L.push(`- **Motion:** ${art.motion}`);
 L.push(`- **Colour:** ${art.accent}`);

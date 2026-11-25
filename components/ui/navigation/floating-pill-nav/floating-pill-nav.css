@@ -16,3 +16,5 @@
   }
 }
 @media (prefers-reduced-motion: reduce) { .lt-pillnav [data-part="hover"] { transition: opacity var(--dur-1); } }
+/* At the top of a page (straight inside <body>) the bar floats: centred, sticky, a little below the top edge. */
+body > .lt-pillnav { position: sticky; top: 12px; z-index: 50; display: flex; width: max-content; max-width: calc(100% - 24px); margin: 12px auto 0; }

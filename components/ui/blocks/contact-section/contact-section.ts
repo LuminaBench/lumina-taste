@@ -2,8 +2,10 @@ import { $$, combine, emit, on, part, type Cleanup } from '../../_shared/dom';
 
 /** Contact form: validates on submit, marks each invalid field and says which ones need attention. */
 export function enhance(root: HTMLElement): Cleanup {
-  const form = part<HTMLFormElement>(root, 'form')!;
-  const msg = part(root, 'msg')!;
+  const form = part<HTMLFormElement>(root, 'form');
+  const msg = part(root, 'msg');
+  // A contact section without a form (just the address and an email link) needs no script.
+  if (!form || !msg) return () => {};
   return combine(
     on(form, 'submit', (e) => {
       e.preventDefault();

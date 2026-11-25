@@ -1,3 +1,4 @@
+// Dev helper: screenshot one element of a page. Usage: node qa/clip.mjs <url> "<css selector>" <out.png> [width] [light|dark]
 import { chromium } from '@playwright/test';
 const [,, url, sel, out, w = '1440', mode = 'light'] = process.argv;
 const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: +w, height: 900 }, reducedMotion: 'reduce', colorScheme: mode });

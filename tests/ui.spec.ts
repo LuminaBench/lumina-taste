@@ -1224,7 +1224,7 @@ test.describe('composition', () => {
         railCols: getComputedStyle(rail.querySelector('ul')!).gridTemplateColumns.split(' ').length,
         plainCols: getComputedStyle(plain.querySelector('ul')!).gridTemplateColumns.split(' ').length,
         centre: getComputedStyle(centre.querySelector('header')!).textAlign,
-        labels: [rail, centre, plain].map((b) => getComputedStyle(b.querySelector('[data-part="eyebrow"]')!, '::before').content),
+        labels: [rail, centre, plain].map((b) => getComputedStyle(b.querySelector('h2')!, '::before').content),
         heroLabel: getComputedStyle(main.querySelector('.lt-hero-split [data-part="eyebrow"]')!, '::before').content,
         rule: getComputedStyle(centre).backgroundImage,
       };
@@ -1358,6 +1358,22 @@ test.describe('show, do not tell', () => {
     expect(r.band).toBeLessThan(60);
     expect(r.ink).toBeGreaterThan(180);
     expect(r.zoom).toBe(true);
+  });
+  test('a brand band recolours a section, never a badge or an art panel with the same tone', async ({ page }) => {
+    const s = await solo(page, 'cta-band');
+    const r = await s.locator('.lt-cta-band').evaluate((el) => {
+      const sec = el as HTMLElement; sec.setAttribute('data-tone', 'accent'); sec.setAttribute('data-variant', 'bold');
+      const badge = document.createElement('span'); badge.className = 'lt-badge'; badge.dataset.tone = 'accent'; badge.textContent = 'New';
+      const art = document.createElement('figure'); art.className = 'lt-art'; art.dataset.tone = 'accent';
+      document.body.append(badge, art);
+      const v = (e: Element, n: string) => getComputedStyle(e).getPropertyValue(n).trim();
+      const out = { bandGround: getComputedStyle(sec).backgroundColor, accent: v(document.body, '--accent-solid'), badgeInk: v(badge, '--text-primary') === v(document.body, '--text-primary'), artInk: v(art, '--text-primary') === v(document.body, '--text-primary') };
+      badge.remove(); art.remove();
+      return out;
+    });
+    expect(r.badgeInk).toBe(true);
+    expect(r.artInk).toBe(true);
+    expect(r.bandGround).not.toBe('rgba(0, 0, 0, 0)');
   });
   test('gallery rail scrolls one picture at a time and disables its buttons at the ends', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });

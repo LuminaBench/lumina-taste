@@ -34,7 +34,7 @@ const FIXED_SHAPE = {
   'terminal-window': 'split', 'code-block': 'left', 'api-endpoint': 'left', 'contact-section': 'split', 'newsletter-signup': 'panel', 'comparison-table': 'left', 'showcase-tabs': 'centre',
 };
 
-/** Styles and domains whose pages read as print: hairlines and numbers instead of tinted bands. */
+/** Styles and domains whose pages read as print: untinted bands, set apart by space and scale. */
 const PRINTLIKE_STYLES = new Set(['editorial', 'swiss', 'minimal', 'atelier', 'newsprint', 'zen', 'noir', 'linen', 'paper', 'mono', 'bauhaus', 'ledger', 'graph', 'kraft']);
 const PRINTLIKE_DOMAINS = new Set(['editorial', 'creative', 'beauty', 'hospitality', 'finance', 'public', 'professional', 'events']);
 /** Where the words carry the first screen better than a product picture. */
@@ -51,20 +51,20 @@ const SIGNATURES = {
   health: { name: 'Calm and close', how: 'Large readable type, generous space, one soft-toned art panel or photograph, and the booking action always in reach. No stock smiles.' },
   public: { name: 'The task, first', how: 'A statement hero that names the task in plain words, then numbered steps. Underlined links, strong focus rings, nothing ornamental.' },
   commerce: { name: 'The objects as a set', how: 'Art panels or photographs at one ratio, toned plain, accent and ink across the set, with prices in full. The range is the layout.' },
-  beauty: { name: 'The objects as a set', how: 'A quiet statement or split hero, then three art panels or photographs at one ratio with a didone headline. Wide margins; hairlines, not boxes.' },
+  beauty: { name: 'The objects as a set', how: 'A quiet statement or split hero, then three art panels or photographs at one ratio with a didone headline. Wide margins and large pictures; no boxes.' },
   hospitality: { name: 'A place you can find', how: 'A type-led hero with one large art panel or photograph, "open now" said in words, and the booking bar in a tinted band halfway down.' },
-  editorial: { name: 'Set like print', how: 'A statement hero, numbered sections and hairline rules. One reading column; pull one figure or quote out large per screen.' },
+  editorial: { name: 'Set like print', how: 'A statement hero and one reading column; pull one figure or quote out large per screen, and let space, not rules, divide the sections.' },
   creative: { name: 'The work, large', how: 'A statement hero and a project grid where the first project spans two columns. Captions small and mono; almost no chrome.' },
   playful: { name: 'One friendly object', how: 'Big rounded shapes, one bright accent, a chunky primary button and a device-frame or illustration-free art panel. Motion only on press.' },
   media: { name: 'The thing itself', how: 'The player or the latest episode is the hero. Dark canvas, one accent, chapter rows, no feature grid.' },
   property: { name: 'Plain numbers', how: 'A calculator or a figure in the hero that answers the visitor\'s first question, then facts as a description-list. Reassuring tone, no urgency.' },
   social: { name: 'People, not chrome', how: 'Real-looking content (a thread, a list of people) in a device-frame carries the hero. One loud accent, used on actions only.' },
-  professional: { name: 'Plain terms', how: 'Services and fees as ruled rows with the price in its own column, named people with the registration that matters, serif headings and hairlines. Nothing decorative: the plainness is the reassurance.' },
+  professional: { name: 'Plain terms', how: 'The first fee set large in the hero, fees as tiles with each price large, named people with the registration that matters. Nothing decorative: the plainness is the reassurance.' },
   trades: { name: 'The job, the price, the phone', how: 'The phone number in the bar and under the headline, call-out fees and common jobs as ruled rows with prices, the area covered said in words. Bold, plain type; one photograph of real work or an art panel.' },
-  events: { name: 'The date, large', how: 'A statement hero with the date and the place above the headline and three figures under it, then the programme as timed rows with mono times. Hairlines and numbered sections; no countdown.' },
+  events: { name: 'The date, large', how: 'A statement hero with the date and the place above the headline and three figures under it, then the programme as timed rows. One dark band for the venue; no countdown.' },
   travel: { name: 'Dates and a place', how: 'A booking bar in the hero with dates and guests, art panels or photographs at one ratio, prices in full.' },
 };
-SIGNATURES.cause = { name: 'The claim and the proof', how: 'A statement hero that says what you do as a plain fact with three true figures under it, then one bar that shows where each pound goes. Hairlines and numbered sections; no photographs of people in distress.' };
+SIGNATURES.cause = { name: 'The claim and the proof', how: 'A statement hero that says what you do as a plain fact with three true figures under it, then one bar that shows where each pound goes. Space and one dark band set the sections apart; no photographs of people in distress.' };
 /** Some pages have their signature whatever the subject's domain; others accept only the domains that suit them. */
 SIGNATURES.about = { name: 'Who, since when, and why', how: 'A statement hero that makes a claim someone could disagree with, the story as prose beside a rail, then the people by name. Dates and places, not adjectives; no stock team photographs.' };
 const TYPE_SIGNATURE = { about: 'about', event: 'events', cause: 'cause', venue: 'hospitality', portfolio: 'creative', 'dev-landing': 'devtool' };
@@ -123,7 +123,9 @@ export function direct({ type, domain, profile, sections, uiIds }) {
   const space = (id) => (id === 'logo-cloud' ? 'tight' : id === 'quote-feature' ? 'open' : null);
   const sectionLayouts = layouts.filter(Boolean).map((l) => ({ ...l, space: space(l.id) }));
 
-  const mainAttrs = marketing ? [printlike ? 'data-separators="rules"' : null, printlike && sectionLayouts.length >= 3 ? 'data-numbered' : null, 'data-scroll'].filter(Boolean) : [];
+  // Rules between sections and numbered labels read as a generated broadsheet: sections are set apart by space,
+  // scale and a change of ground instead. (data-separators and data-numbered remain for a real publication.)
+  const mainAttrs = marketing ? ['data-scroll'] : [];
   const motion = marketing
     ? 'The hero enters once (data-entrance on it); every section rises into place as it arrives (data-scroll on <main>). Add at most two scroll moments where they carry the subject: a scroll-statement for the one claim, stack-cards for steps, data-zoom on the strongest picture. Nothing else moves; everything is still under reduced motion.'
     : 'Motion only answers the person: hover, press, open, a toast. No scroll effects on app screens.';
@@ -131,13 +133,13 @@ export function direct({ type, domain, profile, sections, uiIds }) {
     ? 'Words are a caption to something you can see. Headline 6 to 10 words; each section one heading and at most one sentence; a card or row one line. Every section shows something (the product, a document, a chart, one figure set large); never two word-only sections in a row. The critic checks this (taste-text-wall).'
     : 'Labels and values, not sentences. Help text one line, under the field it explains.';
   const accent = marketing
-    ? 'The accent appears on the primary button, the small section labels and at most one thing in the hero (a chart series, an art panel, a trace). Everything else is ink, secondary ink and hairlines.'
+    ? 'The accent appears on the primary button and at most one thing in the hero (a chart series, an art panel, a figure). Everything else is ink and secondary ink; sections differ by ground and scale, not by lines.'
     : 'The accent marks the one primary action and the current selection. Status colours mean status only. Everything else is ink and hairlines.';
   const type_ = marketing
     ? 'Three sizes carry the page: the headline, section headings (one size, every section) and body. Labels are the fourth, small and uppercase. If a fifth size appears, remove it.'
     : 'Two sizes carry the screen: 14–15px for everything people read and scan, one larger size for the page title and key figures.';
   const rhythm = marketing
-    ? `${printlike ? 'Sections are divided by hairlines; do not also tint bands.' : 'Alternate plain and tinted bands; never two tinted in a row.'} Shapes in order: ${sectionLayouts.map((l) => l.shape).join(' → ')}. No two neighbours share a shape.`
+    ? `${printlike ? 'Bands stay untinted; space and one dark band set the sections apart.' : 'Alternate plain and tinted bands; never two tinted in a row.'} No small label over every heading and no rules between sections. Shapes in order: ${sectionLayouts.map((l) => l.shape).join(' → ')}. No two neighbours share a shape.`
     : 'One primary view fills the screen; chrome stays quiet. Group with space and hairlines before reaching for cards.';
   return { signature, hero, heroWhy, mainAttrs, printlike, sectionLayouts, accent, type: type_, rhythm, motion, words };
 }

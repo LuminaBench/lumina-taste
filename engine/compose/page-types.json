@@ -2148,8 +2148,8 @@
     "coaching",
     "funeral"
    ],
-   "palette": "linen-oxblood",
-   "typography": "bookish",
+   "palette": "charcoal-sky",
+   "typography": "editorial",
    "style": "paper",
    "mode": "light"
   },
@@ -2244,7 +2244,7 @@
     "bakery"
    ],
    "palette": "forest-brass",
-   "typography": "bookish",
+   "typography": "slab",
    "style": "linen",
    "mode": "light"
   },
@@ -2412,7 +2412,7 @@
     "telemetry"
    ],
    "palette": "slate-forest",
-   "typography": "precision",
+   "typography": "geometric",
    "style": null,
    "mode": "light"
   },
@@ -2687,7 +2687,7 @@
     "audit"
    ],
    "palette": "charcoal-sky",
-   "typography": "precision",
+   "typography": "humanist",
    "style": "enterprise",
    "mode": "light"
   },
@@ -2957,9 +2957,9 @@
    "swiss"
   ],
   "professional": [
-   "paper",
    "enterprise",
-   "noir"
+   "noir",
+   "paper@charcoal-sky"
   ],
   "trades": [
    "minimal@navy-sand",

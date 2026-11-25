@@ -8813,9 +8813,9 @@
       ],
       "swatches": {
         "light": {
-          "canvas": "#f8f7f1",
+          "canvas": "#f2f9f3",
           "accent": "#124830",
-          "text": "#18160f"
+          "text": "#111812"
         },
         "dark": {
           "canvas": "#09150e",
@@ -8824,7 +8824,7 @@
         }
       },
       "minTextContrast": {
-        "light": 14.49,
+        "light": 14.55,
         "dark": 13.34
       },
       "files": [
@@ -8874,7 +8874,7 @@
       "kind": "palette",
       "name": "Petrol & Peach",
       "category": "consumer",
-      "summary": "Reassuring and warm. Petrol blue on sand by day, peach on deep petrol by night.",
+      "summary": "Reassuring and calm. Petrol blue on a cool, faintly blue ground by day, peach on deep petrol by night.",
       "aliases": [
         "petrol & peach",
         "petrol",
@@ -8882,15 +8882,17 @@
         "consumer palette",
         "reassuring",
         "petrol",
+        "faintly",
+        "ground",
         "peach",
         "petrol",
         "night"
       ],
       "swatches": {
         "light": {
-          "canvas": "#faf6f1",
+          "canvas": "#f1f9fb",
           "accent": "#015668",
-          "text": "#1a1510"
+          "text": "#0f181a"
         },
         "dark": {
           "canvas": "#01151a",
@@ -8899,7 +8901,7 @@
         }
       },
       "minTextContrast": {
-        "light": 14.6,
+        "light": 14.51,
         "dark": 13.32
       },
       "files": [

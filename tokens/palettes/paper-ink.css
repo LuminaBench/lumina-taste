@@ -33,6 +33,23 @@
   --chart-7: oklch(0.6 0.123 95);
   --chart-8: oklch(0.54 0 0);
 }
+[data-palette="paper-ink"][data-mode="light"] :is(section, header, footer, aside)[data-tone="accent"] {
+  --bg-canvas: oklch(0.37 0.11 262);
+  --bg-surface-1: color-mix(in oklab, oklch(0.985 0.007 262) 10%, oklch(0.37 0.11 262));
+  --bg-surface-2: color-mix(in oklab, oklch(0.985 0.007 262) 14%, oklch(0.37 0.11 262));
+  --bg-surface-3: color-mix(in oklab, oklch(0.985 0.007 262) 20%, oklch(0.37 0.11 262));
+  --text-primary: oklch(0.985 0.007 262);
+  --text-secondary: oklch(0.985 0.007 262);
+  --text-muted: oklch(0.985 0.007 262);
+  --border-hairline: color-mix(in oklab, oklch(0.985 0.007 262) 26%, oklch(0.37 0.11 262));
+  --border-strong: color-mix(in oklab, oklch(0.985 0.007 262) 60%, oklch(0.37 0.11 262));
+  --accent-solid: oklch(0.985 0.007 262);
+  --accent-hover: color-mix(in oklab, oklch(0.985 0.007 262) 88%, oklch(0.37 0.11 262));
+  --accent-ink: oklch(0.37 0.11 262);
+  --accent-text: oklch(0.985 0.007 262);
+  --accent-soft: color-mix(in oklab, oklch(0.985 0.007 262) 16%, oklch(0.37 0.11 262));
+  --focus-ring: oklch(0.985 0.007 262);
+}
 [data-palette="paper-ink"][data-mode="dark"] {
   color-scheme: dark;
   --bg-canvas: oklch(0.175 0.018 262);
@@ -66,6 +83,23 @@
   --chart-6: oklch(0.72 0.12 345);
   --chart-7: oklch(0.88 0.13 95);
   --chart-8: oklch(0.78 0.09 290);
+}
+[data-palette="paper-ink"][data-mode="dark"] :is(section, header, footer, aside)[data-tone="accent"] {
+  --bg-canvas: oklch(0.8 0.085 255);
+  --bg-surface-1: color-mix(in oklab, oklch(0.17 0.02 255) 10%, oklch(0.8 0.085 255));
+  --bg-surface-2: color-mix(in oklab, oklch(0.17 0.02 255) 14%, oklch(0.8 0.085 255));
+  --bg-surface-3: color-mix(in oklab, oklch(0.17 0.02 255) 20%, oklch(0.8 0.085 255));
+  --text-primary: oklch(0.17 0.02 255);
+  --text-secondary: oklch(0.17 0.02 255);
+  --text-muted: oklch(0.17 0.02 255);
+  --border-hairline: color-mix(in oklab, oklch(0.17 0.02 255) 26%, oklch(0.8 0.085 255));
+  --border-strong: color-mix(in oklab, oklch(0.17 0.02 255) 60%, oklch(0.8 0.085 255));
+  --accent-solid: oklch(0.17 0.02 255);
+  --accent-hover: color-mix(in oklab, oklch(0.17 0.02 255) 88%, oklch(0.8 0.085 255));
+  --accent-ink: oklch(0.8 0.085 255);
+  --accent-text: oklch(0.17 0.02 255);
+  --accent-soft: color-mix(in oklab, oklch(0.17 0.02 255) 16%, oklch(0.8 0.085 255));
+  --focus-ring: oklch(0.17 0.02 255);
 }
 [data-palette="paper-ink"] [data-tone="dark"] {
   color-scheme: dark;

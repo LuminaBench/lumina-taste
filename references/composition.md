@@ -22,9 +22,9 @@ A signature is the one move that makes the page this page. Pick one. Two signatu
 | Shop, brand | The objects as a set | `offer-cards` with photographs or art panels at one ratio, toned plain, accent, ink |
 | Place, venue | A place you can find | One large art panel or photograph, "open now" in words (`visit-info`), `booking-bar` |
 | Practice, service | The price, shown | The first price set large in the hero, fees as `bento-grid` tiles, the first visit as `stack-cards` with the written plan as an `invoice-sheet`, open-now on a dark band |
-| Studio, publication | Set like print | `hero-statement`, `<main data-numbered data-separators="rules">` |
+| Studio, publication | Set like print | `hero-statement`, one reading column, the work or one quote set large per screen |
 | Public service | The task, first | `hero-statement` naming the task, numbered `how-it-works`, underlined links |
-| Practice, professional | Plain terms | `service-list` with every price in one column, named people with their registration, hairlines |
+| Practice, professional | Plain terms | The first fee large in the hero, fees as `bento-grid` tiles with each price large, named people with their registration |
 | Charity | The claim and the proof | `hero-statement` with three true figures, one bar showing where each pound goes |
 | Event | The date, large | `hero-statement` with the date and place above the headline, the programme as timed `service-list` rows |
 
@@ -53,16 +53,17 @@ Rules:
 
 `compose.mjs` assigns a layout to each section so that this holds. If you add or remove a section, re-check the neighbours.
 
-## 4. Page-level switches
+## 4. Setting sections apart
 
-Two attributes on `<main>` change the character of the whole page.
+Space, scale and ground set sections apart. Not lines, and not a small label over every heading.
 
-| Attribute | Effect | Use it for | Not for |
-| --- | --- | --- | --- |
-| `data-separators="rules"` | A hairline between sections | Editorial, studios, finance, public services, premium brands: pages that should read as printed | Pages that already alternate tinted bands. Use one or the other. |
-| `data-numbered` | Section labels count 01, 02, 03 | Pages with four or more labelled sections that are read in order | Short pages, app screens |
+- **Space**: a full `--section-y` between sections; `data-space="open"` for a lone statement, `"tight"` to pull a proof strip up to what it supports.
+- **Ground**: alternate plain and tinted bands (`data-tone="well"`), never two tinted in a row, and at most one dark band (`data-tone="dark"`) from the middle of the page on.
+- **Scale**: one section in three should have something large in it: a picture, a figure, a statement.
+- **Labels**: a heading stands on its own. A small label above it earns its place only when it says something the heading cannot ("Saturday 9 October", "Leeds"); never on every section. The critic reports a label over most headings (`taste-label-every-section`).
+- **Lines**: keep rules for tables and the few rows people compare line by line. Lines in every direction read as a generated broadsheet (`taste-hairlines`).
 
-Without either, alternate plain and tinted bands (`data-tone="well"`), never two tinted in a row.
+`data-separators="rules"` and `data-numbered` remain for a real publication (a journal, a report), where numbered parts and rules are the subject's own convention.
 
 ## 5. The first screen
 
@@ -85,7 +86,7 @@ Placing the picture:
 ## 6. Colour budget
 
 - The accent appears in three places at most: the primary button, small section labels, and one thing in the hero (a data series, an art panel, a trace). Count them.
-- Ink, secondary ink and hairlines do the rest. If a section needs to stand out, give it space or a tinted band, not colour.
+- Ink and secondary ink do the rest. If a section needs to stand out, give it space, scale or a change of ground, not colour and not lines.
 - Status colours mean status. Never green for "good feature", never red for emphasis.
 - Dark mode is the same budget on a dark ground, not more glow.
 

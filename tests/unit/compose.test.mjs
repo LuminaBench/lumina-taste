@@ -125,7 +125,7 @@ test('art direction: one signature, no three neighbours with the same shape, a h
   }
   const studio = compose('landing page for Meridian, an architecture studio');
   assert.equal(studio.sections.find((s) => /^hero-/.test(s.id)).id, 'hero-statement');
-  assert.deepEqual(studio.artDirection.mainAttributes, ['data-separators="rules"', 'data-numbered', 'data-scroll']);
+  assert.deepEqual(studio.artDirection.mainAttributes, ['data-scroll']);
   const saas = compose('landing page for a project management app for agencies');
   assert.equal(saas.sections.find((s) => /^hero-/.test(s.id)).id, 'hero-split');
   assert.deepEqual(saas.artDirection.mainAttributes, ['data-scroll']);
@@ -139,7 +139,8 @@ test('compose --write produces a composed draft that audits clean, with real anc
     assert.equal(r.status, 0, r.stderr);
     assert.match(r.stdout, /A first draft is written/);
     const html = readFileSync(join(dir, 'index.html'), 'utf8');
-    assert.match(html, /<main id="main" data-separators="rules" data-numbered data-scroll>/);
+    assert.match(html, /<main id="main" data-scroll>/);
+    assert.doesNotMatch(html, /<header><p data-part="eyebrow">/);
     assert.match(html, /<section class="lt-hero-statement"[^>]*data-entrance/);
     assert.match(html, /<section class="lt-hero-statement"[^>]*id="top"/);
     assert.ok(html.includes('Meridian') && !html.includes('Halyard'), 'the product name replaces the sample brand');
@@ -242,5 +243,29 @@ test('plans put pictures where paragraphs were, and say how the page moves', () 
     const tones = [...html.matchAll(/<section class="lt-[^"]+"([^>]*)>/g)].map((m) => /data-tone="(\w+)"/.exec(m[1])?.[1] ?? null);
     for (let i = 1; i < tones.length; i++) assert.ok(!(tones[i] && tones[i - 1]), `tinted bands ${i - 1} and ${i} touch`);
   } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('no subject default is a default look: every plan says to take the look from the subject', () => {
+  const pal = JSON.parse(readFileSync(join(root, 'tokens/palettes/palettes.json'), 'utf8')).palettes;
+  const kb = JSON.parse(readFileSync(join(root, 'engine/compose/page-types.json'), 'utf8'));
+  const num = (s) => s.match(/[\d.]+/g).map(Number);
+  const BOOK = new Set(['bookish', 'editorial', 'didone']);
+  for (const d of kb.domains) {
+    const p = pal.find((x) => x.id === d.palette);
+    const [L, C, H] = num(p.modes.light.tokens['bg-canvas'].oklch), [, aC, aH] = num(p.modes.light.tokens['accent-solid'].oklch);
+    const cream = L >= 0.93 && C >= 0.006 && H >= 55 && H <= 100;
+    const warm = (aH >= 12 && aH <= 58 && aC >= 0.06) || (aH >= 125 && aH <= 178 && aC >= 0.04);
+    assert.ok(!(cream && BOOK.has(d.typography) && warm), `${d.id}: cream, a book serif and a terracotta or forest accent`);
+  }
+  assert.match(spawnSync(process.execPath, [join(root, 'scripts/compose.mjs'), 'Website for an accountant in Leeds'], { encoding: 'utf8' }).stdout, /data-look-reason/);
+});
+
+test('look flags carry into the plan; --type that names a typeface is read as one', () => {
+  const p = compose('portfolio for a landscape photographer', '--palette', 'petrol-peach', '--typeface', 'slab', '--mode', 'dark');
+  assert.deepEqual([p.pageType.id, p.profile.palette, p.profile.typography, p.profile.mode], ['portfolio', 'petrol-peach', 'slab', 'dark']);
+  assert.match(p.install, /--palette petrol-peach .*--type slab/);
+  const q = compose('portfolio for a landscape photographer', '--type', 'editorial');
+  assert.equal(q.pageType.id, 'portfolio');
+  assert.equal(q.profile.typography, 'editorial');
 });
 

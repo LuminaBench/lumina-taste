@@ -49,12 +49,12 @@ test('static install bundles css, js and snippets that work without a build step
 });
 
 test('a page assembled from section blocks passes the taste critic with no warnings', () => {
-  // What an agent does: static install, paste snippets into <main>, add a tone band or two.
+  // What an agent does: static install with a typeface chosen for the page, paste snippets into <main>, add a tone band or two.
   const dir = mkdtempSync(join(tmpdir(), 'lt-compose-page-'));
   try {
     writeFileSync(join(dir, 'package.json'), '{}');
     const blocks = ['navbar-simple', 'hero-split', 'logo-cloud', 'feature-split', 'stats-band', 'testimonial-grid', 'how-it-works', 'pricing-tiers', 'faq-section', 'blog-grid', 'project-grid', 'code-block', 'cta-band', 'site-footer'];
-    const r = node([join(root, 'scripts/install-taste.mjs'), '--project', dir, '--dest', 'ui', '--framework', 'static', '--density', 'spacious', '--components', blocks.join(',')]);
+    const r = node([join(root, 'scripts/install-taste.mjs'), '--project', dir, '--dest', 'ui', '--framework', 'static', '--density', 'spacious', '--type', 'geometric', '--components', blocks.join(',')]);
     assert.equal(r.status, 0, r.stderr);
     const sn = (id) => readFileSync(join(dir, 'ui/snippets', `${id}.html`), 'utf8');
     const tone = (html) => html.replace('<section class="lt-', '<section data-tone="well" class="lt-');
@@ -62,7 +62,7 @@ test('a page assembled from section blocks passes the taste critic with no warni
     // A bare code figure (no tabs, no copy button) must not break the page script.
     const bare = '<section class="lt-band lt-container"><h2 class="lt-h3">Send an event</h2><figure class="lt-code" data-lt="code-block"><pre tabindex="0"><code>curl https://api.halyard.dev/v1/events -d name=signup</code></pre></figure></section>';
     const body = blocks.slice(1, -1).filter((b) => b !== 'code-block').map((b) => (['stats-band', 'how-it-works'].includes(b) ? tone(sn(b)) : b === 'testimonial-grid' ? rail(sn(b)) : sn(b))).join('\n') + bare;
-    writeFileSync(join(dir, 'index.html'), `<!doctype html><html lang="en" data-palette="slate-forest" data-mode="light" data-type="precision" data-density="spacious" data-radius="balanced" data-motion="snappy"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Composed</title><link rel="stylesheet" href="ui/lumina.css"><script defer src="ui/lumina.js"></script></head><body>${sn(blocks[0])}<main>${body}</main>${sn(blocks.at(-1))}</body></html>`);
+    writeFileSync(join(dir, 'index.html'), `<!doctype html><html lang="en" data-palette="slate-forest" data-mode="light" data-type="geometric" data-density="spacious" data-radius="balanced" data-motion="snappy"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Composed</title><link rel="stylesheet" href="ui/lumina.css"><script defer src="ui/lumina.js"></script></head><body>${sn(blocks[0])}<main>${body}</main>${sn(blocks.at(-1))}</body></html>`);
     const a = node([join(root, 'scripts/audit-ui.mjs'), join(dir, 'index.html'), '--taste', '--strict', '--modes', 'light']);
     assert.equal(a.status, 0, a.stdout);
     assert.match(a.stdout, /taste score 100\/100/);
@@ -168,6 +168,37 @@ test('an unknown id names the closest real ones', () => {
     assert.notEqual(r.status, 0);
     assert.match(r.stderr + r.stdout, /status-badge → badge/);
     assert.match(r.stderr + r.stdout, /date-pick → date-picker/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('audit-ui --taste names the looks models fall back on, and accepts one the page gives a reason for', () => {
+  const rules = (f) => {
+    const out = join(tmpdir(), `lt-ai-${process.pid}-${f}.json`);
+    node([join(root, 'scripts/audit-ui.mjs'), join(root, `tests/fixtures/${f}.html`), '--taste', '--viewports', 'desktop', '--modes', 'light', '--json', out, '--quiet']);
+    const r = new Set(JSON.parse(readFileSync(out, 'utf8')).report[0].findings.map((x) => x.rule));
+    rmSync(out, { force: true });
+    return r;
+  };
+  const saas = rules('ai-default-saas');
+  for (const rule of ['taste-default-look', 'taste-default-font', 'taste-icon-tiles', 'taste-hover-scale', 'taste-invented-stat', 'taste-stock-face']) assert.ok(saas.has(rule), rule);
+  assert.ok(rules('ai-default-cream').has('taste-default-look'), 'cream, a book serif and terracotta');
+  assert.ok(!rules('ai-default-cream-chosen').has('taste-default-look'), 'data-look-reason accepts a chosen look');
+  const sheet = rules('broadsheet');
+  for (const rule of ['taste-label-every-section', 'taste-hairlines']) assert.ok(sheet.has(rule), rule);
+});
+
+test('a second install keeps the parts already there and re-themes the kit page, palette included', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lt-rerun-'));
+  try {
+    node([join(root, 'scripts/install-taste.mjs'), '--project', dir, '--framework', 'static', '--blueprints', 'venue', '--palette', 'forest-brass']);
+    const r = node([join(root, 'scripts/install-taste.mjs'), '--project', dir, '--framework', 'static', '--palette', 'petrol-peach', '--type', 'slab']);
+    assert.match(r.stdout, /Re-themed index\.html/);
+    assert.match(readFileSync(join(dir, 'index.html'), 'utf8'), /data-palette="petrol-peach"[^>]*data-type="slab"/);
+    assert.match(readFileSync(join(dir, 'main.css'), 'utf8'), /\[data-palette="?petrol-peach"?\]/);
+    node([join(root, 'scripts/install-taste.mjs'), '--project', dir, '--framework', 'static', '--components', 'contact-section']);
+    const again = node([join(root, 'scripts/install-taste.mjs'), '--project', dir, '--framework', 'static', '--components', 'button']);
+    assert.match(again.stdout, /Kept \d+ part/);
+    assert.match(readFileSync(join(dir, 'lumina-taste/lumina.css'), 'utf8'), /lt-contact/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 

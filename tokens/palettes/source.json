@@ -583,8 +583,8 @@
       "mood": "Established and calm. Bottle green by day, brass on deep green by night.",
       "light": {
         "neutral": [
-          95,
-          0.008
+          150,
+          0.01
         ],
         "canvasL": 0.975,
         "accent": [
@@ -640,10 +640,10 @@
       "id": "petrol-peach",
       "name": "Petrol & Peach",
       "category": "consumer",
-      "mood": "Reassuring and warm. Petrol blue on sand by day, peach on deep petrol by night.",
+      "mood": "Reassuring and calm. Petrol blue on a cool, faintly blue ground by day, peach on deep petrol by night.",
       "light": {
         "neutral": [
-          75,
+          218,
           0.008
         ],
         "canvasL": 0.976,

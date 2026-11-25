@@ -16,6 +16,9 @@
   [data-part="figure"] small { margin-right: 0.2em; color: var(--text-secondary); font-family: var(--font-body); font-size: 0.24em; font-weight: 500; letter-spacing: 0; vertical-align: 0.9em; }
   article[data-tone="accent"] { background: color-mix(in oklab, var(--accent-solid) 9%, var(--bg-surface-1)); }
   article[data-tone="accent"] [data-part="figure"] { color: var(--accent-text); }
+  /* data-tone="solid": the tile in the brand colour itself, every word in its ink. One per grid. */
+  article[data-tone="solid"] { border-color: transparent; background: var(--accent-solid); color: var(--accent-ink); }
+  article[data-tone="solid"] :is(h3, p, [data-part="figure"], .lt-eyebrow, a) { color: var(--accent-ink); }
   [data-part="big"] { margin-top: auto; display: grid; place-items: center; width: 64px; height: 64px; border-radius: var(--radius-lg); background: var(--accent-soft); color: var(--accent-text); }
 }
 /* A container cannot restyle itself, so the tiles span the full row instead. */

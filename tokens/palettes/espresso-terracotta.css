@@ -33,6 +33,23 @@
   --chart-7: oklch(0.6 0.09 290);
   --chart-8: oklch(0.54 0 0);
 }
+[data-palette="espresso-terracotta"][data-mode="light"] :is(section, header, footer, aside)[data-tone="accent"] {
+  --bg-canvas: oklch(0.55 0.13 38);
+  --bg-surface-1: color-mix(in oklab, oklch(0.985 0.007 38) 10%, oklch(0.55 0.13 38));
+  --bg-surface-2: color-mix(in oklab, oklch(0.985 0.007 38) 14%, oklch(0.55 0.13 38));
+  --bg-surface-3: color-mix(in oklab, oklch(0.985 0.007 38) 20%, oklch(0.55 0.13 38));
+  --text-primary: oklch(0.985 0.007 38);
+  --text-secondary: oklch(0.985 0.007 38);
+  --text-muted: oklch(0.985 0.007 38);
+  --border-hairline: color-mix(in oklab, oklch(0.985 0.007 38) 26%, oklch(0.55 0.13 38));
+  --border-strong: color-mix(in oklab, oklch(0.985 0.007 38) 60%, oklch(0.55 0.13 38));
+  --accent-solid: oklch(0.985 0.007 38);
+  --accent-hover: color-mix(in oklab, oklch(0.985 0.007 38) 88%, oklch(0.55 0.13 38));
+  --accent-ink: oklch(0.55 0.13 38);
+  --accent-text: oklch(0.985 0.007 38);
+  --accent-soft: color-mix(in oklab, oklch(0.985 0.007 38) 16%, oklch(0.55 0.13 38));
+  --focus-ring: oklch(0.985 0.007 38);
+}
 [data-palette="espresso-terracotta"][data-mode="dark"] {
   color-scheme: dark;
   --bg-canvas: oklch(0.18 0.02 50);
@@ -66,6 +83,23 @@
   --chart-6: oklch(0.72 0.13 95);
   --chart-7: oklch(0.88 0.062 290);
   --chart-8: oklch(0.78 0 0);
+}
+[data-palette="espresso-terracotta"][data-mode="dark"] :is(section, header, footer, aside)[data-tone="accent"] {
+  --bg-canvas: oklch(0.71 0.13 40);
+  --bg-surface-1: color-mix(in oklab, oklch(0.17 0.02 40) 10%, oklch(0.71 0.13 40));
+  --bg-surface-2: color-mix(in oklab, oklch(0.17 0.02 40) 14%, oklch(0.71 0.13 40));
+  --bg-surface-3: color-mix(in oklab, oklch(0.17 0.02 40) 20%, oklch(0.71 0.13 40));
+  --text-primary: oklch(0.17 0.02 40);
+  --text-secondary: oklch(0.17 0.02 40);
+  --text-muted: oklch(0.17 0.02 40);
+  --border-hairline: color-mix(in oklab, oklch(0.17 0.02 40) 26%, oklch(0.71 0.13 40));
+  --border-strong: color-mix(in oklab, oklch(0.17 0.02 40) 60%, oklch(0.71 0.13 40));
+  --accent-solid: oklch(0.17 0.02 40);
+  --accent-hover: color-mix(in oklab, oklch(0.17 0.02 40) 88%, oklch(0.71 0.13 40));
+  --accent-ink: oklch(0.71 0.13 40);
+  --accent-text: oklch(0.17 0.02 40);
+  --accent-soft: color-mix(in oklab, oklch(0.17 0.02 40) 16%, oklch(0.71 0.13 40));
+  --focus-ring: oklch(0.17 0.02 40);
 }
 [data-palette="espresso-terracotta"] [data-tone="dark"] {
   color-scheme: dark;

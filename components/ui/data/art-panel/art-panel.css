@@ -11,7 +11,7 @@
   :scope[data-tone="accent"] { --art-tint: 16%; }
   :scope[data-tone="ink"] { background: var(--text-primary); color: var(--bg-canvas); }
   :scope[data-tone="ink"] :is([data-part="fact"], [data-part="index"]) { color: color-mix(in oklab, var(--bg-canvas) 72%, var(--text-primary)); }
-  [data-part="index"] { position: absolute; top: clamp(14px, 6cqi, 24px); left: clamp(16px, 7cqi, 28px); margin: 0; color: var(--text-secondary); font: 600 var(--text-ui-xs) var(--font-mono); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
+  [data-part="index"] { position: absolute; top: clamp(14px, 6cqi, 24px); left: clamp(16px, 7cqi, 28px); margin: 0; color: var(--text-secondary); font: 550 var(--text-ui-sm) var(--font-body); letter-spacing: 0; font-variant-numeric: tabular-nums; }
   [data-part="name"] { margin: 0; font-family: var(--font-display); font-size: clamp(1.5rem, 13cqi, 3.5rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.04; text-wrap: balance; }
   [data-part="fact"] { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
   /* The thing has a colour of its own (a glaze, a paint, a fabric): style="--art: oklch(0.72 0.06 170)" makes the
@@ -28,6 +28,19 @@
   :scope[data-frame] { padding: clamp(24px, 8cqi, 40px); }
   :scope[data-frame] [data-part="index"] { top: clamp(22px, 7cqi, 34px); left: clamp(24px, 8cqi, 40px); }
   :scope:has(> :is(img, video, picture))::after { content: none; }
+  /* data-pattern: a bold shape behind the type, in the panel's own tones, so a stand-in is a composition, not a box.
+     sun (one large disc), bands (two broad diagonal bands), steps (stacked blocks rising to the right), split
+     (the panel halved in two tones). One pattern per set, or one per panel in a set of three at most. */
+  :scope[data-pattern] > :not(img, video, picture) { position: relative; z-index: 1; }
+  :scope[data-pattern] [data-part="index"] { position: absolute; }
+  :scope[data-pattern]::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; --pa: color-mix(in oklab, currentColor 12%, transparent); --pb: color-mix(in oklab, var(--accent-solid) 34%, transparent); }
+  :scope[data-tone="accent"][data-pattern]::before, :scope[data-tone="swatch"][data-pattern]::before { --pb: color-mix(in oklab, currentColor 16%, transparent); }
+  :scope[data-tone="ink"][data-pattern]::before { --pa: color-mix(in oklab, currentColor 10%, transparent); --pb: color-mix(in oklab, var(--accent-solid) 70%, transparent); }
+  :scope[data-pattern="sun"]::before { background: radial-gradient(circle at 74% 30%, var(--pb) 0 27%, transparent 27.3%), radial-gradient(circle at 74% 30%, var(--pa) 0 41%, transparent 41.3%); }
+  :scope[data-pattern="bands"]::before { background: linear-gradient(118deg, transparent 0 46%, var(--pb) 46% 62%, transparent 62% 70%, var(--pa) 70% 86%, transparent 86%); }
+  :scope[data-pattern="steps"]::before { background: linear-gradient(var(--pb), var(--pb)) 58% 100% / 14% 38% no-repeat, linear-gradient(var(--pb), var(--pb)) 74% 100% / 14% 56% no-repeat, linear-gradient(var(--pb), var(--pb)) 90% 100% / 14% 76% no-repeat, linear-gradient(var(--pa), var(--pa)) 42% 100% / 14% 24% no-repeat; }
+  :scope[data-pattern="split"]::before { background: linear-gradient(90deg, transparent 0 58%, var(--pa) 58%); }
+  :scope:has(> :is(img, video, picture))::before { content: none; }
   /* With a photograph: it fills the frame and the placeholder type is hidden (the caption still describes it). */
   img, video, picture { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
 }

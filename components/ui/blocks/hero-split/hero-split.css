@@ -13,7 +13,8 @@
   @media (max-width: 760px) { :scope { grid-template-columns: 1fr; gap: 32px; } }
   :scope { padding-block: var(--block-y, calc(var(--section-y) * 0.75)); }
   /* A hero headline has a display-size floor, whatever the type pairing. */
-  :is(h1, h2) { font-size: max(var(--step-5), clamp(2.25rem, 1.2rem + 3vw, 3.25rem)); max-width: 18ch; }
+  /* The headline is the largest thing in the first screen after the picture: up to 68px on a wide screen. */
+  :is(h1, h2) { font-size: max(var(--step-5), clamp(2.5rem, 1.1rem + 3.6vw, 4.25rem)); max-width: 16ch; line-height: 1.02; }
   [data-part="cta"] { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
   [data-part="note"] { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 16px 0 0; color: var(--text-muted); font-size: var(--text-ui-sm); }
   [data-part="note"] .lt-icon { width: 14px; height: 14px; color: var(--status-positive); }
@@ -31,4 +32,6 @@
   [data-part="chart"] { width: 100%; height: 140px; }
   [data-part="chart"] path { stroke: var(--accent-solid); stroke-width: 2; vector-effect: non-scaling-stroke; }
   [data-part="chart"] [data-part="area"] { stroke: none; fill: color-mix(in oklab, var(--accent-solid) 14%, transparent); }
+  /* The line over the headline is context (what, where), in sentence case at reading size: not a small stamp. */
+  [data-part="eyebrow"] { font-size: max(var(--text-ui), 0.95rem); font-weight: 550; letter-spacing: 0; text-transform: none; color: var(--text-secondary); }
 }

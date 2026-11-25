@@ -31,4 +31,6 @@
   [data-part="chart"] [data-part="area"] { stroke: none; fill: color-mix(in oklab, var(--accent-solid) 12%, transparent); }
   [data-part="axis"] { display: flex; justify-content: space-between; margin: -6px 0 0; color: var(--text-secondary); font-size: var(--text-ui-xs); }
   @container (max-width: 640px) { [data-part="kpis"] { grid-template-columns: repeat(2, minmax(0, 1fr)); } [data-part="chart"] { height: 120px; } }
+  /* The line over the headline is context (what, where), in sentence case at reading size: not a small stamp. */
+  [data-part="eyebrow"] { font-size: max(var(--text-ui), 0.95rem); font-weight: 550; letter-spacing: 0; text-transform: none; color: var(--text-secondary); }
 }
