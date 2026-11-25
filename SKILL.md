@@ -5,7 +5,7 @@ description: Make interfaces look designed, not generated. Use for any UI work (
 
 # Lumina Taste
 
-A design kit for coding agents: a **page composer** that turns a brief into a plan, **24 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **39 visual styles**, **200 named UI patterns** (including **9 page backdrops**: grid, dots, ruled lines, ticks, wash, spotlight, grain, dither, circuit traces), **46 chart engines**, **25 page blueprints**, a **lockable taste profile**, a **Playwright auditor with a page-level taste critic**, a **copy lint** and **36 eval briefs** to measure the result. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
+A design kit for coding agents: a **page composer** that turns a brief into a plan, **24 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **39 visual styles**, **204 named UI patterns** (including **9 page backdrops**: grid, dots, ruled lines, ticks, wash, spotlight, grain, dither, circuit traces), **46 chart engines**, **25 page blueprints**, a **lockable taste profile**, a **Playwright auditor with a page-level taste critic**, a **copy lint** and **36 eval briefs** to measure the result. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
 
 Run commands from this skill's directory with Node.js 20+. Pass absolute paths (or run from the user's project with the absolute script path). Search, install and token scripts need nothing installed; the auditor needs Playwright; the gallery needs `npm install` once.
 
@@ -30,6 +30,7 @@ Components are rarely what makes a page look generated; the plan is. Run this lo
 3. **Install and build** exactly what the plan lists. The quickest correct start is `node scripts/compose.mjs "<brief>" --project <folder> --write`: it runs the install and writes a first draft to `index.html` (never over a page that is already there). When the plan starts from a blueprint the draft is that blueprint in the plan's profile; otherwise it is the plan's sections in order with their layouts, bands, ids and navigation applied and the art direction on `<main>`. Either way every sentence in it is sample copy for you to rewrite; the business's name from the brief is already in place (`install-taste.mjs --blueprints <id> --name "<Name>"` does the same by hand). The sample has its own number of things (three tickets, three products, six people, two days): change the count to the real one. The blocks lay out one to four of anything without an empty column or a card alone on a row, so never pad a set to fit. Start from its blueprint when it names one. Follow the section order; skip optional sections you cannot fill with real content rather than inventing it.
 4. **Write real copy** with the plan's formulas and `references/copy-patterns.md` (headlines, buttons, empty states, errors, pricing, FAQ): the product's name, real numbers, specific benefits. Never ship lorem ipsum, "Acme", "John Doe" or "Feature one"; the critic fails them. **Never invent customers, quotes, reviews, logos, awards or figures.** If the user gave none, leave that optional section out, or use facts about the product itself (what it does, its limits, its price), and end your reply with a short list of what you assumed and what you still need from them. **No photographs?** Use an `art-panel` (Workflow I), never a grey box, a stock photo or a drawing of the product. For tables, charts and lists, `node scripts/sample-data.mjs users|invoices|orders|series|revenue|funnel|cohort|events` prints realistic, seeded data.
 5. **Build the states** the plan lists (loading, empty, error) as well as the happy path.
+5b. **Show, do not tell.** Words are captions: a heading and at most one sentence per section, one line per card, and something to look at in every section (the product, a document, a chart, one figure set large). Where you were about to write a paragraph, use the replacement in `references/composition.md` §8b (fee tiles, stacking cards, a scroll statement, a dark media band). Then add motion: `data-entrance` on the hero, `data-scroll` on `<main>`, and at most two moments (§8c).
 6. **Do the detail pass.** A page that works is not yet a page that looks designed. Look at it: `node scripts/audit-ui.mjs <page> --taste --screenshots <a temp folder>` writes a first-screen and a full-page picture at 1440px and 390px; open those pictures and read them (delete the folder afterwards). Go through the sixteen looks in `references/composition.md` §10: one left edge, headings broken by sense, one clear first thing, the accent in three places at most, no two neighbouring sections the same shape, cards and pictures in a set matching. Fix what you see before you run the audit.
 7. **Critique.** `node scripts/audit-ui.mjs <url> --product "<the product's name>"` (it implies `--taste`; add `--screenshots <dir>` for a first-screen and a full-page capture of every run) fails the page while the kit's sample brands and people (Halyard, Ana López…) are still on it, lists the sample sentences and figures you have not rewritten (and which blueprint or part each came from), links that still lead to the sample's own pages, phone number or email, and links that point nowhere, and checks it like a designer would: type steps, accent hues, corner radii, one primary per screen, reading width, heading order, cards inside cards, section rhythm, a clear first thing to look at, three sections in a row with the same shape, runs of centred sections, content off the shared left edge, a heading that breaks inside a hyphenated word, a heading that strands its last word, the accent used as wallpaper, placeholder copy and long button labels. Fix every error, then warnings, until the score is 90 or more. Then take screenshots at 390px and 1440px and look at them.
 
@@ -272,6 +273,19 @@ Three heroes: `hero-split` (something to show: a product frame, or `<div data-pa
 
 Rules: one signature per page; never the same shape twice in a row; at most two rails; centre only what is symmetrical; the accent in three places at most; one left edge from the logo to the footer. `compose.mjs` assigns layouts that satisfy these; the critic reports the ones it can measure.
 
+
+Sections that show instead of tell (each replaces a paragraph):
+
+| Block | Use it for |
+| --- | --- |
+| `scroll-statement` | The one claim of the page, 12 to 25 words, lighting up word by word as it scrolls |
+| `stack-cards` | Three to five steps as large cards that pin and stack, each with a picture |
+| `media-band` | One claim and one large picture on a dark band, with three figures. One per page |
+| `gallery-rail` | Five to twelve pictures at one ratio in a row that runs off the edge and snaps |
+| `bento-grid` in a plain section | Up to six things with a figure each: fees, plans, ways to help |
+| `invoice-sheet` | The document a product or service produces, as the picture |
+
+Any section takes `data-tone="dark"` for the page's one dark band (the palette's own dark colours, scoped). Motion: `data-entrance` on the hero, `data-scroll` on `<main>`, `data-zoom` on a picture (`tokens/scroll.css`).
 ## Workflow I · Subjects that are not software, and no photographs
 
 Most pages are not for software, and a software page with the words changed never fits. `compose.mjs` reads the subject from the brief and plans the page that subject needs; each has a blueprint that is already that page.
@@ -349,7 +363,7 @@ engine/profiles/             taste profile engine, schema, default profile
 engine/compose/              page types, domains and moods behind compose.mjs
 evals/                       32 briefs (evals.json), fixtures and reference scores
 tokens/                      base.css, layout.css, backdrops.css, composition.css, palettes/*.css (+ source.json), typography/, styles/
-components/ui/<family>/      200 patterns (html, css, ts, react.tsx)
+components/ui/<family>/      204 patterns (html, css, ts, react.tsx)
 components/charts/           core/ + 46 chart engines (+ React wrappers)
 blueprints/                  25 page blueprints (states via ?state=loading|empty|error|incident|sold-out|streaming|running)
 references/                  anti-slop-rules, page-flow, composition, copy-patterns, reading-a-reference, chart-selection, which-one, palettes, harvest-log

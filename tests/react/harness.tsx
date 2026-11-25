@@ -34,6 +34,10 @@ import { OfferCards } from '../../components/ui/blocks/offer-cards/offer-cards.r
 import { VisitInfo } from '../../components/ui/blocks/visit-info/visit-info.react';
 import { TaskList } from '../../components/ui/data/task-list/task-list.react';
 import { BookingBar } from '../../components/ui/controls/booking-bar/booking-bar.react';
+import { ScrollStatement } from '../../components/ui/blocks/scroll-statement/scroll-statement.react';
+import { StackCards } from '../../components/ui/blocks/stack-cards/stack-cards.react';
+import { MediaBand } from '../../components/ui/blocks/media-band/media-band.react';
+import { GalleryRail } from '../../components/ui/blocks/gallery-rail/gallery-rail.react';
 import { InvoiceSheet } from '../../components/ui/data/invoice-sheet/invoice-sheet.react';
 import { ServiceList } from '../../components/ui/blocks/service-list/service-list.react';
 import { HeroStatement } from '../../components/ui/blocks/hero-statement/hero-statement.react';
@@ -480,6 +484,10 @@ function App() {
       <Case id="visit"><VisitInfo title="Find us" address={['14 Mill Lane', 'Bristol']} now="2026-11-28T10:30" days={[{ day: 'Monday', hours: 'Closed' }, { day: 'Tuesday', hours: '8:00 to 16:00' }, { day: 'Wednesday', hours: '8:00 to 16:00' }, { day: 'Thursday', hours: '8:00 to 16:00' }, { day: 'Friday', hours: '8:00 to 18:00' }, { day: 'Saturday', hours: '9:00 to 18:00' }, { day: 'Sunday', hours: '9:00 to 14:00' }]} /></Case>
       <Case id="tasks"><TaskList title="Today" tasks={[{ id: 'a', title: 'Send invoices', done: true }, { id: 'b', title: 'Review forecast' }]} onToggle={(id, done) => log.push(`task:${id}:${done}`)} /></Case>
       <Case id="booking"><BookingBar title="Book a tasting" times={['10:30', '12:00']} defaultDate="2026-11-28" onCheck={(r) => log.push(`book:${r.date}:${r.time}:${r.people}`)} /></Case>
+      <Case id="scroll-statement"><ScrollStatement eyebrow="Why" quiet="Nobody leaves surprised.">Every price is written down before we start.</ScrollStatement></Case>
+      <Case id="stack-cards"><StackCards title="First visit" cards={[{ title: 'We listen', text: 'Ten minutes first.', figure: { value: '10', label: 'minutes' } }, { title: 'We show you', text: 'On the screen.' }]} /></Case>
+      <Case id="media-band"><MediaBand title="The number changes." quiet="So does the chart." media={<div>Picture</div>} facts={[{ value: '5 min', label: 'to the first chart' }]} /></Case>
+      <Case id="gallery-rail"><GalleryRail title="Glazes" items={[{ title: 'Sea green', meta: '£22', picture: <figure className="lt-art"><p data-part="name">Sea green</p></figure> }]} /></Case>
       <Case id="invoice-sheet"><InvoiceSheet from="Larkspur Studio" title="Invoice 0042" status="Paid 4 Nov" state="paid" meta={[{ label: 'Billed to', value: 'Kestrel Labs Ltd' }]} lines={[{ item: 'Workshop day', qty: '1', rate: '£640.00', amount: '£640.00' }]} total={{ label: 'Total', amount: '£640.00' }} /></Case>
       <Case id="service-list"><ServiceList eyebrow="Fees" title="What we do" services={[{ title: 'Check-up', text: 'Forty-five minutes.', meta: '45 min', price: '£68', href: '#c' }, { when: '10:00', title: 'Doors', text: 'Coffee in the foyer.' }]} note="Prices from September." /></Case>
       <Case id="hero-statement"><HeroStatement eyebrow="Studio" title="We design the tools finance teams open every morning" lede="Nine people in Bristol." facts={[{ value: '2,400', label: 'teams' }]} /></Case>

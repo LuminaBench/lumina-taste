@@ -15,8 +15,8 @@
   <button type="button" data-part="toggle" aria-expanded="false" aria-controls="lt-ns-panel" aria-label="Menu"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   <div id="lt-ns-panel" data-part="panel" hidden><ul><li><a href="#get-food">Get food</a></li><li><a href="#money">Where money goes</a></li><li><a href="#help">Ways to help</a></li><li><a href="#questions">Questions</a></li></ul></div>
 </header>
-  <main id="main" data-separators="rules" data-numbered>
-    <section class="lt-hero-statement" id="top" aria-labelledby="cs-h">
+  <main id="main" data-separators="rules" data-numbered data-scroll>
+    <section class="lt-hero-statement" id="top" data-entrance aria-labelledby="cs-h">
       <p data-part="eyebrow">Community food bank · Armley, Leeds</p>
       <h1 id="cs-h">Food for 410 households a week, from one church hall</h1>
       <div data-part="foot">
@@ -65,14 +65,14 @@
       </figure>
     </section>
 
-    <section class="lt-services" id="help" aria-labelledby="cs-he-h">
+    <section class="lt-section" id="help" aria-labelledby="cs-he-h">
       <header><p data-part="eyebrow">Ways to help</p><h2 id="cs-he-h">Money, food or three hours a week</h2></header>
-      <ul>
-        <li><a href="/give/monthly"><h3>Give monthly</h3><p>A regular gift lets us order fresh food ahead instead of waiting to see what arrives. Gift Aid adds 25% at no cost to you.</p><span data-part="meta">Cancel any time</span><b data-part="price">from £5</b><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/give/food"><h3>Bring food</h3><p>This month we are short of tinned fish, cooking oil, UHT milk and nappies in sizes 5 and 6. Leave it at the hall during any session.</p><span data-part="meta">Tue, Thu, Sat</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/volunteer"><h3>Volunteer</h3><p>Sorting on Monday evenings, serving at sessions, or driving the van on Friday mornings. We train you and pay bus fares.</p><span data-part="meta">3 hours a week</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/give/workplace"><h3>Collect at work or school</h3><p>We lend a crate and a poster, collect when it is full, and tell you what it fed.</p><span data-part="meta">We collect</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
-      </ul>
+      <div class="lt-bento" aria-label="Ways to help">
+        <article data-span="wide" data-tone="accent"><span class="lt-eyebrow">Give monthly</span><h3>Fresh food, ordered ahead</h3><p>Gift Aid adds 25p to every pound. <a href="/give/monthly">Give monthly</a></p><p data-part="figure"><small>from</small>£5</p></article>
+        <article data-span="tall"><span class="lt-eyebrow">Volunteer</span><h3>Sort, serve or drive the van</h3><p>We train you and pay bus fares. <a href="/volunteer">Volunteer</a></p><p data-part="figure">3<small>hrs</small></p></article>
+        <article><span class="lt-eyebrow">Bring food</span><h3>Short this month: tinned fish, oil, nappies</h3><p><a href="/give/food">What we need</a></p></article>
+        <article><span class="lt-eyebrow">At work or school</span><h3>We lend a crate and collect it</h3><p><a href="/give/workplace">Start a collection</a></p></article>
+      </div>
     </section>
 
     <section class="lt-faq-section" id="questions" aria-labelledby="cs-faq-h">

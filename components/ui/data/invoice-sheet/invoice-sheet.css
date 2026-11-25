@@ -1,7 +1,7 @@
 @scope (.lt-invoice) {
   /* A document, set like one: a sheet with quiet edges, figures in one right-aligned column, one total. */
   :scope { container-type: inline-size; display: block; width: 100%; max-width: 560px; padding: 28px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); box-shadow: var(--shadow-sm); color: var(--text-primary); font-size: var(--text-ui-sm); line-height: 1.45; }
-  @media (max-width: 480px) { :scope { padding: 20px 18px; } }
+  @media (max-width: 480px) { :scope { padding: 18px 16px; } }
   header { display: flex; align-items: start; justify-content: space-between; gap: 16px; }
   p { margin: 0; }
   [data-part="from"] { font-family: var(--font-display); font-size: var(--step-0); font-weight: 650; letter-spacing: var(--tracking-display); }
@@ -36,6 +36,8 @@
   tfoot td { padding: 4px 0; }
   [data-part="total"] > * { padding-top: 10px; color: var(--text-primary); font-size: var(--step-0); font-weight: 700; }
   /* Narrow: quantity and rate give way; the item and its amount stay. */
-  @container (max-width: 380px) { thead th:nth-child(2), thead th:nth-child(3), tbody td:nth-child(2), tbody td:nth-child(3) { display: none; } }
+  /* Narrow: each row becomes two columns, the item and its amount, so every figure keeps one right edge. */
+  @container (max-width: 380px) { :is(thead, tbody, tfoot) { display: block; } tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; } tfoot tr { border: 0; } thead th:nth-child(2), thead th:nth-child(3), tbody td:nth-child(2), tbody td:nth-child(3) { display: none; } thead th:last-child { text-align: right; } tbody th { padding-right: 16px; } tfoot th { padding-right: 16px; } [data-part="from"] { font-size: var(--text-ui); } }
+  @container (max-width: 320px) { header { flex-direction: column; } [data-part="id"] { justify-items: start; text-align: left; } }
   footer { margin-top: 20px; padding-top: 14px; border-top: var(--bw) var(--border-style) var(--border-hairline); color: var(--text-muted); font-size: var(--text-ui-xs); }
 }

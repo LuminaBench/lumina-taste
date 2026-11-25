@@ -336,16 +336,22 @@ test('episode: a chapter seeks the player and becomes the current one', async ({
 // ---- subject pages: a practice, a cause, a shop, an event
 const deadAnchors = (page: import('@playwright/test').Page) => page.$$eval('a[href^="#"]', (as) => as.map((a) => a.getAttribute('href')!).filter((h) => h.length > 1 && !document.getElementById(h.slice(1))));
 
-test('practice: fees line up in one column, today is marked, the phone number is a link', async ({ page }) => {
+test('practice: the price leads, the fees are tiles, the plan is a document, open-now is large', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/blueprints/practice/');
-  const rights = await page.$$eval('.lt-services [data-part="price"]', (els) => els.map((e) => Math.round(e.getBoundingClientRect().right)));
-  expect(rights.length).toBe(5);
-  expect(new Set(rights).size).toBe(1);
-  const lefts = await page.$$eval('.lt-services li p', (els) => els.map((e) => Math.round(e.getBoundingClientRect().left)));
-  expect(new Set(lefts).size).toBe(1);
+  await expect(page.locator('#top [data-part="figure"]')).toHaveText('£68');
+  await expect(page.locator('#fees .lt-bento [data-part="figure"]')).toHaveCount(6);
+  const big = await page.$$eval('#fees [data-part="figure"]', (els) => Math.min(...els.map((e) => parseFloat(getComputedStyle(e).fontSize))));
+  expect(big).toBeGreaterThanOrEqual(44);
+  await expect(page.locator('#first-visit li')).toHaveCount(3);
+  await expect(page.locator('#first-visit .lt-invoice [data-part="total"] td')).toHaveText('£258.00');
+  const now = page.locator('.lt-visit [data-part="now"]');
+  await expect(now).not.toBeEmpty();
+  expect(await now.evaluate((el) => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(44);
+  // The find-us band is dark inside a light page: its ground is darker than the page's.
+  const grounds = await page.evaluate(() => [document.body, document.querySelector('#visit')!].map((e) => getComputedStyle(e).backgroundColor));
+  expect(grounds[0]).not.toEqual(grounds[1]);
   await expect(page.locator('.lt-visit tr[data-today]')).toHaveCount(1);
-  await expect(page.locator('.lt-visit [data-part="now"]')).not.toBeEmpty();
   await expect(page.locator('header .pr-tel')).toHaveAttribute('href', /^tel:\+44/);
   expect(await deadAnchors(page)).toEqual([]);
 });

@@ -82,7 +82,14 @@ export function fit(box: HTMLElement, inner: HTMLElement, pad = 24) {
       const cs = getComputedStyle(el);
       if (cs.position !== 'absolute' && cs.position !== 'fixed') continue;
       if (cs.visibility === 'hidden') continue;
-      L = Math.min(L, q.left); T = Math.min(T, q.top); R = Math.max(R, q.right); B = Math.max(B, q.bottom);
+      // A part inside a scroller (a rail, a list) only counts as far as the scroller shows it.
+      let qL = q.left, qT = q.top, qR = q.right, qB = q.bottom;
+      for (let p = el.parentElement; p && p !== inner; p = p.parentElement) {
+        const pc = getComputedStyle(p);
+        if (pc.overflowX !== 'visible' || pc.overflowY !== 'visible') { const c = p.getBoundingClientRect(); qL = Math.max(qL, c.left); qT = Math.max(qT, c.top); qR = Math.min(qR, c.right); qB = Math.min(qB, c.bottom); }
+      }
+      if (qR - qL < 1 || qB - qT < 1) continue;
+      L = Math.min(L, qL); T = Math.min(T, qT); R = Math.max(R, qR); B = Math.max(B, qB);
     }
     const w = R - L, h = B - T;
     const s = Math.max(0.3, Math.min(1, (b.width - pad * 2) / Math.max(1, w), (b.height - pad * 2) / Math.max(1, h)));

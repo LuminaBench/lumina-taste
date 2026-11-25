@@ -492,6 +492,26 @@ const TASTE_CHECKS = (arg = null) => {
       const lastWord = h.textContent.trim().split(/\s+/).pop() ?? '';
       if ((last.right - last.left) / longest < 0.24 && lastWord.length <= 9) { add('taste-widow', h, `The heading “${h.textContent.trim().slice(0, 40)}” ends with one word alone on its last line (“${lastWord}”). Add text-wrap: balance, shorten it, or break it by sense.`); break; }
     }
+    // Words against pictures: a section that is only words is a wall; two in a row is a page of them. A picture
+    // is anything to look at: an image, a figure, a device or document, a chart, a large icon, or type set
+    // large enough to be the picture (a figure or statement at 48px or more).
+    if (wide && document.querySelector('[class*="hero"]')) {
+      const PICTURE = 'img, picture, video, canvas, figure, [role="img"], .lt-art, .lt-device, .lt-invoice, .lt-bento, [data-part="visual"], [data-part="media"], [class*="chart"]';
+      const count = (t) => (t || '').split(/\s+/).filter((w) => /[a-z]{2}/i.test(w)).length;
+      const bigType = (band) => { const tw = document.createTreeWalker(band, NodeFilter.SHOW_TEXT); for (let n = tw.nextNode(); n; n = tw.nextNode()) { const el = n.parentElement; if (el && n.textContent.trim() && shown(el) && parseFloat(getComputedStyle(el).fontSize) >= 48) return true; } return false; };
+      // A list of short items (a timetable, opening hours, prices with a name each) scans like a table: it is not a wall.
+      const scans = (band, total) => [...band.querySelectorAll('ul, ol, tbody, dl')].some((l) => { const items = [...l.children].filter(shown); if (items.length < 4) return false; const words = items.reduce((a, it) => a + count(it.innerText), 0); return words / items.length <= 9 && total - words <= 50; });
+      const looksAt = (band, total) => [...band.querySelectorAll(PICTURE)].some((e) => shown(e) && rectOf(e).width >= 120 && rectOf(e).height >= 60)
+        || [...band.querySelectorAll('svg')].some((e) => shown(e) && rectOf(e).width >= 96 && rectOf(e).height >= 64)
+        || bigType(band) || scans(band, total);
+      const walls = bands.filter((b) => rectOf(b).height > 200 && !b.matches('[class*="hero"], [class*="footer"], [class*="nav"]')).map((b) => { const words = count(b.innerText); return { el: b, words, pic: looksAt(b, words) }; });
+      let flagged = false;
+      for (let i = 0; i < walls.length && !flagged; i++) {
+        const w = walls[i];
+        if (!w.pic && w.words > 150) { add('taste-text-wall', w.el, `This section is ${w.words} words with nothing to look at. Cut each item to a name and a few words, or give it a picture: the real screen or document, a chart, one figure set large, stack-cards for steps, or an art panel.`); flagged = true; }
+        else if (i > 0 && !w.pic && !walls[i - 1].pic && w.words > 45 && walls[i - 1].words > 45) { add('taste-text-wall', w.el, `Two sections in a row are only words (${walls[i - 1].words} and ${w.words}). Give one of them a picture (the product, a document, a chart, a figure set large), turn it into a scroll-statement or a media-band, or merge them.`); flagged = true; }
+      }
+    }
     // The page's headline: on a wide screen it should land in four lines or fewer. More means it is too long for its size.
     if (wide) {
       const h1 = [...document.querySelectorAll('h1')].find((x) => shown(x) && !skip(x));

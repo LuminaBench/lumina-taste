@@ -1,0 +1,27 @@
+/* Scroll statement: one large sentence that lights up word by word as it scrolls past, the way a keynote
+   slide lands one phrase at a time. Without scroll-driven animation support, without the script or under
+   reduced motion, it is simply a large sentence at full strength. */
+@scope (.lt-statement) {
+  :scope { container-type: inline-size; display: block; width: 100%; padding: var(--block-y, calc(var(--section-y) / 2)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  /* Blocks pad by half of --section-y, so the gap between two sections is exactly --section-y. data-tone="well" makes a tinted band; data-tone="dark" a dark one. */
+  :scope[data-tone="well"] { background: var(--bg-surface-2); }
+  @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  [data-part="eyebrow"] { margin: 0 0 10px; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; color: var(--accent-text); }
+  [data-part="lede"] { margin: 12px 0 0; max-width: 52ch; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.55; text-wrap: pretty; }
+  :scope { padding-block: calc(var(--block-y, calc(var(--section-y) / 2)) * 1.6); }
+  h2 { margin: 0; max-width: 22ch; font-family: var(--font-display); font-size: clamp(2rem, 0.9rem + 4.4cqi, 4.75rem); font-weight: var(--weight-display); letter-spacing: calc(var(--tracking-display) * 1.2); line-height: 1.06; text-wrap: balance; }
+  /* The second half of the claim sits back in secondary ink: hierarchy without more words. */
+  [data-part="quiet"] { color: var(--text-secondary); }
+  [data-part="note"] { margin: clamp(24px, 4cqi, 40px) 0 0; color: var(--text-muted); font-family: var(--font-mono); font-size: var(--text-ui-sm); letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
+  :scope[data-align="centre"] { text-align: center; }
+  :scope[data-align="centre"] h2 { margin-inline: auto; }
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      /* The script wraps each word in <span data-w> and sets its own range; each one brightens in turn. */
+      [data-w] { animation: lt-stm-light linear both; animation-timeline: --lt-stm; }
+    }
+  }
+}
+.lt-statement { view-timeline: --lt-stm block; }
+@keyframes lt-stm-light { from { opacity: 0.16; } to { opacity: 1; } }

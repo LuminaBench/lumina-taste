@@ -61,6 +61,14 @@
      ]
     },
     {
+     "id": "media-band",
+     "role": "The product, large",
+     "copy": "Three to eight words that name what the picture shows, then the product's real screen large (device-frame, a screenshot, a chart), then three figures a visitor can check.",
+     "rule": "The page's one dark band. The strongest picture you have; nothing decorative.",
+     "tone": "dark",
+     "optional": true
+    },
+    {
      "id": "stats-band",
      "role": "Evidence",
      "copy": "3 numbers people can check, each with a plain label and a source.",
@@ -83,7 +91,10 @@
      "role": "How it works",
      "copy": "3 steps, verb-first headings (\"Connect\", \"Set targets\", \"Share\").",
      "optional": true,
-     "tone": "well"
+     "tone": "well",
+     "alt": [
+      "stack-cards"
+     ]
     },
     {
      "id": "faq-section",
@@ -1677,7 +1688,10 @@
      "id": "offer-cards",
      "role": "The range",
      "copy": "Each product with one line, two or three facts that help choose (size, key ingredient or material, how long it lasts) and its price.",
-     "rule": "Two to four cards: four sit four across (two by two on smaller screens), so no card is left alone on a row. Vary the art panel tone across the set."
+     "rule": "Two to four cards: four sit four across (two by two on smaller screens), so no card is left alone on a row. Vary the art panel tone across the set. Five or more pieces: gallery-rail instead, one ratio, a caption of name and price.",
+     "alt": [
+      "gallery-rail"
+     ]
     },
     {
      "id": "how-it-works",
@@ -1793,21 +1807,31 @@
      ]
     },
     {
-     "id": "service-list",
+     "id": "scroll-statement",
+     "role": "The promise",
+     "copy": "One sentence of 12 to 25 words that says how you work differently, as a claim a competitor could not copy, with its second half in data-part=\"quiet\". A mono line of facts under it.",
+     "rule": "One per page. Leave it out if you cannot write a claim that is true and specific.",
+     "optional": true
+    },
+    {
+     "id": "bento-grid",
      "role": "Services and fees",
-     "copy": "Each service as a row: its plain name, one sentence on what happens, how long it takes and the price or \"from\" price. A note with the date the prices apply from.",
-     "rule": "Prices in full where they are fixed. If fees depend on the case, say what the first meeting costs and what decides the rest. Never \"Contact us for pricing\" on every row.",
+     "copy": "Up to six services as tiles in a plain section: a small label (how long it takes), the service's name, at most one short line, and the price set large at the foot of the tile (<p data-part=\"figure\">£68</p>). The main service gets the wide tile in the accent tone. A note under the grid with the date the prices apply from and a link to the full fee list.",
+     "rule": "Prices in full where they are fixed. More than six services, or prices people compare line by line: service-list rows instead, one short line each. Never \"Contact us for pricing\" on every tile.",
      "alt": [
-      "offer-cards",
-      "pricing-tiers"
+      "service-list",
+      "offer-cards"
      ]
     },
     {
-     "id": "how-it-works",
+     "id": "stack-cards",
      "role": "What happens first",
-     "copy": "Three numbered steps from first contact to a plan in writing, with a time in each. Say what will not happen without agreement.",
-     "rule": "Written for someone anxious or busy: short, concrete, no jargon.",
-     "tone": "well"
+     "copy": "Three steps from first contact to a plan in writing, each a card with a number, a title of three to six words, one line, and a picture: a figure set large (\"10 minutes\"), the screen the client sees, or the document they take home (invoice-sheet as a written plan or quote).",
+     "rule": "Written for someone anxious or busy. Every card has a picture; no card is only words.",
+     "tone": "well",
+     "alt": [
+      "how-it-works"
+     ]
     },
     {
      "id": "team-grid",
@@ -1830,8 +1854,8 @@
      "id": "visit-info",
      "role": "Find us",
      "copy": "Address, how to get here by bus, car and on foot, access, phone and email, and opening hours with what to do out of hours.",
-     "rule": "Opening hours as text in a table, never an image. A service with no premises uses contact-section and says which areas it covers.",
-     "tone": "well",
+     "rule": "Opening hours as text in a table, never an image. The block sets \"Open now, until 18:00\" large by itself: keep data-lt=\"visit-info\". As the page's one dark band (data-tone=\"dark\") it marks the change from what you do to how to come. A service with no premises uses contact-section and says which areas it covers.",
+     "tone": "dark",
      "alt": [
       "contact-section"
      ]
@@ -1934,12 +1958,12 @@
      "layout": "rail"
     },
     {
-     "id": "service-list",
+     "id": "bento-grid",
      "role": "Ways to help",
-     "copy": "Three or four rows: give monthly, give things, volunteer, collect at work. One sentence each on what it does, and what it asks of the person (an amount, a day, three hours).",
+     "copy": "Three or four ways to help as tiles in a plain section: a label, a title of a few words, its one link, and a figure where there is one (\"£5\" a month, \"3 hrs\" a week). The money tile is wide and in the accent tone.",
      "rule": "Each row links to a real page or form.",
      "alt": [
-      "feature-grid"
+      "service-list"
      ]
     },
     {

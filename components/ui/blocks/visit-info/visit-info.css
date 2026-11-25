@@ -18,9 +18,10 @@
   [data-part="links"] { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 24px 0 0; }
   [data-part="links"] a { color: var(--accent-text); font-weight: 600; text-underline-offset: 3px; }
   /* Says whether it is open right now, in words. Empty (and takes no space) without the script. */
-  [data-part="now"] { margin: 0 0 12px; font-size: var(--step-1); font-weight: 650; }
+  /* Open or closed, right now, set as large as a headline: the one thing a visitor came to check. */
+  [data-part="now"] { margin: 0 0 18px; font-family: var(--font-display); font-size: clamp(2rem, 1rem + 2.8cqi, 3.25rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.05; text-wrap: balance; }
   [data-part="now"]:empty { display: none; }
-  [data-part="now"][data-open]::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 10px; border-radius: 50%; background: var(--status-positive); vertical-align: 0.1em; }
+  [data-part="now"][data-open]::before { content: ""; display: inline-block; width: 0.28em; height: 0.28em; margin-right: 0.3em; border-radius: 50%; background: var(--status-positive); vertical-align: 0.18em; box-shadow: 0 0 0 0.12em color-mix(in oklab, var(--status-positive) 22%, transparent); }
   table { width: 100%; border-collapse: collapse; }
   tr { border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
   tr:first-child { border-top: var(--bw) var(--border-style) var(--border-hairline); }

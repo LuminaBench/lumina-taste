@@ -1787,6 +1787,274 @@
       ],
       "added": 14,
       "note": "Use this instead of cards when there are four or more things, or when people compare prices and times. A row is the <li> itself, or one <a> or <div> inside it (use <a> when the row leads somewhere). Columns you do not use (when, meta, price) collapse. For a programme, put <time data-part=\"when\"> first in each row and a <p data-part=\"group\"> above each day's <ul>. It needs the full width: do not put it beside a rail."
+    },
+    {
+      "id": "scroll-statement",
+      "name": "Scroll statement",
+      "summary": "One large sentence that lights up word by word as it scrolls past. The keynote beat: a claim set big, with its quieter half in secondary ink.",
+      "pattern": "<h2> + view-timeline",
+      "states": [
+        "unlit",
+        "lighting",
+        "lit",
+        "still (reduced motion)"
+      ],
+      "aliases": [
+        "big statement",
+        "manifesto",
+        "mission statement",
+        "words light up on scroll",
+        "scroll text highlight",
+        "keynote sentence",
+        "apple style text reveal",
+        "pull statement"
+      ],
+      "react": "ScrollStatement",
+      "api": "view-timeline · [data-part=\"quiet\"] · data-align=\"centre\"",
+      "w": 1000,
+      "preview": [],
+      "called": [
+        "text that lights up as you scroll",
+        "one huge sentence between sections",
+        "the Apple-style words fading in"
+      ],
+      "anatomy": [
+        {
+          "sel": "h2",
+          "name": "The claim",
+          "api": "<h2>",
+          "text": "Twelve to twenty-five words. Each word brightens in turn as the section crosses the screen."
+        },
+        {
+          "sel": "[data-part=\"quiet\"]",
+          "name": "The quiet half",
+          "api": "data-part=\"quiet\"",
+          "text": "The second half in secondary ink: hierarchy without more words."
+        },
+        {
+          "sel": "[data-part=\"note\"]",
+          "name": "Proof line",
+          "api": "data-part=\"note\"",
+          "text": "Two or three facts in mono that back the claim."
+        }
+      ],
+      "prompt": "Build a statement section: one sentence of 12 to 25 words set very large (about 4.5rem at desktop, tight tracking, line-height 1.06, max 22ch), with its second half in secondary ink. Under it a short mono line of facts. As the section scrolls through the screen each word goes from 16% to full opacity in turn, using a named view-timeline on the section and an animation-range per word set by a small script that wraps the words in spans. Without support, without the script and under reduced motion the sentence is simply at full strength.",
+      "debug": "Debug my scroll statement. Rule out: a paragraph instead of one sentence; words hidden when scroll-driven animations are not supported; text dimmed under reduced motion; more than one of these on a page; the sentence repeating the headline above it. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<section class=\"lt-statement\"><h2>… <span data-part=\"quiet\">…</span></h2>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ScrollStatement quiet>",
+          "React"
+        ]
+      ],
+      "added": 16,
+      "note": "One per page at most, between two busy sections: it is a pause, not a section of content. 12 to 25 words, a claim someone could disagree with, with facts in the note line. Never a paragraph."
+    },
+    {
+      "id": "stack-cards",
+      "name": "Stack cards",
+      "summary": "Steps as large cards that pin near the top and stack as you scroll, each with a number, a title, one line and a picture. Replaces a numbered list of paragraphs.",
+      "pattern": "<ol> of sticky <article>",
+      "states": [
+        "stacking",
+        "list (phones, reduced motion)"
+      ],
+      "aliases": [
+        "sticky cards",
+        "stacking cards",
+        "card stack on scroll",
+        "how it works cards",
+        "process steps",
+        "steps with pictures",
+        "pinned steps"
+      ],
+      "react": "StackCards",
+      "api": "position: sticky · --stack-top · [data-part=\"visual\"]",
+      "w": 1000,
+      "preview": [],
+      "called": [
+        "cards that stack on top of each other as you scroll",
+        "the steps, but big",
+        "how it works with a picture per step"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:first-child [data-part=\"n\"]",
+          "name": "Number",
+          "api": "",
+          "text": "In mono, at the top of the card."
+        },
+        {
+          "sel": "li:first-child h3",
+          "name": "Title",
+          "api": "<h3>",
+          "text": "Three to six words, large."
+        },
+        {
+          "sel": "li:first-child [data-part=\"text\"] p",
+          "name": "One line",
+          "api": "<p>",
+          "text": "Twenty words at most."
+        },
+        {
+          "sel": "li:first-child [data-part=\"visual\"]",
+          "name": "Picture",
+          "api": "data-part=\"visual\"",
+          "text": "A device frame, an invoice sheet, a chart, a photograph, or one figure set large."
+        }
+      ],
+      "prompt": "Build a steps section as stacking cards: each step is a large card (min-height about 380px, radius xl, hairline border) split into text on the left (a mono number at the top, a large title near the bottom, one line under it) and a picture on the right. Each <li> is position: sticky with top: calc(84px + index * 16px), so as you scroll each card slides over the last and the edges of the earlier cards stay visible above it. Alternate the card surface. Under 720px and under reduced motion they are a plain list with the picture under the text.",
+      "debug": "Debug my stacking cards. Rule out: an ancestor with overflow hidden (it breaks sticky); cards of different heights; paragraphs instead of one line; no picture, so the stack is three boxes of text; more than five cards. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ol><li><article><div data-part=\"text\">…<div data-part=\"visual\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<StackCards cards>",
+          "React"
+        ]
+      ],
+      "added": 16,
+      "note": "Three to five steps, each with a real picture: the screen it happens on, the document it produces, or one figure. Never an ancestor with overflow: hidden. One stack per page."
+    },
+    {
+      "id": "media-band",
+      "name": "Media band",
+      "summary": "One claim and one large picture on a dark ground, with three facts under it. The cinematic beat of a page; the picture settles into place as it scrolls in.",
+      "pattern": "<section data-tone=\"dark\"> + <figure data-zoom>",
+      "states": [
+        "dark",
+        "light",
+        "picture settling"
+      ],
+      "aliases": [
+        "dark band",
+        "full bleed section",
+        "product shot section",
+        "hero image band",
+        "apple style section",
+        "showcase",
+        "big picture section"
+      ],
+      "react": "MediaBand",
+      "api": "data-tone=\"dark\" · data-zoom · [data-part=\"media|facts\"]",
+      "w": 1000,
+      "preview": [],
+      "called": [
+        "a dark section with one big product picture",
+        "the Apple-style full-width shot",
+        "a break from all the white sections"
+      ],
+      "anatomy": [
+        {
+          "sel": "h2",
+          "name": "Claim",
+          "api": "<h2>",
+          "text": "Three to eight words, centred, with a quiet second half."
+        },
+        {
+          "sel": "[data-part=\"media\"]",
+          "name": "Picture",
+          "api": "data-zoom",
+          "text": "The product's real screen, a chart, a photograph or an art panel, large, with a glow behind it."
+        },
+        {
+          "sel": "[data-part=\"facts\"]",
+          "name": "Three facts",
+          "api": "<dl>",
+          "text": "Large figures with a label each."
+        }
+      ],
+      "prompt": "Build a media band: a full-width section on a dark ground (the palette's own dark tokens on this section only) with generous padding. A centred claim of three to eight words, very large, its second half in secondary ink. Under it one large picture (max 1040px) with a soft radial glow of the accent behind it; it scales from 0.9 to 1 as it scrolls in. A one-line caption, then three facts in a row, large figures with small labels, divided by hairlines.",
+      "debug": "Debug my media band. Rule out: more than one dark band on the page; a paragraph instead of a claim; a small picture lost in the dark; the glow behind text; text colours that do not follow the dark tokens. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<section class=\"lt-media-band\" data-tone=\"dark\"><figure data-part=\"media\" data-zoom>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<MediaBand media facts>",
+          "React"
+        ]
+      ],
+      "added": 16,
+      "note": "At most one dark band per page, from the middle on, for the strongest picture you have. Any block takes data-tone=\"dark\" the same way."
+    },
+    {
+      "id": "gallery-rail",
+      "name": "Gallery rail",
+      "summary": "A row of pictures at one ratio that runs off the right edge and snaps as it scrolls sideways, with previous and next buttons. Many pictures without a wall of cards.",
+      "pattern": "<ul> with scroll-snap",
+      "states": [
+        "start",
+        "middle",
+        "end",
+        "swipe (phones)"
+      ],
+      "aliases": [
+        "carousel",
+        "horizontal scroll",
+        "slider",
+        "product rail",
+        "swipe gallery",
+        "scroll snap row",
+        "highlights row"
+      ],
+      "react": "GalleryRail",
+      "api": "scroll-snap · [data-part=\"track|prev|next|caption\"]",
+      "w": 1000,
+      "preview": [],
+      "called": [
+        "a row of products you can swipe",
+        "the horizontal gallery that bleeds off the edge",
+        "highlights you scroll sideways"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"track\"]",
+          "name": "Track",
+          "api": "scroll-snap",
+          "text": "Runs to the right edge of the screen so the next picture is cut: it says there is more."
+        },
+        {
+          "sel": "[data-part=\"nav\"]",
+          "name": "Buttons",
+          "api": "<button>",
+          "text": "One picture at a time; disabled at either end."
+        },
+        {
+          "sel": "li:first-child [data-part=\"caption\"]",
+          "name": "Caption",
+          "api": "",
+          "text": "The name and one fact, on one line."
+        }
+      ],
+      "prompt": "Build a gallery rail: a heading on the left with round previous and next buttons on the right, then a row of pictures at one ratio (3:4) that starts on the page's left edge and runs off the right edge of the screen, cut mid-picture. Native horizontal scroll with scroll-snap-type: x mandatory and no visible scrollbar; the track is focusable. Each picture has a one-line caption: name left, price or fact right. Buttons scroll by one picture and are disabled at either end. On phones each picture is 72% wide and the buttons hide.",
+      "debug": "Debug my gallery rail. Rule out: a scrollbar showing; the first picture not on the page's left edge; pictures of mixed ratios; buttons that do not disable at the ends; autoplay. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ul data-part=\"track\" tabindex=\"0\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<GalleryRail items>",
+          "React"
+        ]
+      ],
+      "added": 16,
+      "note": "Five to twelve pictures at one ratio: a range, rooms, projects, colours. Never autoplay. For two to four things use offer-cards instead."
     }
   ]
 }

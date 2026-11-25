@@ -18,3 +18,7 @@
 .lt-section [data-part="lede"] a { color: var(--accent-text); text-underline-offset: 3px; }
 .lt-footer-min { padding-block: var(--space-6); }
 @media (max-width: 640px) { .cs-money dl > div { grid-template-columns: minmax(0, 1fr) auto; } .cs-money dl > div > dd:not([data-part]) { grid-column: 1 / -1; grid-row: 2; } }
+
+/* Ways to help: tiles, each with its one link set plainly under the line. */
+#help .lt-bento { grid-auto-rows: minmax(190px, auto); }
+#help .lt-bento p a { color: var(--accent-text); font-weight: 600; text-underline-offset: 3px; }

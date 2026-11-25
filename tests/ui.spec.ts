@@ -1296,7 +1296,9 @@ test.describe('composition', () => {
   test('art panel variants: a large figure, the product colour with readable ink, a keyline frame', async ({ page }) => {
     const s = await solo(page, 'art-panel');
     const r = await s.locator('.lt-art[data-variant="figure"]').evaluate((el) => {
-      const lum = (c: string) => { const m = c.match(/[\d.]+/g)!.map(Number); const [r, g, b] = m.slice(0, 3).map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+      const cx = document.createElement('canvas').getContext('2d', { willReadFrequently: true })!;
+      const rgb = (c: string) => { cx.clearRect(0, 0, 1, 1); cx.fillStyle = c; cx.fillRect(0, 0, 1, 1); return [...cx.getImageData(0, 0, 1, 1).data].slice(0, 3); };
+      const lum = (c: string) => { const [r, g, b] = rgb(c).map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
       const bg = lum(getComputedStyle(el).backgroundColor), ink = lum(getComputedStyle(el).color);
       const ratio = (Math.max(bg, ink) + 0.05) / (Math.min(bg, ink) + 0.05);
       const fig = parseFloat(getComputedStyle(el.querySelector('[data-part="figure"]')!).fontSize), name = parseFloat(getComputedStyle(el.querySelector('[data-part="name"]')!).fontSize);
@@ -1321,6 +1323,53 @@ test.describe('composition', () => {
     expect(await s.locator('h1').evaluate((el) => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(44);
     await expect(s.locator('[data-part="facts"] dd')).toHaveCount(3);
     expect(await s.locator('[data-part="foot"]').evaluate((el) => parseFloat(getComputedStyle(el).borderTopWidth))).toBeGreaterThan(0);
+  });
+});
+
+test.describe('show, do not tell', () => {
+  test('scroll statement lights word by word as it scrolls, and is whole without motion', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    const s = await solo(page, 'scroll-statement');
+    const words = s.locator('h2 [data-w]');
+    expect(await words.count()).toBeGreaterThan(12);
+    // The heading still reads as one sentence.
+    expect((await s.locator('h2').innerText()).replace(/\s+/g, ' ')).toMatch(/^Every price is written down before we start\./);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const still = await words.evaluateAll((els) => els.every((e) => getComputedStyle(e).opacity === '1'));
+    expect(still).toBe(true);
+  });
+  test('stack cards pin at staggered offsets; on a narrow container they are a plain list', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const s = await solo(page, 'stack-cards');
+    const tops = await s.locator('li').evaluateAll((els) => els.map((e) => [getComputedStyle(e).position, parseFloat(getComputedStyle(e).top)]));
+    expect(tops.every(([p]) => p === 'sticky')).toBe(true);
+    expect((tops[1][1] as number) - (tops[0][1] as number)).toBe(16);
+    const narrow = await s.locator('.lt-stack-cards').evaluate((el) => { (el as HTMLElement).style.width = '600px'; return getComputedStyle(el.querySelector('li')!).position; });
+    expect(narrow).toBe('static');
+  });
+  test('media band is dark inside a light page and its picture is marked to settle in', async ({ page }) => {
+    const s = await solo(page, 'media-band');
+    await page.evaluate(() => { document.documentElement.dataset.mode = 'light'; });
+    const r = await s.locator('.lt-media-band').evaluate((el) => {
+      const lum = (c: string) => { const cx = document.createElement('canvas').getContext('2d')!; cx.fillStyle = c; cx.fillRect(0, 0, 1, 1); const [r, g, b] = cx.getImageData(0, 0, 1, 1).data; return (r + g + b) / 3; };
+      return { band: lum(getComputedStyle(el).backgroundColor), ink: lum(getComputedStyle(el.querySelector('h2')!).color), zoom: el.querySelector('[data-part="media"]')!.hasAttribute('data-zoom') };
+    });
+    expect(r.band).toBeLessThan(60);
+    expect(r.ink).toBeGreaterThan(180);
+    expect(r.zoom).toBe(true);
+  });
+  test('gallery rail scrolls one picture at a time and disables its buttons at the ends', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const s = await solo(page, 'gallery-rail');
+    const prev = s.locator('[data-part="prev"]'), next = s.locator('[data-part="next"]'), track = s.locator('[data-part="track"]');
+    await expect(prev).toBeDisabled();
+    await next.click();
+    await expect.poll(() => track.evaluate((el) => el.scrollLeft)).toBeGreaterThan(100);
+    await expect(prev).toBeEnabled();
+    await track.evaluate((el) => { el.scrollLeft = el.scrollWidth; });
+    await expect(next).toBeDisabled();
+    expect(await track.evaluate((el) => getComputedStyle(el).scrollSnapType)).toContain('x');
   });
 });
 

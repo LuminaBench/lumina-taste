@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
   "counts": {
-    "ui": 200,
+    "ui": 204,
     "charts": 46,
     "blueprints": 25,
     "palettes": 24,
@@ -59,7 +59,7 @@
       "title": "Sections for pages",
       "summary": "Whole page sections (heroes, pricing, FAQs, sign-in) built from the same tokens, so a page can be assembled in minutes and still look designed.",
       "order": 7,
-      "count": 28
+      "count": 32
     },
     {
       "id": "backdrops",
@@ -1124,6 +1124,130 @@
         "components/ui/blocks/service-list/service-list.react.tsx"
       ],
       "path": "components/ui/blocks/service-list"
+    },
+    {
+      "id": "scroll-statement",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Scroll statement",
+      "summary": "One large sentence that lights up word by word as it scrolls past. The keynote beat: a claim set big, with its quieter half in secondary ink.",
+      "aliases": [
+        "big statement",
+        "manifesto",
+        "mission statement",
+        "words light up on scroll",
+        "scroll text highlight",
+        "keynote sentence",
+        "apple style text reveal",
+        "pull statement"
+      ],
+      "pattern": "<h2> + view-timeline",
+      "states": [
+        "unlit",
+        "lighting",
+        "lit",
+        "still (reduced motion)"
+      ],
+      "react": "ScrollStatement",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/scroll-statement/scroll-statement.css",
+        "components/ui/blocks/scroll-statement/scroll-statement.html",
+        "components/ui/blocks/scroll-statement/scroll-statement.react.tsx",
+        "components/ui/blocks/scroll-statement/scroll-statement.ts"
+      ],
+      "path": "components/ui/blocks/scroll-statement"
+    },
+    {
+      "id": "stack-cards",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Stack cards",
+      "summary": "Steps as large cards that pin near the top and stack as you scroll, each with a number, a title, one line and a picture. Replaces a numbered list of paragraphs.",
+      "aliases": [
+        "sticky cards",
+        "stacking cards",
+        "card stack on scroll",
+        "how it works cards",
+        "process steps",
+        "steps with pictures",
+        "pinned steps"
+      ],
+      "pattern": "<ol> of sticky <article>",
+      "states": [
+        "stacking",
+        "list (phones, reduced motion)"
+      ],
+      "react": "StackCards",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/stack-cards/stack-cards.css",
+        "components/ui/blocks/stack-cards/stack-cards.html",
+        "components/ui/blocks/stack-cards/stack-cards.react.tsx"
+      ],
+      "path": "components/ui/blocks/stack-cards"
+    },
+    {
+      "id": "media-band",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Media band",
+      "summary": "One claim and one large picture on a dark ground, with three facts under it. The cinematic beat of a page; the picture settles into place as it scrolls in.",
+      "aliases": [
+        "dark band",
+        "full bleed section",
+        "product shot section",
+        "hero image band",
+        "apple style section",
+        "showcase",
+        "big picture section"
+      ],
+      "pattern": "<section data-tone=\"dark\"> + <figure data-zoom>",
+      "states": [
+        "dark",
+        "light",
+        "picture settling"
+      ],
+      "react": "MediaBand",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/media-band/media-band.css",
+        "components/ui/blocks/media-band/media-band.html",
+        "components/ui/blocks/media-band/media-band.react.tsx"
+      ],
+      "path": "components/ui/blocks/media-band"
+    },
+    {
+      "id": "gallery-rail",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Gallery rail",
+      "summary": "A row of pictures at one ratio that runs off the right edge and snaps as it scrolls sideways, with previous and next buttons. Many pictures without a wall of cards.",
+      "aliases": [
+        "carousel",
+        "horizontal scroll",
+        "slider",
+        "product rail",
+        "swipe gallery",
+        "scroll snap row",
+        "highlights row"
+      ],
+      "pattern": "<ul> with scroll-snap",
+      "states": [
+        "start",
+        "middle",
+        "end",
+        "swipe (phones)"
+      ],
+      "react": "GalleryRail",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/gallery-rail/gallery-rail.css",
+        "components/ui/blocks/gallery-rail/gallery-rail.html",
+        "components/ui/blocks/gallery-rail/gallery-rail.react.tsx",
+        "components/ui/blocks/gallery-rail/gallery-rail.ts"
+      ],
+      "path": "components/ui/blocks/gallery-rail"
     },
     {
       "id": "disclosure-chevron",
@@ -7787,8 +7911,8 @@
       "id": "practice",
       "order": 22,
       "name": "Local or professional service",
-      "summary": "A page for a practice or a service business (a dentist, a physio, a solicitor, an accountant, a tradesperson): who it is for and where, what is done and what it costs as ruled rows, what happens at a first visit, the people with their qualifications, the address with opening hours, and the questions people ask before they call.",
-      "anatomy": "Top bar with the phone number → hero (who, where, book) with a picture or art panel → services and fees as rows → first visit in three steps → people → address and opening hours → questions → booking band → footer",
+      "summary": "A page for a practice or a service business (a dentist, a physio, a solicitor, an accountant, a tradesperson): who it is for and where with the first price in the picture, one statement that lights up as it scrolls, fees as tiles with the price set large, the first visit as stacking cards (one holds the written plan), the people as rows, a dark band with whether it is open now, and the questions people ask before they call.",
+      "anatomy": "Top bar with the phone number → hero with the first price set large → scroll statement → fee tiles → first visit as stacking cards → people as rows → find us, open now (dark band) → questions → booking band → footer",
       "aliases": [
         "dentist website",
         "clinic website",
@@ -7810,8 +7934,10 @@
         "navbar-simple",
         "hero-split",
         "art-panel",
-        "service-list",
-        "how-it-works",
+        "scroll-statement",
+        "bento-grid",
+        "stack-cards",
+        "invoice-sheet",
         "team-grid",
         "visit-info",
         "faq-section",
@@ -7835,8 +7961,8 @@
       "id": "cause",
       "order": 23,
       "name": "Charity or community group",
-      "summary": "A page for a charity, a food bank, a club or a campaign: the claim in one sentence with three true figures, how to get help with session times, where each pound goes as one bar that adds up, ways to help as ruled rows, the questions people ask, and one giving action.",
-      "anatomy": "Top bar (Donate) → statement hero with three figures → how to get help: where and when → where the money goes → ways to help as rows → questions → giving band → footer with the charity number",
+      "summary": "A page for a charity, a food bank, a club or a campaign: the claim in one sentence with three true figures, how to get help with session times, where each pound goes as one bar that adds up, ways to help as tiles with one figure each, the questions people ask, and one giving action.",
+      "anatomy": "Top bar (Donate) → statement hero with three figures → how to get help: where and when → where the money goes → ways to help as tiles → questions → giving band → footer with the charity number",
       "aliases": [
         "charity website",
         "nonprofit landing page",
@@ -7854,7 +7980,7 @@
         "navbar-simple",
         "hero-statement",
         "visit-info",
-        "service-list",
+        "bento-grid",
         "faq-section",
         "cta-band",
         "footer-minimal",

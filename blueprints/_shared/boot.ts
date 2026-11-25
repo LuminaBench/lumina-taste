@@ -3,6 +3,7 @@ import '../../tokens/base.css';
 import '../../tokens/layout.css';
 import '../../tokens/backdrops.css';
 import '../../tokens/composition.css';
+import '../../tokens/scroll.css';
 import '../../tokens/palettes/all.css';
 import '../../tokens/typography/typography.css';
 import '../../components/ui/_shared/shared.css';

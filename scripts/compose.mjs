@@ -187,7 +187,7 @@ const plan = {
   install,
   installAlternative: startWith === 'blueprint' ? installSnippets : installBlueprint,
   blueprint: blueprint ?? (type.blueprint ? `${type.blueprint} (not in this version; start from the sections below)` : null),
-  artDirection: { signature: art.signature, mainAttributes: art.mainAttrs, sections: art.sectionLayouts.map((l) => ({ n: l.n, id: l.id, layout: l.layout, space: l.space, attributes: sectionAttrs(l) })), accent: art.accent, type: art.type, rhythm: art.rhythm },
+  artDirection: { signature: art.signature, mainAttributes: art.mainAttrs, sections: art.sectionLayouts.map((l) => ({ n: l.n, id: l.id, layout: l.layout, space: l.space, attributes: sectionAttrs(l) })), accent: art.accent, type: art.type, rhythm: art.rhythm, words: art.words, motion: art.motion },
   sections,
   charts,
   restyle: restyle ? kb.restyle.notes : null,
@@ -228,6 +228,7 @@ if (writeDraft) {
     const family = (id) => cat.ui.find((u) => u.id === id)?.family;
     const anchors = [];
     const body = [];
+    let lastTone = null;
     const slugOf = (role) => role.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     for (const x of picked.filter((y) => !y.id || !isChrome(y.id))) {
       if (!x.id) {
@@ -243,9 +244,12 @@ if (writeDraft) {
       if (x.id === 'hero-statement' && picked.some((y) => y.id === 'stats-band')) html = html.replace(/\s*<dl data-part="facts">[\s\S]*?<\/dl>/, '');
       const slug = hero ? 'top' : SLUG[x.id] ?? slugOf(x.role ?? x.id);
       const lay = layoutOf(x.n);
-      const attrs = [slug && !/^<\w+[^>]*\sid=/.test(html) ? `id="${slug}"` : null, x.tone && !art.printlike ? `data-tone="${x.tone}"` : null, lay ? sectionAttrs(lay) : null].filter(Boolean).join(' ');
+      // Never two tinted bands in a row: a tone that would touch the last one is dropped (a dark band always stays).
+      const tone = x.tone && (!art.printlike || x.tone === 'dark') && (x.tone === 'dark' || !lastTone) ? x.tone : null;
+      lastTone = tone;
+      const attrs = [slug && !/^<\w+[^>]*\sid=/.test(html) ? `id="${slug}"` : null, hero ? 'data-entrance' : null, tone ? `data-tone="${tone}"` : null, lay ? sectionAttrs(lay) : null].filter(Boolean).join(' ');
       if (family(x.id) === 'blocks') {
-        html = html.replace(/^<(section|div|footer)\b([^>]*)>/, (m, tag, rest) => `<${tag}${rest.replace(/\sid="[^"]*"/, slug ? '' : '$&')}${attrs ? ' ' + attrs : ''}>`);
+        html = html.replace(/^<(section|div|footer)\b([^>]*)>/, (m, tag, rest) => `<${tag}${rest.replace(/\sid="[^"]*"/, slug ? '' : '$&').replace(/\sdata-tone="[^"]*"/, tone ? '' : '$&')}${attrs ? ' ' + attrs : ''}>`);
       } else {
         // Not a section block: give it the same band, container and heading as one.
         html = `<section class="lt-section"${attrs ? ' ' + attrs : ''} aria-labelledby="h-${slug ?? x.n}">\n  <header><h2 id="h-${slug ?? x.n}">${x.role}</h2></header>\n  ${html.split('\n').join('\n  ')}\n</section>`;
@@ -321,8 +325,10 @@ if (startWith === 'blueprint') {
 if (restyle) { L.push(H('Restyling an existing page'), ''); for (const n of kb.restyle.notes) L.push(`- ${n}`); L.push(''); }
 L.push(H('Art direction (what makes this page this page)'), '');
 L.push(`- **Signature: ${art.signature.name}.** ${art.signature.how}`);
-if (art.mainAttrs.length) L.push(`- **Page:** \`<main ${art.mainAttrs.join(' ')}>\`: ${art.printlike ? 'hairlines between sections and numbered labels, like a well-set document. Do not tint bands as well.' : ''}`);
+if (art.mainAttrs.length) L.push(`- **Page:** \`<main ${art.mainAttrs.join(' ')}>\`: ${art.printlike ? 'hairlines between sections and numbered labels, like a well-set document, and each section rises into place as it scrolls in. Do not tint bands as well.' : 'each section rises into place as it scrolls in.'}`);
 L.push(`- **Rhythm:** ${art.rhythm}`);
+L.push(`- **Words:** ${art.words}`);
+L.push(`- **Motion:** ${art.motion}`);
 L.push(`- **Colour:** ${art.accent}`);
 L.push(`- **Type:** ${art.type}`);
 L.push('- **Then the detail pass** in references/composition.md before you audit: alignment, line breaks, numbers, edges.', '');

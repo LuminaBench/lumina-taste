@@ -125,10 +125,10 @@ test('art direction: one signature, no three neighbours with the same shape, a h
   }
   const studio = compose('landing page for Meridian, an architecture studio');
   assert.equal(studio.sections.find((s) => /^hero-/.test(s.id)).id, 'hero-statement');
-  assert.deepEqual(studio.artDirection.mainAttributes, ['data-separators="rules"', 'data-numbered']);
+  assert.deepEqual(studio.artDirection.mainAttributes, ['data-separators="rules"', 'data-numbered', 'data-scroll']);
   const saas = compose('landing page for a project management app for agencies');
   assert.equal(saas.sections.find((s) => /^hero-/.test(s.id)).id, 'hero-split');
-  assert.deepEqual(saas.artDirection.mainAttributes, []);
+  assert.deepEqual(saas.artDirection.mainAttributes, ['data-scroll']);
   assert.match(compose('Landing page for Relay, a webhooks API').artDirection.signature.name, /Code/);
 });
 
@@ -139,7 +139,8 @@ test('compose --write produces a composed draft that audits clean, with real anc
     assert.equal(r.status, 0, r.stderr);
     assert.match(r.stdout, /A first draft is written/);
     const html = readFileSync(join(dir, 'index.html'), 'utf8');
-    assert.match(html, /<main id="main" data-separators="rules" data-numbered>/);
+    assert.match(html, /<main id="main" data-separators="rules" data-numbered data-scroll>/);
+    assert.match(html, /<section class="lt-hero-statement"[^>]*data-entrance/);
     assert.match(html, /<section class="lt-hero-statement"[^>]*id="top"/);
     assert.ok(html.includes('Meridian') && !html.includes('Halyard'), 'the product name replaces the sample brand');
     assert.ok(!/lt-logo-cloud|lt-testimonial-grid/.test(html), 'proof from other people is never drafted');
@@ -221,5 +222,25 @@ test('names with more than one word, an audience for every plan, and an action t
   assert.doesNotMatch(act('Website for an emergency plumber in Hull'), /Start free/);
   // The programme and the fee list need the full width: never beside a rail.
   for (const brief of ['Website for a two-day design conference in Leeds', 'Website for an accountant in Leeds']) for (const l of compose(brief).artDirection.sections) if (l.id === 'service-list') assert.equal(l.layout, null);
+});
+
+test('plans put pictures where paragraphs were, and say how the page moves', () => {
+  const p = compose('Home page for Cedar Street Dental, a family dentist in Leeds');
+  const ids = p.sections.map((x) => x.id);
+  for (const id of ['scroll-statement', 'bento-grid', 'stack-cards']) assert.ok(ids.includes(id), id);
+  assert.ok(!ids.includes('how-it-works') && !ids.includes('service-list'), 'steps and fees are not paragraphs');
+  assert.equal(p.sections.find((x) => x.id === 'visit-info').tone, 'dark');
+  assert.match(p.artDirection.words, /caption/);
+  assert.match(p.artDirection.motion, /data-entrance/);
+  // A software landing page gets its one dark band for the product, and the draft never puts two tinted bands together.
+  const dir = mkdtempSync(join(tmpdir(), 'lt-moves-'));
+  try {
+    node([join(root, 'scripts/compose.mjs'), 'Landing page for a booking app for dental clinics', '--project', dir, '--write']);
+    const html = readFileSync(join(dir, 'index.html'), 'utf8');
+    assert.match(html, /<main id="main" data-scroll>/);
+    assert.equal((html.match(/data-tone="dark"/g) ?? []).length, 1);
+    const tones = [...html.matchAll(/<section class="lt-[^"]+"([^>]*)>/g)].map((m) => /data-tone="(\w+)"/.exec(m[1])?.[1] ?? null);
+    for (let i = 1; i < tones.length; i++) assert.ok(!(tones[i] && tones[i - 1]), `tinted bands ${i - 1} and ${i} touch`);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 

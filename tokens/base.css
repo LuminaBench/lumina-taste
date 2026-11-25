@@ -101,7 +101,7 @@
   --step-5: 3.5rem;
 }
 
-:where([data-mode="dark"]) {
+:where([data-mode="dark"], [data-tone="dark"]) {
   --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.3);
   --shadow-md: 0 1px 2px oklch(0 0 0 / 0.3), 0 4px 12px -4px oklch(0 0 0 / 0.3);
   --shadow-overlay: 0 0 0 1px var(--border-hairline), 0 2px 6px oklch(0 0 0 / 0.25),
@@ -211,7 +211,6 @@
 :where(html[data-palette]) {
   background: var(--canvas-image), var(--bg-canvas);
   background-attachment: fixed;
-  scrollbar-gutter: stable;
   scroll-padding-top: 88px;
 }
 :where(html[data-palette]) :where(body) {

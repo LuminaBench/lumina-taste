@@ -2,10 +2,28 @@
 .pr-tel { color: var(--text-primary); font-size: var(--text-ui-sm); font-weight: 650; font-variant-numeric: tabular-nums; text-decoration: none; white-space: nowrap; }
 .pr-tel:hover { color: var(--accent-text); }
 .lt-hero-split [data-part="note"] { color: var(--text-secondary); }
-.lt-hero-split [data-part="note"] a, .lt-services [data-part="note"] a { color: var(--accent-text); font-weight: 600; text-underline-offset: 3px; }
-/* Six people in one row at full width; names and roles can run to two lines. */
-.lt-team-grid ul { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-.lt-team-grid li > span:last-child { text-wrap: balance; }
+.lt-hero-split [data-part="note"] a, .pr-note a { color: var(--accent-text); font-weight: 600; text-underline-offset: 3px; }
+.pr-note { margin: 18px 0 0; color: var(--text-muted); font-size: var(--text-ui-sm); }
+/* The bento's tiles are tall enough for a price set large. */
+#fees .lt-bento { grid-auto-rows: minmax(200px, auto); }
+/* The patient's chart as they see it on the screen: two arches of teeth, two marked to watch. A product
+   fragment drawn from tokens, standing in for the real screen. */
+.pr-chart { display: grid; gap: 14px; width: min(420px, 88%); padding: 22px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); box-shadow: 0 16px 24px -18px oklch(0 0 0 / 0.24); }
+.pr-chart-k { display: flex; justify-content: space-between; gap: 12px; margin: 0; font-size: var(--text-ui-sm); }
+.pr-chart-k span { color: var(--text-secondary); }
+.pr-arch { display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: 4px; }
+.pr-arch i { height: 30px; border-radius: 6px 6px 9px 9px; background: var(--bg-surface-3); box-shadow: inset 0 0 0 1px var(--border-hairline); }
+.pr-arch[data-row="lower"] i { border-radius: 9px 9px 6px 6px; }
+.pr-arch i:is(:nth-child(1), :nth-child(14)) { height: 24px; align-self: center; }
+.pr-arch i[data-watch] { background: color-mix(in oklab, var(--status-warning) 55%, var(--bg-surface-1)); box-shadow: inset 0 0 0 1.5px var(--status-warning); }
+.pr-chart-legend { display: flex; gap: 16px; margin: 0; color: var(--text-secondary); font-size: var(--text-ui-xs); }
+.pr-chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.pr-chart-legend i { width: 10px; height: 10px; border-radius: 3px; background: var(--bg-surface-3); box-shadow: inset 0 0 0 1px var(--border-hairline); }
+.pr-chart-legend i[data-watch] { background: color-mix(in oklab, var(--status-warning) 55%, var(--bg-surface-1)); box-shadow: inset 0 0 0 1.5px var(--status-warning); }
+/* Five people, one row: a portrait stand-in each, then the name, the role and one line. */
+#people ul { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 28px 20px; }
+#people li > p { margin: 6px 0 0; color: var(--text-secondary); font-size: var(--text-ui-sm); line-height: 1.45; }
+@media (max-width: 900px) { #people ul { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 520px) { #people ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .lt-footer-min { padding-block: var(--space-6); }
-@media (max-width: 900px) { .pr-tel { display: none; } .lt-team-grid ul { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-@media (max-width: 480px) { .lt-team-grid ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .pr-tel { display: none; } }

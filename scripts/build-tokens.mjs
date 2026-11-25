@@ -129,6 +129,12 @@ for (const p of palettes) {
     css += `[data-palette="${p.id}"][data-mode="${mode}"] {\n  color-scheme: ${mode};\n`;
     for (const [k, v] of Object.entries(t)) css += k === 'focus-ring' ? `  --${k}: var(--accent-text);\n` : `  --${k}: ${toCss(v)};\n`;
     css += `}\n`;
+    // A dark band inside a light page (data-tone="dark" on a section): the same palette's dark tokens, scoped.
+    if (mode === 'dark') {
+      css += `[data-palette="${p.id}"] [data-tone="dark"] {\n  color-scheme: dark;\n`;
+      for (const [k, v] of Object.entries(t)) css += k === 'focus-ring' ? `  --${k}: var(--accent-text);\n` : `  --${k}: ${toCss(v)};\n`;
+      css += `}\n`;
+    }
   }
   writeFileSync(join(root, `tokens/palettes/${p.id}.css`), css);
   allCss.push(css);

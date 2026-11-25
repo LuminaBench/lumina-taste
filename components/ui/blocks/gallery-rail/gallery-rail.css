@@ -1,0 +1,27 @@
+/* Gallery rail: a row of pictures that runs off the right edge and snaps as you swipe or scroll it
+   sideways. For a range, a set of rooms, a portfolio: many pictures at one ratio without a wall of cards.
+   Native scroll and scroll-snap; the buttons move one picture at a time and hide at either end. */
+@scope (.lt-gallery-rail) {
+  :scope { container-type: inline-size; display: block; width: 100%; padding: var(--block-y, calc(var(--section-y) / 2)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  /* Blocks pad by half of --section-y, so the gap between two sections is exactly --section-y. data-tone="well" makes a tinted band; data-tone="dark" a dark one. */
+  :scope[data-tone="well"] { background: var(--bg-surface-2); }
+  @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  [data-part="eyebrow"] { margin: 0 0 10px; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; color: var(--accent-text); }
+  [data-part="lede"] { margin: 12px 0 0; max-width: 52ch; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.55; text-wrap: pretty; }
+  :scope { padding-right: 0; overflow-x: clip; }
+  header { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: clamp(24px, 4cqi, 40px); padding-right: max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); }
+  h2 { margin: 0; font-family: var(--font-display); font-size: max(var(--step-3), 1.625rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
+  [data-part="nav"] { display: flex; gap: 8px; }
+  [data-part="nav"] button { display: grid; place-items: center; width: 40px; height: 40px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: 50%; background: transparent; color: var(--text-primary); cursor: pointer; transition: background var(--dur-2), opacity var(--dur-2); }
+  [data-part="nav"] button:hover { background: var(--bg-surface-2); }
+  [data-part="nav"] button:disabled { opacity: 0.35; cursor: default; }
+  [data-part="nav"] button:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
+  [data-part="track"] { display: grid; grid-auto-flow: column; grid-auto-columns: clamp(220px, 26cqi, 340px); gap: clamp(14px, 2cqi, 22px); margin: 0; padding: 0 max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)) 8px 0; list-style: none; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: 0; scrollbar-width: none; }
+  [data-part="track"]::-webkit-scrollbar { display: none; }
+  [data-part="track"]:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 4px; border-radius: var(--radius-md); }
+  [data-part="track"] > li { scroll-snap-align: start; }
+  [data-part="caption"] { display: flex; justify-content: space-between; gap: 12px; margin: 12px 0 0; font-size: var(--text-ui-sm); }
+  [data-part="caption"] span { color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+  @container (max-width: 640px) { [data-part="track"] { grid-auto-columns: 72%; padding-right: 16px; } [data-part="nav"] { display: none; } header { padding-right: 16px; } }
+}

@@ -15,8 +15,8 @@
   <button type="button" data-part="toggle" aria-expanded="false" aria-controls="lt-ns-panel" aria-label="Menu"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   <div id="lt-ns-panel" data-part="panel" hidden><ul><li><a href="#programme">Programme</a></li><li><a href="#speakers">Speakers</a></li><li><a href="#tickets">Tickets</a></li><li><a href="#venue">Venue</a></li></ul></div>
 </header>
-  <main id="main" data-separators="rules" data-numbered>
-    <section class="lt-hero-statement" id="top" aria-labelledby="ev-h">
+  <main id="main" data-separators="rules" data-numbered data-scroll>
+    <section class="lt-hero-statement" id="top" data-entrance aria-labelledby="ev-h">
       <p data-part="eyebrow"><time datetime="2027-05-14">14</time> and <time datetime="2027-05-15">15 May 2027</time> · Weaver's Hall, Halifax</p>
       <h1 id="ev-h">Two days on making public services people can use</h1>
       <div data-part="foot">
@@ -29,19 +29,19 @@
     </section>
 
     <section class="lt-services" id="programme" aria-labelledby="ev-pr-h">
-      <header><p data-part="eyebrow">Programme</p><h2 id="ev-pr-h">One room, one track, long breaks</h2><p data-part="lede">Talks are 25 minutes with ten for questions. Friday is below; <a href="/programme#saturday">Saturday's programme</a> follows the same shape.</p></header>
+      <header><p data-part="eyebrow">Programme</p><h2 id="ev-pr-h">One room, one track, long breaks</h2><p data-part="lede">25-minute talks, ten minutes of questions. <a href="/programme#saturday">Saturday</a> runs the same way.</p></header>
       <p data-part="group">Friday <time datetime="2027-05-14">14 May</time></p>
       <ul>
-        <li><div><time data-part="when">09:00</time><h3>Doors, coffee and badges</h3><p>Breakfast rolls from the market, including vegan and gluten-free.</p><span data-part="meta">Foyer</span></div></li>
-        <li><a href="/programme/forms-nobody-finishes"><time data-part="when">10:00</time><h3>The form nobody finishes</h3><p>Amara Okafor on cutting a 47-question benefits form to 12, and what the fraud team said.</p><span data-part="meta">Main hall</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/programme/letters"><time data-part="when">10:45</time><h3>Letters are an interface</h3><p>Tom Brennan rewrote 300 council letters. Missed appointments fell by a fifth.</p><span data-part="meta">Main hall</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
-        <li><div><time data-part="when">11:30</time><h3>Break</h3><p>Forty minutes, on purpose. The best part of any conference is the corridor.</p><span data-part="meta">Foyer</span></div></li>
-        <li><a href="/programme/buses"><time data-part="when">12:10</time><h3>When the bus does not come</h3><p>Priya Shah on live departure boards that admit what they do not know.</p><span data-part="meta">Main hall</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
-        <li><div><time data-part="when">13:00</time><h3>Lunch</h3><p>Hot food from three Halifax kitchens, included in every ticket.</p><span data-part="meta">The yard</span></div></li>
-        <li><a href="/programme/workshops"><time data-part="when">14:30</time><h3>Workshops, choose one of three</h3><p>Testing with people who do not use computers; writing error messages; reading a service's data.</p><span data-part="meta">Rooms 1 to 3</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/programme/closing-friday"><time data-part="when">16:30</time><h3>What we stopped doing</h3><p>Hana Kowalska closes the day with five things her team switched off, and who noticed.</p><span data-part="meta">Main hall</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+        <li><div><time data-part="when">09:00</time><h3>Doors, coffee and badges</h3><p>Breakfast from the market</p><span data-part="meta">Foyer</span></div></li>
+        <li><a href="/programme/forms-nobody-finishes"><time data-part="when">10:00</time><h3>The form nobody finishes</h3><p>Amara Okafor</p><span data-part="meta">Main hall</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+        <li><a href="/programme/letters"><time data-part="when">10:45</time><h3>Letters are an interface</h3><p>Tom Brennan</p><span data-part="meta">Main hall</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+        <li><div><time data-part="when">11:30</time><h3>Break</h3><p>Forty minutes, on purpose</p><span data-part="meta">Foyer</span></div></li>
+        <li><a href="/programme/buses"><time data-part="when">12:10</time><h3>When the bus does not come</h3><p>Priya Shah</p><span data-part="meta">Main hall</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+        <li><div><time data-part="when">13:00</time><h3>Lunch</h3><p>Included in every ticket</p><span data-part="meta">The yard</span></div></li>
+        <li><a href="/programme/workshops"><time data-part="when">14:30</time><h3>Workshops, choose one of three</h3><p>James Lindqvist, Ruth Daley and others</p><span data-part="meta">Rooms 1 to 3</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+        <li><a href="/programme/closing-friday"><time data-part="when">16:30</time><h3>What we stopped doing</h3><p>Hana Kowalska</p><span data-part="meta">Main hall</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
       </ul>
-      <p data-part="note">Times are British Summer Time. Every talk has live captions and is recorded for ticket holders.</p>
+      <p data-part="note">British Summer Time. Every talk is captioned and recorded.</p>
     </section>
 
     <section class="lt-team-grid" id="speakers" data-variant="list" aria-labelledby="ev-sp-h">

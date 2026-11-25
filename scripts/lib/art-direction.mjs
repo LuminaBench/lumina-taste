@@ -21,11 +21,14 @@ const LAYOUTS = {
   'project-grid': ['split', 'default'],
   'logo-cloud': ['default'],
 };
+/** Parts from other families that a page type places as a section of their own: drafted inside a plain section. */
+export const SECTION_PARTS = new Set(['bento-grid', 'description-list', 'comparison-table', 'code-block', 'terminal-window', 'api-endpoint', 'review-summary', 'device-frame', 'invoice-sheet']);
 /** The shape each (block, layout) presents: neighbours with the same shape read as one repeated section. */
 const SHAPE = {
   rail: 'rail', centre: 'centre', split: 'left', default: 'left',
 };
 const FIXED_SHAPE = {
+  'scroll-statement': 'statement', 'stack-cards': 'stack', 'media-band': 'band', 'gallery-rail': 'rail-x', 'bento-grid': 'grid',
   'faq-section': 'rail', 'feature-split': 'alternating', 'quote-feature': 'split', 'cta-band': 'panel', 'logo-cloud': 'centre', 'pricing-tiers': 'centre',
   'hero-split': 'split', 'hero-centered': 'centre', 'hero-statement': 'left', 'visit-info': 'split', 'booking-bar': 'panel', 'sticky-story': 'rail',
   'terminal-window': 'split', 'code-block': 'left', 'api-endpoint': 'left', 'contact-section': 'split', 'newsletter-signup': 'panel', 'comparison-table': 'left', 'showcase-tabs': 'centre',
@@ -120,7 +123,13 @@ export function direct({ type, domain, profile, sections, uiIds }) {
   const space = (id) => (id === 'logo-cloud' ? 'tight' : id === 'quote-feature' ? 'open' : null);
   const sectionLayouts = layouts.filter(Boolean).map((l) => ({ ...l, space: space(l.id) }));
 
-  const mainAttrs = marketing ? [printlike ? 'data-separators="rules"' : null, printlike && sectionLayouts.length >= 3 ? 'data-numbered' : null].filter(Boolean) : [];
+  const mainAttrs = marketing ? [printlike ? 'data-separators="rules"' : null, printlike && sectionLayouts.length >= 3 ? 'data-numbered' : null, 'data-scroll'].filter(Boolean) : [];
+  const motion = marketing
+    ? 'The hero enters once (data-entrance on it); every section rises into place as it arrives (data-scroll on <main>). Add at most two scroll moments where they carry the subject: a scroll-statement for the one claim, stack-cards for steps, data-zoom on the strongest picture. Nothing else moves; everything is still under reduced motion.'
+    : 'Motion only answers the person: hover, press, open, a toast. No scroll effects on app screens.';
+  const words = marketing
+    ? 'Words are a caption to something you can see. Headline 6 to 10 words; each section one heading and at most one sentence; a card or row one line. Every section shows something (the product, a document, a chart, one figure set large); never two word-only sections in a row. The critic checks this (taste-text-wall).'
+    : 'Labels and values, not sentences. Help text one line, under the field it explains.';
   const accent = marketing
     ? 'The accent appears on the primary button, the small section labels and at most one thing in the hero (a chart series, an art panel, a trace). Everything else is ink, secondary ink and hairlines.'
     : 'The accent marks the one primary action and the current selection. Status colours mean status only. Everything else is ink and hairlines.';
@@ -130,7 +139,7 @@ export function direct({ type, domain, profile, sections, uiIds }) {
   const rhythm = marketing
     ? `${printlike ? 'Sections are divided by hairlines; do not also tint bands.' : 'Alternate plain and tinted bands; never two tinted in a row.'} Shapes in order: ${sectionLayouts.map((l) => l.shape).join(' → ')}. No two neighbours share a shape.`
     : 'One primary view fills the screen; chrome stays quiet. Group with space and hairlines before reaching for cards.';
-  return { signature, hero, heroWhy, mainAttrs, printlike, sectionLayouts, accent, type: type_, rhythm };
+  return { signature, hero, heroWhy, mainAttrs, printlike, sectionLayouts, accent, type: type_, rhythm, motion, words };
 }
 
 /** The attribute string to put on a section for its assigned layout and space. */

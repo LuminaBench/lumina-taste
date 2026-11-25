@@ -21,6 +21,7 @@ A signature is the one move that makes the page this page. Pick one. Two signatu
 | App or SaaS | The product, working | `device-frame` holding the real screen, then `sticky-story` or `showcase-tabs` |
 | Shop, brand | The objects as a set | `offer-cards` with photographs or art panels at one ratio, toned plain, accent, ink |
 | Place, venue | A place you can find | One large art panel or photograph, "open now" in words (`visit-info`), `booking-bar` |
+| Practice, service | The price, shown | The first price set large in the hero, fees as `bento-grid` tiles, the first visit as `stack-cards` with the written plan as an `invoice-sheet`, open-now on a dark band |
 | Studio, publication | Set like print | `hero-statement`, `<main data-numbered data-separators="rules">` |
 | Public service | The task, first | `hero-statement` naming the task, numbered `how-it-works`, underlined links |
 | Practice, professional | Plain terms | `service-list` with every price in one column, named people with their registration, hairlines |
@@ -104,6 +105,42 @@ Placing the picture:
 - Sections are a full `--section-y` apart. `data-space="tight"` pulls a proof strip up to the section it supports; `data-space="open"` lets a lone quote stand apart.
 - When a page feels crowded, remove a section before shrinking anything.
 
+## 8b. Show, do not tell: the words budget
+
+A page is not a document. The best product pages put a picture or a figure in every screen and use words as captions to it. A page that is heading, paragraph, rows, repeat reads as generated however well it is set.
+
+| Where | Budget |
+| --- | --- |
+| Headline | 6 to 10 words, four lines at most on a wide screen (the critic checks) |
+| Section | One heading, at most one sentence under it. Zero sentences when a grid, a figure or a picture follows |
+| Card, tile, row | A name and one line. Twenty words at most |
+| Whole landing page | About 250 to 500 visible words |
+| Each screen | At least half of it something to look at, or space |
+
+What to put where a paragraph would have gone:
+
+| Instead of | Use |
+| --- | --- |
+| A list of services with sentences | `bento-grid` tiles with the price set large (`<p data-part="figure">£68</p>`); `service-list` rows with one short line only when there are more than six |
+| Numbered steps in paragraphs | `stack-cards`: each step a card with a picture (a figure, the screen, the document it produces) |
+| A mission paragraph | `scroll-statement`: one claim of 12 to 25 words that lights up as it scrolls |
+| A feature described in words | The feature itself: a `device-frame` with the real screen, an `invoice-sheet`, a chart, cropped and bleeding off its panel |
+| "We have lots of products" | `gallery-rail`: pictures at one ratio, running off the edge |
+| Proof in a sentence | One figure set large (`art-panel data-variant="figure"`, `stats-band`, `media-band` facts) |
+| A section break | A ground change: one `data-tone="dark"` band from the middle of the page on |
+
+Never two word-only sections next to each other; the critic reports it as `taste-text-wall`.
+
+## 8c. Motion: how the page moves
+
+Three layers, no more. All are in `tokens/scroll.css`, plain CSS, still under reduced motion and where scroll-driven animations are not supported.
+
+1. **Entrance**: `data-entrance` on the hero. The headline rises once, then the lede and buttons, then the picture.
+2. **Reveal**: `data-scroll` on `<main>`. Each section's heading and body rise into place as they arrive. Quiet, the same everywhere.
+3. **One or two moments**, where they carry the subject: a `scroll-statement` (the claim lights word by word), `stack-cards` (steps pin and stack), `data-zoom` on the strongest picture (it settles to full size), `gallery-rail` (a row to swipe).
+
+Not: parallax on text, scroll-jacking, anything that moves on its own in a loop, two moments in a row, or a moment on an app screen.
+
 ## 9. Tailor it to the brief
 
 | The brief says | Do this |
@@ -139,4 +176,4 @@ Do this with the page open at 1440px and at 390px, after it works and before the
 
 ## 11. What the critic checks
 
-`audit-ui.mjs --taste` reports the measurable half of this file: three neighbours with the same shape (`taste-monotony`), a run of centred sections (`taste-centred-run`), accent used in too many places (`taste-accent-budget`), content that leaves the shared left edge (`taste-edge`) headings that end on a stranded word (`taste-widow`) headings that break inside a hyphenated word (`taste-heading-break`) and a headline that runs past four lines on a wide screen (`taste-headline-length`), next to its existing checks for type steps, radii, measure, rhythm and focal point. The other half is your eye: do the detail pass.
+`audit-ui.mjs --taste` reports the measurable half of this file: three neighbours with the same shape (`taste-monotony`), a run of centred sections (`taste-centred-run`), accent used in too many places (`taste-accent-budget`), content that leaves the shared left edge (`taste-edge`) headings that end on a stranded word (`taste-widow`) headings that break inside a hyphenated word (`taste-heading-break`), a headline that runs past four lines on a wide screen (`taste-headline-length`) and sections that are only words (`taste-text-wall`), next to its existing checks for type steps, radii, measure, rhythm and focal point. The other half is your eye: do the detail pass.
