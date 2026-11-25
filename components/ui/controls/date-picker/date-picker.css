@@ -1,0 +1,38 @@
+@scope (.lt-date) {
+  :scope { position: relative; display: grid; gap: 6px; width: min(100%, 260px); color: var(--text-primary); font-size: var(--text-ui); }
+  label { font-size: var(--text-ui-sm); font-weight: 600; }
+  [data-part="field"] { display: flex; align-items: center; height: calc(var(--control-h) + 8px); padding: 0 4px 0 12px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-1); transition: border-color var(--dur-1), box-shadow var(--dur-1); }
+  [data-part="field"]:hover { border-color: var(--text-secondary); }
+  [data-part="field"]:focus-within { border-color: var(--focus-ring); box-shadow: var(--field-ring); }
+  input { flex: 1; min-width: 0; height: 100%; padding: 0; border: 0; outline: none; background: none; color: inherit; font: inherit; font-variant-numeric: tabular-nums; }
+  input::placeholder { color: var(--text-muted); }
+  [data-part="open"] { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-secondary); cursor: pointer; }
+  [data-part="open"]:hover { background: var(--bg-surface-2); color: var(--text-primary); }
+  [data-part="hint"] { margin: 0; min-height: 1.4em; color: var(--text-secondary); font-size: var(--text-ui-xs); }
+  :scope[data-state="error"] [data-part="field"] { border-color: var(--status-negative); }
+  :scope[data-state="error"] [data-part="hint"] { color: var(--status-negative); }
+  [data-part="popover"] { position: absolute; top: calc(100% - 18px); left: 0; z-index: var(--z-dropdown); width: max-content; padding: var(--gap-md) var(--gap-sm) var(--gap-sm); border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); box-shadow: var(--shadow-overlay); animation: lt-date-in var(--dur-2) var(--ease-out); }
+  [data-part="popover"][hidden] { display: none; }
+  [data-part="head"] { display: flex; align-items: center; justify-content: space-between; padding: 0 2px var(--gap-sm); }
+  [data-part="head"] h2 { margin: 0; font-size: var(--text-ui); font-weight: 600; }
+  [data-part="head"] button { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-secondary); cursor: pointer; }
+  [data-part="head"] button:hover { background: var(--bg-surface-2); color: var(--text-primary); }
+  table { border-collapse: collapse; }
+  th { width: 36px; height: 28px; color: var(--text-muted); font-size: var(--text-ui-xs); font-weight: 550; }
+  td { padding: 1px 0; }
+  td button { position: relative; display: grid; place-items: center; width: 36px; height: 34px; padding: 0; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-primary); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; cursor: pointer; }
+  td button:hover { background: var(--bg-surface-3); }
+  td button[data-outside] { color: var(--text-muted); }
+  td button[aria-disabled="true"] { color: var(--text-muted); text-decoration: line-through; cursor: not-allowed; }
+  td button[aria-disabled="true"]:hover { background: none; }
+  td button[data-today]::after { content: ""; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent-text); }
+  td button[data-selected] { background: var(--accent-solid); color: var(--accent-ink); font-weight: 650; }
+  td button[data-selected]::after { background: var(--accent-ink); }
+  td button:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 1px; z-index: 1; }
+  [data-part="foot"] { display: flex; justify-content: space-between; margin-top: var(--gap-sm); padding: var(--gap-sm) 2px 0; border-top: var(--bw) var(--border-style) var(--border-hairline); }
+  [data-part="foot"] button { height: 28px; padding: 0 8px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--accent-text); font: 600 var(--text-ui-sm) var(--font-body); cursor: pointer; }
+  [data-part="foot"] button:hover { background: var(--bg-surface-2); }
+  [data-part="foot"] [data-part="clear"] { color: var(--text-secondary); }
+}
+@keyframes lt-date-in { from { opacity: 0; translate: 0 -4px; } }
+@media (prefers-reduced-motion: reduce) { .lt-date [data-part="popover"] { animation: none; } }

@@ -19,7 +19,8 @@ export function enhance(root: HTMLElement): Cleanup {
   const draw = () => {
     svg?.remove();
     const W = root.clientWidth, H = root.clientHeight;
-    if (W < 40 || H < 40) return;
+    // On a phone there is no room beside the text: leave the plain grid.
+    if (W < 600 || H < 40) { root.toggleAttribute('data-empty', true); return; }
     const cell = Math.max(24, Number(root.dataset.cell ?? 56));
     let s = Number(root.dataset.seed ?? 7) >>> 0;
     const rnd = () => { s |= 0; s = (s + 0x6d2b79f5) | 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };

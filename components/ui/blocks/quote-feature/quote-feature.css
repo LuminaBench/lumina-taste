@@ -1,0 +1,29 @@
+@scope (.lt-quote) {
+  :scope { container-type: inline-size; display: block; width: 100%; padding: var(--block-y, calc(var(--section-y) / 2)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  /* Blocks pad by half of --section-y, so the gap between two sections is exactly --section-y. data-tone="well" makes a tinted band. */
+  :scope[data-tone="well"] { background: var(--bg-surface-2); }
+  @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  :scope { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); align-items: start; gap: 18px 56px; }
+  h2[data-part="eyebrow"] { grid-column: 1 / -1; margin: 0; font-family: inherit; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); line-height: 1.4; text-transform: uppercase; color: var(--accent-text); }
+  @container (max-width: 820px) { figure { grid-column: 1 / -1; } [data-part="results"] { grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 20px; } [data-part="results"] > div { border-top: var(--bw) var(--border-style) var(--border-hairline); } }
+  @container (max-width: 520px) { [data-part="results"] { grid-template-columns: 1fr; } }
+  figure { margin: 0; }
+  blockquote { margin: 0; }
+  /* The quote is the headline: display type, hanging opening mark, no card around it. */
+  blockquote p { margin: 0; font-family: var(--font-display); font-size: max(var(--step-3), 1.625rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.16; text-wrap: balance; }
+  blockquote p::before { content: "\201C"; position: absolute; translate: -0.52em 0; color: var(--accent-text); }
+  blockquote p::after { content: "\201D"; }
+  figcaption { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 28px; font-size: var(--text-ui-sm); }
+  [data-part="avatar"] { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--bg-surface-3); color: var(--text-primary); font-size: var(--text-ui-xs); font-weight: 650; }
+  [data-part="who"] { display: grid; gap: 1px; margin-right: auto; color: var(--text-secondary); }
+  [data-part="who"] b { color: var(--text-primary); font-weight: 650; }
+  figcaption a { display: inline-flex; align-items: center; gap: 6px; color: var(--accent-text); font-weight: 600; text-decoration: none; }
+  figcaption a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  [data-part="results"] { display: grid; margin: 0; }
+  [data-part="results"] > div { display: flex; flex-direction: column-reverse; gap: 4px; padding: 16px 0; border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
+  [data-part="results"] > div:first-child { padding-top: 0; }
+  @container (max-width: 820px) { [data-part="results"] > div, [data-part="results"] > div:first-child { padding: 16px 0 0; border-bottom: 0; } }
+  dd { margin: 0; font-family: var(--font-display); font-size: var(--step-2); font-weight: var(--weight-display); letter-spacing: -0.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  dt { color: var(--text-secondary); font-size: var(--text-ui-sm); }
+}

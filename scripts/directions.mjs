@@ -30,7 +30,7 @@ const chosen = ids.slice(0, 3).map((id) => styles.find((s) => s.id === id));
 
 // ---------------------------------------------------------------- build
 mkdirSync(out, { recursive: true });
-const app = plan.pageType.kind === 'app' || ['dashboard', 'settings', 'admin-table', 'ai-chat', 'inbox'].includes(plan.pageType.id);
+const app = plan.pageType.kind === 'app' || ['dashboard', 'settings', 'admin-table', 'ai-chat', 'inbox', 'agent-app', 'mobile-app'].includes(plan.pageType.id);
 const parts = app ? ['app-topbar', 'stat-strip', 'data-table'] : ['navbar-simple', 'hero-split', 'stats-band', 'testimonial-grid'];
 const inst = spawnSync(process.execPath, [join(root, 'scripts/install-taste.mjs'), '--project', out, '--dest', '.', '--framework', 'static', '--all-palettes', '--style', chosen[0].id, '--no-profile',
   '--components', [...parts, 'button', 'badge', 'backdrop-dither', 'backdrop-circuit'].join(',')], { encoding: 'utf8' });

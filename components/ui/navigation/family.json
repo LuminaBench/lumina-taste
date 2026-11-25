@@ -1852,6 +1852,198 @@
         ]
       ],
       "added": 11
+    },
+    {
+      "id": "reading-progress",
+      "name": "Reading progress",
+      "summary": "A thin accent bar at the top that fills as an article is read.",
+      "pattern": "sticky bar + scroll position",
+      "states": [
+        "start",
+        "part way",
+        "end"
+      ],
+      "aliases": [
+        "scroll progress bar",
+        "reading indicator",
+        "page progress",
+        "article progress line",
+        "scroll indicator"
+      ],
+      "react": "ReadingProgress",
+      "api": "data-target · --reading-h",
+      "w": 620,
+      "preview": [],
+      "called": [
+        "the line at the top that grows as you scroll",
+        "how far through the article am I bar",
+        "scroll progress"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"bar\"]",
+          "name": "Bar",
+          "api": "scale: var(--p) 1",
+          "text": "3px, the accent colour, scaled from the left. No layout work while scrolling."
+        }
+      ],
+      "prompt": "Add a reading progress bar to a long article: a sticky 3px strip at the top of the page (or of the scrolling panel) whose inner bar is scaled on the x axis from 0 to 1 with the scroll position, updated at most once per frame from a passive scroll listener. Accent colour, no track, no percentage text. Mark it aria-hidden. Use it only on long-form pages (articles, docs, legal), never on landing pages or app screens.",
+      "debug": "Debug my reading progress bar. Rule out: animating width (use scale); a scroll handler that runs layout on every event; progress measured over the whole page when only the article should count (data-target); a thick or gradient bar; using it on a short page where it jumps from 0 to 100. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "position: sticky; scale: var(--p) 1",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ReadingProgress target=\"#article\" />",
+          "React"
+        ]
+      ],
+      "added": 12
+    },
+    {
+      "id": "row-list",
+      "name": "Row list",
+      "summary": "Grouped navigation rows for a settings or account home: icon, label, current value and a chevron.",
+      "pattern": "<nav> + grouped <ul> of links",
+      "states": [
+        "default",
+        "hover",
+        "with value",
+        "with count",
+        "danger row"
+      ],
+      "aliases": [
+        "settings rows",
+        "list with chevrons",
+        "ios settings list",
+        "grouped list",
+        "inset list",
+        "menu rows",
+        "account menu list",
+        "navigation list"
+      ],
+      "react": "RowList",
+      "api": "<a> rows · <button> for actions",
+      "w": 460,
+      "called": [
+        "list of settings with little arrows on the right",
+        "rows you tap to go deeper",
+        "phone settings style list"
+      ],
+      "anatomy": [
+        {
+          "sel": "section:first-of-type li:first-child a",
+          "name": "Row",
+          "api": "<a href>",
+          "text": "48px, the whole row is the link. Rows that go somewhere end in a chevron."
+        },
+        {
+          "sel": "section:first-of-type li:first-child [data-part=\"value\"]",
+          "name": "Current value",
+          "api": "",
+          "text": "Muted, right-aligned: saves a tap to find out."
+        },
+        {
+          "sel": "[data-part=\"count\"]",
+          "name": "Count",
+          "api": "",
+          "text": "Only for things that need attention."
+        },
+        {
+          "sel": "[data-tone=\"danger\"]",
+          "name": "Action row",
+          "api": "<button>",
+          "text": "Does something instead of going somewhere: no chevron."
+        }
+      ],
+      "prompt": "Build a grouped row list for a settings home: a <nav> of sections, each with a small uppercase heading and a rounded, bordered <ul>. Every row is one 48px link filling the row: an 18px line icon in secondary ink, a medium-weight label, the current value muted and right-aligned (or a small accent count when something needs attention), and a muted chevron. Dividers are hairlines that start after the icon. A row that performs an action (Sign out) is a <button> in its own group with no chevron; destructive ones use the danger tone. No coloured icon tiles.",
+      "debug": "Debug my row list. Rule out: only the label being clickable; chevrons on rows that do not navigate; rows under 44px on touch; a rainbow of icon background tiles; values that wrap onto a second line; toggles and links mixed in one group (use settings-list for switches). The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<nav><ul><li><a>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<RowList label groups>",
+          "React"
+        ]
+      ],
+      "added": 12
+    },
+    {
+      "id": "mobile-app-bar",
+      "name": "Mobile app bar",
+      "summary": "The top bar of a phone screen: back, title and one action, with an optional large title that collapses as you scroll.",
+      "pattern": "<header> + position: sticky",
+      "states": [
+        "large title",
+        "collapsed",
+        "plain"
+      ],
+      "aliases": [
+        "navigation bar",
+        "top app bar",
+        "ios large title",
+        "mobile header",
+        "screen header",
+        "back button bar",
+        "collapsing toolbar"
+      ],
+      "react": "MobileAppBar",
+      "api": "data-size=\"large\" · data-scrolled",
+      "w": 420,
+      "preview": [],
+      "called": [
+        "the bar at the top of a phone app with the back arrow",
+        "big title that shrinks when you scroll",
+        "mobile screen header"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"back\"]",
+          "name": "Back",
+          "api": "aria-label=\"Back to …\"",
+          "text": "A chevron and the name of the screen it returns to. 44px tall."
+        },
+        {
+          "sel": "[data-part=\"large\"]",
+          "name": "Large title",
+          "api": "<h1>",
+          "text": "The screen name at rest. Scrolls away with the content."
+        },
+        {
+          "sel": "[data-part=\"small\"]",
+          "name": "Small title",
+          "api": "aria-hidden when a large title exists",
+          "text": "Fades in once the large title has gone."
+        },
+        {
+          "sel": "[data-part=\"action\"]",
+          "name": "Action",
+          "api": "<button>",
+          "text": "One text action at most."
+        }
+      ],
+      "prompt": "Build a mobile app bar: a sticky <header> with a 44px row holding a back button (chevron plus the name of the previous screen, aria-label \"Back to …\"), a centred title, and at most one text action on the right, both in the accent text colour. With data-size=\"large\", add an <h1> large title (30px display type) under the row that scrolls away with the content; when it has gone, fade the small title in and draw a hairline under the bar. Stickiness is CSS (negative top equal to the large title height); a small IntersectionObserver sets data-scrolled. Keep it opaque so content never shows through.",
+      "debug": "Debug my mobile app bar. Rule out: two <h1>s read aloud (hide the duplicate small title from assistive tech); a back button that only says \"Back\"; targets under 44px; the title jumping instead of handing over; a translucent bar with text scrolling under it; more than one action on the right. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "position: sticky; top: calc(-1 * var(--appbar-large))",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<MobileAppBar title back action large>",
+          "React"
+        ]
+      ],
+      "added": 12
     }
   ]
 }

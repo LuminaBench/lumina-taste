@@ -1231,6 +1231,282 @@
     "Values written as single words",
     "Stock team photos"
    ]
+  },
+  {
+   "id": "dev-landing",
+   "name": "Developer tool landing page",
+   "kind": "marketing",
+   "blueprint": "devtool",
+   "density": "balanced",
+   "pattern": "Z",
+   "layout": "Centred page column with full-width bands; a floating pill nav over a hero with a grid backdrop",
+   "aliases": [
+    "developer landing",
+    "developer landing page",
+    "devtool landing",
+    "api landing",
+    "api landing page",
+    "sdk landing",
+    "cli landing",
+    "open source landing",
+    "landing page for an api",
+    "landing page for developers",
+    "developer tool homepage",
+    "infrastructure landing"
+   ],
+   "primary": "Under the hero headline (\"Get an API key\" or \"Read the docs\"), with the install command beside it. Again in the closing band.",
+   "sections": [
+    {
+     "id": "navbar-simple",
+     "role": "Navigation",
+     "copy": "Brand, Docs, API, Pricing, Changelog, Sign in, one primary button.",
+     "rule": "data-variant=\"pill\" floats it over the hero. Docs is always one click away."
+    },
+    {
+     "id": "hero-centered",
+     "role": "Hero",
+     "copy": "Headline: what it does for the code, in under 8 words (\"Product events, from one line of code\"). Lede: the mechanism and one number. An announcement-pill above for what shipped last.",
+     "rule": "One primary button and a command-chip with the real install command. data-backdrop=\"grid spot\"; add backdrop-circuit only here.",
+     "alt": [
+      "hero-split"
+     ]
+    },
+    {
+     "id": "terminal-window",
+     "role": "Quickstart",
+     "copy": "Three numbered steps beside a terminal that runs the real setup commands and shows their real output.",
+     "rule": "Six to ten lines. It plays once; never loop it."
+    },
+    {
+     "id": "code-block",
+     "role": "The code",
+     "copy": "The smallest complete example, with tabs for each language you support and a file name.",
+     "rule": "8 to 14 lines that would run if pasted. No pseudo-code, no ellipses.",
+     "tone": "well"
+    },
+    {
+     "id": "feature-grid",
+     "role": "Features",
+     "copy": "Six things the reader no longer has to build, each a 3–5 word heading and one sentence with a number or a limit.",
+     "rule": "No adjectives without a figure. Same icon style throughout."
+    },
+    {
+     "id": "api-endpoint",
+     "role": "API teaser",
+     "copy": "Three real endpoints as rows, the first open with its parameters and a sample response; a link to the full reference.",
+     "rule": "Method as a word in a tag, path in mono. Skip this section if there is no public API.",
+     "tone": "well",
+     "optional": true
+    },
+    {
+     "id": "stats-band",
+     "role": "Proof in numbers",
+     "copy": "Four operational figures with their period: volume, latency, uptime, losses.",
+     "rule": "Units written out; no rounded vanity numbers."
+    },
+    {
+     "id": "quote-feature",
+     "role": "Customer",
+     "copy": "One engineer, by name and company, saying what they removed or stopped doing, with two or three figures beside it.",
+     "rule": "One quote, not a wall of logos.",
+     "tone": "well",
+     "optional": true,
+     "alt": [
+      "testimonial-grid",
+      "logo-cloud"
+     ]
+    },
+    {
+     "id": "cta-band",
+     "role": "Closing action",
+     "copy": "The same action as the hero, plus the free tier and the price after it in one line.",
+     "rule": "One primary, one ghost link to the docs."
+    },
+    {
+     "id": "footer-minimal",
+     "role": "Footer",
+     "copy": "Company, Privacy, Terms, Status, Contact.",
+     "rule": "Status links to the real status page.",
+     "alt": [
+      "site-footer"
+     ]
+    }
+   ],
+   "states": [],
+   "avoid": [
+    "A dashboard screenshot where code should be",
+    "Animated gradient blobs and glowing orbs",
+    "Code samples that would not run",
+    "Counting GitHub stars as proof when there are few",
+    "A second moving background below the hero"
+   ]
+  },
+  {
+   "id": "agent-app",
+   "name": "Agent workspace",
+   "kind": "app",
+   "blueprint": "agent",
+   "density": "balanced",
+   "pattern": "single",
+   "layout": "Sidebar (workspace switcher, sessions by project, account) and a main pane: a centred start column at rest, a reading column for a running session",
+   "aliases": [
+    "agent app",
+    "ai agent",
+    "ai agent app",
+    "coding agent",
+    "agent workspace",
+    "agent dashboard",
+    "agent ui",
+    "desktop ai app",
+    "agent desktop app",
+    "task runner",
+    "ai workspace",
+    "agent interface",
+    "autonomous agent",
+    "background agents"
+   ],
+   "primary": "Start, in the composer. While a session runs, the one primary is the approval it is waiting for.",
+   "sections": [
+    {
+     "id": "switcher-menu",
+     "role": "Workspace",
+     "copy": "The current account and workspace; a grouped menu to change it, with a dot where work is running.",
+     "rule": "Top of the sidebar. Names, not avatars alone."
+    },
+    {
+     "id": "session-list",
+     "role": "Sessions",
+     "copy": "\"New session\" first, then sessions grouped by project, each titled by its task with a state and a time.",
+     "rule": "State is a shape and a word for screen readers: running, needs you, done, idle. A drawer on phones.",
+     "alt": [
+      "app-sidebar"
+     ]
+    },
+    {
+     "id": "prompt-composer",
+     "role": "Start",
+     "copy": "A headline that asks for the task, the composer with a placeholder that names three kinds of input, and a mode switch only if modes differ in what they can change.",
+     "rule": "Under it, say what the session will use and what it is allowed to do (folder, branch, \"asks before it edits\")."
+    },
+    {
+     "id": "backdrop-dither",
+     "role": "Backdrop",
+     "copy": "A quiet dither field behind the start screen only.",
+     "rule": "Lower its colour until the headline reads on it without a shadow. Never behind a running session.",
+     "optional": true
+    },
+    {
+     "id": "activity-feed",
+     "role": "Recent",
+     "copy": "Three or four recent sessions as rows: title, project, state in words, time.",
+     "rule": "The whole row is the link.",
+     "alt": [
+      "row-list"
+     ]
+    },
+    {
+     "id": "diff-view",
+     "role": "Proposed change",
+     "copy": "In a running session: the plan as a checked list, then the change it wants to make.",
+     "rule": "Nothing is written until the person approves. The approval bar says how many files and stays in view.",
+     "alt": [
+      "terminal-window",
+      "code-block"
+     ]
+    }
+   ],
+   "states": [
+    "empty: no sessions yet, with four first tasks that fill the composer",
+    "running: plan with one step in progress, the proposed change, an approval bar",
+    "error: say which step failed and why; offer Retry from that step"
+   ],
+   "avoid": [
+    "Sparkle icons, orbs and purple gradients to signal AI",
+    "A chat transcript where a plan and a diff would be clearer",
+    "Hiding what the agent can touch",
+    "Auto-applying changes with no way to stop or review",
+    "A loud backdrop behind text people have to read"
+   ]
+  },
+  {
+   "id": "mobile-app",
+   "name": "Phone app screen",
+   "kind": "app",
+   "blueprint": "mobile",
+   "density": "balanced",
+   "pattern": "single",
+   "start": "blueprint",
+   "layout": "One 430px column: app bar, content, one primary action in thumb reach, bottom tabs. Stays a centred column on wider screens.",
+   "aliases": [
+    "mobile app",
+    "phone app",
+    "ios app",
+    "android app",
+    "app screen",
+    "mobile screen",
+    "mobile home screen",
+    "react native",
+    "pwa",
+    "mobile banking",
+    "mobile dashboard",
+    "iphone app",
+    "app home screen",
+    "mobile ui"
+   ],
+   "primary": "One full-width button above the tab bar. Everything else is a row or a tab.",
+   "sections": [
+    {
+     "id": "mobile-app-bar",
+     "role": "App bar",
+     "copy": "The screen's name as a large title; back with the previous screen's name on inner screens; at most one text action.",
+     "rule": "The large title collapses into the bar on scroll. 44px targets."
+    },
+    {
+     "id": "stat-strip",
+     "role": "Headline figure",
+     "copy": "The one number the person opened the app for, a comparison in words, and a small 7-day view.",
+     "rule": "One figure, not a dashboard. Tabular numbers.",
+     "alt": [
+      "progress-ring",
+      "meter"
+     ]
+    },
+    {
+     "id": "row-list",
+     "role": "Lists",
+     "copy": "Two short lists with headings: what needs attention first, then recent history. Name and amount on the first line, detail and status on the second.",
+     "rule": "Whole-row targets at least 56px tall. Status is a word in a badge, not a colour alone.",
+     "alt": [
+      "activity-feed",
+      "swipe-actions"
+     ]
+    },
+    {
+     "id": "bottom-nav",
+     "role": "Tabs",
+     "copy": "Three to five destinations with an icon and a label each.",
+     "rule": "Labels always visible. A count only where something needs attention."
+    },
+    {
+     "id": "bottom-sheet",
+     "role": "Create",
+     "copy": "The primary action opens a sheet with the fewest fields that can work: amount, who, when, send.",
+     "rule": "Right keyboard for each field (inputmode). Errors in words under the field. Cancel always visible."
+    }
+   ],
+   "states": [
+    "loading: skeleton of the figure and five rows",
+    "empty: one sentence and the primary action",
+    "error: what failed and a Retry button, keeping anything typed"
+   ],
+   "avoid": [
+    "A hamburger menu hiding the main destinations",
+    "Icon-only tabs",
+    "Desktop tables squeezed onto a phone",
+    "Targets under 44px",
+    "More than one filled button on a screen",
+    "Stretching the layout full width on a tablet"
+   ]
   }
  ],
  "domains": [

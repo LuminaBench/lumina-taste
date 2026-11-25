@@ -135,3 +135,52 @@ Compare values across columns in a table; scroll through thousands of single-lin
 | --- | --- | --- |
 | Sortable data table | `data-table` | Accounts, invoices, anything sorted and compared by column. |
 | Virtualised list | `virtual-list` | Logs, messages, events: long and mostly read top to bottom. |
+
+## Date picker, date range or month calendar?
+
+One date someone knows: the date picker, which takes typing. A start and an end: the range picker. Seeing what falls on which day: the month calendar.
+
+| Element | id | Use it for |
+| --- | --- | --- |
+| Date picker | `date-picker` | A due date, a booking day, a deadline. Typed or picked. |
+| Date range picker | `date-range-picker` | A reporting period, a stay, a filter between two dates. |
+| Month calendar | `month-calendar` | A schedule to read: events laid out on their days. |
+
+## Hold to confirm, confirm popover or danger zone?
+
+How often, and how bad? Frequent and recoverable: hold. Occasional: a small popover by the button. Rare and permanent: type the name.
+
+| Element | id | Use it for |
+| --- | --- | --- |
+| Hold to confirm | `hold-to-confirm` | Deleting list items many times a day, where a dialog each time would be noise. |
+| Confirm popover | `confirm-popover` | Removing a member, discarding a draft: one extra click, next to the button. |
+| Danger zone | `danger-zone` | Deleting a workspace or an account: typed confirmation, on its own section. |
+
+## Row list or settings list?
+
+Rows that take you somewhere are a row list. Rows you change in place are a settings list.
+
+| Element | id | Use it for |
+| --- | --- | --- |
+| Row list | `row-list` | A settings or account home: each row opens a screen and shows its current value. |
+| Settings list | `settings-list` | Switches and choices that save as you change them. |
+
+## Command chip, code block or terminal window?
+
+One line to copy: the chip. Code to read or paste: the block. Showing what happens when you run it: the terminal.
+
+| Element | id | Use it for |
+| --- | --- | --- |
+| Command chip | `command-chip` | An install or run command beside a hero button or in a docs step. |
+| Code block | `code-block` | A working example, with tabs per language and a copy button. |
+| Terminal window | `terminal-window` | A short session, typed once: the commands and their real output. |
+
+## Device frame, showcase tabs or sticky story?
+
+One screen to show: a device frame. Several products or themes to compare: showcase tabs. A process with an order: a sticky story.
+
+| Element | id | Use it for |
+| --- | --- | --- |
+| Device frame | `device-frame` | A screenshot or live screen in a hero or a feature row. |
+| Showcase tabs | `showcase-tabs` | Three or four examples the reader flips between. |
+| Sticky story | `sticky-story` | Steps where the picture changes as the text scrolls. |

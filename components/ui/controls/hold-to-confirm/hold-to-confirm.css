@@ -1,0 +1,12 @@
+@scope (.lt-hold) {
+  :scope { display: inline-grid; gap: 8px; justify-items: start; }
+  button { position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: 8px; height: calc(var(--control-h) + 6px); padding: 0 16px; border: var(--bw) var(--border-style) color-mix(in oklab, var(--status-negative) 55%, var(--border-strong)); border-radius: var(--radius-md); background: var(--bg-surface-1); color: var(--status-negative); font: 600 var(--text-ui) var(--font-body); cursor: pointer; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; }
+  [data-part="fill"] { position: absolute; inset: 0; z-index: -1; background: var(--status-negative-soft); transform-origin: left center; scale: 0 1; transition: scale 180ms var(--ease-out); }
+  /* While held, the fill runs for exactly as long as the hold takes. Letting go snaps it back. */
+  :scope[data-holding] [data-part="fill"] { scale: 1 1; transition: scale var(--hold-ms, 1100ms) linear; }
+  :scope[data-done] button { border-color: var(--border-hairline); color: var(--text-secondary); cursor: default; }
+  :scope[data-done] [data-part="fill"] { scale: 1 1; background: var(--bg-surface-2); transition: none; }
+  [data-part="hint"] { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-xs); }
+  :scope[data-done] [data-part="hint"] { visibility: hidden; }
+}
+@media (prefers-reduced-motion: reduce) { .lt-hold [data-part="fill"] { transition: none !important; } }

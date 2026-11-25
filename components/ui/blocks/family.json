@@ -1373,6 +1373,125 @@
         ]
       ],
       "added": 11
+    },
+    {
+      "id": "quote-feature",
+      "name": "Customer quote, featured",
+      "summary": "One quote set as a headline with who said it, and two or three results beside it.",
+      "pattern": "<h2> + <figure> + <blockquote> + <dl>",
+      "states": [
+        "side by side",
+        "stacked"
+      ],
+      "aliases": [
+        "single testimonial",
+        "big quote",
+        "customer story",
+        "case study quote",
+        "pull quote section",
+        "hero testimonial"
+      ],
+      "react": "QuoteFeature",
+      "api": "<blockquote> · <dl>",
+      "w": 1000,
+      "called": [
+        "one big customer quote with numbers next to it",
+        "case study teaser",
+        "large testimonial"
+      ],
+      "anatomy": [
+        {
+          "sel": "blockquote p",
+          "name": "Quote",
+          "api": "<blockquote>",
+          "text": "Display type with a hanging opening mark; one or two sentences with a number in them."
+        },
+        {
+          "sel": "figcaption",
+          "name": "Who said it",
+          "api": "<figcaption>",
+          "text": "A real name, role and company. A link to the full story is optional."
+        },
+        {
+          "sel": "[data-part=\"results\"]",
+          "name": "Results",
+          "api": "<dl>",
+          "text": "Two or three before-and-after figures that back the quote."
+        }
+      ],
+      "prompt": "Build a featured customer quote: a section with a small eyebrow heading (\"Customer story\"), then a <figure> on the left holding the quote as display type (hanging opening quotation mark in the accent text colour, no card, no giant decorative quote icon), a caption with initials avatar, name, role and company and an optional \"Read the story\" link; on the right a <dl> of two or three results as large tabular figures over plain labels, separated by hairlines. Below 820px the results move under the quote in a row.",
+      "debug": "Debug my featured quote. Rule out: a quote with no number or specific in it; a stock photo or made-up person; a giant decorative quote glyph; the quote inside a card inside a band; results that are adjectives, not figures; more than one featured quote on the page. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<figure><blockquote> + <dl>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<QuoteFeature quote name role results>",
+          "React"
+        ]
+      ],
+      "added": 12
+    },
+    {
+      "id": "sticky-story",
+      "name": "Sticky story",
+      "summary": "Steps scroll on the left while the visual for the step being read stays pinned on the right.",
+      "pattern": "<ol> + position: sticky",
+      "states": [
+        "step 1",
+        "step 2",
+        "step 3",
+        "stacked (narrow)"
+      ],
+      "aliases": [
+        "scrollytelling",
+        "pinned scroll section",
+        "sticky scroll features",
+        "scroll-linked steps",
+        "feature walkthrough",
+        "scroll story"
+      ],
+      "react": "StickyStory",
+      "api": "--steps · --story-step · --story-top",
+      "w": 1000,
+      "preview": [],
+      "called": [
+        "the section where the picture stays and the text scrolls",
+        "steps that change the screenshot as you scroll",
+        "pinned feature tour"
+      ],
+      "anatomy": [
+        {
+          "sel": "li[data-active] [data-part=\"text\"]",
+          "name": "Step text",
+          "api": "<ol><li>",
+          "text": "A number, a short heading and two lines. The one being read gets full ink and an accent rule."
+        },
+        {
+          "sel": "li[data-active] figure",
+          "name": "Pinned visual",
+          "api": "position: sticky",
+          "text": "One per step, in the same place. Only the current one shows."
+        }
+      ],
+      "prompt": "Build a sticky story section: a heading, then an ordered list of three or four steps laid out as a two-column grid. Each step holds its text (mono step number, heading, two lines) and its own visual. The text blocks stack in the left column, each about 340px tall, with a 2px left rule that turns to the accent colour for the current step. All visuals share one right-hand cell spanning every row and are position: sticky, so they stay pinned while the text scrolls; only the visual of the current step is opaque, with a 320ms fade. A small script marks the step nearest the middle of the viewport as current. Under 760px every visual sits under its own text and nothing is pinned. Use it once per page, for a process that really has an order.",
+      "debug": "Debug my sticky story. Rule out: scroll hijacking (never change scroll speed or snap); visuals missing on mobile; a sticky element inside an ancestor with overflow hidden or auto; step text too short for the visual to pin; inactive text dimmed with opacity until it fails contrast; more than four steps. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "li { display: contents } figure { position: sticky; grid-row: 1 / span var(--steps) }",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<StickyStory title steps>",
+          "React"
+        ]
+      ],
+      "added": 12
     }
   ]
 }

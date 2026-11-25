@@ -4,15 +4,16 @@
   [data-part="file"] { font: 600 var(--text-ui-sm) / 1.4 var(--font-mono); }
   [data-part="stat"] b { font: 600 var(--text-ui-xs) / 1.4 var(--font-mono); }
   [data-part="stat"] [data-k="add"] { color: var(--status-positive); } [data-part="stat"] [data-k="del"] { color: var(--status-negative); }
-  [data-part="scroll"] { overflow-x: auto; }
+  /* Positioned, so the visually hidden cells inside are clipped with the table instead of widening the page. */
+  [data-part="scroll"] { position: relative; overflow-x: auto; }
   [data-part="scroll"]:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -2px; }
   table { width: 100%; border-collapse: collapse; font: 12.5px/1.7 var(--font-mono); }
   td { padding: 0 10px; white-space: pre; vertical-align: top; }
   [data-part="n"] { width: 1%; padding: 0 8px; color: var(--text-muted); text-align: right; user-select: none; font-variant-numeric: tabular-nums; }
   [data-part="sign"] { width: 1%; padding: 0 4px; color: var(--text-muted); user-select: none; }
   code { font: inherit; }
-  [data-k="add"] { background: color-mix(in oklab, var(--status-positive) 10%, transparent); }
+  tr[data-k="add"] { background: color-mix(in oklab, var(--status-positive) 10%, transparent); }
   [data-k="add"] [data-part="sign"] { color: var(--status-positive); }
-  [data-k="del"] { background: color-mix(in oklab, var(--status-negative) 10%, transparent); }
+  tr[data-k="del"] { background: color-mix(in oklab, var(--status-negative) 10%, transparent); }
   [data-k="del"] [data-part="sign"] { color: var(--status-negative); }
 }

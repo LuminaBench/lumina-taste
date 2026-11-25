@@ -2,7 +2,7 @@
 
 How well does an agent build pages with this skill? These files measure it.
 
-- `evals.json`: 30 briefs across 19 page types and a dozen domains, in the skill-creator format plus `slug`, `pageType` and machine `checks`.
+- `evals.json`: 32 briefs across 22 page types and a dozen domains, in the skill-creator format plus `slug`, `pageType` and machine `checks`.
 - `fixtures/plain-landing.html`: a typical generated landing page (purple gradient, emoji icons, three equal buttons) for the "restyle an existing page" brief.
 - `reference-scores.json`: the blueprints scored as reference answers.
 

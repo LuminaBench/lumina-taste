@@ -16,6 +16,19 @@ import { SessionList } from '../../components/ui/navigation/session-list/session
 import { CommandChip } from '../../components/ui/controls/command-chip/command-chip.react';
 import { AnnouncementPill } from '../../components/ui/feedback/announcement-pill/announcement-pill.react';
 import { ShowcaseTabs } from '../../components/ui/blocks/showcase-tabs/showcase-tabs.react';
+import { DeviceFrame } from '../../components/ui/data/device-frame/device-frame.react';
+import { QuoteFeature } from '../../components/ui/blocks/quote-feature/quote-feature.react';
+import { ApiEndpoint } from '../../components/ui/data/api-endpoint/api-endpoint.react';
+import { TerminalWindow } from '../../components/ui/data/terminal-window/terminal-window.react';
+import { TextReveal } from '../../components/ui/motion/text-reveal/text-reveal.react';
+import { ReadingProgress } from '../../components/ui/navigation/reading-progress/reading-progress.react';
+import { HoldToConfirm } from '../../components/ui/controls/hold-to-confirm/hold-to-confirm.react';
+import { AmountInput } from '../../components/ui/controls/amount-input/amount-input.react';
+import { StickyStory } from '../../components/ui/blocks/sticky-story/sticky-story.react';
+import { MediaPlayer } from '../../components/ui/data/media-player/media-player.react';
+import { RowList } from '../../components/ui/navigation/row-list/row-list.react';
+import { MobileAppBar } from '../../components/ui/navigation/mobile-app-bar/mobile-app-bar.react';
+import { DatePicker } from '../../components/ui/controls/date-picker/date-picker.react';
 import { Rating } from '../../components/ui/controls/rating/rating.react';
 import { BillingToggle } from '../../components/ui/controls/billing-toggle/billing-toggle.react';
 import { ColorPicker } from '../../components/ui/controls/color-picker/color-picker.react';
@@ -433,6 +446,19 @@ function App() {
       <Case id="command"><CommandChip command="npx halyard init" /></Case>
       <Case id="pill"><AnnouncementPill tag="New" href="#changelog">Alerts reach Slack in under a second</AnnouncementPill></Case>
       <Case id="showcase"><ShowcaseTabs title="Two products" examples={[{ label: 'Shop', content: <p>Shop screen</p> }, { label: 'API', palette: 'black-signal', mode: 'dark', content: <p>API screen</p> }]} /></Case>
+      <Case id="device"><DeviceFrame kind="phone" label="The payouts screen"><p>Today</p></DeviceFrame></Case>
+      <Case id="quote"><QuoteFeature quote="We close the month in two days." name="Riya Mehta" role="Head of Finance, Moss Studio" initials="RM" results={[{ label: 'Month-end close', value: '2 days' }]} /></Case>
+      <Case id="endpoint"><ApiEndpoint method="POST" path="/v1/customers/{id}/invoices" summary="Create an invoice" params={[{ name: 'amount', type: 'integer', required: true, description: 'Smallest unit.' }]} status={201} statusText="Created" sample={'{ "id": "inv_1" }'} defaultOpen /></Case>
+      <Case id="terminal"><TerminalWindow label="Terminal: set up" title="zsh" lines={[{ kind: 'cmd', text: 'npx halyard init' }, { kind: 'out', text: 'Wrote halyard.config.ts', tone: 'ok' }]} /></Case>
+      <Case id="reveal"><TextReveal as="h2">Every number on one page</TextReveal></Case>
+      <Case id="reading"><ReadingProgress /></Case>
+      <Case id="hold"><HoldToConfirm ms={300} onConfirm={() => log.push('held')}>Hold to delete</HoldToConfirm></Case>
+      <Case id="amount"><AmountInput label="Amount" symbol="£" code="GBP" max={10000} hint="Up to £10,000." onChange={(v, ok) => log.push(`amount:${v}:${ok}`)} /></Case>
+      <Case id="story"><StickyStory title="How it works" steps={[{ title: 'Connect', text: 'Paste a connection string.', visual: <p>One</p> }, { title: 'Share', text: 'Send one link.', visual: <p>Two</p> }]} /></Case>
+      <Case id="player"><MediaPlayer title="Pricing a seat" subtitle="Episode 12" duration={120} onChange={(st) => log.push(`player:${st.playing}:${st.speed}`)} /></Case>
+      <Case id="rows"><RowList label="Settings" groups={[{ title: 'Account', rows: [{ label: 'Profile', href: '#p', value: 'Ana López' }] }, { rows: [{ label: 'Sign out', tone: 'danger', onSelect: () => log.push('signout') }] }]} /></Case>
+      <Case id="appbar"><MobileAppBar title="Invoices" large back={{ label: 'Home', onClick: () => log.push('back') }} action={{ label: 'Edit', onClick: () => log.push('edit') }} /></Case>
+      <Case id="date"><DatePicker label="Due date" defaultValue="2026-12-24" min="2026-11-25" onChange={(v) => log.push(`date:${v}`)} /></Case>
       <Case id="stagger"><Stagger><span>One</span><span>Two</span></Stagger></Case>
     </ToastProvider>
   );

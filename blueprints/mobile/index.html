@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en" data-palette="slate-forest" data-mode="light" data-type="humanist" data-density="balanced" data-radius="balanced" data-motion="snappy">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Today · Halyard Pay</title>
+  <meta name="description" content="Blueprint: a phone app screen with a collapsing large title, a headline figure with a week of bars, two tappable lists, a bottom tab bar and a bottom-sheet form, plus loading and empty states built with lumina-taste.">
+</head>
+<body>
+  <a class="bp-skip" href="#main">Skip to content</a>
+  <div class="mb-app">
+    <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+      <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Today</p><button type="button" data-part="action" id="mb-add-top" aria-haspopup="dialog">New</button></div>
+      <h1 data-part="large">Today</h1>
+    </header>
+    <main id="main">
+      <div data-view="ready">
+        <section class="mb-balance" aria-labelledby="mb-bal-h">
+          <h2 id="mb-bal-h">Paid to you this week</h2>
+          <p class="mb-fig">£4,820.00</p>
+          <p class="mb-delta"><span class="lt-badge" data-tone="positive">£640 more</span> than last week</p>
+          <ol class="mb-week" aria-label="Payments by day"><li style="--h: 38%"><span class="lt-visually-hidden">Monday: £640</span><i aria-hidden="true"></i><span aria-hidden="true">M</span></li><li style="--h: 52%"><span class="lt-visually-hidden">Tuesday: £880</span><i aria-hidden="true"></i><span aria-hidden="true">T</span></li><li style="--h: 3%"><span class="lt-visually-hidden">Wednesday: nothing</span><i aria-hidden="true"></i><span aria-hidden="true">W</span></li><li style="--h: 71%"><span class="lt-visually-hidden">Thursday: £1,200</span><i aria-hidden="true"></i><span aria-hidden="true">T</span></li><li style="--h: 100%" data-today><span class="lt-visually-hidden">Friday: £1,700</span><i aria-hidden="true"></i><span aria-hidden="true">F</span></li><li style="--h: 24%"><span class="lt-visually-hidden">Saturday: £400</span><i aria-hidden="true"></i><span aria-hidden="true">S</span></li><li style="--h: 3%"><span class="lt-visually-hidden">Sunday: nothing</span><i aria-hidden="true"></i><span aria-hidden="true">S</span></li></ol>
+        </section>
+        <section class="mb-list" aria-labelledby="mb-due-h"><header><h2 id="mb-due-h">Waiting to be paid</h2><p>£7,160.00</p></header><ul><li><a href="#invoice"><span class="mb-avatar" aria-hidden="true">H</span><span class="mb-name">Harbour &amp; Co</span><span class="mb-sub">Website retainer, November</span><b>£2,400.00</b><span class="lt-badge" data-tone="warning">Due in 3 days</span></a></li><li><a href="#invoice"><span class="mb-avatar" aria-hidden="true">K</span><span class="mb-name">Kestrel Labs</span><span class="mb-sub">Brand workshop</span><b>£1,640.00</b><span class="lt-badge" data-tone="negative">2 days late</span></a></li><li><a href="#invoice"><span class="mb-avatar" aria-hidden="true">J</span><span class="mb-name">Juniper Freight</span><span class="mb-sub">Photography, two days</span><b>£3,120.00</b><span class="lt-badge">Due 12 Dec</span></a></li></ul></section>
+        <section class="mb-list" aria-labelledby="mb-paid-h"><header><h2 id="mb-paid-h">Paid</h2><a class="bp-link" href="#all">See all</a></header><ul><li><a href="#invoice"><span class="mb-avatar" aria-hidden="true">M</span><span class="mb-name">Moss Studio</span><span class="mb-sub">Paid Monday</span><b>£780.00</b></a></li><li><a href="#invoice"><span class="mb-avatar" aria-hidden="true">L</span><span class="mb-name">Larkspur</span><span class="mb-sub">Paid 18 Nov</span><b>£960.00</b></a></li><li><a href="#invoice"><span class="mb-avatar" aria-hidden="true">H</span><span class="mb-name">Harbour &amp; Co</span><span class="mb-sub">Paid 4 Nov</span><b>£2,400.00</b></a></li></ul></section>
+      </div>
+      <div data-view="loading" aria-busy="true" aria-label="Loading your invoices" hidden>
+        <div class="mb-balance"><span class="lt-skeleton" style="width: 44%"></span><span class="lt-skeleton mb-skel-fig"></span><span class="lt-skeleton" data-shape="block" style="height: 72px"></span></div>
+        <ul class="mb-skels"><li class="mb-skel"><span class="lt-skeleton" data-shape="circle"></span><span class="lt-skeleton" style="width: 52%"></span><span class="lt-skeleton" style="width: 22%"></span></li><li class="mb-skel"><span class="lt-skeleton" data-shape="circle"></span><span class="lt-skeleton" style="width: 52%"></span><span class="lt-skeleton" style="width: 22%"></span></li><li class="mb-skel"><span class="lt-skeleton" data-shape="circle"></span><span class="lt-skeleton" style="width: 52%"></span><span class="lt-skeleton" style="width: 22%"></span></li><li class="mb-skel"><span class="lt-skeleton" data-shape="circle"></span><span class="lt-skeleton" style="width: 52%"></span><span class="lt-skeleton" style="width: 22%"></span></li><li class="mb-skel"><span class="lt-skeleton" data-shape="circle"></span><span class="lt-skeleton" style="width: 52%"></span><span class="lt-skeleton" style="width: 22%"></span></li></ul>
+      </div>
+      <section class="lt-empty" data-view="empty" aria-labelledby="mb-empty-h" hidden>
+        <span data-part="icon" aria-hidden="true"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-10Z"/><path d="M14 3.5v5h5"/></svg></span>
+        <h2 id="mb-empty-h">No invoices yet</h2>
+        <p>Send your first one and it will show here, with the day it is due and the day it is paid.</p>
+        <div data-part="actions"><button type="button" class="lt-btn" data-variant="primary" id="mb-add-empty" aria-haspopup="dialog"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span data-part="label">New invoice</span></button></div>
+      </section>
+    </main>
+    <div class="mb-fab" data-view="ready"><button type="button" class="lt-btn" data-variant="primary" data-size="lg" id="mb-add" aria-haspopup="dialog"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span data-part="label">New invoice</span></button></div>
+    <nav class="lt-bottom-nav" data-lt="bottom-nav" aria-label="Primary">
+      <span data-part="pill" aria-hidden="true"></span>
+      <a href="#home" aria-current="page"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1Z"/></svg><span>Today</span></a>
+      <a href="#invoices"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-10Z"/><path d="M14 3.5v5h5"/></svg><span>Invoices</span><em data-part="badge" aria-label="1 late">1</em></a>
+      <a href="#clients"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.25"/><path d="M3 20a6 6 0 0 1 12 0M16 4.8a3.25 3.25 0 0 1 0 6.4M17.5 14.2A6 6 0 0 1 21 20"/></svg><span>Clients</span></a>
+      <a href="#settings"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg><span>Settings</span></a>
+    </nav>
+  </div>
+
+  <div data-lt="bottom-sheet" id="mb-sheet-root">
+    <dialog class="lt-sheet" aria-labelledby="mb-sheet-h" id="mb-sheet">
+      <div data-part="grab" aria-hidden="true"><span></span></div>
+      <h2 id="mb-sheet-h">New invoice</h2>
+      <form class="mb-form" id="mb-form" novalidate>
+        <div class="lt-amount" data-lt="amount-input" data-min="1" data-max="50000">
+          <label for="mb-amount">Amount</label>
+          <div data-part="field"><span data-part="symbol" aria-hidden="true">£</span><input id="mb-amount" type="text" inputmode="decimal" autocomplete="off" placeholder="0.00" aria-describedby="mb-amount-hint"><span data-part="code">GBP</span></div>
+          <p id="mb-amount-hint" data-part="hint">Before VAT.</p>
+        </div>
+        <div class="mb-field"><label for="mb-client">Client</label><select id="mb-client" class="mb-select"><option>Harbour &amp; Co</option><option>Kestrel Labs</option><option>Juniper Freight</option><option>Moss Studio</option><option>Larkspur</option></select></div>
+        <div class="mb-field"><span id="mb-due-l">Due</span>
+          <div class="lt-segmented" data-lt="segmented-control" role="radiogroup" aria-labelledby="mb-due-l" id="mb-terms">
+            <span data-part="indicator" aria-hidden="true"></span>
+            <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="7">In 7 days</button>
+            <button type="button" role="radio" aria-checked="true" tabindex="0" data-value="14">In 14 days</button>
+            <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="30">In 30 days</button>
+          </div>
+        </div>
+        <button type="submit" class="lt-btn" data-variant="primary" data-size="lg"><span data-part="label">Send invoice</span></button>
+      </form>
+      <button type="button" class="lt-btn" data-variant="ghost" data-part="cancel"><span data-part="label">Cancel</span></button>
+    </dialog>
+  </div>
+  <p class="mb-toast" role="status" id="mb-toast"></p>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

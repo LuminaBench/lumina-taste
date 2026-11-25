@@ -1,0 +1,27 @@
+<div class="lt-endpoints">
+  <details class="lt-endpoint" open>
+    <summary><span data-part="method" data-m="post">POST</span><code data-part="path">/v1/customers/<var>{id}</var>/invoices</code><span data-part="what">Create an invoice</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+    <div data-part="body">
+      <table><caption>Body parameters</caption><thead><tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Description</th></tr></thead><tbody>
+        <tr><th scope="row"><code>amount</code><span data-part="req">required</span></th><td>integer</td><td>Total in the smallest currency unit, for example 2400 for £24.00.</td></tr>
+        <tr><th scope="row"><code>currency</code><span data-part="req">required</span></th><td>string</td><td>Three-letter ISO code, lower case.</td></tr>
+        <tr><th scope="row"><code>due_date</code></th><td>date</td><td>Defaults to 30 days from today.</td></tr>
+      </tbody></table>
+      <figure data-part="sample"><figcaption><span data-part="status" data-ok>201</span> Created</figcaption><pre tabindex="0"><code>{
+  "id": "inv_8f2k1",
+  "amount": 2400,
+  "currency": "gbp",
+  "status": "open",
+  "due_date": "2026-12-24"
+}</code></pre></figure>
+    </div>
+  </details>
+  <details class="lt-endpoint">
+    <summary><span data-part="method" data-m="get">GET</span><code data-part="path">/v1/invoices/<var>{id}</var></code><span data-part="what">Retrieve an invoice</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+    <div data-part="body"><table><caption>Path parameters</caption><thead><tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Description</th></tr></thead><tbody><tr><th scope="row"><code>id</code><span data-part="req">required</span></th><td>string</td><td>The invoice id, starting <code>inv_</code>.</td></tr></tbody></table></div>
+  </details>
+  <details class="lt-endpoint">
+    <summary><span data-part="method" data-m="delete">DELETE</span><code data-part="path">/v1/invoices/<var>{id}</var></code><span data-part="what">Void an invoice</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+    <div data-part="body"><table><caption>Path parameters</caption><thead><tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Description</th></tr></thead><tbody><tr><th scope="row"><code>id</code><span data-part="req">required</span></th><td>string</td><td>Only open invoices can be voided.</td></tr></tbody></table></div>
+  </details>
+</div>

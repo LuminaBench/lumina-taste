@@ -5,7 +5,7 @@ description: Make interfaces look designed, not generated. Use for any UI work (
 
 # Lumina Taste
 
-A design kit for coding agents: a **page composer** that turns a brief into a plan, **18 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **39 visual styles**, **179 named UI patterns** (including **9 page backdrops**: grid, dots, ruled lines, ticks, wash, spotlight, grain, dither, circuit traces), **42 chart engines**, **14 page blueprints**, a **lockable taste profile**, a **Playwright auditor with a page-level taste critic**, a **copy lint** and **30 eval briefs** to measure the result. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
+A design kit for coding agents: a **page composer** that turns a brief into a plan, **18 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **39 visual styles**, **192 named UI patterns** (including **9 page backdrops**: grid, dots, ruled lines, ticks, wash, spotlight, grain, dither, circuit traces), **42 chart engines**, **17 page blueprints**, a **lockable taste profile**, a **Playwright auditor with a page-level taste critic**, a **copy lint** and **32 eval briefs** to measure the result. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
 
 Run commands from this skill's directory with Node.js 20+. Pass absolute paths (or run from the user's project with the absolute script path). Search, install and token scripts need nothing installed; the auditor needs Playwright; the gallery needs `npm install` once.
 
@@ -32,7 +32,7 @@ Components are rarely what makes a page look generated; the plan is. Run this lo
 5. **Build the states** the plan lists (loading, empty, error) as well as the happy path.
 6. **Critique.** `node scripts/audit-ui.mjs <url> --product "<the product's name>"` (it implies `--taste`; add `--screenshots <dir>` for a first-screen and a full-page capture of every run) fails the page while the kit's sample brands and people (Halyard, Ana López…) are still on it, and checks it like a designer would: type steps, accent hues, corner radii, one primary per screen, reading width, heading order, cards inside cards, section rhythm, a clear first thing to look at, placeholder copy and long button labels. Fix every error, then warnings, until the score is 90 or more. Then take screenshots at 390px and 1440px and look at them.
 
-`evals/evals.json` holds 30 real briefs; `node scripts/eval-score.mjs <output> --brief <slug>` scores any page you build for one of them (audit, taste, brief checks and hygiene, out of 100). The blueprints score 99 on average as reference answers.
+`evals/evals.json` holds 32 real briefs; `node scripts/eval-score.mjs <output> --brief <slug>` scores any page you build for one of them (audit, taste, brief checks and hygiene, out of 100). The blueprints score 99 on average as reference answers.
 
 ## Find the right thing first
 
@@ -147,12 +147,15 @@ Keep the stack and bring the taste: `node scripts/export-tokens.mjs --format sha
 | Store product page | `store` | Gallery, size, grind and subscription options, price on the button, reviews, mobile buy bar; sold-out state |
 | Checkout | `checkout` | One column with sticky summary, delivery cards, Pay £X; declined-card state |
 | AI assistant chat | `assistant` | History rail (a drawer on phones), reading-width conversation with prose, tables and code, pinned composer; empty, streaming and error states |
+| Developer tool landing | `devtool` | Floating pill nav over a grid hero with circuit traces, install command beside the action, typed terminal, tabbed code, API rows, figures, one quote |
+| Agent workspace | `agent` | Workspace switcher and sessions by project, a composer over a dither backdrop, and a running session with a plan, a diff and an approval bar; empty and running states |
+| Phone app screen | `mobile` | Collapsing large title, one headline figure with a week of bars, whole-row lists, primary action above bottom tabs, a bottom-sheet form; loading and empty states |
 
 ```sh
 node scripts/install-taste.mjs --project /abs/app --blueprints dashboard --dest src/pages
 ```
 
-Open any data blueprint with `?state=loading`, `?state=empty` or `?state=error` (status: `incident`, store: `sold-out`) to see the other states; blocks marked `data-view="…"` switch, and buttons with `data-set-state` switch live. Ship every state your page has, not just the happy path.
+Open any data blueprint with `?state=loading`, `?state=empty` or `?state=error` (status: `incident`, store: `sold-out`, assistant: `streaming`, agent: `running`) to see the other states; blocks marked `data-view="…"` switch, and buttons with `data-set-state` switch live. Ship every state your page has, not just the happy path.
 
 With `--framework static`, asking only for `--blueprints <id>` writes just that page (`<dest>/<id>/index.html`, `main.css`, `main.js`): move the three files to where the page lives and edit them. `compose.mjs` tells you whether to start from a blueprint or from snippets; use one, not both, unless you need a section the blueprint lacks (then add `--components` and link `lumina.css` after `main.css`).
 
@@ -236,7 +239,7 @@ Rules: one backdrop per screen, one hue, and the pattern fades before it reaches
 - Snippets from a static install start with a comment naming the parts. When it says the outer `-demo` element is a preview frame, keep what is inside and drop the frame (app-sidebar's `<aside>` goes straight into `.lt-shell`).
 - Settings and account panels (settings list, plan card, usage meters, team members, danger zone) share one width, `--lt-panel-max` (default 720px). Set it once on the page (`--lt-panel-max: none` to fill the column) so they line up.
 - Overriding a component's own spacing or size: component rules live in `@scope`, which wins ties against plain page CSS. Use two classes (`.lt-bulk.users-table { padding-bottom: 0 }`) or set the component's custom properties instead of fighting it with `!important`.
-- Families: controls (37), navigation (28), feedback (18), overlays (19), data (36), motion (10), backdrops (9), sections (22: heroes, features, pricing, testimonials, FAQ, CTA, stats, newsletter, how it works, team, sign-in, 404, integrations, contact, blog, feature rows, logo cloud, article, before/after, project grid, showcase tabs). Full list: `catalog.json` or `--list`.
+- Families: controls (40), navigation (31), feedback (18), overlays (19), data (40), motion (11), backdrops (9), sections (24: heroes, features, pricing, testimonials, FAQ, CTA, stats, newsletter, how it works, team, sign-in, 404, integrations, contact, blog, feature rows, logo cloud, article, before/after, project grid, showcase tabs, featured quote, sticky story). Full list: `catalog.json` or `--list`.
 
 ## Tokens at a glance
 
@@ -267,11 +270,11 @@ SKILL.md                     this file
 catalog.json                 every pattern/chart/blueprint/palette with aliases
 engine/profiles/             taste profile engine, schema, default profile
 engine/compose/              page types, domains and moods behind compose.mjs
-evals/                       30 briefs (evals.json), fixtures and reference scores
+evals/                       32 briefs (evals.json), fixtures and reference scores
 tokens/                      base.css, layout.css, backdrops.css, palettes/*.css (+ source.json), typography/, styles/
-components/ui/<family>/      179 patterns (html, css, ts, react.tsx)
+components/ui/<family>/      192 patterns (html, css, ts, react.tsx)
 components/charts/           core/ + 42 chart engines (+ React wrappers)
-blueprints/                  14 page blueprints (states via ?state=loading|empty|error|incident|sold-out|streaming)
+blueprints/                  17 page blueprints (states via ?state=loading|empty|error|incident|sold-out|streaming|running)
 references/                  anti-slop-rules, page-flow, copy-patterns, reading-a-reference, chart-selection, which-one, palettes, harvest-log
 scripts/                     compose, directions, search, install-taste, sniff, export-tokens, sample-data, audit-ui, audit-all, lint-copy, eval-score, eval-run, build-tokens, test-contrast, build, serve
 ```

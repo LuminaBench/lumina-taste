@@ -2298,6 +2298,288 @@
         ]
       ],
       "added": 10
+    },
+    {
+      "id": "device-frame",
+      "name": "Device frame",
+      "summary": "An outline browser window, desktop window, tablet or phone around a screenshot or live markup.",
+      "pattern": "<figure> + <figcaption>",
+      "states": [
+        "browser",
+        "window",
+        "phone",
+        "tablet"
+      ],
+      "aliases": [
+        "phone mockup",
+        "browser mockup",
+        "iphone frame",
+        "screenshot frame",
+        "app window chrome",
+        "laptop mockup",
+        "device mockup"
+      ],
+      "react": "DeviceFrame",
+      "api": "data-kind · --device-w",
+      "w": 900,
+      "preview": [],
+      "called": [
+        "a phone with my app screen in it",
+        "fake browser window around a screenshot",
+        "the three dots window frame",
+        "app preview on a phone"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-kind=\"browser\"] [data-part=\"bar\"]",
+          "name": "Window bar",
+          "api": "aria-hidden",
+          "text": "Three quiet dots and an address pill; decoration only."
+        },
+        {
+          "sel": "[data-kind=\"browser\"] [data-part=\"screen\"]",
+          "name": "Screen",
+          "api": "",
+          "text": "An <img>, a <video> or live markup. Clipped to the frame."
+        },
+        {
+          "sel": "[data-kind=\"phone\"]",
+          "name": "Phone",
+          "api": "data-kind=\"phone\"",
+          "text": "9 / 19.5 with a camera pill; width from --device-w."
+        }
+      ],
+      "prompt": "Add a device frame: a <figure> that draws an outline device around its screen. data-kind=\"browser\" has a 36px bar with three small neutral dots and a centred mono address pill; \"window\" shows a centred title instead; \"phone\" is a 9 / 19.5 frame with 42px corners, a 7px rim and a camera pill; \"tablet\" is 4 / 3. The frame is a hairline border on a surface colour, not a photoreal bezel, and takes a small shadow. The screen holds an <img>, <video> or live markup and clips it. Give the figure a visually hidden <figcaption> that says what the screen shows. Never put coloured traffic-light dots on the bar.",
+      "debug": "Debug my device frame. Rule out: a screenshot stretched instead of cropped (object-fit: cover, top aligned); red, yellow and green window dots; a phone wider than its column on mobile; a photoreal bezel image that fights the theme; no text alternative for the screen. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<figure data-kind> + <figcaption>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<DeviceFrame kind url label>",
+          "React"
+        ]
+      ],
+      "added": 12
+    },
+    {
+      "id": "api-endpoint",
+      "name": "API endpoint row",
+      "summary": "An endpoint as a disclosure row: method tag, path with its variables marked, what it does; parameters and a sample response inside.",
+      "pattern": "<details> + <table> + <pre>",
+      "states": [
+        "closed",
+        "open",
+        "GET",
+        "POST",
+        "PATCH",
+        "DELETE"
+      ],
+      "aliases": [
+        "api reference row",
+        "rest endpoint",
+        "method and path",
+        "endpoint list",
+        "api docs entry",
+        "swagger row"
+      ],
+      "react": "ApiEndpoint",
+      "api": "<details> · <var>",
+      "w": 900,
+      "preview": [],
+      "called": [
+        "GET POST rows in API docs",
+        "the expandable endpoint list",
+        "api method badge with the url"
+      ],
+      "anatomy": [
+        {
+          "sel": "details[open] [data-part=\"method\"]",
+          "name": "Method",
+          "api": "data-m",
+          "text": "The word in a fixed-width mono tag. Colour supports it: read is calm, delete is the danger tone."
+        },
+        {
+          "sel": "details[open] [data-part=\"path\"]",
+          "name": "Path",
+          "api": "<var>",
+          "text": "Mono, on one line; {variables} in the accent text colour."
+        },
+        {
+          "sel": "details[open] table",
+          "name": "Parameters",
+          "api": "<table> + <caption>",
+          "text": "Name, type, description. \"required\" is written out under the name."
+        },
+        {
+          "sel": "[data-part=\"sample\"]",
+          "name": "Sample response",
+          "api": "<figure> + <pre tabindex=\"0\">",
+          "text": "Status code and a short, real response body; scrolls by keyboard."
+        }
+      ],
+      "prompt": "Build an API endpoint list from <details> rows. Each summary shows a fixed-width mono method tag (GET in the info tone, POST positive, PUT and PATCH warning, DELETE negative, always with the word), the path in mono on one line with {variables} wrapped in <var> and coloured with the accent text colour, a short \"what it does\" label that hides under 560px, and a chevron that rotates when open. The body holds a parameters table with a caption (name in mono with \"required\" written under it, type, description) and a sample response figure with the status code and a focusable <pre>. Keep rows 48px tall and closed by default except the first.",
+      "debug": "Debug my API endpoint rows. Rule out: method shown by colour alone; a path that wraps onto two lines; required marked with only an asterisk or colour; a sample response that cannot be scrolled by keyboard; every row open at once on a long reference page; invented fields in the sample. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<details><summary> + <table> + <pre>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ApiEndpoint method path summary params sample>",
+          "React"
+        ]
+      ],
+      "added": 12
+    },
+    {
+      "id": "terminal-window",
+      "name": "Terminal window",
+      "summary": "A terminal that types its commands and prints their output once, when it scrolls into view.",
+      "pattern": "<figure> + typed lines",
+      "states": [
+        "playing",
+        "done",
+        "reduced motion (complete)"
+      ],
+      "aliases": [
+        "animated terminal",
+        "cli demo",
+        "console output",
+        "typing terminal",
+        "command line preview",
+        "shell session"
+      ],
+      "react": "TerminalWindow",
+      "api": "data-kind=\"cmd|out\" · data-tone · data-speed",
+      "w": 520,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"replay\"]"
+        ]
+      ],
+      "called": [
+        "the fake terminal that types a command",
+        "animated command line in the hero",
+        "console window showing install steps"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"bar\"]",
+          "name": "Window bar",
+          "api": "",
+          "text": "Neutral dots, a mono title and a replay button."
+        },
+        {
+          "sel": "[data-kind=\"cmd\"]",
+          "name": "Command",
+          "api": "data-kind=\"cmd\"",
+          "text": "Typed a character at a time after a muted $ prompt."
+        },
+        {
+          "sel": "[data-kind=\"out\"]",
+          "name": "Output",
+          "api": "data-kind=\"out\" data-tone",
+          "text": "Appears a line at a time. Tone marks success, warnings and errors."
+        }
+      ],
+      "prompt": "Add a terminal window: a <figure> with a 36px bar (three neutral dots, centred mono title, replay button) and a mono screen. Lines are paragraphs: data-kind=\"cmd\" gets a muted \"$ \" prompt and is typed at about 26ms a character with a block caret in the accent colour; data-kind=\"out\" is indented, secondary ink, and appears 240ms after the line before it (data-tone=\"ok\", \"warn\" or \"error\" colours it). All text is in the markup from the start and waiting lines keep their space, so the window never changes height. Play once when 40% visible; show everything at once under reduced motion. Use real commands and real output from the product, six to ten lines.",
+      "debug": "Debug my terminal window. Rule out: the window growing as lines appear (layout shift); looping forever; text that only exists in script; invented commands or output; a black terminal forced onto a light page; no way to replay. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<figure> + <p data-kind>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<TerminalWindow label lines>",
+          "React"
+        ]
+      ],
+      "added": 12
+    },
+    {
+      "id": "media-player",
+      "name": "Media player",
+      "summary": "Audio controls: play or pause, a scrubber, elapsed and total time, back 15 seconds and playback speed.",
+      "pattern": "<audio> + <input type=\"range\">",
+      "states": [
+        "paused",
+        "playing",
+        "seeking",
+        "ended"
+      ],
+      "aliases": [
+        "audio player",
+        "podcast player",
+        "play bar",
+        "scrubber",
+        "voice note player",
+        "playback controls",
+        "music player"
+      ],
+      "react": "MediaPlayer",
+      "api": "<audio> · data-duration",
+      "w": 560,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"play\"]"
+        ]
+      ],
+      "called": [
+        "play button with the line you drag",
+        "podcast episode player",
+        "audio bar with speed"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"play\"]",
+          "name": "Play / pause",
+          "api": "aria-label swaps",
+          "text": "The one filled control: 44px, the accent colour."
+        },
+        {
+          "sel": "[data-part=\"seek\"]",
+          "name": "Scrubber",
+          "api": "<input type=\"range\"> aria-valuetext",
+          "text": "Native range: arrows and Home / End work. Reads \"6:52 of 32:14\"."
+        },
+        {
+          "sel": "[data-part=\"time\"]",
+          "name": "Time",
+          "api": "tabular-nums",
+          "text": "Elapsed and total, so the width never jumps."
+        },
+        {
+          "sel": "[data-part=\"speed\"]",
+          "name": "Speed",
+          "api": "",
+          "text": "Cycles 1×, 1.25×, 1.5×, 2×."
+        }
+      ],
+      "prompt": "Build an audio player bar: a 44px round accent play/pause button whose aria-label swaps with its icon, the title and a muted subtitle on one line each, a native <input type=\"range\"> scrubber with a 4px track filled to the current position and aria-valuetext like \"6:52 of 32:14\", tabular elapsed / total time, a \"−15\" back button and a speed button that cycles 1×, 1.25×, 1.5×, 2×. Drive a real <audio> element when there is one. No autoplay, no waveform made of random bars, no volume slider (the device has one).",
+      "debug": "Debug my media player. Rule out: a div scrubber with no keyboard support; time text that changes width as it counts; autoplay; play state out of sync after the track ends; a seek that fires on every pixel and stutters; no accessible name for icon-only buttons. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<audio> + <input type=\"range\" aria-valuetext>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<MediaPlayer title src>",
+          "React"
+        ]
+      ],
+      "added": 12
     }
   ]
 }

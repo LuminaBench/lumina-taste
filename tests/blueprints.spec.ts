@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ids = readdirSync(join(root, 'blueprints')).filter((d) => existsSync(join(root, 'blueprints', d, 'meta.json')));
 
-test('there are 14 blueprints', () => expect(ids.length).toBe(14));
+test('there are 17 blueprints', () => expect(ids.length).toBe(17));
 
 for (const id of ids) {
   for (const vp of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
@@ -114,7 +114,7 @@ test('admin: search, status filter, bulk bar and detail drawer', async ({ page }
   await expect(page.locator('#ad-d-role')).toHaveText('Viewer');
 });
 
-for (const [id, state, shows] of [['admin', 'loading', '[data-view="loading"]'], ['admin', 'empty', '[data-view="empty"]'], ['admin', 'error', '[data-view="error"]'], ['status', 'incident', '.sp-incident'], ['store', 'sold-out', '.sp-sold'], ['checkout', 'error', '.co-error'], ['assistant', 'empty', '.as-empty'], ['assistant', 'streaming', '.as-stop'], ['assistant', 'error', '[data-part="error"]']] as const) {
+for (const [id, state, shows] of [['admin', 'loading', '[data-view="loading"]'], ['admin', 'empty', '[data-view="empty"]'], ['admin', 'error', '[data-view="error"]'], ['status', 'incident', '.sp-incident'], ['store', 'sold-out', '.sp-sold'], ['checkout', 'error', '.co-error'], ['assistant', 'empty', '.as-empty'], ['assistant', 'streaming', '.as-stop'], ['assistant', 'error', '[data-part="error"]'], ['agent', 'empty', '.ag-ideas'], ['agent', 'running', '.ag-plan'], ['mobile', 'loading', '[data-view="loading"]'], ['mobile', 'empty', '.lt-empty']] as const) {
   test(`${id} ?state=${state} shows its state and hides the ready view`, async ({ page }) => {
     await page.goto(`/blueprints/${id}/?state=${state}`);
     await expect(page.locator(shows)).toBeVisible();
@@ -189,3 +189,73 @@ test('assistant: history is a drawer on phones and closes with Escape', async ({
   await page.keyboard.press('Escape');
   await expect(page.locator('#as-menu')).toBeFocused();
 });
+
+test('devtool: code tabs switch, the command copies, the hero backdrop can be paused', async ({ page }) => {
+  await page.goto('/blueprints/devtool/');
+  await page.getByRole('tab', { name: 'Python' }).click();
+  await expect(page.locator('#dv-code-py')).toBeVisible();
+  await expect(page.locator('#dv-code-node')).toBeHidden();
+  await page.locator('.lt-command [data-part="copy"]').click();
+  await expect(page.locator('.lt-command [data-part="msg"]')).toHaveText('Command copied.');
+  const pause = page.locator('.lt-circuit [data-part="pause"]');
+  await pause.click();
+  await expect(pause).toHaveAttribute('aria-pressed', 'true');
+  // The floating nav sits over the hero, so the hero's backdrop starts at the top of the page.
+  expect((await page.locator('.lt-hero-centered').boundingBox())!.y).toBeLessThanOrEqual(1);
+});
+
+test('agent: a task starts a session; approving the edit advances the plan', async ({ page }) => {
+  await page.goto('/blueprints/agent/');
+  await expect(page.locator('.lt-dither canvas')).toBeVisible();
+  await page.fill('#ag-input', 'Add a retry to the export job');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#ag-run-h')).toHaveText('Add a retry to the export job');
+  await expect(page.locator('.ag-home')).toBeHidden();
+  await expect(page.locator('.ag-plan li[data-s="running"]')).toHaveText(/Round each line before summing/);
+  await page.click('#ag-approve');
+  await expect(page.locator('.ag-plan li[data-s="running"]')).toHaveText(/Run the 212 ledger tests/);
+  await expect(page.locator('#ag-status')).toContainText('Edit approved');
+  await expect(page.locator('#ag-approve')).toHaveCount(0);
+});
+
+test('agent: the sidebar is a drawer on phones; the switcher changes workspace', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/blueprints/agent/');
+  await expect(page.locator('#ag-side')).not.toBeInViewport();
+  await page.click('#ag-menu');
+  await expect(page.locator('#ag-side')).toBeInViewport();
+  await page.locator('.lt-switcher [data-part="trigger"]').click();
+  await page.locator('[role="menuitemradio"][data-value="larkspur/staging"]').click();
+  await expect(page.locator('.lt-switcher [data-part="meta"]')).toHaveText('Staging');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#ag-menu')).toBeFocused();
+});
+
+test('mobile: the sheet keeps a bad amount open with a reason, then sends', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/blueprints/mobile/');
+  await page.click('#mb-add');
+  await expect(page.locator('#mb-sheet')).toBeVisible();
+  await page.getByRole('radio', { name: 'In 30 days' }).click();
+  await expect(page.locator('#mb-sheet')).toBeVisible();
+  await page.getByRole('button', { name: 'Send invoice' }).click();
+  await expect(page.locator('#mb-amount-hint')).toHaveText('Enter an amount, for example 250.00.');
+  await expect(page.locator('#mb-sheet')).toBeVisible();
+  await page.fill('#mb-amount', '250');
+  await page.selectOption('#mb-client', 'Kestrel Labs');
+  await page.getByRole('button', { name: 'Send invoice' }).click();
+  await expect(page.locator('#mb-sheet')).toBeHidden();
+  await expect(page.locator('#mb-toast')).toHaveText('Invoice sent to Kestrel Labs');
+  await expect(page.locator('#mb-add')).toBeFocused();
+});
+
+test('mobile: the large title hands over to the bar; the app stays a phone column on desktop', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 600 });
+  await page.goto('/blueprints/mobile/');
+  await expect(page.locator('.lt-appbar')).not.toHaveAttribute('data-scrolled', '');
+  await page.locator('.mb-app').evaluate((el) => { el.scrollTop = 200; });
+  await expect(page.locator('.lt-appbar')).toHaveAttribute('data-scrolled', '');
+  await page.setViewportSize({ width: 1440, height: 900 });
+  expect((await page.locator('.mb-app').boundingBox())!.width).toBeLessThanOrEqual(430);
+});
+

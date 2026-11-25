@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
   "counts": {
-    "ui": 179,
+    "ui": 192,
     "charts": 42,
-    "blueprints": 14,
+    "blueprints": 17,
     "palettes": 18,
     "themes": 36,
     "typography": 12,
@@ -17,14 +17,14 @@
       "title": "Controls & tactile inputs",
       "summary": "Buttons, toggles, pickers and fields with real pressed states and no layout jump.",
       "order": 1,
-      "count": 37
+      "count": 40
     },
     {
       "id": "navigation",
       "title": "Navigation & page chrome",
       "summary": "Headers, rails, menus and footers that tell people where they are and get out of the way.",
       "order": 2,
-      "count": 28
+      "count": 31
     },
     {
       "id": "feedback",
@@ -45,21 +45,21 @@
       "title": "Data & layout primitives",
       "summary": "Tables, lists, grids and blocks for showing real data cleanly, with tabular numbers everywhere.",
       "order": 5,
-      "count": 36
+      "count": 40
     },
     {
       "id": "motion",
       "title": "Motion & CSS craft",
       "summary": "Curves, transitions and small details that make an interface feel made, all collapsing under reduced motion.",
       "order": 6,
-      "count": 10
+      "count": 11
     },
     {
       "id": "blocks",
       "title": "Sections for pages",
       "summary": "Whole page sections (heroes, pricing, FAQs, sign-in) built from the same tokens, so a page can be assembled in minutes and still look designed.",
       "order": 7,
-      "count": 22
+      "count": 24
     },
     {
       "id": "backdrops",
@@ -928,6 +928,65 @@
         "components/ui/blocks/showcase-tabs/showcase-tabs.ts"
       ],
       "path": "components/ui/blocks/showcase-tabs"
+    },
+    {
+      "id": "quote-feature",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Customer quote, featured",
+      "summary": "One quote set as a headline with who said it, and two or three results beside it.",
+      "aliases": [
+        "single testimonial",
+        "big quote",
+        "customer story",
+        "case study quote",
+        "pull quote section",
+        "hero testimonial"
+      ],
+      "pattern": "<h2> + <figure> + <blockquote> + <dl>",
+      "states": [
+        "side by side",
+        "stacked"
+      ],
+      "react": "QuoteFeature",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/quote-feature/quote-feature.css",
+        "components/ui/blocks/quote-feature/quote-feature.html",
+        "components/ui/blocks/quote-feature/quote-feature.react.tsx"
+      ],
+      "path": "components/ui/blocks/quote-feature"
+    },
+    {
+      "id": "sticky-story",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Sticky story",
+      "summary": "Steps scroll on the left while the visual for the step being read stays pinned on the right.",
+      "aliases": [
+        "scrollytelling",
+        "pinned scroll section",
+        "sticky scroll features",
+        "scroll-linked steps",
+        "feature walkthrough",
+        "scroll story"
+      ],
+      "pattern": "<ol> + position: sticky",
+      "states": [
+        "step 1",
+        "step 2",
+        "step 3",
+        "stacked (narrow)"
+      ],
+      "react": "StickyStory",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/sticky-story/sticky-story.css",
+        "components/ui/blocks/sticky-story/sticky-story.html",
+        "components/ui/blocks/sticky-story/sticky-story.react.tsx",
+        "components/ui/blocks/sticky-story/sticky-story.ts"
+      ],
+      "path": "components/ui/blocks/sticky-story"
     },
     {
       "id": "disclosure-chevron",
@@ -2045,6 +2104,99 @@
       "path": "components/ui/controls/command-chip"
     },
     {
+      "id": "hold-to-confirm",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Hold to confirm",
+      "summary": "A destructive button that fires only after it is held for a second; letting go cancels.",
+      "aliases": [
+        "press and hold button",
+        "long press to delete",
+        "hold to delete",
+        "confirm by holding",
+        "slide to confirm"
+      ],
+      "pattern": "button + timed hold + role=\"status\"",
+      "states": [
+        "rest",
+        "holding",
+        "done"
+      ],
+      "react": "HoldToConfirm",
+      "deps": [],
+      "files": [
+        "components/ui/controls/hold-to-confirm/hold-to-confirm.css",
+        "components/ui/controls/hold-to-confirm/hold-to-confirm.html",
+        "components/ui/controls/hold-to-confirm/hold-to-confirm.react.tsx",
+        "components/ui/controls/hold-to-confirm/hold-to-confirm.ts"
+      ],
+      "path": "components/ui/controls/hold-to-confirm"
+    },
+    {
+      "id": "amount-input",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Amount input",
+      "summary": "A money field: currency symbol, right-aligned tabular digits, formatted when you leave it, limits explained in words.",
+      "aliases": [
+        "currency input",
+        "money field",
+        "price input",
+        "payment amount",
+        "number with currency",
+        "transfer amount"
+      ],
+      "pattern": "<input inputmode=\"decimal\"> + format on blur",
+      "states": [
+        "empty",
+        "typing",
+        "formatted",
+        "over the limit"
+      ],
+      "react": "AmountInput",
+      "deps": [],
+      "files": [
+        "components/ui/controls/amount-input/amount-input.css",
+        "components/ui/controls/amount-input/amount-input.html",
+        "components/ui/controls/amount-input/amount-input.react.tsx",
+        "components/ui/controls/amount-input/amount-input.ts"
+      ],
+      "path": "components/ui/controls/amount-input"
+    },
+    {
+      "id": "date-picker",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Date picker",
+      "summary": "One date, typed or picked: a text field that understands several formats, with a calendar for dates you need to see.",
+      "aliases": [
+        "single date picker",
+        "calendar input",
+        "date field",
+        "due date",
+        "birthday field",
+        "datepicker",
+        "day picker"
+      ],
+      "pattern": "APG date picker dialog + text input",
+      "states": [
+        "empty",
+        "typed",
+        "calendar open",
+        "out of range",
+        "not a date"
+      ],
+      "react": "DatePicker",
+      "deps": [],
+      "files": [
+        "components/ui/controls/date-picker/date-picker.css",
+        "components/ui/controls/date-picker/date-picker.html",
+        "components/ui/controls/date-picker/date-picker.react.tsx",
+        "components/ui/controls/date-picker/date-picker.ts"
+      ],
+      "path": "components/ui/controls/date-picker"
+    },
+    {
       "id": "data-table",
       "kind": "ui",
       "family": "data",
@@ -3076,6 +3228,131 @@
       "path": "components/ui/data/assistant-thread"
     },
     {
+      "id": "device-frame",
+      "kind": "ui",
+      "family": "data",
+      "name": "Device frame",
+      "summary": "An outline browser window, desktop window, tablet or phone around a screenshot or live markup.",
+      "aliases": [
+        "phone mockup",
+        "browser mockup",
+        "iphone frame",
+        "screenshot frame",
+        "app window chrome",
+        "laptop mockup",
+        "device mockup"
+      ],
+      "pattern": "<figure> + <figcaption>",
+      "states": [
+        "browser",
+        "window",
+        "phone",
+        "tablet"
+      ],
+      "react": "DeviceFrame",
+      "deps": [],
+      "files": [
+        "components/ui/data/device-frame/device-frame.css",
+        "components/ui/data/device-frame/device-frame.html",
+        "components/ui/data/device-frame/device-frame.react.tsx"
+      ],
+      "path": "components/ui/data/device-frame"
+    },
+    {
+      "id": "api-endpoint",
+      "kind": "ui",
+      "family": "data",
+      "name": "API endpoint row",
+      "summary": "An endpoint as a disclosure row: method tag, path with its variables marked, what it does; parameters and a sample response inside.",
+      "aliases": [
+        "api reference row",
+        "rest endpoint",
+        "method and path",
+        "endpoint list",
+        "api docs entry",
+        "swagger row"
+      ],
+      "pattern": "<details> + <table> + <pre>",
+      "states": [
+        "closed",
+        "open",
+        "GET",
+        "POST",
+        "PATCH",
+        "DELETE"
+      ],
+      "react": "ApiEndpoint",
+      "deps": [],
+      "files": [
+        "components/ui/data/api-endpoint/api-endpoint.css",
+        "components/ui/data/api-endpoint/api-endpoint.html",
+        "components/ui/data/api-endpoint/api-endpoint.react.tsx"
+      ],
+      "path": "components/ui/data/api-endpoint"
+    },
+    {
+      "id": "terminal-window",
+      "kind": "ui",
+      "family": "data",
+      "name": "Terminal window",
+      "summary": "A terminal that types its commands and prints their output once, when it scrolls into view.",
+      "aliases": [
+        "animated terminal",
+        "cli demo",
+        "console output",
+        "typing terminal",
+        "command line preview",
+        "shell session"
+      ],
+      "pattern": "<figure> + typed lines",
+      "states": [
+        "playing",
+        "done",
+        "reduced motion (complete)"
+      ],
+      "react": "TerminalWindow",
+      "deps": [],
+      "files": [
+        "components/ui/data/terminal-window/terminal-window.css",
+        "components/ui/data/terminal-window/terminal-window.html",
+        "components/ui/data/terminal-window/terminal-window.react.tsx",
+        "components/ui/data/terminal-window/terminal-window.ts"
+      ],
+      "path": "components/ui/data/terminal-window"
+    },
+    {
+      "id": "media-player",
+      "kind": "ui",
+      "family": "data",
+      "name": "Media player",
+      "summary": "Audio controls: play or pause, a scrubber, elapsed and total time, back 15 seconds and playback speed.",
+      "aliases": [
+        "audio player",
+        "podcast player",
+        "play bar",
+        "scrubber",
+        "voice note player",
+        "playback controls",
+        "music player"
+      ],
+      "pattern": "<audio> + <input type=\"range\">",
+      "states": [
+        "paused",
+        "playing",
+        "seeking",
+        "ended"
+      ],
+      "react": "MediaPlayer",
+      "deps": [],
+      "files": [
+        "components/ui/data/media-player/media-player.css",
+        "components/ui/data/media-player/media-player.html",
+        "components/ui/data/media-player/media-player.react.tsx",
+        "components/ui/data/media-player/media-player.ts"
+      ],
+      "path": "components/ui/data/media-player"
+    },
+    {
       "id": "count-up",
       "kind": "ui",
       "family": "feedback",
@@ -3864,6 +4141,36 @@
         "components/ui/motion/logo-marquee/logo-marquee.react.tsx"
       ],
       "path": "components/ui/motion/logo-marquee"
+    },
+    {
+      "id": "text-reveal",
+      "kind": "ui",
+      "family": "motion",
+      "name": "Text reveal",
+      "summary": "The words of one headline rise in one after another, once, when it first comes on screen.",
+      "aliases": [
+        "word by word reveal",
+        "headline animation",
+        "staggered text",
+        "text fade up",
+        "split text animation",
+        "animated heading"
+      ],
+      "pattern": "word spans + one transition",
+      "states": [
+        "before",
+        "revealed",
+        "reduced motion (static)"
+      ],
+      "react": "TextReveal",
+      "deps": [],
+      "files": [
+        "components/ui/motion/text-reveal/text-reveal.css",
+        "components/ui/motion/text-reveal/text-reveal.html",
+        "components/ui/motion/text-reveal/text-reveal.react.tsx",
+        "components/ui/motion/text-reveal/text-reveal.ts"
+      ],
+      "path": "components/ui/motion/text-reveal"
     },
     {
       "id": "navbar-mega",
@@ -4678,6 +4985,99 @@
         "components/ui/navigation/session-list/session-list.ts"
       ],
       "path": "components/ui/navigation/session-list"
+    },
+    {
+      "id": "reading-progress",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Reading progress",
+      "summary": "A thin accent bar at the top that fills as an article is read.",
+      "aliases": [
+        "scroll progress bar",
+        "reading indicator",
+        "page progress",
+        "article progress line",
+        "scroll indicator"
+      ],
+      "pattern": "sticky bar + scroll position",
+      "states": [
+        "start",
+        "part way",
+        "end"
+      ],
+      "react": "ReadingProgress",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/reading-progress/reading-progress.css",
+        "components/ui/navigation/reading-progress/reading-progress.html",
+        "components/ui/navigation/reading-progress/reading-progress.react.tsx",
+        "components/ui/navigation/reading-progress/reading-progress.ts"
+      ],
+      "path": "components/ui/navigation/reading-progress"
+    },
+    {
+      "id": "row-list",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Row list",
+      "summary": "Grouped navigation rows for a settings or account home: icon, label, current value and a chevron.",
+      "aliases": [
+        "settings rows",
+        "list with chevrons",
+        "ios settings list",
+        "grouped list",
+        "inset list",
+        "menu rows",
+        "account menu list",
+        "navigation list"
+      ],
+      "pattern": "<nav> + grouped <ul> of links",
+      "states": [
+        "default",
+        "hover",
+        "with value",
+        "with count",
+        "danger row"
+      ],
+      "react": "RowList",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/row-list/row-list.css",
+        "components/ui/navigation/row-list/row-list.html",
+        "components/ui/navigation/row-list/row-list.react.tsx"
+      ],
+      "path": "components/ui/navigation/row-list"
+    },
+    {
+      "id": "mobile-app-bar",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Mobile app bar",
+      "summary": "The top bar of a phone screen: back, title and one action, with an optional large title that collapses as you scroll.",
+      "aliases": [
+        "navigation bar",
+        "top app bar",
+        "ios large title",
+        "mobile header",
+        "screen header",
+        "back button bar",
+        "collapsing toolbar"
+      ],
+      "pattern": "<header> + position: sticky",
+      "states": [
+        "large title",
+        "collapsed",
+        "plain"
+      ],
+      "react": "MobileAppBar",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/mobile-app-bar/mobile-app-bar.css",
+        "components/ui/navigation/mobile-app-bar/mobile-app-bar.html",
+        "components/ui/navigation/mobile-app-bar/mobile-app-bar.react.tsx",
+        "components/ui/navigation/mobile-app-bar/mobile-app-bar.ts"
+      ],
+      "path": "components/ui/navigation/mobile-app-bar"
     },
     {
       "id": "command-palette",
@@ -6733,6 +7133,125 @@
         "blueprints/assistant/page.css"
       ],
       "path": "blueprints/assistant"
+    },
+    {
+      "id": "devtool",
+      "order": 15,
+      "name": "Developer tool landing",
+      "summary": "A floating pill nav over a grid hero with circuit traces, an install command beside the one action, a typed terminal, tabbed code, six plain features, an API teaser, figures, one customer quote and a closing band.",
+      "anatomy": "Pill nav → hero (announcement, headline, action + install command) → quickstart + terminal → SDK code → features → API endpoints → figures → quote → CTA → footer",
+      "aliases": [
+        "developer landing page",
+        "api product page",
+        "sdk landing",
+        "devtool homepage",
+        "open source project site",
+        "cli tool landing",
+        "infrastructure product page"
+      ],
+      "uses": [
+        "navbar-simple",
+        "announcement-pill",
+        "command-chip",
+        "backdrop-circuit",
+        "hero-centered",
+        "terminal-window",
+        "code-block",
+        "feature-grid",
+        "api-endpoint",
+        "stats-band",
+        "quote-feature",
+        "cta-band",
+        "footer-minimal",
+        "button"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/devtool/index.html",
+        "blueprints/devtool/main.ts",
+        "blueprints/devtool/meta.json",
+        "blueprints/devtool/page.css"
+      ],
+      "path": "blueprints/devtool"
+    },
+    {
+      "id": "agent",
+      "order": 16,
+      "name": "Agent workspace",
+      "summary": "A desktop agent app: a workspace switcher and sessions by project in the sidebar, a composer over a dither backdrop to start work, and a running session with a plan, a proposed change and an approval bar.",
+      "anatomy": "Sidebar (switcher → sessions by project → account) | top bar → home: headline, composer, context chips, recent sessions · run: title, plan, diff, approve",
+      "aliases": [
+        "ai agent app",
+        "coding agent ui",
+        "desktop ai app",
+        "agent dashboard",
+        "task runner app",
+        "ai workspace",
+        "copilot workspace",
+        "session list app"
+      ],
+      "uses": [
+        "switcher-menu",
+        "session-list",
+        "backdrop-dither",
+        "prompt-composer",
+        "diff-view",
+        "badge",
+        "button"
+      ],
+      "states": [
+        "empty",
+        "running"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/agent/index.html",
+        "blueprints/agent/main.ts",
+        "blueprints/agent/meta.json",
+        "blueprints/agent/page.css"
+      ],
+      "path": "blueprints/agent"
+    },
+    {
+      "id": "mobile",
+      "order": 17,
+      "name": "Phone app screen",
+      "summary": "A thumb-first app screen: a large title that collapses on scroll, one headline figure with a week of bars, whole-row lists, a primary action above a bottom tab bar, and a bottom-sheet form. Loading and empty states included.",
+      "anatomy": "App bar (large title) → headline figure + 7-day bars → list: waiting → list: paid → primary action → bottom tabs · sheet: amount, client, terms, send",
+      "aliases": [
+        "mobile app",
+        "phone app",
+        "ios app screen",
+        "android app screen",
+        "app home screen",
+        "mobile banking home",
+        "pwa",
+        "react native screen",
+        "mobile dashboard"
+      ],
+      "uses": [
+        "mobile-app-bar",
+        "bottom-nav",
+        "bottom-sheet",
+        "amount-input",
+        "segmented-control",
+        "badge",
+        "skeleton",
+        "empty-state",
+        "button"
+      ],
+      "states": [
+        "loading",
+        "empty"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/mobile/index.html",
+        "blueprints/mobile/main.ts",
+        "blueprints/mobile/meta.json",
+        "blueprints/mobile/page.css"
+      ],
+      "path": "blueprints/mobile"
     }
   ],
   "palettes": [

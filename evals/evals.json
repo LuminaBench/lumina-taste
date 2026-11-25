@@ -55,7 +55,7 @@
   {
    "id": 2,
    "slug": "devtool-landing",
-   "pageType": "landing",
+   "pageType": "dev-landing",
    "kind": "marketing",
    "prompt": "Landing page for \"Relay\", a webhooks API for developers. Dark theme. Show code. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
    "expected_output": "A complete landing page that passes the audit and the taste critic.",
@@ -1287,6 +1287,99 @@
      "name": "at least 4 sections",
      "selector": "main > section, main > * > section, body > section",
      "min": 4
+    }
+   ]
+  },
+  {
+   "id": 31,
+   "slug": "agent-workspace",
+   "pageType": "agent-app",
+   "kind": "app",
+   "prompt": "A desktop app for a coding agent called \"Tiller\": sessions grouped by project in a sidebar, a box to describe a new task, and recent sessions underneath. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+   "expected_output": "A complete agent workspace that passes the audit and the taste critic.",
+   "files": [],
+   "expectations": [
+    "Ran compose.mjs (or followed its plan) before writing markup",
+    "Taste profile written and tokens used; no raw hex colours in component CSS",
+    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+    "Taste score (audit-ui --taste) is 90 or more",
+    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+    "One primary action per screen"
+   ],
+   "checks": [
+    {
+     "name": "one h1",
+     "selector": "h1",
+     "min": 1,
+     "max": 1
+    },
+    {
+     "name": "main landmark",
+     "selector": "main",
+     "min": 1,
+     "max": 1
+    },
+    {
+     "name": "navigation landmark",
+     "selector": "nav, [role=\"navigation\"]",
+     "min": 1
+    },
+    {
+     "name": "task box",
+     "selector": "textarea, [contenteditable]",
+     "min": 1
+    },
+    {
+     "name": "at least 3 sessions listed",
+     "selector": "nav li, aside li",
+     "min": 3
+    }
+   ]
+  },
+  {
+   "id": 32,
+   "slug": "mobile-habits",
+   "pageType": "mobile-app",
+   "kind": "app",
+   "prompt": "The home screen of a phone app for tracking daily habits, called \"Tally Up\": today's progress, a list of habits to tick off, a way to add one, and bottom tabs. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+   "expected_output": "A complete phone app screen that passes the audit and the taste critic.",
+   "files": [],
+   "expectations": [
+    "Ran compose.mjs (or followed its plan) before writing markup",
+    "Taste profile written and tokens used; no raw hex colours in component CSS",
+    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+    "Taste score (audit-ui --taste) is 90 or more",
+    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+    "One primary action per screen"
+   ],
+   "checks": [
+    {
+     "name": "one h1",
+     "selector": "h1",
+     "min": 1,
+     "max": 1
+    },
+    {
+     "name": "main landmark",
+     "selector": "main",
+     "min": 1,
+     "max": 1
+    },
+    {
+     "name": "bottom tabs",
+     "selector": "nav a, nav button",
+     "min": 3,
+     "max": 5
+    },
+    {
+     "name": "a list of at least 3 rows",
+     "selector": "main li",
+     "min": 3
+    },
+    {
+     "name": "one way to add",
+     "selector": "button, a.lt-btn",
+     "min": 1
     }
    ]
   }

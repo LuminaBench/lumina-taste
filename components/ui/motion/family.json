@@ -541,6 +541,62 @@
         ]
       ],
       "added": 2
+    },
+    {
+      "id": "text-reveal",
+      "name": "Text reveal",
+      "summary": "The words of one headline rise in one after another, once, when it first comes on screen.",
+      "pattern": "word spans + one transition",
+      "states": [
+        "before",
+        "revealed",
+        "reduced motion (static)"
+      ],
+      "aliases": [
+        "word by word reveal",
+        "headline animation",
+        "staggered text",
+        "text fade up",
+        "split text animation",
+        "animated heading"
+      ],
+      "react": "TextReveal",
+      "api": "--reveal-dur · --reveal-gap",
+      "w": 620,
+      "preview": [
+        [
+          "click",
+          "[data-replay-reveal]"
+        ]
+      ],
+      "called": [
+        "headline where the words appear one at a time",
+        "the text that slides up word by word",
+        "animated hero title"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-reveal",
+          "name": "Headline",
+          "api": "data-lt=\"text-reveal\"",
+          "text": "Real text in the markup. The script wraps each word; nothing depends on it."
+        }
+      ],
+      "prompt": "Add a text reveal to one headline per page: on first view, split its text into word spans (keep inline elements) and let each rise 0.4em and fade in over 520ms with an ease-out curve, 45ms after the word before it. Use opacity and translate only. Run once, never on scroll back. With reduced motion or no script the headline is plain text. Never use it on body copy, on more than one heading per screen, or letter by letter.",
+      "debug": "Debug my text reveal. Rule out: text invisible when script fails (hide words only after splitting); layout shift from words changing size; replaying on every scroll; letter-by-letter splitting that breaks screen readers and ligatures; more than one revealed heading on a screen; a blur filter that smears on low-end devices. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "opacity + translate, transition-delay: calc(var(--i) * 45ms)",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<TextReveal as=\"h1\">",
+          "React"
+        ]
+      ],
+      "added": 12
     }
   ]
 }

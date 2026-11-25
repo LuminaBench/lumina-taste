@@ -1,0 +1,7 @@
+/* Text reveal: the words of a headline rise in one after another, once. Words become inline-blocks only
+   after the script runs, so without it (or under reduced motion) the headline is just a headline. */
+.lt-reveal [data-w] { display: inline-block; opacity: 0; translate: 0 0.4em; transition: opacity var(--reveal-dur, 520ms) var(--ease-out), translate var(--reveal-dur, 520ms) var(--ease-out); transition-delay: calc(var(--i) * var(--reveal-gap, 45ms)); }
+.lt-reveal[data-in] [data-w] { opacity: 1; translate: 0 0; }
+@media (prefers-reduced-motion: reduce) { .lt-reveal [data-w] { opacity: 1; translate: none; transition: none; } }
+.lt-reveal-demo { display: grid; justify-items: start; gap: 18px; max-width: 560px; }
+.lt-reveal-demo h3 { margin: 0; font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.1; text-wrap: balance; }

@@ -21,7 +21,8 @@ export function enhance(root: HTMLElement): Cleanup {
     on(grab, 'pointercancel', end),
     on(sheet, 'click', (e: MouseEvent) => {
       if (e.target === sheet) { sheet.close(); return; }
-      const b = (e.target as Element).closest('button');
+      // Only the sheet's own actions close it, so a form inside (fields, pickers, toggles) keeps working.
+      const b = (e.target as Element).closest('[data-part="actions"] button, [data-part="cancel"], [data-sheet-action]');
       if (!b) return;
       if (b.matches('[data-part="cancel"]')) sheet.close();
       else { emit(root, { action: b.textContent?.trim() }); sheet.close(); }

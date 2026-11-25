@@ -1,0 +1,10 @@
+<div class="lt-date" data-lt="date-picker" data-value="2026-12-24" data-min="2026-11-25">
+  <label for="lt-dp-in">Due date</label>
+  <div data-part="field"><input id="lt-dp-in" type="text" inputmode="numeric" autocomplete="off" placeholder="DD/MM/YYYY" value="24/12/2026" aria-describedby="lt-dp-hint"><button type="button" data-part="open" aria-label="Choose a date" aria-haspopup="dialog" aria-expanded="false"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></button></div>
+  <p id="lt-dp-hint" data-part="hint">Day, month, year. Today or later.</p>
+  <div data-part="popover" role="dialog" aria-modal="false" aria-label="Choose a date" hidden>
+    <div data-part="head"><button type="button" data-part="prev" aria-label="Previous month"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button><h2 data-part="month" aria-live="polite">December 2026</h2><button type="button" data-part="next" aria-label="Next month"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div>
+    <table data-part="grid" role="grid" aria-label="Calendar"></table>
+    <div data-part="foot"><button type="button" data-part="today">Today</button><button type="button" data-part="clear">Clear</button></div>
+  </div>
+</div>

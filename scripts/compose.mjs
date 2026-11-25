@@ -50,11 +50,15 @@ function pickType() {
   const viaBp = hit && kb.pageTypes.find((t) => t.blueprint === hit.d.id);
   return { type: viaBp ?? kb.pageTypes.find((t) => t.id === 'landing'), confident: false };
 }
-const { type, confident, runnerUp } = pickType();
+const picked = pickType();
+let { type } = picked;
+const { confident, runnerUp } = picked;
 
 // ---------------------------------------------------------------- domain, mood, profile
 const domainScores = kb.domains.map((d) => ({ d, s: d.words.filter((w) => has(w)).length })).sort((a, b) => b.s - a.s);
 const domain = domainScores[0].s > 0 ? domainScores[0].d : null;
+// A landing page for a developer product has its own plan (code, terminal, API), unless --type says otherwise.
+if (type.id === 'landing' && domain?.id === 'devtool' && !forceType) type = kb.pageTypes.find((t) => t.id === 'dev-landing') ?? type;
 const moodHits = Object.entries(kb.moods).filter(([w]) => has(w));
 const mood = Object.assign({}, ...moodHits.map(([, v]) => v));
 // A style is applied only when the brief names a mood; the domain's style is offered, not imposed.

@@ -1,0 +1,39 @@
+@scope (.lt-story) {
+  :scope { container-type: inline-size; display: block; width: 100%; padding: var(--block-y, calc(var(--section-y) / 2)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  /* Blocks pad by half of --section-y, so the gap between two sections is exactly --section-y. data-tone="well" makes a tinted band. */
+  :scope[data-tone="well"] { background: var(--bg-surface-2); }
+  @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  .lt-eyebrow, [data-part="eyebrow"] { margin: 0 0 10px; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; color: var(--accent-text); }
+  h2 { margin: 0; font-family: var(--font-display); font-size: max(var(--step-3), 1.625rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
+  header { margin-bottom: 40px; }
+  header h2 { max-width: 20ch; }
+  /* One list, two columns. The text of every step stacks on the left; the visuals share one cell on the
+     right and stay pinned while their steps scroll past. Each visual lives inside its step, so the order
+     is right for narrow screens, screen readers and pages without script. */
+  [data-part="steps"] { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); grid-template-rows: repeat(var(--steps, 3), auto); column-gap: 56px; margin: 0; padding: 0; list-style: none; }
+  li { display: contents; }
+  [data-part="text"] { grid-column: 1; display: grid; align-content: center; gap: 8px; min-height: var(--story-step, 340px); padding: 24px 0 24px 22px; border-left: 2px solid var(--border-hairline); transition: border-color var(--dur-2); }
+  li[data-active] [data-part="text"] { border-left-color: var(--accent-solid); }
+  [data-part="n"] { color: var(--text-secondary); font: 600 var(--text-ui-xs) var(--font-mono); font-variant-numeric: tabular-nums; }
+  h3 { margin: 0; font-size: var(--step-2); font-weight: 650; letter-spacing: -0.015em; line-height: 1.2; color: var(--text-secondary); transition: color var(--dur-2); }
+  li[data-active] h3 { color: var(--text-primary); }
+  [data-part="text"] p { margin: 0; max-width: 44ch; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.55; }
+  figure { grid-column: 2; grid-row: 1 / span var(--steps, 3); align-self: start; position: sticky; top: var(--story-top, 96px); margin: 20px 0; opacity: 0; translate: 0 8px; transition: opacity var(--dur-3) var(--ease-out), translate var(--dur-3) var(--ease-out); pointer-events: none; }
+  li[data-active] figure { opacity: 1; translate: 0 0; pointer-events: auto; }
+  /* Narrow: each visual sits under its own text; nothing is pinned or hidden. */
+  @container (max-width: 760px) {
+    [data-part="steps"] { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; row-gap: 12px; }
+    [data-part="text"] { min-height: 0; padding-block: 8px; }
+    figure, li[data-active] figure { grid-column: 1; grid-row: auto; position: static; margin: 4px 0 28px; opacity: 1; translate: none; pointer-events: auto; }
+    h3 { color: var(--text-primary); }
+    [data-part="text"] { border-left-color: var(--accent-solid); }
+  }
+  /* Sample visuals: a plain panel of facts. Replace with a screenshot, a chart or live components. */
+  [data-mock] { display: grid; padding: 8px 22px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); box-shadow: var(--shadow-md); }
+  [data-mock] p { display: flex; justify-content: space-between; gap: 16px; margin: 0; padding: 16px 0; color: var(--text-secondary); font-size: var(--text-ui); }
+  [data-mock] p + p { border-top: var(--bw) var(--border-style) var(--border-hairline); }
+  [data-mock] b { color: var(--text-primary); font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+  [data-mock] [data-ok] b { color: var(--status-positive); }
+}
+@media (prefers-reduced-motion: reduce) { .lt-story figure { transition: none; translate: none; } }

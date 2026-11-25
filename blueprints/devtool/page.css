@@ -1,0 +1,25 @@
+/* Custom bands follow the same rule as the section blocks: full width, content centred in the container,
+   half of --section-y above and below, so every gap on the page is one --section-y. */
+.dv-band { padding: calc(var(--section-y) / 2) max(24px, calc((100% - 1180px) / 2)); }
+.dv-band[data-tone="well"] { background: var(--bg-surface-2); }
+.dv-eyebrow { margin: 0 0 10px; color: var(--accent-text); font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; }
+.dv-band h2 { margin: 0; font-family: var(--font-display); font-size: max(var(--step-3), 1.625rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
+.dv-head { max-width: 640px; margin-bottom: var(--space-6); }
+.dv-head p:last-child, .dv-split > div > p:not(.dv-eyebrow) { margin: 12px 0 0; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.55; }
+.dv-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: center; gap: 56px; }
+.dv-steps { display: grid; gap: 14px; margin: 22px 0 0; padding: 0; list-style: none; counter-reset: dv; color: var(--text-secondary); line-height: 1.55; }
+.dv-steps li { position: relative; padding-left: 36px; counter-increment: dv; }
+.dv-steps li::before { content: counter(dv); position: absolute; left: 0; top: 1px; display: grid; place-items: center; width: 22px; height: 22px; border: 1px solid var(--border-strong); border-radius: 50%; color: var(--text-primary); font: 600 11px var(--font-mono); }
+.dv-steps b { color: var(--text-primary); font-weight: 650; }
+.dv-note { margin: 18px 0 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+.dv-more { margin: var(--space-5) 0 0; }
+.lt-hero-centered [data-part="cta"] { align-items: center; }
+.lt-hero-centered .lt-pill { margin-bottom: 22px; }
+.lt-footer-min { padding-block: var(--space-6); }
+@media (max-width: 860px) {
+  .dv-split { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+}
+@media (max-width: 640px) {
+  .dv-band { padding: calc(var(--section-y) / 2) 16px; }
+  .lt-hero-centered .lt-command { width: 100%; }
+}
