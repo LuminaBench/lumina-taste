@@ -1,0 +1,8 @@
+@scope (.lt-command) {
+  :scope { display: inline-flex; align-items: center; gap: 10px; width: fit-content; max-width: 100%; height: calc(var(--control-h) + 8px); padding: 0 6px 0 16px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-md); background: var(--bg-surface-2); color: var(--text-primary); font: var(--text-ui-sm) var(--font-mono); }
+  [data-part="prompt"] { color: var(--text-muted); user-select: none; }
+  code { min-width: 0; font: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  [data-part="copy"] { display: grid; place-items: center; flex: none; width: 32px; height: 32px; margin-left: 4px; border: 0; border-radius: var(--radius-sm); background: var(--bg-surface-3); color: var(--text-secondary); cursor: pointer; transition: color var(--dur-1); }
+  [data-part="copy"]:hover { color: var(--text-primary); }
+  [data-part="copy"][data-done] { color: var(--status-positive); }
+}

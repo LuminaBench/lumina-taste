@@ -185,7 +185,7 @@ const visit = (f) => {
 };
 for (const e of entries) visit(e);
 // Blueprint boot imports tokens itself; everything else gets tokens explicitly below.
-const tokenFiles = ['tokens/base.css', 'tokens/layout.css', 'tokens/typography/typography.css', ...(opts['all-palettes'] ? ['tokens/palettes/all.css'] : [`tokens/palettes/${profile.palette}.css`]), ...(profile.style !== 'none' ? ['tokens/styles/styles.css'] : [])];
+const tokenFiles = ['tokens/base.css', 'tokens/layout.css', 'tokens/backdrops.css', 'tokens/typography/typography.css', ...(opts['all-palettes'] ? ['tokens/palettes/all.css'] : [`tokens/palettes/${profile.palette}.css`]), ...(profile.style !== 'none' ? ['tokens/styles/styles.css'] : [])];
 for (const f of [...files]) if (f.startsWith('tokens/palettes/') && f !== `tokens/palettes/${profile.palette}.css`) files.delete(f);
 const profileEngine = ['engine/profiles/profile.mjs', 'engine/profiles/profile.d.mts', 'engine/profiles/options.mjs', 'engine/profiles/options.d.mts'];
 

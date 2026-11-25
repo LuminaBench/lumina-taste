@@ -93,6 +93,30 @@ const installBlueprint = blueprint ? `${base} --blueprints ${blueprint}` : null;
 // One way to start, not two: a blueprint when it already is this page, snippets when the plan differs from it.
 const startWith = blueprint && type.start !== 'snippets' ? 'blueprint' : 'snippets';
 const install = startWith === 'blueprint' ? installBlueprint : installSnippets;
+// ---------------------------------------------------------------- three looks, and the few questions worth asking
+const styleDefs = JSON.parse(readFileSync(join(root, 'tokens/styles/source.json'), 'utf8')).styles;
+const saidMode = mood.mode ?? (has('black') ? 'dark' : has('light') || has('white') || has('bright') ? 'light' : null);
+let looks = [...new Set([profile.style, ...(kb.directions[domain?.id] ?? []), ...kb.directions.default].filter((id) => id && styleDefs.some((s) => s.id === id)))];
+if (saidMode) {
+  // A brief that says dark only gets dark looks (and the same for light).
+  const same = looks.filter((id) => styleDefs.find((s) => s.id === id).mode === saidMode);
+  looks = [...same, ...styleDefs.filter((s) => s.mode === saidMode && !same.includes(s.id)).map((s) => s.id)];
+}
+looks = looks.slice(0, 3);
+const directions = {
+  styles: looks.map((id) => { const s = styleDefs.find((x) => x.id === id); return { id, name: s.name, summary: s.summary, mode: s.mode }; }),
+  command: `node scripts/directions.mjs ${JSON.stringify(brief || type.name)} --out ${project === '/abs/app' ? './lumina-directions' : join(project, 'lumina-directions')}`,
+};
+// Ask only what the brief leaves open, most useful first, three at most. Everything else has a sound default.
+const saysAction = ['sign up', 'signup', 'waitlist', 'demo', 'buy', 'install', 'download', 'subscribe', 'contact', 'book', 'trial', 'donate', 'apply'].some(has);
+const questions = [
+  restyle && { id: 'keep', ask: 'What must stay as it is (logo, brand colour, copy, layout)?', why: 'A restyle changes the surface; it should not move what people already know.', default: 'keep the content and structure, change tokens and components only' },
+  !product && { id: 'product', ask: 'What is the product called, and what does it do in one line?', why: 'Sample names and sample numbers must not ship; the headline is written from this.', default: 'none: ask, or take the name from the repository or the existing site' },
+  !profile.style && !restyle && { id: 'look', ask: `Which look fits: ${directions.styles.map((s, i) => `${'ABC'[i]} ${s.name}`).join(', ')}? (Render them side by side with the directions command and let the person point.)`, why: 'People choose a look faster by eye than from a description.', default: `the plain profile below (${profile.palette}, ${profile.typography}), no style` },
+  ['marketing', 'flow'].includes(type.kind) && !saysAction && { id: 'action', ask: 'What is the one thing a visitor should do here: start a trial, book a demo, join a waitlist, buy?', why: 'One primary action per screen; its label is the most-read words on the page.', default: 'a free start ("Start free"), with a quieter second link to a demo or the docs' },
+  !saidMode && { id: 'mode', ask: 'Light, dark, or both with a switch?', why: 'Dark is a second design, not an inversion; it is cheaper to know now.', default: `${profile.mode}, with the other mode working` },
+].filter(Boolean).slice(0, 3);
+
 const audience = domain ? { finance: 'people who check figures and need to trust them', trading: 'people watching numbers change who need speed and density', devtool: 'developers who want the facts, the code and the limits', analytics: 'people who need one answer fast, then the detail', health: 'people who may be anxious and need calm, plain steps', public: 'anyone, on any device, including people with low vision or little time', commerce: 'shoppers comparing, who need the price, delivery and returns up front', editorial: 'readers who came to read, so the text comes first', productivity: 'teams who want to see the product working, not adjectives', creative: 'clients judging taste, so the work leads and words stay short', playful: 'families and younger users who need big targets and friendly words', enterprise: 'buyers and admins who need proof, controls and compliance', travel: 'people planning, who need dates, prices and photos they trust' }[domain.id] : 'name them in one line before building';
 const plan = {
   brief,
@@ -107,6 +131,8 @@ const plan = {
   },
   profile,
   styleOffer,
+  questions,
+  directions,
   startWith,
   install,
   installAlternative: startWith === 'blueprint' ? installSnippets : installBlueprint,
@@ -138,6 +164,12 @@ L.push(`- **Primary action:** ${type.primary}`);
 L.push(`- **Reading pattern:** ${plan.designBrief.readingPattern}`);
 L.push(`- **Layout:** ${type.layout}`);
 L.push(`- **Density:** ${profile.density}`, '');
+if (questions.length) {
+  L.push(H('Ask first (only these)'), '', 'The brief leaves these open. Ask them in one short message, then build. If the answer is "you choose", take the default and say which you took. Do not ask anything else.', '');
+  for (const q of questions) L.push(`- **${q.ask}** ${q.why} _Default: ${q.default}._`);
+  L.push('');
+  if (questions.some((q) => q.id === 'look')) L.push('To show the looks instead of describing them:', '', '```sh', directions.command, '```', '', `It writes one page with ${directions.styles.map((s) => s.name).join(', ')} on the same content. Open it, or send a screenshot, and ask for A, B or C.`, '');
+}
 L.push(H('Profile and install'), '');
 L.push(`Palette \`${profile.palette}\` (${profile.mode}), type \`${profile.typography}\`, density \`${profile.density}\`${profile.style ? `, style \`${profile.style}\`` : ', no style'}.${domain ? ` Chosen for the ${domain.id} domain.` : ' No domain recognised, so these are the neutral defaults.'}`);
 if (styleOffer) L.push(`If the brief wants more character, add \`--style ${styleOffer}\`.`);

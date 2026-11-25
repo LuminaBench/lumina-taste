@@ -1341,30 +1341,36 @@
     {
       "id": "navbar-simple",
       "name": "Navbar, simple",
-      "summary": "Brand, four links, Sign in and one primary button; a menu button and panel on narrow screens.",
+      "summary": "Brand, four links, Sign in and one primary button; a menu button and panel on narrow screens. data-variant=\"pill\" floats it as a centred rounded bar.",
       "pattern": "<header> + <nav> + disclosure",
       "states": [
         "wide",
         "narrow closed",
         "narrow open",
-        "current page"
+        "current page",
+        "pill"
       ],
       "aliases": [
         "top navigation bar",
         "website header",
         "site nav",
         "header with logo and links",
-        "navbar"
+        "navbar",
+        "pill navbar",
+        "floating nav",
+        "rounded nav bar"
       ],
       "react": "NavbarSimple",
-      "api": "<nav aria-label> · aria-current",
+      "api": "<nav aria-label> · aria-current · data-variant=\"pill\"",
       "w": 980,
       "preview": [],
       "called": [
         "bar at the top of a website with logo and links",
         "site header with sign in button",
         "simple navigation bar",
-        "top menu"
+        "top menu",
+        "rounded floating bar of links at the top",
+        "pill shaped menu bar"
       ],
       "anatomy": [
         {
@@ -1384,6 +1390,12 @@
           "name": "Primary action",
           "api": "",
           "text": "One filled button; Sign in stays a text link."
+        },
+        {
+          "sel": ":scope",
+          "name": "Pill variant",
+          "api": "data-variant=\"pill\"",
+          "text": "Floats the bar: centred, 860px at most (--nav-pill-max), fully rounded, with a hairline border."
         }
       ],
       "prompt": "Add a simple site header: 60px tall with a translucent background and hairline bottom border, brand mark and name on the left, 3–5 nav links (current page in primary ink via aria-current), a text \"Sign in\" and one small primary button on the right; under 680px of container width the links fold into a menu button that opens a panel below the bar.",
@@ -1769,6 +1781,77 @@
         ]
       ],
       "added": 10
+    },
+    {
+      "id": "session-list",
+      "name": "Session list",
+      "summary": "Past and running sessions grouped by project: a state mark, a one-line title and how long ago, for agent and chat sidebars.",
+      "pattern": "<nav> of grouped links with aria-current",
+      "states": [
+        "running",
+        "needs you",
+        "done",
+        "idle",
+        "current"
+      ],
+      "aliases": [
+        "chat history sidebar",
+        "conversation list",
+        "agent sessions",
+        "thread list",
+        "recent chats",
+        "task list sidebar"
+      ],
+      "react": "SessionList",
+      "api": "data-s=\"running|waiting|done|idle\"",
+      "w": 420,
+      "called": [
+        "the list of past chats on the left",
+        "sidebar with running tasks",
+        "sessions grouped by folder",
+        "history list with spinners"
+      ],
+      "anatomy": [
+        {
+          "sel": "h3",
+          "name": "Project",
+          "api": "<section aria-labelledby>",
+          "text": "Groups sessions by where they ran."
+        },
+        {
+          "sel": "[data-part=\"state\"]",
+          "name": "State",
+          "api": "data-s",
+          "text": "A different shape per state, plus hidden words."
+        },
+        {
+          "sel": "[data-part=\"title\"]",
+          "name": "Title",
+          "api": "text-overflow: ellipsis",
+          "text": "The first request, one line."
+        },
+        {
+          "sel": "time",
+          "name": "Age",
+          "api": "tabular-nums",
+          "text": "Relative and short: 1m, 2h, 3d."
+        }
+      ],
+      "prompt": "Build a session list for an agent sidebar: a header with a ghost \"New session\" button and a search icon, then sessions grouped under small project headings with a folder icon. Each row is a link with a 10px state mark (spinning ring = running, amber dot = needs you, green tick = done, hollow ring = idle, each with a visually hidden label), a one-line truncated title and a short relative time in muted tabular figures. The current session has aria-current and a tinted row. Up and Down arrows move between rows across groups.",
+      "debug": "Debug my session list. Rule out: state shown by colour alone; titles wrapping to two lines; full timestamps where \"2h\" is enough; spinners that keep animating under reduced motion; every row bold; groups with no heading. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<nav> + aria-current",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SessionList projects>",
+          "React"
+        ]
+      ],
+      "added": 11
     }
   ]
 }

@@ -1,0 +1,21 @@
+@scope (.lt-sessions) {
+  :scope { display: grid; align-content: start; gap: var(--space-3); width: 100%; max-width: 280px; padding: var(--space-2); font-size: var(--text-ui-sm); }
+  [data-part="head"] { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  [data-part="tool"] { display: grid; place-items: center; width: 32px; height: 32px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-secondary); cursor: pointer; }
+  [data-part="tool"]:hover { background: var(--bg-surface-2); color: var(--text-primary); }
+  section { display: grid; gap: 2px; }
+  h3 { display: flex; align-items: center; gap: 8px; margin: 0; padding: 4px 8px; color: var(--text-muted); font-size: var(--text-ui-xs); font-weight: 600; }
+  ul { display: grid; gap: 1px; margin: 0; padding: 0; list-style: none; }
+  a:not(.lt-btn) { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto; align-items: center; gap: 10px; height: 32px; padding: 0 8px; border-radius: var(--radius-sm); color: var(--text-secondary); text-decoration: none; }
+  a:not(.lt-btn):hover { background: var(--bg-surface-2); color: var(--text-primary); }
+  a[aria-current] { background: var(--bg-surface-3); color: var(--text-primary); font-weight: 600; }
+  [data-part="title"] { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  time { color: var(--text-muted); font-size: var(--text-ui-xs); font-weight: 400; font-variant-numeric: tabular-nums; }
+  /* State is a shape as well as a colour: ring spinning, solid dot, tick, hollow ring. */
+  [data-part="state"] { justify-self: center; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--border-strong); }
+  [data-s="running"] { border-color: var(--border-hairline); border-top-color: var(--accent-solid); animation: lt-sessions-spin 0.9s linear infinite; }
+  [data-s="waiting"] { border: 0; width: 8px; height: 8px; background: var(--status-warning); }
+  [data-s="done"] { border: 0; width: 12px; height: 12px; background: var(--status-positive); mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / contain no-repeat; }
+}
+@keyframes lt-sessions-spin { to { rotate: 360deg; } }
+@media (prefers-reduced-motion: reduce) { .lt-sessions [data-s="running"] { animation: none; border-top-color: var(--accent-solid); border-right-color: var(--accent-solid); } }

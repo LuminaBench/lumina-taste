@@ -1,11 +1,11 @@
 ---
 name: lumina-taste
-description: Make interfaces look designed, not generated. Use for any UI work (landing, pricing, dashboard, settings, docs, auth, store, checkout, admin, status pages): plan a page from a one-line brief, pick palettes, light/dark themes, type, density and visual styles (swiss, editorial, neobrutalism, glass, terminal…), and match an existing site or export to shadcn/ui and Tailwind. Use when a UI element is described loosely (rotating arrow, 9-dot menu, cmd-K box, OTP boxes, bottom sheet, kanban, carousel) to get its real name and working code. Use for charts, including leaderboards, trade-off quadrants, slope, waterfall, treemap and Gantt. Use to audit a page for overflow, clipped text, contrast, focus rings, dead buttons, AI slop (purple gradients, heavy shadows, emoji icons, hype copy) and page-level taste, and to keep a product's look stable with a lockable taste-profile.json. Vanilla HTML/CSS/TS and React, no dependencies.
+description: Make interfaces look designed, not generated. Use for any UI work (landing, pricing, dashboard, settings, docs, auth, store, checkout, admin, status pages): plan a page from a one-line brief, show three looks to choose from, pick palettes, light/dark themes, type, density and visual styles (swiss, editorial, neobrutalism, glass, terminal…), patterned backgrounds (grid, dots, dither, circuit traces), and match an existing site or export to shadcn/ui and Tailwind. Use when a UI element is described loosely (rotating arrow, 9-dot menu, cmd-K box, OTP boxes, bottom sheet, kanban, carousel) to get its real name and working code. Use for charts, including leaderboards, trade-off quadrants, slope, waterfall, treemap and Gantt. Use to audit a page for overflow, clipped text, contrast, focus rings, dead buttons, AI slop (purple gradients, heavy shadows, emoji icons, hype copy) and page-level taste, and to keep a product's look stable with a lockable taste-profile.json. Vanilla HTML/CSS/TS and React, no dependencies.
 ---
 
 # Lumina Taste
 
-A design kit for coding agents: a **page composer** that turns a brief into a plan, **18 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **35 visual styles**, **165 named UI patterns**, **42 chart engines**, **14 page blueprints**, a **lockable taste profile**, a **Playwright auditor with a page-level taste critic**, a **copy lint** and **30 eval briefs** to measure the result. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
+A design kit for coding agents: a **page composer** that turns a brief into a plan, **18 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **39 visual styles**, **179 named UI patterns** (including **9 page backdrops**: grid, dots, ruled lines, ticks, wash, spotlight, grain, dither, circuit traces), **42 chart engines**, **14 page blueprints**, a **lockable taste profile**, a **Playwright auditor with a page-level taste critic**, a **copy lint** and **30 eval briefs** to measure the result. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
 
 Run commands from this skill's directory with Node.js 20+. Pass absolute paths (or run from the user's project with the absolute script path). Search, install and token scripts need nothing installed; the auditor needs Playwright; the gallery needs `npm install` once.
 
@@ -26,7 +26,7 @@ Read `references/anti-slop-rules.md` once per session. The short version:
 Components are rarely what makes a page look generated; the plan is. Run this loop for every page or screen:
 
 1. **Compose.** `node scripts/compose.mjs "<the user's brief in one line>"` prints a page plan: the design brief (audience, product, primary action, reading pattern, layout, density), a taste profile chosen for the domain, the sections in order with real catalog ids and a copy formula for each, the states to build, what to avoid, and the install command. Add `--json` to read it as data, `--type <id>` to force a page type.
-2. **Confirm the brief.** If the user's request does not say who the page is for or what the one action is, ask once. Otherwise state your brief in two lines and go.
+2. **Ask only what is open, and show the look.** The plan's "Ask first" section lists at most three questions the brief leaves unanswered (product name, look, main action, light or dark), each with a default. Ask them in one short message; if the brief answers them, state your brief in two lines and go. When the look is open, do not describe styles: run `node scripts/directions.mjs "<brief>" --out <dir>`, which renders three fitting styles on the same content in one `directions.html` (labelled A, B, C, each with its `--style` flag), and let the person point. "A, but lighter" is a fine answer: keep the style, change the mode or palette. Then lock it (`--lock style,palette`). If they sent a reference image or site, read `references/reading-a-reference.md` first.
 3. **Install and build** exactly what the plan lists. Start from its blueprint when it names one. Follow the section order; skip optional sections you cannot fill with real content rather than inventing it.
 4. **Write real copy** with the plan's formulas and `references/copy-patterns.md` (headlines, buttons, empty states, errors, pricing, FAQ): the product's name, real numbers, specific benefits. Never ship lorem ipsum, "Acme", "John Doe" or "Feature one"; the critic fails them. For tables, charts and lists, `node scripts/sample-data.mjs users|invoices|orders|series|revenue|funnel|cohort|events` prints realistic, seeded data.
 5. **Build the states** the plan lists (loading, empty, error) as well as the happy path.
@@ -206,6 +206,25 @@ Use when the user has a working page that looks generated and wants it designed,
 5. Keep every action, but only one filled primary per screen; the rest become secondary or ghost. Point every `#anchor` at a real id.
 6. Audit again and report both scores.
 
+## Workflow H · Backdrops and patterned pages
+
+A page background can carry a quiet pattern or light. It is one attribute on a hero, a band or `<body>`, built from the palette so it follows every theme:
+
+```html
+<section class="lt-hero-centered" data-backdrop="grid spot">…</section>
+```
+
+| Value | What it draws | Good for |
+| --- | --- | --- |
+| `grid` · `dots` · `lines` · `ticks` | Graph paper, a dot grid, ruled lines, registration marks. Pick one. | Developer tools, technical products, docs, dashboards' empty areas |
+| `wash` | One accent hue rising from below the headline | A launch or product hero on a dark theme |
+| `spot` | A soft light from the top | Any dark hero that feels flat |
+| `grain` | Fine film grain | Taking the plastic edge off flat fills |
+| `dither` + `backdrop-dither` | An ordered-dither pixel field that thins out towards the content | AI and agent apps, composer screens |
+| `grid` + `backdrop-circuit` | A few accent traces with travelling pulses that route around the text, with a pause button | A single hero on a technical landing page |
+
+Rules: one backdrop per screen, one hue, and the pattern fades before it reaches the text (so contrast never depends on it). Text over a wash sits on its own surface (a card, a chip, a composer). Tune with `--backdrop-size`, `--backdrop-strength`, `--backdrop-fade`, `--wash-start`, `--wash-strength`. Four styles bring a backdrop with them and put it behind heroes without any attribute: `trace` (grid + spotlight), `graph` (light graph paper), `ember` (wash + grain) and `pixel` (dither); `data-backdrop="none"` on a hero opts out. The script-drawn two install like any component (`--components backdrop-dither,backdrop-circuit`); everything else is CSS in `tokens/backdrops.css`, which every install includes.
+
 ## Component conventions
 
 - Files per pattern: `components/ui/<family>/<id>/<id>.html` (markup), `.css` (`@scope (.lt-<name>)`, tokens only), `.ts` (`enhance(root) → cleanup`), `.react.tsx` (same markup and behaviour).
@@ -217,7 +236,7 @@ Use when the user has a working page that looks generated and wants it designed,
 - Snippets from a static install start with a comment naming the parts. When it says the outer `-demo` element is a preview frame, keep what is inside and drop the frame (app-sidebar's `<aside>` goes straight into `.lt-shell`).
 - Settings and account panels (settings list, plan card, usage meters, team members, danger zone) share one width, `--lt-panel-max` (default 720px). Set it once on the page (`--lt-panel-max: none` to fill the column) so they line up.
 - Overriding a component's own spacing or size: component rules live in `@scope`, which wins ties against plain page CSS. Use two classes (`.lt-bulk.users-table { padding-bottom: 0 }`) or set the component's custom properties instead of fighting it with `!important`.
-- Families: controls (36), navigation (27), feedback (17), overlays (18), data (36), motion (10), sections (21: heroes, features, pricing, testimonials, FAQ, CTA, stats, newsletter, how it works, team, sign-in, 404, integrations, contact, blog, feature rows, logo cloud, article, before/after, project grid). Full list: `catalog.json` or `--list`.
+- Families: controls (37), navigation (28), feedback (18), overlays (19), data (36), motion (10), backdrops (9), sections (22: heroes, features, pricing, testimonials, FAQ, CTA, stats, newsletter, how it works, team, sign-in, 404, integrations, contact, blog, feature rows, logo cloud, article, before/after, project grid, showcase tabs). Full list: `catalog.json` or `--list`.
 
 ## Tokens at a glance
 
@@ -249,10 +268,10 @@ catalog.json                 every pattern/chart/blueprint/palette with aliases
 engine/profiles/             taste profile engine, schema, default profile
 engine/compose/              page types, domains and moods behind compose.mjs
 evals/                       30 briefs (evals.json), fixtures and reference scores
-tokens/                      base.css, palettes/*.css (+ source.json), typography/, styles/
-components/ui/<family>/      165 patterns (html, css, ts, react.tsx)
+tokens/                      base.css, layout.css, backdrops.css, palettes/*.css (+ source.json), typography/, styles/
+components/ui/<family>/      179 patterns (html, css, ts, react.tsx)
 components/charts/           core/ + 42 chart engines (+ React wrappers)
 blueprints/                  14 page blueprints (states via ?state=loading|empty|error|incident|sold-out|streaming)
-references/                  anti-slop-rules, page-flow, copy-patterns, chart-selection, which-one, palettes, harvest-log
-scripts/                     compose, search, install-taste, sniff, export-tokens, sample-data, audit-ui, audit-all, lint-copy, eval-score, eval-run, build-tokens, test-contrast, build, serve
+references/                  anti-slop-rules, page-flow, copy-patterns, reading-a-reference, chart-selection, which-one, palettes, harvest-log
+scripts/                     compose, directions, search, install-taste, sniff, export-tokens, sample-data, audit-ui, audit-all, lint-copy, eval-score, eval-run, build-tokens, test-contrast, build, serve
 ```

@@ -125,7 +125,11 @@
         "signal",
         "ledger",
         "volt",
-        "civic"
+        "civic",
+        "trace",
+        "ember",
+        "pixel",
+        "graph"
       ],
       "description": "Visual style layer. 'none' is the plain kit."
     },

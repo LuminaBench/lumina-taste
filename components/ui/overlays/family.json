@@ -1311,6 +1311,93 @@
         ]
       ],
       "added": 6
+    },
+    {
+      "id": "switcher-menu",
+      "name": "Grouped switcher menu",
+      "summary": "A compact trigger that opens a menu of choices under group headings, each with a plan tag, an activity dot and a tick on the current one.",
+      "pattern": "WAI-ARIA Menu Button + menuitemradio in role=\"group\"",
+      "states": [
+        "closed",
+        "open",
+        "checked",
+        "busy",
+        "focus-visible"
+      ],
+      "aliases": [
+        "workspace switcher",
+        "account switcher",
+        "model picker",
+        "environment switcher",
+        "org dropdown",
+        "team switcher",
+        "profile switcher menu"
+      ],
+      "react": "SwitcherMenu",
+      "api": "role=\"menuitemradio\" + aria-checked",
+      "w": 620,
+      "deps": [
+        "dropdown-menu"
+      ],
+      "preview": [
+        [
+          "click",
+          "[data-part=\"trigger\"]"
+        ]
+      ],
+      "called": [
+        "the dropdown where you pick the workspace",
+        "account picker with sections",
+        "model selector menu with a checkmark",
+        "switch organisation dropdown"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"trigger\"]",
+          "name": "Trigger",
+          "api": "aria-haspopup=\"menu\"",
+          "text": "Shows the group and the current choice."
+        },
+        {
+          "sel": "[data-part=\"group\"]",
+          "name": "Group heading",
+          "api": "role=\"group\"",
+          "text": "Names the account or provider; not selectable."
+        },
+        {
+          "sel": "[data-part=\"tag\"]",
+          "name": "Tag",
+          "api": "",
+          "text": "Plan or tier, in muted ink."
+        },
+        {
+          "sel": "[data-part=\"dot\"]",
+          "name": "Activity",
+          "api": "visually hidden label",
+          "text": "A dot with words for screen readers."
+        },
+        {
+          "sel": "[aria-checked=\"true\"] [data-part=\"check\"]",
+          "name": "Current",
+          "api": "aria-checked",
+          "text": "A tick, in the same slot as the dot."
+        }
+      ],
+      "prompt": "Build a grouped switcher menu: a compact trigger (a square initial, the group name, the current choice in secondary ink, an up-down chevron) that opens a menu with group headings; each row is a menuitemradio with the name, a muted plan tag on the right and one 16px status slot that holds a tick for the current choice or a small amber dot with a visually hidden label when something is running. Arrow keys move through the rows, Enter chooses, Esc closes and returns focus. Choosing updates the trigger and emits the value.",
+      "debug": "Debug my switcher menu. Rule out: group headings that take focus; the tick and the activity dot fighting for different columns; no accessible text on the dot; a native <select> used where rows need tags; the menu staying open after a choice; the trigger not updating. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "role=\"menuitemradio\"",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<SwitcherMenu groups value>",
+          "React"
+        ]
+      ],
+      "added": 11
     }
   ]
 }

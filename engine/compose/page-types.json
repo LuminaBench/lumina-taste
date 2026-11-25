@@ -1630,6 +1630,43 @@
   },
   "airy": {
    "density": "spacious"
+  },
+  "circuit": {
+   "style": "trace",
+   "mode": "dark"
+  },
+  "traces": {
+   "style": "trace",
+   "mode": "dark"
+  },
+  "ember": {
+   "style": "ember",
+   "mode": "dark"
+  },
+  "glow": {
+   "style": "ember",
+   "mode": "dark"
+  },
+  "pixel": {
+   "style": "pixel",
+   "mode": "dark"
+  },
+  "dither": {
+   "style": "pixel",
+   "mode": "dark"
+  },
+  "dithered": {
+   "style": "pixel",
+   "mode": "dark"
+  },
+  "graph paper": {
+   "style": "graph"
+  },
+  "gridded": {
+   "style": "graph"
+  },
+  "patterned": {
+   "style": "graph"
   }
  },
  "restyle": {
@@ -1655,6 +1692,79 @@
    "Replace emoji used as icons with inline SVG icons; replace purple or rainbow gradients with a flat surface.",
    "Every link must go somewhere: point in-page links (#pricing) at real ids, or turn them into plain text.",
    "Run the audit on the old page first, then on yours, and say how the score changed."
+  ]
+ },
+ "directions": {
+  "$comment": "Three distinct looks per domain, used by scripts/directions.mjs and the composer's questions. First = the expected one.",
+  "finance": [
+   "ledger",
+   "enterprise",
+   "midnight"
+  ],
+  "trading": [
+   "ticker",
+   "graphite",
+   "trace"
+  ],
+  "devtool": [
+   "trace",
+   "volt",
+   "graph"
+  ],
+  "analytics": [
+   "studio",
+   "graphite",
+   "graph"
+  ],
+  "health": [
+   "soft",
+   "zen",
+   "nordic"
+  ],
+  "public": [
+   "civic",
+   "system",
+   "minimal"
+  ],
+  "commerce": [
+   "atelier",
+   "linen",
+   "kraft"
+  ],
+  "editorial": [
+   "editorial",
+   "newsprint",
+   "paper"
+  ],
+  "productivity": [
+   "studio",
+   "ember",
+   "pixel"
+  ],
+  "creative": [
+   "swiss",
+   "atelier",
+   "mono"
+  ],
+  "playful": [
+   "playful",
+   "clay",
+   "soft"
+  ],
+  "enterprise": [
+   "enterprise",
+   "system",
+   "graphite"
+  ],
+  "travel": [
+   "nordic",
+   "linen",
+   "lucid"
+  ],
+  "default": [
+   "studio",
+   "ember",
+   "swiss"
   ]
  }
 }

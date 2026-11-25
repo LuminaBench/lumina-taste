@@ -1023,6 +1023,68 @@
         ]
       ],
       "added": 5
+    },
+    {
+      "id": "announcement-pill",
+      "name": "Announcement pill",
+      "summary": "One short line in a pill above a headline: a tagged link to what is new, a two-part fact, or a live status.",
+      "pattern": "<a> or <p>",
+      "states": [
+        "default",
+        "hover",
+        "focus-visible"
+      ],
+      "aliases": [
+        "hero pill",
+        "announcement badge",
+        "eyebrow pill",
+        "new feature pill",
+        "above the headline chip",
+        "changelog pill"
+      ],
+      "react": "AnnouncementPill",
+      "api": "",
+      "w": 520,
+      "called": [
+        "the little pill above the headline",
+        "new feature banner chip",
+        "rounded announcement link in the hero"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"tag\"]",
+          "name": "Tag",
+          "api": "",
+          "text": "One word: New, Beta, v4."
+        },
+        {
+          "sel": "b",
+          "name": "Lead",
+          "api": "",
+          "text": "The fact in primary ink; the rest stays secondary."
+        },
+        {
+          "sel": ".lt-icon",
+          "name": "Arrow",
+          "api": "translate on hover",
+          "text": "Only when the pill is a link."
+        }
+      ],
+      "prompt": "Add an announcement pill above the hero headline: a fully rounded hairline pill on a surface fill, 14px text in secondary ink. Variant one is a link with a one-word accent tag (\"New\"), a short line and a small arrow that nudges 2px on hover. Variant two is a two-part fact with the first part bold in primary ink. Variant three is a status with a 7px green dot. One pill per hero, under 60 characters.",
+      "debug": "Debug my announcement pill. Rule out: two pills in one hero; a sentence that wraps to two lines; a pill that looks clickable but is not a link; emoji as the tag; the pill competing with the primary button for colour. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<a class=\"lt-pill\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<AnnouncementPill tag href>",
+          "React"
+        ]
+      ],
+      "added": 11
     }
   ]
 }

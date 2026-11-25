@@ -1,0 +1,98 @@
+/* lumina-taste backdrops: quiet page backgrounds built from the palette, so they follow every theme.
+   Put data-backdrop on a hero, a band or <body>. Values combine: data-backdrop="grid spot".
+
+     Patterns (one):  grid · dots · lines · ticks
+     Light (any):     wash · spot · grain
+     Drawn by script: dither · circuit   (components backdrop-dither and backdrop-circuit)
+
+   Rules that keep them tasteful:
+   - One hue only: ink for patterns, the accent for light. Never two colours, never a rainbow.
+   - Patterns fade out before they reach the text (a mask), so contrast never depends on them.
+   - A wash starts below the headline. Text that sits on it needs its own surface (a card, a chip).
+   - One backdrop per screen. A page with three patterned bands reads as wallpaper.
+
+   Zero specificity (:where), so your own CSS always wins. Tune with:
+     --backdrop-size (pattern pitch) · --backdrop-strength (ink %) · --backdrop-fade (mask) · --wash-start · --wash-strength ·
+     --backdrop-settle (how far from the bottom the light fades back into the page; 0px for a hard horizon) */
+
+/* Styles that come with a backdrop (trace, ember, pixel, graph) put it behind hero blocks by themselves.
+   Give a hero data-backdrop="none" to opt out, or any other value to choose a different one. */
+:where([data-backdrop]), :where([data-style="trace"], [data-style="ember"], [data-style="pixel"], [data-style="graph"]) :where(.lt-hero-centered, .lt-hero-split):where(:not([data-backdrop])) { position: relative; isolation: isolate; }
+:where([data-backdrop])::before, :where([data-backdrop])::after, :where([data-style="trace"], [data-style="ember"], [data-style="pixel"], [data-style="graph"]) :where(.lt-hero-centered, .lt-hero-split):where(:not([data-backdrop]))::before, :where([data-style="trace"], [data-style="ember"], [data-style="pixel"], [data-style="graph"]) :where(.lt-hero-centered, .lt-hero-split):where(:not([data-backdrop]))::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+
+/* ---------------------------------------------------------------- patterns (::before, masked) */
+:where([data-backdrop])::before, :where([data-style="trace"], [data-style="ember"], [data-style="pixel"], [data-style="graph"]) :where(.lt-hero-centered, .lt-hero-split):where(:not([data-backdrop]))::before {
+  --bd-ink: color-mix(in oklab, var(--text-primary) var(--backdrop-strength, 8%), transparent);
+  background: var(--bd-pattern, none);
+  -webkit-mask-image: var(--backdrop-fade, radial-gradient(ellipse 85% 90% at 50% 25%, #000 25%, transparent 82%));
+  mask-image: var(--backdrop-fade, radial-gradient(ellipse 85% 90% at 50% 25%, #000 25%, transparent 82%));
+}
+/* Graph-paper grid. */
+:where([data-backdrop~="grid"])::before, :where([data-style="trace"], [data-style="graph"]) :where(.lt-hero-centered, .lt-hero-split):where(:not([data-backdrop]))::before {
+  --bd-pattern:
+    linear-gradient(to right, var(--bd-ink) 1px, transparent 1px) 50% 0 / var(--backdrop-size, 56px) var(--backdrop-size, 56px),
+    linear-gradient(to bottom, var(--bd-ink) 1px, transparent 1px) 50% 0 / var(--backdrop-size, 56px) var(--backdrop-size, 56px);
+}
+/* Dot grid. */
+:where([data-backdrop~="dots"])::before {
+  --bd-ink: color-mix(in oklab, var(--text-primary) var(--backdrop-strength, 18%), transparent);
+  --bd-pattern: radial-gradient(circle at center, var(--bd-ink) 1px, transparent 1.6px) 50% 0 / var(--backdrop-size, 22px) var(--backdrop-size, 22px);
+}
+/* Ruled lines, like a ledger or a notebook. */
+:where([data-backdrop~="lines"])::before {
+  --bd-pattern: linear-gradient(to bottom, transparent calc(100% - 1px), var(--bd-ink) calc(100% - 1px)) 0 0 / 100% var(--backdrop-size, 32px);
+}
+/* Registration ticks: a small plus at each crossing (grid lines seen through a dot mask). */
+:where([data-backdrop~="ticks"])::before {
+  --bd-ink: color-mix(in oklab, var(--text-primary) var(--backdrop-strength, 26%), transparent);
+  --bd-pattern:
+    linear-gradient(to right, transparent calc(50% - 0.5px), var(--bd-ink) calc(50% - 0.5px) calc(50% + 0.5px), transparent calc(50% + 0.5px)) 50% 0 / var(--backdrop-size, 72px) var(--backdrop-size, 72px),
+    linear-gradient(to bottom, transparent calc(50% - 0.5px), var(--bd-ink) calc(50% - 0.5px) calc(50% + 0.5px), transparent calc(50% + 0.5px)) 50% 0 / var(--backdrop-size, 72px) var(--backdrop-size, 72px);
+  -webkit-mask-image: radial-gradient(circle at center, #000 5px, transparent 5.5px), var(--backdrop-fade, radial-gradient(ellipse 85% 90% at 50% 25%, #000 25%, transparent 82%));
+  mask-image: radial-gradient(circle at center, #000 5px, transparent 5.5px), var(--backdrop-fade, radial-gradient(ellipse 85% 90% at 50% 25%, #000 25%, transparent 82%));
+  -webkit-mask-size: var(--backdrop-size, 72px) var(--backdrop-size, 72px), 100% 100%;
+  mask-size: var(--backdrop-size, 72px) var(--backdrop-size, 72px), 100% 100%;
+  -webkit-mask-position: 50% 0, 0 0;
+  mask-position: 50% 0, 0 0;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+/* Fallback for dither until the script draws the real thing: a halftone that thins out downwards. */
+:where([data-backdrop~="dither"]:not([data-backdrop-ready]))::before, :where([data-style="pixel"]) :where(.lt-hero-centered, .lt-hero-split):where(:not([data-backdrop]))::before {
+  --bd-ink: color-mix(in oklab, var(--accent-solid) 42%, var(--bg-canvas));
+  --bd-pattern: radial-gradient(circle at center, var(--bd-ink) 1.4px, transparent 1.8px) 50% 0 / 7px 7px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 62%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 62%);
+}
+
+/* ---------------------------------------------------------------- light (::after, layered) */
+:where([data-backdrop])::after, :where([data-style="trace"], [data-style="ember"], [data-style="pixel"], [data-style="graph"]) :where(.lt-hero-centered, .lt-hero-split):where(:not([data-backdrop]))::after {
+  background: var(--bd-grain, none), var(--bd-spot, none), var(--bd-wash, none);
+  /* The light settles back into the page over the last stretch, so the next section never starts on a hard edge. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--backdrop-settle, 88px)), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - var(--backdrop-settle, 88px)), transparent);
+}
+/* A single-hue wash that rises from the bottom, starting below the headline. */
+:where([data-backdrop~="wash"]), :where([data-style="ember"]) :where(.lt-hero-centered, .lt-hero-split):where(:not([data-backdrop])) {
+  --bd-wash: linear-gradient(to bottom, transparent var(--wash-start, 56%), color-mix(in oklab, var(--accent-solid) var(--wash-strength, 58%), var(--bg-canvas)) 90%, color-mix(in oklab, var(--accent-solid) calc(var(--wash-strength, 58%) * 0.5), var(--bg-surface-1)) 100%);
+}
+/* On light themes a strong wash turns muddy and eats text contrast: it runs at half strength. */
+:where([data-mode="light"]) :where([data-backdrop~="wash"]), :where([data-mode="light"][data-backdrop~="wash"]) { --wash-strength: 26%; }
+/* A soft light from the top, low enough in chroma to read as lighting, not as a gradient. */
+:where([data-backdrop~="spot"]), :where([data-style="trace"]) :where(.lt-hero-centered, .lt-hero-split):where(:not([data-backdrop])) {
+  --bd-spot: radial-gradient(ellipse 62% 55% at 50% 0%, color-mix(in oklab, var(--accent-solid) 13%, transparent), transparent 72%);
+}
+/* Film grain: takes the plastic edge off flat fills. */
+:where([data-backdrop~="grain"]), :where([data-style="ember"]) :where(.lt-hero-centered, .lt-hero-split):where(:not([data-backdrop])) {
+  --bd-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------------------------------------------------------------- script-drawn layers */
+/* backdrop-dither and backdrop-circuit put one element inside the host; it sits with the pseudo layers. */
+:where([data-backdrop]) > :where(.lt-dither, .lt-circuit) { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+:where(.lt-dither) canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+:where(.lt-circuit) svg { display: block; width: 100%; height: 100%; }
+:where(.lt-circuit) [data-part="pause"] { pointer-events: auto; }
+
+@media (forced-colors: active) { :where([data-backdrop])::before, :where([data-backdrop])::after, :where(.lt-dither, .lt-circuit) { display: none; } }
+@media print { :where([data-backdrop])::before, :where([data-backdrop])::after, :where(.lt-dither, .lt-circuit) { display: none; } }

@@ -2560,6 +2560,73 @@
         ]
       ],
       "added": 8
+    },
+    {
+      "id": "command-chip",
+      "name": "Command chip",
+      "summary": "One terminal command in a mono chip with a copy button, for install lines in heroes and docs.",
+      "pattern": "<code> + copy button + role=\"status\"",
+      "states": [
+        "default",
+        "copied"
+      ],
+      "aliases": [
+        "install command",
+        "npm install box",
+        "copy command line",
+        "terminal snippet chip",
+        "cli command with copy",
+        "one-line code copy"
+      ],
+      "react": "CommandChip",
+      "api": "navigator.clipboard",
+      "w": 520,
+      "preview": [
+        [
+          "click",
+          "[data-part=\"copy\"]"
+        ]
+      ],
+      "called": [
+        "the npm install line with a copy button",
+        "terminal command pill in the hero",
+        "copyable one-liner"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"prompt\"]",
+          "name": "Prompt",
+          "api": "aria-hidden, user-select: none",
+          "text": "Decoration: never copied, never read out."
+        },
+        {
+          "sel": "code",
+          "name": "Command",
+          "api": "",
+          "text": "One line; truncates rather than wraps."
+        },
+        {
+          "sel": "[data-part=\"copy\"]",
+          "name": "Copy",
+          "api": "role=\"status\"",
+          "text": "Turns into a tick and says \"Command copied.\""
+        }
+      ],
+      "prompt": "Add a command chip: a mono-font chip with a muted \"$\" prompt that is hidden from assistive tech and cannot be selected, the command on one line (ellipsis if it does not fit), and a square copy button at the right end. Copying writes only the command to the clipboard, swaps the icon for a green tick for 1.8 seconds and announces \"Command copied.\" in a status region. Use it in a hero beside one secondary button, or in docs.",
+      "debug": "Debug my command chip. Rule out: the $ ending up in the clipboard; a multi-line command in a one-line chip (use a code block); no confirmation after copying; the chip wider than the phone screen; a second primary button next to it. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<code> + clipboard.writeText",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<CommandChip command>",
+          "React"
+        ]
+      ],
+      "added": 11
     }
   ]
 }

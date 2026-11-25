@@ -3,10 +3,19 @@
 import { StrictMode, useState, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '../../tokens/base.css';
+import '../../tokens/backdrops.css';
 import '../../tokens/palettes/all.css';
 import '../../tokens/typography/typography.css';
 import '../../components/ui/_shared/shared.css';
 
+import { Backdrop } from '../../components/ui/backdrops/backdrop-grid/backdrop-grid.react';
+import { DitherBackdrop } from '../../components/ui/backdrops/backdrop-dither/backdrop-dither.react';
+import { CircuitBackdrop } from '../../components/ui/backdrops/backdrop-circuit/backdrop-circuit.react';
+import { SwitcherMenu } from '../../components/ui/overlays/switcher-menu/switcher-menu.react';
+import { SessionList } from '../../components/ui/navigation/session-list/session-list.react';
+import { CommandChip } from '../../components/ui/controls/command-chip/command-chip.react';
+import { AnnouncementPill } from '../../components/ui/feedback/announcement-pill/announcement-pill.react';
+import { ShowcaseTabs } from '../../components/ui/blocks/showcase-tabs/showcase-tabs.react';
 import { Rating } from '../../components/ui/controls/rating/rating.react';
 import { BillingToggle } from '../../components/ui/controls/billing-toggle/billing-toggle.react';
 import { ColorPicker } from '../../components/ui/controls/color-picker/color-picker.react';
@@ -416,6 +425,14 @@ function App() {
       <Case id="doc-pager"><DocPager prev={{ title: 'Install', href: '#i' }} next={{ title: 'Identify a user', href: '#u' }} /></Case>
       <Case id="assistant"><AssistantThread turns={[{ role: 'user', content: 'Why did churn rise?' }, { role: 'assistant', content: <p>Renewals.</p>, sources: 'From Billing' }, { role: 'assistant', content: 'It timed out.', state: 'error' }]} onRetry={(i) => log.push(`retry:${i}`)} /></Case>
       <Case id="projects"><ProjectGrid title="Selected work" projects={[{ title: 'Harbour Library', meta: 'Public · Bristol', year: '2025', href: '#1', kind: 'Public' }]} /></Case>
+      <Case id="backdrop"><Backdrop kind={['grid', 'spot']}><p>On a grid</p></Backdrop></Case>
+      <Case id="dither"><DitherBackdrop><p style={{ padding: 60 }}>On a dither field</p></DitherBackdrop></Case>
+      <Case id="circuit"><CircuitBackdrop><p style={{ padding: 80 }}>On traces</p></CircuitBackdrop></Case>
+      <Case id="switcher"><SwitcherMenu value="kestrel/sandbox" groups={[{ name: 'Larkspur', items: [{ value: 'larkspur/production', label: 'Production', tag: 'Scale' }] }, { name: 'Kestrel', items: [{ value: 'kestrel/sandbox', label: 'Sandbox' }] }]} onChange={(v) => log.push(`switch:${v}`)} /></Case>
+      <Case id="sessions"><SessionList current="s1" projects={[{ name: 'billing-api', sessions: [{ id: 's1', title: 'Fix invoice rounding', time: '2m', state: 'running' }, { id: 's2', title: 'Add CSV export', time: '1h', state: 'done' }] }]} onSelect={(t) => log.push(`session:${t}`)} /></Case>
+      <Case id="command"><CommandChip command="npx halyard init" /></Case>
+      <Case id="pill"><AnnouncementPill tag="New" href="#changelog">Alerts reach Slack in under a second</AnnouncementPill></Case>
+      <Case id="showcase"><ShowcaseTabs title="Two products" examples={[{ label: 'Shop', content: <p>Shop screen</p> }, { label: 'API', palette: 'black-signal', mode: 'dark', content: <p>API screen</p> }]} /></Case>
       <Case id="stagger"><Stagger><span>One</span><span>Two</span></Stagger></Case>
     </ToastProvider>
   );

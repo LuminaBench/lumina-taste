@@ -1,5 +1,7 @@
 // lumina-taste gallery. Vanilla TS, bundled by scripts/build.mjs.
 import '../tokens/base.css';
+import '../tokens/layout.css';
+import '../tokens/backdrops.css';
 import '../tokens/palettes/all.css';
 import '../tokens/typography/typography.css';
 import '../tokens/styles/styles.css';
@@ -162,7 +164,7 @@ function viewCharts(id?: string) {
 
 // ------------------------------------------------------------------ styles atlas
 function styleMini(s: any) {
-  return `<div class="g-style-prev" data-theme-root data-lock="palette mode type radius density style" data-palette="${s.palette}" data-mode="${s.mode}" data-type="${s.type}" data-radius="${s.radius}" data-density="balanced" data-motion="snappy" data-style="${s.id}">
+  return `<div class="g-style-prev" data-theme-root data-lock="palette mode type radius density style" data-palette="${s.palette}" data-mode="${s.mode}" data-type="${s.type}" data-radius="${s.radius}" data-density="balanced" data-motion="snappy" data-style="${s.id}"${s.backdrop ? ` data-backdrop="${s.backdrop}"` : ''}>
     <div class="g-mini">
       <div class="g-mini-card">
         <span class="lt-eyebrow">${esc(s.sample?.eyebrow ?? 'Plan')}</span>

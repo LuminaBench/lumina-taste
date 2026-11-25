@@ -1,0 +1,22 @@
+.lt-backdrop-demo { container-type: inline-size; width: 100%; }
+@scope (.lt-backdrop-demo) {
+  :scope { display: grid; justify-items: center; align-content: center; gap: 14px; min-height: 360px; padding: 56px 24px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-canvas); color: var(--text-primary); text-align: center; overflow: hidden; }
+  [data-part="pill"] { display: inline-flex; gap: 10px; margin: 0; padding: 5px 14px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-pill); background: var(--bg-surface-1); color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  [data-part="pill"] b { color: var(--text-primary); font-weight: 650; }
+  h3 { margin: 0; max-width: 16ch; font-family: var(--font-display); font-size: max(var(--step-4), 2.25rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.05; text-wrap: balance; }
+  [data-part="lede"] { margin: 0; max-width: 46ch; color: var(--text-secondary); font-size: var(--step-0); line-height: 1.55; text-wrap: pretty; }
+  [data-part="cta"] { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+  [data-part="card"] { margin-top: 18px; padding: 10px 16px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); color: var(--text-secondary); font-size: var(--text-ui-sm); box-shadow: var(--shadow-sm); }
+}
+@scope (.lt-circuit) {
+  [data-part="cell"] { fill: color-mix(in oklab, var(--accent-solid) 9%, transparent); }
+  [data-part="trace"] { fill: none; stroke: color-mix(in oklab, var(--accent-solid) 70%, transparent); stroke-width: 1.25; vector-effect: non-scaling-stroke; }
+  [data-part="node"] { fill: var(--accent-solid); }
+  [data-part="pulse"] { fill: none; stroke: var(--accent-solid); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 6 94; stroke-dashoffset: 100; animation: lt-circuit-run var(--circuit-speed, 7s) linear infinite; }
+  :scope[data-paused] [data-part="pulse"] { animation-play-state: paused; }
+  [data-part="pause"] { position: absolute; right: 16px; bottom: 16px; display: grid; place-items: center; width: 32px; height: 32px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: 50%; background: var(--bg-surface-1); color: var(--text-secondary); cursor: pointer; }
+  [data-part="pause"]:hover { color: var(--text-primary); }
+  :scope[data-empty] [data-part="pause"] { display: none; }
+}
+@keyframes lt-circuit-run { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .lt-circuit [data-part="pulse"] { animation: none; opacity: 0; } .lt-circuit [data-part="pause"] { display: none; } }

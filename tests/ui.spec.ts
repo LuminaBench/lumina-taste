@@ -53,6 +53,8 @@ test('keyboard focus is visible on the first control of every stage', async ({ p
   await page.keyboard.press('Shift');
   // Grid previews are inert thumbnails; make them live for this check.
   await page.evaluate(() => document.querySelectorAll('[inert]').forEach((n) => n.removeAttribute('inert')));
+  // Let resize-driven components settle first (a backdrop hides its pause button when there is no room for traces).
+  await page.waitForTimeout(300);
   // Tag the first keyboard-focusable control of each stage, then compare pixels before/after focus.
   const ids = await page.evaluate(() => {
     const out: string[] = [];
@@ -941,5 +943,79 @@ test.describe('added in 1.0 (batch 5)', () => {
     s = await solo(page, 'project-grid');
     await expect(s.locator('li')).toHaveCount(6);
     await expect(s.locator('[data-part="media"] b').first()).toHaveText('01');
+  });
+});
+
+test.describe('backdrops and app chrome', () => {
+  test('switcher menu: choosing a row moves the tick, updates the trigger and emits', async ({ page }) => {
+    const s = await solo(page, 'switcher-menu');
+    const events = s.evaluate((el) => new Promise((r) => el.addEventListener('lt-change', (e) => r((e as CustomEvent).detail), { once: true })));
+    await s.locator('[data-part="trigger"]').click();
+    await s.locator('[role="menuitemradio"][data-value="larkspur/production"]').click();
+    expect(await events).toMatchObject({ value: 'larkspur/production' });
+    await expect(s.locator('[role="menuitemradio"][aria-checked="true"]')).toHaveCount(1);
+    await expect(s.locator('[data-part="trigger"] [data-part="meta"]')).toHaveText('Production');
+    await expect(s.locator('[data-part="trigger"]')).toHaveAttribute('aria-expanded', 'false');
+  });
+  test('session list: arrows move between sessions, click marks the current one', async ({ page }) => {
+    const s = await solo(page, 'session-list');
+    const links = s.locator('ul a');
+    await links.first().focus();
+    await page.keyboard.press('ArrowDown');
+    await expect(links.nth(1)).toBeFocused();
+    await links.nth(1).click();
+    await expect(s.locator('[aria-current="page"]')).toHaveCount(1);
+    await expect(links.nth(1)).toHaveAttribute('aria-current', 'page');
+  });
+  test('command chip announces the copy', async ({ page }) => {
+    const s = await solo(page, 'command-chip');
+    await s.locator('[data-part="copy"]').click();
+    await expect(s.locator('[data-part="msg"]')).toHaveText('Command copied.');
+  });
+  test('showcase tabs swap the framed example and keep one panel visible', async ({ page }) => {
+    const s = await solo(page, 'showcase-tabs');
+    await s.getByRole('tab', { name: 'Developer API' }).click();
+    await expect(s.locator('[role="tabpanel"]:visible')).toHaveCount(1);
+    await expect(s.locator('[role="tabpanel"]:visible')).toHaveAttribute('data-mode', 'dark');
+    await s.getByRole('tab', { name: 'Developer API' }).press('ArrowRight');
+    await expect(s.getByRole('tab', { name: 'Clinic' })).toHaveAttribute('aria-selected', 'true');
+  });
+  test('circuit backdrop: traces keep off the text, and the pause button stops them', async ({ page }) => {
+    const s = await solo(page, 'backdrop-circuit');
+    await expect(s.locator('[data-part="trace"]').first()).toBeAttached();
+    // No trace segment may cross the headline, the lede or the buttons.
+    const crossing = await s.locator('.lt-circuit').evaluate((root) => {
+      const box = root.getBoundingClientRect();
+      const blocks = [...root.parentElement!.querySelectorAll('h3, p, a')].filter((n) => !root.contains(n)).map((n) => n.getBoundingClientRect());
+      let hits = 0;
+      for (const path of root.querySelectorAll<SVGPathElement>('[data-part="trace"]')) {
+        const pts = [...path.getAttribute('d')!.matchAll(/[ML]([\d.-]+) ([\d.-]+)/g)].map((m) => [box.left + Number(m[1]), box.top + Number(m[2])]);
+        for (let i = 1; i < pts.length; i++) {
+          const l = Math.min(pts[i - 1][0], pts[i][0]), r = Math.max(pts[i - 1][0], pts[i][0]), t = Math.min(pts[i - 1][1], pts[i][1]), b = Math.max(pts[i - 1][1], pts[i][1]);
+          if (blocks.some((k) => r > k.left && l < k.right && b > k.top && t < k.bottom)) hits++;
+        }
+      }
+      return hits;
+    });
+    expect(crossing).toBe(0);
+    const pause = s.locator('[data-part="pause"]');
+    await pause.click();
+    await expect(pause).toHaveAttribute('aria-pressed', 'true');
+    await expect(s.locator('.lt-circuit')).toHaveAttribute('data-paused', '');
+  });
+  test('dither backdrop draws on its canvas and marks the host ready', async ({ page }) => {
+    const s = await solo(page, 'backdrop-dither');
+    await expect(s.locator('[data-backdrop~="dither"]')).toHaveAttribute('data-backdrop-ready', '');
+    const inked = await s.locator('canvas').evaluate((c: HTMLCanvasElement) => { const d = c.getContext('2d')!.getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i] > 0) n++; return n; });
+    expect(inked).toBeGreaterThan(50);
+  });
+  test('css backdrops paint a pattern layer without changing the layout', async ({ page }) => {
+    for (const id of ['backdrop-grid', 'backdrop-dots', 'backdrop-lines', 'backdrop-ticks', 'backdrop-wash', 'backdrop-spot', 'backdrop-grain']) {
+      const s = await solo(page, id);
+      const host = s.locator('[data-backdrop]').first();
+      const layers = await host.evaluate((el) => [getComputedStyle(el, '::before').backgroundImage, getComputedStyle(el, '::after').backgroundImage].join(' '));
+      expect(layers, id).toMatch(/gradient|url\(/);
+      expect(await host.evaluate((el) => el.scrollWidth <= el.clientWidth + 1), id).toBe(true);
+    }
   });
 });

@@ -468,5 +468,41 @@ export const STYLES = [
     "mode": "light",
     "typography": "humanist",
     "radius": "balanced"
+  },
+  {
+    "id": "trace",
+    "name": "Trace",
+    "kind": "Technical grid",
+    "palette": "black-signal",
+    "mode": "dark",
+    "typography": "geometric",
+    "radius": "sharp"
+  },
+  {
+    "id": "ember",
+    "name": "Ember",
+    "kind": "Warm launch",
+    "palette": "black-signal",
+    "mode": "dark",
+    "typography": "geometric",
+    "radius": "soft"
+  },
+  {
+    "id": "pixel",
+    "name": "Pixel",
+    "kind": "Dithered dark",
+    "palette": "ice-cobalt",
+    "mode": "dark",
+    "typography": "precision",
+    "radius": "balanced"
+  },
+  {
+    "id": "graph",
+    "name": "Graph",
+    "kind": "Paper grid",
+    "palette": "ice-cobalt",
+    "mode": "light",
+    "typography": "swiss",
+    "radius": "sharp"
   }
 ];

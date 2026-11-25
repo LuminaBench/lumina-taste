@@ -1127,6 +1127,149 @@
     "cta": "Start now",
     "badge": "Open"
    }
+  },
+  {
+   "id": "trace",
+   "name": "Trace",
+   "kind": "Technical grid",
+   "palette": "black-signal",
+   "mode": "dark",
+   "type": "geometric",
+   "radius": "sharp",
+   "backdrop": "grid spot",
+   "aliases": [
+    "dark grid hero",
+    "circuit board look",
+    "devtool dark with grid",
+    "observability site style",
+    "glowing grid lines",
+    "linear style dark"
+   ],
+   "summary": "Near-black pages on a faint grid, one hot accent for actions and traces, and mono labels.",
+   "signals": [
+    "faint grid behind heroes",
+    "one orange accent",
+    "mono eyebrows and figures",
+    "square controls",
+    "no shadows"
+   ],
+   "useFor": "Monitoring, infrastructure, developer tools and anything that shows live systems.",
+   "notTo": "Blueprint, which is drafting-paper blue throughout; trace is black with one hot accent.",
+   "brief": "Put a faint grid behind the hero, keep everything neutral and spend the accent on actions and a few traced lines.",
+   "sample": {
+    "eyebrow": "Monitoring",
+    "title": "See which deploy broke it",
+    "body": "Errors · Traces · Releases",
+    "cta": "Start free",
+    "badge": "Live"
+   }
+  },
+  {
+   "id": "ember",
+   "name": "Ember",
+   "kind": "Warm launch",
+   "palette": "black-signal",
+   "mode": "dark",
+   "type": "geometric",
+   "radius": "soft",
+   "backdrop": "wash grain",
+   "aliases": [
+    "orange gradient hero",
+    "warm dark landing",
+    "sunset gradient site",
+    "glow from the bottom",
+    "launch page style",
+    "dark to orange fade"
+   ],
+   "summary": "A dark canvas with one warm wash rising from below the headline, soft corners and a little grain.",
+   "signals": [
+    "single-hue wash under the hero",
+    "headline stays on the dark canvas",
+    "soft rounded controls",
+    "grain over colour",
+    "surfaces for anything on the wash"
+   ],
+   "useFor": "Product launches, tools for makers and brand pages that want warmth without a rainbow.",
+   "notTo": "Glass, which blurs layers over colour; ember is flat fills with one wash.",
+   "brief": "Keep the page dark, let one accent wash rise from below the headline, and put anything that sits on it on its own surface.",
+   "sample": {
+    "eyebrow": "New",
+    "title": "Ship the idea tonight",
+    "body": "Design · Build · Publish",
+    "cta": "Start building",
+    "badge": "v2"
+   }
+  },
+  {
+   "id": "pixel",
+   "name": "Pixel",
+   "kind": "Dithered dark",
+   "palette": "ice-cobalt",
+   "mode": "dark",
+   "type": "precision",
+   "radius": "balanced",
+   "backdrop": "dither",
+   "aliases": [
+    "dithered background",
+    "pixel gradient app",
+    "retro pixel dark",
+    "8-bit fade",
+    "bayer dither look",
+    "desktop app dark blue"
+   ],
+   "summary": "Deep blue-black with a field of single pixels that thins out behind the content, and crisp compact type.",
+   "signals": [
+    "pixel dither behind the first screen",
+    "deep blue-black canvas",
+    "compact product type",
+    "hairline panels",
+    "no gradients beyond the dither"
+   ],
+   "useFor": "Desktop apps, agent tools, editors and consoles that want character without noise.",
+   "notTo": "Terminal, which is mono type everywhere; pixel keeps normal type and puts the texture in the background.",
+   "brief": "Draw an ordered-dither field in a muted accent behind the first screen and keep every panel flat and hairlined.",
+   "sample": {
+    "eyebrow": "Workspace",
+    "title": "Tell it what to build",
+    "body": "Plan · Run · Review",
+    "cta": "New session",
+    "badge": "Local"
+   }
+  },
+  {
+   "id": "graph",
+   "name": "Graph",
+   "kind": "Paper grid",
+   "palette": "ice-cobalt",
+   "mode": "light",
+   "type": "swiss",
+   "radius": "sharp",
+   "backdrop": "grid",
+   "aliases": [
+    "graph paper site",
+    "light grid background",
+    "engineering paper look",
+    "notebook grid style",
+    "light technical"
+   ],
+   "summary": "Light graph paper behind heroes, cobalt ink for actions, tight grotesque headlines and square controls.",
+   "signals": [
+    "graph-paper grid on light",
+    "cobalt ink accent",
+    "tight grotesque type",
+    "square controls",
+    "hairlines instead of shadows"
+   ],
+   "useFor": "Engineering, hardware, data and education products that should feel precise and open.",
+   "notTo": "Swiss, which is plain white with rules; graph puts measured paper behind the first screen.",
+   "brief": "Use a light canvas with a faint grid behind heroes, one cobalt accent and square, hairlined controls.",
+   "sample": {
+    "eyebrow": "Hardware",
+    "title": "Measure twice",
+    "body": "Sensors · Logs · Reports",
+    "cta": "See the specs",
+    "badge": "Rev C"
+   }
   }
  ]
 }

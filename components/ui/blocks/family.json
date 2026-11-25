@@ -1305,6 +1305,74 @@
         ]
       ],
       "added": 10
+    },
+    {
+      "id": "showcase-tabs",
+      "name": "Showcase tabs",
+      "summary": "A segmented tab row over a framed example; each tab shows a different product with its own palette and type.",
+      "pattern": "WAI-ARIA Tabs + framed panels",
+      "states": [
+        "selected",
+        "hover",
+        "focus-visible"
+      ],
+      "aliases": [
+        "example switcher",
+        "use case tabs",
+        "demo tabs with preview",
+        "template preview tabs",
+        "product tour tabs",
+        "before you scroll showcase"
+      ],
+      "react": "ShowcaseTabs",
+      "api": "role=\"tablist\" + data-palette on each panel",
+      "w": 1000,
+      "preview": [
+        [
+          "click",
+          "[role=\"tab\"]:nth-child(2)"
+        ]
+      ],
+      "called": [
+        "the tabs that switch the preview under the hero",
+        "use case switcher with a browser frame",
+        "pill tabs with screenshots"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"tabs\"]",
+          "name": "Tabs",
+          "api": "role=\"tablist\"",
+          "text": "A segmented pill; arrows move, selection follows focus."
+        },
+        {
+          "sel": "[data-part=\"frame\"]",
+          "name": "Frame",
+          "api": "data-palette, data-mode, data-type",
+          "text": "A browser-like frame with its own theme."
+        },
+        {
+          "sel": "[data-part=\"screen\"]",
+          "name": "Example",
+          "api": "data-mock",
+          "text": "A real screenshot or a small live mockup."
+        }
+      ],
+      "prompt": "Build a showcase section: a centred heading and lede, a segmented pill of 3–5 tabs (the selected tab is a raised chip), and under it one framed panel per tab with a browser bar (three dots and a short URL) and an example screen. Give each panel its own data-palette, data-mode and data-type so the frame shows a visibly different product. Standard tabs behaviour: arrow keys move between tabs and select them; hidden panels use the hidden attribute.",
+      "debug": "Debug my showcase tabs. Rule out: panels that all look the same; a carousel that moves on its own; tabs that are links to other pages; a frame taller than the screen; examples that are stock images. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "role=\"tablist\" + [hidden]",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ShowcaseTabs examples>",
+          "React"
+        ]
+      ],
+      "added": 11
     }
   ]
 }

@@ -1,6 +1,6 @@
 # Lumina Taste
 
-Interfaces that look designed, not generated. A taste kit for coding agents: 18 verified palettes, 35 visual styles, 165 named UI patterns, 42 publication-grade charts and 14 page blueprints, a page composer that turns a one-line brief into a plan, and an auditor with a page-level taste critic that catches slop before your users do.
+Interfaces that look designed, not generated. A taste kit for coding agents: 18 verified palettes, 39 visual styles, 179 named UI patterns, 42 publication-grade charts and 14 page blueprints, a page composer that turns a one-line brief into a plan, and an auditor with a page-level taste critic that catches slop before your users do.
 
 ## Install
 
@@ -45,11 +45,12 @@ npx skills remove lumina-taste -g
 | --- | ---: | --- |
 | **Palettes** | 18 × light/dark | Cream & Charcoal, Deep Navy & Warm Sand, Matte Black & Signal Orange, Lab Monochrome & Acid Lime… Every text, control and chart pair is checked: primary text ≥ 7:1, all other text ≥ 4.5:1, UI marks ≥ 3:1. |
 | **Type pairings** | 12 | Editorial serif + grotesque, precision dev sans + mono, financial condensed, warm humanist… Fluid `clamp()` scales, tabular numbers everywhere they matter. |
-| **Visual styles** | 35 | Monochrome, graphite, atelier, nordic, kraft, midnight, playful, enterprise, zen, swiss, editorial, neobrutalism, terminal, glass, soft, clay, retro, blueprint, paper, newsprint… One attribute restyles borders, surfaces, shadows and fields across every component. |
-| **UI patterns** | 165 | Rotating chevrons, sliding pill toggles, OTP input, ⌘K palette, bulk action bar, kanban board, chat thread, prompt composer, carousel, lightbox, swipe actions, @-mentions, plus ready page sections: heroes, pricing, FAQ, testimonials, sign-in, 404… Vanilla HTML/CSS/TS **and** React, keyboard-complete, `@scope`-isolated. |
+| **Visual styles** | 39 | Monochrome, graphite, atelier, nordic, kraft, midnight, playful, enterprise, zen, swiss, editorial, neobrutalism, terminal, glass, soft, clay, retro, blueprint, paper, newsprint, and four that bring their own backdrop (trace, graph, ember, pixel)… One attribute restyles borders, surfaces, shadows and fields across every component. |
+| **UI patterns** | 179 | Rotating chevrons, grouped switcher menus, session lists, install-command chips, announcement pills, sliding pill toggles, OTP input, ⌘K palette, bulk action bar, kanban board, chat thread, prompt composer, carousel, lightbox, swipe actions, @-mentions, plus ready page sections: heroes, pricing, FAQ, testimonials, sign-in, 404… Vanilla HTML/CSS/TS **and** React, keyboard-complete, `@scope`-isolated. |
+| **Backdrops** | 9 | `data-backdrop="grid spot"` on a hero or a band: graph paper, dot grid, ruled lines, registration ticks, a single-hue wash, a spotlight, film grain, a pixel dither field and circuit traces that route around the text. One hue, faded before the text, themed by the palette. |
 | **Charts** | 42 | Benchmark leaderboards (ranked columns, leaderboard table, range bars, trade-off quadrant, Pareto frontier), line, area, bars, slope, dumbbell, waterfall, histogram, box plot, beeswarm, bump, small multiples, heatmaps, candlestick, Sankey, treemap, Gantt, waffle, radar… Magnetic crosshair, direct labels, keyboard navigation. |
 | **Page blueprints** | 14 | Landing, dashboard, editorial, docs, pricing, settings, directory, auth, admin list, status page, changelog, store product page, checkout, AI assistant chat. Data pages ship loading, empty and error states. |
-| **Page composer** | 20 page types | `compose.mjs "landing page for an invoicing tool"` prints the design brief, a profile chosen for the domain, the sections in order with real ids and a copy formula for each, the states to build and the install command. |
+| **Page composer** | 20 page types | `compose.mjs "landing page for an invoicing tool"` prints the design brief, a profile chosen for the domain, the sections in order with real ids and a copy formula for each, the states to build, the install command and the few questions worth asking. `directions.mjs "<brief>"` renders three fitting looks on the same content so you choose by eye. |
 | **Taste profile** | 1 file | `taste-profile.json` pins palette, mode, type, density, radius, motion and style. Lock what you love; agents leave locked parts alone. |
 | **Auditor** | 12 + 13 rules | Overflow, clipped or overlapping text, contrast, focus rings, tabular numbers, dead controls, purple gradients, heavy shadows, emoji icons, hype copy. `--taste` adds a page-level critic (type steps, accent hues, radii, one primary per screen, reading width, heading order, nested cards, section rhythm, focal point, placeholder copy, button labels) and a score out of 100. Desktop + mobile, light + dark. |
 | **Evals** | 30 briefs | `eval-score.mjs` scores any page an agent builds for a brief; `eval-run.mjs` runs your agent over all of them. In ten pilot runs across ten page types, every agent following the skill finished with 0 audit errors under the rules of the day, most on the first or second audit; the generated-looking fixture page scores 26. Each round made the critic stricter: it now also fails empty placeholder visuals and the kit's own sample names left on a page, which puts the latest round at 90 on average when re-scored. |
@@ -64,6 +65,7 @@ Run these from the installed skill directory or a clone of this repository.
 
 ```sh
 node scripts/compose.mjs "pricing page for a developer API"
+node scripts/directions.mjs "landing page for a webhooks API" --out ./directions
 node scripts/search.mjs "bar when ticking rows"
 node scripts/search.mjs --card bulk-action-bar
 node scripts/install-taste.mjs --project /path/to/app --framework react --palette slate-forest --components data-table,command-palette --charts kpi-card

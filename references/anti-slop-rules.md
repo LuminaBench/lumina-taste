@@ -8,7 +8,8 @@ Treat every rule as a ban unless the user explicitly asks for the banned thing. 
 
 | Ban | Do instead |
 | --- | --- |
-| ★ Generic purple→blue or pink→purple hero gradients (`#667eea → #764ba2` and friends) | A flat `--bg-canvas`, or one restrained surface step (`--bg-surface-2`) behind the hero. If a brand truly needs a gradient, keep it within one hue family and under 0.06 OKLCH chroma. |
+| ★ Generic purple→blue or pink→purple hero gradients (`#667eea → #764ba2` and friends) | A flat `--bg-canvas`, or one restrained surface step (`--bg-surface-2`) behind the hero. For light behind a hero use a backdrop (`data-backdrop="wash"` or `spot`): one accent hue, starting below the headline, never behind running text. Any other gradient stays within one hue family and under 0.06 OKLCH chroma. |
+| Wallpaper: a pattern at full strength across the whole page, two patterns on one screen, or more than one moving background | One backdrop per screen (`data-backdrop="grid"`, `dots`, `lines`, `ticks`), in ink at 8–26%, masked so it fades out before the text. A moving one (circuit traces) has a pause button and stops under reduced motion. |
 | ★ Gradient-filled headline text (`background-clip: text`) | Solid `--text-primary`. Emphasise one word with weight, an italic serif, or `--accent-text`. |
 | Raw hex values in components | Semantic tokens only: `--bg-*`, `--text-*`, `--border-*`, `--accent-*`, `--status-*`, `--chart-*`. |
 | More than one accent hue competing on a screen | One accent. Status colours are for status only, never decoration. |

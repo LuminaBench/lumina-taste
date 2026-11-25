@@ -41,7 +41,8 @@ export function menuButton({ trigger, menu, itemSelector = '[role="menuitem"]', 
       else if (e.key === 'Tab') close(false);
     }),
     on(menu, 'click', (e: MouseEvent) => {
-      const item = (e.target as Element).closest<HTMLElement>('[role="menuitem"]');
+      // Radio items choose one option and close, like a plain item; checkbox items stay open (see menuExtras).
+      const item = (e.target as Element).closest<HTMLElement>('[role="menuitem"], [role="menuitemradio"]');
       if (!item || !menu.contains(item) || item.hasAttribute('aria-haspopup') || item.getAttribute('aria-disabled') === 'true') return;
       onSelect?.(item);
       close();

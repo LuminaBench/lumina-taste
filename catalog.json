@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
   "counts": {
-    "ui": 165,
+    "ui": 179,
     "charts": 42,
     "blueprints": 14,
     "palettes": 18,
     "themes": 36,
     "typography": 12,
-    "styles": 35
+    "styles": 39
   },
   "families": [
     {
@@ -17,28 +17,28 @@
       "title": "Controls & tactile inputs",
       "summary": "Buttons, toggles, pickers and fields with real pressed states and no layout jump.",
       "order": 1,
-      "count": 36
+      "count": 37
     },
     {
       "id": "navigation",
       "title": "Navigation & page chrome",
       "summary": "Headers, rails, menus and footers that tell people where they are and get out of the way.",
       "order": 2,
-      "count": 27
+      "count": 28
     },
     {
       "id": "feedback",
       "title": "Feedback, status & numbers",
       "summary": "Counters, progress, loading and messages that stay readable and never shift the layout.",
       "order": 3,
-      "count": 17
+      "count": 18
     },
     {
       "id": "overlays",
       "title": "Overlays & power-user patterns",
       "summary": "Palettes, menus, popovers and dialogs built on native <dialog>, the Popover API and CSS anchor positioning.",
       "order": 4,
-      "count": 18
+      "count": 19
     },
     {
       "id": "data",
@@ -59,10 +59,270 @@
       "title": "Sections for pages",
       "summary": "Whole page sections (heroes, pricing, FAQs, sign-in) built from the same tokens, so a page can be assembled in minutes and still look designed.",
       "order": 7,
-      "count": 21
+      "count": 22
+    },
+    {
+      "id": "backdrops",
+      "title": "Backdrops & patterns",
+      "summary": "Quiet page backgrounds drawn from the palette: grids, dots, ruled lines, a single-hue wash, pixel dither and circuit traces. One per screen, always behind the text.",
+      "order": 8,
+      "count": 9
     }
   ],
   "ui": [
+    {
+      "id": "backdrop-grid",
+      "kind": "ui",
+      "family": "backdrops",
+      "name": "Grid backdrop",
+      "summary": "A faint graph-paper grid that fades out towards the edges, with a soft light from the top.",
+      "aliases": [
+        "grid background",
+        "graph paper background",
+        "grid lines hero",
+        "linear style grid",
+        "technical grid pattern"
+      ],
+      "pattern": "Decorative ::before / ::after layer (no markup, hidden from assistive tech)",
+      "states": [
+        "light",
+        "dark",
+        "forced-colors: hidden",
+        "print: hidden"
+      ],
+      "react": "Backdrop",
+      "deps": [],
+      "files": [
+        "components/ui/backdrops/backdrop-grid/backdrop-grid.css",
+        "components/ui/backdrops/backdrop-grid/backdrop-grid.html",
+        "components/ui/backdrops/backdrop-grid/backdrop-grid.react.tsx"
+      ],
+      "path": "components/ui/backdrops/backdrop-grid"
+    },
+    {
+      "id": "backdrop-dots",
+      "kind": "ui",
+      "family": "backdrops",
+      "name": "Dot grid backdrop",
+      "summary": "An even field of small dots, like dotted notebook paper.",
+      "aliases": [
+        "dot grid background",
+        "dotted background",
+        "polka dot pattern subtle",
+        "dot matrix background",
+        "canvas dots"
+      ],
+      "pattern": "Decorative ::before / ::after layer (no markup, hidden from assistive tech)",
+      "states": [
+        "light",
+        "dark",
+        "forced-colors: hidden",
+        "print: hidden"
+      ],
+      "deps": [],
+      "files": [
+        "components/ui/backdrops/backdrop-dots/backdrop-dots.css",
+        "components/ui/backdrops/backdrop-dots/backdrop-dots.html"
+      ],
+      "path": "components/ui/backdrops/backdrop-dots"
+    },
+    {
+      "id": "backdrop-lines",
+      "kind": "ui",
+      "family": "backdrops",
+      "name": "Ruled lines backdrop",
+      "summary": "Horizontal hairlines at a steady pitch, like a ledger or a notebook.",
+      "aliases": [
+        "ruled paper background",
+        "lined background",
+        "ledger lines",
+        "notebook lines pattern",
+        "horizontal lines background"
+      ],
+      "pattern": "Decorative ::before / ::after layer (no markup, hidden from assistive tech)",
+      "states": [
+        "light",
+        "dark",
+        "forced-colors: hidden",
+        "print: hidden"
+      ],
+      "deps": [],
+      "files": [
+        "components/ui/backdrops/backdrop-lines/backdrop-lines.css",
+        "components/ui/backdrops/backdrop-lines/backdrop-lines.html"
+      ],
+      "path": "components/ui/backdrops/backdrop-lines"
+    },
+    {
+      "id": "backdrop-ticks",
+      "kind": "ui",
+      "family": "backdrops",
+      "name": "Registration ticks backdrop",
+      "summary": "Small plus marks at each grid crossing, like a printer’s registration marks.",
+      "aliases": [
+        "plus pattern background",
+        "crosshair grid",
+        "registration marks",
+        "plus sign pattern",
+        "tick marks grid"
+      ],
+      "pattern": "Decorative ::before / ::after layer (no markup, hidden from assistive tech)",
+      "states": [
+        "light",
+        "dark",
+        "forced-colors: hidden",
+        "print: hidden"
+      ],
+      "deps": [],
+      "files": [
+        "components/ui/backdrops/backdrop-ticks/backdrop-ticks.css",
+        "components/ui/backdrops/backdrop-ticks/backdrop-ticks.html"
+      ],
+      "path": "components/ui/backdrops/backdrop-ticks"
+    },
+    {
+      "id": "backdrop-wash",
+      "kind": "ui",
+      "family": "backdrops",
+      "name": "Colour wash backdrop",
+      "summary": "One hue rising from the bottom of the section, starting below the headline, with a little grain.",
+      "aliases": [
+        "gradient hero background",
+        "single colour gradient",
+        "colour fade background",
+        "sunset wash hero",
+        "accent gradient band"
+      ],
+      "pattern": "Decorative ::before / ::after layer (no markup, hidden from assistive tech)",
+      "states": [
+        "light",
+        "dark",
+        "forced-colors: hidden",
+        "print: hidden"
+      ],
+      "deps": [],
+      "files": [
+        "components/ui/backdrops/backdrop-wash/backdrop-wash.css",
+        "components/ui/backdrops/backdrop-wash/backdrop-wash.html"
+      ],
+      "path": "components/ui/backdrops/backdrop-wash"
+    },
+    {
+      "id": "backdrop-spot",
+      "kind": "ui",
+      "family": "backdrops",
+      "name": "Spotlight backdrop",
+      "summary": "A soft pool of accent light from the top centre, low enough in strength to read as lighting.",
+      "aliases": [
+        "glow background",
+        "top light gradient",
+        "radial glow hero",
+        "spotlight hero",
+        "soft accent glow"
+      ],
+      "pattern": "Decorative ::before / ::after layer (no markup, hidden from assistive tech)",
+      "states": [
+        "light",
+        "dark",
+        "forced-colors: hidden",
+        "print: hidden"
+      ],
+      "deps": [],
+      "files": [
+        "components/ui/backdrops/backdrop-spot/backdrop-spot.css",
+        "components/ui/backdrops/backdrop-spot/backdrop-spot.html"
+      ],
+      "path": "components/ui/backdrops/backdrop-spot"
+    },
+    {
+      "id": "backdrop-grain",
+      "kind": "ui",
+      "family": "backdrops",
+      "name": "Film grain backdrop",
+      "summary": "A fine static noise over the section that takes the plastic edge off flat colour.",
+      "aliases": [
+        "noise texture",
+        "grainy background",
+        "film grain overlay",
+        "paper texture background",
+        "noise overlay"
+      ],
+      "pattern": "Decorative ::before / ::after layer (no markup, hidden from assistive tech)",
+      "states": [
+        "light",
+        "dark",
+        "forced-colors: hidden",
+        "print: hidden"
+      ],
+      "deps": [],
+      "files": [
+        "components/ui/backdrops/backdrop-grain/backdrop-grain.css",
+        "components/ui/backdrops/backdrop-grain/backdrop-grain.html"
+      ],
+      "path": "components/ui/backdrops/backdrop-grain"
+    },
+    {
+      "id": "backdrop-dither",
+      "kind": "ui",
+      "family": "backdrops",
+      "name": "Pixel dither backdrop",
+      "summary": "An accent-coloured field that breaks into single pixels as it fades out: ordered dithering, drawn to a tiny canvas and scaled up crisp.",
+      "aliases": [
+        "dithered gradient",
+        "pixel gradient background",
+        "bayer dither",
+        "retro pixel fade",
+        "8-bit gradient",
+        "halftone fade"
+      ],
+      "pattern": "Decorative <canvas> (aria-hidden), redrawn on resize and theme change",
+      "states": [
+        "light",
+        "dark",
+        "no script: halftone fallback",
+        "forced-colors: hidden"
+      ],
+      "react": "DitherBackdrop",
+      "deps": [],
+      "files": [
+        "components/ui/backdrops/backdrop-dither/backdrop-dither.css",
+        "components/ui/backdrops/backdrop-dither/backdrop-dither.html",
+        "components/ui/backdrops/backdrop-dither/backdrop-dither.react.tsx",
+        "components/ui/backdrops/backdrop-dither/backdrop-dither.ts"
+      ],
+      "path": "components/ui/backdrops/backdrop-dither"
+    },
+    {
+      "id": "backdrop-circuit",
+      "kind": "ui",
+      "family": "backdrops",
+      "name": "Circuit traces backdrop",
+      "summary": "A faint grid with a few accent lines running along it at the sides, a small pulse travelling each one, and a pause button.",
+      "aliases": [
+        "circuit board background",
+        "animated grid lines",
+        "glowing lines hero",
+        "tech lines background",
+        "pcb traces",
+        "data flow lines"
+      ],
+      "pattern": "Decorative inline SVG (aria-hidden) + a real pause button",
+      "states": [
+        "running",
+        "paused",
+        "reduced motion: static",
+        "forced-colors: hidden"
+      ],
+      "react": "CircuitBackdrop",
+      "deps": [],
+      "files": [
+        "components/ui/backdrops/backdrop-circuit/backdrop-circuit.css",
+        "components/ui/backdrops/backdrop-circuit/backdrop-circuit.html",
+        "components/ui/backdrops/backdrop-circuit/backdrop-circuit.react.tsx",
+        "components/ui/backdrops/backdrop-circuit/backdrop-circuit.ts"
+      ],
+      "path": "components/ui/backdrops/backdrop-circuit"
+    },
     {
       "id": "hero-split",
       "kind": "ui",
@@ -638,6 +898,36 @@
         "components/ui/blocks/project-grid/project-grid.react.tsx"
       ],
       "path": "components/ui/blocks/project-grid"
+    },
+    {
+      "id": "showcase-tabs",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Showcase tabs",
+      "summary": "A segmented tab row over a framed example; each tab shows a different product with its own palette and type.",
+      "aliases": [
+        "example switcher",
+        "use case tabs",
+        "demo tabs with preview",
+        "template preview tabs",
+        "product tour tabs",
+        "before you scroll showcase"
+      ],
+      "pattern": "WAI-ARIA Tabs + framed panels",
+      "states": [
+        "selected",
+        "hover",
+        "focus-visible"
+      ],
+      "react": "ShowcaseTabs",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/showcase-tabs/showcase-tabs.css",
+        "components/ui/blocks/showcase-tabs/showcase-tabs.html",
+        "components/ui/blocks/showcase-tabs/showcase-tabs.react.tsx",
+        "components/ui/blocks/showcase-tabs/showcase-tabs.ts"
+      ],
+      "path": "components/ui/blocks/showcase-tabs"
     },
     {
       "id": "disclosure-chevron",
@@ -1724,6 +2014,35 @@
         "components/ui/controls/danger-zone/danger-zone.ts"
       ],
       "path": "components/ui/controls/danger-zone"
+    },
+    {
+      "id": "command-chip",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Command chip",
+      "summary": "One terminal command in a mono chip with a copy button, for install lines in heroes and docs.",
+      "aliases": [
+        "install command",
+        "npm install box",
+        "copy command line",
+        "terminal snippet chip",
+        "cli command with copy",
+        "one-line code copy"
+      ],
+      "pattern": "<code> + copy button + role=\"status\"",
+      "states": [
+        "default",
+        "copied"
+      ],
+      "react": "CommandChip",
+      "deps": [],
+      "files": [
+        "components/ui/controls/command-chip/command-chip.css",
+        "components/ui/controls/command-chip/command-chip.html",
+        "components/ui/controls/command-chip/command-chip.react.tsx",
+        "components/ui/controls/command-chip/command-chip.ts"
+      ],
+      "path": "components/ui/controls/command-chip"
     },
     {
       "id": "data-table",
@@ -3237,6 +3556,35 @@
       "path": "components/ui/feedback/undo-snackbar"
     },
     {
+      "id": "announcement-pill",
+      "kind": "ui",
+      "family": "feedback",
+      "name": "Announcement pill",
+      "summary": "One short line in a pill above a headline: a tagged link to what is new, a two-part fact, or a live status.",
+      "aliases": [
+        "hero pill",
+        "announcement badge",
+        "eyebrow pill",
+        "new feature pill",
+        "above the headline chip",
+        "changelog pill"
+      ],
+      "pattern": "<a> or <p>",
+      "states": [
+        "default",
+        "hover",
+        "focus-visible"
+      ],
+      "react": "AnnouncementPill",
+      "deps": [],
+      "files": [
+        "components/ui/feedback/announcement-pill/announcement-pill.css",
+        "components/ui/feedback/announcement-pill/announcement-pill.html",
+        "components/ui/feedback/announcement-pill/announcement-pill.react.tsx"
+      ],
+      "path": "components/ui/feedback/announcement-pill"
+    },
+    {
       "id": "motion-tokens",
       "kind": "ui",
       "family": "motion",
@@ -4103,20 +4451,24 @@
       "kind": "ui",
       "family": "navigation",
       "name": "Navbar, simple",
-      "summary": "Brand, four links, Sign in and one primary button; a menu button and panel on narrow screens.",
+      "summary": "Brand, four links, Sign in and one primary button; a menu button and panel on narrow screens. data-variant=\"pill\" floats it as a centred rounded bar.",
       "aliases": [
         "top navigation bar",
         "website header",
         "site nav",
         "header with logo and links",
-        "navbar"
+        "navbar",
+        "pill navbar",
+        "floating nav",
+        "rounded nav bar"
       ],
       "pattern": "<header> + <nav> + disclosure",
       "states": [
         "wide",
         "narrow closed",
         "narrow open",
-        "current page"
+        "current page",
+        "pill"
       ],
       "react": "NavbarSimple",
       "deps": [],
@@ -4294,6 +4646,38 @@
         "components/ui/navigation/doc-pager/doc-pager.react.tsx"
       ],
       "path": "components/ui/navigation/doc-pager"
+    },
+    {
+      "id": "session-list",
+      "kind": "ui",
+      "family": "navigation",
+      "name": "Session list",
+      "summary": "Past and running sessions grouped by project: a state mark, a one-line title and how long ago, for agent and chat sidebars.",
+      "aliases": [
+        "chat history sidebar",
+        "conversation list",
+        "agent sessions",
+        "thread list",
+        "recent chats",
+        "task list sidebar"
+      ],
+      "pattern": "<nav> of grouped links with aria-current",
+      "states": [
+        "running",
+        "needs you",
+        "done",
+        "idle",
+        "current"
+      ],
+      "react": "SessionList",
+      "deps": [],
+      "files": [
+        "components/ui/navigation/session-list/session-list.css",
+        "components/ui/navigation/session-list/session-list.html",
+        "components/ui/navigation/session-list/session-list.react.tsx",
+        "components/ui/navigation/session-list/session-list.ts"
+      ],
+      "path": "components/ui/navigation/session-list"
     },
     {
       "id": "command-palette",
@@ -4843,6 +5227,41 @@
         "components/ui/overlays/shortcuts-sheet/shortcuts-sheet.ts"
       ],
       "path": "components/ui/overlays/shortcuts-sheet"
+    },
+    {
+      "id": "switcher-menu",
+      "kind": "ui",
+      "family": "overlays",
+      "name": "Grouped switcher menu",
+      "summary": "A compact trigger that opens a menu of choices under group headings, each with a plan tag, an activity dot and a tick on the current one.",
+      "aliases": [
+        "workspace switcher",
+        "account switcher",
+        "model picker",
+        "environment switcher",
+        "org dropdown",
+        "team switcher",
+        "profile switcher menu"
+      ],
+      "pattern": "WAI-ARIA Menu Button + menuitemradio in role=\"group\"",
+      "states": [
+        "closed",
+        "open",
+        "checked",
+        "busy",
+        "focus-visible"
+      ],
+      "react": "SwitcherMenu",
+      "deps": [
+        "dropdown-menu"
+      ],
+      "files": [
+        "components/ui/overlays/switcher-menu/switcher-menu.css",
+        "components/ui/overlays/switcher-menu/switcher-menu.html",
+        "components/ui/overlays/switcher-menu/switcher-menu.react.tsx",
+        "components/ui/overlays/switcher-menu/switcher-menu.ts"
+      ],
+      "path": "components/ui/overlays/switcher-menu"
     }
   ],
   "charts": [
@@ -7864,6 +8283,97 @@
       "radius": "balanced",
       "useFor": "Public services, councils, health, education and forms anyone might need to fill in.",
       "notTo": "Minimal, which hides affordances for looks; civic makes every link and control obvious.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "trace",
+      "kind": "style",
+      "name": "Trace",
+      "summary": "Near-black pages on a faint grid, one hot accent for actions and traces, and mono labels.",
+      "aliases": [
+        "dark grid hero",
+        "circuit board look",
+        "devtool dark with grid",
+        "observability site style",
+        "glowing grid lines",
+        "linear style dark"
+      ],
+      "palette": "black-signal",
+      "mode": "dark",
+      "typography": "geometric",
+      "radius": "sharp",
+      "useFor": "Monitoring, infrastructure, developer tools and anything that shows live systems.",
+      "notTo": "Blueprint, which is drafting-paper blue throughout; trace is black with one hot accent.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "ember",
+      "kind": "style",
+      "name": "Ember",
+      "summary": "A dark canvas with one warm wash rising from below the headline, soft corners and a little grain.",
+      "aliases": [
+        "orange gradient hero",
+        "warm dark landing",
+        "sunset gradient site",
+        "glow from the bottom",
+        "launch page style",
+        "dark to orange fade"
+      ],
+      "palette": "black-signal",
+      "mode": "dark",
+      "typography": "geometric",
+      "radius": "soft",
+      "useFor": "Product launches, tools for makers and brand pages that want warmth without a rainbow.",
+      "notTo": "Glass, which blurs layers over colour; ember is flat fills with one wash.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "pixel",
+      "kind": "style",
+      "name": "Pixel",
+      "summary": "Deep blue-black with a field of single pixels that thins out behind the content, and crisp compact type.",
+      "aliases": [
+        "dithered background",
+        "pixel gradient app",
+        "retro pixel dark",
+        "8-bit fade",
+        "bayer dither look",
+        "desktop app dark blue"
+      ],
+      "palette": "ice-cobalt",
+      "mode": "dark",
+      "typography": "precision",
+      "radius": "balanced",
+      "useFor": "Desktop apps, agent tools, editors and consoles that want character without noise.",
+      "notTo": "Terminal, which is mono type everywhere; pixel keeps normal type and puts the texture in the background.",
+      "files": [
+        "tokens/styles/styles.css"
+      ]
+    },
+    {
+      "id": "graph",
+      "kind": "style",
+      "name": "Graph",
+      "summary": "Light graph paper behind heroes, cobalt ink for actions, tight grotesque headlines and square controls.",
+      "aliases": [
+        "graph paper site",
+        "light grid background",
+        "engineering paper look",
+        "notebook grid style",
+        "light technical"
+      ],
+      "palette": "ice-cobalt",
+      "mode": "light",
+      "typography": "swiss",
+      "radius": "sharp",
+      "useFor": "Engineering, hardware, data and education products that should feel precise and open.",
+      "notTo": "Swiss, which is plain white with rules; graph puts measured paper behind the first screen.",
       "files": [
         "tokens/styles/styles.css"
       ]
