@@ -3,7 +3,7 @@
 import { chart, gutter, tipHtml, yGrid, type ChartInstance, type ChartOptions, type Mark } from './frame';
 import { formatNumber, type NumberFormat } from './format';
 import { extent, linear, niceDomain } from './scale';
-import { el, linePath, r } from './svg';
+import { el, linePath, r, textWidth } from './svg';
 import { groupColors, legend, mute, placeLabels } from './kit';
 
 export interface TradeoffPoint { label: string; x: number; y: number; group?: string }
@@ -69,7 +69,8 @@ export function tradeoff(host: HTMLElement, data: TradeoffPoint[], opts: Tradeof
     for (const t of ticks) {
       const px = r(xs(t));
       xg.append(el('line', { x1: px, x2: px, y1: m.t, y2: height - m.b, class: 'lt-vgrid' }));
-      xg.append(el('text', { x: px, y: height - m.b + 16, 'text-anchor': 'middle', class: 'lt-tick' }, [xf(t)]));
+      const over = px + textWidth(xf(t), '11px system-ui') / 2 > width;
+      xg.append(el('text', { x: over ? width : px, y: height - m.b + 16, 'text-anchor': over ? 'end' : 'middle', class: 'lt-tick' }, [xf(t)]));
     }
     svg.append(xg);
     if (o.quadrant) {

@@ -5,7 +5,7 @@ description: Make interfaces look designed, not generated. Use for any UI work (
 
 # Lumina Taste
 
-A design kit for coding agents: a **page composer** that turns a brief into a plan, **18 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **39 visual styles**, **192 named UI patterns** (including **9 page backdrops**: grid, dots, ruled lines, ticks, wash, spotlight, grain, dither, circuit traces), **42 chart engines**, **17 page blueprints**, a **lockable taste profile**, a **Playwright auditor with a page-level taste critic**, a **copy lint** and **32 eval briefs** to measure the result. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
+A design kit for coding agents: a **page composer** that turns a brief into a plan, **24 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **39 visual styles**, **192 named UI patterns** (including **9 page backdrops**: grid, dots, ruled lines, ticks, wash, spotlight, grain, dither, circuit traces), **46 chart engines**, **17 page blueprints**, a **lockable taste profile**, a **Playwright auditor with a page-level taste critic**, a **copy lint** and **32 eval briefs** to measure the result. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
 
 Run commands from this skill's directory with Node.js 20+. Pass absolute paths (or run from the user's project with the absolute script path). Search, install and token scripts need nothing installed; the auditor needs Playwright; the gallery needs `npm install` once.
 
@@ -26,7 +26,7 @@ Read `references/anti-slop-rules.md` once per session. The short version:
 Components are rarely what makes a page look generated; the plan is. Run this loop for every page or screen:
 
 1. **Compose.** `node scripts/compose.mjs "<the user's brief in one line>"` prints a page plan: the design brief (audience, product, primary action, reading pattern, layout, density), a taste profile chosen for the domain, the sections in order with real catalog ids and a copy formula for each, the states to build, what to avoid, and the install command. Add `--json` to read it as data, `--type <id>` to force a page type.
-2. **Ask only what is open, and show the look.** The plan's "Ask first" section lists at most three questions the brief leaves unanswered (product name, look, main action, light or dark), each with a default. Ask them in one short message; if the brief answers them, state your brief in two lines and go. When the look is open, do not describe styles: run `node scripts/directions.mjs "<brief>" --out <dir>`, which renders three fitting styles on the same content in one `directions.html` (labelled A, B, C, each with its `--style` flag), and let the person point. "A, but lighter" is a fine answer: keep the style, change the mode or palette. Then lock it (`--lock style,palette`). If they sent a reference image or site, read `references/reading-a-reference.md` first.
+2. **Ask only what is open, and show the look.** The plan's "Ask first" section lists at most three questions the brief leaves unanswered (product name, look, main action, light or dark), each with a default. Ask them in one short message; if the brief answers them, state your brief in two lines and go. A look is a style plus a palette: any style takes any palette (`--style linen --palette forest-brass`), and the composer suggests pairings per domain. When the look is open, do not describe styles: run `node scripts/directions.mjs "<brief>" --out <dir>`, which renders three fitting styles on the same content in one `directions.html` (labelled A, B, C, each with its `--style` flag), and let the person point. "A, but lighter" is a fine answer: keep the style, change the mode or palette. Then lock it (`--lock style,palette`). If they sent a reference image or site, read `references/reading-a-reference.md` first.
 3. **Install and build** exactly what the plan lists. Start from its blueprint when it names one. Follow the section order; skip optional sections you cannot fill with real content rather than inventing it.
 4. **Write real copy** with the plan's formulas and `references/copy-patterns.md` (headlines, buttons, empty states, errors, pricing, FAQ): the product's name, real numbers, specific benefits. Never ship lorem ipsum, "Acme", "John Doe" or "Feature one"; the critic fails them. For tables, charts and lists, `node scripts/sample-data.mjs users|invoices|orders|series|revenue|funnel|cohort|events` prints realistic, seeded data.
 5. **Build the states** the plan lists (loading, empty, error) as well as the happy path.
@@ -127,7 +127,8 @@ Keep the stack and bring the taste: `node scripts/export-tokens.mjs --format sha
    React: `<MultiLineChart data={…} options={…} />` from the `.react.tsx` file.
 4. Benchmark and leaderboard pages: `ranked-columns` (sorted, value on top, colour by group, hatched when missing), `leaderboard-table` (inline bar plus heat cells), `range-bar-chart` (p5–p95 with median), `tradeoff-scatter` (better-on-both quadrant) and `frontier-chart` (Pareto line). Pass `groups` so each group keeps its colour across every chart on the page.
 5. Built in, never re-implement: gutter labels with dashed horizontal grid only, direct end labels, magnetic crosshair + fixed tooltip, arrow-key navigation, hidden data table, SVG/PNG export, theme-derived colours (`--chart-1…8`, `seqColor`, `divColor`), Canvas above 300 scatter points, re-render on theme change.
-6. Formats: `formatNumber(v, { prefix: '£', compact: true })` → `£24.4k`; `{ suffix: ' fps', decimals: 1 }` → `60.1 fps`; `{ percent: true, sign: true }` → `+12.4%`; dates → `Nov 24`.
+6. Options that carry the story, on every line and area chart: `highlight: 'Team'` (one series in colour, the rest grey; on grouped bars it names the series to emphasise), `annotations: [{ at, label }]` (events), `target: { value, label }` (a goal or limit line), `band: { lower, upper }` (a range behind the line), `forecastFrom: index` (dashed from there on, and the tooltip says forecast), `step: true` (values that hold then jump). `forecast-chart`, `step-chart`, `ridgeline-chart` and `cohort-grid` wrap the common cases.
+7. Formats: `formatNumber(v, { prefix: '£', compact: true })` → `£24.4k`; `{ suffix: ' fps', decimals: 1 }` → `60.1 fps`; `{ percent: true, sign: true }` → `+12.4%`; dates → `Nov 24`.
 
 ## Workflow E · Whole pages from blueprints
 
@@ -253,7 +254,7 @@ Rules: one backdrop per screen, one hue, and the pattern fades before it reaches
 | `--chart-1…8` | Categorical series, CVD-safe order |
 | `--space-1…9`, `--gap-xs…xl`, `--control-h`, `--radius-*`, `--dur-*`, `--ease-*`, `--shadow-sm/md/overlay` | Rhythm, density, shape, motion, elevation |
 
-Palettes are generated by `node scripts/build-tokens.mjs` from `tokens/palettes/source.json` and verified by `node scripts/test-contrast.mjs` (2,268 checks across 36 themes). To add a palette, add seeds there, rebuild and re-test; never hand-edit generated CSS.
+Palettes are generated by `node scripts/build-tokens.mjs` from `tokens/palettes/source.json` and verified by `node scripts/test-contrast.mjs` (3,024 checks across 48 themes). To add a palette, add seeds there, rebuild and re-test; never hand-edit generated CSS.
 
 ## Live gallery
 
@@ -273,7 +274,7 @@ engine/compose/              page types, domains and moods behind compose.mjs
 evals/                       32 briefs (evals.json), fixtures and reference scores
 tokens/                      base.css, layout.css, backdrops.css, palettes/*.css (+ source.json), typography/, styles/
 components/ui/<family>/      192 patterns (html, css, ts, react.tsx)
-components/charts/           core/ + 42 chart engines (+ React wrappers)
+components/charts/           core/ + 46 chart engines (+ React wrappers)
 blueprints/                  17 page blueprints (states via ?state=loading|empty|error|incident|sold-out|streaming|running)
 references/                  anti-slop-rules, page-flow, copy-patterns, reading-a-reference, chart-selection, which-one, palettes, harvest-log
 scripts/                     compose, directions, search, install-taste, sniff, export-tokens, sample-data, audit-ui, audit-all, lint-copy, eval-score, eval-run, build-tokens, test-contrast, build, serve

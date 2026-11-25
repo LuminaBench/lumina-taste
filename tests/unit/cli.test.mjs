@@ -81,6 +81,15 @@ test('audit-ui flags every slop rule on the fixture', () => {
   for (const rule of ['overflow', 'clipped-text', 'overlap', 'contrast', 'tabular-nums', 'slop-gradient', 'slop-gradient-text', 'slop-shadow', 'slop-emoji', 'slop-copy', 'dead-control', 'focus-visible']) assert.ok(rules.has(rule), rule);
 });
 
+test('audit-ui reads plain rgb() colours: black text passes, translucent text fails', () => {
+  const out = join(tmpdir(), `lt-plain-${process.pid}.json`);
+  node([join(root, 'scripts/audit-ui.mjs'), join(root, 'tests/fixtures/plain-colours.html'), '--viewports', 'desktop', '--modes', 'light', '--json', out, '--quiet']);
+  const contrast = JSON.parse(readFileSync(out, 'utf8')).report[0].findings.filter((f) => f.rule === 'contrast').map((f) => f.message);
+  rmSync(out, { force: true });
+  assert.equal(contrast.length, 2, contrast.join(' | '));
+  assert.ok(contrast.every((m) => /Thirty percent black/.test(m)), contrast.join(' | '));
+});
+
 test('audit-ui --taste flags every page-level rule on the taste fixture', () => {
   const out = join(mkdtempSync(join(tmpdir(), 'lt-taste-')), 'r.json');
   const r = node([join(root, 'scripts/audit-ui.mjs'), join(root, 'tests/fixtures/taste.html'), '--taste', '--viewports', 'desktop', '--modes', 'light', '--json', out, '--quiet']);

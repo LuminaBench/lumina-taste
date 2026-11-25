@@ -79,7 +79,9 @@ test('directions are three real styles, and a brief that says dark only gets dar
   for (const [domain, ids] of Object.entries(kb.directions).filter(([k]) => !k.startsWith('$'))) {
     assert.equal(ids.length, 3, domain);
     assert.equal(new Set(ids).size, 3, domain);
-    for (const id of ids) assert.ok(styles.some((s) => s.id === id), `${domain}: ${id}`);
+    const palettes = JSON.parse(readFileSync(join(root, 'catalog.json'), 'utf8')).palettes;
+    assert.equal(new Set(ids.map((k) => k.split('@')[0])).size, 3, `${domain}: three different styles`);
+    for (const key of ids) { const [id, palette] = key.split('@'); assert.ok(styles.some((s) => s.id === id), `${domain}: ${id}`); if (palette) assert.ok(palettes.some((p) => p.id === palette), `${domain}: ${palette}`); }
   }
   const d = compose('dark landing page for a webhooks API').directions;
   assert.equal(d.styles.length, 3);

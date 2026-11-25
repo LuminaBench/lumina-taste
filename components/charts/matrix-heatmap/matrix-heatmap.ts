@@ -41,9 +41,10 @@ export function render(host: HTMLElement, data: MatrixData, opts: MatrixOptions 
 }
 
 export function demo(host: HTMLElement) {
-  const rows = ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'];
-  const cols = ['M0', 'M1', 'M2', 'M3', 'M4', 'M5'];
-  const base = [100, 78, 69, 64, 61, 59];
-  const values = rows.map((_, ri) => cols.map((_, ci) => (ci > rows.length - 1 - ri ? null : ci === 0 ? 100 : Math.round(base[ci] * (1 + ri * 0.012) * (1 - (ri % 2) * 0.02)))));
-  return render(host, { rows, cols, values }, { title: 'Retention is improving with each cohort', subtitle: 'Share of signups still active, by month since signup', format: { suffix: '%' }, source: 'Source: synthetic cohorts' });
+  const rows = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const cols = ['06', '08', '10', '12', '14', '16', '18', '20', '22'];
+  // A weekday morning peak, a smaller one after lunch, and quiet weekends.
+  const shape = [8, 31, 58, 44, 49, 36, 21, 12, 6];
+  const values = rows.map((_, ri) => cols.map((_, ci) => Math.round(shape[ci] * (ri > 4 ? 0.28 : 1 - Math.abs(ri - 1.5) * 0.07) + ((ri * 5 + ci * 3) % 7))));
+  return render(host, { rows, cols, values }, { title: 'Support is busiest on weekday mornings', subtitle: 'New tickets by weekday and hour, average of the last 12 weeks', source: 'Source: synthetic helpdesk data' });
 }

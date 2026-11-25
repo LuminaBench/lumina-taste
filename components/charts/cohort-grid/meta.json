@@ -1,0 +1,20 @@
+{
+  "id": "cohort-grid",
+  "order": 46,
+  "name": "Retention cohorts",
+  "group": "Matrix",
+  "summary": "A triangle of signup cohorts by months since joining, shaded by the share still active, with sizes and a weighted average row.",
+  "bestFor": "Retention and churn by signup month or week; repeat purchase by first-order month",
+  "avoidFor": "One cohort (use a line) or unrelated rows and columns (use a matrix heatmap)",
+  "dataShape": "cohorts: { label, size, values: % by period }[]",
+  "aliases": [
+    "cohort chart",
+    "retention table",
+    "retention heatmap",
+    "cohort analysis",
+    "retention triangle",
+    "churn cohorts"
+  ],
+  "wide": true,
+  "react": "CohortGrid"
+}

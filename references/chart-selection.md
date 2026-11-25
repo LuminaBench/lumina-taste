@@ -48,6 +48,10 @@ Pick the chart from the **shape of the data** and the **one sentence the reader 
 | Rank over time for 4–10 entries | Who overtook whom? | Bump | `bump-chart` | When gap size matters |
 | Six or more series over time | How does each one move? | Small multiples on a shared scale | `small-multiples` | One tangled line chart |
 | A trend with events that explain it | Why did it jump? | Annotated line | `annotated-line-chart` | More than six notes |
+| A measured trend and a projection | Where is this heading, and how sure are we? | Line that turns dashed inside a shaded range | `forecast-chart` | A forecast with no range, or a range you cannot explain |
+| A value that is set, then holds (price, seats, limit) | When did it change, and to what? | Step line | `step-chart` | Continuous measures like revenue |
+| One measure across 4–12 groups, many samples each | How do the shapes differ? | Ridgeline with median ticks | `ridgeline-chart` | Two or three groups (box plot), or exact values |
+| Signup cohorts by months since joining | Are newer cohorts staying longer? | Retention triangle with an average row | `cohort-grid` | A single cohort (line), unrelated rows and columns (matrix heatmap) |
 
 When two rows fit, prefer the one higher in this list: simpler charts are read faster.
 

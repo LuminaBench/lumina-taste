@@ -212,6 +212,10 @@ import { DocPager } from '../../components/ui/navigation/doc-pager/doc-pager.rea
 import { AssistantThread } from '../../components/ui/data/assistant-thread/assistant-thread.react';
 import { ProjectGrid } from '../../components/ui/blocks/project-grid/project-grid.react';
 import { Treemap } from '../../components/charts/treemap/treemap.react';
+import { ForecastChart } from '../../components/charts/forecast-chart/forecast-chart.react';
+import { StepChart } from '../../components/charts/step-chart/step-chart.react';
+import { RidgelineChart } from '../../components/charts/ridgeline-chart/ridgeline-chart.react';
+import { CohortGrid } from '../../components/charts/cohort-grid/cohort-grid.react';
 import { GanttChart } from '../../components/charts/gantt-chart/gantt-chart.react';
 import { WaffleChart } from '../../components/charts/waffle-chart/waffle-chart.react';
 import { RadialBarChart } from '../../components/charts/radial-bar-chart/radial-bar-chart.react';
@@ -432,6 +436,10 @@ function App() {
       <Case id="members"><TeamMembers members={[{ name: 'Ana Lopes', email: 'ana@halyard.io', role: 'Admin', status: 'Active' }]} /></Case>
       <Case id="danger"><DangerZone name="halyard" impact="Deletes all reports." onDelete={() => log.push('deleted')} /></Case>
       <Case id="treemap"><Treemap data={[{ label: 'A', value: 3, group: 'X' }, { label: 'B', value: 1, group: 'Y' }]} options={{ title: 'Spend' }} /></Case>
+      <Case id="forecast"><ForecastChart data={{ x: ['2026-09-15', '2026-10-15', '2026-11-15', '2026-12-15'], values: [10, 12, 13, 15], from: 2, lower: [null, null, 13, 13], upper: [null, null, 13, 17] }} options={{ title: 'Forecast', target: { value: 14, label: 'Goal' } }} /></Case>
+      <Case id="step"><StepChart data={{ x: ['2026-09-15', '2026-10-15', '2026-11-15'], series: [{ name: 'Seats', values: [10, 10, 20] }] }} options={{ title: 'Seats' }} /></Case>
+      <Case id="ridgeline"><RidgelineChart data={[{ label: 'A', values: [1, 2, 2, 3, 3, 3, 4] }, { label: 'B', values: [3, 4, 4, 5, 6] }]} options={{ title: 'Spread' }} /></Case>
+      <Case id="cohorts"><CohortGrid data={[{ label: 'Jan', size: 100, values: [100, 60, 50] }, { label: 'Feb', size: 120, values: [100, 64] }]} options={{ title: 'Retention' }} /></Case>
       <Case id="gantt"><GanttChart data={[{ label: 'Plan', start: '2026-11-02', end: '2026-11-20', done: 0.5 }]} options={{ title: 'Plan' }} /></Case>
       <Case id="waffle"><WaffleChart data={{ label: 'of teams', value: 68 }} options={{ title: 'Share' }} /></Case>
       <Case id="radial"><RadialBarChart data={[{ label: 'Goal', value: 70 }]} options={{ title: 'Goals' }} /></Case>

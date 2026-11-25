@@ -4,10 +4,10 @@
   "generated": "scripts/build-catalog.mjs",
   "counts": {
     "ui": 192,
-    "charts": 42,
+    "charts": 46,
     "blueprints": 17,
-    "palettes": 18,
-    "themes": 36,
+    "palettes": 24,
+    "themes": 48,
     "typography": 12,
     "styles": 39
   },
@@ -5999,15 +5999,15 @@
       "kind": "chart",
       "name": "Matrix heatmap",
       "group": "Distribution",
-      "summary": "Rows × columns of values, like a cohort or hour-by-day grid.",
+      "summary": "Rows × columns of values, like an hour-by-weekday or region-by-product grid.",
       "aliases": [
-        "cohort table",
         "heat grid",
         "correlation matrix",
-        "hour by day grid"
+        "hour by day grid",
+        "hour by day heatmap"
       ],
-      "bestFor": "Two categorical dimensions with one value (cohorts, hour × weekday)",
-      "avoidFor": "Exact comparison between cells",
+      "bestFor": "Two categorical dimensions with one value (hour × weekday, region × product, correlations)",
+      "avoidFor": "Exact comparison between cells; retention by signup month (use the cohort grid)",
       "dataShape": "rows, cols, values[][]",
       "react": "MatrixHeatmap",
       "order": 15,
@@ -6531,6 +6531,33 @@
       "path": "components/charts/bump-chart"
     },
     {
+      "id": "forecast-chart",
+      "kind": "chart",
+      "name": "Forecast with range",
+      "group": "Trends",
+      "summary": "A measured line that continues as a dashed forecast inside a shaded range, with an optional goal line.",
+      "aliases": [
+        "projection chart",
+        "confidence band",
+        "prediction interval",
+        "fan chart",
+        "forecast line",
+        "uncertainty band",
+        "run rate projection"
+      ],
+      "bestFor": "Projections, budgets and run-rates where the uncertainty matters as much as the central line",
+      "avoidFor": "A forecast with no stated range (it reads as a promise)",
+      "dataShape": "x; values (measured then forecast); from: last measured index; lower / upper bounds",
+      "react": "ForecastChart",
+      "order": 43,
+      "files": [
+        "components/charts/forecast-chart/forecast-chart.react.tsx",
+        "components/charts/forecast-chart/forecast-chart.ts",
+        "components/charts/forecast-chart/meta.json"
+      ],
+      "path": "components/charts/forecast-chart"
+    },
+    {
       "id": "small-multiples",
       "kind": "chart",
       "name": "Small multiples",
@@ -6556,6 +6583,31 @@
       "path": "components/charts/small-multiples"
     },
     {
+      "id": "step-chart",
+      "kind": "chart",
+      "name": "Step chart",
+      "group": "Trends",
+      "summary": "Lines that hold flat and jump, for values that are set, not measured continuously.",
+      "aliases": [
+        "stepped line",
+        "staircase chart",
+        "step line chart",
+        "price history",
+        "plan changes over time"
+      ],
+      "bestFor": "Prices, seats, limits, rates and stock: anything that changes at a moment and then stays",
+      "avoidFor": "Continuous measures like revenue or traffic (use a line)",
+      "dataShape": "x: dates; 1–3 series",
+      "react": "StepChart",
+      "order": 44,
+      "files": [
+        "components/charts/step-chart/meta.json",
+        "components/charts/step-chart/step-chart.react.tsx",
+        "components/charts/step-chart/step-chart.ts"
+      ],
+      "path": "components/charts/step-chart"
+    },
+    {
       "id": "annotated-line-chart",
       "kind": "chart",
       "name": "Annotated line chart",
@@ -6579,6 +6631,58 @@
         "components/charts/annotated-line-chart/meta.json"
       ],
       "path": "components/charts/annotated-line-chart"
+    },
+    {
+      "id": "ridgeline-chart",
+      "kind": "chart",
+      "name": "Ridgeline",
+      "group": "Distribution",
+      "summary": "One smoothed distribution per group, stacked with a slight overlap on a shared scale, each with a median tick.",
+      "aliases": [
+        "joy plot",
+        "joyplot",
+        "stacked density",
+        "density ridges",
+        "distribution by group",
+        "violin alternative"
+      ],
+      "bestFor": "Comparing the shape of one measure across 4 to 12 groups: response time by region, order size by plan",
+      "avoidFor": "Two or three groups (use a box plot or overlaid histograms) or exact values",
+      "dataShape": "groups: { label, values: number[] }[]",
+      "react": "RidgelineChart",
+      "order": 45,
+      "files": [
+        "components/charts/ridgeline-chart/meta.json",
+        "components/charts/ridgeline-chart/ridgeline-chart.react.tsx",
+        "components/charts/ridgeline-chart/ridgeline-chart.ts"
+      ],
+      "path": "components/charts/ridgeline-chart"
+    },
+    {
+      "id": "cohort-grid",
+      "kind": "chart",
+      "name": "Retention cohorts",
+      "group": "Matrix",
+      "summary": "A triangle of signup cohorts by months since joining, shaded by the share still active, with sizes and a weighted average row.",
+      "aliases": [
+        "cohort chart",
+        "retention table",
+        "retention heatmap",
+        "cohort analysis",
+        "retention triangle",
+        "churn cohorts"
+      ],
+      "bestFor": "Retention and churn by signup month or week; repeat purchase by first-order month",
+      "avoidFor": "One cohort (use a line) or unrelated rows and columns (use a matrix heatmap)",
+      "dataShape": "cohorts: { label, size, values: % by period }[]",
+      "react": "CohortGrid",
+      "order": 46,
+      "files": [
+        "components/charts/cohort-grid/cohort-grid.react.tsx",
+        "components/charts/cohort-grid/cohort-grid.ts",
+        "components/charts/cohort-grid/meta.json"
+      ],
+      "path": "components/charts/cohort-grid"
     },
     {
       "id": "treemap",
@@ -7922,6 +8026,228 @@
       },
       "files": [
         "tokens/palettes/ochre-indigo.css"
+      ]
+    },
+    {
+      "id": "bone-plum",
+      "kind": "palette",
+      "name": "Bone & Plum",
+      "category": "consumer",
+      "summary": "Soft, grown-up, a little luxurious. Deep plum actions on warm bone.",
+      "aliases": [
+        "bone & plum",
+        "bone",
+        "plum",
+        "consumer palette",
+        "grownup",
+        "little",
+        "luxurious",
+        "actions"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#faf6f3",
+          "accent": "#631f4a",
+          "text": "#1a1512"
+        },
+        "dark": {
+          "canvas": "#140d12",
+          "accent": "#e9a1c9",
+          "text": "#feeef8"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.49,
+        "dark": 13.68
+      },
+      "files": [
+        "tokens/palettes/bone-plum.css"
+      ]
+    },
+    {
+      "id": "forest-brass",
+      "kind": "palette",
+      "name": "Deep Forest & Brass",
+      "category": "editorial",
+      "summary": "Established and calm. Bottle green by day, brass on deep green by night.",
+      "aliases": [
+        "deep forest & brass",
+        "deep forest",
+        "brass",
+        "editorial palette",
+        "established",
+        "bottle",
+        "green",
+        "brass",
+        "green",
+        "night"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#f8f7f1",
+          "accent": "#124830",
+          "text": "#18160f"
+        },
+        "dark": {
+          "canvas": "#09150e",
+          "accent": "#e2bb6a",
+          "text": "#e3faed"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.49,
+        "dark": 13.34
+      },
+      "files": [
+        "tokens/palettes/forest-brass.css"
+      ]
+    },
+    {
+      "id": "graphite-violet",
+      "kind": "palette",
+      "name": "Graphite & Violet",
+      "category": "dev-tool",
+      "summary": "Precise with one vivid note. Flat violet on cool graphite, never a gradient.",
+      "aliases": [
+        "graphite & violet",
+        "graphite",
+        "violet",
+        "dev-tool palette",
+        "precise",
+        "vivid",
+        "violet",
+        "graphite",
+        "never",
+        "gradient"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#f9f9fc",
+          "accent": "#6949ba",
+          "text": "#16161a"
+        },
+        "dark": {
+          "canvas": "#0d0d12",
+          "accent": "#ad99fb",
+          "text": "#f2f2fe"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.77,
+        "dark": 14.23
+      },
+      "files": [
+        "tokens/palettes/graphite-violet.css"
+      ]
+    },
+    {
+      "id": "petrol-peach",
+      "kind": "palette",
+      "name": "Petrol & Peach",
+      "category": "consumer",
+      "summary": "Reassuring and warm. Petrol blue on sand by day, peach on deep petrol by night.",
+      "aliases": [
+        "petrol & peach",
+        "petrol",
+        "peach",
+        "consumer palette",
+        "reassuring",
+        "petrol",
+        "peach",
+        "petrol",
+        "night"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#faf6f1",
+          "accent": "#015668",
+          "text": "#1a1510"
+        },
+        "dark": {
+          "canvas": "#01151a",
+          "accent": "#fab688",
+          "text": "#e2f8ff"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.6,
+        "dark": 13.32
+      },
+      "files": [
+        "tokens/palettes/petrol-peach.css"
+      ]
+    },
+    {
+      "id": "fog-fuchsia",
+      "kind": "palette",
+      "name": "Fog & Fuchsia",
+      "category": "consumer",
+      "summary": "Loud on purpose. One hot fuchsia on quiet cool grey.",
+      "aliases": [
+        "fog & fuchsia",
+        "fog",
+        "fuchsia",
+        "consumer palette",
+        "purpose",
+        "fuchsia",
+        "quiet"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#f8fafc",
+          "accent": "#c61d78",
+          "text": "#141619"
+        },
+        "dark": {
+          "canvas": "#0b0d11",
+          "accent": "#fc69ab",
+          "text": "#eef4fc"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.91,
+        "dark": 14.26
+      },
+      "files": [
+        "tokens/palettes/fog-fuchsia.css"
+      ]
+    },
+    {
+      "id": "seaglass-coral",
+      "kind": "palette",
+      "name": "Sea Glass & Coral",
+      "category": "consumer",
+      "summary": "Fresh and sunny. Coral actions on pale sea-glass neutrals.",
+      "aliases": [
+        "sea glass & coral",
+        "sea glass",
+        "coral",
+        "consumer palette",
+        "fresh",
+        "sunny",
+        "coral",
+        "actions",
+        "seaglass",
+        "neutrals"
+      ],
+      "swatches": {
+        "light": {
+          "canvas": "#f1faf7",
+          "accent": "#d05448",
+          "text": "#0f1816"
+        },
+        "dark": {
+          "canvas": "#061313",
+          "accent": "#f8907f",
+          "text": "#ddfafa"
+        }
+      },
+      "minTextContrast": {
+        "light": 14.6,
+        "dark": 13.61
+      },
+      "files": [
+        "tokens/palettes/seaglass-coral.css"
       ]
     }
   ],

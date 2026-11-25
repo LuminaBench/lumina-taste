@@ -1,6 +1,6 @@
 # Lumina Taste
 
-Interfaces that look designed, not generated. A taste kit for coding agents: 18 verified palettes, 39 visual styles, 192 named UI patterns, 42 publication-grade charts and 17 page blueprints, a page composer that turns a one-line brief into a plan, and an auditor with a page-level taste critic that catches slop before your users do.
+Interfaces that look designed, not generated. A taste kit for coding agents: 24 verified palettes, 39 visual styles, 192 named UI patterns, 46 publication-grade charts and 17 page blueprints, a page composer that turns a one-line brief into a plan, and an auditor with a page-level taste critic that catches slop before your users do.
 
 ## Install
 
@@ -43,12 +43,12 @@ npx skills remove lumina-taste -g
 
 | | Count | Highlights |
 | --- | ---: | --- |
-| **Palettes** | 18 × light/dark | Cream & Charcoal, Deep Navy & Warm Sand, Matte Black & Signal Orange, Lab Monochrome & Acid Lime… Every text, control and chart pair is checked: primary text ≥ 7:1, all other text ≥ 4.5:1, UI marks ≥ 3:1. |
+| **Palettes** | 24 × light/dark | Cream & Charcoal, Deep Navy & Warm Sand, Matte Black & Signal Orange, Lab Monochrome & Acid Lime, Bone & Plum, Deep Forest & Brass, Graphite & Violet, Petrol & Peach… Every text, control and chart pair is checked: primary text ≥ 7:1, all other text ≥ 4.5:1, UI marks ≥ 3:1. |
 | **Type pairings** | 12 | Editorial serif + grotesque, precision dev sans + mono, financial condensed, warm humanist… Fluid `clamp()` scales, tabular numbers everywhere they matter. |
 | **Visual styles** | 39 | Monochrome, graphite, atelier, nordic, kraft, midnight, playful, enterprise, zen, swiss, editorial, neobrutalism, terminal, glass, soft, clay, retro, blueprint, paper, newsprint, and four that bring their own backdrop (trace, graph, ember, pixel)… One attribute restyles borders, surfaces, shadows and fields across every component. |
 | **UI patterns** | 192 | Rotating chevrons, grouped switcher menus, session lists, install-command chips, announcement pills, a typed terminal, device frames, a date picker that takes typing, a money field, hold-to-confirm, an audio player, API endpoint rows, phone app bars and row lists, sliding pill toggles, OTP input, ⌘K palette, bulk action bar, kanban board, chat thread, prompt composer, carousel, lightbox, swipe actions, @-mentions, plus ready page sections: heroes, pricing, FAQ, testimonials, sign-in, 404… Vanilla HTML/CSS/TS **and** React, keyboard-complete, `@scope`-isolated. |
 | **Backdrops** | 9 | `data-backdrop="grid spot"` on a hero or a band: graph paper, dot grid, ruled lines, registration ticks, a single-hue wash, a spotlight, film grain, a pixel dither field and circuit traces that route around the text. One hue, faded before the text, themed by the palette. |
-| **Charts** | 42 | Benchmark leaderboards (ranked columns, leaderboard table, range bars, trade-off quadrant, Pareto frontier), line, area, bars, slope, dumbbell, waterfall, histogram, box plot, beeswarm, bump, small multiples, heatmaps, candlestick, Sankey, treemap, Gantt, waffle, radar… Magnetic crosshair, direct labels, keyboard navigation. |
+| **Charts** | 46 | Benchmark leaderboards (ranked columns, leaderboard table, range bars, trade-off quadrant, Pareto frontier), line, area, bars, slope, dumbbell, waterfall, histogram, box plot, beeswarm, bump, small multiples, forecast with a range, step, ridgeline, retention cohorts, heatmaps, candlestick, Sankey, treemap, Gantt, waffle, radar… Magnetic crosshair, direct labels, keyboard navigation. |
 | **Page blueprints** | 17 | Landing, dashboard, editorial, docs, pricing, settings, directory, auth, admin list, status page, changelog, store product page, checkout, AI assistant chat, developer tool landing, agent workspace, phone app screen. Data pages ship loading, empty and error states. |
 | **Page composer** | 22 page types | `compose.mjs "landing page for an invoicing tool"` prints the design brief, a profile chosen for the domain, the sections in order with real ids and a copy formula for each, the states to build, the install command and the few questions worth asking. `directions.mjs "<brief>"` renders three fitting looks on the same content so you choose by eye. |
 | **Taste profile** | 1 file | `taste-profile.json` pins palette, mode, type, density, radius, motion and style. Lock what you love; agents leave locked parts alone. |

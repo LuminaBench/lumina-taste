@@ -89,6 +89,36 @@ export const PALETTES = [
     "id": "ochre-indigo",
     "name": "Ochre Paper & Indigo",
     "category": "editorial"
+  },
+  {
+    "id": "bone-plum",
+    "name": "Bone & Plum",
+    "category": "consumer"
+  },
+  {
+    "id": "forest-brass",
+    "name": "Deep Forest & Brass",
+    "category": "editorial"
+  },
+  {
+    "id": "graphite-violet",
+    "name": "Graphite & Violet",
+    "category": "dev-tool"
+  },
+  {
+    "id": "petrol-peach",
+    "name": "Petrol & Peach",
+    "category": "consumer"
+  },
+  {
+    "id": "fog-fuchsia",
+    "name": "Fog & Fuchsia",
+    "category": "consumer"
+  },
+  {
+    "id": "seaglass-coral",
+    "name": "Sea Glass & Coral",
+    "category": "consumer"
   }
 ];
 export const TYPOGRAPHY = [

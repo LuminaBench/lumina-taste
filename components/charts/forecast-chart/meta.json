@@ -1,0 +1,21 @@
+{
+  "id": "forecast-chart",
+  "order": 43,
+  "name": "Forecast with range",
+  "group": "Trends",
+  "summary": "A measured line that continues as a dashed forecast inside a shaded range, with an optional goal line.",
+  "bestFor": "Projections, budgets and run-rates where the uncertainty matters as much as the central line",
+  "avoidFor": "A forecast with no stated range (it reads as a promise)",
+  "dataShape": "x; values (measured then forecast); from: last measured index; lower / upper bounds",
+  "aliases": [
+    "projection chart",
+    "confidence band",
+    "prediction interval",
+    "fan chart",
+    "forecast line",
+    "uncertainty band",
+    "run rate projection"
+  ],
+  "wide": false,
+  "react": "ForecastChart"
+}

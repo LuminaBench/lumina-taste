@@ -1,0 +1,20 @@
+{
+  "id": "ridgeline-chart",
+  "order": 45,
+  "name": "Ridgeline",
+  "group": "Distribution",
+  "summary": "One smoothed distribution per group, stacked with a slight overlap on a shared scale, each with a median tick.",
+  "bestFor": "Comparing the shape of one measure across 4 to 12 groups: response time by region, order size by plan",
+  "avoidFor": "Two or three groups (use a box plot or overlaid histograms) or exact values",
+  "dataShape": "groups: { label, values: number[] }[]",
+  "aliases": [
+    "joy plot",
+    "joyplot",
+    "stacked density",
+    "density ridges",
+    "distribution by group",
+    "violin alternative"
+  ],
+  "wide": false,
+  "react": "RidgelineChart"
+}

@@ -85,7 +85,8 @@ const PAGE_CHECKS = (copyRules = []) => {
     cx.clearRect(0, 0, 1, 1); cx.fillStyle = '#000'; cx.fillStyle = c; cx.fillRect(0, 0, 1, 1);
     const d = cx.getImageData(0, 0, 1, 1).data;
     // getImageData gives premultiplied-then-unmultiplied values; alpha from parsing is more reliable:
-    const a = /rgba?\([^)]*,\s*([\d.]+)\)|\/\s*([\d.]+%?)\s*\)/.exec(c);
+    // Only a fourth comma value or a slash value is alpha: rgb(0, 0, 0) has none (its last number is blue).
+    const a = /rgba\(\s*[\d.]+%?\s*,\s*[\d.]+%?\s*,\s*[\d.]+%?\s*,\s*([\d.]+%?)\s*\)|\/\s*([\d.]+%?)\s*\)/.exec(c);
     let alpha = d[3] / 255;
     if (c === 'transparent') alpha = 0;
     if (a) { const v = a[1] ?? a[2]; alpha = v.endsWith('%') ? parseFloat(v) / 100 : parseFloat(v); }

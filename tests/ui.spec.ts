@@ -29,7 +29,7 @@ test('all 80+ patterns render with non-empty stages and no errors', async ({ pag
   expect(errors).toEqual([]);
 });
 
-test('every pattern re-skins across all 36 palette × mode themes', async ({ page }) => {
+test('every pattern re-skins across all 48 palette × mode themes', async ({ page }) => {
   await page.goto('/#/palettes');
   const result = await page.evaluate(async () => {
     const html = document.documentElement;
@@ -42,8 +42,8 @@ test('every pattern re-skins across all 36 palette × mode themes', async ({ pag
     }
     return { themes: ids.length * 2, distinct: seen.size };
   });
-  expect(result.themes).toBe(36);
-  expect(result.distinct).toBe(36);
+  expect(result.themes).toBe(48);
+  expect(result.distinct).toBe(48);
 });
 
 test('keyboard focus is visible on the first control of every stage', async ({ page }) => {

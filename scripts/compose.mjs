@@ -100,15 +100,18 @@ const install = startWith === 'blueprint' ? installBlueprint : installSnippets;
 // ---------------------------------------------------------------- three looks, and the few questions worth asking
 const styleDefs = JSON.parse(readFileSync(join(root, 'tokens/styles/source.json'), 'utf8')).styles;
 const saidMode = mood.mode ?? (has('black') ? 'dark' : has('light') || has('white') || has('bright') ? 'light' : null);
-let looks = [...new Set([profile.style, ...(kb.directions[domain?.id] ?? []), ...kb.directions.default].filter((id) => id && styleDefs.some((s) => s.id === id)))];
+// A look is a style, optionally with a palette other than the style's own: "atelier@bone-plum".
+const lookOf = (key) => { const [id, palette] = String(key).split('@'); const s = styleDefs.find((x) => x.id === id); const pal = palette && palette !== s?.palette ? cat.palettes.find((p) => p.id === palette) : null; return s ? { key: pal ? `${id}@${palette}` : id, id, palette: pal ? palette : s.palette, name: pal ? `${s.name} in ${pal.name}` : s.name, summary: pal ? `${s.summary} Shown here in ${pal.name} instead of the style's own palette.` : s.summary, mode: s.mode } : null; };
+let looks = [profile.style, ...(kb.directions[domain?.id] ?? []), ...kb.directions.default].filter(Boolean).map(lookOf).filter(Boolean);
+looks = looks.filter((l, i) => looks.findIndex((x) => x.id === l.id) === i);
 if (saidMode) {
   // A brief that says dark only gets dark looks (and the same for light).
-  const same = looks.filter((id) => styleDefs.find((s) => s.id === id).mode === saidMode);
-  looks = [...same, ...styleDefs.filter((s) => s.mode === saidMode && !same.includes(s.id)).map((s) => s.id)];
+  const same = looks.filter((l) => l.mode === saidMode);
+  looks = [...same, ...styleDefs.filter((st) => st.mode === saidMode && !same.some((l) => l.id === st.id)).map((st) => lookOf(st.id))];
 }
 looks = looks.slice(0, 3);
 const directions = {
-  styles: looks.map((id) => { const s = styleDefs.find((x) => x.id === id); return { id, name: s.name, summary: s.summary, mode: s.mode }; }),
+  styles: looks,
   command: `node scripts/directions.mjs ${JSON.stringify(brief || type.name)} --out ${project === '/abs/app' ? './lumina-directions' : join(project, 'lumina-directions')}`,
 };
 // Ask only what the brief leaves open, most useful first, three at most. Everything else has a sound default.
@@ -121,7 +124,7 @@ const questions = [
   !saidMode && { id: 'mode', ask: 'Light, dark, or both with a switch?', why: 'Dark is a second design, not an inversion; it is cheaper to know now.', default: `${profile.mode}, with the other mode working` },
 ].filter(Boolean).slice(0, 3);
 
-const audience = domain ? { finance: 'people who check figures and need to trust them', trading: 'people watching numbers change who need speed and density', devtool: 'developers who want the facts, the code and the limits', analytics: 'people who need one answer fast, then the detail', health: 'people who may be anxious and need calm, plain steps', public: 'anyone, on any device, including people with low vision or little time', commerce: 'shoppers comparing, who need the price, delivery and returns up front', editorial: 'readers who came to read, so the text comes first', productivity: 'teams who want to see the product working, not adjectives', creative: 'clients judging taste, so the work leads and words stay short', playful: 'families and younger users who need big targets and friendly words', enterprise: 'buyers and admins who need proof, controls and compliance', travel: 'people planning, who need dates, prices and photos they trust' }[domain.id] : 'name them in one line before building';
+const audience = domain ? { finance: 'people who check figures and need to trust them', trading: 'people watching numbers change who need speed and density', devtool: 'developers who want the facts, the code and the limits', analytics: 'people who need one answer fast, then the detail', health: 'people who may be anxious and need calm, plain steps', public: 'anyone, on any device, including people with low vision or little time', commerce: 'shoppers comparing, who need the price, delivery and returns up front', editorial: 'readers who came to read, so the text comes first', productivity: 'teams who want to see the product working, not adjectives', creative: 'clients judging taste, so the work leads and words stay short', playful: 'families and younger users who need big targets and friendly words', enterprise: 'buyers and admins who need proof, controls and compliance', travel: 'people planning, who need dates, prices and photos they trust', beauty: 'people choosing with their eyes, so the product and its result lead and the words stay few', hospitality: 'guests deciding where to go, who need the menu or rooms, the hours and a way to book', media: 'listeners and viewers who came for the thing itself, so controls stay out of the way', property: 'people making a large, slow decision who need plain numbers and no pressure', social: 'people here for each other, so their content leads and the chrome stays quiet' }[domain.id] : 'name them in one line before building';
 const plan = {
   brief,
   pageType: { id: type.id, name: type.name, confident, alsoConsider: runnerUp?.id ?? null },

@@ -31,7 +31,9 @@ const lum = ([r, g, b]: [number, number, number]) => {
 export const contrastRatio = (a: [number, number, number], b: [number, number, number]) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
 
 /** Of the candidate text colours, return the one with the highest contrast on `fill`. */
-export function readableOn(fill: string, scope: Element, candidates = ['var(--text-primary)', 'var(--bg-surface-1)']) {
+// Pure black and white are last-resort candidates: between them, one always reaches 4.5:1 on any fill,
+// so a mid-tone cell in a heatmap never loses its label.
+export function readableOn(fill: string, scope: Element, candidates = ['var(--text-primary)', 'var(--bg-surface-1)', '#000', '#fff']) {
   const bg = resolveRGB(fill, scope);
   let best = candidates[0], bestR = 0;
   for (const c of candidates) { const ratio = contrastRatio(resolveRGB(c, scope), bg); if (ratio > bestR) { bestR = ratio; best = c; } }

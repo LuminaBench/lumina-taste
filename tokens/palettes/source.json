@@ -545,6 +545,186 @@
           85
         ]
       }
+    },
+    {
+      "id": "bone-plum",
+      "name": "Bone & Plum",
+      "category": "consumer",
+      "mood": "Soft, grown-up, a little luxurious. Deep plum actions on warm bone.",
+      "light": {
+        "neutral": [
+          60,
+          0.006
+        ],
+        "canvasL": 0.976,
+        "accent": [
+          0.36,
+          0.11,
+          345
+        ]
+      },
+      "dark": {
+        "neutral": [
+          340,
+          0.014
+        ],
+        "canvasL": 0.172,
+        "accent": [
+          0.79,
+          0.1,
+          345
+        ]
+      }
+    },
+    {
+      "id": "forest-brass",
+      "name": "Deep Forest & Brass",
+      "category": "editorial",
+      "mood": "Established and calm. Bottle green by day, brass on deep green by night.",
+      "light": {
+        "neutral": [
+          95,
+          0.008
+        ],
+        "canvasL": 0.975,
+        "accent": [
+          0.36,
+          0.07,
+          160
+        ]
+      },
+      "dark": {
+        "neutral": [
+          160,
+          0.022
+        ],
+        "canvasL": 0.18,
+        "accent": [
+          0.81,
+          0.11,
+          85
+        ]
+      }
+    },
+    {
+      "id": "graphite-violet",
+      "name": "Graphite & Violet",
+      "category": "dev-tool",
+      "mood": "Precise with one vivid note. Flat violet on cool graphite, never a gradient.",
+      "light": {
+        "neutral": [
+          285,
+          0.005
+        ],
+        "canvasL": 0.982,
+        "accent": [
+          0.5,
+          0.17,
+          292
+        ]
+      },
+      "dark": {
+        "neutral": [
+          285,
+          0.012
+        ],
+        "canvasL": 0.16,
+        "accent": [
+          0.74,
+          0.14,
+          292
+        ]
+      }
+    },
+    {
+      "id": "petrol-peach",
+      "name": "Petrol & Peach",
+      "category": "consumer",
+      "mood": "Reassuring and warm. Petrol blue on sand by day, peach on deep petrol by night.",
+      "light": {
+        "neutral": [
+          75,
+          0.008
+        ],
+        "canvasL": 0.976,
+        "accent": [
+          0.42,
+          0.08,
+          218
+        ]
+      },
+      "dark": {
+        "neutral": [
+          218,
+          0.03
+        ],
+        "canvasL": 0.18,
+        "accent": [
+          0.83,
+          0.1,
+          55
+        ]
+      }
+    },
+    {
+      "id": "fog-fuchsia",
+      "name": "Fog & Fuchsia",
+      "category": "consumer",
+      "mood": "Loud on purpose. One hot fuchsia on quiet cool grey.",
+      "light": {
+        "neutral": [
+          260,
+          0.004
+        ],
+        "canvasL": 0.984,
+        "accent": [
+          0.55,
+          0.21,
+          355
+        ]
+      },
+      "dark": {
+        "neutral": [
+          260,
+          0.008
+        ],
+        "canvasL": 0.16,
+        "accent": [
+          0.72,
+          0.19,
+          355
+        ]
+      }
+    },
+    {
+      "id": "seaglass-coral",
+      "name": "Sea Glass & Coral",
+      "category": "consumer",
+      "mood": "Fresh and sunny. Coral actions on pale sea-glass neutrals.",
+      "light": {
+        "neutral": [
+          178,
+          0.009
+        ],
+        "canvasL": 0.977,
+        "accent": [
+          0.6,
+          0.16,
+          28
+        ]
+      },
+      "dark": {
+        "neutral": [
+          195,
+          0.02
+        ],
+        "canvasL": 0.175,
+        "accent": [
+          0.76,
+          0.13,
+          30
+        ]
+      }
     }
   ]
 }

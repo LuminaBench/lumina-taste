@@ -1670,14 +1670,10 @@
     "furniture",
     "homeware",
     "coffee",
-    "restaurant",
     "bakery",
     "food",
-    "beauty",
-    "skincare",
     "jewellery",
     "jewelry",
-    "wine",
     "candles",
     "ceramics"
    ],
@@ -1820,9 +1816,125 @@
     "outdoor",
     "camping"
    ],
-   "palette": "mint-ocean",
+   "palette": "seaglass-coral",
    "typography": "humanist",
    "style": "nordic",
+   "mode": "light"
+  },
+  {
+   "id": "beauty",
+   "words": [
+    "beauty",
+    "skincare",
+    "cosmetics",
+    "salon",
+    "spa",
+    "makeup",
+    "fragrance",
+    "perfume",
+    "wedding",
+    "weddings",
+    "bridal",
+    "florist",
+    "haircare",
+    "nails"
+   ],
+   "palette": "bone-plum",
+   "typography": "didone",
+   "style": "atelier",
+   "mode": "light"
+  },
+  {
+   "id": "hospitality",
+   "words": [
+    "restaurant",
+    "restaurants",
+    "bistro",
+    "tavern",
+    "winery",
+    "vineyard",
+    "wine",
+    "distillery",
+    "whisky",
+    "brewery",
+    "golf",
+    "heritage",
+    "lodge",
+    "members club"
+   ],
+   "palette": "forest-brass",
+   "typography": "bookish",
+   "style": "linen",
+   "mode": "light"
+  },
+  {
+   "id": "media",
+   "words": [
+    "music",
+    "audio",
+    "streaming",
+    "video",
+    "playlist",
+    "radio",
+    "concert",
+    "concerts",
+    "festival",
+    "musicians",
+    "band",
+    "bands",
+    "record label",
+    "dj",
+    "listeners"
+   ],
+   "palette": "graphite-violet",
+   "typography": "geometric",
+   "style": "lucid",
+   "mode": "dark"
+  },
+  {
+   "id": "property",
+   "words": [
+    "property",
+    "real estate",
+    "estate agent",
+    "mortgage",
+    "mortgages",
+    "insurance",
+    "insurer",
+    "pension",
+    "pensions",
+    "lettings",
+    "landlord",
+    "landlords",
+    "tenants",
+    "housing",
+    "realtor"
+   ],
+   "palette": "petrol-peach",
+   "typography": "humanist",
+   "style": "elevated",
+   "mode": "light"
+  },
+  {
+   "id": "social",
+   "words": [
+    "dating",
+    "social",
+    "community",
+    "communities",
+    "creator",
+    "creators",
+    "influencer",
+    "messaging",
+    "nightlife",
+    "fans",
+    "fan",
+    "meetups",
+    "friends"
+   ],
+   "palette": "fog-fuchsia",
+   "typography": "rounded",
+   "style": "signal",
    "mode": "light"
   }
  ],
@@ -2033,9 +2145,34 @@
    "graphite"
   ],
   "travel": [
-   "nordic",
-   "linen",
-   "lucid"
+   "nordic@seaglass-coral",
+   "tonal@seaglass-coral",
+   "linen"
+  ],
+  "beauty": [
+   "atelier@bone-plum",
+   "soft@bone-plum",
+   "noir"
+  ],
+  "hospitality": [
+   "linen@forest-brass",
+   "midnight@forest-brass",
+   "kraft"
+  ],
+  "media": [
+   "lucid@graphite-violet",
+   "ember@graphite-violet",
+   "volt"
+  ],
+  "property": [
+   "elevated@petrol-peach",
+   "nordic@petrol-peach",
+   "midnight@petrol-peach"
+  ],
+  "social": [
+   "signal@fog-fuchsia",
+   "playful@fog-fuchsia",
+   "volt@fog-fuchsia"
   ],
   "default": [
    "studio",

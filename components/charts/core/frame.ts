@@ -163,7 +163,9 @@ export function xGrid(svg: SVGSVGElement, x: Linear, y0: number, y1: number, fmt
   for (const t of x.ticks(ticks)) {
     const px = r(x(t));
     g.append(el('line', { x1: px, x2: px, y1: y0, y2: y1, class: t === 0 ? 'lt-zero' : 'lt-vgrid' }));
-    g.append(el('text', { x: px, y: y1 + 16, 'text-anchor': 'middle', class: 'lt-tick' }, [fmt(t)]));
+    // A label centred on the last gridline would be cut off by the edge of the plot: end-align it there instead.
+    const edge = Math.max(x.range[0], x.range[1]) + 10, over = px + textWidth(fmt(t), '11px system-ui') / 2 > edge;
+    g.append(el('text', { x: over ? r(edge) : px, y: y1 + 16, 'text-anchor': over ? 'end' : 'middle', class: 'lt-tick' }, [fmt(t)]));
   }
   svg.append(g);
 }

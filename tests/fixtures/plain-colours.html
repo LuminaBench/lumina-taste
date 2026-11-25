@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Plain colours</title>
+<style>
+  body { margin: 40px; font: 16px/1.5 system-ui, sans-serif; background: #fff; color: #000; }
+  .navy { color: rgb(0, 0, 128); }
+  .olive { color: rgb(85, 85, 0); }
+  .faint { color: rgba(0, 0, 0, 0.3); }
+  .slash { color: rgb(0 0 0 / 0.3); }
+  .on-black { background: rgb(0, 0, 0); color: rgb(255, 255, 255); padding: 8px; }
+</style></head>
+<body>
+<main>
+  <h1>Plain colours</h1>
+  <p id="black">Pure black text on white is the browser default and must pass.</p>
+  <p id="navy" class="navy">Navy written as rgb(0, 0, 128) must pass.</p>
+  <p id="olive" class="olive">Dark olive written as rgb(85, 85, 0) must pass.</p>
+  <p id="white" class="on-black">White on black must pass.</p>
+  <p id="faint" class="faint">Thirty percent black, comma syntax, must fail.</p>
+  <p id="slash" class="slash">Thirty percent black, slash syntax, must fail.</p>
+</main>
+</body></html>

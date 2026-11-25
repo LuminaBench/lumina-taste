@@ -4,7 +4,7 @@ import { band, extent, linear, niceDomain } from './scale';
 import { el, r, textWidth } from './svg';
 
 export interface BarItem { label: string; value: number }
-export interface BarOptions extends ChartOptions { highlight?: string; values?: boolean; sort?: 'desc' | 'asc' | 'none' }
+export interface BarOptions extends ChartOptions { /** Bars: the category to emphasise. Grouped bars: the series to emphasise. */ highlight?: string; values?: boolean; sort?: 'desc' | 'asc' | 'none' }
 export interface GroupData { categories: string[]; series: Array<{ name: string; values: number[] }> }
 
 /** Rect with only the end away from the baseline rounded. */
@@ -91,11 +91,11 @@ export function horizontalBars(host: HTMLElement, data: BarItem[], opts: BarOpti
 }
 
 /** Legend row for multi-series bars (direct labels do not fit inside groups). */
-function legend(svg: SVGSVGElement, names: string[], y = 12) {
+function legend(svg: SVGSVGElement, names: string[], y = 12, color: (i: number) => string = seriesColor) {
   const g = el('g', { class: 'lt-legend' });
   let x = 0;
   names.forEach((n, i) => {
-    g.append(el('rect', { x, y: y - 8, width: 10, height: 10, rx: 2, style: `fill: ${seriesColor(i)}` }));
+    g.append(el('rect', { x, y: y - 8, width: 10, height: 10, rx: 2, style: `fill: ${color(i)}` }));
     g.append(el('text', { x: x + 15, y: y + 1, class: 'lt-label-muted' }, [n]));
     x += 15 + textWidth(n) + 18;
   });
@@ -103,10 +103,12 @@ function legend(svg: SVGSVGElement, names: string[], y = 12) {
 }
 
 export function groupedBars(host: HTMLElement, data: GroupData, opts: BarOptions = {}): ChartInstance<GroupData> {
-  return chart(host, data, opts, (ctx, d) => {
+  return chart(host, data, opts, (ctx, d, o) => {
     const { svg, width, height, fmt } = ctx;
     const m = { t: 34, b: 26 };
-    legend(svg, d.series.map((s) => s.name));
+    // highlight: name one series (this year, your product); the series it is compared with turns neutral.
+    const color = (si: number) => (o.highlight && d.series[si].name !== o.highlight ? 'var(--border-strong)' : o.highlight ? 'var(--chart-1)' : seriesColor(si));
+    legend(svg, d.series.map((s) => s.name), 12, color);
     const y = linear(niceDomain(...extent(d.series.flatMap((s) => s.values)), 5, true), [height - m.b, m.t]);
     const gl = gutter(y, fmt);
     const x = band(d.categories, [gl, width], 0.28, 0.08);
@@ -117,9 +119,9 @@ export function groupedBars(host: HTMLElement, data: GroupData, opts: BarOptions
     d.categories.forEach((c, ci) => {
       d.series.forEach((s, si) => {
         const v = s.values[ci], px = x(c) + inner(s.name), py = y(Math.max(0, v));
-        g.append(el('path', { d: barPath(px, py, inner.bandwidth, Math.abs(y(v) - y(0)), 2, 'up'), class: 'lt-mark', style: `fill: ${seriesColor(si)}` }));
+        g.append(el('path', { d: barPath(px, py, inner.bandwidth, Math.abs(y(v) - y(0)), 2, 'up'), class: 'lt-mark', style: `fill: ${color(si)}` }));
       });
-      marks.push({ x: x(c) + x.bandwidth / 2, y: y(Math.max(...d.series.map((s) => s.values[ci]))), hit: { x: x(c), y: m.t, w: x.bandwidth, h: height - m.b - m.t }, html: tipHtml(c, d.series.map((s, si) => ({ color: seriesColor(si), label: s.name, value: fmt(s.values[ci]) }))), text: `${c}: ${d.series.map((s) => `${s.name} ${fmt(s.values[ci])}`).join(', ')}` });
+      marks.push({ x: x(c) + x.bandwidth / 2, y: y(Math.max(...d.series.map((s) => s.values[ci]))), hit: { x: x(c), y: m.t, w: x.bandwidth, h: height - m.b - m.t }, html: tipHtml(c, d.series.map((s, si) => ({ color: color(si), label: s.name, value: fmt(s.values[ci]) }))), text: `${c}: ${d.series.map((s) => `${s.name} ${fmt(s.values[ci])}`).join(', ')}` });
     });
     svg.append(g);
     xLabels(svg, thinCategories(d.categories, width).map((c) => ({ x: x(c) + x.bandwidth / 2, text: c })), height - 6, width);

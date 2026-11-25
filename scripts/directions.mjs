@@ -22,11 +22,13 @@ const brief = args.join(' ').trim();
 if (!brief) { console.error('Usage: node scripts/directions.mjs "<one-line brief>" [--out dir] [--styles a,b,c]'); process.exit(2); }
 
 const styles = JSON.parse(readFileSync(join(root, 'tokens/styles/source.json'), 'utf8')).styles;
+const palettes = JSON.parse(readFileSync(join(root, 'tokens/palettes/palettes.json'), 'utf8')).palettes;
 const plan = JSON.parse(spawnSync(process.execPath, [join(root, 'scripts/compose.mjs'), brief, '--json'], { encoding: 'utf8' }).stdout);
-let ids = pick ?? plan.directions.styles.map((s) => s.id);
-const unknown = ids.filter((id) => !styles.some((s) => s.id === id));
+// A look is a style, optionally with another palette: --styles atelier@bone-plum,noir,soft
+const keys = pick ?? plan.directions.styles.map((s) => s.key ?? s.id);
+const chosen = keys.slice(0, 3).map((key) => { const [id, palette] = key.split('@'); const s = styles.find((x) => x.id === id); const pal = palette && palette !== s?.palette ? palettes.find((p) => p.id === palette) : null; return s ? { ...s, palette: pal ? palette : s.palette, own: !pal, name: pal ? `${s.name} in ${pal.name}` : s.name, summary: pal ? `${s.summary} Shown here in ${pal.name} instead of the style's own palette.` : s.summary } : { id, missing: true }; });
+const unknown = chosen.filter((s) => s.missing).map((s) => s.id);
 if (unknown.length) { console.error(`Unknown style ${unknown.join(', ')}. See tokens/styles/source.json.`); process.exit(2); }
-const chosen = ids.slice(0, 3).map((id) => styles.find((s) => s.id === id));
 
 // ---------------------------------------------------------------- build
 mkdirSync(out, { recursive: true });
@@ -46,7 +48,7 @@ const body = (s) => {
   if (!app && s.id === 'trace') html = html.replace('<section class="lt-hero-split"', '<section data-backdrop="grid spot" class="lt-hero-split"').replace(/(<section data-backdrop="grid spot" class="lt-hero-split"[^>]*>)/, '$1<div class="lt-circuit" data-lt="backdrop-circuit"></div>');
   return app ? `<div class="lt-container lt-stack" style="--gap: var(--space-5); padding-block: var(--space-6)">${html}</div>` : html;
 };
-const flags = (s) => `--style ${s.id}`;
+const flags = (s) => `--style ${s.id}${s.own ? '' : ` --palette ${s.palette}`}`;
 const letter = (i) => 'ABC'[i];
 const page = `<!doctype html>
 <html lang="en" data-palette="slate-forest" data-mode="light" data-type="precision" data-density="balanced" data-radius="balanced" data-motion="snappy">
@@ -84,6 +86,6 @@ ${body(s)}
 writeFileSync(join(out, 'directions.html'), page);
 
 console.log(`Three directions for: ${brief}\n`);
-chosen.forEach((s, i) => console.log(`  ${letter(i)}  ${s.name.padEnd(12)} ${s.summary}\n     palette ${s.palette} (${s.mode}), type ${s.type}, radius ${s.radius}${s.backdrop ? `, backdrop ${s.backdrop}` : ''}   →  ${flags(s)}`));
+chosen.forEach((s, i) => console.log(`  ${letter(i)}  ${s.name}\n     ${s.summary}\n     palette ${s.palette} (${s.mode}), type ${s.type}, radius ${s.radius}${s.backdrop ? `, backdrop ${s.backdrop}` : ''}   →  ${flags(s)}`));
 console.log(`\nOpen ${join(out, 'directions.html')} and ask which one fits: A, B or C (or "A, but lighter").`);
 console.log(`Then build with that look: add --style <id> --lock style,palette to the install command compose.mjs prints.`);

@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test';
 const noInteract = new Set(['radial-gauge', 'sparkline', 'kpi-card']);
 // Vertical gridlines are banned on time and category axes (no cage). Charts whose x axis is a
 // continuous value scale (scatter, ranges, distributions) keep light value guides.
-const valueX = new Set(['range-bar-chart', 'dumbbell-chart', 'box-plot', 'beeswarm-chart', 'tradeoff-scatter', 'frontier-chart', 'gantt-chart']);
+const valueX = new Set(['range-bar-chart', 'dumbbell-chart', 'box-plot', 'beeswarm-chart', 'tradeoff-scatter', 'frontier-chart', 'gantt-chart', 'ridgeline-chart']);
 
 for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile', width: 390, height: 844 }]) {
   test(`all charts render cleanly (${vp.name})`, async ({ page }) => {
@@ -82,3 +82,41 @@ test('gallery previews never offer downloads', async ({ page }) => {
   await expect(page.locator('[data-chart]').first()).toBeVisible();
   await expect(page.locator('[data-export]')).toHaveCount(0);
 });
+
+test('forecast chart: dashed after the last measured point, a range, a goal line and an honest tooltip', async ({ page }) => {
+  await page.goto('/#/charts/forecast-chart');
+  const fig = page.locator('#chart-forecast-chart figure.lt-chart');
+  await expect(fig.locator('path.lt-band')).toHaveCount(1);
+  expect(await fig.locator('path.lt-line').count()).toBe(2);
+  expect(await fig.locator('path.lt-line').nth(1).getAttribute('style')).toContain('stroke-dasharray');
+  await expect(fig.locator('svg text', { hasText: 'Goal £300k' })).toHaveCount(1);
+  await expect(fig.locator('[data-part="data"]')).toContainText('Dec 2026');
+  const summary = await fig.locator('svg').first().getAttribute('aria-label');
+  expect(summary ?? await fig.textContent()).toContain('forecast from');
+});
+
+test('new charts: steps are axis-aligned, every ridge has a median, cohort cells are all labelled', async ({ page }) => {
+  await page.goto('/#/charts/step-chart');
+  const d = await page.locator('#chart-step-chart path.lt-line').first().getAttribute('d');
+  expect(d).toMatch(/^M[\d.]+ [\d.]+(H[\d.]+V[\d.]+)+$/);
+  await page.goto('/#/charts/ridgeline-chart');
+  await expect(page.locator('#chart-ridgeline-chart figure.lt-chart svg path.lt-line')).toHaveCount(6);
+  await expect(page.locator('#chart-ridgeline-chart [data-part="data"] tbody tr')).toHaveCount(6);
+  for (const mode of ['light', 'dark']) {
+    await page.goto('/#/charts/cohort-grid');
+    await page.evaluate((m) => document.querySelectorAll('[data-mode]').forEach((e) => e.setAttribute('data-mode', m)), mode);
+    await page.waitForTimeout(400);
+    const fig = page.locator('#chart-cohort-grid figure.lt-chart');
+    const cells = await fig.locator('svg rect.lt-mark').count();
+    const labels = await fig.locator('svg text', { hasText: /^\d+%$/ }).count();
+    expect(cells, mode).toBe(65);
+    expect(labels, mode).toBe(cells);
+  }
+});
+
+test('grouped bars: highlight keeps one series in colour and greys the comparison', async ({ page }) => {
+  await page.goto('/#/charts/grouped-bar-chart');
+  const fills = await page.locator('#chart-grouped-bar-chart figure.lt-chart path.lt-mark').evaluateAll((els) => [...new Set(els.map((e) => (e as SVGElement).style.fill))]);
+  expect(fills).toEqual(['var(--border-strong)', 'var(--chart-1)']);
+});
+

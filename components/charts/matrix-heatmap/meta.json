@@ -3,15 +3,15 @@
   "order": 15,
   "name": "Matrix heatmap",
   "group": "Distribution",
-  "summary": "Rows \u00d7 columns of values, like a cohort or hour-by-day grid.",
-  "bestFor": "Two categorical dimensions with one value (cohorts, hour \u00d7 weekday)",
-  "avoidFor": "Exact comparison between cells",
+  "summary": "Rows × columns of values, like an hour-by-weekday or region-by-product grid.",
+  "bestFor": "Two categorical dimensions with one value (hour × weekday, region × product, correlations)",
+  "avoidFor": "Exact comparison between cells; retention by signup month (use the cohort grid)",
   "dataShape": "rows, cols, values[][]",
   "aliases": [
-    "cohort table",
     "heat grid",
     "correlation matrix",
-    "hour by day grid"
+    "hour by day grid",
+    "hour by day heatmap"
   ],
   "react": "MatrixHeatmap",
   "wide": false

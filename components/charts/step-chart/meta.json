@@ -1,0 +1,19 @@
+{
+  "id": "step-chart",
+  "order": 44,
+  "name": "Step chart",
+  "group": "Trends",
+  "summary": "Lines that hold flat and jump, for values that are set, not measured continuously.",
+  "bestFor": "Prices, seats, limits, rates and stock: anything that changes at a moment and then stays",
+  "avoidFor": "Continuous measures like revenue or traffic (use a line)",
+  "dataShape": "x: dates; 1–3 series",
+  "aliases": [
+    "stepped line",
+    "staircase chart",
+    "step line chart",
+    "price history",
+    "plan changes over time"
+  ],
+  "wide": false,
+  "react": "StepChart"
+}
