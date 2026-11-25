@@ -627,8 +627,10 @@
       "summary": "Square portraits or initials with a name and role, in a grid that fills any width.",
       "pattern": "<ul> of people",
       "states": [
-        "wide",
-        "narrow"
+        "four or fewer",
+        "list rows",
+        "narrow",
+        "wide"
       ],
       "aliases": [
         "team section",
@@ -675,7 +677,7 @@
         ]
       ],
       "added": 4,
-      "note": "Five or more people make a grid of tiles. Four or fewer become rows with a small picture, and each can take a <p> with one line about the person. Put an <img> in place of the initials when there are photographs: same ratio for everyone."
+      "note": "Three ways to show people. Five or more with photographs: the grid of tiles. Four or fewer: rows with a small picture, each with room for a <p> about the person (this happens by itself). No photographs, or the people are speakers, partners or a studio: data-variant=\"list\" sets them as ruled rows of name, role and one line, with no grey tiles. Put an <img> in place of the initials when there are photographs: same ratio for everyone."
     },
     {
       "id": "sign-in-card",

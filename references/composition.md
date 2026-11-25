@@ -78,6 +78,8 @@ Placing the picture:
 - It may touch the right edge of the container. It never floats with equal space on all sides inside its half.
 - A caption states what it shows in one line, in secondary ink, when that is not obvious.
 - No picture is better than a wrong one. No stock photographs, no drawings of the product, no decorative shapes.
+- No photograph yet? The stand-in must still say something true, large. An `art-panel` with `data-frame` and the name; or `data-variant="figure"` with the one number that matters ("20 min", "410 a week", "£26"); or, when the thing has a colour of its own, `data-tone="swatch"` in that colour. A panel that only repeats the headline is a grey box with words on it.
+- No photographs of people? Do not tile initials on grey squares: set the people as ruled rows (`team-grid` with `data-variant="list"`: name, role, one line).
 
 ## 6. Colour budget
 
@@ -137,4 +139,4 @@ Do this with the page open at 1440px and at 390px, after it works and before the
 
 ## 11. What the critic checks
 
-`audit-ui.mjs --taste` reports the measurable half of this file: three neighbours with the same shape (`taste-monotony`), a run of centred sections (`taste-centred-run`), accent used in too many places (`taste-accent-budget`), content that leaves the shared left edge (`taste-edge`) headings that end on a stranded word (`taste-widow`) and headings that break inside a hyphenated word (`taste-heading-break`), next to its existing checks for type steps, radii, measure, rhythm and focal point. The other half is your eye: do the detail pass.
+`audit-ui.mjs --taste` reports the measurable half of this file: three neighbours with the same shape (`taste-monotony`), a run of centred sections (`taste-centred-run`), accent used in too many places (`taste-accent-budget`), content that leaves the shared left edge (`taste-edge`) headings that end on a stranded word (`taste-widow`) headings that break inside a hyphenated word (`taste-heading-break`) and a headline that runs past four lines on a wide screen (`taste-headline-length`), next to its existing checks for type steps, radii, measure, rhythm and focal point. The other half is your eye: do the detail pass.

@@ -1293,6 +1293,17 @@ test.describe('composition', () => {
     });
     expect(bare).toEqual({ aligned: true, padded: true });
   });
+  test('art panel variants: a large figure, the product colour with readable ink, a keyline frame', async ({ page }) => {
+    const s = await solo(page, 'art-panel');
+    const r = await s.locator('.lt-art[data-variant="figure"]').evaluate((el) => {
+      const lum = (c: string) => { const m = c.match(/[\d.]+/g)!.map(Number); const [r, g, b] = m.slice(0, 3).map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+      const bg = lum(getComputedStyle(el).backgroundColor), ink = lum(getComputedStyle(el).color);
+      const ratio = (Math.max(bg, ink) + 0.05) / (Math.min(bg, ink) + 0.05);
+      const fig = parseFloat(getComputedStyle(el.querySelector('[data-part="figure"]')!).fontSize), name = parseFloat(getComputedStyle(el.querySelector('[data-part="name"]')!).fontSize);
+      return { readable: ratio >= 4.5, figureLeads: fig > name * 2.5, framed: getComputedStyle(el, '::after').borderTopStyle === 'solid' };
+    });
+    expect(r).toEqual({ readable: true, figureLeads: true, framed: true });
+  });
   test('invoice sheet: figures share one right edge and the lines add up to the total', async ({ page }) => {
     const s = await solo(page, 'invoice-sheet');
     const r = await s.locator('.lt-invoice').evaluate((el) => {

@@ -1,6 +1,2 @@
 .lt-services [data-part="lede"] a, .lt-visit [data-part="note"] a { color: var(--accent-text); text-underline-offset: 3px; }
-/* Beside a rail the speakers sit three across with room for a two-line role. */
-.lt-team-grid[data-layout="rail"] > ul { gap: 32px 24px; }
-.lt-team-grid li > span:last-child { text-wrap: balance; }
 .lt-footer-min { padding-block: var(--space-6); }
-@media (max-width: 640px) { .lt-team-grid[data-layout="rail"] > ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

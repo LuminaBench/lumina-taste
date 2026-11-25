@@ -19,6 +19,8 @@
   ul { display: grid; gap: 8px; margin: 18px 0 0; padding: 0; list-style: none; }
   li { display: flex; gap: 8px; font-size: var(--text-ui-sm); }
   li .lt-icon { flex: none; width: 16px; height: 16px; margin-top: 2px; color: var(--accent-text); }
+  /* A point written without its tick still reads as a list item. */
+  [data-part="copy"] li:not(:has(.lt-icon))::before { content: ""; flex: none; width: 5px; height: 5px; margin: 0.55em 5px 0 6px; border-radius: 50%; background: var(--text-muted); }
 [data-part="visual"] { display: grid; align-content: start; gap: 12px; padding: 22px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); box-shadow: var(--shadow-md); font-size: var(--text-ui-sm); overflow: hidden; }
   [data-part="mock-title"] { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-xs); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
   [data-part="mock-list"] { display: grid; margin: 0; padding: 0; list-style: none; }

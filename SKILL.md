@@ -175,7 +175,7 @@ Keep the stack and bring the taste: `node scripts/export-tokens.mjs --format sha
 | Local or professional service | `practice` | Who it is for and where, services and fees as ruled rows with prices in one column, the first visit in three steps, people with their qualifications, address and opening hours, questions, a booking band with the phone number |
 | Charity or community group | `cause` | The claim as a fact with three true figures, how to get help with session times, where each pound goes as one bar that adds up, ways to help as rows, one giving action |
 | Maker or product brand | `shop` | The object and its price in the first screen, the range as three art panels at one ratio, how it is made, materials and care as plain facts, delivery and returns, a buying band |
-| Event or conference | `event` | The date and place above a statement headline with three figures, the programme as timed rows, speakers beside a rail, three tickets, venue and door times, questions |
+| Event or conference | `event` | The date and place above a statement headline with three figures, the programme as timed rows, speakers as ruled rows with their talks, three tickets, venue and door times, questions |
 | Phone app screen | `mobile` | Collapsing large title, one headline figure with a week of bars, whole-row lists, primary action above bottom tabs, a bottom-sheet form; loading and empty states |
 
 ```sh
@@ -297,12 +297,13 @@ When the page needs a picture and there is none:
 </figure>
 ```
 
-- The **art panel** sets the thing's name large on a tinted panel with one true fact. Vary `data-tone` (plain, `accent`, `ink`) across a set; add `data-backdrop="lines|dots|grain"` on a large one.
+- The **art panel** sets the thing's name large on a tinted panel with one true fact. `data-variant="figure"` sets one number large instead ("20 min", "410"); `data-tone="swatch"` with `style="--art: <colour>"` shows the product's own colour; `data-frame` adds a printed keyline for a hero-sized panel. Vary `data-tone` (plain, `accent`, `ink`) across a set; add `data-backdrop="lines|dots|grain"` on a large one.
 - `data-shot` is the photo brief for the owner. When the photo arrives, put the `<img>` first inside the figure and it covers the panel.
 - `hero-split` takes it in `<div data-part="visual">` in place of the product frame; `offer-cards` uses it for each card.
 - Rows or cards? Four or more things, or anything people compare by price or time (treatments, practice areas, a menu, a programme): `service-list`, ruled rows with every price in one column. Two to four things worth a picture each: `offer-cards`.
 - Parts for places: `offer-cards` (things with prices), `booking-bar` (date, time, people, one answer in a sentence), `visit-info` (address, getting here, hours with today marked), `faq-section` for "before you come".
 - Never draw the product or the building, never use a stock photo of something else, and never leave a grey rectangle.
+- No photographs of people either? `team-grid` with `data-variant="list"` sets them as ruled rows of name, role and one line instead of initials on tiles.
 
 ## Component conventions
 

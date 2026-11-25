@@ -610,8 +610,10 @@
       ],
       "pattern": "<ul> of people",
       "states": [
-        "wide",
-        "narrow"
+        "four or fewer",
+        "list rows",
+        "narrow",
+        "wide"
       ],
       "react": "TeamGrid",
       "deps": [],
@@ -3529,7 +3531,7 @@
       "kind": "ui",
       "family": "data",
       "name": "Art panel",
-      "summary": "What stands in for a photograph until there is one: the name set large on a tinted panel, with one fact. Add an <img> and the photo takes over.",
+      "summary": "What stands in for a photograph until there is one: the thing's name set large on a tinted panel with one true fact. Variants: one large figure, the product's own colour, a keyline frame.",
       "aliases": [
         "image placeholder",
         "no photo",
@@ -3542,9 +3544,12 @@
       ],
       "pattern": "<figure> + <figcaption>",
       "states": [
-        "plain",
         "accent",
+        "figure",
+        "framed",
         "ink",
+        "plain",
+        "swatch",
         "with a photograph"
       ],
       "react": "ArtPanel",
@@ -7915,8 +7920,8 @@
       "id": "event",
       "order": 25,
       "name": "Event or conference",
-      "summary": "A page for a conference, a festival, a course or a meetup: the date and place first, what it is in one sentence with three figures, the programme as timed rows, the speakers, tickets with what each includes, how to get there, and the questions people ask before they buy.",
-      "anatomy": "Top bar (Get a ticket) → statement hero with the date, the place and three figures → programme as timed rows → speakers beside a rail → three tickets → venue and doors → questions → footer",
+      "summary": "A page for a conference, a festival, a course or a meetup: the date and place first, what it is in one sentence with three figures, the programme as timed rows, the speakers with their talks, tickets with what each includes, how to get there, and the questions people ask before they buy.",
+      "anatomy": "Top bar (Get a ticket) → statement hero with the date, the place and three figures → programme as timed rows → speakers as ruled rows with their talks → three tickets → venue and doors → questions → footer",
       "aliases": [
         "conference website",
         "event landing page",

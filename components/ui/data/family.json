@@ -2585,12 +2585,15 @@
     {
       "id": "art-panel",
       "name": "Art panel",
-      "summary": "What stands in for a photograph until there is one: the name set large on a tinted panel, with one fact. Add an <img> and the photo takes over.",
+      "summary": "What stands in for a photograph until there is one: the thing's name set large on a tinted panel with one true fact. Variants: one large figure, the product's own colour, a keyline frame.",
       "pattern": "<figure> + <figcaption>",
       "states": [
-        "plain",
         "accent",
+        "figure",
+        "framed",
         "ink",
+        "plain",
+        "swatch",
         "with a photograph"
       ],
       "aliases": [
@@ -2604,7 +2607,7 @@
         "media placeholder"
       ],
       "react": "ArtPanel",
-      "api": "data-tone · data-ratio · data-backdrop · data-shot",
+      "api": "data-tone=\"accent|ink|swatch\" · data-variant=\"figure\" · data-frame · data-ratio · data-shot",
       "w": 900,
       "called": [
         "what do I put where the photo goes",
@@ -2651,7 +2654,8 @@
           "React"
         ]
       ],
-      "added": 13
+      "added": 13,
+      "note": "Make the panel say one true thing, large. For a hero, use data-frame and either the name or data-variant=\"figure\" with <p data-part=\"figure\">20<small>min</small></p>. If the thing has a colour of its own (a glaze, a paint, a brand colour), data-tone=\"swatch\" with style=\"--art: <colour>\" shows it; the type picks dark or light ink by itself. Across a set vary the tone (plain, accent, ink) and keep one ratio. When the photograph arrives, put the <img> first inside the figure."
     },
     {
       "id": "task-list",

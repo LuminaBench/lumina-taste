@@ -41,6 +41,8 @@ main[data-separators="rules"] > section:not(:first-child) {
   background-repeat: no-repeat; background-position: top center;
   background-size: min(var(--container, 1180px), 100% - 2 * var(--block-x, 24px)) 1px;
 }
+/* On a page ruled like print the closing band is a plain framed panel: no colour wash. */
+main[data-separators="rules"] > .lt-cta-band [data-part="panel"] { background: var(--bg-surface-1); }
 /* A section that follows a tinted band, or is one, already has an edge. */
 main[data-separators="rules"] > section[data-tone], main[data-separators="rules"] > section[data-tone] + section { background-image: none; }
 

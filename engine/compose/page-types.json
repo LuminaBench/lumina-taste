@@ -1227,7 +1227,8 @@
     {
      "id": "team-grid",
      "role": "People",
-     "copy": "Photograph or initials, name, role. One line on what each person does, if there are fewer than eight."
+     "copy": "Photograph or initials, name, role. One line on what each person does, if there are fewer than eight.",
+     "rule": "No photographs? data-variant=\"list\": ruled rows of name, role and one line. Initials on tiles only for a small team with nothing else to show."
     },
     {
      "id": "service-list",
@@ -1812,7 +1813,7 @@
      "id": "team-grid",
      "role": "People",
      "copy": "Each person: name, role, the qualification or registration that matters to this client, and what they mostly do. With four people or fewer the block sets each as a row with room for a line about them: write that line.",
-     "rule": "Real names and real registration bodies only. Photographs of the real people, or initials until there are some.",
+     "rule": "Real names and real registration bodies only. Photographs of the real people; without them, four or fewer people already sit as rows with initials, and more than four use data-variant=\"list\".",
      "optional": true
     },
     {
@@ -2037,8 +2038,8 @@
     {
      "id": "team-grid",
      "role": "Speakers",
-     "copy": "Name, role and organisation for six to twelve people, and a link to everyone.",
-     "rule": "Real people who have confirmed. Photographs or initials; never stock portraits.",
+     "copy": "Name, role and organisation, and the talk each gives, for six to twelve people; a link to everyone.",
+     "rule": "Real people who have confirmed. Without photographs use data-variant=\"list\": ruled rows of name, role and talk, never initials on tiles.",
      "optional": true
     },
     {

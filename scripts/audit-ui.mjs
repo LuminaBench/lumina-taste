@@ -492,6 +492,15 @@ const TASTE_CHECKS = (arg = null) => {
       const lastWord = h.textContent.trim().split(/\s+/).pop() ?? '';
       if ((last.right - last.left) / longest < 0.24 && lastWord.length <= 9) { add('taste-widow', h, `The heading “${h.textContent.trim().slice(0, 40)}” ends with one word alone on its last line (“${lastWord}”). Add text-wrap: balance, shorten it, or break it by sense.`); break; }
     }
+    // The page's headline: on a wide screen it should land in four lines or fewer. More means it is too long for its size.
+    if (wide) {
+      const h1 = [...document.querySelectorAll('h1')].find((x) => shown(x) && !skip(x));
+      if (h1) {
+        const lh = parseFloat(getComputedStyle(h1).lineHeight) || parseFloat(getComputedStyle(h1).fontSize) * 1.1;
+        const lines = Math.round(h1.getBoundingClientRect().height / lh);
+        if (lines >= 5) add('taste-headline-length', h1, `The headline runs to ${lines} lines at this width. At its size it should take four at most: cut it to the claim (six to ten words), or let it run wider.`);
+      }
+    }
     // A heading that breaks inside a hyphenated word ("sea- / green").
     for (const h of [...document.querySelectorAll('h1, h2, h3')].filter((x) => shown(x) && !skip(x) && parseFloat(getComputedStyle(x).fontSize) >= 22)) {
       const walker = document.createTreeWalker(h, NodeFilter.SHOW_TEXT); let hit = null;

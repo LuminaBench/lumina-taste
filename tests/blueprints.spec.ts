@@ -383,9 +383,9 @@ test('event: the programme is timed rows on one grid, three tickets, the date is
   expect(times.every((t) => /^\d\d:\d\d$/.test(t ?? ''))).toBe(true);
   await expect(page.locator('#tickets [data-part="tier"]')).toHaveCount(3);
   await expect(page.locator('.lt-hero-statement time').first()).toHaveAttribute('datetime', '2027-05-14');
-  // Beside the rail the speakers sit to the right of the heading.
-  const rail = await page.evaluate(() => { const h = document.querySelector('#speakers header')!.getBoundingClientRect(), u = document.querySelector('#speakers ul')!.getBoundingClientRect(); return u.left >= h.right - 1; });
-  expect(rail).toBe(true);
+  // Speakers are ruled rows: names share one left edge, talks share another, and no tiles are shown.
+  const rows = await page.$$eval('#speakers li', (lis) => ({ names: new Set(lis.map((li) => Math.round(li.querySelector('strong')!.getBoundingClientRect().left))).size, talks: new Set(lis.map((li) => Math.round(li.querySelector('p')!.getBoundingClientRect().left))).size, tiles: lis.filter((li) => getComputedStyle(li.querySelector('[data-part="avatar"]')!).display !== 'none').length }));
+  expect(rows).toEqual({ names: 1, talks: 1, tiles: 0 });
   expect(await deadAnchors(page)).toEqual([]);
 });
 

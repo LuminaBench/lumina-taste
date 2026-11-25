@@ -100,7 +100,7 @@ test('audit-ui --taste names composition faults: a wall of cards, an off edge, a
   node([join(root, 'scripts/audit-ui.mjs'), join(root, 'tests/fixtures/composition.html'), '--taste', '--viewports', 'desktop', '--modes', 'light', '--json', out, '--quiet']);
   const rules = new Set(JSON.parse(readFileSync(out, 'utf8')).report[0].findings.map((f) => f.rule));
   rmSync(out, { force: true });
-  for (const rule of ['taste-monotony', 'taste-edge', 'taste-widow', 'taste-accent-budget', 'taste-heading-break']) assert.ok(rules.has(rule), rule);
+  for (const rule of ['taste-monotony', 'taste-edge', 'taste-widow', 'taste-accent-budget', 'taste-heading-break', 'taste-headline-length']) assert.ok(rules.has(rule), rule);
 });
 
 test('a single blueprint installs flat, lean and labelled as sample content; an existing page is kept', () => {
