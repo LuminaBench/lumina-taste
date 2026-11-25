@@ -365,7 +365,7 @@ SKILL.md                     this file
 catalog.json                 every pattern/chart/blueprint/palette with aliases
 engine/profiles/             taste profile engine, schema, default profile
 engine/compose/              page types, domains and moods behind compose.mjs
-evals/                       32 briefs (evals.json), fixtures and reference scores
+evals/                       36 briefs (evals.json), fixtures and reference scores
 tokens/                      base.css, layout.css, backdrops.css, composition.css, palettes/*.css (+ source.json), typography/, styles/
 components/ui/<family>/      204 patterns (html, css, ts, react.tsx)
 components/charts/           core/ + 46 chart engines (+ React wrappers)

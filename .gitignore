@@ -1,7 +1,7 @@
 node_modules/
 dist/
 preview/dist/
-qa/artifacts/
+qa/
 test-results/
 playwright-report/
 .DS_Store
@@ -11,3 +11,6 @@ preview/generated/
 
 # Agent eval runs (scored with scripts/eval-score.mjs)
 evals/runs/
+
+# Authoring helpers (kept locally)
+scripts/docs/
