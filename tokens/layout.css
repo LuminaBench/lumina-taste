@@ -8,6 +8,16 @@
 
 /* Bands: one idea per band, the same vertical rhythm everywhere. Section blocks (lt-hero-*,
    lt-feature-*, lt-faq-section…) already carry this padding: place them straight in <main>. */
+/* A blank section block: the same band, container, spacing and heading as the ready-made blocks, for anything
+   they do not cover (a table, a chart, a form, a component from another family). Give it a <header> with an
+   optional eyebrow, an <h2> and an optional lede, then the body. Takes data-tone, data-layout and data-space. */
+:where(.lt-section) { display: block; width: 100%; padding: var(--block-y, calc(var(--section-y) / 2)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: var(--bg-canvas); color: var(--text-primary); }
+:where(.lt-section[data-tone="well"]) { background: var(--bg-surface-2); }
+:where(.lt-section) > :where(header) { max-width: 640px; margin-bottom: 36px; }
+:where(.lt-section) > :where(header) :where([data-part="eyebrow"]) { margin: 0 0 10px; color: var(--accent-text); font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; }
+:where(.lt-section) > :where(header) :where(h2) { margin: 0; font-family: var(--font-display); font-size: max(var(--step-3), 1.625rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
+:where(.lt-section) > :where(header) :where([data-part="lede"]) { margin: 12px 0 0; max-width: 56ch; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.55; text-wrap: pretty; }
+@media (max-width: 640px) { :where(.lt-section) { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
 :where(.lt-band) { padding-block: var(--section-y); }
 :where(.lt-band-tight) { padding-block: calc(var(--section-y) * 0.6); }
 :where(.lt-band[data-tone="well"]) { background: var(--bg-surface-2); }

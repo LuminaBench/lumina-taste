@@ -9,7 +9,8 @@
   [data-part="lede"] { margin: 12px 0 0; max-width: 56ch; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.55; text-wrap: pretty; }
 
   :scope { display: grid; gap: 64px; }
-  header { max-width: 640px; margin-bottom: 40px; }
+  /* Rows sit 64px apart; the heading sits 40px above the first, like every other block's heading. */
+  header { max-width: 640px; margin-bottom: -24px; }
   [data-part="row"] { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: center; gap: 56px; }
   [data-flip] [data-part="copy"] { order: 2; }
   @container (max-width: 760px) { [data-part="row"] { grid-template-columns: 1fr; gap: 24px; } [data-flip] [data-part="copy"] { order: 0; } }

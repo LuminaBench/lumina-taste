@@ -1,0 +1,20 @@
+/* Art panel: what stands in for a photograph until there is one. A tinted panel with the thing's name set
+   large, one fact and an optional number. Put an <img> first inside it and the photo takes over; the type
+   steps aside. data-shot holds the brief for whoever takes the picture. Never draw the product instead. */
+@scope (.lt-art) {
+  :scope { position: relative; isolation: isolate; display: grid; align-content: end; gap: 8px; margin: 0; aspect-ratio: var(--art-ratio, 4 / 5); padding: clamp(16px, 7cqi, 28px); border-radius: var(--radius-lg); background: color-mix(in oklab, var(--accent-solid) var(--art-tint, 7%), var(--bg-surface-2)); color: var(--text-primary); overflow: hidden; container-type: inline-size; }
+  :scope[data-ratio="1/1"] { --art-ratio: 1 / 1; }
+  :scope[data-ratio="3/2"] { --art-ratio: 3 / 2; }
+  :scope[data-ratio="16/9"] { --art-ratio: 16 / 9; }
+  :scope[data-ratio="3/4"] { --art-ratio: 3 / 4; }
+  :scope[data-tone="accent"] { --art-tint: 16%; }
+  :scope[data-tone="ink"] { background: var(--text-primary); color: var(--bg-canvas); }
+  :scope[data-tone="ink"] :is([data-part="fact"], [data-part="index"]) { color: color-mix(in oklab, var(--bg-canvas) 72%, var(--text-primary)); }
+  [data-part="index"] { position: absolute; top: clamp(14px, 6cqi, 24px); left: clamp(16px, 7cqi, 28px); margin: 0; color: var(--text-secondary); font: 600 var(--text-ui-xs) var(--font-mono); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
+  [data-part="name"] { margin: 0; font-family: var(--font-display); font-size: clamp(1.5rem, 13cqi, 3.5rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.04; text-wrap: balance; }
+  [data-part="fact"] { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  /* With a photograph: it fills the frame and the placeholder type is hidden (the caption still describes it). */
+  img, video, picture { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+}
+.lt-art-demo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; width: 100%; }
+@media (max-width: 560px) { .lt-art-demo { grid-template-columns: minmax(0, 1fr); } .lt-art-demo .lt-art { --art-ratio: 16 / 9; } }

@@ -1,0 +1,33 @@
+@scope (.lt-visit) {
+  :scope { container-type: inline-size; display: block; width: 100%; padding: var(--block-y, calc(var(--section-y) / 2)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  /* Blocks pad by half of --section-y, so the gap between two sections is exactly --section-y. data-tone="well" makes a tinted band. */
+  :scope[data-tone="well"] { background: var(--bg-surface-2); }
+  @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  .lt-eyebrow, [data-part="eyebrow"] { margin: 0 0 10px; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; color: var(--accent-text); }
+  h2 { margin: 0; font-family: var(--font-display); font-size: max(var(--step-3), 1.625rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
+  [data-part="lede"] { margin: 12px 0 0; max-width: 56ch; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.55; text-wrap: pretty; }
+  header { margin-bottom: 32px; }
+  [data-part="cols"] { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; }
+  @container (max-width: 760px) { [data-part="cols"] { grid-template-columns: minmax(0, 1fr); gap: 36px; } }
+  h3 { margin: 0 0 8px; color: var(--text-secondary); font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; }
+  [data-part="where"] h3:not(:first-child) { margin-top: 28px; }
+  address { font-style: normal; font-size: var(--step-1); line-height: 1.45; }
+  ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; color: var(--text-secondary); line-height: 1.5; }
+  ul b { margin-right: 6px; color: var(--text-primary); font-weight: 650; }
+  [data-part="links"] { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 24px 0 0; }
+  [data-part="links"] a { color: var(--accent-text); font-weight: 600; text-underline-offset: 3px; }
+  /* Says whether it is open right now, in words. Empty (and takes no space) without the script. */
+  [data-part="now"] { margin: 0 0 12px; font-size: var(--step-1); font-weight: 650; }
+  [data-part="now"]:empty { display: none; }
+  [data-part="now"][data-open]::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 10px; border-radius: 50%; background: var(--status-positive); vertical-align: 0.1em; }
+  table { width: 100%; border-collapse: collapse; }
+  tr { border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
+  tr:first-child { border-top: var(--bw) var(--border-style) var(--border-hairline); }
+  th, td { padding: 11px 0; font-weight: 400; text-align: left; }
+  td { text-align: right; font-variant-numeric: tabular-nums; }
+  td[data-closed] { color: var(--text-secondary); }
+  tr[data-today] th, tr[data-today] td { font-weight: 650; }
+  tr[data-today] th::after { content: "Today"; margin-left: 10px; padding: 1px 7px; border-radius: 999px; background: var(--bg-surface-3); color: var(--text-secondary); font-size: 11px; font-weight: 600; }
+  [data-part="note"] { margin: 14px 0 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+}

@@ -1,0 +1,29 @@
+/* The picture slot is an art panel (components/ui/data/art-panel): install it alongside. */
+@scope (.lt-offers) {
+  :scope { container-type: inline-size; display: block; width: 100%; padding: var(--block-y, calc(var(--section-y) / 2)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  /* Blocks pad by half of --section-y, so the gap between two sections is exactly --section-y. data-tone="well" makes a tinted band. */
+  :scope[data-tone="well"] { background: var(--bg-surface-2); }
+  @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  .lt-eyebrow, [data-part="eyebrow"] { margin: 0 0 10px; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; color: var(--accent-text); }
+  h2 { margin: 0; font-family: var(--font-display); font-size: max(var(--step-3), 1.625rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
+  [data-part="lede"] { margin: 12px 0 0; max-width: 56ch; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.55; text-wrap: pretty; }
+  header { margin-bottom: 36px; }
+  ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin: 0; padding: 0; list-style: none; }
+  @container (max-width: 860px) { ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @container (max-width: 560px) { ul { grid-template-columns: minmax(0, 1fr); gap: 36px; } }
+  /* No card around the card: the panel is the object, the words sit under it on the page. */
+  article { display: grid; align-content: start; gap: 8px; height: 100%; }
+  article > .lt-art { --art-ratio: 1 / 1; margin-bottom: 10px; }
+  @container (max-width: 560px) { article > .lt-art { --art-ratio: 3 / 2; } }
+  h3 { margin: 0; font-size: var(--step-1); font-weight: 650; letter-spacing: -0.01em; line-height: 1.25; }
+  article > p { margin: 0; color: var(--text-secondary); line-height: 1.5; }
+  dl { display: grid; margin: 6px 0 0; border-top: var(--bw) var(--border-style) var(--border-hairline); }
+  dl > div { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: var(--bw) var(--border-style) var(--border-hairline); font-size: var(--text-ui-sm); }
+  dt { color: var(--text-secondary); }
+  dd { margin: 0; text-align: right; }
+  [data-part="foot"] { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 6px !important; color: var(--text-primary) !important; }
+  [data-part="foot"] b { font-size: var(--step-1); font-weight: 650; font-variant-numeric: tabular-nums; }
+  [data-part="foot"] a { display: inline-flex; align-items: center; gap: 6px; color: var(--accent-text); font-size: var(--text-ui-sm); font-weight: 600; text-decoration: none; }
+  [data-part="foot"] a:hover { text-decoration: underline; text-underline-offset: 3px; }
+}

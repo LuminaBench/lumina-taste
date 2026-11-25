@@ -1157,3 +1157,109 @@ test.describe('added in 1.0 (batch 6)', () => {
     for (const a of await s.locator('a, button').all()) expect((await a.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   });
 });
+
+test.describe('places and products', () => {
+  test('task list: ticking a row updates the count, the track and the event', async ({ page }) => {
+    const s = await solo(page, 'task-list');
+    await s.evaluate((el) => { (window as any).__t = []; el.addEventListener('lt-change', (e) => (window as any).__t.push((e as CustomEvent).detail)); });
+    await expect(s.locator('[data-part="count"]')).toHaveText('2 of 5 done');
+    await s.locator('li').nth(2).locator('label').click();
+    await expect(s.locator('[data-part="count"]')).toHaveText('3 of 5 done');
+    expect(await page.evaluate(() => (window as any).__t)).toEqual([{ name: 't3', done: true, doneCount: 3, total: 5 }]);
+    expect(await s.locator('[data-part="track"] span').evaluate((el) => el.style.getPropertyValue('--p'))).toBe('60%');
+    await s.locator('li').nth(3).locator('input').focus();
+    await page.keyboard.press('Space'); await page.keyboard.press('Tab'); await page.keyboard.press('Space');
+    await expect(s.locator('[data-part="count"]')).toHaveText('All 5 done');
+  });
+  test('visit info: marks today and says whether the place is open, in words', async ({ page }) => {
+    await page.goto('/#/ui/visit-info');
+    const s = card(page, 'visit-info');
+    await expect(s.locator('tr[data-today]')).toHaveCount(1);
+    await expect(s.locator('[data-part="now"]')).toHaveText(/^(Open now, until \d+:\d+|Opens today at \d+:\d+|Closed now)$/);
+    await expect(s.locator('tbody tr')).toHaveCount(7);
+  });
+  test('booking bar: needs a date, then asks with date, time and people', async ({ page }) => {
+    const s = await solo(page, 'booking-bar');
+    await s.evaluate((el) => { (window as any).__b = []; el.addEventListener('lt-change', (e) => { const d = (e as CustomEvent).detail; if (d && 'people' in d) (window as any).__b.push(d); }); });
+    await s.locator('.lt-stepper [data-part="inc"]').click();
+    await s.locator('select').selectOption('14:00');
+    await s.getByRole('button', { name: 'Check availability' }).click();
+    expect(await page.evaluate(() => (window as any).__b)).toEqual([{ date: '2026-11-28', time: '14:00', people: 3 }]);
+    await expect(s.locator('[data-part="result"]')).toContainText('Saturday 28 November at 14:00, 3 people');
+    await s.locator('.lt-date input').fill(''); await s.locator('.lt-date input').blur();
+    await s.getByRole('button', { name: 'Check availability' }).click();
+    await expect(s.locator('[data-part="result"]')).toHaveText('Choose a date first.');
+    await expect(s.locator('.lt-date input')).toBeFocused();
+  });
+  test('art panel: a photograph covers the placeholder type; offers link by name', async ({ page }) => {
+    let s = await solo(page, 'art-panel');
+    const fig = s.locator('.lt-art').first();
+    await expect(fig.locator('figcaption')).toHaveText(/Huila/);
+    expect(await fig.getAttribute('data-shot')).toContain('4:5');
+    await fig.evaluate((el) => { const img = document.createElement('img'); img.alt = ''; img.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%224%22 height=%225%22/%3E'; el.prepend(img); });
+    const covers = await fig.evaluate((el) => { const i = el.querySelector('img')!.getBoundingClientRect(), f = el.getBoundingClientRect(); return Math.abs(i.width - f.width) < 2 && Math.abs(i.height - f.height) < 2 && getComputedStyle(el.querySelector('img')!).zIndex === '1'; });
+    expect(covers).toBe(true);
+    s = await solo(page, 'offer-cards');
+    await expect(s.locator('article')).toHaveCount(3);
+    await expect(s.locator('[data-part="foot"] a').first()).toHaveText(/Huila in detail/);
+  });
+});
+
+test.describe('composition', () => {
+  test('layout attributes recompose a block; numbering counts sections; rules draw hairlines', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/#/ui/feature-grid');
+    const result = await page.evaluate(() => {
+      const src = document.querySelector('#ui-feature-grid .lt-feature-grid')!;
+      const main = document.createElement('main');
+      main.setAttribute('data-numbered', ''); main.setAttribute('data-separators', 'rules');
+      main.style.cssText = 'display:block;width:1280px';
+      const hero = '<section class="lt-hero-split"><div><p data-part="eyebrow">Hero</p></div></section>';
+      main.innerHTML = hero + ['rail', 'centre', ''].map((l) => { const c = src.cloneNode(true) as HTMLElement; if (l) c.setAttribute('data-layout', l); return c.outerHTML; }).join('');
+      document.body.append(main);
+      const [rail, centre, plain] = [...main.querySelectorAll<HTMLElement>('.lt-feature-grid')];
+      const h = rail.querySelector('header')!.getBoundingClientRect(), u = rail.querySelector('ul')!.getBoundingClientRect();
+      const out = {
+        railBeside: u.left >= h.right - 1 && Math.abs(u.top - h.top) < 40,
+        railCols: getComputedStyle(rail.querySelector('ul')!).gridTemplateColumns.split(' ').length,
+        plainCols: getComputedStyle(plain.querySelector('ul')!).gridTemplateColumns.split(' ').length,
+        centre: getComputedStyle(centre.querySelector('header')!).textAlign,
+        labels: [rail, centre, plain].map((b) => getComputedStyle(b.querySelector('[data-part="eyebrow"]')!, '::before').content),
+        heroLabel: getComputedStyle(main.querySelector('.lt-hero-split [data-part="eyebrow"]')!, '::before').content,
+        rule: getComputedStyle(centre).backgroundImage,
+      };
+      main.remove();
+      return out;
+    });
+    expect(result.railBeside).toBe(true);
+    expect(result.railCols).toBe(2);
+    expect(result.plainCols).toBe(3);
+    expect(result.centre).toBe('center');
+    expect(result.labels.every((c) => c.includes('counter(lt-section'))).toBe(true);
+    expect(result.heroLabel).toBe('none');
+    expect(result.rule).toContain('linear-gradient');
+  });
+  test('service list: every column lines up down the list; a narrow container stacks each row', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const s = await solo(page, 'service-list');
+    await expect(s.locator('li')).toHaveCount(5);
+    const cols = await s.locator('.lt-services').evaluate((el) => {
+      const xs = (sel: string, edge: 'left' | 'right') => new Set([...el.querySelectorAll(sel)].map((e) => Math.round(e.getBoundingClientRect()[edge]))).size;
+      return { names: xs('li h3', 'left'), lines: xs('li p', 'left'), meta: xs('[data-part="meta"]', 'left'), price: xs('[data-part="price"]', 'right') };
+    });
+    expect(cols).toEqual({ names: 1, lines: 1, meta: 1, price: 1 });
+    const stacked = await s.locator('.lt-services').evaluate((el) => {
+      (el as HTMLElement).style.width = '420px';
+      const li = el.querySelector('li')!, h = li.querySelector('h3')!.getBoundingClientRect(), p = li.querySelector('p')!.getBoundingClientRect(), b = li.querySelector('[data-part="price"]')!.getBoundingClientRect();
+      return { below: p.top >= h.bottom - 1, sameLine: Math.abs(b.top - h.top) < 12, fits: el.scrollWidth <= el.clientWidth + 1 };
+    });
+    expect(stacked).toEqual({ below: true, sameLine: true, fits: true });
+  });
+  test('statement hero: one large h1, three facts in a ruled row', async ({ page }) => {
+    const s = await solo(page, 'hero-statement');
+    expect(await s.locator('h1').evaluate((el) => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(44);
+    await expect(s.locator('[data-part="facts"] dd')).toHaveCount(3);
+    expect(await s.locator('[data-part="foot"]').evaluate((el) => parseFloat(getComputedStyle(el).borderTopWidth))).toBeGreaterThan(0);
+  });
+});
+

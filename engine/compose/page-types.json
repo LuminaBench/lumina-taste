@@ -18,7 +18,10 @@
     "product site",
     "launch page",
     "website",
-    "startup site"
+    "startup site",
+    "site",
+    "web site",
+    "web page"
    ],
    "primary": "Under the hero headline, and again in the closing CTA band. Nowhere else.",
    "sections": [
@@ -26,7 +29,7 @@
      "id": "navbar-mega",
      "role": "Top bar",
      "copy": "Brand left, 3–5 links, one CTA right (\"Start free\").",
-     "rule": "Use navbar-simple instead when there is only one product area. Its button is secondary (or a text link) when the hero carries the primary.",
+     "rule": "Use navbar-simple instead when there is only one product area. Its button repeats the hero's action with the same words; any other action in the bar is a text link.",
      "alt": [
       "navbar-simple",
       "flyout-menu"
@@ -133,7 +136,7 @@
      "id": "navbar-simple",
      "role": "Top bar",
      "copy": "Same as the rest of the site.",
-     "rule": "Its button is secondary (or a text link) when the hero carries the primary."
+     "rule": "Its button repeats the hero's action with the same words; any other action in the bar is a text link."
     },
     {
      "id": "billing-toggle",
@@ -604,13 +607,16 @@
    "aliases": [
     "portfolio",
     "personal site",
-    "studio",
     "agency",
     "designer portfolio",
     "freelancer",
     "case studies",
     "photography site",
-    "architect"
+    "architect",
+    "studio website",
+    "design studio",
+    "architecture studio",
+    "agency website"
    ],
    "primary": "\"Get in touch\" in the top bar and at the end.",
    "sections": [
@@ -689,7 +695,7 @@
      "alt": [
       "navbar-mega"
      ],
-     "rule": "Its button is secondary (or a text link) when the hero carries the primary."
+     "rule": "Its button repeats the hero's action with the same words; any other action in the bar is a text link."
     },
     {
      "id": "breadcrumbs",
@@ -1149,7 +1155,7 @@
     {
      "id": "navbar-simple",
      "role": "Top bar",
-     "rule": "Its button is secondary (or a text link) when the hero carries the primary."
+     "rule": "Its button repeats the hero's action with the same words; any other action in the bar is a text link."
     },
     {
      "id": "contact-section",
@@ -1197,24 +1203,38 @@
     {
      "id": "navbar-simple",
      "role": "Top bar",
-     "rule": "Its button is secondary (or a text link) when the hero carries the primary."
+     "rule": "Its button repeats the hero's action with the same words; any other action in the bar is a text link."
     },
     {
      "id": "hero-centered",
      "role": "Why we exist",
-     "copy": "One sentence of what you do and for whom; skip the mission statement. The headline is the page’s h1."
+     "copy": "One sentence of what you do and for whom, as a claim someone could disagree with; skip the mission statement. The headline is the page’s h1."
+    },
+    {
+     "id": null,
+     "role": "The story",
+     "copy": "Two or three short paragraphs: why this exists, what changed along the way, where it is now. Dates and names, not adjectives.",
+     "rule": "A plain section (class=\"lt-section\" data-layout=\"rail\"): the heading in the rail, the prose beside it at 60 to 72 characters a line. No timeline graphic unless there are at least five real dates.",
+     "layout": "rail"
     },
     {
      "id": "stats-band",
      "role": "Facts",
-     "copy": "Founded, team size, customers.",
+     "copy": "Three or four figures a reader can check: founded, people, customers, places. Each with its unit and period.",
      "optional": true,
      "tone": "well"
     },
     {
      "id": "team-grid",
      "role": "People",
-     "copy": "Photo, name, role, one line."
+     "copy": "Photograph or initials, name, role. One line on what each person does, if there are fewer than eight."
+    },
+    {
+     "id": "service-list",
+     "role": "How we work",
+     "copy": "Three to five principles as rows: a short name and one sentence that says what you do because of it. Each must rule something out.",
+     "rule": "Leave out anything every company would say (\"We care about quality\"). No prices or links in these rows.",
+     "optional": true
     },
     {
      "id": "cta-band",
@@ -1507,9 +1527,769 @@
     "More than one filled button on a screen",
     "Stretching the layout full width on a tablet"
    ]
+  },
+  {
+   "id": "venue",
+   "name": "Place or venue",
+   "kind": "marketing",
+   "blueprint": "venue",
+   "density": "spacious",
+   "pattern": "Z",
+   "layout": "Centred page column with full-width bands. Type and art panels carry it until there are photographs.",
+   "aliases": [
+    "venue",
+    "restaurant website",
+    "cafe website",
+    "café website",
+    "distillery",
+    "brewery website",
+    "hotel website",
+    "attraction",
+    "book a tour",
+    "book a table",
+    "visit us",
+    "opening hours page",
+    "home page for a restaurant",
+    "home page for a cafe",
+    "bar website",
+    "pub website",
+    "bakery website",
+    "hotel home page",
+    "museum website",
+    "gallery website"
+   ],
+   "primary": "The booking or visiting action (\"Book a table\", \"Book a tour\", \"Plan your visit\"), in the bar, under the headline and in the booking section. The same words each time.",
+   "sections": [
+    {
+     "id": "navbar-simple",
+     "role": "Navigation",
+     "copy": "Name, three or four anchors (what is on offer, booking, visit), and the one action.",
+     "rule": "No Sign in unless there really are accounts. Every link points at a section on this page or a real page."
+    },
+    {
+     "id": "hero-split",
+     "role": "Hero",
+     "copy": "Headline: what the place is and the one thing that makes it this place (\"Coffee roasted forty steps from your cup\"). Lede: what you can do here. Under the buttons: days open and the street.",
+     "rule": "Right side: a photograph of the place, or an art-panel with its name and one fact until there is one. Never a dashboard frame, never a drawing."
+    },
+    {
+     "id": "offer-cards",
+     "role": "What is on offer",
+     "copy": "Two to four things (dishes, products, rooms, tours, treatments), each with one line, two facts that differ and the price.",
+     "rule": "Prices in full. Links named after the thing."
+    },
+    {
+     "id": "booking-bar",
+     "role": "Booking",
+     "copy": "A heading that says what is being booked, four facts beside it (how long, how much, when, how many), then date, time, people and one button.",
+     "rule": "The answer comes back as a sentence. If booking happens elsewhere, link there instead and say where.",
+     "tone": "well",
+     "alt": [
+      "contact-section",
+      "time-slots"
+     ]
+    },
+    {
+     "id": "visit-info",
+     "role": "Visiting",
+     "copy": "Full address, how to get there by each means with a time, phone and email, and opening hours for all seven days.",
+     "rule": "Closed days are listed as Closed. Today is marked; \"open now\" is said in words."
+    },
+    {
+     "id": "quote-feature",
+     "role": "What people say",
+     "copy": "One real review with the person's name and where it was published, and two facts beside it.",
+     "rule": "Leave this out unless the user gave you a real review. Never write one.",
+     "optional": true,
+     "alt": [
+      "review-summary"
+     ]
+    },
+    {
+     "id": "faq-section",
+     "role": "Before you come",
+     "copy": "Four to six real questions: booking, access, children, dogs, parking, dietary needs.",
+     "rule": "Answers in one or two sentences, with the fact first.",
+     "tone": "well"
+    },
+    {
+     "id": "footer-minimal",
+     "role": "Footer",
+     "copy": "Legal name, the same contact links, and one line that is true of the place.",
+     "rule": "No newsletter box unless they send one.",
+     "alt": [
+      "site-footer"
+     ]
+    }
+   ],
+   "states": [],
+   "avoid": [
+    "Software sections: logo walls, feature grids, \"Start free\"",
+    "A stock photo that is not this place",
+    "A hand-drawn illustration of the product or building",
+    "An embedded map that loads before the address is readable",
+    "Opening hours as an image",
+    "Invented reviews, awards or visitor numbers"
+   ]
+  },
+  {
+   "id": "brand-landing",
+   "name": "Product brand landing page",
+   "kind": "marketing",
+   "start": "blueprint",
+   "density": "spacious",
+   "pattern": "Z",
+   "layout": "Centred page column with full-width bands; the products carry the page",
+   "aliases": [
+    "brand landing",
+    "product brand",
+    "skincare brand",
+    "dtc landing",
+    "d2c landing",
+    "consumer product landing",
+    "shop landing page",
+    "brand home page",
+    "product range page",
+    "landing page for a brand",
+    "online shop home page",
+    "maker website",
+    "pottery shop",
+    "handmade shop",
+    "shop home page",
+    "small shop website"
+   ],
+   "primary": "The buying action (\"Shop the set\", \"Buy the starter kit\"), with the price beside it, under the headline and in the closing band.",
+   "sections": [
+    {
+     "id": "navbar-simple",
+     "role": "Navigation",
+     "copy": "Name, the range, how it works or what is inside, questions, and the buying action.",
+     "rule": "No Sign in unless there are accounts. Links point at sections on this page."
+    },
+    {
+     "id": "hero-split",
+     "role": "Hero",
+     "copy": "Headline: what the product does for the person, in their words. Lede: what it is, in one plain sentence with what is in the box. Under the buttons: delivery and returns facts.",
+     "rule": "Right side: a photograph of the product, or an art-panel with its name and one fact until there is one. Never draw the product."
+    },
+    {
+     "id": "offer-cards",
+     "role": "The range",
+     "copy": "Each product with one line, two or three facts that help choose (size, key ingredient or material, how long it lasts) and its price.",
+     "rule": "Two to four cards. Vary the art panel tone across the set."
+    },
+    {
+     "id": "how-it-works",
+     "role": "How to use it",
+     "copy": "Three numbered steps with a verb first and a time or an amount in each.",
+     "rule": "Skip it if the product needs no explaining.",
+     "optional": true,
+     "tone": "well"
+    },
+    {
+     "id": "description-list",
+     "role": "What is inside",
+     "copy": "Ingredients, materials or specifications as plain label and value pairs, with what each one is for.",
+     "rule": "Real values only. If you do not have them, leave the section out and tell the user what is missing.",
+     "optional": true,
+     "alt": [
+      "comparison-table"
+     ]
+    },
+    {
+     "id": "review-summary",
+     "role": "Reviews",
+     "copy": "The real average, the real count and two or three real reviews with names.",
+     "rule": "Leave this out unless the user gave you real reviews. Never write one.",
+     "optional": true,
+     "alt": [
+      "quote-feature",
+      "testimonial-grid"
+     ]
+    },
+    {
+     "id": "faq-section",
+     "role": "Questions",
+     "copy": "What is in the box, who it suits, delivery cost and time, returns.",
+     "rule": "Fact first, one or two sentences."
+    },
+    {
+     "id": "cta-band",
+     "role": "Closing action",
+     "copy": "The full offer in one line with the price, and the same button as the hero.",
+     "rule": "One primary. The button leads to a real basket or checkout."
+    },
+    {
+     "id": "site-footer",
+     "role": "Footer",
+     "copy": "Shop, Help (delivery, returns, contact), Company.",
+     "rule": "Legal name and where it is made, if that is true.",
+     "alt": [
+      "footer-minimal"
+     ]
+    }
+   ],
+   "states": [],
+   "avoid": [
+    "Software sections: logo walls, dashboards, \"Start free\"",
+    "A drawing of the product in place of a photograph",
+    "Invented reviews, ratings, percentages or awards",
+    "Claims about health or results with no source",
+    "A buy button that goes nowhere",
+    "Status colours used as decoration on ingredient lists"
+   ],
+   "blueprint": "shop"
+  },
+  {
+   "id": "service-landing",
+   "name": "Local or professional service",
+   "kind": "marketing",
+   "blueprint": "practice",
+   "density": "spacious",
+   "pattern": "Z",
+   "layout": "Centred page column with full-width bands; services and fees as ruled rows, not cards",
+   "aliases": [
+    "service landing",
+    "service business",
+    "local service",
+    "practice website",
+    "dentist website",
+    "dental practice",
+    "clinic website",
+    "physio website",
+    "law firm website",
+    "solicitor website",
+    "accountant website",
+    "salon website",
+    "barber website",
+    "vet website",
+    "plumber website",
+    "electrician website",
+    "builder website",
+    "cleaner website",
+    "tutor website",
+    "consultant website",
+    "consultancy website",
+    "home page for a dentist",
+    "home page for a clinic",
+    "treatments and fees"
+   ],
+   "primary": "The booking or contact action (\"Book a check-up\", \"Book a free call\", \"Get a quote\"), in the bar beside the phone number, under the headline and in the closing band. The same words each time.",
+   "sections": [
+    {
+     "id": "navbar-simple",
+     "role": "Navigation",
+     "copy": "Name, three or four anchors (what you do and fees, first visit, people, find us), the phone number as text and the one action.",
+     "rule": "The phone number is a tel: link. No Sign in unless there is a patient or client portal."
+    },
+    {
+     "id": "hero-split",
+     "role": "Hero",
+     "copy": "Headline: what you do, for whom, and the one thing that sets you apart, in the client's words (\"A dentist who tells you the price before the drill\"). Lede: who is here, where, and whether you are taking new clients. Under the buttons: what to do if it is urgent.",
+     "rule": "Right side: a photograph of the real place or the real people, or an art-panel with the address and one fact until there is one. Never stock smiles, never a dashboard frame."
+    },
+    {
+     "id": "service-list",
+     "role": "Services and fees",
+     "copy": "Each service as a row: its plain name, one sentence on what happens, how long it takes and the price or \"from\" price. A note with the date the prices apply from.",
+     "rule": "Prices in full where they are fixed. If fees depend on the case, say what the first meeting costs and what decides the rest. Never \"Contact us for pricing\" on every row.",
+     "alt": [
+      "offer-cards",
+      "pricing-tiers"
+     ]
+    },
+    {
+     "id": "how-it-works",
+     "role": "What happens first",
+     "copy": "Three numbered steps from first contact to a plan in writing, with a time in each. Say what will not happen without agreement.",
+     "rule": "Written for someone anxious or busy: short, concrete, no jargon.",
+     "tone": "well"
+    },
+    {
+     "id": "team-grid",
+     "role": "People",
+     "copy": "Each person: name, role, the qualification or registration that matters to this client, and what they mostly do.",
+     "rule": "Real names and real registration bodies only. Photographs of the real people, or initials until there are some.",
+     "optional": true
+    },
+    {
+     "id": "quote-feature",
+     "role": "A client, in their words",
+     "copy": "One real client with a name (or a role, with permission), saying what changed for them.",
+     "rule": "Leave this out unless the user gave you a real quote. Never write one.",
+     "optional": true,
+     "alt": [
+      "review-summary"
+     ]
+    },
+    {
+     "id": "visit-info",
+     "role": "Find us",
+     "copy": "Address, how to get here by bus, car and on foot, access, phone and email, and opening hours with what to do out of hours.",
+     "rule": "Opening hours as text in a table, never an image. A service with no premises uses contact-section and says which areas it covers.",
+     "tone": "well",
+     "alt": [
+      "contact-section"
+     ]
+    },
+    {
+     "id": "faq-section",
+     "role": "Questions",
+     "copy": "The four things people ask before they call: are you taking new clients, what does the first visit cost, can I spread the cost, what if I cancel.",
+     "rule": "Fact first, one or two sentences."
+    },
+    {
+     "id": "cta-band",
+     "role": "Closing action",
+     "copy": "The first step and its price or length in one line, the booking button and the phone number.",
+     "rule": "One primary. The phone number is the secondary action."
+    },
+    {
+     "id": "footer-minimal",
+     "role": "Footer",
+     "copy": "Legal name, regulator or professional body with registration number, privacy, complaints.",
+     "rule": "Regulated professions must name their regulator. Do not invent a number.",
+     "alt": [
+      "site-footer"
+     ]
+    }
+   ],
+   "states": [],
+   "avoid": [
+    "Software sections: logo walls, feature grids, \"Start free\"",
+    "Stock photographs of smiling models",
+    "\"Contact us for pricing\" where a price could be given",
+    "Invented reviews, star ratings, awards or registration numbers",
+    "Claims about results or cures with no source",
+    "A contact form as the only way to reach a person"
+   ],
+   "start": "blueprint"
+  },
+  {
+   "id": "cause",
+   "name": "Charity or community group",
+   "kind": "marketing",
+   "blueprint": "cause",
+   "density": "spacious",
+   "pattern": "F",
+   "layout": "Centred page column divided by hairlines; the claim in type, figures with sources, one giving action",
+   "aliases": [
+    "charity website",
+    "charity landing page",
+    "charity home page",
+    "nonprofit website",
+    "nonprofit landing page",
+    "non-profit website",
+    "food bank",
+    "donation page",
+    "donate page",
+    "fundraising page",
+    "fundraiser",
+    "campaign page",
+    "community group",
+    "community project",
+    "volunteer page",
+    "foundation website",
+    "club website",
+    "home page for a charity"
+   ],
+   "primary": "The giving action (\"Donate\", \"Give monthly\"), in the bar, under the headline and in the closing band. If people also come here for help, that route is the second button in the hero and the first section.",
+   "sections": [
+    {
+     "id": "navbar-simple",
+     "role": "Navigation",
+     "copy": "Name, anchors for getting help, where the money goes and ways to help, and Donate.",
+     "rule": "Getting help comes before giving in the link order."
+    },
+    {
+     "id": "hero-statement",
+     "role": "Hero",
+     "copy": "Headline: what you do and for how many, as a plain fact (\"Food for 410 households a week, from one church hall\"). Lede: how, in one sentence. Three figures: people helped, who does the work, the share of each pound that reaches the cause.",
+     "rule": "Every figure is real and has a period (\"a week\", \"in 2025\"). No photographs of people in distress.",
+     "alt": [
+      "hero-split"
+     ]
+    },
+    {
+     "id": "visit-info",
+     "role": "Get help",
+     "copy": "Where to come, what to expect in three plain lines (no referral, you choose, we can deliver), a phone number, and the session times.",
+     "rule": "Leave this out if the organisation does not serve people directly. Never ask for proof of need on the page.",
+     "optional": true,
+     "alt": [
+      "how-it-works",
+      "contact-section"
+     ]
+    },
+    {
+     "id": null,
+     "role": "Where the money goes",
+     "copy": "One bar that adds up to a pound, split into two to four parts, each named and explained in a sentence with its total for the year. Link the accounts.",
+     "rule": "Figures from the latest accounts, with the year. Use a segmented bar and a <dl> in a plain section (class=\"lt-section\" data-layout=\"rail\"); the cause blueprint has one. Leave it out if there are no accounts yet.",
+     "optional": true,
+     "layout": "rail"
+    },
+    {
+     "id": "service-list",
+     "role": "Ways to help",
+     "copy": "Three or four rows: give monthly, give things, volunteer, collect at work. One sentence each on what it does, and what it asks of the person (an amount, a day, three hours).",
+     "rule": "Each row links to a real page or form.",
+     "alt": [
+      "feature-grid"
+     ]
+    },
+    {
+     "id": "quote-feature",
+     "role": "Someone it helped, or who helps",
+     "copy": "One real person, with their permission, in their own words.",
+     "rule": "Leave this out unless the user gave you a real quote and consent. Never write one.",
+     "optional": true
+    },
+    {
+     "id": "faq-section",
+     "role": "Questions",
+     "copy": "Do I need a referral, can I claim tax relief on a gift, is it safe, what do you not accept.",
+     "rule": "Fact first, one or two sentences."
+    },
+    {
+     "id": "cta-band",
+     "role": "Closing action",
+     "copy": "What one concrete amount does (\"£12 fills one household's gap for a week\"), then Donate and Give monthly.",
+     "rule": "A real, checkable equivalence. No urgency tricks, no countdowns."
+    },
+    {
+     "id": "footer-minimal",
+     "role": "Footer",
+     "copy": "Legal name, registered charity number, privacy, safeguarding, accounts.",
+     "rule": "Do not invent a registration number: ask for it.",
+     "alt": [
+      "site-footer"
+     ]
+    }
+   ],
+   "states": [],
+   "avoid": [
+    "Photographs of people in distress, or stock photographs of anyone",
+    "Guilt, urgency timers, pre-ticked monthly gifts",
+    "Invented figures, stories, quotes or partner logos",
+    "A donate button that opens a third-party page with no warning",
+    "Software sections: feature grids, pricing tiers, \"Start free\"",
+    "Decoration in place of the facts: where, when, how much reaches the cause"
+   ],
+   "start": "blueprint"
+  },
+  {
+   "id": "event",
+   "name": "Event or conference",
+   "kind": "marketing",
+   "blueprint": "event",
+   "density": "spacious",
+   "pattern": "F",
+   "layout": "Centred page column divided by hairlines; the date and place in type, the programme as timed rows",
+   "aliases": [
+    "event page",
+    "event landing page",
+    "event website",
+    "conference website",
+    "conference landing page",
+    "conference page",
+    "festival website",
+    "festival page",
+    "meetup page",
+    "meetup website",
+    "workshop page",
+    "workshop landing page",
+    "course landing page",
+    "summit",
+    "wedding website",
+    "wedding page",
+    "tickets page",
+    "schedule page",
+    "agenda page",
+    "home page for a conference"
+   ],
+   "primary": "The ticket or sign-up action with its price (\"Get a ticket · £240\"), in the bar, under the headline and in the tickets section.",
+   "sections": [
+    {
+     "id": "navbar-simple",
+     "role": "Navigation",
+     "copy": "Name, anchors for programme, speakers, tickets and venue, and the ticket action.",
+     "rule": "No Sign in."
+    },
+    {
+     "id": "hero-statement",
+     "role": "Hero",
+     "copy": "Above the headline: the date and the place, in full. Headline: what the event is about, as a claim. Lede: how many talks or sessions, from whom, for whom. Three figures: sessions, workshops, places (and how many are left).",
+     "rule": "The date is a <time> element. If places are limited, give the real number.",
+     "alt": [
+      "hero-split"
+     ]
+    },
+    {
+     "id": "service-list",
+     "role": "Programme",
+     "copy": "Timed rows: start time, title, one sentence with the speaker's name, the room. A small label above each day.",
+     "rule": "Times in one format with the time zone stated once. Breaks and lunch are rows too. Link each session to its page if it has one."
+    },
+    {
+     "id": "team-grid",
+     "role": "Speakers",
+     "copy": "Name, role and organisation for six to twelve people, and a link to everyone.",
+     "rule": "Real people who have confirmed. Photographs or initials; never stock portraits.",
+     "optional": true
+    },
+    {
+     "id": "pricing-tiers",
+     "role": "Tickets",
+     "copy": "Two or three tickets: who each is for, the price with tax, and four things it includes. The refund rule in the lede.",
+     "rule": "A badge only for a real fact (\"108 left\", \"Sold out\"). No fake scarcity.",
+     "alt": [
+      "service-list"
+     ]
+    },
+    {
+     "id": "visit-info",
+     "role": "Venue",
+     "copy": "Address, how to get here by train and car, access, door times for each day, and where to stay.",
+     "rule": "Leave out the open-now line (no data-lt) when the times are for specific dates.",
+     "alt": [
+      "contact-section"
+     ]
+    },
+    {
+     "id": "faq-section",
+     "role": "Questions",
+     "copy": "Refunds, paying by invoice, recordings, food and allergies, the code of conduct.",
+     "rule": "Fact first, one or two sentences."
+    },
+    {
+     "id": "footer-minimal",
+     "role": "Footer",
+     "copy": "Organiser's legal name, code of conduct, accessibility, privacy.",
+     "rule": "Link the code of conduct.",
+     "alt": [
+      "site-footer"
+     ]
+    }
+   ],
+   "states": [],
+   "avoid": [
+    "A countdown timer",
+    "\"Speakers to be announced\" as a section: leave it out until there are names",
+    "Sponsor logos nobody agreed to",
+    "Invented attendee numbers or quotes from last year",
+    "A schedule as an image or a PDF only",
+    "Fake scarcity on tickets"
+   ],
+   "start": "blueprint"
   }
  ],
  "domains": [
+  {
+   "id": "professional",
+   "service": true,
+   "words": [
+    "law",
+    "law firm",
+    "lawyer",
+    "lawyers",
+    "solicitor",
+    "solicitors",
+    "legal practice",
+    "barrister",
+    "notary",
+    "accountant",
+    "accountants",
+    "accountancy",
+    "bookkeeper",
+    "consultant",
+    "consultants",
+    "consultancy",
+    "consulting",
+    "surveyor",
+    "surveyors",
+    "financial adviser",
+    "financial advisor",
+    "mortgage broker",
+    "recruiter",
+    "translator",
+    "tutor",
+    "tutors",
+    "tutoring",
+    "coach",
+    "coaching",
+    "funeral"
+   ],
+   "palette": "linen-oxblood",
+   "typography": "bookish",
+   "style": "paper",
+   "mode": "light"
+  },
+  {
+   "id": "trades",
+   "service": true,
+   "words": [
+    "plumber",
+    "plumbers",
+    "plumbing",
+    "electrician",
+    "electricians",
+    "builder",
+    "builders",
+    "roofer",
+    "roofing",
+    "joiner",
+    "carpenter",
+    "decorator",
+    "painter and decorator",
+    "cleaner",
+    "cleaners",
+    "cleaning",
+    "gardener",
+    "gardening",
+    "landscaping",
+    "mechanic",
+    "garage",
+    "locksmith",
+    "removals",
+    "handyman",
+    "window cleaner",
+    "pest control",
+    "driving school",
+    "driving instructor",
+    "dog walker",
+    "groomer"
+   ],
+   "palette": "navy-sand",
+   "typography": "swiss",
+   "style": "minimal",
+   "mode": "light"
+  },
+  {
+   "id": "beauty",
+   "words": [
+    "beauty",
+    "skincare",
+    "cosmetics",
+    "salon",
+    "spa",
+    "makeup",
+    "fragrance",
+    "perfume",
+    "bridal",
+    "florist",
+    "haircare",
+    "nails",
+    "barber",
+    "barbers",
+    "hairdresser",
+    "hair salon",
+    "nail bar",
+    "tattoo"
+   ],
+   "palette": "bone-plum",
+   "typography": "didone",
+   "style": "atelier",
+   "mode": "light"
+  },
+  {
+   "id": "hospitality",
+   "words": [
+    "restaurant",
+    "restaurants",
+    "bistro",
+    "tavern",
+    "winery",
+    "vineyard",
+    "wine",
+    "distillery",
+    "whisky",
+    "brewery",
+    "golf",
+    "heritage",
+    "lodge",
+    "members club",
+    "cafe",
+    "café",
+    "pub",
+    "bar",
+    "bakery"
+   ],
+   "palette": "forest-brass",
+   "typography": "bookish",
+   "style": "linen",
+   "mode": "light"
+  },
+  {
+   "id": "media",
+   "words": [
+    "music",
+    "audio",
+    "streaming",
+    "video",
+    "playlist",
+    "radio",
+    "concert",
+    "concerts",
+    "festival",
+    "musicians",
+    "band",
+    "bands",
+    "record label",
+    "dj",
+    "listeners"
+   ],
+   "palette": "graphite-violet",
+   "typography": "geometric",
+   "style": "lucid",
+   "mode": "dark"
+  },
+  {
+   "id": "property",
+   "words": [
+    "property",
+    "real estate",
+    "estate agent",
+    "mortgage",
+    "mortgages",
+    "insurance",
+    "insurer",
+    "pension",
+    "pensions",
+    "lettings",
+    "landlord",
+    "landlords",
+    "tenants",
+    "housing",
+    "realtor"
+   ],
+   "palette": "petrol-peach",
+   "typography": "humanist",
+   "style": "elevated",
+   "mode": "light"
+  },
+  {
+   "id": "social",
+   "words": [
+    "dating",
+    "social",
+    "community",
+    "communities",
+    "creator",
+    "creators",
+    "influencer",
+    "messaging",
+    "nightlife",
+    "fans",
+    "fan",
+    "meetups",
+    "friends"
+   ],
+   "palette": "fog-fuchsia",
+   "typography": "rounded",
+   "style": "signal",
+   "mode": "light"
+  },
   {
    "id": "finance",
    "words": [
@@ -1520,7 +2300,6 @@
     "invoice",
     "invoicing",
     "accounting",
-    "accountant",
     "payments",
     "payroll",
     "tax",
@@ -1626,7 +2405,29 @@
     "patients",
     "dental",
     "pharmacy",
-    "sleep"
+    "sleep",
+    "yoga",
+    "pilates",
+    "dentist",
+    "dentists",
+    "physio",
+    "physiotherapy",
+    "physiotherapist",
+    "gp",
+    "doctor",
+    "doctors",
+    "counselling",
+    "counsellor",
+    "optician",
+    "opticians",
+    "osteopath",
+    "chiropractor",
+    "vet",
+    "vets",
+    "veterinary",
+    "midwife",
+    "nutritionist",
+    "personal trainer"
    ],
    "palette": "sage-clay",
    "typography": "humanist",
@@ -1652,7 +2453,19 @@
     "museum",
     "permit",
     "benefits",
-    "students"
+    "students",
+    "food bank",
+    "foodbank",
+    "charities",
+    "donate",
+    "donation",
+    "donations",
+    "fundraising",
+    "volunteer",
+    "volunteers",
+    "foundation",
+    "community group",
+    "campaign"
    ],
    "palette": "ochre-indigo",
    "typography": "humanist",
@@ -1675,7 +2488,27 @@
     "jewellery",
     "jewelry",
     "candles",
-    "ceramics"
+    "ceramics",
+    "pottery",
+    "mugs",
+    "handmade",
+    "maker",
+    "makers",
+    "sells",
+    "online shop",
+    "meal kit",
+    "meal kits",
+    "subscription box",
+    "soap",
+    "tea",
+    "chocolate",
+    "plants",
+    "prints",
+    "stationery",
+    "bikes",
+    "bicycles",
+    "products",
+    "gifts"
    ],
    "palette": "cream-charcoal",
    "typography": "didone",
@@ -1739,7 +2572,6 @@
    "words": [
     "portfolio",
     "agency",
-    "studio",
     "designer",
     "design",
     "photography",
@@ -1750,9 +2582,42 @@
     "film",
     "art",
     "gallery",
-    "artist"
+    "artist",
+    "creative agency",
+    "branding",
+    "illustration",
+    "filmmaker",
+    "videographer"
    ],
    "palette": "olive-stone",
+   "typography": "swiss",
+   "style": "swiss",
+   "mode": "light"
+  },
+  {
+   "id": "events",
+   "service": true,
+   "words": [
+    "conference",
+    "conferences",
+    "summit",
+    "meetup",
+    "meetups",
+    "festival",
+    "workshop",
+    "workshops",
+    "wedding",
+    "weddings",
+    "event",
+    "events",
+    "hackathon",
+    "retreat",
+    "exhibition",
+    "tickets",
+    "programme",
+    "speakers"
+   ],
+   "palette": "arctic-red",
    "typography": "swiss",
    "style": "swiss",
    "mode": "light"
@@ -1819,122 +2684,6 @@
    "palette": "seaglass-coral",
    "typography": "humanist",
    "style": "nordic",
-   "mode": "light"
-  },
-  {
-   "id": "beauty",
-   "words": [
-    "beauty",
-    "skincare",
-    "cosmetics",
-    "salon",
-    "spa",
-    "makeup",
-    "fragrance",
-    "perfume",
-    "wedding",
-    "weddings",
-    "bridal",
-    "florist",
-    "haircare",
-    "nails"
-   ],
-   "palette": "bone-plum",
-   "typography": "didone",
-   "style": "atelier",
-   "mode": "light"
-  },
-  {
-   "id": "hospitality",
-   "words": [
-    "restaurant",
-    "restaurants",
-    "bistro",
-    "tavern",
-    "winery",
-    "vineyard",
-    "wine",
-    "distillery",
-    "whisky",
-    "brewery",
-    "golf",
-    "heritage",
-    "lodge",
-    "members club"
-   ],
-   "palette": "forest-brass",
-   "typography": "bookish",
-   "style": "linen",
-   "mode": "light"
-  },
-  {
-   "id": "media",
-   "words": [
-    "music",
-    "audio",
-    "streaming",
-    "video",
-    "playlist",
-    "radio",
-    "concert",
-    "concerts",
-    "festival",
-    "musicians",
-    "band",
-    "bands",
-    "record label",
-    "dj",
-    "listeners"
-   ],
-   "palette": "graphite-violet",
-   "typography": "geometric",
-   "style": "lucid",
-   "mode": "dark"
-  },
-  {
-   "id": "property",
-   "words": [
-    "property",
-    "real estate",
-    "estate agent",
-    "mortgage",
-    "mortgages",
-    "insurance",
-    "insurer",
-    "pension",
-    "pensions",
-    "lettings",
-    "landlord",
-    "landlords",
-    "tenants",
-    "housing",
-    "realtor"
-   ],
-   "palette": "petrol-peach",
-   "typography": "humanist",
-   "style": "elevated",
-   "mode": "light"
-  },
-  {
-   "id": "social",
-   "words": [
-    "dating",
-    "social",
-    "community",
-    "communities",
-    "creator",
-    "creators",
-    "influencer",
-    "messaging",
-    "nightlife",
-    "fans",
-    "fan",
-    "meetups",
-    "friends"
-   ],
-   "palette": "fog-fuchsia",
-   "typography": "rounded",
-   "style": "signal",
    "mode": "light"
   }
  ],
@@ -2178,6 +2927,21 @@
    "studio",
    "ember",
    "swiss"
+  ],
+  "professional": [
+   "paper",
+   "enterprise",
+   "noir"
+  ],
+  "trades": [
+   "minimal@navy-sand",
+   "bauhaus",
+   "nordic"
+  ],
+  "events": [
+   "swiss",
+   "bauhaus",
+   "newsprint"
   ]
  }
 }

@@ -1,0 +1,11 @@
+/* The phone number sits beside the booking button: for a practice it is the second primary action. */
+.pr-tel { color: var(--text-primary); font-size: var(--text-ui-sm); font-weight: 650; font-variant-numeric: tabular-nums; text-decoration: none; white-space: nowrap; }
+.pr-tel:hover { color: var(--accent-text); }
+.lt-hero-split [data-part="note"] { color: var(--text-secondary); }
+.lt-hero-split [data-part="note"] a, .lt-services [data-part="note"] a { color: var(--accent-text); font-weight: 600; text-underline-offset: 3px; }
+/* Six people in one row at full width; names and roles can run to two lines. */
+.lt-team-grid ul { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.lt-team-grid li > span:last-child { text-wrap: balance; }
+.lt-footer-min { padding-block: var(--space-6); }
+@media (max-width: 900px) { .pr-tel { display: none; } .lt-team-grid ul { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .lt-team-grid ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

@@ -57,7 +57,7 @@ if (opts.list) {
 const framework = opts.framework ?? 'vanilla';
 if (!['vanilla', 'react', 'static'].includes(framework)) fail(`--framework must be vanilla, react or static`);
 const projectDir = resolve(opts.project ?? '.');
-const dest = resolve(projectDir, opts.dest ?? 'lumina-taste');
+let dest = resolve(projectDir, opts.dest ?? 'lumina-taste');
 const profilePath = resolve(projectDir, opts.profile ?? 'taste-profile.json');
 const dry = !!opts['dry-run'];
 function fail(msg, code = 1) { console.error(`✗ ${msg}`); process.exit(code); }
@@ -117,6 +117,14 @@ for (const [tok, val] of Object.entries(profile.overrides)) {
 const want = { components: list(opts.components), charts: list(opts.charts), blueprints: list(opts.blueprints) };
 // Asking only for blueprints means "give me that page": write the page and nothing else.
 const blueprintOnly = framework === 'static' && want.blueprints.length > 0 && !want.components.length && !want.charts.length;
+// One blueprint and nothing else is "give me that page": it is written where the page lives (the project
+// folder unless --dest says otherwise), not in a sub-folder that then has to be moved. A page that is
+// already there is never written over: the blueprint goes into <id>/ beside it instead.
+const solo = blueprintOnly && want.blueprints.length === 1;
+if (solo && !opts.dest) dest = projectDir;
+const MARK = '<!-- lumina-taste blueprint:';
+const soloTaken = solo && !opts.overwrite && existsSync(join(dest, 'index.html')) && !readFileSync(join(dest, 'index.html'), 'utf8').includes(MARK);
+const pageDir = (id) => (solo && !soloTaken ? '' : `${id}/`);
 // A blueprint's markup uses catalog components: install them too, so pages built from its snippets are styled.
 if (!blueprintOnly) for (const id of want.blueprints) for (const u of catalog.blueprints.find((b) => b.id === id)?.uses ?? []) if (catalog.ui.some((c) => c.id === u) && !want.components.includes(u)) want.components.push(u);
 const unknown = [
@@ -185,7 +193,7 @@ const visit = (f) => {
 };
 for (const e of entries) visit(e);
 // Blueprint boot imports tokens itself; everything else gets tokens explicitly below.
-const tokenFiles = ['tokens/base.css', 'tokens/layout.css', 'tokens/backdrops.css', 'tokens/typography/typography.css', ...(opts['all-palettes'] ? ['tokens/palettes/all.css'] : [`tokens/palettes/${profile.palette}.css`]), ...(profile.style !== 'none' ? ['tokens/styles/styles.css'] : [])];
+const tokenFiles = ['tokens/base.css', 'tokens/layout.css', 'tokens/backdrops.css', 'tokens/composition.css', 'tokens/typography/typography.css', ...(opts['all-palettes'] ? ['tokens/palettes/all.css'] : [`tokens/palettes/${profile.palette}.css`]), ...(profile.style !== 'none' ? ['tokens/styles/styles.css'] : [])];
 for (const f of [...files]) if (f.startsWith('tokens/palettes/') && f !== `tokens/palettes/${profile.palette}.css`) files.delete(f);
 const profileEngine = ['engine/profiles/profile.mjs', 'engine/profiles/profile.d.mts', 'engine/profiles/options.mjs', 'engine/profiles/options.d.mts'];
 
@@ -218,9 +226,16 @@ function snippetNote(c, html) {
   if (doc.anatomy?.length) lines.push(`Parts: ${doc.anatomy.map((a) => `${clean(a.name)} ${clean(a.sel)}`).join('; ')}.`);
   const demo = html.match(/^<[a-z]+ class="(lt-[a-z-]*demo[a-z-]*)"/)?.[1];
   if (demo) lines.push(`The outer .${demo} element is only a preview frame: keep what is inside it and drop the frame.`);
+  if (doc.note) lines.push(clean(doc.note));
   lines.push('Every part is optional: delete the ones this page does not need.');
   lines.push('Replace the sample words, names and numbers with the product\'s own before shipping.');
   return `<!-- ${lines.join('\n     ')} -->\n${html}`;
+}
+
+/** The shared preamble of styles.css plus the sections that address one style. */
+function oneStyle(id) {
+  const [head, ...sections] = readFileSync(join(root, 'tokens/styles/styles.css'), 'utf8').split(/(?=^\/\* -{10,} )/m);
+  return [head, ...sections.filter((sec) => sec.includes(`[data-style="${id}"]`))].join('');
 }
 
 async function writeStatic() {
@@ -251,12 +266,20 @@ async function writeStatic() {
   for (const id of want.blueprints) {
     const bp = catalog.blueprints.find((x) => x.id === id);
     // Unminified on purpose: a blueprint is a starting point you edit.
-    const b = await esbuild.build({ entryPoints: [join(root, bp.path, 'main.ts')], bundle: true, format: 'iife', target: 'es2022', minify: false, legalComments: 'none', write: false, outdir: 'out', entryNames: 'main', logLevel: 'silent' });
-    for (const o of b.outputFiles) write(`${id}/${basename(o.path)}`, Buffer.from(o.contents), true);
-    const html = readFileSync(join(root, bp.path, 'index.html'), 'utf8').replace(/<script type="module" src="\.\/main\.ts"><\/script>/, '<link rel="stylesheet" href="./main.css">\n  <script defer src="./main.js"></script>');
+    // The page ships the palette it uses (every palette with --all-palettes), and the style sheet when a style is set.
+    const onePalette = { name: 'one-palette', setup(build) { if (!opts['all-palettes']) build.onResolve({ filter: /palettes\/all\.css$/ }, () => ({ path: join(root, `tokens/palettes/${profile.palette}.css`) })); } };
+    const b = await esbuild.build({ entryPoints: [join(root, bp.path, 'main.ts')], bundle: true, format: 'iife', target: 'es2022', minify: false, legalComments: 'none', write: false, outdir: 'out', entryNames: 'main', logLevel: 'silent', plugins: [onePalette] });
+    for (const o of b.outputFiles) {
+      let out = Buffer.from(o.contents);
+      if (o.path.endsWith('.css') && profile.style !== 'none') out = Buffer.concat([out, Buffer.from(`\n/* tokens/styles/styles.css: ${profile.style} */\n${oneStyle(profile.style)}`)]);
+      write(`${pageDir(id)}${basename(o.path)}`, out, true);
+    }
+    const html = readFileSync(join(root, bp.path, 'index.html'), 'utf8').replace(/<script type="module" src="\.\/main\.ts"><\/script>/, '<link rel="stylesheet" href="./main.css">\n  <script defer src="./main.js"></script>')
+      // The demo's title and description describe the kit's sample, not your page.
+      .replace(/<meta name="description" content="[^"]*">/, `<meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  ${MARK} ${id}. Sample brand, people, copy and numbers are placeholders: replace all of them. -->`);
     // The page follows your profile, not the blueprint's demo theme.
     const themed = html.replace(/<html([^>]*)>/, (_m, a) => `<html${a.replace(/\s+data-(palette|mode|type|density|radius|motion|style)="[^"]*"/g, '')} data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="${profile.radius}" data-motion="${profile.motion}"${profile.style !== 'none' ? ` data-style="${profile.style}"` : ''}>`);
-    write(`${id}/index.html`, themed);
+    write(`${pageDir(id)}index.html`, themed, solo && !soloTaken);
   }
 }
 const tokenIndex = `/* lumina-taste tokens: import this once, before any component CSS. */\n${tokenFiles.map((f) => `@import "./${relative('tokens', f)}";`).join('\n')}\n`;
@@ -270,18 +293,27 @@ if (!opts['no-profile']) {
 // ------------------------------------------------------------------ report
 const attrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="${profile.radius}" data-motion="${profile.motion}"${profile.style !== 'none' ? ` data-style="${profile.style}"` : ''}`;
 console.log(`${dry ? 'Dry run: would install' : 'Installed'} lumina-taste (${framework}) into ${relative(projectDir, dest) || '.'} (in ${projectDir})`);
-console.log(`  ${copied} file(s) written, ${unchanged} already up to date${skipped ? `, ${skipped} kept` : ''}.`);
+console.log(`  ${copied} file(s) written, ${unchanged} already up to date${skipped ? `, ${skipped} kept` : ''}${opts['no-profile'] || dry ? '' : `, plus ${relative(projectDir, profilePath)}`}.`);
 if (applied.length) console.log(`  Profile updated: ${applied.join(', ')}.`);
 if (blocked.length) console.log(`  Locked, left unchanged: ${blocked.join(', ')}. Pass --force or --unlock <axis> if the user asked for it.`);
 console.log(`  Profile: ${relative(projectDir, profilePath)} (${profile.palette}, ${profile.mode}, ${profile.typography}, ${profile.density}, ${profile.radius}, ${profile.motion}${profile.style !== 'none' ? `, style ${profile.style}` : ''}${profile.locks.length ? `; locked: ${profile.locks.join(', ')}` : ''})`);
 console.log('\nNext:');
-if (blueprintOnly) console.log(`  1. ${want.blueprints.map((b) => relative(projectDir, join(dest, b))).join(', ')} holds a complete page: index.html, main.css and main.js (tokens and every component it uses).\n     Move those three files to where the page lives, then change the brand, words, numbers and currency.\n     For a section it lacks, rerun with --components <ids> and link lumina.css and lumina.js after main.css.`);
-else if (framework === 'static') console.log(`  1. In each page: <link rel="stylesheet" href="${relative(projectDir, join(dest, 'lumina.css'))}"> and <script defer src="${relative(projectDir, join(dest, 'lumina.js'))}"></script>.\n     Paste markup from ${relative(projectDir, join(dest, 'snippets'))}/; it is enhanced on load. Charts: lumina.charts['line-chart'](el, data, options) after DOMContentLoaded. Works from file:// too.`);
+if (blueprintOnly) {
+  const where = (id) => relative(projectDir, join(dest, pageDir(id))) || '.';
+  if (soloTaken) console.log(`  ! ${relative(projectDir, join(dest, 'index.html'))} already exists, so the page was written to ${where(want.blueprints[0])}/ instead (--overwrite replaces it).`);
+  console.log(`  1. ${want.blueprints.map((b) => `${where(b)}/index.html`).join(', ')} ${want.blueprints.length > 1 ? 'are complete pages' : 'is a complete page'}, with main.css and main.js beside it (tokens and every component it uses). It opens from disk.
+  2. Make it yours: every brand, person, sentence, number and link in it is sample content. Change them all;
+     audit-ui --product "<name>" lists what is left. Remove a section you cannot fill with real facts.
+     Page behaviour is the last block of main.js, under the comment "// blueprints/<id>/main.ts"; the component code above it stays as it is.
+  3. Need a part or a chart it lacks? Run this command again with --components <ids> and/or --charts <ids> added: that also writes
+     lumina.css and lumina.js. Link both after main.css; charts are then at lumina.charts['<id>'](el, data, options).`);
+}
+else if (framework === 'static') console.log(`  1. In each page: <link rel="stylesheet" href="${relative(projectDir, join(dest, 'lumina.css'))}"> and <script defer src="${relative(projectDir, join(dest, 'lumina.js'))}"></script>.\n     Paste markup from ${relative(projectDir, join(dest, 'snippets'))}/; it is enhanced on load. ${want.charts.length ? `Charts in this bundle: ${want.charts.map((c) => `lumina.charts['${c}']`).join(', ')}; call them as (el, data, options) after DOMContentLoaded. ` : ''}Works from file:// too.`);
 else console.log(`  1. Import ${relative(projectDir, join(dest, 'tokens/index.css'))} once, before component CSS.`);
 if (profile.installMode === 'attach') console.log(`  2. Put the attributes on your wrapper only (host styles stay untouched):\n     <div class="lt-root" ${attrs}>…</div>   (attachRoot: "${profile.attachRoot}")`);
 else if (!blueprintOnly) console.log(`  2. Put the attributes on <html>:\n     <html ${attrs}>\n     or call applyProfile(profile) from engine/profiles/profile.mjs (bootstrapSnippet() avoids a flash).`);
 const webfont = JSON.parse(readFileSync(join(root, 'tokens/typography/source.json'), 'utf8')).pairings?.find?.((x) => x.id === profile.typography)?.webfont;
 if (framework === 'static' && want.blueprints.length && !blueprintOnly) console.log(`  Blueprints: ${want.blueprints.map((b) => relative(projectDir, join(dest, b, 'index.html'))).join(', ')} ${want.blueprints.length > 1 ? 'are' : 'is'} a complete page:\n     main.css and main.js already hold the tokens and every component it uses, so it does not need lumina.css.\n     Move it where the page should live (or copy its markup into your page), then replace the sample words and data.`);
-if (webfont) console.log(`  Fonts: the stacks fall back to installed faces with the same character. For the exact faces add\n     <link rel="stylesheet" href="${webfont}">`);
+if (webfont) console.log(`  Fonts: nothing to do. The page uses faces already on the device, chosen to match, and works offline.\n     Optional, needs network: for the exact faces add <link rel="stylesheet" href="${webfont}">, or self-host them with @font-face.`);
 if (want.components.length && framework !== 'static') console.log(`  3. ${framework === 'react' ? 'Import the components from their .react.tsx files.' : 'Paste each .html snippet and call enhance(el) from its .ts file (or autoEnhance(document, { id: enhance }) from _shared/dom.ts).'}`);
 if (blocked.length && !opts.force) process.exit(3);

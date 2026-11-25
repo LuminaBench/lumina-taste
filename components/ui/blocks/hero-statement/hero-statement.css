@@ -1,0 +1,25 @@
+@scope (.lt-hero-statement) {
+  :scope { container-type: inline-size; display: block; width: 100%; padding: var(--block-y, calc(var(--section-y) * 0.75)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  :scope[data-tone="well"] { background: var(--bg-surface-2); }
+  @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  [data-part="eyebrow"] { margin: 0 0 18px; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; color: var(--accent-text); }
+  /* The headline is the picture: as wide as the page allows, set tight, broken by sense not by width. */
+  h1 { margin: 0; max-width: 15ch; font-family: var(--font-display); font-size: clamp(2.75rem, 1rem + 7.2cqi, 6.25rem); font-weight: var(--weight-display); letter-spacing: calc(var(--tracking-display) * 1.3); line-height: 0.98; text-wrap: balance; }
+  /* Under it, one ruled row: what it is and the action on the left, three facts on the right. */
+  [data-part="foot"] { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: start; gap: 28px 64px; margin-top: clamp(36px, 6cqi, 72px); padding-top: 28px; border-top: var(--bw) var(--border-style) var(--border-strong); }
+  @container (max-width: 820px) { [data-part="foot"] { grid-template-columns: minmax(0, 1fr); } }
+  /* Without facts (the page has a figures section of its own): the words on the left, the buttons on the right. */
+  [data-part="foot"]:not(:has(> [data-part="facts"])) { grid-template-columns: minmax(0, 1fr); }
+  [data-part="foot"]:not(:has(> [data-part="facts"])) > [data-part="pitch"] { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 24px 64px; }
+  [data-part="foot"]:not(:has(> [data-part="facts"])) [data-part="lede"] { max-width: 52ch; }
+  [data-part="foot"]:not(:has(> [data-part="facts"])) [data-part="cta"] { margin-top: 0; }
+  [data-part="lede"] { margin: 0; max-width: 44ch; color: var(--text-secondary); font-size: var(--step-1); line-height: 1.5; text-wrap: pretty; }
+  [data-part="cta"] { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  [data-part="facts"] { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
+  [data-part="facts"] > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 6px; padding: 0 20px; border-left: var(--bw) var(--border-style) var(--border-hairline); }
+  [data-part="facts"] > div:first-child { padding-left: 0; border-left: 0; }
+  @container (max-width: 480px) { [data-part="facts"] { grid-template-columns: minmax(0, 1fr); gap: 0; } [data-part="facts"] > div { flex-direction: row; align-items: baseline; justify-content: space-between; padding: 12px 0; border-left: 0; border-top: var(--bw) var(--border-style) var(--border-hairline); } [data-part="facts"] > div:first-child { border-top: 0; } }
+  dd { margin: 0; font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+  dt { color: var(--text-secondary); font-size: var(--text-ui-sm); line-height: 1.4; }
+}

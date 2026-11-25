@@ -8,7 +8,7 @@ export function demo(host: HTMLElement) {
   return render(host, [
     { label: 'Dashboards and reporting', value: 412 },
     { label: 'Scheduled CSV exports', value: 288 },
-    { label: 'Slack alert integration', value: 251 },
+    { label: 'Alerts in team chat', value: 251 },
     { label: 'Single sign-on (SAML)', value: 197 },
     { label: 'Row-level permissions', value: 164 },
     { label: 'Embedded analytics', value: 121 },

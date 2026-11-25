@@ -2,6 +2,7 @@
 import '../tokens/base.css';
 import '../tokens/layout.css';
 import '../tokens/backdrops.css';
+import '../tokens/composition.css';
 import '../tokens/palettes/all.css';
 import '../tokens/typography/typography.css';
 import '../tokens/styles/styles.css';

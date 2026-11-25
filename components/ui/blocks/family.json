@@ -68,7 +68,8 @@
           "React"
         ]
       ],
-      "added": 4
+      "added": 4,
+      "note": "The right-hand side is a slot. Keep data-part=\"frame\" for a software product (put a real screenshot or a small live mock in it). For anything else replace the whole frame with <div data-part=\"visual\">…</div> holding one thing: an art-panel (a physical product or a place with no photograph yet), a device-frame, a code-block, a chart, or an <img>."
     },
     {
       "id": "hero-centered",
@@ -1070,7 +1071,8 @@
           "React"
         ]
       ],
-      "added": 7
+      "added": 7,
+      "note": "Each row's visual is a slot too: a list mock or bar mock suits software; for a product, a place or a service use an art-panel or a photograph, and for a process a short numbered list."
     },
     {
       "id": "logo-cloud",
@@ -1492,6 +1494,295 @@
         ]
       ],
       "added": 12
+    },
+    {
+      "id": "offer-cards",
+      "name": "Offer cards",
+      "summary": "Two to four things on offer, each with a picture or an art panel, one line, two facts, a price and a link.",
+      "pattern": "<ul> of <article> + <dl>",
+      "states": [
+        "three across",
+        "two across",
+        "stacked"
+      ],
+      "aliases": [
+        "product cards",
+        "product trio",
+        "services section",
+        "the range",
+        "our products",
+        "menu highlights",
+        "rooms",
+        "tour options",
+        "collection grid",
+        "what we sell"
+      ],
+      "react": "OfferCards",
+      "api": "<article> · <dl> · art panel",
+      "w": 1000,
+      "deps": [
+        "art-panel"
+      ],
+      "called": [
+        "three products side by side with prices",
+        "services with a picture each",
+        "the whiskies / the coffees / the rooms section"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:first-child .lt-art",
+          "name": "Picture or art panel",
+          "api": ".lt-art",
+          "text": "A photograph when there is one; until then the name, set large."
+        },
+        {
+          "sel": "li:first-child h3",
+          "name": "Name and line",
+          "api": "<h3> + <p>",
+          "text": "What it is, then one sentence a person would say about it."
+        },
+        {
+          "sel": "li:first-child dl",
+          "name": "Facts",
+          "api": "<dl>",
+          "text": "Two or three that help someone choose between the cards."
+        },
+        {
+          "sel": "li:first-child [data-part=\"foot\"]",
+          "name": "Price and link",
+          "api": "",
+          "text": "The price in full, and a link named after the thing."
+        }
+      ],
+      "prompt": "Build an offers section for a shop, a maker or a place: a heading, then two to four cards in a row (two across under 860px, one under 560px). Each card is an <article> with no box around it: a 4:5 picture (or an art panel with the name set large when there is no photograph), the name as an <h3>, one sentence, a <dl> of two or three facts that differ between the cards, then the price in full on the left and a text link named after the thing on the right. Vary the art panel tone across the set. No \"Learn more\" links, no badges unless something is really new or sold out.",
+      "debug": "Debug my product or service cards. Rule out: cards inside a tinted band inside a card; facts that are the same on every card; prices hidden behind a click; links that all say \"Learn more\"; pictures at different ratios; a fourth card orphaned on its own row. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ul><li><article><figure class=\"lt-art\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<OfferCards title offers>",
+          "React"
+        ]
+      ],
+      "added": 13
+    },
+    {
+      "id": "visit-info",
+      "name": "Visit information",
+      "summary": "Where a place is, how to get there, how to reach it, and opening hours with today marked and \"open now\" in words.",
+      "pattern": "<address> + hours <table>",
+      "states": [
+        "open now",
+        "opens later today",
+        "closed now",
+        "stacked"
+      ],
+      "aliases": [
+        "opening hours",
+        "find us",
+        "location section",
+        "contact and hours",
+        "getting here",
+        "address block",
+        "store hours",
+        "directions"
+      ],
+      "react": "VisitInfo",
+      "api": "data-day · data-now",
+      "w": 1000,
+      "preview": [],
+      "called": [
+        "when are you open and where are you",
+        "the address and opening times bit",
+        "find us section"
+      ],
+      "anatomy": [
+        {
+          "sel": "address",
+          "name": "Address",
+          "api": "<address>",
+          "text": "In full, as you would write it on an envelope, in large type."
+        },
+        {
+          "sel": "[data-part=\"where\"] ul",
+          "name": "Getting here",
+          "api": "",
+          "text": "One line per way of arriving, with a time or a number in each."
+        },
+        {
+          "sel": "[data-part=\"now\"]",
+          "name": "Open now",
+          "api": "role=\"status\"",
+          "text": "Says it in words; the dot only backs it up."
+        },
+        {
+          "sel": "table",
+          "name": "Hours",
+          "api": "<table> data-day",
+          "text": "Every day listed, closed days included. Today in bold."
+        }
+      ],
+      "prompt": "Build a visit section for a place: on the left the full postal address in an <address> at a larger size, a \"Getting here\" list with one line per way of arriving (on foot, by bike, by car, by train) each with a real time or number, and phone and email as links (tel: and mailto:). On the right an opening hours table that lists all seven days with closed days written as \"Closed\", marks today in bold, and a line above it that says in words \"Open now, until 18:00\", \"Opens today at 9:00\" or \"Closed now\". Add one line for exceptions (holidays, last orders). No embedded map image; if a map matters, link to one.",
+      "debug": "Debug my location and hours section. Rule out: hours as an image or a paragraph; days missing because they are closed; \"open now\" shown only by a green dot; a phone number that is not a tel: link; a map embed that loads a megabyte of script; times in a format locals do not use. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<address> + <table> with data-day",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<VisitInfo title address days>",
+          "React"
+        ]
+      ],
+      "added": 13
+    },
+    {
+      "id": "hero-statement",
+      "name": "Hero, statement",
+      "summary": "A type-led hero: one very large headline across the page, then a ruled row with the pitch, the action and three facts.",
+      "pattern": "<h1> + <dl>",
+      "states": [
+        "wide",
+        "stacked"
+      ],
+      "aliases": [
+        "type hero",
+        "big headline hero",
+        "editorial hero",
+        "typographic hero",
+        "no image hero",
+        "statement headline",
+        "oversized title"
+      ],
+      "react": "HeroStatement",
+      "api": "<h1> · <dl>",
+      "w": 1000,
+      "called": [
+        "hero with just a huge headline",
+        "big text at the top and no picture",
+        "the opening line that fills the screen"
+      ],
+      "anatomy": [
+        {
+          "sel": "h1",
+          "name": "Headline",
+          "api": "container-sized type",
+          "text": "The picture. Up to 100px, set tight, 15 characters a line, balanced."
+        },
+        {
+          "sel": "[data-part=\"foot\"]",
+          "name": "Ruled row",
+          "api": "border-top",
+          "text": "A strong rule, then the pitch and action left, facts right."
+        },
+        {
+          "sel": "[data-part=\"facts\"]",
+          "name": "Three facts",
+          "api": "<dl>",
+          "text": "True figures with their unit and what they count."
+        }
+      ],
+      "note": "Use this hero when there is no picture worth showing, or when the words are the product (a studio, a publication, a venue, a brand, a manifesto). The headline must be a real claim of six to ten words; it carries the whole first screen.",
+      "prompt": "Build a statement hero: a small eyebrow, then an <h1> set very large (clamp from 44px to 100px with the container width), tight line height (0.98), tight tracking, 15 characters a line, text-wrap: balance. Under it a row that starts with a strong hairline: on the left the lede at 20px in secondary ink (44 characters a line) and the actions (one primary, one ghost); on the right a <dl> of three facts, each a large tabular figure over a plain label, divided by hairlines. Under 820px the row stacks; under 480px the facts become rows. No image, no background effect behind the headline: the type is the picture.",
+      "debug": "Debug my type-led hero. Rule out: a headline that is a slogan with no claim; more than ten words at this size; lines broken mid-phrase (balance, or break by hand); a gradient or image behind the type; facts with no unit or period; three buttons. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<h1> + <dl data-part=\"facts\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<HeroStatement title lede facts>",
+          "React"
+        ]
+      ],
+      "added": 14
+    },
+    {
+      "id": "service-list",
+      "name": "Service list",
+      "summary": "Things on offer as ruled rows: a name, one sentence, how long it takes and the price, each in its own column down the list. Also a programme with times, or a menu.",
+      "pattern": "<ul> rows on one shared grid (subgrid)",
+      "states": [
+        "rows with links",
+        "plain rows",
+        "timed rows",
+        "grouped lists",
+        "stacked on phones"
+      ],
+      "aliases": [
+        "services and fees",
+        "price list",
+        "treatment list",
+        "practice areas",
+        "menu",
+        "programme",
+        "schedule",
+        "agenda",
+        "timetable",
+        "class timetable",
+        "ruled rows",
+        "ways to help",
+        "what we do"
+      ],
+      "react": "ServiceList",
+      "api": "<ul> · subgrid · data-part=\"when|meta|price|group|note\"",
+      "w": 1000,
+      "called": [
+        "a list of services with prices instead of cards",
+        "the conference schedule with times",
+        "treatments and fees",
+        "a restaurant menu with prices lined up"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:first-child h3",
+          "name": "Name",
+          "api": "<h3>",
+          "text": "The plain name of the service or session. A row that links somewhere is one <a>."
+        },
+        {
+          "sel": "li:first-child p",
+          "name": "One sentence",
+          "api": "<p>",
+          "text": "What happens, or who is speaking. Never longer than two lines at full width."
+        },
+        {
+          "sel": "li:first-child [data-part=\"meta\"]",
+          "name": "Time or place",
+          "api": "data-part=\"meta\"",
+          "text": "How long it takes, which room, which days. One short phrase in its own column."
+        },
+        {
+          "sel": "li:first-child [data-part=\"price\"]",
+          "name": "Price",
+          "api": "data-part=\"price\"",
+          "text": "In full, right-aligned, tabular. Leave the column out when nothing has a price."
+        }
+      ],
+      "prompt": "Build a list of services as ruled rows, not cards: a heading, then a <ul> where every row shares one grid (use subgrid) so the names, the one-sentence descriptions, the durations and the prices each line up in a column down the list. A strong rule above the first row and a hairline under each. A row that leads somewhere is a single link with an arrow at the end that moves 3px on hover; a row that does not is plain. Prices are right-aligned with tabular figures. An optional leading column holds a start time in mono for a programme, and a small mono label can sit above each list when there are several (days, courses). Under 760px the name and price share the first line and the sentence and duration go beneath. A note under the list says when the prices apply from.",
+      "debug": "Debug my service or price list. Rule out: prices that do not line up down the list; rows of different structure; \"Contact us\" in place of every price; cards where rows would scan faster; a description longer than two lines; times in mixed formats; links that all say \"Learn more\". The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<ul><li><a><h3>…</h3><p>…</p><b data-part=\"price\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ServiceList title services>",
+          "React"
+        ]
+      ],
+      "added": 14,
+      "note": "Use this instead of cards when there are four or more things, or when people compare prices and times. Columns you do not use (when, meta, price) collapse. For a programme, put <time data-part=\"when\"> first in each row and a <p data-part=\"group\"> above each day's <ul>."
     }
   ]
 }

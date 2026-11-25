@@ -1,0 +1,33 @@
+.ca-head { display: grid; gap: var(--space-3); padding-block: var(--section-y) var(--space-7); }
+.ca-eyebrow { margin: 0; color: var(--accent-text); font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; }
+.ca-head h1 { margin: 0; max-width: 18ch; font-family: var(--font-display); font-size: max(var(--step-5), clamp(2.25rem, 1.2rem + 3vw, 3.25rem)); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.05; text-wrap: balance; }
+.ca-head p:last-child { margin: 0; max-width: 52ch; color: var(--text-secondary); font-size: var(--step-1); line-height: 1.5; }
+/* Inputs on the left, the answer on the right. The answer stays in view while the inputs are changed. */
+.ca-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; gap: var(--space-8); }
+.ca-form { display: grid; gap: var(--space-6); }
+.ca-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); }
+.ca-form .lt-amount, .ca-form .lt-range { width: 100%; }
+.ca-field { display: grid; gap: 8px; font-size: var(--text-ui-sm); font-weight: 600; justify-items: start; }
+.ca-result { position: sticky; top: var(--space-5); display: grid; gap: var(--space-3); padding: var(--space-6); border: 1px solid var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); box-shadow: var(--shadow-md); }
+.ca-result h2 { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 600; }
+.ca-figure { font-family: var(--font-display); font-size: clamp(2.75rem, 2rem + 3vw, 4rem); font-weight: var(--weight-display); letter-spacing: -0.035em; line-height: 1; font-variant-numeric: tabular-nums; }
+.ca-note { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+.ca-result dl { display: grid; margin: var(--space-2) 0; border-top: 1px solid var(--border-hairline); }
+.ca-result dl div { display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border-hairline); font-size: var(--text-ui); }
+.ca-result dt { color: var(--text-secondary); }
+.ca-result dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ca-result .lt-btn { width: 100%; }
+.ca-small { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-xs); text-align: center; }
+.ca-chart { padding-block: var(--section-y); }
+.ca-chart header { max-width: 640px; margin-bottom: var(--space-5); }
+.ca-chart h2 { margin: 0; font-family: var(--font-display); font-size: max(var(--step-3), 1.625rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
+.ca-chart header p { margin: 12px 0 0; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.55; }
+.lt-footer-min { padding-block: var(--space-6); }
+@media (max-width: 900px) {
+  .ca-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-6); }
+  /* On a phone the answer comes first and stays pinned as a compact bar while the inputs scroll under it. */
+  .ca-result { order: -1; top: 0; z-index: 10; margin-inline: -16px; padding: var(--space-4); border-radius: 0; border-inline: 0; box-shadow: 0 1px 0 var(--border-hairline); }
+  .ca-result dl, .ca-result .ca-small { display: none; }
+  .ca-figure { font-size: 2.5rem; }
+}
+@media (max-width: 520px) { .ca-pair { grid-template-columns: minmax(0, 1fr); } }

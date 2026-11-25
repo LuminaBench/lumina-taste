@@ -50,6 +50,6 @@ export function render(host: HTMLElement, data: DonutItem[], opts: DonutOptions 
 }
 
 export function demo(host: HTMLElement) {
-  return render(host, [{ label: 'Card', value: 18240 }, { label: 'Direct debit', value: 9110 }, { label: 'Invoice', value: 4380 }, { label: 'PayPal', value: 1210 }, { label: 'Crypto', value: 140 }],
+  return render(host, [{ label: 'Card', value: 18240 }, { label: 'Direct debit', value: 9110 }, { label: 'Invoice', value: 4380 }, { label: 'Wallet', value: 1210 }, { label: 'Crypto', value: 140 }],
     { title: 'How customers pay', subtitle: 'Share of November revenue', format: { prefix: '£', compact: true }, centerLabel: 'Revenue', source: 'Source: synthetic billing data' });
 }

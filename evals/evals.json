@@ -140,7 +140,7 @@
   {
    "id": 4,
    "slug": "clinic-landing",
-   "pageType": "landing",
+   "pageType": "service-landing",
    "kind": "marketing",
    "prompt": "Website homepage for a physiotherapy clinic in Leeds. Booking an appointment is the goal. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
    "expected_output": "A complete landing page that passes the audit and the taste critic.",
@@ -1380,6 +1380,232 @@
      "name": "one way to add",
      "selector": "button, a.lt-btn",
      "min": 1
+    }
+   ]
+  },
+  {
+   "id": 33,
+   "slug": "law-firm-landing",
+   "pageType": "service-landing",
+   "kind": "marketing",
+   "prompt": "Website home page for Harrow & Finch, a three-partner employment law firm in Manchester. People should book a free first call. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+   "expected_output": "A complete page that passes the audit and the taste critic, with sections that fit the subject.",
+   "files": [],
+   "expectations": [
+    "Ran compose.mjs (or followed its plan) before writing markup",
+    "Taste profile written and tokens used; no raw hex colours in component CSS",
+    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+    "Taste score (audit-ui --taste) is 90 or more",
+    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+    "One primary action per screen",
+    "No software sections (logo wall, feature grid, \"Start free\") on a page that is not for software"
+   ],
+   "checks": [
+    {
+     "name": "one h1",
+     "selector": "h1",
+     "min": 1,
+     "max": 1
+    },
+    {
+     "name": "top navigation",
+     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
+     "min": 1
+    },
+    {
+     "name": "footer",
+     "selector": "footer",
+     "min": 1
+    },
+    {
+     "name": "at least 4 sections",
+     "selector": "main > section, main > * > section, body > section",
+     "min": 4
+    },
+    {
+     "name": "fees or first call stated",
+     "text": "free",
+     "min": 1
+    },
+    {
+     "name": "phone link",
+     "selector": "a[href^=\"tel:\"]",
+     "min": 1
+    },
+    {
+     "name": "no start-free",
+     "text": "start free",
+     "max": 0,
+     "min": 0
+    }
+   ]
+  },
+  {
+   "id": 34,
+   "slug": "food-bank-cause",
+   "pageType": "cause",
+   "kind": "marketing",
+   "prompt": "Home page for Canal Street Food Bank, a volunteer-run charity in Birmingham. Two audiences: people who need food this week, and people who want to give. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+   "expected_output": "A complete page that passes the audit and the taste critic, with sections that fit the subject.",
+   "files": [],
+   "expectations": [
+    "Ran compose.mjs (or followed its plan) before writing markup",
+    "Taste profile written and tokens used; no raw hex colours in component CSS",
+    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+    "Taste score (audit-ui --taste) is 90 or more",
+    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+    "One primary action per screen",
+    "No software sections (logo wall, feature grid, \"Start free\") on a page that is not for software"
+   ],
+   "checks": [
+    {
+     "name": "one h1",
+     "selector": "h1",
+     "min": 1,
+     "max": 1
+    },
+    {
+     "name": "top navigation",
+     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
+     "min": 1
+    },
+    {
+     "name": "footer",
+     "selector": "footer",
+     "min": 1
+    },
+    {
+     "name": "at least 4 sections",
+     "selector": "main > section, main > * > section, body > section",
+     "min": 4
+    },
+    {
+     "name": "donate action",
+     "text": "donate",
+     "min": 1
+    },
+    {
+     "name": "opening times as a table",
+     "selector": "table",
+     "min": 1
+    },
+    {
+     "name": "no pricing tiers",
+     "selector": ".lt-pricing-tiers",
+     "max": 0,
+     "min": 0
+    }
+   ]
+  },
+  {
+   "id": 35,
+   "slug": "ceramics-shop",
+   "pageType": "brand-landing",
+   "kind": "marketing",
+   "prompt": "Home page for Tidewater Pottery, one potter in Cornwall selling four stoneware pieces online. No photographs yet. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+   "expected_output": "A complete page that passes the audit and the taste critic, with sections that fit the subject.",
+   "files": [],
+   "expectations": [
+    "Ran compose.mjs (or followed its plan) before writing markup",
+    "Taste profile written and tokens used; no raw hex colours in component CSS",
+    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+    "Taste score (audit-ui --taste) is 90 or more",
+    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+    "One primary action per screen",
+    "No software sections (logo wall, feature grid, \"Start free\") on a page that is not for software"
+   ],
+   "checks": [
+    {
+     "name": "one h1",
+     "selector": "h1",
+     "min": 1,
+     "max": 1
+    },
+    {
+     "name": "top navigation",
+     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
+     "min": 1
+    },
+    {
+     "name": "footer",
+     "selector": "footer",
+     "min": 1
+    },
+    {
+     "name": "at least 4 sections",
+     "selector": "main > section, main > * > section, body > section",
+     "min": 4
+    },
+    {
+     "name": "prices shown",
+     "text": "£",
+     "min": 3
+    },
+    {
+     "name": "art panels in place of photographs",
+     "selector": ".lt-art",
+     "min": 3
+    },
+    {
+     "name": "delivery answered",
+     "text": "delivery",
+     "min": 1
+    }
+   ]
+  },
+  {
+   "id": 36,
+   "slug": "conference-event",
+   "pageType": "event",
+   "kind": "marketing",
+   "prompt": "Website for Signal & Noise, a one-day data journalism conference in Glasgow on 9 October 2027, 200 places, tickets £120. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+   "expected_output": "A complete page that passes the audit and the taste critic, with sections that fit the subject.",
+   "files": [],
+   "expectations": [
+    "Ran compose.mjs (or followed its plan) before writing markup",
+    "Taste profile written and tokens used; no raw hex colours in component CSS",
+    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+    "Taste score (audit-ui --taste) is 90 or more",
+    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+    "One primary action per screen",
+    "No software sections (logo wall, feature grid, \"Start free\") on a page that is not for software"
+   ],
+   "checks": [
+    {
+     "name": "one h1",
+     "selector": "h1",
+     "min": 1,
+     "max": 1
+    },
+    {
+     "name": "top navigation",
+     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
+     "min": 1
+    },
+    {
+     "name": "footer",
+     "selector": "footer",
+     "min": 1
+    },
+    {
+     "name": "at least 4 sections",
+     "selector": "main > section, main > * > section, body > section",
+     "min": 4
+    },
+    {
+     "name": "date as time element",
+     "selector": "time[datetime]",
+     "min": 1
+    },
+    {
+     "name": "ticket action",
+     "text": "ticket",
+     "min": 2
+    },
+    {
+     "name": "programme rows",
+     "selector": ".lt-services li, table tr",
+     "min": 4
     }
    ]
   }

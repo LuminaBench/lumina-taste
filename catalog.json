@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
   "counts": {
-    "ui": 192,
+    "ui": 199,
     "charts": 46,
-    "blueprints": 17,
+    "blueprints": 25,
     "palettes": 24,
     "themes": 48,
     "typography": 12,
@@ -17,7 +17,7 @@
       "title": "Controls & tactile inputs",
       "summary": "Buttons, toggles, pickers and fields with real pressed states and no layout jump.",
       "order": 1,
-      "count": 40
+      "count": 41
     },
     {
       "id": "navigation",
@@ -45,7 +45,7 @@
       "title": "Data & layout primitives",
       "summary": "Tables, lists, grids and blocks for showing real data cleanly, with tabular numbers everywhere.",
       "order": 5,
-      "count": 40
+      "count": 42
     },
     {
       "id": "motion",
@@ -59,7 +59,7 @@
       "title": "Sections for pages",
       "summary": "Whole page sections (heroes, pricing, FAQs, sign-in) built from the same tokens, so a page can be assembled in minutes and still look designed.",
       "order": 7,
-      "count": 24
+      "count": 28
     },
     {
       "id": "backdrops",
@@ -987,6 +987,141 @@
         "components/ui/blocks/sticky-story/sticky-story.ts"
       ],
       "path": "components/ui/blocks/sticky-story"
+    },
+    {
+      "id": "offer-cards",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Offer cards",
+      "summary": "Two to four things on offer, each with a picture or an art panel, one line, two facts, a price and a link.",
+      "aliases": [
+        "product cards",
+        "product trio",
+        "services section",
+        "the range",
+        "our products",
+        "menu highlights",
+        "rooms",
+        "tour options",
+        "collection grid",
+        "what we sell"
+      ],
+      "pattern": "<ul> of <article> + <dl>",
+      "states": [
+        "three across",
+        "two across",
+        "stacked"
+      ],
+      "react": "OfferCards",
+      "deps": [
+        "art-panel"
+      ],
+      "files": [
+        "components/ui/blocks/offer-cards/offer-cards.css",
+        "components/ui/blocks/offer-cards/offer-cards.html",
+        "components/ui/blocks/offer-cards/offer-cards.react.tsx"
+      ],
+      "path": "components/ui/blocks/offer-cards"
+    },
+    {
+      "id": "visit-info",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Visit information",
+      "summary": "Where a place is, how to get there, how to reach it, and opening hours with today marked and \"open now\" in words.",
+      "aliases": [
+        "opening hours",
+        "find us",
+        "location section",
+        "contact and hours",
+        "getting here",
+        "address block",
+        "store hours",
+        "directions"
+      ],
+      "pattern": "<address> + hours <table>",
+      "states": [
+        "open now",
+        "opens later today",
+        "closed now",
+        "stacked"
+      ],
+      "react": "VisitInfo",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/visit-info/visit-info.css",
+        "components/ui/blocks/visit-info/visit-info.html",
+        "components/ui/blocks/visit-info/visit-info.react.tsx",
+        "components/ui/blocks/visit-info/visit-info.ts"
+      ],
+      "path": "components/ui/blocks/visit-info"
+    },
+    {
+      "id": "hero-statement",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Hero, statement",
+      "summary": "A type-led hero: one very large headline across the page, then a ruled row with the pitch, the action and three facts.",
+      "aliases": [
+        "type hero",
+        "big headline hero",
+        "editorial hero",
+        "typographic hero",
+        "no image hero",
+        "statement headline",
+        "oversized title"
+      ],
+      "pattern": "<h1> + <dl>",
+      "states": [
+        "wide",
+        "stacked"
+      ],
+      "react": "HeroStatement",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/hero-statement/hero-statement.css",
+        "components/ui/blocks/hero-statement/hero-statement.html",
+        "components/ui/blocks/hero-statement/hero-statement.react.tsx"
+      ],
+      "path": "components/ui/blocks/hero-statement"
+    },
+    {
+      "id": "service-list",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Service list",
+      "summary": "Things on offer as ruled rows: a name, one sentence, how long it takes and the price, each in its own column down the list. Also a programme with times, or a menu.",
+      "aliases": [
+        "services and fees",
+        "price list",
+        "treatment list",
+        "practice areas",
+        "menu",
+        "programme",
+        "schedule",
+        "agenda",
+        "timetable",
+        "class timetable",
+        "ruled rows",
+        "ways to help",
+        "what we do"
+      ],
+      "pattern": "<ul> rows on one shared grid (subgrid)",
+      "states": [
+        "rows with links",
+        "plain rows",
+        "timed rows",
+        "grouped lists",
+        "stacked on phones"
+      ],
+      "react": "ServiceList",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/service-list/service-list.css",
+        "components/ui/blocks/service-list/service-list.html",
+        "components/ui/blocks/service-list/service-list.react.tsx"
+      ],
+      "path": "components/ui/blocks/service-list"
     },
     {
       "id": "disclosure-chevron",
@@ -2197,6 +2332,43 @@
       "path": "components/ui/controls/date-picker"
     },
     {
+      "id": "booking-bar",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Booking bar",
+      "summary": "Date, time and party size in one row with one action, and the answer given as a sentence.",
+      "aliases": [
+        "reservation form",
+        "book a table",
+        "availability search",
+        "booking widget",
+        "reserve bar",
+        "check availability",
+        "appointment picker",
+        "tour booking"
+      ],
+      "pattern": "<form> + date picker + <select> + stepper",
+      "states": [
+        "ready",
+        "no date",
+        "checking",
+        "answered"
+      ],
+      "react": "BookingBar",
+      "deps": [
+        "date-picker",
+        "number-stepper",
+        "button"
+      ],
+      "files": [
+        "components/ui/controls/booking-bar/booking-bar.css",
+        "components/ui/controls/booking-bar/booking-bar.html",
+        "components/ui/controls/booking-bar/booking-bar.react.tsx",
+        "components/ui/controls/booking-bar/booking-bar.ts"
+      ],
+      "path": "components/ui/controls/booking-bar"
+    },
+    {
       "id": "data-table",
       "kind": "ui",
       "family": "data",
@@ -3351,6 +3523,70 @@
         "components/ui/data/media-player/media-player.ts"
       ],
       "path": "components/ui/data/media-player"
+    },
+    {
+      "id": "art-panel",
+      "kind": "ui",
+      "family": "data",
+      "name": "Art panel",
+      "summary": "What stands in for a photograph until there is one: the name set large on a tinted panel, with one fact. Add an <img> and the photo takes over.",
+      "aliases": [
+        "image placeholder",
+        "no photo",
+        "product image fallback",
+        "typographic card",
+        "photo slot",
+        "cover panel",
+        "poster card",
+        "media placeholder"
+      ],
+      "pattern": "<figure> + <figcaption>",
+      "states": [
+        "plain",
+        "accent",
+        "ink",
+        "with a photograph"
+      ],
+      "react": "ArtPanel",
+      "deps": [],
+      "files": [
+        "components/ui/data/art-panel/art-panel.css",
+        "components/ui/data/art-panel/art-panel.html",
+        "components/ui/data/art-panel/art-panel.react.tsx"
+      ],
+      "path": "components/ui/data/art-panel"
+    },
+    {
+      "id": "task-list",
+      "kind": "ui",
+      "family": "data",
+      "name": "Task list",
+      "summary": "Tickable rows with a title, a detail line and an optional value, a running \"2 of 5 done\" and a progress track.",
+      "aliases": [
+        "todo list",
+        "checklist",
+        "habit list",
+        "tick list",
+        "to-do rows",
+        "daily tasks",
+        "checkable rows",
+        "habit tracker rows"
+      ],
+      "pattern": "native checkboxes in whole-row labels",
+      "states": [
+        "to do",
+        "done",
+        "all done"
+      ],
+      "react": "TaskList",
+      "deps": [],
+      "files": [
+        "components/ui/data/task-list/task-list.css",
+        "components/ui/data/task-list/task-list.html",
+        "components/ui/data/task-list/task-list.react.tsx",
+        "components/ui/data/task-list/task-list.ts"
+      ],
+      "path": "components/ui/data/task-list"
     },
     {
       "id": "count-up",
@@ -7356,6 +7592,317 @@
         "blueprints/mobile/page.css"
       ],
       "path": "blueprints/mobile"
+    },
+    {
+      "id": "inbox",
+      "order": 18,
+      "name": "Support inbox",
+      "summary": "Views, a conversation list with search and unread state, a thread with a reply box, and a customer details pane. Four panes on a desktop, one at a time on a phone.",
+      "anatomy": "Views | conversation list (search, rows with who, subject, one line, time) | thread (subject, messages, reply or note) | customer (plan, history, tags)",
+      "aliases": [
+        "helpdesk",
+        "support inbox",
+        "shared inbox",
+        "email client",
+        "messages app",
+        "ticketing",
+        "three pane inbox",
+        "customer support tool",
+        "conversations"
+      ],
+      "uses": [
+        "chat-thread",
+        "prompt-composer",
+        "badge",
+        "button",
+        "kbd"
+      ],
+      "states": [
+        "empty"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/inbox/index.html",
+        "blueprints/inbox/main.ts",
+        "blueprints/inbox/meta.json",
+        "blueprints/inbox/page.css"
+      ],
+      "path": "blueprints/inbox"
+    },
+    {
+      "id": "calculator",
+      "order": 19,
+      "name": "Calculator",
+      "summary": "A calculator page: labelled money fields and sliders on the left, a live answer with the one action on the right (pinned on phones), a chart that explains the answer, and the questions people ask.",
+      "anatomy": "Top bar → question as the headline → inputs | live result + action → explaining chart → FAQ → footer",
+      "aliases": [
+        "mortgage calculator",
+        "loan calculator",
+        "pricing calculator page",
+        "savings calculator",
+        "quote page",
+        "estimator",
+        "roi calculator",
+        "repayment calculator",
+        "interactive calculator"
+      ],
+      "uses": [
+        "navbar-simple",
+        "amount-input",
+        "range-slider",
+        "segmented-control",
+        "faq-section",
+        "footer-minimal",
+        "button"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/calculator/index.html",
+        "blueprints/calculator/main.ts",
+        "blueprints/calculator/meta.json",
+        "blueprints/calculator/page.css"
+      ],
+      "path": "blueprints/calculator"
+    },
+    {
+      "id": "episode",
+      "order": 20,
+      "name": "Episode page",
+      "summary": "A podcast or video episode: title and guest, a player that stays in reach, chapters that seek, a transcript at reading width with a progress bar, earlier episodes and an email sign-up.",
+      "anatomy": "Top bar → episode header (number, date, length, title, guest) → sticky player → chapters → transcript → earlier episodes → sign-up → footer",
+      "aliases": [
+        "podcast episode",
+        "podcast page",
+        "audio page",
+        "video page",
+        "talk page",
+        "show notes",
+        "transcript page",
+        "lecture page",
+        "webinar recording"
+      ],
+      "uses": [
+        "navbar-simple",
+        "media-player",
+        "reading-progress",
+        "newsletter-signup",
+        "footer-minimal",
+        "button"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/episode/index.html",
+        "blueprints/episode/main.ts",
+        "blueprints/episode/meta.json",
+        "blueprints/episode/page.css"
+      ],
+      "path": "blueprints/episode"
+    },
+    {
+      "id": "venue",
+      "order": 21,
+      "name": "Place or venue",
+      "summary": "A page for a café, shop, studio, clinic or attraction: what it is and where, the things on offer with prices, a booking bar that answers in a sentence, visiting information with opening hours, and the questions people ask before they come. Art panels stand in until there are photographs.",
+      "anatomy": "Top bar → hero (what and where, book) with a picture or art panel → offers with prices → booking → address, getting here, opening hours → questions → footer",
+      "aliases": [
+        "restaurant website",
+        "cafe website",
+        "local business page",
+        "shop home page",
+        "distillery",
+        "salon",
+        "clinic home page",
+        "studio website",
+        "venue page",
+        "attraction",
+        "book a tour"
+      ],
+      "uses": [
+        "navbar-simple",
+        "hero-split",
+        "art-panel",
+        "offer-cards",
+        "booking-bar",
+        "date-picker",
+        "number-stepper",
+        "visit-info",
+        "faq-section",
+        "footer-minimal",
+        "button"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/venue/index.html",
+        "blueprints/venue/main.ts",
+        "blueprints/venue/meta.json",
+        "blueprints/venue/page.css"
+      ],
+      "path": "blueprints/venue"
+    },
+    {
+      "id": "practice",
+      "order": 22,
+      "name": "Local or professional service",
+      "summary": "A page for a practice or a service business (a dentist, a physio, a solicitor, an accountant, a tradesperson): who it is for and where, what is done and what it costs as ruled rows, what happens at a first visit, the people with their qualifications, the address with opening hours, and the questions people ask before they call.",
+      "anatomy": "Top bar with the phone number → hero (who, where, book) with a picture or art panel → services and fees as rows → first visit in three steps → people → address and opening hours → questions → booking band → footer",
+      "aliases": [
+        "dentist website",
+        "clinic website",
+        "law firm website",
+        "solicitor",
+        "accountant website",
+        "physio",
+        "vet",
+        "plumber",
+        "electrician",
+        "tutor",
+        "consultant website",
+        "service business",
+        "local service",
+        "practice website",
+        "treatments and fees"
+      ],
+      "uses": [
+        "navbar-simple",
+        "hero-split",
+        "art-panel",
+        "service-list",
+        "how-it-works",
+        "team-grid",
+        "visit-info",
+        "faq-section",
+        "cta-band",
+        "footer-minimal",
+        "button"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/practice/index.html",
+        "blueprints/practice/main.ts",
+        "blueprints/practice/meta.json",
+        "blueprints/practice/page.css"
+      ],
+      "path": "blueprints/practice"
+    },
+    {
+      "id": "cause",
+      "order": 23,
+      "name": "Charity or community group",
+      "summary": "A page for a charity, a food bank, a club or a campaign: the claim in one sentence with three true figures, how to get help with session times, where each pound goes as one bar that adds up, ways to help as ruled rows, the questions people ask, and one giving action.",
+      "anatomy": "Top bar (Donate) → statement hero with three figures → how to get help: where and when → where the money goes → ways to help as rows → questions → giving band → footer with the charity number",
+      "aliases": [
+        "charity website",
+        "nonprofit landing page",
+        "food bank",
+        "donation page",
+        "fundraising page",
+        "community group",
+        "campaign page",
+        "volunteer page",
+        "club website",
+        "foundation",
+        "where the money goes"
+      ],
+      "uses": [
+        "navbar-simple",
+        "hero-statement",
+        "visit-info",
+        "service-list",
+        "faq-section",
+        "cta-band",
+        "footer-minimal",
+        "button"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/cause/index.html",
+        "blueprints/cause/main.ts",
+        "blueprints/cause/meta.json",
+        "blueprints/cause/page.css"
+      ],
+      "path": "blueprints/cause"
+    },
+    {
+      "id": "shop",
+      "order": 24,
+      "name": "Maker or product brand",
+      "summary": "A home page for a maker or a small product brand: the object and its price in the first screen, the range as a set at one ratio, how it is made in three steps, materials and care as plain facts, delivery and returns answered, and one buying action. Art panels stand in until there are photographs.",
+      "anatomy": "Top bar → hero (the object, the price, delivery facts) with a picture or art panel → the range as three cards → how it is made → materials and care → delivery and returns → buying band → footer",
+      "aliases": [
+        "online shop home page",
+        "product brand landing page",
+        "pottery",
+        "ceramics",
+        "candles",
+        "skincare brand",
+        "coffee brand",
+        "handmade",
+        "maker website",
+        "small shop",
+        "dtc brand",
+        "subscription box",
+        "meal kit"
+      ],
+      "uses": [
+        "navbar-simple",
+        "hero-split",
+        "art-panel",
+        "offer-cards",
+        "how-it-works",
+        "faq-section",
+        "cta-band",
+        "footer-minimal",
+        "button"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/shop/index.html",
+        "blueprints/shop/main.ts",
+        "blueprints/shop/meta.json",
+        "blueprints/shop/page.css"
+      ],
+      "path": "blueprints/shop"
+    },
+    {
+      "id": "event",
+      "order": 25,
+      "name": "Event or conference",
+      "summary": "A page for a conference, a festival, a course or a meetup: the date and place first, what it is in one sentence with three figures, the programme as timed rows, the speakers, tickets with what each includes, how to get there, and the questions people ask before they buy.",
+      "anatomy": "Top bar (Get a ticket) → statement hero with the date, the place and three figures → programme as timed rows → speakers beside a rail → three tickets → venue and doors → questions → footer",
+      "aliases": [
+        "conference website",
+        "event landing page",
+        "festival",
+        "meetup",
+        "workshop page",
+        "course page",
+        "summit",
+        "wedding website",
+        "schedule",
+        "agenda",
+        "programme",
+        "tickets page",
+        "speakers"
+      ],
+      "uses": [
+        "navbar-simple",
+        "hero-statement",
+        "service-list",
+        "team-grid",
+        "pricing-tiers",
+        "visit-info",
+        "faq-section",
+        "footer-minimal",
+        "button"
+      ],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/event/index.html",
+        "blueprints/event/main.ts",
+        "blueprints/event/meta.json",
+        "blueprints/event/page.css"
+      ],
+      "path": "blueprints/event"
     }
   ],
   "palettes": [

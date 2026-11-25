@@ -58,9 +58,10 @@ test('a page assembled from section blocks passes the taste critic with no warni
     assert.equal(r.status, 0, r.stderr);
     const sn = (id) => readFileSync(join(dir, 'ui/snippets', `${id}.html`), 'utf8');
     const tone = (html) => html.replace('<section class="lt-', '<section data-tone="well" class="lt-');
+    const rail = (html) => html.replace('<section class="lt-', '<section data-layout="rail" class="lt-');
     // A bare code figure (no tabs, no copy button) must not break the page script.
     const bare = '<section class="lt-band lt-container"><h2 class="lt-h3">Send an event</h2><figure class="lt-code" data-lt="code-block"><pre tabindex="0"><code>curl https://api.halyard.dev/v1/events -d name=signup</code></pre></figure></section>';
-    const body = blocks.slice(1, -1).filter((b) => b !== 'code-block').map((b) => (['stats-band', 'how-it-works'].includes(b) ? tone(sn(b)) : sn(b))).join('\n') + bare;
+    const body = blocks.slice(1, -1).filter((b) => b !== 'code-block').map((b) => (['stats-band', 'how-it-works'].includes(b) ? tone(sn(b)) : b === 'testimonial-grid' ? rail(sn(b)) : sn(b))).join('\n') + bare;
     writeFileSync(join(dir, 'index.html'), `<!doctype html><html lang="en" data-palette="slate-forest" data-mode="light" data-type="precision" data-density="spacious" data-radius="balanced" data-motion="snappy"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Composed</title><link rel="stylesheet" href="ui/lumina.css"><script defer src="ui/lumina.js"></script></head><body>${sn(blocks[0])}<main>${body}</main>${sn(blocks.at(-1))}</body></html>`);
     const a = node([join(root, 'scripts/audit-ui.mjs'), join(dir, 'index.html'), '--taste', '--strict', '--modes', 'light']);
     assert.equal(a.status, 0, a.stdout);
@@ -69,7 +70,11 @@ test('a page assembled from section blocks passes the taste critic with no warni
     const named = node([join(root, 'scripts/audit-ui.mjs'), join(dir, 'index.html'), '--product', 'Tally', '--viewports', 'desktop', '--modes', 'light']);
     assert.equal(named.status, 1);
     assert.match(named.stdout, /taste-sample-copy/);
-    assert.match(named.stdout, /1 error −12/);
+    // So do its sample sentences and figures (brand swapped or not), and links to sections that are not there.
+    assert.match(named.stdout, /taste-sample-content/);
+    assert.match(named.stdout, /pieces of the kit's sample content are unchanged/);
+    assert.match(named.stdout, /taste-dead-anchor/);
+    assert.match(named.stdout, /2 errors −24/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
@@ -88,6 +93,36 @@ test('audit-ui reads plain rgb() colours: black text passes, translucent text fa
   rmSync(out, { force: true });
   assert.equal(contrast.length, 2, contrast.join(' | '));
   assert.ok(contrast.every((m) => /Thirty percent black/.test(m)), contrast.join(' | '));
+});
+
+test('audit-ui --taste names composition faults: a wall of cards, an off edge, a stranded word, flooded accent', () => {
+  const out = join(tmpdir(), `lt-composition-${process.pid}.json`);
+  node([join(root, 'scripts/audit-ui.mjs'), join(root, 'tests/fixtures/composition.html'), '--taste', '--viewports', 'desktop', '--modes', 'light', '--json', out, '--quiet']);
+  const rules = new Set(JSON.parse(readFileSync(out, 'utf8')).report[0].findings.map((f) => f.rule));
+  rmSync(out, { force: true });
+  for (const rule of ['taste-monotony', 'taste-edge', 'taste-widow', 'taste-accent-budget']) assert.ok(rules.has(rule), rule);
+});
+
+test('a single blueprint installs flat, lean and labelled as sample content; an existing page is kept', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lt-flat-'));
+  try {
+    const r = node([join(root, 'scripts/install-taste.mjs'), '--project', dir, '--framework', 'static', '--palette', 'graphite-violet', '--mode', 'dark', '--style', 'lucid', '--blueprints', 'agent']);
+    assert.equal(r.status, 0, r.stderr);
+    for (const f of ['index.html', 'main.css', 'main.js', 'taste-profile.json']) assert.ok(existsSync(join(dir, f)), f);
+    const css = readFileSync(join(dir, 'main.css'), 'utf8');
+    assert.ok(/\[data-palette="?graphite-violet"?\]/.test(css) && !/\[data-palette="?cream-charcoal"?\]/.test(css), 'one palette');
+    assert.ok(/\[data-style="?lucid"?\]/.test(css) && !/\[data-style="?neobrutal"?\]/.test(css), 'one style');
+    const html = readFileSync(join(dir, 'index.html'), 'utf8');
+    assert.match(html, /content="TODO: one sentence/);
+    assert.match(html, /lumina-taste blueprint: agent/);
+    const again = mkdtempSync(join(tmpdir(), 'lt-flat2-'));
+    writeFileSync(join(again, 'index.html'), '<p>mine</p>');
+    const r2 = node([join(root, 'scripts/install-taste.mjs'), '--project', again, '--framework', 'static', '--blueprints', 'mobile']);
+    assert.match(r2.stdout, /already exists/);
+    assert.equal(readFileSync(join(again, 'index.html'), 'utf8'), '<p>mine</p>');
+    assert.ok(existsSync(join(again, 'mobile/index.html')));
+    rmSync(again, { recursive: true, force: true });
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
 test('audit-ui --taste flags every page-level rule on the taste fixture', () => {

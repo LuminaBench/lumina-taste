@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en" data-palette="petrol-peach" data-mode="light" data-type="humanist" data-density="spacious" data-radius="balanced" data-motion="snappy">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Repayment calculator · Halyard Home</title>
+  <meta name="description" content="Blueprint: a calculator page with labelled money fields and sliders on the left, a live result with the one action on the right, a chart that explains the answer and the questions people ask built with lumina-taste.">
+</head>
+<body>
+  <a class="bp-skip" href="#main">Skip to content</a>
+<header class="lt-nav-simple" data-lt="navbar-simple">
+  <a href="#home" data-part="brand"><span data-part="mark" aria-hidden="true"></span>Halyard Home</a>
+  <nav aria-label="Main"><ul data-part="links"><li><a href="#rates">Rates</a></li><li><a href="#calculator" aria-current="page">Calculator</a></li><li><a href="#guides">Guides</a></li><li><a href="#about">About</a></li></ul></nav>
+  <div data-part="actions"><a href="#signin" data-part="signin">Sign in</a><a class="lt-btn" data-variant="primary" data-size="sm" href="#start">Start an application</a></div>
+  <button type="button" data-part="toggle" aria-expanded="false" aria-controls="lt-ns-panel" aria-label="Menu"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <div id="lt-ns-panel" data-part="panel" hidden><ul><li><a href="#rates">Rates</a></li><li><a href="#calculator" aria-current="page">Calculator</a></li><li><a href="#guides">Guides</a></li><li><a href="#about">About</a></li></ul><a href="#signin">Sign in</a></div>
+</header>
+  <main id="main">
+    <header class="ca-head bp-container">
+      <p class="ca-eyebrow">Repayment calculator</p>
+      <h1>What would it cost each month?</h1>
+      <p>Change a number and the answer updates. Nothing is saved, and there is no credit check.</p>
+    </header>
+
+    <section class="ca-grid bp-container" id="calculator" aria-label="Calculator">
+      <form class="ca-form" id="ca-form" novalidate>
+        <h2 class="lt-visually-hidden">Your numbers</h2>
+        <div class="ca-pair">
+          <div class="lt-amount" data-lt="amount-input" data-min="0" data-max="5000000" data-decimals="0" id="ca-price">
+            <label for="ca-price-in">Property price</label>
+            <div data-part="field"><span data-part="symbol" aria-hidden="true">£</span><input id="ca-price-in" type="text" inputmode="decimal" autocomplete="off" value="325,000" aria-describedby="ca-price-hint"><span data-part="code">GBP</span></div>
+            <p id="ca-price-hint" data-part="hint">The agreed or asking price.</p>
+          </div>
+          <div class="lt-amount" data-lt="amount-input" data-min="0" data-max="5000000" data-decimals="0" id="ca-deposit">
+            <label for="ca-deposit-in">Deposit</label>
+            <div data-part="field"><span data-part="symbol" aria-hidden="true">£</span><input id="ca-deposit-in" type="text" inputmode="decimal" autocomplete="off" value="48,750" aria-describedby="ca-deposit-hint"><span data-part="code">GBP</span></div>
+            <p id="ca-deposit-hint" data-part="hint">15% of the price.</p>
+          </div>
+        </div>
+        <div class="lt-range" data-lt="range-slider" data-unit=" years" id="ca-term">
+            <div data-part="head"><label for="ca-term-in">Term</label><output for="ca-term-in" data-part="readout">25 years</output></div>
+            <div data-part="track-wrap">
+              <input id="ca-term-in" type="range" min="5" max="40" step="1" value="25">
+              <span data-part="bubble" aria-hidden="true">25 years</span>
+              <span data-part="ticks" aria-hidden="true"></span>
+            </div>
+          </div>
+        <div class="lt-range" data-lt="range-slider" data-unit="%" id="ca-rate">
+            <div data-part="head"><label for="ca-rate-in">Interest rate</label><output for="ca-rate-in" data-part="readout">4.85%</output></div>
+            <div data-part="track-wrap">
+              <input id="ca-rate-in" type="range" min="2" max="9" step="0.05" value="4.85">
+              <span data-part="bubble" aria-hidden="true">4.85%</span>
+              <span data-part="ticks" aria-hidden="true"></span>
+            </div>
+          </div>
+        <div class="ca-field"><span id="ca-kind-l">Type</span>
+          <div class="lt-segmented" data-lt="segmented-control" role="radiogroup" aria-labelledby="ca-kind-l" id="ca-kind">
+            <span data-part="indicator" aria-hidden="true"></span>
+            <button type="button" role="radio" aria-checked="true" tabindex="0" data-value="repayment">Repayment</button>
+            <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="interest">Interest only</button>
+          </div>
+        </div>
+      </form>
+
+      <aside class="ca-result" aria-labelledby="ca-result-h">
+        <h2 id="ca-result-h">Monthly payment</h2>
+        <output class="ca-figure" id="ca-monthly" for="ca-price-in ca-deposit-in ca-term-in ca-rate-in" aria-live="polite">£1,591</output>
+        <p class="ca-note" id="ca-summary">On a £276,250 loan over 25 years at 4.85%.</p>
+        <dl>
+          <div><dt>Loan</dt><dd id="ca-loan">£276,250</dd></div>
+          <div><dt>Loan to value</dt><dd id="ca-ltv">85%</dd></div>
+          <div><dt>Interest over the term</dt><dd id="ca-interest">£201,050</dd></div>
+          <div><dt>Total you repay</dt><dd id="ca-total">£477,300</dd></div>
+        </dl>
+        <a class="lt-btn" data-variant="primary" data-size="lg" href="#apply">Start an application</a>
+        <p class="ca-small">An illustration at one fixed rate for the whole term. Not an offer.</p>
+      </aside>
+    </section>
+
+    <section class="ca-chart bp-container" aria-labelledby="ca-chart-h">
+      <header><h2 id="ca-chart-h">Where each year's payments go</h2><p>Early on, most of what you pay is interest. The balance shifts as the loan gets smaller.</p></header>
+      <div id="ca-chart"></div>
+    </section>
+
+    <section class="lt-faq-section" data-tone="well" aria-labelledby="ca-faq-h">
+      <header><h2 id="ca-faq-h">Before you rely on this</h2><p data-part="lede">Four things people ask about the numbers above.</p></header>
+      <div data-part="list"><details open><summary>Is this a mortgage offer?<span data-part="chev" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><p>No. It is an illustration that assumes one fixed rate for the whole term. A lender's offer depends on your income, your outgoings and the property.</p></details><details><summary>Why is my first year mostly interest?<span data-part="chev" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><p>Interest is charged on what you still owe, and at the start you owe the most. Each payment clears a little more of the loan, so the interest share falls every year.</p></details><details><summary>What does a bigger deposit change?<span data-part="chev" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><p>It lowers the loan, so you pay less interest, and it lowers the loan to value. Below 90%, 85%, 75% and 60%, lenders usually offer lower rates.</p></details><details><summary>Are there other costs?<span data-part="chev" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><p>Yes: stamp duty, legal fees, a survey and sometimes a lender fee. Budget for them separately; this page only covers the monthly payment.</p></details></div>
+    </section>
+  </main>
+  <footer class="lt-footer-min">
+  <p>© 2026 Halyard Labs Ltd</p>
+  <nav aria-label="Footer"><ul><li><a href="#privacy">Privacy</a></li><li><a href="#terms">Terms</a></li><li><a href="#status">Status</a></li><li><a href="#contact">Contact</a></li></ul></nav>
+  <p data-part="made">Your home may be repossessed if you do not keep up repayments</p>
+</footer>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

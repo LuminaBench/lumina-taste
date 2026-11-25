@@ -5,7 +5,7 @@ description: Make interfaces look designed, not generated. Use for any UI work (
 
 # Lumina Taste
 
-A design kit for coding agents: a **page composer** that turns a brief into a plan, **24 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **39 visual styles**, **192 named UI patterns** (including **9 page backdrops**: grid, dots, ruled lines, ticks, wash, spotlight, grain, dither, circuit traces), **46 chart engines**, **17 page blueprints**, a **lockable taste profile**, a **Playwright auditor with a page-level taste critic**, a **copy lint** and **32 eval briefs** to measure the result. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
+A design kit for coding agents: a **page composer** that turns a brief into a plan, **24 OKLCH palettes** (light + dark, every pair WCAG-verified), **12 type pairings**, **39 visual styles**, **199 named UI patterns** (including **9 page backdrops**: grid, dots, ruled lines, ticks, wash, spotlight, grain, dither, circuit traces), **46 chart engines**, **25 page blueprints**, a **lockable taste profile**, a **Playwright auditor with a page-level taste critic**, a **copy lint** and **36 eval briefs** to measure the result. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
 
 Run commands from this skill's directory with Node.js 20+. Pass absolute paths (or run from the user's project with the absolute script path). Search, install and token scripts need nothing installed; the auditor needs Playwright; the gallery needs `npm install` once.
 
@@ -25,14 +25,15 @@ Read `references/anti-slop-rules.md` once per session. The short version:
 
 Components are rarely what makes a page look generated; the plan is. Run this loop for every page or screen:
 
-1. **Compose.** `node scripts/compose.mjs "<the user's brief in one line>"` prints a page plan: the design brief (audience, product, primary action, reading pattern, layout, density), a taste profile chosen for the domain, the sections in order with real catalog ids and a copy formula for each, the states to build, what to avoid, and the install command. Add `--json` to read it as data, `--type <id>` to force a page type.
+1. **Compose.** `node scripts/compose.mjs "<the user's brief in one line>"` prints a page plan: the design brief (audience, product, primary action, reading pattern, layout, density), a taste profile chosen for the domain, the **art direction** (one signature for this subject, the hero, a layout for every section so no two neighbours share a shape, and where colour and type sizes may go), the sections in order with real catalog ids and a copy formula for each, the states to build, what to avoid, and the install command. Add `--json` to read it as data, `--type <id>` to force a page type.
 2. **Ask only what is open, and show the look.** The plan's "Ask first" section lists at most three questions the brief leaves unanswered (product name, look, main action, light or dark), each with a default. Ask them in one short message; if the brief answers them, state your brief in two lines and go. A look is a style plus a palette: any style takes any palette (`--style linen --palette forest-brass`), and the composer suggests pairings per domain. When the look is open, do not describe styles: run `node scripts/directions.mjs "<brief>" --out <dir>`, which renders three fitting styles on the same content in one `directions.html` (labelled A, B, C, each with its `--style` flag), and let the person point. "A, but lighter" is a fine answer: keep the style, change the mode or palette. Then lock it (`--lock style,palette`). If they sent a reference image or site, read `references/reading-a-reference.md` first.
-3. **Install and build** exactly what the plan lists. Start from its blueprint when it names one. Follow the section order; skip optional sections you cannot fill with real content rather than inventing it.
-4. **Write real copy** with the plan's formulas and `references/copy-patterns.md` (headlines, buttons, empty states, errors, pricing, FAQ): the product's name, real numbers, specific benefits. Never ship lorem ipsum, "Acme", "John Doe" or "Feature one"; the critic fails them. For tables, charts and lists, `node scripts/sample-data.mjs users|invoices|orders|series|revenue|funnel|cohort|events` prints realistic, seeded data.
+3. **Install and build** exactly what the plan lists. The quickest correct start is `node scripts/compose.mjs "<brief>" --project <folder> --write`: it runs the install and writes a first draft to `index.html` (never over a page that is already there). When the plan starts from a blueprint the draft is that blueprint in the plan's profile; otherwise it is the plan's sections in order with their layouts, bands, ids and navigation applied and the art direction on `<main>`. Either way every sentence in it is sample copy for you to rewrite. Start from its blueprint when it names one. Follow the section order; skip optional sections you cannot fill with real content rather than inventing it.
+4. **Write real copy** with the plan's formulas and `references/copy-patterns.md` (headlines, buttons, empty states, errors, pricing, FAQ): the product's name, real numbers, specific benefits. Never ship lorem ipsum, "Acme", "John Doe" or "Feature one"; the critic fails them. **Never invent customers, quotes, reviews, logos, awards or figures.** If the user gave none, leave that optional section out, or use facts about the product itself (what it does, its limits, its price), and end your reply with a short list of what you assumed and what you still need from them. **No photographs?** Use an `art-panel` (Workflow I), never a grey box, a stock photo or a drawing of the product. For tables, charts and lists, `node scripts/sample-data.mjs users|invoices|orders|series|revenue|funnel|cohort|events` prints realistic, seeded data.
 5. **Build the states** the plan lists (loading, empty, error) as well as the happy path.
-6. **Critique.** `node scripts/audit-ui.mjs <url> --product "<the product's name>"` (it implies `--taste`; add `--screenshots <dir>` for a first-screen and a full-page capture of every run) fails the page while the kit's sample brands and people (Halyard, Ana López…) are still on it, and checks it like a designer would: type steps, accent hues, corner radii, one primary per screen, reading width, heading order, cards inside cards, section rhythm, a clear first thing to look at, placeholder copy and long button labels. Fix every error, then warnings, until the score is 90 or more. Then take screenshots at 390px and 1440px and look at them.
+6. **Do the detail pass.** A page that works is not yet a page that looks designed. Open it at 1440px and 390px and go through the sixteen looks in `references/composition.md` §10: one left edge, headings broken by sense, one clear first thing, the accent in three places at most, no two neighbouring sections the same shape, cards and pictures in a set matching. Fix what you see before you run the audit.
+7. **Critique.** `node scripts/audit-ui.mjs <url> --product "<the product's name>"` (it implies `--taste`; add `--screenshots <dir>` for a first-screen and a full-page capture of every run) fails the page while the kit's sample brands and people (Halyard, Ana López…) are still on it, lists the sample sentences and figures you have not rewritten and the links that point nowhere, and checks it like a designer would: type steps, accent hues, corner radii, one primary per screen, reading width, heading order, cards inside cards, section rhythm, a clear first thing to look at, three sections in a row with the same shape, runs of centred sections, content off the shared left edge, a heading that strands its last word, the accent used as wallpaper, placeholder copy and long button labels. Fix every error, then warnings, until the score is 90 or more. Then take screenshots at 390px and 1440px and look at them.
 
-`evals/evals.json` holds 32 real briefs; `node scripts/eval-score.mjs <output> --brief <slug>` scores any page you build for one of them (audit, taste, brief checks and hygiene, out of 100). The blueprints score 99 on average as reference answers.
+`evals/evals.json` holds 36 real briefs; `node scripts/eval-score.mjs <output> --brief <slug>` scores any page you build for one of them (audit, taste, brief checks and hygiene, out of 100). The blueprints score 99 on average as reference answers.
 
 ## Find the right thing first
 
@@ -61,18 +62,35 @@ When two elements sound alike (tooltip or popover, modal or drawer, checkbox or 
    - Typography: `tokens/typography/source.json` `use` field. Default `precision`.
    - Density: `spacious` for marketing/onboarding, `balanced` for products, `dense` for admin/trading.
    - Radius `sharp | balanced | soft`; motion `snappy | calm | reduced`.
-   - Style (optional): one of 35 looks in `tokens/styles/source.json` (studio, swiss, editorial, neobrutal, terminal, glass, soft, clay, retro, blueprint, lucid, flat, minimal, paper, elevated, newsprint, mono, graphite, atelier, nordic, kraft, midnight, playful, enterprise, zen, tonal, system, noir, bauhaus, ticker, linen, signal, ledger, volt, civic). `--style swiss` brings its palette, mode, type and radius; explicit flags still win. Pick a style only when the brief names a mood; default is none.
-2. **Install only what the page needs** (writes `taste-profile.json`, copies tokens + chosen files + their imports, nothing else). `--framework static` is for plain HTML with no build step: it writes one `lumina.css`, one `lumina.js` (enhances every `[data-lt]` element on load, charts on `lumina.charts`) and `snippets/<id>.html` to paste; pages work from `file://`. `vanilla` copies the TypeScript sources for a bundler; `react` copies the `.react.tsx` wrappers.
+   - Style (optional): one of 39 looks in `tokens/styles/source.json` (studio, swiss, editorial, neobrutal, terminal, glass, soft, clay, retro, blueprint, lucid, flat, minimal, paper, elevated, newsprint, mono, graphite, atelier, nordic, kraft, midnight, playful, enterprise, zen, tonal, system, noir, bauhaus, ticker, linen, signal, ledger, volt, civic, trace, graph, ember, pixel). `--style swiss` brings its palette, mode, type and radius; explicit flags still win. Pick a style only when the brief names a mood; default is none.
+2. **Install only what the page needs** (writes `taste-profile.json`, copies tokens + chosen files + their imports, nothing else). `--framework static` is for plain HTML with no build step; pages work from `file://`. `vanilla` copies the TypeScript sources for a bundler; `react` copies the `.react.tsx` wrappers.
 
-   Static page recipe:
+   **Static, from a blueprint** (when `compose.mjs` says "start from the blueprint"). One command writes the finished page into the project folder:
+   ```sh
+   node scripts/install-taste.mjs --project /abs/app --framework static --blueprints venue
+   # → /abs/app/index.html, main.css, main.js and taste-profile.json. An index.html that is already there is never replaced: the page goes to venue/ beside it.
+   ```
+   Everything in that page is sample content: every brand, person, sentence, number and link. Rewrite all of it (step 4 of the loop). When the page needs a part or a chart the blueprint lacks, run the same command again with `--components <ids>` and/or `--charts <ids>` added and link `lumina-taste/lumina.css` and `lumina.js` after `main.css`.
+
+   **Static, from snippets** (when it says "build from the snippets"). Files go to `<project>/lumina-taste/` unless you pass `--dest`: one `lumina.css`, one `lumina.js` (enhances every `[data-lt]` element on load, charts on `lumina.charts`) and `snippets/<id>.html` to paste.
    ```html
-   <html data-palette="navy-sand" data-mode="light" data-type="financial" data-density="balanced" data-radius="balanced" data-motion="snappy">
-   <link rel="stylesheet" href="ui/lumina.css"><script defer src="ui/lumina.js"></script>
-   <main class="lt-container lt-stack"> … markup pasted from ui/snippets/ … <div id="mrr"></div> </main>
+   <html lang="en" data-palette="navy-sand" data-mode="light" data-type="financial" data-density="balanced" data-radius="balanced" data-motion="snappy">
+   <link rel="stylesheet" href="lumina-taste/lumina.css"><script defer src="lumina-taste/lumina.js"></script>
+   <body>
+     <header class="lt-nav-simple" data-lt="navbar-simple">…</header>
+     <main>
+       <!-- Section blocks (hero, features, pricing, FAQ…) go straight in <main>, one after another. They centre and pad themselves. -->
+       <section class="lt-hero-split">…</section>
+       <!-- Anything that is not a section block (an app screen, a chart, a table) gets a container from you. -->
+       <div class="lt-container lt-stack"> … <div id="mrr"></div> … </div>
+     </main>
+   </body>
    <script>addEventListener('DOMContentLoaded', () => lumina.charts['multi-line-chart'](document.getElementById('mrr'),
      { x: ['Jan', 'Feb', 'Mar'], series: [{ name: 'Team', values: [12, 14, 18] }] }, { title: 'Team plan pulled ahead', subtitle: 'MRR, £k' }));</script>
    ```
-   Only the charts you pass to `--charts` are in `lumina.charts`. `node scripts/search.mjs --card <chart-id>` prints its data shape. A blueprint installed this way is a complete page in `<dest>/<id>/` with its own `main.css` and `main.js`: move it into place and edit its words and data, or build your page from `snippets/` with `lumina.css`; do not mix the two on one page.
+   Only the charts you pass to `--charts` are in `lumina.charts`; the installer lists them. `node scripts/search.mjs --card <chart-id>` prints the data shape and the options.
+
+   Things people trip on: **fonts** need nothing (pages use faces already on the device, chosen to match, and work offline; the web-font link the installer prints is optional). **One mode only**: the auditor flips `data-mode` to test light and dark; if the page ships one, pass `--modes dark` (or `light`). **Anchors**: give each section an `id` and point nav links at them; `--product` audits list links that go nowhere.
    ```sh
    node scripts/install-taste.mjs --project /abs/app --dest src/ui --framework react \
      --palette navy-sand --type swiss --density balanced \
@@ -150,6 +168,14 @@ Keep the stack and bring the taste: `node scripts/export-tokens.mjs --format sha
 | AI assistant chat | `assistant` | History rail (a drawer on phones), reading-width conversation with prose, tables and code, pinned composer; empty, streaming and error states |
 | Developer tool landing | `devtool` | Floating pill nav over a grid hero with circuit traces, install command beside the action, typed terminal, tabbed code, API rows, figures, one quote |
 | Agent workspace | `agent` | Workspace switcher and sessions by project, a composer over a dither backdrop, and a running session with a plan, a diff and an approval bar; empty and running states |
+| Place or venue | `venue` | What it is and where, offers with prices on art panels, a booking bar that answers in a sentence, address and opening hours, questions |
+| Support inbox | `inbox` | Views, conversation list with search and unread state, thread with reply or note, customer details; one pane at a time on phones; empty state |
+| Calculator | `calculator` | Money fields and sliders, a live answer with the one action (pinned on phones), a chart that explains it, questions |
+| Episode page | `episode` | Title and guest, a player that stays in reach, chapters that seek, a readable transcript with a progress bar, earlier episodes |
+| Local or professional service | `practice` | Who it is for and where, services and fees as ruled rows with prices in one column, the first visit in three steps, people with their qualifications, address and opening hours, questions, a booking band with the phone number |
+| Charity or community group | `cause` | The claim as a fact with three true figures, how to get help with session times, where each pound goes as one bar that adds up, ways to help as rows, one giving action |
+| Maker or product brand | `shop` | The object and its price in the first screen, the range as three art panels at one ratio, how it is made, materials and care as plain facts, delivery and returns, a buying band |
+| Event or conference | `event` | The date and place above a statement headline with three figures, the programme as timed rows, speakers beside a rail, three tickets, venue and door times, questions |
 | Phone app screen | `mobile` | Collapsing large title, one headline figure with a week of bars, whole-row lists, primary action above bottom tabs, a bottom-sheet form; loading and empty states |
 
 ```sh
@@ -229,6 +255,55 @@ A page background can carry a quiet pattern or light. It is one attribute on a h
 
 Rules: one backdrop per screen, one hue, and the pattern fades before it reaches the text (so contrast never depends on it). Text over a wash sits on its own surface (a card, a chip, a composer). Tune with `--backdrop-size`, `--backdrop-strength`, `--backdrop-fade`, `--wash-start`, `--wash-strength`. Four styles bring a backdrop with them and put it behind heroes without any attribute: `trace` (grid + spotlight), `graph` (light graph paper), `ember` (wash + grain) and `pixel` (dither); `data-backdrop="none"` on a hero opts out. The script-drawn two install like any component (`--components backdrop-dither,backdrop-circuit`); everything else is CSS in `tokens/backdrops.css`, which every install includes.
 
+## Workflow H2 · Composition: layouts that fit the subject
+
+The blocks are the same for every page; what makes a page look designed for its subject is how they are composed. `references/composition.md` is the full guide. The tools:
+
+| Where | Attribute | Effect |
+| --- | --- | --- |
+| A heading-and-body block (features, offers, steps, figures, quotes, team, posts, integrations) | `data-layout="rail"` | Heading in a left column that stays put, body on the right. Grids drop a column; three items become rows; steps run down a line. |
+| | `data-layout="centre"` | Heading centred above a symmetrical body. |
+| | `data-layout="split"` | Heading left, its lede right, on one line. |
+| Any block | `data-space="tight"` / `"open"` | Pull a proof strip close; let a lone quote stand apart. |
+| `<main>` | `data-separators="rules"` | Hairlines between sections instead of tinted bands (editorial, studios, finance, premium brands). |
+| `<main>` | `data-numbered` | Section labels count 01, 02, 03. |
+
+Three heroes: `hero-split` (something to show: a product frame, or `<div data-part="visual">` with a device frame, code, a chart, a photograph or an art panel), `hero-centered` (a wide picture under the words, or a backdrop) and `hero-statement` (no picture: one very large headline, then a ruled row with the pitch, the action and three facts).
+
+Rules: one signature per page; never the same shape twice in a row; at most two rails; centre only what is symmetrical; the accent in three places at most; one left edge from the logo to the footer. `compose.mjs` assigns layouts that satisfy these; the critic reports the ones it can measure.
+
+## Workflow I · Subjects that are not software, and no photographs
+
+Most pages are not for software, and a software page with the words changed never fits. `compose.mjs` reads the subject from the brief and plans the page that subject needs; each has a blueprint that is already that page.
+
+| The brief is about | Page type | Blueprint | What carries the page |
+| --- | --- | --- | --- |
+| A dentist, clinic, physio, salon, solicitor, accountant, plumber, tutor | `service-landing` | `practice` | Services and fees as ruled rows, the first visit, named people, where to find them |
+| A café, restaurant, bar, bakery, distillery, hotel, museum | `venue` | `venue` | What is on offer with prices, a booking bar, the address and opening hours |
+| A maker, a shop, a product brand, a subscription box | `brand-landing` | `shop` | The object and its price, the range at one ratio, how it is made, delivery and returns |
+| A charity, food bank, club, campaign | `cause` | `cause` | The claim with true figures, how to get help, where the money goes, ways to give |
+| A conference, festival, course, wedding | `event` | `event` | The date and place, the programme as timed rows, speakers, tickets |
+| A studio, agency, photographer, architect | `portfolio` | from parts | A statement and the work, large |
+| Software | `landing`, `dev-landing` | `landing`, `devtool` | The product working: a real screen, a chart or code |
+
+Never give the first five rows logo walls, feature grids, dashboards or "Start free". If the composer picked the wrong row, rerun it with `--type <page type>`. The blueprint's words are about one fictional business: rewrite every sentence for the real one (the critic lists what is left).
+
+When the page needs a picture and there is none:
+
+```html
+<figure class="lt-art" data-tone="accent" data-shot="Bottle on pale stone, soft side light, 4:5">
+  <p data-part="index">01</p><p data-part="name">Cleanser</p><p data-part="fact">150 ml · pH 5.5</p>
+  <figcaption class="lt-visually-hidden">Dew Cleanser, 150 ml</figcaption>
+</figure>
+```
+
+- The **art panel** sets the thing's name large on a tinted panel with one true fact. Vary `data-tone` (plain, `accent`, `ink`) across a set; add `data-backdrop="lines|dots|grain"` on a large one.
+- `data-shot` is the photo brief for the owner. When the photo arrives, put the `<img>` first inside the figure and it covers the panel.
+- `hero-split` takes it in `<div data-part="visual">` in place of the product frame; `offer-cards` uses it for each card.
+- Rows or cards? Four or more things, or anything people compare by price or time (treatments, practice areas, a menu, a programme): `service-list`, ruled rows with every price in one column. Two to four things worth a picture each: `offer-cards`.
+- Parts for places: `offer-cards` (things with prices), `booking-bar` (date, time, people, one answer in a sentence), `visit-info` (address, getting here, hours with today marked), `faq-section` for "before you come".
+- Never draw the product or the building, never use a stock photo of something else, and never leave a grey rectangle.
+
 ## Component conventions
 
 - Files per pattern: `components/ui/<family>/<id>/<id>.html` (markup), `.css` (`@scope (.lt-<name>)`, tokens only), `.ts` (`enhance(root) → cleanup`), `.react.tsx` (same markup and behaviour).
@@ -240,7 +315,7 @@ Rules: one backdrop per screen, one hue, and the pattern fades before it reaches
 - Snippets from a static install start with a comment naming the parts. When it says the outer `-demo` element is a preview frame, keep what is inside and drop the frame (app-sidebar's `<aside>` goes straight into `.lt-shell`).
 - Settings and account panels (settings list, plan card, usage meters, team members, danger zone) share one width, `--lt-panel-max` (default 720px). Set it once on the page (`--lt-panel-max: none` to fill the column) so they line up.
 - Overriding a component's own spacing or size: component rules live in `@scope`, which wins ties against plain page CSS. Use two classes (`.lt-bulk.users-table { padding-bottom: 0 }`) or set the component's custom properties instead of fighting it with `!important`.
-- Families: controls (40), navigation (31), feedback (18), overlays (19), data (40), motion (11), backdrops (9), sections (24: heroes, features, pricing, testimonials, FAQ, CTA, stats, newsletter, how it works, team, sign-in, 404, integrations, contact, blog, feature rows, logo cloud, article, before/after, project grid, showcase tabs, featured quote, sticky story). Full list: `catalog.json` or `--list`.
+- Families: controls (41), navigation (31), feedback (18), overlays (19), data (42), motion (11), backdrops (9), sections (27: heroes, features, pricing, testimonials, FAQ, CTA, stats, newsletter, how it works, team, sign-in, 404, integrations, contact, blog, feature rows, logo cloud, article, before/after, project grid, showcase tabs, featured quote, sticky story, offer cards, visit information). Full list: `catalog.json` or `--list`.
 
 ## Tokens at a glance
 
@@ -272,10 +347,10 @@ catalog.json                 every pattern/chart/blueprint/palette with aliases
 engine/profiles/             taste profile engine, schema, default profile
 engine/compose/              page types, domains and moods behind compose.mjs
 evals/                       32 briefs (evals.json), fixtures and reference scores
-tokens/                      base.css, layout.css, backdrops.css, palettes/*.css (+ source.json), typography/, styles/
-components/ui/<family>/      192 patterns (html, css, ts, react.tsx)
+tokens/                      base.css, layout.css, backdrops.css, composition.css, palettes/*.css (+ source.json), typography/, styles/
+components/ui/<family>/      199 patterns (html, css, ts, react.tsx)
 components/charts/           core/ + 46 chart engines (+ React wrappers)
-blueprints/                  17 page blueprints (states via ?state=loading|empty|error|incident|sold-out|streaming|running)
-references/                  anti-slop-rules, page-flow, copy-patterns, reading-a-reference, chart-selection, which-one, palettes, harvest-log
+blueprints/                  25 page blueprints (states via ?state=loading|empty|error|incident|sold-out|streaming|running)
+references/                  anti-slop-rules, page-flow, composition, copy-patterns, reading-a-reference, chart-selection, which-one, palettes, harvest-log
 scripts/                     compose, directions, search, install-taste, sniff, export-tokens, sample-data, audit-ui, audit-all, lint-copy, eval-score, eval-run, build-tokens, test-contrast, build, serve
 ```

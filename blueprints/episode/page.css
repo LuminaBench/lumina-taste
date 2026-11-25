@@ -1,0 +1,40 @@
+.lt-reading { position: sticky; top: 0; z-index: 30; }
+.ep { width: min(100% - 32px, 720px); margin-inline: auto; padding-block: var(--section-y) calc(var(--section-y) / 2); }
+.ep-head { display: grid; gap: var(--space-4); }
+.ep-eyebrow { margin: 0; color: var(--accent-text); font-family: var(--font-body); font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; }
+.ep-head h1 { margin: 0; font-family: var(--font-display); font-size: max(var(--step-5), clamp(2.5rem, 1.4rem + 3.4vw, 3.75rem)); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.02; }
+.ep-lede { margin: 0; color: var(--text-secondary); font-size: var(--step-1); line-height: 1.5; text-wrap: pretty; }
+.ep-guest { display: flex; align-items: center; gap: 12px; margin: 0; font-family: var(--font-body); font-size: var(--text-ui-sm); color: var(--text-secondary); }
+.ep-guest > span:last-child { display: grid; }
+.ep-guest b { color: var(--text-primary); font-weight: 650; }
+.ep-avatar { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--bg-surface-3); color: var(--text-primary); font-size: var(--text-ui-xs); font-weight: 650; }
+/* The player follows the reader down the page, so play and seek are always one move away. */
+.ep-player { position: sticky; top: 12px; z-index: 20; margin-block: var(--space-7) var(--space-6); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
+.ep h2, .ep-more h2 { margin: 0 0 var(--space-3); font-family: var(--font-body); color: var(--text-secondary); font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; }
+.ep-chapters ol { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--border-hairline); }
+.ep-chapters li { border-bottom: 1px solid var(--border-hairline); }
+.ep-chapters button { display: grid; grid-template-columns: 56px minmax(0, 1fr); align-items: baseline; gap: 12px; width: 100%; min-height: 48px; padding: 10px 4px; border: 0; background: none; color: var(--text-primary); font: inherit; font-family: var(--font-body); font-size: var(--text-ui); text-align: left; cursor: pointer; }
+.ep-chapters button:hover { background: var(--bg-surface-2); }
+.ep-chapters time { color: var(--text-secondary); font-family: var(--font-mono); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; }
+.ep-chapters button[aria-current] { font-weight: 650; }
+.ep-chapters button[aria-current] time { color: var(--accent-text); }
+.ep-transcript { margin-top: var(--space-8); }
+/* Transcript: one measure, the speaker's name inline in bold, the time in the margin on wide screens. */
+.ep-transcript p { position: relative; margin: 0 0 1.15em; font-size: max(var(--step-0), 1.0625rem); line-height: 1.7; text-wrap: pretty; }
+.ep-transcript p b { margin-right: 0.5em; font-family: var(--font-body); font-size: 0.9em; font-weight: 700; }
+.ep-transcript p time { display: block; margin-bottom: 2px; color: var(--text-secondary); font-family: var(--font-mono); font-size: var(--text-ui-xs); font-variant-numeric: tabular-nums; }
+.ep-end { color: var(--text-secondary); font-family: var(--font-body); font-size: var(--text-ui-sm) !important; }
+.ep-more { width: min(100% - 32px, 720px); margin-inline: auto; padding-block: calc(var(--section-y) / 2); }
+.ep-more ul { margin: 0 0 var(--space-4); padding: 0; list-style: none; border-top: 1px solid var(--border-hairline); }
+.ep-more li { border-bottom: 1px solid var(--border-hairline); }
+.ep-more li a { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto 16px; align-items: center; gap: 12px; min-height: 56px; padding: 8px 4px; color: var(--text-primary); font-family: var(--font-body); text-decoration: none; }
+.ep-more li a:hover { background: var(--bg-surface-2); }
+.ep-n { color: var(--text-secondary); font-family: var(--font-mono); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; }
+.ep-t { font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ep-d { color: var(--text-secondary); font-size: var(--text-ui-sm); white-space: nowrap; }
+.ep-more li a .lt-icon { color: var(--text-muted); }
+.lt-footer-min { padding-block: var(--space-6); }
+@media (min-width: 1040px) {
+  .ep-transcript p time { position: absolute; right: calc(100% + 20px); top: 0.45em; margin: 0; }
+}
+@media (max-width: 520px) { .ep-d { display: none; } .ep-more li a { grid-template-columns: 28px minmax(0, 1fr) 16px; } }

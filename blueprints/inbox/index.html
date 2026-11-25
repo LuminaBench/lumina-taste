@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" data-palette="porcelain-teal" data-mode="light" data-type="humanist" data-density="balanced" data-radius="balanced" data-motion="snappy">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Open conversations · Halyard Support</title>
+  <meta name="description" content="Blueprint: a support inbox with views, a conversation list, a thread with a reply box and a customer details pane that fold into one pane on phones built with lumina-taste.">
+</head>
+<body>
+  <a class="bp-skip" href="#main">Skip to content</a>
+  <div class="ib-shell" data-pane="thread">
+    <nav class="ib-nav" id="ib-nav" aria-label="Views">
+      <a class="ib-brand" href="#home">Halyard <span>Support</span></a>
+      <ul><li><a href="#view" aria-current="page"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 13.5 6 5.5h12l2.5 8V18a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2Z"/><path d="M3.5 13.5H8l1.5 2.5h5l1.5-2.5h4.5"/></svg><span>Open</span><b>12</b></a></li><li><a href="#view"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg><span>Assigned to me</span><b>4</b></a></li><li><a href="#view"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.25"/><path d="M3 20a6 6 0 0 1 12 0M16 4.8a3.25 3.25 0 0 1 0 6.4M17.5 14.2A6 6 0 0 1 21 20"/></svg><span>Unassigned</span><b>3</b></a></li><li><a href="#view"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>Snoozed</span></a></li><li><a href="#view"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.3 2.4 2.4 4.6-4.9"/></svg><span>Closed</span></a></li></ul>
+      <h2>Teams</h2>
+      <ul><li><a href="#team"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2Z"/></svg><span>Billing</span><b>5</b></a></li><li><a href="#team"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2Z"/></svg><span>Technical</span><b>6</b></a></li><li><a href="#team"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2Z"/></svg><span>Onboarding</span><b>1</b></a></li></ul>
+      <div class="ib-me"><span class="ib-avatar" aria-hidden="true">AL</span><span><b>Ana López</b><span>Available</span></span></div>
+    </nav>
+
+    <main id="main" class="ib-main">
+    <section class="ib-list" aria-labelledby="ib-list-h">
+      <header>
+        <h1 id="ib-list-h">Open <span>12</span></h1>
+        <button type="button" class="ib-icon" aria-label="New conversation"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16Z"/><path d="m13.5 6.5 4 4"/></svg></button>
+      </header>
+      <label class="ib-search"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><span class="lt-visually-hidden">Search conversations</span><input type="search" placeholder="Search people, subjects, text" id="ib-search"></label>
+      <ul class="ib-convs" data-view="ready" id="ib-convs"><li><a href="#c0" data-conv="0" aria-current="true" data-unread><span class="ib-avatar" aria-hidden="true">RM</span><span class="ib-who">Riya Mehta<span> · Moss Studio</span></span><time>09:41</time><span class="ib-subj"><span class="lt-visually-hidden">Unread: </span>Charged twice for November</span><span class="ib-snip">I can see two payments of £240 on the 3rd. Could you refund one?</span><span class="lt-badge" data-tone="warning">Reply due in 22 min</span></a></li><li><a href="#c1" data-conv="1" data-unread><span class="ib-avatar" aria-hidden="true">KM</span><span class="ib-who">Kai Moreno<span> · Kestrel Labs</span></span><time>09:12</time><span class="ib-subj"><span class="lt-visually-hidden">Unread: </span>Export stops at 10,000 rows</span><span class="ib-snip">The CSV from the accounts table cuts off. Is that a limit on our plan?</span></a></li><li><a href="#c2" data-conv="2"><span class="ib-avatar" aria-hidden="true">AL</span><span class="ib-who">Ana López<span> · Juniper Freight</span></span><time>08:57</time><span class="ib-subj">Add a teammate without a seat?</span><span class="ib-snip">We have a contractor for two weeks. Can they view dashboards only?</span></a></li><li><a href="#c3" data-conv="3"><span class="ib-avatar" aria-hidden="true">TS</span><span class="ib-who">Tomás Silva<span> · Harbour &amp; Co</span></span><time>Yesterday</time><span class="ib-subj">Single sign-on setup</span><span class="ib-snip">Thanks, that worked. One more question about group mapping.</span></a></li><li><a href="#c4" data-conv="4"><span class="ib-avatar" aria-hidden="true">NW</span><span class="ib-who">Nia Williams<span> · Larkspur</span></span><time>Yesterday</time><span class="ib-subj">Invoice address is out of date</span><span class="ib-snip">We moved in October. Where do I change the billing address?</span><span class="lt-badge" data-tone="negative">1 day late</span></a></li><li><a href="#c5" data-conv="5"><span class="ib-avatar" aria-hidden="true">JP</span><span class="ib-who">Jun Park<span> · Kestrel Labs</span></span><time>Mon</time><span class="ib-subj">Alert fired twice</span><span class="ib-snip">Got the same churn alert at 09:00 and 09:05 this morning.</span></a></li></ul>
+      <p class="ib-nomatch" id="ib-nomatch" hidden>No conversation matches that search.</p>
+      <div class="ib-zero" data-view="empty" hidden><p><b>Nothing open</b>New conversations land here. Snoozed ones come back when their time is up.</p></div>
+    </section>
+
+    <div class="ib-thread">
+      <div class="ib-conv" data-view="ready">
+        <header class="ib-thread-head">
+          <button type="button" class="ib-icon ib-back" id="ib-back" aria-label="Back to conversations"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>
+          <div><h2 id="ib-subject">Charged twice for November</h2><p><span id="ib-from">Riya Mehta · Moss Studio</span> · Billing</p></div>
+          <span class="lt-badge" data-tone="warning">Reply due in 22 min</span>
+          <button type="button" class="ib-icon ib-info" id="ib-info" aria-label="Customer details" aria-controls="ib-side" aria-expanded="false"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></svg></button>
+        </header>
+        <div class="ib-scroll" id="ib-scroll">
+          <section class="lt-chat" aria-label="Conversation with Riya Mehta">
+            <ol data-part="log" role="log" aria-live="polite">
+              <li data-part="divider"><span>Today</span></li>
+              <li data-part="group" data-from="them">
+                <span data-part="avatar" aria-hidden="true">RM</span>
+                <div data-part="stack">
+                  <p data-part="meta"><strong>Riya Mehta</strong> <time datetime="2026-11-25T09:41">09:41</time></p>
+                  <p data-part="bubble">Hi. I can see two payments of £240 on the 3rd of November, both for the Team plan.</p>
+                  <p data-part="bubble">Could you refund one? Our accountant closes the month on Friday.</p>
+                  <p data-part="attachment"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-10Z"/><path d="M14 3.5v5h5"/></svg><span><strong>statement-november.pdf</strong><span>Bank statement · 1 page</span></span></p>
+                </div>
+              </li>
+              <li data-part="group" data-from="me">
+                <div data-part="stack">
+                  <p data-part="meta"><time datetime="2026-11-25T09:52">09:52</time></p>
+                  <p data-part="bubble">Hi Riya. You are right: the renewal ran twice after a card update on the 3rd.</p>
+                  <p data-part="bubble">I have refunded the second £240. It should reach your account in 3 to 5 working days, and I have attached the credit note for your accountant.</p>
+                  <p data-part="attachment"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-10Z"/><path d="M14 3.5v5h5"/></svg><span><strong>credit-note-CN-2041.pdf</strong><span>Credit note · £240.00</span></span></p>
+                  <p data-part="status">Sent 09:52</p>
+                </div>
+              </li>
+              <li data-part="group" data-from="them">
+                <span data-part="avatar" aria-hidden="true">RM</span>
+                <div data-part="stack">
+                  <p data-part="meta"><strong>Riya Mehta</strong> <time datetime="2026-11-25T09:58">09:58</time></p>
+                  <p data-part="bubble">That was quick, thank you. Will it happen again next month?</p>
+                </div>
+              </li>
+            </ol>
+          </section>
+        </div>
+        <div class="ib-dock">
+          <form class="lt-composer" data-lt="prompt-composer" aria-label="Reply" id="ib-composer">
+            <label for="ib-input" class="lt-visually-hidden">Reply to Riya</label>
+            <textarea id="ib-input" rows="2" placeholder="Write a reply to Riya" maxlength="5000" aria-describedby="ib-hint"></textarea>
+            <div data-part="bar">
+              <button type="button" data-part="attach" aria-label="Attach a file"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m20 11.5-7.8 7.8a5 5 0 0 1-7.1-7.1l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8"/></svg></button>
+              <div data-part="mode" role="radiogroup" aria-label="Kind of message"><button type="button" role="radio" aria-checked="true">Reply</button><button type="button" role="radio" aria-checked="false" tabindex="-1">Internal note</button></div>
+              <span id="ib-hint" data-part="hint"><kbd class="lt-kbd">⌘</kbd><kbd class="lt-kbd">↵</kbd> to send</span>
+              <button type="submit" data-part="send" aria-label="Send reply" disabled><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+            </div>
+          </form>
+          <div class="ib-after"><button type="button" class="lt-btn" data-variant="secondary" data-size="sm" id="ib-close"><span data-part="label">Close conversation</span></button><p role="status" id="ib-status"></p></div>
+        </div>
+      </div>
+      <div class="ib-none" data-view="empty" hidden><p>Choose a conversation to read it here.</p></div>
+    </div>
+    </main>
+
+    <aside class="ib-side" id="ib-side" aria-label="Customer details">
+      <header><span class="ib-avatar ib-avatar-lg" aria-hidden="true">RM</span><div><h2>Riya Mehta</h2><p>Head of Finance, Moss Studio</p></div><button type="button" class="ib-icon ib-side-close" id="ib-side-close" aria-label="Close details"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></header>
+      <dl class="ib-facts"><div><dt>Plan</dt><dd>Team · 20 seats</dd></div><div><dt>Paying since</dt><dd>March 2025</dd></div><div><dt>Monthly</dt><dd>£240.00</dd></div><div><dt>Last invoice</dt><dd>Paid 3 Nov</dd></div><div><dt>Health</dt><dd>Good</dd></div></dl>
+      <h3>Earlier conversations</h3>
+      <ul class="ib-past"><li><a href="#past">Card declined on renewal</a><span>Closed 12 Aug</span></li><li><a href="#past">How do I add a viewer?</a><span>Closed 2 May</span></li><li><a href="#past">Trial extension</a><span>Closed 14 Mar</span></li></ul>
+      <h3>Tags</h3>
+      <p class="ib-tags"><span class="lt-badge" data-variant="outline">billing</span><span class="lt-badge" data-variant="outline">refund</span><span class="lt-badge" data-variant="outline">renewal</span></p>
+    </aside>
+  </div>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

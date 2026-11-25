@@ -25,8 +25,16 @@ const styles = JSON.parse(readFileSync(join(root, 'tokens/styles/source.json'), 
 const palettes = JSON.parse(readFileSync(join(root, 'tokens/palettes/palettes.json'), 'utf8')).palettes;
 const plan = JSON.parse(spawnSync(process.execPath, [join(root, 'scripts/compose.mjs'), brief, '--json'], { encoding: 'utf8' }).stdout);
 // A look is a style, optionally with another palette: --styles atelier@bone-plum,noir,soft
+const lookType = Object.fromEntries(plan.directions.styles.map((s) => [s.key ?? s.id, s.type]));
 const keys = pick ?? plan.directions.styles.map((s) => s.key ?? s.id);
-const chosen = keys.slice(0, 3).map((key) => { const [id, palette] = key.split('@'); const s = styles.find((x) => x.id === id); const pal = palette && palette !== s?.palette ? palettes.find((p) => p.id === palette) : null; return s ? { ...s, palette: pal ? palette : s.palette, own: !pal, name: pal ? `${s.name} in ${pal.name}` : s.name, summary: pal ? `${s.summary} Shown here in ${pal.name} instead of the style's own palette.` : s.summary } : { id, missing: true }; });
+const chosen = keys.slice(0, 3).map((key) => {
+  const [id, palette] = key.split('@');
+  const s = styles.find((x) => x.id === id);
+  if (!s) return { id, missing: true };
+  const pal = palette && palette !== s.palette ? palettes.find((p) => p.id === palette) : null;
+  const type = !pick && lookType[key] ? lookType[key] : s.type;
+  return { ...s, palette: pal ? palette : s.palette, type, own: !pal, ownType: type === s.type, name: pal ? `${s.name} in ${pal.name}` : s.name, summary: pal ? `${s.summary} Shown here in ${pal.name} instead of the style's own palette.` : s.summary };
+});
 const unknown = chosen.filter((s) => s.missing).map((s) => s.id);
 if (unknown.length) { console.error(`Unknown style ${unknown.join(', ')}. See tokens/styles/source.json.`); process.exit(2); }
 
@@ -48,7 +56,7 @@ const body = (s) => {
   if (!app && s.id === 'trace') html = html.replace('<section class="lt-hero-split"', '<section data-backdrop="grid spot" class="lt-hero-split"').replace(/(<section data-backdrop="grid spot" class="lt-hero-split"[^>]*>)/, '$1<div class="lt-circuit" data-lt="backdrop-circuit"></div>');
   return app ? `<div class="lt-container lt-stack" style="--gap: var(--space-5); padding-block: var(--space-6)">${html}</div>` : html;
 };
-const flags = (s) => `--style ${s.id}${s.own ? '' : ` --palette ${s.palette}`}`;
+const flags = (s) => `--style ${s.id}${s.own ? '' : ` --palette ${s.palette}`}${s.ownType ? '' : ` --type ${s.type}`}`;
 const letter = (i) => 'ABC'[i];
 const page = `<!doctype html>
 <html lang="en" data-palette="slate-forest" data-mode="light" data-type="precision" data-density="balanced" data-radius="balanced" data-motion="snappy">
@@ -88,4 +96,5 @@ writeFileSync(join(out, 'directions.html'), page);
 console.log(`Three directions for: ${brief}\n`);
 chosen.forEach((s, i) => console.log(`  ${letter(i)}  ${s.name}\n     ${s.summary}\n     palette ${s.palette} (${s.mode}), type ${s.type}, radius ${s.radius}${s.backdrop ? `, backdrop ${s.backdrop}` : ''}   →  ${flags(s)}`));
 console.log(`\nOpen ${join(out, 'directions.html')} and ask which one fits: A, B or C (or "A, but lighter").`);
+console.log(`This folder is only for choosing: delete it once a look is picked.`);
 console.log(`Then build with that look: add --style <id> --lock style,palette to the install command compose.mjs prints.`);

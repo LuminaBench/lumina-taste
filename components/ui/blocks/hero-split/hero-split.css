@@ -18,6 +18,11 @@
   [data-part="note"] { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 16px 0 0; color: var(--text-muted); font-size: var(--text-ui-sm); }
   [data-part="note"] .lt-icon { width: 14px; height: 14px; color: var(--status-positive); }
   [data-part="frame"] { display: grid; gap: 14px; padding: 14px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); box-shadow: var(--shadow-md); }
+  /* The right-hand side is a slot. data-part="frame" is a product window; data-part="visual" is a bare slot for
+     an art panel, a device frame, a code block, a chart or a photograph. */
+  [data-part="visual"] { min-width: 0; }
+  [data-part="visual"] > .lt-art { --art-ratio: 5 / 4; }
+  [data-part="visual"] > :is(img, picture, video) { display: block; width: 100%; border-radius: var(--radius-xl); }
   [data-part="bar"] { display: flex; gap: 6px; }
   [data-part="bar"] i { width: 9px; height: 9px; border-radius: 50%; background: var(--bg-surface-3); }
   [data-part="kpis"] { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }

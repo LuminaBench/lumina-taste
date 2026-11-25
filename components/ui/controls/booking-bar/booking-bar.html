@@ -1,0 +1,26 @@
+<form class="lt-booking" data-lt="booking-bar" aria-labelledby="lt-bk-title" novalidate>
+  <h3 id="lt-bk-title">Book a tasting</h3>
+  <div data-part="fields">
+    <div class="lt-date" data-lt="date-picker" data-value="2026-11-28" data-min="2026-11-25">
+      <label for="lt-bk-date">Date</label>
+      <div data-part="field"><input id="lt-bk-date" type="text" inputmode="numeric" autocomplete="off" placeholder="DD/MM/YYYY" value="28/11/2026" aria-describedby="lt-bk-date-hint"><button type="button" data-part="open" aria-label="Choose a date" aria-haspopup="dialog" aria-expanded="false"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></button></div>
+      <p id="lt-bk-date-hint" data-part="hint">Saturdays and Sundays.</p>
+      <div data-part="popover" role="dialog" aria-modal="false" aria-label="Choose a date" hidden>
+        <div data-part="head"><button type="button" data-part="prev" aria-label="Previous month"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button><h2 data-part="month" aria-live="polite">November 2026</h2><button type="button" data-part="next" aria-label="Next month"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div>
+        <table data-part="grid" role="grid" aria-label="Calendar"></table>
+        <div data-part="foot"><button type="button" data-part="today">Today</button><button type="button" data-part="clear">Clear</button></div>
+      </div>
+    </div>
+    <div data-part="field-time"><label for="lt-bk-time">Time</label><select id="lt-bk-time" name="time"><option>10:30</option><option selected>12:00</option><option>14:00</option></select></div>
+    <div class="lt-stepper" data-lt="number-stepper">
+      <label for="lt-bk-people">People</label>
+      <div data-part="control">
+        <button type="button" data-part="dec" aria-label="One person fewer"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+        <input id="lt-bk-people" type="number" inputmode="numeric" min="1" max="8" step="1" value="2">
+        <button type="button" data-part="inc" aria-label="One person more"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+      </div>
+    </div>
+    <button type="submit" class="lt-btn" data-variant="primary" data-size="lg"><span data-part="label">Check availability</span></button>
+  </div>
+  <p data-part="result" role="status"></p>
+</form>

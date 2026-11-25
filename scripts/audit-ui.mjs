@@ -14,10 +14,10 @@
 //               reading measure, heading order, nested cards, section rhythm, focal point,
 //               placeholder copy, empty visual boxes, button labels) and a 0–100 taste score per run
 // Requires Playwright (`npm i -D @playwright/test && npx playwright install chromium`).
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
 import { createRequire } from 'node:module';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { COPY_RULES } from './lib/copy-rules.mjs';
 
 // Playwright is looked up next to this script first, then in the project you run it from,
@@ -228,14 +228,14 @@ const PAGE_CHECKS = (copyRules = []) => {
         const fo = +getComputedStyle(s).fillOpacity * opacityChain(s);
         if (c[3] * fo > 0.5) under = [c[0], c[1], c[2], c[3] * fo];
       }
-      if (under) return { color: blend(under, bgOf(svgRoot.parentElement).color), image: false };
+      if (under) return { color: blend(under, bgOf(svgRoot.parentElement).color ?? [255, 255, 255, 1]), image: false };
       el = el.closest('svg').parentElement;
     }
     const layers = [];
     for (let e = el; e; e = e.parentElement) {
       const cs = getComputedStyle(e);
-      if (cs.backgroundImage !== 'none' && !cs.backgroundImage.startsWith('url(')) return { image: true };
-      if (cs.backgroundImage.startsWith('url(')) return { image: true };
+      // "none, none" is what layered background declarations compute to when every layer is empty.
+      if (cs.backgroundImage.split(',').some((layer) => layer.trim() !== 'none')) return { image: true, color: [255, 255, 255, 1] };
       const c = rgba(cs.backgroundColor);
       if (c[3] > 0) { layers.push(c); if (c[3] >= 0.999) break; }
     }
@@ -324,7 +324,8 @@ const PAGE_CHECKS = (copyRules = []) => {
 // Judges the page as a whole, the way a designer squints at it: how many type sizes, accent hues and
 // corner radii it uses, whether one thing leads, whether text lines are readable, whether headings
 // nest, whether cards nest, whether sections keep one rhythm, and whether placeholder copy is left in.
-const TASTE_CHECKS = (product = null) => {
+const TASTE_CHECKS = (arg = null) => {
+  const product = arg?.name ?? null, kitSamples = arg?.samples ?? [];
   const out = [];
   const add = (rule, el, message, severity = 'warning') => out.push({ rule, severity, selector: el ? sel(el) : null, message });
   function sel(el) { const p = []; for (let e = el; e && e.nodeType === 1 && p.length < 4; e = e.parentElement) { let s = e.tagName.toLowerCase(); if (e.id) { p.unshift(s + '#' + e.id); break; } const c = [...e.classList].filter((x) => !x.startsWith('is-')).slice(0, 2); if (c.length) s += '.' + c.join('.'); p.unshift(s); } return p.join(' > '); }
@@ -431,12 +432,113 @@ const TASTE_CHECKS = (product = null) => {
     if (new Set(tops).size > 3 && max < 28) add('taste-focal', tops[0], `${new Set(tops).size} text blocks share the largest size (${Math.round(max)}px) in the first screen. Make one headline clearly bigger so the eye knows where to start.`);
   }
 
+  // 9e. Composition: a page reads as designed when neighbouring sections differ in shape, share one left
+  // edge and are not all centred. These look at geometry, not class names, so they hold for any page.
+  {
+    const vw = document.documentElement.clientWidth;
+    const rectOf = (el) => el.getBoundingClientRect();
+    const firstHeading = (band) => [...band.querySelectorAll('h1, h2, h3')].find((h) => { const r = h.getBoundingClientRect(); return shown(h) && !skip(h) && r.width > 8 && r.height > 8; }) ?? null;
+    const shapeOf = (band) => {
+      const h = firstHeading(band);
+      if (!h) return { shape: 'none', h: null };
+      const b = rectOf(band), r = rectOf(h);
+      const cs = getComputedStyle(band), padL = parseFloat(cs.paddingLeft) || 0, padR = parseFloat(cs.paddingRight) || 0;
+      const left = b.left + padL, right = b.right - padR, width = Math.max(1, right - left), mid = (left + right) / 2;
+      // A heading inside a framed panel is that panel's business (a closing band, a card): its own shape.
+      const bandBg = cs.backgroundColor;
+      // A section that is itself a rounded, filled card is a panel.
+      if (parseFloat(cs.borderTopLeftRadius) > 0 && cs.backgroundColor !== 'rgba(0, 0, 0, 0)') return { shape: 'panel', h };
+      for (let e = h.parentElement; e && e !== band; e = e.parentElement) { const c = getComputedStyle(e); const framed = parseFloat(c.borderTopWidth) > 0 && c.borderTopStyle !== 'none' && parseFloat(c.borderLeftWidth) > 0; const filled = c.backgroundColor !== 'rgba(0, 0, 0, 0)' && c.backgroundColor !== bandBg && rectOf(e).width < b.width - 8; if ((framed || filled) && rectOf(e).width > Math.min(width * 0.25, 240)) return { shape: 'panel', h }; }
+      const centred = getComputedStyle(h).textAlign === 'center' || (Math.abs((r.left + r.right) / 2 - mid) < width * 0.04 && r.left - left > 48);
+      if (centred) return { shape: 'centre', h };
+      // Something substantial beside the heading, starting level with it: a rail or a split.
+      const beside = [...band.querySelectorAll('ul, ol, dl, figure, form, table, img, [data-part]')].some((el) => { if (el.contains(h) || h.contains(el) || !shown(el)) return false; const e = rectOf(el); return e.left >= r.right - 8 && e.left > left + width * 0.28 && e.top < r.bottom + 24 && e.bottom > r.top && e.width > width * 0.3 && e.height > 80; });
+      if (beside) return { shape: 'side', h };
+      // Otherwise the heading is on top. Is the body a row of three or more like things?
+      const row = [...band.querySelectorAll('ul, ol, dl, div')].some((list) => { const kids = [...list.children].filter(shown); if (kids.length < 3) return false; const t0 = rectOf(kids[0]).top; const sameRow = kids.filter((k) => Math.abs(rectOf(k).top - t0) < 6); return sameRow.length >= 3 && rectOf(kids[0]).top > r.bottom - 4 && rectOf(list).width > width * 0.7; });
+      return { shape: row ? 'grid' : 'top', h, left: r.left };
+    };
+    const wide = vw >= 900;
+    const seq = bands.filter((s) => rectOf(s).height > 200).map((s) => ({ el: s, ...shapeOf(s) })).filter((s) => s.shape !== 'none');
+    const WORDS = { grid: 'a heading on top and a row of cards below', top: 'a heading on top and the body below', centre: 'a centred heading', side: 'a heading on the left and the body beside it', panel: 'one panel' };
+    if (wide) {
+      for (let i = 2; i < seq.length; i++) {
+        // Prose under a heading may repeat (an article is meant to); rows of cards may not.
+        if (seq[i].shape === 'grid' && seq[i - 1].shape === 'grid' && seq[i - 2].shape === 'grid') {
+          add('taste-monotony', seq[i - 1].el, `Three sections in a row are ${WORDS.grid}: a wall of cards. Change the middle one: data-layout="rail" (rows beside the heading), figures, or one quote.`);
+          break;
+        }
+      }
+      let run = 0;
+      for (const s of seq) { run = s.shape === 'centre' ? run + 1 : 0; if (run >= 4) { add('taste-centred-run', s.el, 'Four centred sections in a row. Centre a section only when its body is symmetrical; set the others on the left edge (or data-layout="rail").'); break; } }
+      // One left edge: headings that are neither centred nor in a panel should start on the same line.
+      const lefts = seq.filter((s) => (s.shape === 'top' || s.shape === 'grid' || s.shape === 'side') && s.h).map((s) => ({ s, x: Math.round(rectOf(s.h).left) }));
+      if (lefts.length >= 3) {
+        const counts = new Map(); for (const l of lefts) counts.set(l.x, (counts.get(l.x) ?? 0) + 1);
+        const [edge, n] = [...counts.entries()].sort((a, b) => b[1] - a[1])[0];
+        const off = lefts.find((l) => Math.abs(l.x - edge) >= 6 && Math.abs(l.x - edge) <= 72);
+        if (off && n >= 2) add('taste-edge', off.s.h, `This section starts ${Math.abs(off.x - edge)}px ${off.x > edge ? 'right' : 'left'} of the edge the other sections share (x=${off.x}, the page's edge is x=${edge}). Align it: one left edge from the top of the page to the bottom.`);
+      }
+    }
+    // A heading whose last line is one short word.
+    for (const h of [...document.querySelectorAll('h1, h2, h3')].filter((x) => shown(x) && !skip(x) && parseFloat(getComputedStyle(x).fontSize) >= 22)) {
+      const range = document.createRange(); range.selectNodeContents(h);
+      const lines = []; for (const r of range.getClientRects()) { if (r.width < 2) continue; const line = lines.find((l) => Math.abs(l.top - r.top) < r.height * 0.6); if (line) { line.left = Math.min(line.left, r.left); line.right = Math.max(line.right, r.right); } else lines.push({ top: r.top, left: r.left, right: r.right }); }
+      if (lines.length < 2) continue;
+      lines.sort((a, b) => a.top - b.top);
+      const last = lines[lines.length - 1], longest = Math.max(...lines.map((l) => l.right - l.left));
+      const lastWord = h.textContent.trim().split(/\s+/).pop() ?? '';
+      if ((last.right - last.left) / longest < 0.24 && lastWord.length <= 9) { add('taste-widow', h, `The heading “${h.textContent.trim().slice(0, 40)}” ends with one word alone on its last line (“${lastWord}”). Add text-wrap: balance, shorten it, or break it by sense.`); break; }
+    }
+    // Accent budget: solid accent fills should be a small share of the page, not its wallpaper.
+    {
+      const probe = document.createElement('span'); probe.style.cssText = 'position:absolute;visibility:hidden;color:var(--accent-solid)'; document.body.append(probe);
+      const accent = getComputedStyle(probe).color; probe.remove();
+      if (accent && accent !== 'rgba(0, 0, 0, 0)') {
+        const page = document.documentElement.scrollWidth * document.documentElement.scrollHeight;
+        let area = 0;
+        for (const el of document.querySelectorAll('body *')) {
+          if (skip(el)) continue;
+          const c = getComputedStyle(el);
+          if (c.backgroundColor !== accent || !shown(el)) continue;
+          if (el.parentElement && getComputedStyle(el.parentElement).backgroundColor === accent) continue;
+          const r = rectOf(el); area += r.width * r.height;
+        }
+        if (page > 0 && area / page > 0.12) add('taste-accent-budget', null, `The accent colour fills ${Math.round((area / page) * 100)}% of the page. Keep it for the primary action, small labels and one thing in the hero; use ink, hairlines and tinted bands for the rest.`);
+      }
+    }
+  }
+
   // 9b. Leftover sample copy: with --product "Name", the kit's own demo brands and people must be gone.
   if (product) {
-    const SAMPLES = ['Halyard', 'Kestrel Labs', 'Moss Studio', 'Juniper & Co', 'Juniper Coffee', 'Larkspur', 'Harbour & Co', 'Moss & Oak', 'Ana López', 'Kai Moreno', 'Riya Mehta', 'Lee Park', 'Made in Lisbon', 'Made in Bristol'];
+    const SAMPLES = ['Halyard', 'Kestrel Labs', 'Moss Studio', 'Juniper & Co', 'Juniper Coffee', 'Juniper Freight', 'Larkspur', 'Harbour & Co', 'Moss & Oak', 'Ana López', 'Kai Moreno', 'Riya Mehta', 'Lee Park', 'Made in Lisbon', 'Made in Bristol'];
     const text = document.body.innerText;
     const left = SAMPLES.filter((s) => text.includes(s) && !product.toLowerCase().includes(s.toLowerCase()));
     if (left.length) add('taste-sample-copy', null, `Sample copy from the kit is still on the page: ${left.slice(0, 5).map((s) => `“${s}”`).join(', ')}${left.length > 5 ? ` and ${left.length - 5} more` : ''}. Replace it with ${product}’s own names, words and numbers.`, 'error');
+
+    // 9c. Leftover sample content: sentences and figures that came with a blueprint or a snippet and were
+    // never rewritten. Swapping the brand name is not enough, so the product's name is ignored when comparing.
+    const norm = (t) => t.replace(/\s+/g, ' ').trim().toLowerCase().replaceAll(product.toLowerCase(), '§');
+    const kit = new Set(kitSamples);
+    const kept = new Map();
+    for (const el of leaves) for (const node of el.childNodes) {
+      if (node.nodeType !== 3) continue;
+      const raw = node.textContent.replace(/\s+/g, ' ').trim();
+      if (raw.length >= 6 && kit.has(norm(raw)) && !kept.has(norm(raw))) kept.set(norm(raw), raw);
+      // A placeholder a draft left for the writer ("TODO: two short paragraphs…") is unfinished copy too.
+      if (/^TODO\b/.test(raw) && !kept.has(norm(raw))) kept.set(norm(raw), raw);
+    }
+    const desc = document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
+    if (/lumina-taste|^Blueprint:|^TODO\b/i.test(desc)) kept.set('meta', `meta description: ${desc.slice(0, 48)}…`);
+    if (/^TODO\b/.test(document.title)) kept.set('title', `page title: ${document.title.slice(0, 48)}`);
+    if (kept.size) {
+      const list = [...kept.values()];
+      add('taste-sample-content', null, `${list.length} piece${list.length > 1 ? 's' : ''} of the kit's sample content ${list.length > 1 ? 'are' : 'is'} unchanged: ${list.slice(0, 4).map((t) => `“${t.length > 56 ? t.slice(0, 54) + '…' : t}”`).join(', ')}${list.length > 4 ? ` and ${list.length - 4} more` : ''}. Rewrite ${list.length > 1 ? 'them' : 'it'} with ${product}’s own facts, or remove ${list.length > 1 ? 'them' : 'it'}. Never keep or invent customers, quotes or figures.`, list.length >= 5 ? 'error' : 'warning');
+    }
+
+    // 9d. Links to sections that do not exist. A page built from parts inherits their #anchors.
+    const dead = [...new Set([...document.querySelectorAll('a[href^="#"]')].filter((a) => !skip(a) && shown(a)).map((a) => a.getAttribute('href')).filter((h) => h.length > 1 && !document.getElementById(decodeURIComponent(h.slice(1)))))];
+    if (dead.length) add('taste-dead-anchor', null, `${dead.length} link target${dead.length > 1 ? 's are' : ' is'} not on the page: ${dead.slice(0, 5).join(', ')}${dead.length > 5 ? ` and ${dead.length - 5} more` : ''}. Point each link at a real section id or a real page, or remove it.`);
   }
 
   // 10. Placeholder and template content.
@@ -459,9 +561,11 @@ const TASTE_CHECKS = (product = null) => {
 
   // 11. Button labels: short verbs, not sentences.
   for (const el of document.querySelectorAll('button, a.lt-btn, [role="button"]')) {
-    if (skip(el) || !shown(el) || el.hasAttribute('aria-expanded') || el.closest('summary, [role="tablist"], [role="listbox"], [role="menu"]')) continue; const words = el.textContent.trim().split(/\s+/).filter(Boolean);
+    if (skip(el) || !shown(el) || el.hasAttribute('aria-expanded') || el.closest('summary, [role="tablist"], [role="listbox"], [role="menu"]') || el.matches('[role="checkbox"], [role="switch"], [role="radio"], [role="option"], [role="tab"], [role^="menuitem"], [aria-pressed], [aria-checked]')) continue; const words = (el.innerText ?? el.textContent).trim().split(/\s+/).filter(Boolean);
     // Example prompts and FAQ-style questions are sentences on purpose.
     if (/\?\s*$/.test(el.textContent.trim()) || el.hasAttribute('data-suggest')) continue;
+    // A row in a list that happens to be a button (a chapter, a conversation, a file) is named by its content.
+    if (el.parentElement?.tagName === 'LI' && el.parentElement.children.length === 1) continue;
     if (words.length > 5) { add('taste-button-label', el, `Button label has ${words.length} words (“${el.textContent.trim().slice(0, 40)}”). Use a verb and an object: “Export report”.`); break; }
   }
   return out;
@@ -501,7 +605,7 @@ async function auditOne(browser, url, vpName, mode) {
   });
   if (process.env.LT_AUDIT_DEBUG) await page.evaluate(() => (window.__ltDebug = true));
   const findings = (await page.evaluate(PAGE_CHECKS, COPY_RULES.map(([re, why, fix]) => [re.source, re.flags, why, fix]))).map((f) => ({ ...f, viewport: vpName, mode }));
-  if (tasteOn) for (const f of await page.evaluate(TASTE_CHECKS, product)) findings.push({ ...f, viewport: vpName, mode });
+  if (tasteOn) for (const f of await page.evaluate(TASTE_CHECKS, product ? { name: product, samples: KIT_SAMPLES } : null)) findings.push({ ...f, viewport: vpName, mode });
   for (const e of runtimeErrors) findings.push({ rule: 'runtime-error', severity: 'error', selector: null, message: e, viewport: vpName, mode });
 
   // Dead controls: no click/key/pointer listener on the control or any ancestor, no native behaviour.
@@ -595,18 +699,63 @@ async function auditOne(browser, url, vpName, mode) {
   await page.evaluate(() => document.activeElement?.blur?.());
   if (shotDir) {
     mkdirSync(shotDir, { recursive: true });
-    const name = url.replace(/^\w+:\/\//, '').replace(/[^a-z0-9]+/gi, '-').slice(0, 60);
+    // Name the files after the page, not its whole path: the folder and file for a local page ("pricing-index"),
+    // the host, path and state for a served one.
+    const u = url.replace(/^\w+:\/\//, '').replace(/\.html?(?=$|[?#])/, '');
+    const name = (url.startsWith('file:') || !/^\w+:/.test(url) ? u.split(/[?#]/)[0].split('/').filter(Boolean).slice(-2).join('-') + (u.match(/[?#].*$/)?.[0] ?? '') : u).replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').slice(-70);
     // The first screen as people see it, then the whole page with sticky and fixed bars put back in
     // the flow (otherwise a full-page capture shows them floating halfway down).
     const base = `${shotDir}/${name}-${vpName}-${mode}`;
-    await page.evaluate(() => scrollTo(0, 0));
+    // Back to the top, including app shells that scroll inside themselves.
+    await page.evaluate(() => { scrollTo(0, 0); for (const el of document.querySelectorAll('body *')) if (el.scrollTop) el.scrollTop = 0; });
+    await page.waitForTimeout(120);
     await page.screenshot({ path: `${base}-screen.png` });
     await page.evaluate(() => { for (const el of document.querySelectorAll('body *')) { const p = getComputedStyle(el).position; if (p === 'sticky') el.style.position = 'relative'; else if (p === 'fixed') el.style.position = 'absolute'; } });
+    // An app shell that is one screen tall and scrolls inside is opened out, so the full capture shows all of it.
+    await page.evaluate(() => {
+      for (const el of document.querySelectorAll('body *')) {
+        const cs = getComputedStyle(el);
+        if (!/auto|scroll/.test(cs.overflowY) || el.scrollHeight <= el.clientHeight + 40 || el.clientHeight < innerHeight * 0.5) continue;
+        el.style.overflow = 'visible'; el.style.height = 'auto'; el.style.maxHeight = 'none';
+        for (let a = el.parentElement; a; a = a.parentElement) { a.style.height = 'auto'; a.style.maxHeight = 'none'; a.style.overflow = 'visible'; }
+      }
+    });
     await page.screenshot({ path: `${base}-full.png`, fullPage: true });
     shots.push(`${base}-screen.png`, `${base}-full.png`);
   }
   await ctx.close();
   return { findings, controls: meta.count, focusChecked: focusIdx.length };
+}
+
+/**
+ * Distinctive text that ships with the kit's blueprints and snippets: sentences of seven words or more, and
+ * phrases of four words or more with a figure in them. Interface microcopy (short labels, keyboard hints) is left out, because a
+ * page may rightly keep it. The kit's brand name is masked so a find-and-replace of the name still matches.
+ */
+function kitSamplePhrases() {
+  const kitRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+  const files = [];
+  try {
+    for (const b of readdirSync(join(kitRoot, 'blueprints'))) { const f = join(kitRoot, 'blueprints', b, 'index.html'); if (existsSync(f)) files.push(f); }
+    for (const fam of readdirSync(join(kitRoot, 'components/ui'))) {
+      const famDir = join(kitRoot, 'components/ui', fam);
+      if (!existsSync(join(famDir, 'family.json'))) continue;
+      for (const id of readdirSync(famDir)) { const f = join(famDir, id, `${id}.html`); if (existsSync(f)) files.push(f); }
+    }
+  } catch { return []; }
+  const ent = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'", '&nbsp;': ' ' };
+  const out = new Set();
+  for (const f of files) {
+    const html = readFileSync(f, 'utf8').replace(/<(script|style|svg|pre|code|kbd|title)[\s\S]*?<\/\1>/gi, ' ');
+    for (const piece of html.split(/<[^>]+>/)) {
+      const t = piece.replace(/&[a-z#0-9]+;/gi, (m) => ent[m] ?? ' ').replace(/\s+/g, ' ').trim();
+      const words = t.split(' ').length;
+      if (t.length < 6 || words < 2) continue;
+      if (/\b(enter|shift|esc|press|tab|click|tap|drag|hold|arrow|keys?)\b/i.test(t) && words < 14) continue;
+      if (words >= 7 || (/\d/.test(t) && words >= 4 && /[a-z]{3}/i.test(t))) out.add(t.toLowerCase().replaceAll('halyard', '§'));
+    }
+  }
+  return [...out];
 }
 
 /** 100 minus weighted findings: errors cost 12, taste warnings 6, other warnings 3. One count per rule and message. */
@@ -624,6 +773,7 @@ function scoreNote(findings) {
 }
 
 const shots = [];
+const KIT_SAMPLES = product ? kitSamplePhrases() : [];
 const browser = await chromium.launch();
 const report = [];
 let errors = 0, warnings = 0;

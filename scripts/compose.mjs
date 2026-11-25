@@ -6,22 +6,25 @@
 //   node scripts/compose.mjs "landing page for an invoicing tool for freelancers"
 //   node scripts/compose.mjs "dark admin users table for a devtool" --framework react --project /abs/app
 //   node scripts/compose.mjs "pricing page" --type pricing --json
-import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { search } from './lib/search-core.mjs';
+import { direct, sectionAttrs } from './lib/art-direction.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
 const opt = (name, def) => { const i = args.indexOf(`--${name}`); if (i < 0) return def; const v = args[i + 1]; args.splice(i, 2); return v; };
 const flag = (name) => { const i = args.indexOf(`--${name}`); if (i < 0) return false; args.splice(i, 1); return true; };
 const asJson = flag('json');
+const writeDraft = flag('write');
 const forceType = opt('type', null);
 const framework = opt('framework', 'static');
 const project = opt('project', '/abs/app');
 const brief = args.join(' ').trim();
 if (!brief && !forceType) {
-  console.error('Usage: node scripts/compose.mjs "<one-line brief>" [--type <page-type>] [--framework static|vanilla|react] [--project /abs/app] [--json]');
+  console.error('Usage: node scripts/compose.mjs "<one-line brief>" [--type <page-type>] [--framework static|vanilla|react] [--project /abs/app] [--write] [--json]');
   process.exit(2);
 }
 
@@ -55,10 +58,32 @@ let { type } = picked;
 const { confident, runnerUp } = picked;
 
 // ---------------------------------------------------------------- domain, mood, profile
-const domainScores = kb.domains.map((d) => ({ d, s: d.words.filter((w) => has(w)).length })).sort((a, b) => b.s - a.s);
+const any = (list) => list.some(has);
+// Is the thing being made software? "A booking app for clinics" is a product page; "a clinic" is not.
+const software = any(['app', 'apps', 'software', 'saas', 'platform', 'tool', 'tools', 'api', 'sdk', 'dashboard', 'plugin', 'extension', 'chatbot', 'crm', 'startup']);
+const domainScores = kb.domains.filter((d) => !(software && d.service)).map((d) => ({ d, s: d.words.filter((w) => has(w)).length })).sort((a, b) => b.s - a.s);
 const domain = domainScores[0].s > 0 ? domainScores[0].d : null;
-// A landing page for a developer product has its own plan (code, terminal, API), unless --type says otherwise.
-if (type.id === 'landing' && domain?.id === 'devtool' && !forceType) type = kb.pageTypes.find((t) => t.id === 'dev-landing') ?? type;
+// A landing page is not always for software, and each kind of subject has its own page: a developer product
+// gets code, a terminal and an API; a practice or a trade gets services with fees, people and how to find
+// them; a place gets what is on offer, booking and opening hours; a maker gets the range and a price; a
+// charity gets the claim, where the money goes and ways to help; an event gets the date, the programme and
+// tickets; a studio gets its work. --type overrides all of this.
+if (type.id === 'landing' && !forceType) {
+  const cause = any(['charity', 'charities', 'nonprofit', 'non-profit', 'food bank', 'foodbank', 'donate', 'donation', 'donations', 'fundraising', 'fundraiser', 'volunteer', 'volunteers', 'foundation', 'community group', 'campaign']);
+  const practice = any(['dentist', 'dentists', 'dental', 'clinic', 'clinics', 'physio', 'physiotherapy', 'physiotherapist', 'osteopath', 'chiropractor', 'optician', 'opticians', 'vet', 'vets', 'veterinary', 'salon', 'barber', 'barbers', 'hairdresser', 'spa', 'yoga', 'pilates', 'gym', 'personal trainer', 'therapist', 'counselling', 'counsellor', 'doctor', 'doctors', 'gp', 'practice', 'appointment', 'appointments']);
+  const place = any(['restaurant', 'restaurants', 'cafe', 'café', 'bakery', 'distillery', 'brewery', 'winery', 'hotel', 'venue', 'museum', 'gallery', 'tour', 'tours', 'pub', 'bar', 'bistro', 'visit', 'visiting', 'opening hours', 'book a table', 'book a tour']);
+  const occasion = any(['conference', 'conferences', 'summit', 'festival', 'meetup', 'meetups', 'hackathon', 'retreat', 'exhibition', 'workshop', 'workshops', 'event', 'events', 'wedding website', 'wedding site', 'wedding page', 'our wedding', 'wedding invitation']);
+  const swap = domain?.id === 'devtool' ? 'dev-landing'
+    : software ? null
+    : occasion || domain?.id === 'events' ? 'event'
+    : cause ? 'cause'
+    : ['professional', 'trades'].includes(domain?.id) || practice ? 'service-landing'
+    : domain?.id === 'hospitality' || place ? 'venue'
+    : ['commerce', 'beauty'].includes(domain?.id) ? 'brand-landing'
+    : domain?.id === 'creative' ? 'portfolio'
+    : null;
+  if (swap) type = kb.pageTypes.find((t) => t.id === swap) ?? type;
+}
 const moodHits = Object.entries(kb.moods).filter(([w]) => has(w));
 const mood = Object.assign({}, ...moodHits.map(([, v]) => v));
 // A style is applied only when the brief names a mood; the domain's style is offered, not imposed.
@@ -86,6 +111,10 @@ const restyle = (kb.restyle?.words ?? []).some((w) => text.includes(` ${w} `) ||
 // ---------------------------------------------------------------- plan
 const sections = type.sections.map((s, i) => ({ n: i + 1, ...s, exists: !s.id || uiIds.has(s.id) }));
 // Developer products show code: a code-block figure takes the place of the hero's product frame.
+// Art direction: one signature, a hero, a layout for each section and where colour and type may go.
+const art = direct({ type, domain, profile, sections, uiIds });
+if (art.hero && art.hero !== sections.find((x) => /^hero-/.test(x.id ?? ''))?.id) for (const x of sections) if (/^hero-/.test(x.id ?? '')) { x.alt = [...new Set([x.id, ...(x.alt ?? [])])]; x.id = art.hero; x.rule = `${x.rule ?? ''} Chosen because ${art.heroWhy}; use ${x.alt[0]} instead if there is a real product screen or photograph to show.${sections.some((y) => y.id === 'stats-band') ? ' Leave its three facts out: this page has a figures section, and figures are shown once.' : ''}`.trim(); }
+const layoutOf = (n) => art.sectionLayouts.find((l) => l.n === n) ?? null;
 const wantsCode = type.kind === 'marketing' && (domain?.id === 'devtool' || has('code') || has('show code'));
 const components = [...new Set([...sections.filter((s) => s.id && !s.optional).map((s) => s.id), ...(wantsCode ? ['code-block'] : [])])].filter((id) => uiIds.has(id));
 const charts = type.charts ?? [];
@@ -100,9 +129,17 @@ const install = startWith === 'blueprint' ? installBlueprint : installSnippets;
 // ---------------------------------------------------------------- three looks, and the few questions worth asking
 const styleDefs = JSON.parse(readFileSync(join(root, 'tokens/styles/source.json'), 'utf8')).styles;
 const saidMode = mood.mode ?? (has('black') ? 'dark' : has('light') || has('white') || has('bright') ? 'light' : null);
-// A look is a style, optionally with a palette other than the style's own: "atelier@bone-plum".
-const lookOf = (key) => { const [id, palette] = String(key).split('@'); const s = styleDefs.find((x) => x.id === id); const pal = palette && palette !== s?.palette ? cat.palettes.find((p) => p.id === palette) : null; return s ? { key: pal ? `${id}@${palette}` : id, id, palette: pal ? palette : s.palette, name: pal ? `${s.name} in ${pal.name}` : s.name, summary: pal ? `${s.summary} Shown here in ${pal.name} instead of the style's own palette.` : s.summary, mode: s.mode } : null; };
-let looks = [profile.style, ...(kb.directions[domain?.id] ?? []), ...kb.directions.default].filter(Boolean).map(lookOf).filter(Boolean);
+// A look is a style, optionally with a palette (and type) other than the style's own: "atelier@bone-plum".
+const lookOf = (key, type = null) => {
+  const [id, palette] = String(key).split('@');
+  const st = styleDefs.find((x) => x.id === id);
+  if (!st) return null;
+  const pal = palette && palette !== st.palette ? cat.palettes.find((p) => p.id === palette) : null;
+  return { key: pal ? `${id}@${palette}` : id, id, palette: pal ? palette : st.palette, type: type ?? st.type, name: pal ? `${st.name} in ${pal.name}` : st.name, summary: pal ? `${st.summary} Shown here in ${pal.name} instead of the style's own palette.` : st.summary, mode: st.mode };
+};
+// When the brief names a style, look A is exactly what the install command below produces: that style with
+// this profile's palette and type. The other two are the domain's alternatives.
+let looks = [profile.style ? lookOf(`${profile.style}@${profile.palette}`, profile.typography) : null, ...[...(kb.directions[domain?.id] ?? []), ...kb.directions.default].map((k) => lookOf(k))].filter(Boolean);
 looks = looks.filter((l, i) => looks.findIndex((x) => x.id === l.id) === i);
 if (saidMode) {
   // A brief that says dark only gets dark looks (and the same for light).
@@ -115,16 +152,17 @@ const directions = {
   command: `node scripts/directions.mjs ${JSON.stringify(brief || type.name)} --out ${project === '/abs/app' ? './lumina-directions' : join(project, 'lumina-directions')}`,
 };
 // Ask only what the brief leaves open, most useful first, three at most. Everything else has a sound default.
-const saysAction = ['sign up', 'signup', 'waitlist', 'demo', 'buy', 'install', 'download', 'subscribe', 'contact', 'book', 'trial', 'donate', 'apply'].some(has);
+const saysAction = ['sign up', 'signup', 'waitlist', 'demo', 'buy', 'install', 'download', 'subscribe', 'contact', 'book', 'trial', 'donate', 'apply', 'shop', 'order', 'reserve', 'action', 'booking', 'appointment', 'appointments', 'tour', 'cta', 'enquire', 'get a quote', 'join', 'register'].some(has);
+const actionDefault = { commerce: 'one "Shop" or "Add to bag" action, with the price beside it', beauty: 'one "Shop" action, with the price beside it', hospitality: '"Book", leading to dates and party size', health: '"Book an appointment", with a phone number as the quiet alternative', travel: '"Check availability", with dates', property: '"Get a quote" or "Book a viewing"', media: '"Listen" or "Subscribe"', public: 'the one task the page exists for, as a verb ("Apply", "Renew")' }[domain?.id] ?? 'a free start ("Start free"), with a quieter second link to a demo or the docs';
 const questions = [
   restyle && { id: 'keep', ask: 'What must stay as it is (logo, brand colour, copy, layout)?', why: 'A restyle changes the surface; it should not move what people already know.', default: 'keep the content and structure, change tokens and components only' },
   !product && { id: 'product', ask: 'What is the product called, and what does it do in one line?', why: 'Sample names and sample numbers must not ship; the headline is written from this.', default: 'none: ask, or take the name from the repository or the existing site' },
   !profile.style && !restyle && { id: 'look', ask: `Which look fits: ${directions.styles.map((s, i) => `${'ABC'[i]} ${s.name}`).join(', ')}? (Render them side by side with the directions command and let the person point.)`, why: 'People choose a look faster by eye than from a description.', default: `the plain profile below (${profile.palette}, ${profile.typography}), no style` },
-  ['marketing', 'flow'].includes(type.kind) && !saysAction && { id: 'action', ask: 'What is the one thing a visitor should do here: start a trial, book a demo, join a waitlist, buy?', why: 'One primary action per screen; its label is the most-read words on the page.', default: 'a free start ("Start free"), with a quieter second link to a demo or the docs' },
+  ['marketing', 'flow'].includes(type.kind) && !saysAction && { id: 'action', ask: 'What is the one thing a visitor should do here: start a trial, book a demo, join a waitlist, buy?', why: 'One primary action per screen; its label is the most-read words on the page.', default: actionDefault },
   !saidMode && { id: 'mode', ask: 'Light, dark, or both with a switch?', why: 'Dark is a second design, not an inversion; it is cheaper to know now.', default: `${profile.mode}, with the other mode working` },
 ].filter(Boolean).slice(0, 3);
 
-const audience = domain ? { finance: 'people who check figures and need to trust them', trading: 'people watching numbers change who need speed and density', devtool: 'developers who want the facts, the code and the limits', analytics: 'people who need one answer fast, then the detail', health: 'people who may be anxious and need calm, plain steps', public: 'anyone, on any device, including people with low vision or little time', commerce: 'shoppers comparing, who need the price, delivery and returns up front', editorial: 'readers who came to read, so the text comes first', productivity: 'teams who want to see the product working, not adjectives', creative: 'clients judging taste, so the work leads and words stay short', playful: 'families and younger users who need big targets and friendly words', enterprise: 'buyers and admins who need proof, controls and compliance', travel: 'people planning, who need dates, prices and photos they trust', beauty: 'people choosing with their eyes, so the product and its result lead and the words stay few', hospitality: 'guests deciding where to go, who need the menu or rooms, the hours and a way to book', media: 'listeners and viewers who came for the thing itself, so controls stay out of the way', property: 'people making a large, slow decision who need plain numbers and no pressure', social: 'people here for each other, so their content leads and the chrome stays quiet' }[domain.id] : 'name them in one line before building';
+const audience = domain ? { finance: 'people who check figures and need to trust them', trading: 'people watching numbers change who need speed and density', devtool: 'developers who want the facts, the code and the limits', analytics: 'people who need one answer fast, then the detail', health: 'people who may be anxious and need calm, plain steps', public: 'anyone, on any device, including people with low vision or little time', commerce: 'shoppers comparing, who need the price, delivery and returns up front', editorial: 'readers who came to read, so the text comes first', productivity: 'teams who want to see the product working, not adjectives', creative: 'clients judging taste, so the work leads and words stay short', playful: 'families and younger users who need big targets and friendly words', enterprise: 'buyers and admins who need proof, controls and compliance', travel: 'people planning, who need dates, prices and photos they trust', beauty: 'people choosing with their eyes, so the product and its result lead and the words stay few', hospitality: 'guests deciding where to go, who need the menu or rooms, the hours and a way to book', media: 'listeners and viewers who came for the thing itself, so controls stay out of the way', property: 'people making a large, slow decision who need plain numbers and no pressure', social: 'people here for each other, so their content leads and the chrome stays quiet' }[domain.id] : 'not clear from the brief: write one line (who they are, what they came to do) and state it with your plan';
 const plan = {
   brief,
   pageType: { id: type.id, name: type.name, confident, alsoConsider: runnerUp?.id ?? null },
@@ -144,6 +182,7 @@ const plan = {
   install,
   installAlternative: startWith === 'blueprint' ? installSnippets : installBlueprint,
   blueprint: blueprint ?? (type.blueprint ? `${type.blueprint} (not in this version; start from the sections below)` : null),
+  artDirection: { signature: art.signature, mainAttributes: art.mainAttrs, sections: art.sectionLayouts.map((l) => ({ n: l.n, id: l.id, layout: l.layout, space: l.space, attributes: sectionAttrs(l) })), accent: art.accent, type: art.type, rhythm: art.rhythm },
   sections,
   charts,
   restyle: restyle ? kb.restyle.notes : null,
@@ -156,7 +195,86 @@ const plan = {
   ],
 };
 
-if (asJson) { console.log(JSON.stringify(plan, null, 2)); process.exit(0); }
+// ---------------------------------------------------------------- --write: a composed first draft
+// Installs what the plan needs and writes the page itself: sections in order with their layouts, tones and
+// ids applied, the navigation pointing at them, and the art direction on <main>. Every sentence in it is
+// still sample copy; the plan below says what each section should say instead.
+let draft = null;
+if (writeDraft) {
+  if (project === '/abs/app') { console.error('--write needs --project <the folder the page should live in>.'); process.exit(2); }
+  if (framework !== 'static') { console.error('--write produces a plain HTML draft: use it with --framework static (the default).'); process.exit(2); }
+  const dir = resolve(project);
+  mkdirSync(dir, { recursive: true });
+  const run = (cmd) => { const parts = cmd.replace(/\\\n\s*/g, ' ').replace(`--project ${project}`, '--project \u0000').split(/\s+/).slice(1).map((a) => (a === '\u0000' ? dir : a)); const r = spawnSync(process.execPath, parts, { cwd: root, encoding: 'utf8' }); if (r.status !== 0 && r.status !== 3) { console.error(r.stderr || r.stdout); process.exit(1); } return r.stdout; };
+  if (startWith === 'blueprint') {
+    const out = run(installBlueprint);
+    draft = { path: join(dir, /written to (\S+)\/ instead/.exec(out)?.[1] ?? '', 'index.html'), kind: 'blueprint' };
+  } else {
+    // Proof from other people (logos, quotes, reviews) is never drafted: it has to be real.
+    const PROOF = new Set(['logo-cloud', 'testimonial-grid', 'quote-feature', 'review-summary']);
+    const SLUG = { 'feature-split': 'features', 'feature-grid': 'features', 'bento-grid': 'features', 'how-it-works': 'how', 'stats-band': 'figures', 'faq-section': 'questions', 'cta-band': 'start', 'pricing-tiers': 'pricing', 'offer-cards': 'range', 'visit-info': 'visit', 'booking-bar': 'book', 'contact-section': 'contact', 'team-grid': 'team', 'blog-grid': 'posts', 'project-grid': 'work', 'integrations-grid': 'integrations', 'code-block': 'code', 'terminal-window': 'quickstart', 'api-endpoint': 'api', 'description-list': 'details', 'comparison-table': 'compare', 'newsletter-signup': 'newsletter', 'sticky-story': 'story', 'showcase-tabs': 'examples' };
+    const LABEL = { features: 'Features', how: 'How it works', figures: 'In numbers', questions: 'Questions', pricing: 'Pricing', range: 'The range', visit: 'Visit', book: 'Book', contact: 'Contact', team: 'Team', posts: 'Writing', work: 'Work', integrations: 'Integrations', code: 'Code', quickstart: 'Quickstart', api: 'API', details: 'Details', compare: 'Compare', story: 'How it works', examples: 'Examples' };
+    const isChrome = (id) => /^(navbar|footer|site-footer|floating-pill-nav|hide-on-scroll)/.test(id);
+    const picked = sections.filter((x) => (x.id ? uiIds.has(x.id) : type.kind === 'marketing' && x.role && x.copy) && !(x.optional && PROOF.has(x.id))).map((x) => ({ ...x, id: x.id === 'navbar-mega' && (x.alt ?? []).includes('navbar-simple') ? 'navbar-simple' : x.id }));
+    const ids = [...new Set([...picked.map((x) => x.id).filter(Boolean), 'button'])];
+    run(`${base} --components ${ids.join(',')}${charts.length ? ` --charts ${charts.join(',')}` : ''}`);
+    const kit = join(dir, 'lumina-taste');
+    const snippet = (id) => readFileSync(join(kit, 'snippets', `${id}.html`), 'utf8').replace(/<!--[\s\S]*?-->\n?/, '').trim();
+    const family = (id) => cat.ui.find((u) => u.id === id)?.family;
+    const anchors = [];
+    const body = [];
+    const slugOf = (role) => role.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    for (const x of picked.filter((y) => !y.id || !isChrome(y.id))) {
+      if (!x.id) {
+        // Nothing ready-made fits this section: a plain section with the heading in place and the brief for its words.
+        const slug = slugOf(x.role), lay = layoutOf(x.n);
+        anchors.push({ slug, label: x.role });
+        body.push(`${x.optional ? `<!-- Optional (${x.role}): keep it only if you have the real content for it. -->\n` : ''}<section class="lt-section" id="${slug}"${lay ? ' ' + sectionAttrs(lay) : ''} aria-labelledby="h-${slug}">\n  <header><h2 id="h-${slug}">${x.role}</h2></header>\n  <div class="lt-prose"><p>TODO: ${x.copy}</p></div>\n</section>`);
+        continue;
+      }
+      let html = snippet(x.id);
+      const hero = /^hero-/.test(x.id);
+      // Figures are shown once: when the page has a figures section, the statement hero leaves its three facts out.
+      if (x.id === 'hero-statement' && picked.some((y) => y.id === 'stats-band')) html = html.replace(/\s*<dl data-part="facts">[\s\S]*?<\/dl>/, '');
+      const slug = hero ? 'top' : SLUG[x.id] ?? slugOf(x.role ?? x.id);
+      const lay = layoutOf(x.n);
+      const attrs = [slug && !/^<\w+[^>]*\sid=/.test(html) ? `id="${slug}"` : null, x.tone && !art.printlike ? `data-tone="${x.tone}"` : null, lay ? sectionAttrs(lay) : null].filter(Boolean).join(' ');
+      if (family(x.id) === 'blocks') {
+        html = html.replace(/^<(section|div|footer)\b([^>]*)>/, (m, tag, rest) => `<${tag}${rest.replace(/\sid="[^"]*"/, slug ? '' : '$&')}${attrs ? ' ' + attrs : ''}>`);
+      } else {
+        // Not a section block: give it the same band, container and heading as one.
+        html = `<section class="lt-section"${attrs ? ' ' + attrs : ''} aria-labelledby="h-${slug ?? x.n}">\n  <header><h2 id="h-${slug ?? x.n}">${x.role}</h2></header>\n  ${html.split('\n').join('\n  ')}\n</section>`;
+      }
+      if (slug && slug !== 'top' && !anchors.some((a) => a.slug === slug)) anchors.push({ slug, label: LABEL[slug] ?? x.role ?? slug });
+      // The small label above the heading says what the plan calls this section, so the draft reads in the plan's order.
+      if (!hero && x.role && !LABEL[slug]) html = html.replace(/(<(?:p|h2)[^>]*data-part="eyebrow"[^>]*>)[^<]*/, `$1${x.role}`);
+      body.push(`${x.optional ? `<!-- Optional (${x.role}): keep it only if you have the real content for it. -->\n` : ''}${html}`);
+    }
+    // Navigation and footer: links point at the sections that exist; nothing points nowhere.
+    const action = anchors.some((a) => a.slug === 'start') ? '#start' : anchors.some((a) => a.slug === 'book') ? '#book' : anchors.some((a) => a.slug === 'contact') ? '#contact' : '#top';
+    const links = anchors.filter((a) => `#${a.slug}` !== action).slice(0, 4);
+    const li = links.map((a) => `<li><a href="#${a.slug}">${a.label}</a></li>`).join('');
+
+    const pill = (html) => html.replace(/(<span data-part="hover"[^>]*><\/span>)[\s\S]*?(<a [^>]*data-part="cta")/, (m, hover, cta) => `${hover}\n  ${links.map((l, i) => `<a href="#${l.slug}"${i === 0 ? ' aria-current="true"' : ''}>${l.label}</a>`).join('\n  ')}\n  ${cta}`).replace(/<a href="#[^"]*"( data-part="cta")/, `<a href="${action}"$1`);
+    const chrome = (id) => pill(snippet(id)).replace(/<ul data-part="links">[\s\S]*?<\/ul>/, `<ul data-part="links">${li}</ul>`).replace(/(<div[^>]*data-part="panel"[^>]*>)<ul>[\s\S]*?<\/ul>/, `$1<ul>${li}</ul>`).replace(/href="#home"/g, 'href="#top"').replace(/href="#start"/g, `href="${action}"`).replace(/<a href="#signin"[^>]*>[^<]*<\/a>/g, '');
+    const top = picked.filter((y) => /^(navbar|floating-pill-nav|hide-on-scroll)/.test(y.id ?? '')).map((y) => chrome(y.id)).join('\n');
+    const foot = picked.filter((y) => /footer/.test(y.id ?? '')).map((y) => chrome(y.id)).join('\n');
+    const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''}`;
+    let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${product ?? 'TODO: page title'}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. Every sentence, name, number and link target below is sample content: rewrite all of it. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${top}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}>\n${body.join('\n\n')}\n</main>\n${foot}\n</body>\n</html>\n`;
+    if (product) page = page.replaceAll('Halyard', product).replaceAll('halyard', product.toLowerCase().replace(/[^a-z0-9]+/g, ''));
+    const MARK = '<!-- lumina-taste draft for:';
+    const target = existsSync(join(dir, 'index.html')) && !readFileSync(join(dir, 'index.html'), 'utf8').includes(MARK) ? join(dir, 'index.draft.html') : join(dir, 'index.html');
+    writeFileSync(target, page);
+    draft = { path: target, kind: 'snippets', sections: picked.filter((y) => !y.id || !isChrome(y.id)).map((y) => y.id ?? slugOf(y.role)), left: sections.filter((x) => x.optional && PROOF.has(x.id ?? '')).map((x) => x.id) };
+  }
+  plan.draft = { ...draft, path: relative(process.cwd(), draft.path) || draft.path };
+}
+
+// No process.exit() here: exiting straight after a large write can cut piped output short.
+if (asJson) console.log(JSON.stringify(plan, null, 2));
+else printPlan();
+
+function printPlan() {
 
 // ---------------------------------------------------------------- markdown
 const L = [];
@@ -164,6 +282,9 @@ let h = 0; const H = (title) => `## ${++h}. ${title}`;
 L.push(`# Page plan: ${type.name}`, '', `> ${brief || `--type ${type.id}`}`, '');
 if (!confident) L.push(`Page type guessed from the catalog. If this is wrong, rerun with \`--type <id>\` (${kb.pageTypes.map((p) => p.id).join(', ')}).`, '');
 else if (runnerUp) L.push(`Also close: \`${runnerUp.id}\`. Rerun with \`--type ${runnerUp.id}\` if that fits better.`, '');
+if (draft) L.push(draft.kind === 'blueprint'
+  ? `**A first draft is written: \`${draft.path}\`** (the \`${blueprint}\` blueprint, themed with this profile). Everything in it is sample content. Rewrite it section by section with the plan below, then do the detail pass and audit.`
+  : `**A first draft is written: \`${draft.path}\`.** It has the sections below in order, with their layouts, bands, ids and navigation already applied, and the art direction on \`<main>\`. Every sentence, name and number in it is sample copy: rewrite each section with its copy formula below.${draft.left.length ? ` Not drafted, because they need real material from the user: ${draft.left.map((x) => `\`${x}\``).join(', ')}.` : ''}`, '');
 L.push(H('Design brief (confirm before writing code)'), '');
 L.push(`- **Audience:** ${plan.designBrief.audience}`);
 L.push(`- **Product:** ${plan.designBrief.product}`);
@@ -189,6 +310,13 @@ if (startWith === 'blueprint') {
   L.push('Build the page from the snippets this writes, in the section order below.' + (installBlueprint ? ` The \`${blueprint}\` blueprint is a finished example of a similar page (\`--blueprints ${blueprint}\`) if you want to see one, but its sections differ from this plan.` : ''), '');
 }
 if (restyle) { L.push(H('Restyling an existing page'), ''); for (const n of kb.restyle.notes) L.push(`- ${n}`); L.push(''); }
+L.push(H('Art direction (what makes this page this page)'), '');
+L.push(`- **Signature: ${art.signature.name}.** ${art.signature.how}`);
+if (art.mainAttrs.length) L.push(`- **Page:** \`<main ${art.mainAttrs.join(' ')}>\`: ${art.printlike ? 'hairlines between sections and numbered labels, like a well-set document. Do not tint bands as well.' : ''}`);
+L.push(`- **Rhythm:** ${art.rhythm}`);
+L.push(`- **Colour:** ${art.accent}`);
+L.push(`- **Type:** ${art.type}`);
+L.push('- **Then the detail pass** in references/composition.md before you audit: alignment, line breaks, numbers, edges.', '');
 L.push(H('Sections, in order'), '');
 for (const s of sections) {
   const id = s.id ? `\`${s.id}\`` : '_(layout, no component)_';
@@ -196,13 +324,16 @@ for (const s of sections) {
   L.push(`${s.n}. **${s.role}**${s.optional ? ' _(optional)_' : ''}: ${id}${alt}`);
   if (s.copy) L.push(`   - Copy: ${s.copy}`);
   if (s.rule) L.push(`   - Rule: ${s.rule}`);
-  if (wantsCode && /^hero-/.test(s.id ?? '')) L.push('   - Code: this is a developer product, so replace the product frame with a `code-block` figure (a real request and its response, 8–14 lines). Use `code-block` again wherever a feature is easier to show than to describe.');
-  if (s.tone) L.push(`   - Band: add \`data-tone="${s.tone}"\` to this block so the page alternates plain and tinted bands.`);
+  if (wantsCode && type.id !== 'dev-landing' && /^hero-/.test(s.id ?? '')) L.push('   - Code: this is a developer product, so replace the product frame with a `code-block` figure (a real request and its response, 8–14 lines). Use `code-block` again wherever a feature is easier to show than to describe.');
+  const lay = layoutOf(s.n);
+  if (lay && sectionAttrs(lay)) L.push(`   - Layout: add \`${sectionAttrs(lay)}\` to this block (${lay.layout === 'rail' ? 'heading in a left rail that stays put, body on the right' : lay.layout === 'centre' ? 'heading centred above a symmetrical body' : lay.layout === 'split' ? 'heading left and its lede right, on one line' : lay.space === 'tight' ? 'it sits close to the section it supports' : 'more air: it stands alone'}).`);
+  if (s.tone && !art.printlike) L.push(`   - Band: add \`data-tone="${s.tone}"\` to this block so the page alternates plain and tinted bands.`);
 }
 L.push('');
-if (type.kind === 'marketing') L.push('Section blocks go straight inside `<main>`, one after another. Each centres its content in a 1180px container and pads itself by half of `--section-y`, so the gap between two sections is always `--section-y`; never wrap them in another band or container. Never tint two bands in a row.', '');
+if (type.kind === 'marketing') L.push('Section blocks go straight inside `<main>`, one after another. Each centres its content in a 1180px container and pads itself by half of `--section-y`, so the gap between two sections is always `--section-y`; never wrap them in another band or container.' + (art.printlike ? ' This page uses hairlines between sections, so leave every band plain.' : ' Never tint two bands in a row.'), '');
 if (charts.length) L.push(H('Charts'), '', `Start with ${charts.map((c) => `\`${c}\``).join(', ')}. Write each title as the takeaway first; check the pick in references/chart-selection.md.`, '');
 if (type.states.length) { L.push(H('States to build'), ''); for (const s of type.states) L.push(`- ${s}`); L.push(''); }
 L.push(H('Avoid'), ''); for (const a of type.avoid) L.push(`- ${a}`); L.push('');
 L.push(H('Finish'), ''); for (const f of plan.finish) L.push(`- ${f.startsWith('node') ? '`' + f.replace(/\s{2,}\(.*$/, '') + '`' + (f.match(/\s{2,}(\(.*)$/)?.[1] ? ' ' + f.match(/\s{2,}(\(.*)$/)[1] : '') : f}`);
 console.log(L.join('\n'));
+}

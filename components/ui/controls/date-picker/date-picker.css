@@ -1,10 +1,10 @@
 @scope (.lt-date) {
-  :scope { position: relative; display: grid; gap: 6px; width: min(100%, 260px); color: var(--text-primary); font-size: var(--text-ui); }
+  :scope { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; width: min(100%, 260px); color: var(--text-primary); font-size: var(--text-ui); }
   label { font-size: var(--text-ui-sm); font-weight: 600; }
   [data-part="field"] { display: flex; align-items: center; height: calc(var(--control-h) + 8px); padding: 0 4px 0 12px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-1); transition: border-color var(--dur-1), box-shadow var(--dur-1); }
   [data-part="field"]:hover { border-color: var(--text-secondary); }
   [data-part="field"]:focus-within { border-color: var(--focus-ring); box-shadow: var(--field-ring); }
-  input { flex: 1; min-width: 0; height: 100%; padding: 0; border: 0; outline: none; background: none; color: inherit; font: inherit; font-variant-numeric: tabular-nums; }
+  input { flex: 1; width: 100%; min-width: 0; height: 100%; padding: 0; border: 0; outline: none; background: none; color: inherit; font: inherit; font-variant-numeric: tabular-nums; }
   input::placeholder { color: var(--text-muted); }
   [data-part="open"] { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-secondary); cursor: pointer; }
   [data-part="open"]:hover { background: var(--bg-surface-2); color: var(--text-primary); }

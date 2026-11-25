@@ -2580,6 +2580,148 @@
         ]
       ],
       "added": 12
+    },
+    {
+      "id": "art-panel",
+      "name": "Art panel",
+      "summary": "What stands in for a photograph until there is one: the name set large on a tinted panel, with one fact. Add an <img> and the photo takes over.",
+      "pattern": "<figure> + <figcaption>",
+      "states": [
+        "plain",
+        "accent",
+        "ink",
+        "with a photograph"
+      ],
+      "aliases": [
+        "image placeholder",
+        "no photo",
+        "product image fallback",
+        "typographic card",
+        "photo slot",
+        "cover panel",
+        "poster card",
+        "media placeholder"
+      ],
+      "react": "ArtPanel",
+      "api": "data-tone · data-ratio · data-backdrop · data-shot",
+      "w": 900,
+      "called": [
+        "what do I put where the photo goes",
+        "nice placeholder for a product picture",
+        "card with just the name in big letters"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-art:first-child [data-part=\"name\"]",
+          "name": "Name",
+          "api": "container-sized type",
+          "text": "The thing itself, set in display type. It scales with the panel."
+        },
+        {
+          "sel": ".lt-art:first-child [data-part=\"fact\"]",
+          "name": "One fact",
+          "api": "",
+          "text": "Origin, size, date: something true and specific."
+        },
+        {
+          "sel": ".lt-art:first-child [data-part=\"index\"]",
+          "name": "Index",
+          "api": "optional",
+          "text": "A number when the panels form a set."
+        },
+        {
+          "sel": ".lt-art[data-tone=\"ink\"]",
+          "name": "Tones",
+          "api": "data-tone=\"accent | ink\"",
+          "text": "Vary the tone across a set so three panels do not read as three grey boxes."
+        }
+      ],
+      "prompt": "When a page needs a picture and there is no photograph, use an art panel, never a grey box, a stock photo or a drawing of the product. It is a <figure> with a fixed aspect ratio (4:5 by default), a surface tinted 7% with the accent, the name of the thing set large in display type at the bottom left, one true fact under it, and an optional small mono index number at the top. Add a quiet backdrop (ruled lines, dots or grain) if the panel is large. Vary the tone across a set (plain, accent, ink). Write the photo brief in data-shot (\"bottle on pale stone, soft side light, 4:5\") so the owner knows what to shoot, and a visually hidden figcaption that says what it shows. When a photo exists, put the <img> first inside the figure: it covers the panel.",
+      "debug": "Debug my image area. Rule out: an empty grey rectangle; a hand-drawn SVG of the product; a stock photo that is not the product; type that does not scale with the panel (use container units); three identical panels in a row; no text alternative; a made-up fact. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<figure class=\"lt-art\" data-shot=\"…\"><p data-part=\"name\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<ArtPanel name fact label shot>",
+          "React"
+        ]
+      ],
+      "added": 13
+    },
+    {
+      "id": "task-list",
+      "name": "Task list",
+      "summary": "Tickable rows with a title, a detail line and an optional value, a running \"2 of 5 done\" and a progress track.",
+      "pattern": "native checkboxes in whole-row labels",
+      "states": [
+        "to do",
+        "done",
+        "all done"
+      ],
+      "aliases": [
+        "todo list",
+        "checklist",
+        "habit list",
+        "tick list",
+        "to-do rows",
+        "daily tasks",
+        "checkable rows",
+        "habit tracker rows"
+      ],
+      "react": "TaskList",
+      "api": "<input type=\"checkbox\"> · data-noun",
+      "w": 480,
+      "preview": [],
+      "called": [
+        "list of things you tick off",
+        "habits with a circle you tap",
+        "to do list with a counter"
+      ],
+      "anatomy": [
+        {
+          "sel": "li:nth-child(3) label",
+          "name": "Row",
+          "api": "<label>",
+          "text": "The whole row ticks the box. 52px tall."
+        },
+        {
+          "sel": "li:first-child [data-part=\"box\"]",
+          "name": "Tick",
+          "api": "input:checked",
+          "text": "A filled circle with a tick; the title is struck through, still readable."
+        },
+        {
+          "sel": "[data-part=\"count\"]",
+          "name": "Count",
+          "api": "role=\"status\"",
+          "text": "Says progress in words and is announced when it changes."
+        },
+        {
+          "sel": "[data-part=\"track\"]",
+          "name": "Track",
+          "api": "aria-hidden",
+          "text": "The same progress as a thin bar."
+        }
+      ],
+      "prompt": "Build a task list from native checkboxes: each row is a <label> holding a visually hidden checkbox, a 22px circle that fills with the accent and shows a tick when checked, a title, a secondary detail line under it and an optional right-aligned value (a streak, an amount). Rows are 52px tall with hairlines between them. Done rows strike the title through in secondary ink (never fade them with opacity). Above the list, the heading and a status line \"2 of 5 done\" that updates and is announced, with a thin progress track under it. No drag handles, priorities or due-date chips unless the product needs them.",
+      "debug": "Debug my checklist. Rule out: a div with a click handler instead of a checkbox; only the circle being clickable; done rows faded until unreadable; the count not announced; rows that jump position when ticked; a tick shown by colour alone. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<label><input type=\"checkbox\">",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<TaskList title tasks onToggle>",
+          "React"
+        ]
+      ],
+      "added": 13
     }
   ]
 }

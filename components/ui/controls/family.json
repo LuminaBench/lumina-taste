@@ -2847,6 +2847,83 @@
         ]
       ],
       "added": 12
+    },
+    {
+      "id": "booking-bar",
+      "name": "Booking bar",
+      "summary": "Date, time and party size in one row with one action, and the answer given as a sentence.",
+      "pattern": "<form> + date picker + <select> + stepper",
+      "states": [
+        "ready",
+        "no date",
+        "checking",
+        "answered"
+      ],
+      "aliases": [
+        "reservation form",
+        "book a table",
+        "availability search",
+        "booking widget",
+        "reserve bar",
+        "check availability",
+        "appointment picker",
+        "tour booking"
+      ],
+      "react": "BookingBar",
+      "api": "lt-change { date, time, people }",
+      "w": 900,
+      "preview": [],
+      "deps": [
+        "date-picker",
+        "number-stepper",
+        "button"
+      ],
+      "called": [
+        "the bar where you pick a date and how many people",
+        "book a table widget",
+        "check availability form"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-date",
+          "name": "Date",
+          "api": "date-picker",
+          "text": "Typed or picked. The hint says which days can be booked."
+        },
+        {
+          "sel": "[data-part=\"field-time\"]",
+          "name": "Time",
+          "api": "<select>",
+          "text": "A native select: there are only a few slots."
+        },
+        {
+          "sel": ".lt-stepper",
+          "name": "People",
+          "api": "number-stepper",
+          "text": "Minus and plus, with the limit enforced."
+        },
+        {
+          "sel": "[data-part=\"result\"]",
+          "name": "Answer",
+          "api": "role=\"status\"",
+          "text": "One sentence: what is free, or what to try instead."
+        }
+      ],
+      "prompt": "Build a booking bar: a form with a heading and one row of a date picker (typed or picked, with a hint that says which days are bookable), a native time select with the few real slots, a people stepper with its minimum and maximum, and one primary button \"Check availability\". Labels sit above each field; the button lines up with the fields. On submit, require a date (say \"Choose a date first.\" and focus it), emit the request, and put the answer in a status line as a sentence: \"Saturday 28 November at 12:00, 2 people: 4 places left.\" or what to try instead. Under 720px the date takes a full row, time and people share one, and the button spans the width.",
+      "debug": "Debug my booking form. Rule out: a date field that only accepts clicks; past dates selectable; the answer shown only as a colour change; a submit that reloads the page; a people field that accepts 0; labels as placeholders; the button out of line with the fields. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<form> + .lt-date + <select> + .lt-stepper",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<BookingBar title times onCheck>",
+          "React"
+        ]
+      ],
+      "added": 13
     }
   ]
 }

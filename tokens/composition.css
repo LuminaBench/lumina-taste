@@ -1,0 +1,85 @@
+/* lumina-taste composition: page-level art direction. A handful of attributes that change how a page of
+   section blocks reads, without editing the blocks. They are what stops ten sections from looking like
+   the same section ten times.
+
+   On <main>:
+     data-numbered             section labels count up: 01, 02, 03…
+     data-separators="rules"   a hairline between sections (use it instead of tinted bands, not with them)
+
+   On a section block that has a heading and a body (features, offers, steps, figures, logos, quotes, team, posts):
+     data-layout="rail"        the heading sits in a left column and stays put while the body scrolls past
+     data-layout="centre"      the heading is centred above the body
+     data-layout="split"       heading on the left, its lede on the right, on one line above the body
+
+   On any block:
+     data-space="tight|open"   less or more air above and below than the default
+
+   Rules of use: at most one rail in a row; centre a section only when its body is symmetrical (three
+   tiers, a logo row); never give two neighbouring sections the same layout. `compose.mjs` assigns these. */
+
+/* ---------------------------------------------------------------- numbered sections */
+:where(main[data-numbered]) { counter-reset: lt-section; }
+/* The section counts, its label shows the number: a counter stepped inside ::before would restart every time. */
+:where(main[data-numbered] > section:not([class*="hero"]):has(> header > [data-part="eyebrow"], > header > h2:first-child, > h2[data-part="eyebrow"], > div:first-child > [data-part="eyebrow"])) { counter-increment: lt-section; }
+main[data-numbered] > section:not([class*="hero"]) > header > [data-part="eyebrow"]::before,
+main[data-numbered] > section:not([class*="hero"]) > h2[data-part="eyebrow"]::before,
+main[data-numbered] > section:not([class*="hero"]) > div:first-child > [data-part="eyebrow"]::before {
+  content: counter(lt-section, decimal-leading-zero);
+  margin-right: 0.9em; color: var(--text-secondary); font-family: var(--font-mono); font-weight: 500; letter-spacing: 0; font-variant-numeric: tabular-nums;
+}
+
+/* A heading with no small label above it carries the number on its own line. */
+main[data-numbered] > section:not([class*="hero"]) > header > h2:first-child::before {
+  content: counter(lt-section, decimal-leading-zero);
+  display: block; margin-bottom: 14px; color: var(--text-secondary); font-family: var(--font-mono); font-size: var(--text-ui-xs); font-weight: 500; line-height: 1; letter-spacing: 0; font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------- hairline separators */
+/* Drawn as a background so it works on any block, whatever its display or pseudo-elements, at container width. */
+main[data-separators="rules"] > section:not(:first-child) {
+  background-image: linear-gradient(var(--border-hairline), var(--border-hairline));
+  background-repeat: no-repeat; background-position: top center;
+  background-size: min(var(--container, 1180px), 100% - 2 * var(--block-x, 24px)) 1px;
+}
+/* A section that follows a tinted band, or is one, already has an edge. */
+main[data-separators="rules"] > section[data-tone], main[data-separators="rules"] > section[data-tone] + section { background-image: none; }
+
+/* ---------------------------------------------------------------- spacing */
+:where([data-space="tight"]) { --block-y: calc(var(--section-y) * 0.3); --block-y-sm: calc(var(--section-y) * 0.3); }
+:where([data-space="open"]) { --block-y: calc(var(--section-y) * 0.8); --block-y-sm: calc(var(--section-y) * 0.7); }
+
+/* ---------------------------------------------------------------- centred heading */
+:is(section, div)[data-layout="centre"] > header { max-width: 720px; margin-inline: auto; text-align: center; }
+:is(section, div)[data-layout="centre"] > header [data-part="lede"] { margin-inline: auto; }
+:is(section, div)[data-layout="centre"] > h2[data-part="eyebrow"] { text-align: center; }
+
+@media (min-width: 900px) {
+  /* -------------------------------------------------------------- split heading */
+  :is(section, div)[data-layout="split"] > header { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 56px; align-items: end; max-width: none; }
+  :is(section, div)[data-layout="split"] > header > [data-part="eyebrow"] { grid-column: 1 / -1; }
+  :is(section, div)[data-layout="split"] > header > :is([data-part="lede"], a, p:last-child:not([data-part="eyebrow"])) { margin: 0; max-width: 46ch; justify-self: end; }
+
+  /* -------------------------------------------------------------- rail */
+  :is(section, div)[data-layout="rail"] { display: grid; grid-template-columns: minmax(0, 0.44fr) minmax(0, 1fr); column-gap: clamp(32px, 5vw, 80px); align-items: start; }
+  :is(section, div)[data-layout="rail"] > :is(header, h2):first-child { position: sticky; top: var(--rail-top, 88px); max-width: none; margin: 0; }
+  :is(section, div)[data-layout="rail"] > :is(header, h2):first-child ~ * { grid-column: 2; min-width: 0; margin-top: 0; }
+  /* The body column is about two thirds of a band: grids drop a column so each card keeps its width. */
+  :is(section, div)[data-layout="rail"] > :is(ul, ol):where(:not([data-part="tiers"])) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Three of something beside a rail read better as rows than as two cards and an orphan. */
+  :is(section, div)[data-layout="rail"] > ul:where(:has(> li:nth-child(3):last-child)) { grid-template-columns: minmax(0, 1fr); }
+  /* People stay small beside a rail: four across, not two large tiles. */
+  .lt-team-grid[data-layout="rail"] > ul { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .lt-offers[data-layout="rail"] > ul { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .lt-logo-cloud[data-layout="rail"] { text-align: left; }
+  .lt-logo-cloud[data-layout="rail"] > ul { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 0; }
+  /* Steps read down the page beside a rail, not across it: numbers on a vertical line. */
+  .lt-how-it-works[data-layout="rail"] > ol { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+  .lt-how-it-works[data-layout="rail"] > ol::before { top: 18px; bottom: 18px; left: 17px; right: auto; width: 1px; height: auto; }
+  .lt-how-it-works[data-layout="rail"] > ol > li { padding-left: 56px; }
+  .lt-how-it-works[data-layout="rail"] > ol > li > [data-part="n"] { position: absolute; left: 0; top: 0; margin: 0; }
+  .lt-how-it-works[data-layout="rail"] > ol > li > p { max-width: 52ch; }
+  /* Figures become two by two, divided by hairlines both ways. */
+  .lt-stats-band[data-layout="rail"] > dl { grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 0; }
+  .lt-stats-band[data-layout="rail"] > dl > div { padding: 22px 20px 22px 0; border-left: 0; border-top: var(--bw) var(--border-style) var(--border-hairline); }
+  .lt-stats-band[data-layout="rail"] > dl > div:nth-child(even) { padding-left: 20px; border-left: var(--bw) var(--border-style) var(--border-hairline); }
+}

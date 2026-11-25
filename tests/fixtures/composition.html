@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Composition faults</title>
+<style>
+  :root { --accent-solid: rgb(20, 80, 200); }
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #111; background: #fff; }
+  section { padding: 72px max(24px, calc((100% - 1100px) / 2)); }
+  h1 { font-size: 48px; line-height: 1.05; margin: 0 0 16px; }
+  h2 { font-size: 30px; line-height: 1.15; margin: 0 0 24px; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 0; padding: 0; list-style: none; }
+  .cards li { padding: 20px; border: 1px solid #ddd; border-radius: 8px; min-height: 120px; }
+  .off h2 { margin-left: 22px; }
+  .narrow h2 { max-width: 330px; }
+  .loud { background: var(--accent-solid); color: #fff; min-height: 900px; }
+</style></head>
+<body><main>
+  <section><h1>A page with composition faults</h1><p>Each section below is a fault the critic should name.</p></section>
+  <section><h2>First row of cards</h2><ul class="cards"><li>One</li><li>Two</li><li>Three</li></ul></section>
+  <section><h2>Second row of cards</h2><ul class="cards"><li>One</li><li>Two</li><li>Three</li></ul></section>
+  <section><h2>Third row of cards</h2><ul class="cards"><li>One</li><li>Two</li><li>Three</li></ul></section>
+  <section class="off"><h2>This heading starts off the edge</h2><p>Its heading is 22px to the right of the others.</p></section>
+  <section class="narrow"><h2>A heading that leaves one word alone at the end</h2><p>The last line is a single short word.</p></section>
+  <section class="loud"><h2>A band flooded with the accent</h2><p>Far more than a button and a label.</p></section>
+</main></body></html>
