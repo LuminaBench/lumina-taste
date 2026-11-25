@@ -1,0 +1,41 @@
+@scope (.lt-invoice) {
+  /* A document, set like one: a sheet with quiet edges, figures in one right-aligned column, one total. */
+  :scope { container-type: inline-size; display: block; width: 100%; max-width: 560px; padding: 28px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); box-shadow: var(--shadow-sm); color: var(--text-primary); font-size: var(--text-ui-sm); line-height: 1.45; }
+  @media (max-width: 480px) { :scope { padding: 20px 18px; } }
+  header { display: flex; align-items: start; justify-content: space-between; gap: 16px; }
+  p { margin: 0; }
+  [data-part="from"] { font-family: var(--font-display); font-size: var(--step-0); font-weight: 650; letter-spacing: var(--tracking-display); }
+  [data-part="addr"] { margin-top: 2px; color: var(--text-muted); font-size: var(--text-ui-xs); }
+  [data-part="id"] { display: grid; justify-items: end; gap: 6px; text-align: right; }
+  h3 { margin: 0; font-family: var(--font-mono); font-size: var(--text-ui-sm); font-weight: 500; letter-spacing: 0; color: var(--text-secondary); white-space: nowrap; }
+  /* Status in words first; the colour only agrees with them. */
+  [data-part="status"] { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: var(--radius-pill); background: var(--status-warning-soft); color: var(--text-primary); font-size: var(--text-ui-xs); font-weight: 600; white-space: nowrap; }
+  [data-part="status"]::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--status-warning); }
+  [data-part="status"][data-state="paid"] { background: var(--status-positive-soft); }
+  [data-part="status"][data-state="paid"]::before { background: var(--status-positive); }
+  [data-part="status"][data-state="overdue"] { background: var(--status-negative-soft); }
+  [data-part="status"][data-state="overdue"]::before { background: var(--status-negative); }
+  [data-part="status"][data-state="draft"] { background: var(--bg-surface-3); }
+  [data-part="status"][data-state="draft"]::before { background: var(--text-muted); }
+
+  [data-part="meta"] { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: 12px 20px; margin: 24px 0 0; padding: 14px 0; border-block: var(--bw) var(--border-style) var(--border-hairline); }
+  dt { color: var(--text-muted); font-size: var(--text-ui-xs); }
+  dd { margin: 2px 0 0; font-weight: 600; }
+  @container (max-width: 380px) { [data-part="meta"] { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } [data-part="meta"] > div:first-child { grid-column: 1 / -1; } }
+
+  table { width: 100%; margin-top: 18px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  thead th { padding: 0 0 8px; color: var(--text-muted); font-size: var(--text-ui-xs); font-weight: 500; text-align: left; }
+  th[data-num], td { text-align: right; white-space: nowrap; }
+  tbody th { padding: 10px 12px 10px 0; font-weight: 600; text-align: left; }
+  tbody th span { display: block; color: var(--text-muted); font-size: var(--text-ui-xs); font-weight: 400; }
+  tbody td { padding: 10px 0 10px 12px; vertical-align: top; color: var(--text-secondary); }
+  tbody td:last-child { color: var(--text-primary); }
+  tbody tr { border-top: var(--bw) var(--border-style) var(--border-hairline); }
+  tfoot tr:first-child > * { padding-top: 14px; border-top: var(--bw) var(--border-style) var(--border-strong); }
+  tfoot th { padding: 4px 12px 4px 0; color: var(--text-secondary); font-weight: 400; text-align: right; }
+  tfoot td { padding: 4px 0; }
+  [data-part="total"] > * { padding-top: 10px; color: var(--text-primary); font-size: var(--step-0); font-weight: 700; }
+  /* Narrow: quantity and rate give way; the item and its amount stay. */
+  @container (max-width: 380px) { thead th:nth-child(2), thead th:nth-child(3), tbody td:nth-child(2), tbody td:nth-child(3) { display: none; } }
+  footer { margin-top: 20px; padding-top: 14px; border-top: var(--bw) var(--border-style) var(--border-hairline); color: var(--text-muted); font-size: var(--text-ui-xs); }
+}

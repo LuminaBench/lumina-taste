@@ -17,7 +17,7 @@ A signature is the one move that makes the page this page. Pick one. Two signatu
 | Subject | Signature | Built from |
 | --- | --- | --- |
 | Developer tool | Code that runs | `data-backdrop="grid spot"` + `backdrop-circuit` behind the hero, `command-chip` beside the button, `terminal-window` |
-| Finance, analytics | One true chart | A real chart in the hero frame with the finding as its title (`forecast-chart`, `multi-line-chart` with `highlight`) |
+| Finance, analytics | The real thing, with real numbers | The document the product makes (`invoice-sheet`) or one chart with the finding as its title (`forecast-chart`, `multi-line-chart` with `highlight`) in the hero |
 | App or SaaS | The product, working | `device-frame` holding the real screen, then `sticky-story` or `showcase-tabs` |
 | Shop, brand | The objects as a set | `offer-cards` with photographs or art panels at one ratio, toned plain, accent, ink |
 | Place, venue | A place you can find | One large art panel or photograph, "open now" in words (`visit-info`), `booking-bar` |
@@ -44,6 +44,7 @@ Every section presents one of six shapes. Neighbours must differ.
 
 Rules:
 
+- Count what the brief has, then choose: one to four of anything lays out cleanly (two tickets centre, four products go four across, three people become rows). Never add an item to fill a row, and never leave one alone on a row.
 - At most two rails on a page, never adjacent. A rail suits a long body (six features, three quotes, eight integrations).
 - Centre a section only when its body is symmetrical: three tiers, a row of logos, an even grid. Never centre body text.
 - Three or more card grids in a row is a wall. Turn the middle one into rows (`rail`), a quote, or figures.
@@ -136,4 +137,4 @@ Do this with the page open at 1440px and at 390px, after it works and before the
 
 ## 11. What the critic checks
 
-`audit-ui.mjs --taste` reports the measurable half of this file: three neighbours with the same shape (`taste-monotony`), a run of centred sections (`taste-centred-run`), accent used in too many places (`taste-accent-budget`), content that leaves the shared left edge (`taste-edge`) and headings that end on a stranded word (`taste-widow`), next to its existing checks for type steps, radii, measure, rhythm and focal point. The other half is your eye: do the detail pass.
+`audit-ui.mjs --taste` reports the measurable half of this file: three neighbours with the same shape (`taste-monotony`), a run of centred sections (`taste-centred-run`), accent used in too many places (`taste-accent-budget`), content that leaves the shared left edge (`taste-edge`) headings that end on a stranded word (`taste-widow`) and headings that break inside a hyphenated word (`taste-heading-break`), next to its existing checks for type steps, radii, measure, rhythm and focal point. The other half is your eye: do the detail pass.

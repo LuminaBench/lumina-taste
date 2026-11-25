@@ -205,3 +205,21 @@ test('compose --write drafts a plain section where no part fits, and the critic 
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
+test('names with more than one word, an audience for every plan, and an action that fits the page', () => {
+  assert.equal(compose('Home page for Canal Street Food Bank, a volunteer-run charity in Birmingham').designBrief.product, 'Canal Street Food Bank');
+  assert.equal(compose('Website home page for Harrow & Finch, a three-partner employment law firm in Manchester').designBrief.product, 'Harrow & Finch');
+  assert.equal(compose('Website for Signal & Noise, a one-day data journalism conference in Glasgow').designBrief.product, 'Signal & Noise');
+  assert.equal(compose('Landing page for Tally, an invoicing tool for freelancers').designBrief.product, 'Tally');
+  const kb = JSON.parse(readFileSync(join(root, 'engine/compose/page-types.json'), 'utf8'));
+  for (const d of kb.domains) for (const page of ['landing page', 'dashboard', 'about page']) {
+    const p = compose(`${page} for a ${d.words[0]} business`);
+    assert.ok(p.designBrief.audience && !/undefined/.test(p.designBrief.audience), `${d.id} ${page}: audience`);
+  }
+  const act = (brief) => compose(brief).questions.find((q) => q.id === 'action')?.default ?? '';
+  assert.match(act('Website for a two-day design conference in Leeds'), /ticket/i);
+  assert.match(act('Home page for a charity that runs food banks'), /Donate/);
+  assert.doesNotMatch(act('Website for an emergency plumber in Hull'), /Start free/);
+  // The programme and the fee list need the full width: never beside a rail.
+  for (const brief of ['Website for a two-day design conference in Leeds', 'Website for an accountant in Leeds']) for (const l of compose(brief).artDirection.sections) if (l.id === 'service-list') assert.equal(l.layout, null);
+});
+

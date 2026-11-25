@@ -12,7 +12,7 @@ const LAYOUTS = {
   'offer-cards': ['split', 'default', 'rail'],
   'how-it-works': ['default', 'rail'],
   'stats-band': ['default'],
-  'service-list': ['default', 'rail'],
+  'service-list': ['default'],
   'testimonial-grid': ['centre', 'rail', 'default'],
   'pricing-tiers': ['centre'],
   'integrations-grid': ['rail', 'default'],
@@ -40,7 +40,7 @@ const STATEMENT_STYLES = new Set(['editorial', 'swiss', 'minimal', 'noir', 'news
 
 const SIGNATURES = {
   devtool: { name: 'Code that runs', how: 'A grid backdrop with circuit traces behind the hero (data-backdrop="grid spot" + backdrop-circuit), the install command beside the one button (command-chip), and a terminal-window that types the real setup. Nothing else on the page moves.' },
-  finance: { name: 'One true chart', how: 'Put a real chart in the hero\'s frame with the finding as its title (forecast-chart or multi-line-chart with highlight). Tabular figures everywhere; ruled rows instead of cards.' },
+  finance: { name: 'The real thing, with real numbers', how: 'Put the artefact itself in the hero: the document the product makes (an invoice-sheet, a statement) or one chart with the finding as its title (forecast-chart, multi-line-chart with highlight). Tabular figures everywhere; ruled rows instead of cards.' },
   trading: { name: 'Density, in order', how: 'A dense first screen: a ticker-style stat-strip and one candlestick or multi-line chart. Mono numbers, hairline grids, no decoration.' },
   analytics: { name: 'The product, working', how: 'A live chart or a device-frame with the product\'s real screen in the hero, then showcase-tabs to show three views of the same data.' },
   productivity: { name: 'The product, working', how: 'A device-frame (browser or phone) holding the real screen in the hero, then a sticky-story that walks through one task in three steps.' },
@@ -63,7 +63,8 @@ const SIGNATURES = {
 };
 SIGNATURES.cause = { name: 'The claim and the proof', how: 'A statement hero that says what you do as a plain fact with three true figures under it, then one bar that shows where each pound goes. Hairlines and numbered sections; no photographs of people in distress.' };
 /** Some pages have their signature whatever the subject's domain; others accept only the domains that suit them. */
-const TYPE_SIGNATURE = { event: 'events', cause: 'cause', venue: 'hospitality', portfolio: 'creative', 'dev-landing': 'devtool' };
+SIGNATURES.about = { name: 'Who, since when, and why', how: 'A statement hero that makes a claim someone could disagree with, the story as prose beside a rail, then the people by name. Dates and places, not adjectives; no stock team photographs.' };
+const TYPE_SIGNATURE = { about: 'about', event: 'events', cause: 'cause', venue: 'hospitality', portfolio: 'creative', 'dev-landing': 'devtool' };
 const TYPE_DOMAINS = { 'service-landing': ['health', 'professional', 'trades', 'beauty'], 'brand-landing': ['commerce', 'beauty'] };
 const signatureFor = (type, domain) => {
   if (TYPE_SIGNATURE[type.id]) return SIGNATURES[TYPE_SIGNATURE[type.id]];

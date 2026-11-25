@@ -13,6 +13,8 @@
   ul { display: grid; grid-template-columns: [when] auto [name] minmax(0, 0.8fr) [text] minmax(0, 1.4fr) [meta] auto [price] auto [go] auto; margin: 0; padding: 0; list-style: none; border-top: var(--bw) var(--border-style) var(--border-strong); }
   li { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
   li > :is(a, div) { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; align-items: baseline; padding: 20px 0; color: inherit; text-decoration: none; }
+  /* A row written straight into the <li>, with no link or wrapper, lays out the same. */
+  li:not(:has(> a, > div)) { align-items: baseline; padding: 20px 0; }
   [data-part="when"] { grid-column: when; padding-right: 28px; color: var(--text-secondary); font-family: var(--font-mono); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }
   h3 { grid-column: name; margin: 0; padding-right: 28px; font-family: var(--font-display); font-size: var(--step-1); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.2; text-wrap: balance; }
   li p { grid-column: text; margin: 0; padding-right: 28px; max-width: 58ch; color: var(--text-secondary); line-height: 1.55; text-wrap: pretty; }
@@ -31,7 +33,7 @@
   /* Narrow: the name and price share the first line; the sentence and the time sit under them. */
   @container (max-width: 760px) {
     ul { grid-template-columns: [when name text meta] minmax(0, 1fr) [price] auto [go] auto; }
-    li > :is(a, div) { row-gap: 6px; padding: 16px 0; }
+    li > :is(a, div), li:not(:has(> a, > div)) { row-gap: 6px; padding: 16px 0; }
     [data-part="when"] { grid-row: 1; padding: 0; }
     [data-part="when"] ~ h3 { grid-row: 2; }
     h3 { grid-column: name; padding-right: 16px; }

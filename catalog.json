@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
   "counts": {
-    "ui": 199,
+    "ui": 200,
     "charts": 46,
     "blueprints": 25,
     "palettes": 24,
@@ -45,7 +45,7 @@
       "title": "Data & layout primitives",
       "summary": "Tables, lists, grids and blocks for showing real data cleanly, with tabular numbers everywhere.",
       "order": 5,
-      "count": 42
+      "count": 43
     },
     {
       "id": "motion",
@@ -3587,6 +3587,41 @@
         "components/ui/data/task-list/task-list.ts"
       ],
       "path": "components/ui/data/task-list"
+    },
+    {
+      "id": "invoice-sheet",
+      "kind": "ui",
+      "family": "data",
+      "name": "Invoice sheet",
+      "summary": "A document set like one: who it is from, its number and status, three facts, lines with every figure in one right-aligned column, and one total. For invoices, quotes, receipts and statements.",
+      "aliases": [
+        "invoice",
+        "receipt",
+        "quote",
+        "estimate",
+        "statement",
+        "order summary document",
+        "bill",
+        "document preview",
+        "paper sheet",
+        "invoice preview"
+      ],
+      "pattern": "<article> + <dl> + <table> with <tfoot>",
+      "states": [
+        "due",
+        "paid",
+        "overdue",
+        "draft",
+        "narrow"
+      ],
+      "react": "InvoiceSheet",
+      "deps": [],
+      "files": [
+        "components/ui/data/invoice-sheet/invoice-sheet.css",
+        "components/ui/data/invoice-sheet/invoice-sheet.html",
+        "components/ui/data/invoice-sheet/invoice-sheet.react.tsx"
+      ],
+      "path": "components/ui/data/invoice-sheet"
     },
     {
       "id": "count-up",
@@ -7730,6 +7765,10 @@
         "footer-minimal",
         "button"
       ],
+      "brand": [
+        "Juniper Coffee Roasters",
+        "Juniper Coffee"
+      ],
       "kind": "blueprint",
       "files": [
         "blueprints/venue/index.html",
@@ -7775,6 +7814,9 @@
         "footer-minimal",
         "button"
       ],
+      "brand": [
+        "Kestrel Dental"
+      ],
       "kind": "blueprint",
       "files": [
         "blueprints/practice/index.html",
@@ -7812,6 +7854,9 @@
         "cta-band",
         "footer-minimal",
         "button"
+      ],
+      "brand": [
+        "Moss Lane Pantry"
       ],
       "kind": "blueprint",
       "files": [
@@ -7854,6 +7899,9 @@
         "footer-minimal",
         "button"
       ],
+      "brand": [
+        "Larkspur Ceramics"
+      ],
       "kind": "blueprint",
       "files": [
         "blueprints/shop/index.html",
@@ -7894,6 +7942,9 @@
         "faq-section",
         "footer-minimal",
         "button"
+      ],
+      "brand": [
+        "Larkspur Assembly"
       ],
       "kind": "blueprint",
       "files": [

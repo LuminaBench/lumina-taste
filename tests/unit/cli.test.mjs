@@ -100,7 +100,7 @@ test('audit-ui --taste names composition faults: a wall of cards, an off edge, a
   node([join(root, 'scripts/audit-ui.mjs'), join(root, 'tests/fixtures/composition.html'), '--taste', '--viewports', 'desktop', '--modes', 'light', '--json', out, '--quiet']);
   const rules = new Set(JSON.parse(readFileSync(out, 'utf8')).report[0].findings.map((f) => f.rule));
   rmSync(out, { force: true });
-  for (const rule of ['taste-monotony', 'taste-edge', 'taste-widow', 'taste-accent-budget']) assert.ok(rules.has(rule), rule);
+  for (const rule of ['taste-monotony', 'taste-edge', 'taste-widow', 'taste-accent-budget', 'taste-heading-break']) assert.ok(rules.has(rule), rule);
 });
 
 test('a single blueprint installs flat, lean and labelled as sample content; an existing page is kept', () => {
@@ -144,3 +144,30 @@ test('copy lint flags hype and passes plain sentences', () => {
   const repo = node([join(root, 'scripts/lint-copy.mjs'), join(root, 'components'), join(root, 'blueprints'), join(root, 'SKILL.md'), join(root, 'references')]);
   assert.equal(repo.status, 0, repo.stdout);
 });
+
+test('a blueprint draft carries the real name; the critic says where leftovers came from and spots the sample\'s links', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lt-name-'));
+  try {
+    const r = node([join(root, 'scripts/install-taste.mjs'), '--project', dir, '--framework', 'static', '--blueprints', 'practice', '--name', 'Harrow & Finch']);
+    assert.equal(r.status, 0, r.stderr);
+    const html = readFileSync(join(dir, 'index.html'), 'utf8');
+    assert.ok(html.includes('Harrow &amp; Finch') && !html.includes('Kestrel Dental'));
+    const a = node([join(root, 'scripts/audit-ui.mjs'), join(dir, 'index.html'), '--product', 'Harrow & Finch', '--viewports', 'desktop', '--modes', 'light']);
+    assert.match(a.stdout, /taste-sample-content/);
+    assert.match(a.stdout, /\(from the practice blueprint\)/);
+    assert.match(a.stdout, /a link to (\/treatments\/|tel:|mailto:)/);
+    // A question is the same question anywhere: only its answer counts as sample content.
+    assert.doesNotMatch(a.stdout, /“Are you taking new patients\?”/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('an unknown id names the closest real ones', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lt-near-'));
+  try {
+    const r = node([join(root, 'scripts/install-taste.mjs'), '--project', dir, '--framework', 'static', '--components', 'status-badge,date-pick']);
+    assert.notEqual(r.status, 0);
+    assert.match(r.stderr + r.stdout, /status-badge → badge/);
+    assert.match(r.stderr + r.stdout, /date-pick → date-picker/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+

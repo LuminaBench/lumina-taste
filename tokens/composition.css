@@ -69,6 +69,9 @@ main[data-separators="rules"] > section[data-tone], main[data-separators="rules"
   :is(section, div)[data-layout="rail"] > ul:where(:has(> li:nth-child(3):last-child)) { grid-template-columns: minmax(0, 1fr); }
   /* People stay small beside a rail: four across, not two large tiles. */
   .lt-team-grid[data-layout="rail"] > ul { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .lt-team-grid[data-layout="rail"] > ul:is(:has(> li:nth-child(5):last-child), :has(> li:nth-child(6):last-child), :has(> li:nth-child(9):last-child)) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .lt-team-grid[data-layout="rail"] > ul:has(> li:nth-child(-n+4):last-child) { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+  .lt-offers[data-layout="rail"] > ul:has(> li:nth-child(4):last-child) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .lt-offers[data-layout="rail"] > ul { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
   .lt-logo-cloud[data-layout="rail"] { text-align: left; }
   .lt-logo-cloud[data-layout="rail"] > ul { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 0; }

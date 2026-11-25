@@ -132,7 +132,10 @@ const unknown = [
   ...want.charts.filter((id) => !catalog.charts.some((c) => c.id === id)).map((id) => `chart "${id}"`),
   ...want.blueprints.filter((id) => !catalog.blueprints.some((c) => c.id === id)).map((id) => `blueprint "${id}"`),
 ];
-if (unknown.length) fail(`Unknown ${unknown.join(', ')}. Try: node scripts/search.mjs "<what you want>"`);
+// The closest real ids, by shared words: "status-badge" → badge, status-dot.
+const near = (id, pool) => { const w = id.split('-'); return pool.map((c) => ({ c, s: c.split('-').filter((x) => w.includes(x)).length * 2 + (c.includes(id) || id.includes(c) ? 2 : 0) })).filter((x) => x.s > 0).sort((a, b) => b.s - a.s).slice(0, 3).map((x) => x.c); };
+const hints = [...want.components.filter((id) => !catalog.ui.some((c) => c.id === id)).map((id) => [id, near(id, catalog.ui.map((c) => c.id))]), ...want.charts.filter((id) => !catalog.charts.some((c) => c.id === id)).map((id) => [id, near(id, catalog.charts.map((c) => c.id))])].filter(([, n]) => n.length).map(([id, n]) => `${id} → ${n.join(', ')}`);
+if (unknown.length) fail(`Unknown ${unknown.join(', ')}.${hints.length ? ` Closest ids: ${hints.join('; ')}.` : ''} Try: node scripts/search.mjs "<what you want>"`);
 
 // A component's markup may use another component's classes (a .lt-btn inside a dialog, a .lt-badge in a
 // table). Their CSS comes along automatically, so pasted markup never renders unstyled.
@@ -277,8 +280,15 @@ async function writeStatic() {
     const html = readFileSync(join(root, bp.path, 'index.html'), 'utf8').replace(/<script type="module" src="\.\/main\.ts"><\/script>/, '<link rel="stylesheet" href="./main.css">\n  <script defer src="./main.js"></script>')
       // The demo's title and description describe the kit's sample, not your page.
       .replace(/<meta name="description" content="[^"]*">/, `<meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  ${MARK} ${id}. Sample brand, people, copy and numbers are placeholders: replace all of them. -->`);
+    // --name "Your Business": the sample's name gives way to yours wherever it appears, longest form first.
+    let named = html;
+    if (typeof opts.name === 'string' && opts.name.trim()) {
+      const esc = opts.name.trim().replace(/&/g, '&amp;').replace(/</g, '&lt;');
+      let sampleNames = []; try { sampleNames = JSON.parse(readFileSync(join(root, bp.path, 'meta.json'), 'utf8')).brand ?? []; } catch { /* no meta */ }
+      for (const b of [...sampleNames].sort((x, y) => y.length - x.length)) named = named.replaceAll(b.replace(/&/g, '&amp;'), esc).replaceAll(b, esc);
+    }
     // The page follows your profile, not the blueprint's demo theme.
-    const themed = html.replace(/<html([^>]*)>/, (_m, a) => `<html${a.replace(/\s+data-(palette|mode|type|density|radius|motion|style)="[^"]*"/g, '')} data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="${profile.radius}" data-motion="${profile.motion}"${profile.style !== 'none' ? ` data-style="${profile.style}"` : ''}>`);
+    const themed = named.replace(/<html([^>]*)>/, (_m, a) => `<html${a.replace(/\s+data-(palette|mode|type|density|radius|motion|style)="[^"]*"/g, '')} data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="${profile.radius}" data-motion="${profile.motion}"${profile.style !== 'none' ? ` data-style="${profile.style}"` : ''}>`);
     write(`${pageDir(id)}index.html`, themed, solo && !soloTaken);
   }
 }

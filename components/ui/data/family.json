@@ -2363,7 +2363,8 @@
           "React"
         ]
       ],
-      "added": 12
+      "added": 12,
+      "note": "One device is enough on a page: copy a single <figure class=\"lt-device\"> (the outer .lt-device-demo only sets two side by side in the gallery). The small mock inside ([data-mock]) is styled wherever the device is; replace it with a real screenshot <img> or your own markup when you have one."
     },
     {
       "id": "api-endpoint",
@@ -2722,6 +2723,82 @@
         ]
       ],
       "added": 13
+    },
+    {
+      "id": "invoice-sheet",
+      "name": "Invoice sheet",
+      "summary": "A document set like one: who it is from, its number and status, three facts, lines with every figure in one right-aligned column, and one total. For invoices, quotes, receipts and statements.",
+      "pattern": "<article> + <dl> + <table> with <tfoot>",
+      "states": [
+        "due",
+        "paid",
+        "overdue",
+        "draft",
+        "narrow"
+      ],
+      "aliases": [
+        "invoice",
+        "receipt",
+        "quote",
+        "estimate",
+        "statement",
+        "order summary document",
+        "bill",
+        "document preview",
+        "paper sheet",
+        "invoice preview"
+      ],
+      "react": "InvoiceSheet",
+      "api": "<table> · <tfoot> · data-state=\"due|paid|overdue|draft\"",
+      "w": 620,
+      "preview": [],
+      "called": [
+        "an invoice that looks like a real invoice",
+        "the document the product makes, shown in the hero",
+        "a receipt with a total at the bottom"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"id\"]",
+          "name": "Number and status",
+          "api": "data-state",
+          "text": "The number in mono; the status in words, with a dot that agrees."
+        },
+        {
+          "sel": "[data-part=\"meta\"]",
+          "name": "Three facts",
+          "api": "<dl>",
+          "text": "Who it is for, when it was issued, when it is due."
+        },
+        {
+          "sel": "tbody tr:first-child",
+          "name": "A line",
+          "api": "<th scope=\"row\"> + <td>",
+          "text": "What it was, a detail under it, then quantity, rate and amount."
+        },
+        {
+          "sel": "[data-part=\"total\"]",
+          "name": "The total",
+          "api": "<tfoot>",
+          "text": "The one large figure. Everything above it adds up to it."
+        }
+      ],
+      "prompt": "Build an invoice as a document, not a card of widgets: a white sheet with a hairline edge and a small shadow, at most 560px wide. Top: who it is from on the left (name, then address in small muted text), the invoice number in mono and a status pill on the right; the status is words (\"Due in 14 days\", \"Paid 4 Nov\") with a coloured dot. Under a hairline: three facts in a row (billed to, issued, due). Then a real <table>: item with a small detail line under it, quantity, rate, amount; every figure right-aligned with tabular numerals and two decimals. A strong rule above the totals; subtotal and tax in secondary ink; the total larger and bold. A one-line note at the foot. Under 380px hide quantity and rate and keep item and amount. The lines must add up.",
+      "debug": "Debug my invoice or receipt. Rule out: figures that do not add up; amounts left-aligned or in a proportional font; mixed decimals (£120 beside £1,800.00); a status shown by colour alone; a total no larger than the lines; a card full of badges where a plain table would do. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<article class=\"lt-invoice\"><table>…<tfoot>",
+          ""
+        ],
+        [
+          "lumina-taste",
+          "<InvoiceSheet from title meta lines total>",
+          "React"
+        ]
+      ],
+      "added": 15,
+      "note": "Use it as the hero picture for anything that makes documents (invoicing, quotes, payroll, bookings): put it in hero-split's <div data-part=\"visual\">. Keep the sums true: lines add up to the subtotal, tax follows, the total is their sum. Change data-state and the status words together."
     }
   ]
 }

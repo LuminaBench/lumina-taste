@@ -1676,7 +1676,7 @@
      "id": "offer-cards",
      "role": "The range",
      "copy": "Each product with one line, two or three facts that help choose (size, key ingredient or material, how long it lasts) and its price.",
-     "rule": "Two to four cards. Vary the art panel tone across the set."
+     "rule": "Two to four cards: four sit four across (two by two on smaller screens), so no card is left alone on a row. Vary the art panel tone across the set."
     },
     {
      "id": "how-it-works",
@@ -1786,7 +1786,10 @@
      "id": "hero-split",
      "role": "Hero",
      "copy": "Headline: what you do, for whom, and the one thing that sets you apart, in the client's words (\"A dentist who tells you the price before the drill\"). Lede: who is here, where, and whether you are taking new clients. Under the buttons: what to do if it is urgent.",
-     "rule": "Right side: a photograph of the real place or the real people, or an art-panel with the address and one fact until there is one. Never stock smiles, never a dashboard frame."
+     "rule": "Right side: a photograph of the real place or the real people, or an art-panel that states one concrete fact large (the address, \"20 minutes, free\", the call-out fee) until there is one. Nothing worth stating? Use hero-statement instead. Never stock smiles, never a dashboard frame.",
+     "alt": [
+      "hero-statement"
+     ]
     },
     {
      "id": "service-list",
@@ -1808,7 +1811,7 @@
     {
      "id": "team-grid",
      "role": "People",
-     "copy": "Each person: name, role, the qualification or registration that matters to this client, and what they mostly do.",
+     "copy": "Each person: name, role, the qualification or registration that matters to this client, and what they mostly do. With four people or fewer the block sets each as a row with room for a line about them: write that line.",
      "rule": "Real names and real registration bodies only. Photographs of the real people, or initials until there are some.",
      "optional": true
     },
@@ -1842,7 +1845,7 @@
      "id": "cta-band",
      "role": "Closing action",
      "copy": "The first step and its price or length in one line, the booking button and the phone number.",
-     "rule": "One primary. The phone number is the secondary action."
+     "rule": "One primary. The phone number is the secondary action. No booking system? The button is a mailto: or tel: link and says so (\"Email to book\", \"Call to book\"): never a form that goes nowhere."
     },
     {
      "id": "footer-minimal",
@@ -1893,7 +1896,7 @@
     "club website",
     "home page for a charity"
    ],
-   "primary": "The giving action (\"Donate\", \"Give monthly\"), in the bar, under the headline and in the closing band. If people also come here for help, that route is the second button in the hero and the first section.",
+   "primary": "Two actions, in this order when people come here for help: the help route (\"Get food this week\") is the first button in the hero and the first section; the giving action (\"Donate\") is in the bar and the closing band. For a charity that does not serve people directly, Donate is the hero's button.",
    "sections": [
     {
      "id": "navbar-simple",
@@ -1905,7 +1908,7 @@
      "id": "hero-statement",
      "role": "Hero",
      "copy": "Headline: what you do and for how many, as a plain fact (\"Food for 410 households a week, from one church hall\"). Lede: how, in one sentence. Three figures: people helped, who does the work, the share of each pound that reaches the cause.",
-     "rule": "Every figure is real and has a period (\"a week\", \"in 2025\"). No photographs of people in distress.",
+     "rule": "Every figure is real and has a period (\"a week\", \"in 2025\"). No photographs of people in distress. If people in need are an audience, their button comes first and is the filled one; Donate is the second.",
      "alt": [
       "hero-split"
      ]
@@ -2028,7 +2031,7 @@
     {
      "id": "service-list",
      "role": "Programme",
-     "copy": "Timed rows: start time, title, one sentence with the speaker's name, the room. A small label above each day.",
+     "copy": "Timed rows: start time, title, one sentence with the speaker's name, the room. A small label above each day; a one-day event has one list and no label for a second day.",
      "rule": "Times in one format with the time zone stated once. Breaks and lunch are rows too. Link each session to its page if it has one."
     },
     {
@@ -2041,7 +2044,7 @@
     {
      "id": "pricing-tiers",
      "role": "Tickets",
-     "copy": "Two or three tickets: who each is for, the price with tax, and four things it includes. The refund rule in the lede.",
+     "copy": "One to three tickets: who each is for, the price with tax, and three or four things it includes. The refund rule in the lede. One or two tickets sit centred; do not invent a third to fill a row.",
      "rule": "A badge only for a real fact (\"108 left\", \"Sold out\"). No fake scarcity.",
      "alt": [
       "service-list"

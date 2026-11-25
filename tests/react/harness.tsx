@@ -34,6 +34,7 @@ import { OfferCards } from '../../components/ui/blocks/offer-cards/offer-cards.r
 import { VisitInfo } from '../../components/ui/blocks/visit-info/visit-info.react';
 import { TaskList } from '../../components/ui/data/task-list/task-list.react';
 import { BookingBar } from '../../components/ui/controls/booking-bar/booking-bar.react';
+import { InvoiceSheet } from '../../components/ui/data/invoice-sheet/invoice-sheet.react';
 import { ServiceList } from '../../components/ui/blocks/service-list/service-list.react';
 import { HeroStatement } from '../../components/ui/blocks/hero-statement/hero-statement.react';
 import { Rating } from '../../components/ui/controls/rating/rating.react';
@@ -479,6 +480,7 @@ function App() {
       <Case id="visit"><VisitInfo title="Find us" address={['14 Mill Lane', 'Bristol']} now="2026-11-28T10:30" days={[{ day: 'Monday', hours: 'Closed' }, { day: 'Tuesday', hours: '8:00 to 16:00' }, { day: 'Wednesday', hours: '8:00 to 16:00' }, { day: 'Thursday', hours: '8:00 to 16:00' }, { day: 'Friday', hours: '8:00 to 18:00' }, { day: 'Saturday', hours: '9:00 to 18:00' }, { day: 'Sunday', hours: '9:00 to 14:00' }]} /></Case>
       <Case id="tasks"><TaskList title="Today" tasks={[{ id: 'a', title: 'Send invoices', done: true }, { id: 'b', title: 'Review forecast' }]} onToggle={(id, done) => log.push(`task:${id}:${done}`)} /></Case>
       <Case id="booking"><BookingBar title="Book a tasting" times={['10:30', '12:00']} defaultDate="2026-11-28" onCheck={(r) => log.push(`book:${r.date}:${r.time}:${r.people}`)} /></Case>
+      <Case id="invoice-sheet"><InvoiceSheet from="Larkspur Studio" title="Invoice 0042" status="Paid 4 Nov" state="paid" meta={[{ label: 'Billed to', value: 'Kestrel Labs Ltd' }]} lines={[{ item: 'Workshop day', qty: '1', rate: '£640.00', amount: '£640.00' }]} total={{ label: 'Total', amount: '£640.00' }} /></Case>
       <Case id="service-list"><ServiceList eyebrow="Fees" title="What we do" services={[{ title: 'Check-up', text: 'Forty-five minutes.', meta: '45 min', price: '£68', href: '#c' }, { when: '10:00', title: 'Doors', text: 'Coffee in the foyer.' }]} note="Prices from September." /></Case>
       <Case id="hero-statement"><HeroStatement eyebrow="Studio" title="We design the tools finance teams open every morning" lede="Nine people in Bristol." facts={[{ value: '2,400', label: 'teams' }]} /></Case>
       <Case id="stagger"><Stagger><span>One</span><span>Two</span></Stagger></Case>

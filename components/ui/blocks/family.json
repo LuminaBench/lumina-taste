@@ -252,7 +252,8 @@
           "React"
         ]
       ],
-      "added": 4
+      "added": 4,
+      "note": "One, two or three tiers: one or two sit centred at their own width. Never add a tier to fill the row."
     },
     {
       "id": "testimonial-grid",
@@ -673,7 +674,8 @@
           "React"
         ]
       ],
-      "added": 4
+      "added": 4,
+      "note": "Five or more people make a grid of tiles. Four or fewer become rows with a small picture, and each can take a <p> with one line about the person. Put an <img> in place of the initials when there are photographs: same ratio for everyone."
     },
     {
       "id": "sign-in-card",
@@ -1782,7 +1784,7 @@
         ]
       ],
       "added": 14,
-      "note": "Use this instead of cards when there are four or more things, or when people compare prices and times. Columns you do not use (when, meta, price) collapse. For a programme, put <time data-part=\"when\"> first in each row and a <p data-part=\"group\"> above each day's <ul>."
+      "note": "Use this instead of cards when there are four or more things, or when people compare prices and times. A row is the <li> itself, or one <a> or <div> inside it (use <a> when the row leads somewhere). Columns you do not use (when, meta, price) collapse. For a programme, put <time data-part=\"when\"> first in each row and a <p data-part=\"group\"> above each day's <ul>. It needs the full width: do not put it beside a rail."
     }
   ]
 }

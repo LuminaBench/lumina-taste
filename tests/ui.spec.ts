@@ -1255,6 +1255,56 @@ test.describe('composition', () => {
     });
     expect(stacked).toEqual({ below: true, sameLine: true, fits: true });
   });
+  test('counts lay out cleanly: four offers, two tickets, three people, bare service rows', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    let s = await solo(page, 'offer-cards');
+    const four = await s.locator('.lt-offers').evaluate((el) => {
+      (el as HTMLElement).style.width = '1200px';
+      const ul = el.querySelector('ul')!; ul.append(ul.children[0].cloneNode(true));
+      const tops = [...ul.children].map((c) => Math.round(c.getBoundingClientRect().top));
+      (el as HTMLElement).style.width = '960px';
+      const cols = getComputedStyle(ul).gridTemplateColumns.split(' ').length;
+      return { oneRow: new Set(tops).size === 1, midCols: cols };
+    });
+    expect(four).toEqual({ oneRow: true, midCols: 2 });
+    s = await solo(page, 'pricing-tiers');
+    const two = await s.locator('.lt-pricing-tiers').evaluate((el) => {
+      (el as HTMLElement).style.width = '1100px';
+      const ul = el.querySelector<HTMLElement>('[data-part="tiers"]')!; ul.lastElementChild!.remove();
+      const r = ul.getBoundingClientRect(), p = el.getBoundingClientRect(), cs = getComputedStyle(el);
+      const inner = { l: p.left + parseFloat(cs.paddingLeft), r: p.right - parseFloat(cs.paddingRight) };
+      return { cols: getComputedStyle(ul).gridTemplateColumns.split(' ').length, centred: Math.abs((r.left - inner.l) - (inner.r - r.right)) < 2, narrower: r.width < inner.r - inner.l - 100 };
+    });
+    expect(two).toEqual({ cols: 2, centred: true, narrower: true });
+    s = await solo(page, 'team-grid');
+    const three = await s.locator('.lt-team-grid').evaluate((el) => {
+      (el as HTMLElement).style.width = '1100px';
+      const ul = el.querySelector('ul')!; while (ul.children.length > 3) ul.lastElementChild!.remove();
+      const li = ul.children[0], av = li.querySelector('[data-part="avatar"]')!.getBoundingClientRect(), name = li.querySelector('strong')!.getBoundingClientRect();
+      const last = ul.lastElementChild!.getBoundingClientRect(), u = ul.getBoundingClientRect();
+      return { small: av.width <= 80, beside: name.left >= av.right, fills: u.right - last.right < 4, oneRow: new Set([...ul.children].map((c) => Math.round(c.getBoundingClientRect().top))).size === 1 };
+    });
+    expect(three).toEqual({ small: true, beside: true, fills: true, oneRow: true });
+    s = await solo(page, 'service-list');
+    const bare = await s.locator('.lt-services').evaluate((el) => {
+      const li = el.querySelector('li')!; const a = li.querySelector('a')!; li.append(...a.childNodes); a.remove();
+      const price = li.querySelector('[data-part="price"]')!.getBoundingClientRect(), other = el.querySelectorAll('li')[1].querySelector('[data-part="price"]')!.getBoundingClientRect();
+      return { aligned: Math.abs(price.right - other.right) < 1, padded: parseFloat(getComputedStyle(li).paddingTop) >= 16 };
+    });
+    expect(bare).toEqual({ aligned: true, padded: true });
+  });
+  test('invoice sheet: figures share one right edge and the lines add up to the total', async ({ page }) => {
+    const s = await solo(page, 'invoice-sheet');
+    const r = await s.locator('.lt-invoice').evaluate((el) => {
+      const money = (t: string) => Math.round(parseFloat(t.replace(/[^0-9.]/g, '')) * 100);
+      const amounts = [...el.querySelectorAll('tbody td:last-child')].map((td) => money(td.textContent!));
+      const foot = [...el.querySelectorAll('tfoot td')].map((td) => money(td.textContent!));
+      const rights = new Set([...el.querySelectorAll('tbody td:last-child, tfoot td')].map((td) => Math.round(td.getBoundingClientRect().right)));
+      const total = el.querySelector('[data-part="total"] td')!;
+      return { sum: amounts.reduce((a, b) => a + b, 0) === foot[0], total: foot[0] + foot[1] === foot[2], oneEdge: rights.size === 1, big: parseFloat(getComputedStyle(total).fontSize) > parseFloat(getComputedStyle(el.querySelector('tbody td')!).fontSize), status: el.querySelector('[data-part="status"]')!.textContent };
+    });
+    expect(r).toEqual({ sum: true, total: true, oneEdge: true, big: true, status: 'Due in 14 days' });
+  });
   test('statement hero: one large h1, three facts in a ruled row', async ({ page }) => {
     const s = await solo(page, 'hero-statement');
     expect(await s.locator('h1').evaluate((el) => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(44);

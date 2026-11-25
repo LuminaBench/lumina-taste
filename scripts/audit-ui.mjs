@@ -15,7 +15,7 @@
 //               placeholder copy, empty visual boxes, button labels) and a 0–100 taste score per run
 // Requires Playwright (`npm i -D @playwright/test && npx playwright install chromium`).
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { basename, dirname, join, resolve } from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { COPY_RULES } from './lib/copy-rules.mjs';
@@ -325,7 +325,7 @@ const PAGE_CHECKS = (copyRules = []) => {
 // corner radii it uses, whether one thing leads, whether text lines are readable, whether headings
 // nest, whether cards nest, whether sections keep one rhythm, and whether placeholder copy is left in.
 const TASTE_CHECKS = (arg = null) => {
-  const product = arg?.name ?? null, kitSamples = arg?.samples ?? [];
+  const product = arg?.name ?? null, kitSamples = arg?.samples ?? [], kitBrands = arg?.brands ?? [], kitLinks = new Set(arg?.links ?? []);
   const out = [];
   const add = (rule, el, message, severity = 'warning') => out.push({ rule, severity, selector: el ? sel(el) : null, message });
   function sel(el) { const p = []; for (let e = el; e && e.nodeType === 1 && p.length < 4; e = e.parentElement) { let s = e.tagName.toLowerCase(); if (e.id) { p.unshift(s + '#' + e.id); break; } const c = [...e.classList].filter((x) => !x.startsWith('is-')).slice(0, 2); if (c.length) s += '.' + c.join('.'); p.unshift(s); } return p.join(' > '); }
@@ -395,6 +395,8 @@ const TASTE_CHECKS = (arg = null) => {
   // 5. Reading measure: body text lines over ~90 characters are tiring.
   for (const el of document.querySelectorAll('p, li, blockquote, dd')) {
     if (skip(el) || !shown(el) || el.textContent.trim().length < 180) continue;
+    // A row built from parts (a name, a sentence, a price in columns) is not one line of text: its parts are measured on their own.
+    if (el.matches('li, dd') && el.querySelector('p, h3, h4, dl, table, ul, ol, div')) continue;
     const cs = getComputedStyle(el); const fs = parseFloat(cs.fontSize);
     const chars = el.getBoundingClientRect().width / (fs * 0.5);
     if (chars > 95) { add('taste-measure', el, `Text line is about ${Math.round(chars)} characters wide. Cap reading text at max-width: var(--measure) (68ch).`); break; }
@@ -490,6 +492,19 @@ const TASTE_CHECKS = (arg = null) => {
       const lastWord = h.textContent.trim().split(/\s+/).pop() ?? '';
       if ((last.right - last.left) / longest < 0.24 && lastWord.length <= 9) { add('taste-widow', h, `The heading “${h.textContent.trim().slice(0, 40)}” ends with one word alone on its last line (“${lastWord}”). Add text-wrap: balance, shorten it, or break it by sense.`); break; }
     }
+    // A heading that breaks inside a hyphenated word ("sea- / green").
+    for (const h of [...document.querySelectorAll('h1, h2, h3')].filter((x) => shown(x) && !skip(x) && parseFloat(getComputedStyle(x).fontSize) >= 22)) {
+      const walker = document.createTreeWalker(h, NodeFilter.SHOW_TEXT); let hit = null;
+      for (let n = walker.nextNode(); n && !hit; n = walker.nextNode()) {
+        for (const m of n.textContent.matchAll(/[A-Za-z]-[A-Za-z]/g)) {
+          const r1 = document.createRange(), r2 = document.createRange();
+          r1.setStart(n, m.index); r1.setEnd(n, m.index + 1); r2.setStart(n, m.index + 2); r2.setEnd(n, m.index + 3);
+          const a = r1.getBoundingClientRect(), b = r2.getBoundingClientRect();
+          if (a.height && b.top - a.top > a.height * 0.6) { hit = n.textContent.slice(Math.max(0, n.textContent.lastIndexOf(' ', m.index) + 1)).split(/\s/)[0]; break; }
+        }
+      }
+      if (hit) { add('taste-heading-break', h, `The heading breaks inside “${hit}”. Use a non-breaking hyphen (U+2011) in that word, or reword so the line ends between words.`); break; }
+    }
     // Accent budget: solid accent fills should be a small share of the page, not its wallpaper.
     {
       const probe = document.createElement('span'); probe.style.cssText = 'position:absolute;visibility:hidden;color:var(--accent-solid)'; document.body.append(probe);
@@ -511,7 +526,7 @@ const TASTE_CHECKS = (arg = null) => {
 
   // 9b. Leftover sample copy: with --product "Name", the kit's own demo brands and people must be gone.
   if (product) {
-    const SAMPLES = ['Halyard', 'Kestrel Labs', 'Moss Studio', 'Juniper & Co', 'Juniper Coffee', 'Juniper Freight', 'Larkspur', 'Harbour & Co', 'Moss & Oak', 'Ana López', 'Kai Moreno', 'Riya Mehta', 'Lee Park', 'Made in Lisbon', 'Made in Bristol'];
+    const SAMPLES = ['Halyard', 'Kestrel Labs', 'Moss Studio', 'Juniper & Co', 'Juniper Coffee', 'Juniper Freight', 'Larkspur', 'Harbour & Co', 'Moss & Oak', 'Ana López', 'Kai Moreno', 'Riya Mehta', 'Lee Park', ...kitBrands];
     const text = document.body.innerText;
     const left = SAMPLES.filter((s) => text.includes(s) && !product.toLowerCase().includes(s.toLowerCase()));
     if (left.length) add('taste-sample-copy', null, `Sample copy from the kit is still on the page: ${left.slice(0, 5).map((s) => `“${s}”`).join(', ')}${left.length > 5 ? ` and ${left.length - 5} more` : ''}. Replace it with ${product}’s own names, words and numbers.`, 'error');
@@ -519,21 +534,24 @@ const TASTE_CHECKS = (arg = null) => {
     // 9c. Leftover sample content: sentences and figures that came with a blueprint or a snippet and were
     // never rewritten. Swapping the brand name is not enough, so the product's name is ignored when comparing.
     const norm = (t) => t.replace(/\s+/g, ' ').trim().toLowerCase().replaceAll(product.toLowerCase(), '§');
-    const kit = new Set(kitSamples);
+    const kit = new Map(kitSamples);
     const kept = new Map();
     for (const el of leaves) for (const node of el.childNodes) {
       if (node.nodeType !== 3) continue;
       const raw = node.textContent.replace(/\s+/g, ' ').trim();
-      if (raw.length >= 6 && kit.has(norm(raw)) && !kept.has(norm(raw))) kept.set(norm(raw), raw);
+      if (raw.length >= 6 && kit.has(norm(raw)) && !kept.has(norm(raw))) kept.set(norm(raw), { t: raw, from: kit.get(norm(raw)) });
       // A placeholder a draft left for the writer ("TODO: two short paragraphs…") is unfinished copy too.
-      if (/^TODO\b/.test(raw) && !kept.has(norm(raw))) kept.set(norm(raw), raw);
+      if (/^TODO\b/.test(raw) && !kept.has(norm(raw))) kept.set(norm(raw), { t: raw });
     }
     const desc = document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
-    if (/lumina-taste|^Blueprint:|^TODO\b/i.test(desc)) kept.set('meta', `meta description: ${desc.slice(0, 48)}…`);
-    if (/^TODO\b/.test(document.title)) kept.set('title', `page title: ${document.title.slice(0, 48)}`);
+    if (/lumina-taste|^Blueprint:|^TODO\b/i.test(desc)) kept.set('meta', { t: `meta description: ${desc.slice(0, 48)}…` });
+    if (/^TODO\b/.test(document.title)) kept.set('title', { t: `page title: ${document.title.slice(0, 48)}` });
+    // Links that still lead where the sample's led: its product pages, its phone number, its email address.
+    for (const a of document.querySelectorAll('a[href]')) { const h = a.getAttribute('href'); if (kitLinks.has(h) && !kept.has(`link:${h}`) && !skip(a)) kept.set(`link:${h}`, { t: `a link to ${h}`, link: true }); }
     if (kept.size) {
-      const list = [...kept.values()];
-      add('taste-sample-content', null, `${list.length} piece${list.length > 1 ? 's' : ''} of the kit's sample content ${list.length > 1 ? 'are' : 'is'} unchanged: ${list.slice(0, 4).map((t) => `“${t.length > 56 ? t.slice(0, 54) + '…' : t}”`).join(', ')}${list.length > 4 ? ` and ${list.length - 4} more` : ''}. Rewrite ${list.length > 1 ? 'them' : 'it'} with ${product}’s own facts, or remove ${list.length > 1 ? 'them' : 'it'}. Never keep or invent customers, quotes or figures.`, list.length >= 5 ? 'error' : 'warning');
+      const list = [...kept.values()].filter((x) => !x.link), linked = [...kept.values()].filter((x) => x.link).map((x) => x.t.replace(/^a link to /, ''));
+      if (linked.length) add('taste-sample-content', null, `${linked.length} link${linked.length > 1 ? 's still lead' : ' still leads'} where the sample's did: a link to ${linked.slice(0, 4).join(', ')}${linked.length > 4 ? ` and ${linked.length - 4} more` : ''}. Point ${linked.length > 1 ? 'them' : 'it'} at ${product}’s own pages, phone number and address, or remove ${linked.length > 1 ? 'them' : 'it'}.`);
+      if (list.length) add('taste-sample-content', null, `${list.length} piece${list.length > 1 ? 's' : ''} of the kit's sample content ${list.length > 1 ? 'are' : 'is'} unchanged: ${list.slice(0, 4).map((x) => `“${x.t.length > 56 ? x.t.slice(0, 54) + '…' : x.t}”${x.from ? ` (from ${x.from})` : ''}`).join(', ')}${list.length > 4 ? ` and ${list.length - 4} more` : ''}. Rewrite ${list.length > 1 ? 'them' : 'it'} with ${product}’s own facts, or remove ${list.length > 1 ? 'them' : 'it'}. Never keep or invent customers, quotes or figures.`, list.length >= 5 ? 'error' : 'warning');
     }
 
     // 9d. Links to sections that do not exist. A page built from parts inherits their #anchors.
@@ -605,7 +623,7 @@ async function auditOne(browser, url, vpName, mode) {
   });
   if (process.env.LT_AUDIT_DEBUG) await page.evaluate(() => (window.__ltDebug = true));
   const findings = (await page.evaluate(PAGE_CHECKS, COPY_RULES.map(([re, why, fix]) => [re.source, re.flags, why, fix]))).map((f) => ({ ...f, viewport: vpName, mode }));
-  if (tasteOn) for (const f of await page.evaluate(TASTE_CHECKS, product ? { name: product, samples: KIT_SAMPLES } : null)) findings.push({ ...f, viewport: vpName, mode });
+  if (tasteOn) for (const f of await page.evaluate(TASTE_CHECKS, product ? { name: product, samples: KIT_SAMPLES.phrases, brands: KIT_SAMPLES.brands, links: KIT_SAMPLES.links } : null)) findings.push({ ...f, viewport: vpName, mode });
   for (const e of runtimeErrors) findings.push({ rule: 'runtime-error', severity: 'error', selector: null, message: e, viewport: vpName, mode });
 
   // Dead controls: no click/key/pointer listener on the control or any ancestor, no native behaviour.
@@ -742,20 +760,31 @@ function kitSamplePhrases() {
       if (!existsSync(join(famDir, 'family.json'))) continue;
       for (const id of readdirSync(famDir)) { const f = join(famDir, id, `${id}.html`); if (existsSync(f)) files.push(f); }
     }
-  } catch { return []; }
+  } catch { return { phrases: [], brands: [], links: [] }; }
   const ent = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'", '&nbsp;': ' ' };
-  const out = new Set();
+  const out = new Map(), brands = new Set(), links = new Set();
   for (const f of files) {
-    const html = readFileSync(f, 'utf8').replace(/<(script|style|svg|pre|code|kbd|title)[\s\S]*?<\/\1>/gi, ' ');
+    const blueprint = /blueprints\/([^/]+)\/index\.html$/.exec(f)?.[1];
+    const source = blueprint ? `the ${blueprint} blueprint` : basename(f, '.html');
+    const raw = readFileSync(f, 'utf8');
+    if (blueprint) {
+      // Where the sample's links lead and who the sample is: neither belongs on a finished page.
+      for (const m of raw.matchAll(/href="((?:\/|mailto:|tel:)[^"]+)"/g)) if (!m[1].startsWith('/') || m[1].split('/').length > 2) links.add(m[1]);
+      try { for (const b of JSON.parse(readFileSync(join(dirname(f), 'meta.json'), 'utf8')).brand ?? []) brands.add(b); } catch { /* no meta */ }
+    }
+    const html = raw.replace(/<(script|style|svg|pre|code|kbd|title)[\s\S]*?<\/\1>/gi, ' ');
     for (const piece of html.split(/<[^>]+>/)) {
       const t = piece.replace(/&[a-z#0-9]+;/gi, (m) => ent[m] ?? ' ').replace(/\s+/g, ' ').trim();
       const words = t.split(' ').length;
       if (t.length < 6 || words < 2) continue;
       if (/\b(enter|shift|esc|press|tab|click|tap|drag|hold|arrow|keys?)\b/i.test(t) && words < 14) continue;
-      if (words >= 7 || (/\d/.test(t) && words >= 4 && /[a-z]{3}/i.test(t))) out.add(t.toLowerCase().replaceAll('halyard', '§'));
+      // A question is the same question on every site ("Can I cancel?"); it is the answer that must be rewritten.
+      if (/\?$/.test(t)) continue;
+      const key = t.toLowerCase().replaceAll('halyard', '§');
+      if ((words >= 7 || (/\d/.test(t) && words >= 4 && /[a-z]{3}/i.test(t))) && !out.has(key)) out.set(key, source);
     }
   }
-  return [...out];
+  return { phrases: [...out], brands: [...brands], links: [...links] };
 }
 
 /** 100 minus weighted findings: errors cost 12, taste warnings 6, other warnings 3. One count per rule and message. */
@@ -773,7 +802,7 @@ function scoreNote(findings) {
 }
 
 const shots = [];
-const KIT_SAMPLES = product ? kitSamplePhrases() : [];
+const KIT_SAMPLES = product ? kitSamplePhrases() : { phrases: [], brands: [], links: [] };
 const browser = await chromium.launch();
 const report = [];
 let errors = 0, warnings = 0;
