@@ -62,3 +62,7 @@
   .bp-kpis .lt-kpi-cmp { display: none; }
   .bp-kpis .lt-kpi[data-size="compact"] h3 { white-space: normal; text-wrap: balance; }
 }
+/* Room for each chart before it is drawn (see data-chart-slot in charts.css): the heights they render at. */
+#c-mrr { --chart-slot: 428px; }
+#c-region { --chart-slot: 262px; }
+@media (max-width: 1040px) { #c-region { --chart-slot: 343px; } }

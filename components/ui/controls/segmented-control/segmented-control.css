@@ -21,3 +21,7 @@
   }
   :scope:not([data-ready]) [data-part="indicator"] { transition: none; }
 }
+/* Touch: each segment's hit area reaches 44px tall without making the control itself taller. */
+@media (pointer: coarse) {
+  .lt-segmented button::before { content: ""; position: absolute; inset: min(0px, calc((100% - var(--hit, 44px)) / 2)) 0; }
+}

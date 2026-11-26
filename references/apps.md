@@ -16,7 +16,7 @@ Put `data-app` on `<html>` and `viewport-fit=cover` in the viewport meta. On a p
 | Primary action | an action bar above the home indicator | The price on the button ("Pay £38.50"). One filled button per screen |
 | Choices | `segmented-control`, `number-stepper`, `toggle-switch` | Settings act at once: no Save button |
 
-- **Touch targets 44px or more**, in both directions. Text inputs 48px.
+- **Touch targets 44px or more**, in both directions. Text inputs 48px. On any touch screen (`@media (pointer: coarse)`) the tokens do most of it: `--control-h` becomes 44px, `--control-h-lg` 52px, and small controls (chips, segments, toolbar icons, sort headers) keep their look and gain an invisible 44px hit area from an inset `::before` sized by `--hit`.
 - **Press states feel physical:** a quick dip in scale (`--press-scale`) and a tint, back on release. No hover-only affordances.
 - **Push and back** slide (view transitions, off under reduced motion); tabs swap without a slide. Focus moves to the new screen's title.
 - **Safe areas:** the status bar area at the top (`env(safe-area-inset-top)`), the home indicator at the bottom of every bar that touches the edge.

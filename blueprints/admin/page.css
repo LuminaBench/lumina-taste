@@ -42,3 +42,5 @@
   .ad-main { padding: var(--space-5) var(--space-4); }
   .ad-search { max-width: none; }
 }
+/* Touch: side-nav rows are 44px targets. */
+@media (pointer: coarse) { .ad-side a:not(.ad-brand) { height: var(--hit, 44px); } }

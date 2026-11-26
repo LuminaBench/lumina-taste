@@ -121,4 +121,5 @@ The note on the chart is a sentence under about 60 characters. The step text bes
 - **Eight to twelve figures on one surface** (`kpi-card` with `size: 'compact'`), five to a row on a desktop, two on a phone, set apart by space, not by a frame each.
 - **One filter row drives everything.** No filters on cards.
 - **Tables with 20 or more rows** scroll inside their own region with a sticky header, numbers right-aligned in `tabular-nums`, a sparkline column for trend, status as a badge only where it is an exception.
+- **Reserve each chart's room before it draws:** `data-chart-slot` on the host and `--chart-slot` set to the height it renders at (`data-chart-slot="kpi"` for a compact KPI), so drawing after load moves nothing (layout shift stays under 0.1).
 - Fixed categorical order and colours across every chart on the page (Scale is always `--chart-1`); direct labels up to four series; marks thin (2px lines, 4–6px meters); no dual axes.

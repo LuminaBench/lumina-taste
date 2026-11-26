@@ -24,20 +24,9 @@ const common = ['--focus-limit', process.env.FOCUS_LIMIT ?? '400', ...process.ar
 // Known findings on blueprints, waiting on a fix in the pages or the tokens (not in the critic). They are printed
 // as pending on every run and do not count; when one stops firing the audit says so, and it comes off this list.
 const PENDING = [
-  // Primary controls under 44×44px at phone width. Root cause: --control-h is 36px (28px small) at balanced density
-  // and icon buttons are 32px, with no bump for touch screens (tokens/base.css: @media (pointer: coarse)).
-  'admin:app-touch-target', // the side-nav items (34px) and Invite user (32px)
-  'agent:app-touch-target', // Plan first (26px) and the 32px start button
-  'assistant:app-touch-target', // the 32px send button
-  'dashboard:app-touch-target', // Export (36px) and the Region filter chip (28px)
-  'mobile:app-touch-target', // New invoice in the empty state (36px)
-  'app-phone:app-touch-target', // the harbour switch on the home screen (segmented control, 38px), seen in the state views
-  'workspace:app-touch-target', // a desktop work app: at phone width the views (34px) and icon buttons (28px) are small
   // Sections that are only words on a marketing page.
   'shop:taste-no-visual', // "Nine days from a ball of clay": three steps in sentences; stack-cards with a picture each
   'devtool:taste-no-visual', // six features, each an icon in a tinted tile and two lines; show the feature instead
-  // Charts drawn after load move the page (layout shift about 0.2): reserve their height before they render.
-  'dashboard:perf-cls',
 ];
 // Gallery views and element pages: element-level rules.
 const res = spawnSync(process.execPath, [join(root, 'scripts/audit-ui.mjs'), ...targets, '--json', join(root, 'qa/artifacts/audit-report.json'), ...common], { stdio: 'inherit', cwd: root });

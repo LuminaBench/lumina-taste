@@ -11,3 +11,8 @@
   [data-part="reset"]:hover { background: var(--bg-surface-2); color: var(--text-primary); }
 }
 @keyframes lt-chip-in { from { scale: 0.85; opacity: 0; } }
+/* Touch: chips and the small text buttons keep their look and get a 44px hit area. */
+@media (pointer: coarse) {
+  .lt-filterbar :is([data-part="chip"], [data-part="add"], [data-part="reset"]) { position: relative; }
+  .lt-filterbar :is([data-part="chip"], [data-part="add"], [data-part="reset"])::before { content: ""; position: absolute; inset: min(0px, calc((100% - var(--hit, 44px)) / 2)) 0; }
+}
