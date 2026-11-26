@@ -20,6 +20,14 @@
   /* The headline is the largest thing in the first screen after the picture: up to 68px on a wide screen. */
   :is(h1, h2) { font-size: max(var(--step-5), clamp(2.5rem, 1.1rem + 3.6vw, 4.25rem)); max-width: 16ch; line-height: 1.02; }
   [data-part="cta"] { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  /* On a phone the actions stack from the start: two buttons that only just fit on one line would jump to two
+     when the web font arrives (or not, depending on the face), moving everything below. */
+  @media (max-width: 479.98px) {
+    [data-part="cta"] { flex-direction: column; align-items: flex-start; }
+    /* A text-style action under the button keeps the column's left edge: its padding hangs outside it. */
+    [data-part="cta"] > .lt-btn[data-variant="ghost"] { margin-inline-start: calc(-1 * var(--control-px)); }
+    [data-part="cta"] > .lt-btn[data-variant="ghost"][data-size="lg"] { margin-inline-start: calc(-1 * (var(--control-px) + 6px)); }
+  }
   [data-part="note"] { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 16px 0 0; color: var(--text-muted); font-size: var(--text-ui-sm); }
   [data-part="note"] .lt-icon { width: 14px; height: 14px; color: var(--status-positive); }
   [data-part="frame"] { display: grid; gap: 14px; padding: 14px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); box-shadow: var(--shadow-md); }

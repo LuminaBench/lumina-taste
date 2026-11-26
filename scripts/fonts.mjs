@@ -105,14 +105,15 @@ const measured = new Map();
 for (const [family, list] of byFamily) {
   try {
     const at = faceTargets(p, family);
-    const measure = (which) => { const f = fileFor(list, at[which].wght); return { file: f.file, ...fontMetrics(f.buf, at[which]) }; };
-    const m = { regular: measure('regular'), bold: measure('bold') };
+    const measure = (t) => { const f = fileFor(list, t.wght); return { file: f.file, ...fontMetrics(f.buf, t) }; };
+    const m = { regular: measure(at.regular), bold: measure(at.bold) };
+    if (at.phone) m.phone = { regular: measure(at.phone.regular), bold: measure(at.phone.bold) };
     const kind = p.fonts?.find((x) => x.family === family)?.fallback ?? 'sans';
     const fb = fallbackFaces(family, m, kind);
     fallbacks += fb.css;
     const entry = manifest.files.find((x) => x.file === m.regular.file);
     const strip = ({ wght, opsz }, avgWidth) => ({ wght, opsz, avgWidth });
-    measured.set(family, { unitsPerEm: m.regular.unitsPerEm, ascent: m.regular.ascent, descent: m.regular.descent, lineGap: m.regular.lineGap, regular: strip(at.regular, m.regular.avgWidth), bold: strip(at.bold, m.bold.avgWidth) });
+    measured.set(family, { unitsPerEm: m.regular.unitsPerEm, ascent: m.regular.ascent, descent: m.regular.descent, lineGap: m.regular.lineGap, regular: strip(at.regular, m.regular.avgWidth), bold: strip(at.bold, m.bold.avgWidth), ...(m.phone ? { phone: { regular: strip(at.phone.regular, m.phone.regular.avgWidth), bold: strip(at.phone.bold, m.phone.bold.avgWidth) } } : {}) });
     entry.metrics = { unitsPerEm: m.regular.unitsPerEm, ascent: m.regular.ascent, descent: m.regular.descent, lineGap: m.regular.lineGap, regular: { ...at.regular, avgWidth: m.regular.avgWidth }, bold: { ...at.bold, avgWidth: m.bold.avgWidth }, sizeAdjust: fb.sizeAdjust, sizeAdjustBold: fb.sizeAdjustBold, fallback: kind };
   } catch (e) {
     console.warn(`  ${family}: could not measure metrics (${e.message}); no fallback face written.`);

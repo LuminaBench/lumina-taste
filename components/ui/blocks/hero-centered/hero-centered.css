@@ -16,6 +16,9 @@
   :is(h1, h2) { max-width: 18ch; font-size: max(var(--step-5), clamp(2.25rem, 1.2rem + 3vw, 3.25rem)); }
   [data-part="lede"] { margin-inline: auto; }
   [data-part="cta"] { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 28px; }
+  /* On a phone the actions stack from the start: two buttons that only just fit on one line would jump to two
+     when the web font arrives (or not, depending on the face), moving everything below. */
+  @media (max-width: 479.98px) { [data-part="cta"] { flex-direction: column; align-items: center; } }
   [data-part="shot"] { display: grid; gap: 14px; width: 100%; max-width: 920px; margin-top: 48px; padding: 16px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); box-shadow: var(--shadow-md); text-align: left; }
   [data-part="bar"] { display: flex; align-items: center; gap: 6px; }
   [data-part="bar"] i { width: 9px; height: 9px; border-radius: 50%; background: var(--bg-surface-3); }

@@ -12,6 +12,14 @@
   [data-part="side"] { display: grid; gap: 22px; padding-bottom: 6px; }
   [data-part="lede"] { margin: 0; max-width: 36ch; color: var(--text-secondary); font-size: max(var(--step-1), 1.0625rem); line-height: 1.5; text-wrap: pretty; }
   [data-part="cta"] { display: flex; flex-wrap: wrap; gap: 10px; }
+  /* On a phone the actions stack from the start: two buttons that only just fit on one line would jump to two
+     when the web font arrives (or not, depending on the face), moving everything below. */
+  @media (max-width: 479.98px) {
+    [data-part="cta"] { flex-direction: column; align-items: flex-start; }
+    /* A text-style action under the button keeps the column's left edge: its padding hangs outside it. */
+    [data-part="cta"] > .lt-btn[data-variant="ghost"] { margin-inline-start: calc(-1 * var(--control-px)); }
+    [data-part="cta"] > .lt-btn[data-variant="ghost"][data-size="lg"] { margin-inline-start: calc(-1 * (var(--control-px) + 6px)); }
+  }
   @container (max-width: 760px) { [data-part="copy"] { grid-template-columns: minmax(0, 1fr); } }
 
   /* The picture keeps its shape whatever is in it: still, film, or both. */
