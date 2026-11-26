@@ -12,8 +12,8 @@ const STREET = '(?:Lane|Street|Road|Row|Way|Square|Avenue|Hill|Place|Yard|Walk|T
 const UNIT = '(?:second|minute|min|hour|day|week|month|year|night)s?';
 const NUM_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twelve: 12 };
 // Words that end a noun phrase when reading forwards or backwards from a figure.
-const STOP = new Set(['a', 'an', 'the', 'and', 'or', 'for', 'from', 'in', 'on', 'at', 'of', 'to', 'with', 'that', 'which', 'who', 'is', 'are', 'was', 'open', 'opens', 'gave', 'give', 'gives', 'sends', 'send', 'by', 'it', 'its', 'our', 'their', 'per', 'every', 'each', 'last', 'this', 'than', 'up', 'out', 'about', 'around', 'over', 'under', 'into']);
-const VERBS = /^(?:sends?|chases?|builds?|building|makes?|making|sells?|selling|runs?|running|offers?|offering|gives?|gave|giving|helps?|tracks?|books?|keeps?|turns?|lets?|finds?|shows?|writes?|reads?|bakes?|baking|roasts?|roasting|serves?|serving|fixes?|fixing|teaches?|teaching|cuts?|plans?|pays?|pay|files?|repairs?|repairing|installs?|installing|delivers?|delivering|cooks?|brews?|designs?|designing|grows?|ships?|takes?|handles?|checks?|answers?|collects?|stores?|syncs?)$/i;
+const STOP = new Set(['a', 'an', 'the', 'and', 'or', 'for', 'from', 'in', 'on', 'at', 'of', 'to', 'with', 'that', 'which', 'who', 'is', 'are', 'was', 'open', 'opens', 'gave', 'give', 'gives', 'sends', 'send', 'by', 'it', 'its', 'our', 'their', 'per', 'every', 'each', 'last', 'this', 'than', 'up', 'out', 'about', 'around', 'over', 'under', 'into', 'within', 'after', 'before']);
+const VERBS = /^(?:sends?|chases?|builds?|building|makes?|making|sells?|selling|runs?|running|offers?|offering|gives?|gave|giving|helps?|tracks?|books?|keeps?|turns?|lets?|finds?|shows?|writes?|reads?|bakes?|baking|roasts?|roasting|serves?|serving|fixes?|fixing|teaches?|teaching|cuts?|plans?|pays?|pay|files?|repairs?|repairing|installs?|installing|delivers?|delivering|cooks?|brews?|designs?|designing|grows?|ships?|takes?|handles?|checks?|answers?|collects?|stores?|syncs?|feeds?|buys?|covers?|reconciles?|match(?:es)?|matching)$/i;
 
 const clean = (s) => s.replace(/\s+/g, ' ').replace(/^[\s,;:.-]+|[\s,;:.-]+$/g, '').trim();
 const words = (s) => s.split(/\s+/).filter(Boolean);
@@ -53,14 +53,15 @@ const lowerFirst = (s) => (/^[A-Z][a-z]/.test(s) && !DAYS.some((d) => s.startsWi
  */
 export function extractFacts(brief, { product = null } = {}) {
   const b = ` ${String(brief ?? '').replace(/\s+/g, ' ').trim()} `;
-  const facts = { brief: String(brief ?? '').trim(), name: product ?? null, kind: null, place: null, street: null, audience: null, prices: [], times: [], days: null, durations: [], counts: [], claims: [], offers: [] };
+  const facts = { brief: String(brief ?? '').trim(), name: product ?? null, kind: null, place: null, street: null, audience: null, prices: [], times: [], days: null, durations: [], counts: [], claims: [], offers: [], phone: null, email: null, postcode: null, building: null, people: [], steps: [], says: [] };
 
   // The kind of business: "…, a sourdough bakery on Mill Lane" / "an invoicing tool for freelancers".
   const kindM = /,\s+(?:an?|the)\s+([a-z][\w'’-]*(?:\s+[a-z][\w'’-]*){0,4}?)(?=\s+(?:on|in|at|for|that|which|who|with|near|building|making|selling|run|based|offering|open)\b|[,.;]|\s*$)/.exec(b)
     ?? /\b(?:for|page for|site for|website for)\s+(?:an?|the)\s+([a-z][\w'’-]*(?:\s+[a-z][\w'’-]*){0,4}?)(?=\s+(?:on|in|at|for|that|which|who|with|near|building|making|selling|run|based|offering|open)\b|[,.;]|\s*$)/.exec(b);
   if (kindM) facts.kind = clean(kindM[1]);
 
-  const streetM = new RegExp(`\\b(?:on|at)\\s+((?:\\d+\\s+)?[A-Z][\\w'’-]*(?:\\s+[A-Z][\\w'’-]*)*\\s+${STREET})\\b`).exec(b);
+  const streetM = new RegExp(`\\b(?:on|at)\\s+((?:\\d+\\s+)?[A-Z][\\w'’-]*(?:\\s+[A-Z][\\w'’-]*)*\\s+${STREET})\\b`).exec(b)
+    ?? new RegExp(`\\b(\\d+\\s+[A-Z][\\w'’-]*(?:\\s+[A-Z][\\w'’-]*)*\\s+${STREET})\\b`).exec(b);
   if (streetM) facts.street = streetM[1];
   // A place is a capitalised name after "in", that is not a month, a day or the product.
   for (const m of b.matchAll(/\bin\s+([A-Z][a-zA-Z'’-]+(?:\s+(?:upon|on|-on-)?\s*[A-Z][a-zA-Z'’-]+){0,2})/g)) {
@@ -71,6 +72,32 @@ export function extractFacts(brief, { product = null } = {}) {
   const audM = /\bfor\s+((?:small\s+|independent\s+|busy\s+|local\s+)?[a-z]+(?:ers|ists|ants|ents|people|teams|families|parents|owners))\b/.exec(b);
   if (audM && !/^(a|an|the)$/.test(audM[1])) facts.audience = audM[1];
 
+  // Contact details and the address, as written.
+  facts.phone = /(?:\+44\s?\d{2,4}|\b0\d{2,4})[\s-]?\d{3,4}[\s-]?\d{3,4}\b/.exec(b)?.[0]?.trim() ?? null;
+  facts.email = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/.exec(b)?.[0] ?? null;
+  facts.postcode = /\b[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}\b/.exec(b)?.[0] ?? null;
+  facts.building = /\bat\s+((?:St\.?\s)?[A-Z][\w'’]*(?:\s+[A-Z][\w'’]*){0,3}),\s+\d+\s+[A-Z]/.exec(b)?.[1] ?? null;
+  if (!facts.place && facts.street) facts.place = new RegExp(`${facts.street.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')},\\s+([A-Z][a-zA-Z'’-]+)`).exec(b)?.[1] ?? null;
+  // People named in the brief: "run by Nell and Owen Hart", "partners Ruth Harrow, Sam Finch and Priya Shah".
+  const peopleM = /\b(run by|owned by|founded by|led by|partners(?: are)?|with partners)\s+((?:[A-Z][a-z'’-]+(?:\s[A-Z][a-z'’-]+)?)(?:(?:,\s*|\s+and\s+)[A-Z][a-z'’-]+(?:\s[A-Z][a-z'’-]+)?)*)/.exec(b);
+  if (peopleM) {
+    const role = /partner/.test(peopleM[1]) ? 'Partner' : /found/.test(peopleM[1]) ? 'Founder' : /led/.test(peopleM[1]) ? 'Lead' : 'Owner';
+    let names = peopleM[2].split(/,\s*|\s+and\s+/).map((n) => n.trim()).filter(Boolean);
+    // "Nell and Owen Hart": a first name alone shares the last name that follows it.
+    const last = names[names.length - 1].split(' ').slice(1).join(' ');
+    names = names.map((n) => (n.includes(' ') || !last ? n : `${n} ${last}`));
+    facts.people = names.map((name) => ({ name, role }));
+  }
+  // Steps: "how it works: add a client, send the invoice, get paid" or "first …, then …, then …".
+  const stepsM = /\b(?:how it works|the steps|steps|process)\s*:\s*(.+?)(?=\.\s|;|$)/i.exec(b) ?? /\bfirst\s+(.+?,\s*then\s+.+?)(?=\.\s|;|$)/i.exec(b);
+  if (stepsM) {
+    for (const part of stepsM[1].split(/,\s*(?:and\s+)?(?:then\s+)?|\s+then\s+/)) {
+      const st = clean(part);
+      if (!st || /^(phone|call|tel|email|open|opens)\b/i.test(st) || /\d{4,}/.test(st)) break;
+      facts.steps.push(st);
+    }
+    if (facts.steps.length < 2) facts.steps = [];
+  }
   // Prices: £4.20, £40,000, $12, €9.50, £9 a month, from £450.
   for (const m of b.matchAll(/(\bfrom\s+)?([£$€]\s?\d{1,3}(?:,\d{3})*(?:\.\d{1,2})?(?:k|m)?)(\s+(?:a|per)\s+(?:month|year|week|hour|head|person|night|day|session|class))?/g)) {
     const value = m[2].replace(/\s/g, '') + (m[3] ?? '');
@@ -80,6 +107,10 @@ export function extractFacts(brief, { product = null } = {}) {
     const after = nounAfter(b, m.index + m[0].length);
     // "a £40,000 single-storey extension": the noun follows the price.
     if (after && (!what || /\b(?:a|an)\s*$/.test(b.slice(0, at)))) what = after;
+    // "£10 feeds a household for a week": a price that says what it does.
+    const said = /^\s+((?:feeds?|buys?|covers?|pays for|keeps?|gives?|fills?)\b[^,.;]*)/.exec(b.slice(m.index + m[0].length))?.[1];
+    // It is a statement, not a price list entry.
+    if (said) { facts.says.push(clean(`${m[2]} ${said}`)); continue; }
     facts.prices.push({ value, from: !!m[1], what: lowerFirst(what) || null, text: clean(m[0]) });
   }
   // Clock times: 7:30, 7.30am, 10am, "10 to 2" after days.
@@ -92,6 +123,9 @@ export function extractFacts(brief, { product = null } = {}) {
     facts.days = clean(dayM[1]);
     if (dayM[2]) facts.times.push({ value: clean(dayM[2]).replace(/\s*(?:to|-|–)\s*/, ' to '), what: 'hours', text: clean(dayM[2]) });
   }
+  // A clock time inside an hours range ("7:30" in "7:30 to 3") is that range, not a second time.
+  const ranges = facts.times.filter((t) => t.what === 'hours');
+  facts.times = facts.times.filter((t) => t.what || !ranges.some((r) => r.text.includes(t.value)));
   // Durations: 30 seconds, 12 weeks, a 20-minute call.
   for (const m of b.matchAll(new RegExp(`\\b(\\d+|${Object.keys(NUM_WORDS).join('|')})[-\\s](${UNIT})\\b`, 'gi'))) {
     const hyphen = b[m.index + m[1].length] === '-';
@@ -118,9 +152,9 @@ export function extractFacts(brief, { product = null } = {}) {
     facts.counts.push({ value: m[1], what, per, when, text: clean(`${m[1]} ${what}${per ? ` ${per}` : ''}${when ? ` ${when}` : ''}`) });
   }
   // Claims: what the thing does, as the brief says it ("that sends an invoice in 30 seconds and chases late payers").
-  const claimM = /\b(?:that|which|who)\s+(.+?)(?=,\s+(?:open|from|with|for)\b|[.;]|\s+for\s+[£$€]|$)/.exec(b);
+  const claimM = /\b(?:that|which|who)\s+(.+?)(?=,\s+(?:open|from|with|for|how it works|phone|[£$€])|[.;]|\s+for\s+[£$€]|$)/i.exec(b);
   if (claimM) {
-    for (const part of claimM[1].split(/,\s*|\s+and\s+(?=[a-z]+s\b)/)) {
+    for (const part of claimM[1].split(/,\s*(?=[a-z]+s\b)|\s+and\s+(?=[a-z]+s\b)/)) {
       const c = clean(part);
       if (c && words(c).length >= 2 && VERBS.test(words(c)[0])) facts.claims.push(c);
     }
@@ -161,13 +195,13 @@ export function heroCopy(facts, { typeId, product }) {
   const kind = facts.kind ? cap(facts.kind) : null;
   const where = facts.street ? `${facts.street}${facts.place ? `, ${facts.place}` : ''}` : facts.place;
   const price = facts.prices.find((p) => p.what) ?? facts.prices[0] ?? null;
-  const time = facts.times.find((t) => /open|from/.test(t.what ?? '')) ?? facts.times[0] ?? null;
+  const time = facts.times.find((t) => /open|from/.test(t.what ?? '')) ?? facts.times.find((t) => t.what === 'hours') ?? facts.times[0] ?? null;
   const count = facts.counts[0] ?? null;
   const dur = facts.durations.find((d) => d.what) ?? facts.durations[0] ?? null;
   const claim = facts.claims[0] ?? null;
   const eyebrow = kind && facts.place ? `${kind} · ${facts.place}` : kind ?? facts.place ?? null;
   let headline = null;
-  if (typeId === 'venue' && kind && (facts.street || facts.place)) headline = `${/^an?\s/i.test(kind) ? kind : `A ${facts.kind}`} on ${facts.street ?? `the high street in ${facts.place}`}${facts.street && facts.place ? ` in ${facts.place}` : ''}`;
+  if (typeId === 'venue' && kind && (facts.street || facts.place)) headline = `${/^an?\s/i.test(kind) ? kind : `A ${facts.kind}`} on ${facts.street ? facts.street.replace(/^\d+\s+/, '') : `the high street in ${facts.place}`}${facts.street && facts.place ? ` in ${facts.place}` : ''}`;
   else if (typeId === 'event' && kind) headline = `${/^(an?|the)\s/i.test(facts.kind) ? kind : `A ${facts.kind}`}${facts.place ? ` in ${facts.place}` : ''}`;
   else if (typeId === 'cause' && count) headline = `${count.value} ${count.what}${count.per ? ` ${count.per}` : ''}${count.when ? ` ${count.when}` : ''}${facts.place ? `, in ${facts.place}` : ''}`;
   else if (typeId === 'service-landing' && price?.what) {
@@ -193,7 +227,7 @@ export function heroCopy(facts, { typeId, product }) {
     for (const c of facts.claims.slice(headline === imperative(claim ?? '') ? 1 : 0, 2)) ledeParts.push(`${name ?? 'It'} ${c}.`);
     if (price && !headline?.includes(price.value)) ledeParts.push(price.what ? `${cap(price.what)} ${price.from ? 'from' : 'at'} ${price.value}.` : `${price.value.replace(/\s+a\s+/, ' a ')}${facts.audience ? ` for ${facts.audience}` : ''}.`.replace(/^./, (c) => c.toUpperCase()));
   }
-  if (!ledeParts.length && typeId === 'cause' && (facts.days || time)) ledeParts.push(`Open ${facts.days ?? ''}${time ? `${facts.days ? ', ' : ''}${time.what === 'hours' ? time.value : `from ${time.value}`}` : ''}${facts.street ? ` on ${facts.street}` : ''}.`.replace(/\s+/g, ' '));
+  if (!ledeParts.length && typeId === 'cause' && (facts.days || time)) ledeParts.push(`Open ${facts.days ?? ''}${time ? `${facts.days ? ', ' : ''}${time.what === 'hours' ? time.value : `from ${time.value}`}` : ''}${facts.street ? `, at ${facts.building ? `${facts.building}, ` : ""}${facts.street}` : ''}.`.replace(/\s+/g, ' '));
   const noteParts = [facts.days && time ? `Open ${facts.days}${time.what === 'hours' ? `, ${time.value}` : `, from ${time.value}`}` : facts.days ? `Open ${facts.days}` : time ? `Open from ${time.value}` : null, facts.street ? where : null].filter(Boolean);
   // A note that would only repeat the place in the eyebrow says nothing.
   const note = noteParts.join(' · ') || null;
@@ -239,7 +273,7 @@ export function openingHours(facts) {
   if (!m) return null;
   const to24 = (h, ap, other) => { let x = +h; if (/pm/i.test(ap ?? '') && x < 12) x += 12; if (!ap && other != null && x < other) x += 12; return x; };
   const h1 = to24(m[1], m[3], null), h2 = to24(m[4], m[6], h1);
-  const fmt = (h, mm) => `${String(h).padStart(2, '0')}:${mm ?? '00'}`;
+  const fmt = (h, mm) => `${h}:${mm ?? '00'}`;
   const idx = (d) => DAYS.findIndex((x) => d.startsWith(x)) + 1;
   const open = new Set();
   for (const part of facts.days.split(/\s*(?:,|and)\s*/)) {

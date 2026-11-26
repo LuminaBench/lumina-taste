@@ -2149,9 +2149,40 @@
     "funeral"
    ],
    "palette": "charcoal-sky",
-   "typography": "editorial",
+   "typography": "legal",
    "style": "paper",
-   "mode": "light"
+   "mode": "light",
+   "typeWhy": "a contract-like serif: measured and formal, and easy to read at length"
+  },
+  {
+   "id": "construction",
+   "service": true,
+   "words": [
+    "construction",
+    "construction firm",
+    "construction company",
+    "building firm",
+    "builder",
+    "builders",
+    "extension",
+    "extensions",
+    "loft conversion",
+    "loft conversions",
+    "renovation",
+    "renovations",
+    "refurbishment",
+    "bricklayer",
+    "scaffolding",
+    "groundworks",
+    "plant hire",
+    "civil engineering",
+    "site safety"
+   ],
+   "palette": "navy-sand",
+   "typography": "stencil",
+   "style": "minimal",
+   "mode": "light",
+   "typeWhy": "stencilled site lettering, the kind read at a distance on hoardings, vans and plant"
   },
   {
    "id": "trades",
@@ -2162,8 +2193,6 @@
     "plumbing",
     "electrician",
     "electricians",
-    "builder",
-    "builders",
     "roofer",
     "roofing",
     "joiner",
@@ -2187,25 +2216,14 @@
     "driving instructor",
     "dog walker",
     "groomer",
-    "construction",
-    "construction firm",
-    "building firm",
-    "extension",
-    "extensions",
-    "loft conversion",
-    "loft conversions",
-    "renovation",
-    "renovations",
-    "refurbishment",
-    "bricklayer",
-    "scaffolding",
     "kitchen fitter",
     "bathroom fitter"
    ],
    "palette": "navy-sand",
-   "typography": "swiss",
+   "typography": "stamped",
    "style": "minimal",
-   "mode": "light"
+   "mode": "light",
+   "typeWhy": "stamped letters, like a van’s signwriting or a rubber-stamped invoice: sturdy and plain"
   },
   {
    "id": "beauty",
@@ -2407,9 +2425,10 @@
     "webhooks"
    ],
    "palette": "black-signal",
-   "typography": "technical",
+   "typography": "workbench",
    "style": "volt",
-   "mode": "dark"
+   "mode": "light",
+   "typeWhy": "a light-ground pairing with a mono for code, like the tool’s own surface"
   },
   {
    "id": "analytics",
@@ -2472,9 +2491,10 @@
     "personal trainer"
    ],
    "palette": "sage-clay",
-   "typography": "humanist",
+   "typography": "hyperlegible",
    "style": "soft",
-   "mode": "light"
+   "mode": "light",
+   "typeWhy": "letters that stay distinct for readers with low vision, or anyone anxious and in a hurry"
   },
   {
    "id": "public",
@@ -2482,9 +2502,7 @@
     "council",
     "government",
     "gov",
-    "school",
     "university",
-    "education",
     "course",
     "courses",
     "nonprofit",
@@ -2660,15 +2678,14 @@
     "speakers"
    ],
    "palette": "arctic-red",
-   "typography": "swiss",
+   "typography": "stadium",
    "style": "swiss",
-   "mode": "light"
+   "mode": "light",
+   "typeWhy": "condensed stadium figures, so dates, times and prices read at a glance"
   },
   {
    "id": "playful",
    "words": [
-    "kids",
-    "children",
     "game",
     "games",
     "gaming",
@@ -2724,9 +2741,74 @@
     "camping"
    ],
    "palette": "seaglass-coral",
-   "typography": "humanist",
+   "typography": "signage",
    "style": "nordic",
-   "mode": "light"
+   "mode": "light",
+   "typeWhy": "the lettering of station and road signs, built to be read in passing"
+  },
+  {
+   "id": "education",
+   "words": [
+    "school",
+    "schools",
+    "nursery",
+    "nurseries",
+    "primary school",
+    "after-school",
+    "after school",
+    "kids",
+    "children",
+    "childrens",
+    "pupils",
+    "teachers",
+    "classroom",
+    "phonics",
+    "reading app",
+    "homework",
+    "education",
+    "early years"
+   ],
+   "palette": "porcelain-teal",
+   "typography": "schoolbook",
+   "style": "soft",
+   "mode": "light",
+   "typeWhy": "single-storey a and g, like the letters children learn to write"
+  },
+  {
+   "id": "transport",
+   "words": [
+    "transport",
+    "bus",
+    "buses",
+    "train",
+    "trains",
+    "rail",
+    "railway",
+    "station",
+    "stations",
+    "timetable",
+    "timetables",
+    "parking",
+    "car park",
+    "route",
+    "routes",
+    "ferry",
+    "ferries",
+    "taxi",
+    "taxis",
+    "courier",
+    "couriers",
+    "haulage",
+    "tram",
+    "trams",
+    "commute",
+    "commuters"
+   ],
+   "palette": "ice-cobalt",
+   "typography": "signage",
+   "style": "system",
+   "mode": "light",
+   "typeWhy": "the lettering of station and road signs, built to be read in passing"
   }
  ],
  "moods": {
@@ -2984,6 +3066,21 @@
    "swiss",
    "bauhaus",
    "newsprint"
+  ],
+  "construction": [
+   "minimal@navy-sand",
+   "bauhaus",
+   "nordic"
+  ],
+  "education": [
+   "soft",
+   "playful",
+   "clay"
+  ],
+  "transport": [
+   "system",
+   "swiss@ice-cobalt",
+   "nordic@ice-cobalt"
   ]
  }
 }

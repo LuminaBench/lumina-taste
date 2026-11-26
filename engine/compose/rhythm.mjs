@@ -58,7 +58,7 @@ export function bandsOf(sections, { draft = true } = {}) {
  *   sections: [{ n, id, role, tone?, optional? }] in page order. canInsert: may add a breather part.
  * @returns {{ banded: boolean, beats: any[], moved: string[], inserted: any[] }}
  */
-export function planRhythm({ type, sections, canInsert = true, draft = true }) {
+export function planRhythm({ type, sections, canInsert = true, draft = true, brandClose = true }) {
   const bands = bandsOf(sections, { draft }).map((s) => ({ ...s }));
   if (!isBanded(type)) {
     const beats = bands.map((s) => ({ n: s.n, id: s.id ?? null, role: s.role, label: labelOf(s), density: BEAT[s.id]?.d ?? 'busy', ground: 'screen', scale: 'normal' }));
@@ -104,10 +104,12 @@ export function planRhythm({ type, sections, canInsert = true, draft = true }) {
   if (close) close.scale = 'display';
 
   // 2. Grounds: one brand band (the close, when it is a closing band), one picture or dark band from the middle on.
-  if (close && ['cta-band', 'newsletter-signup'].includes(close.id)) close.ground = 'brand';
+  // The brand band closes the page, unless the bold idea already sits on the brand colour in the first
+  // screen: then the close takes the dark ground, so the brand colour is one moment, not two.
+  if (close && ['cta-band', 'newsletter-signup'].includes(close.id)) close.ground = brandClose ? 'brand' : 'dark';
   for (const b of beats) if (b.ground === 'picture' && beats.filter((x) => x.ground === 'picture').indexOf(b) > 0) b.ground = null;
   const strong = (b) => ['dark', 'brand', 'picture'].includes(b?.ground);
-  if (!beats.some((b) => b.ground === 'picture') && beats.length >= 5) {
+  if (!beats.some((b) => b.ground === 'picture' || b.ground === 'dark') && beats.length >= 5) {
     const mid = beats.slice(1, close ? -1 : undefined).filter((b, k, a) => !strong(b) && !strong(beats[beats.indexOf(b) - 1]) && !strong(beats[beats.indexOf(b) + 1]));
     const hinted = mid.find((b) => b.hint === 'dark');
     const from = Math.floor(beats.length / 3);

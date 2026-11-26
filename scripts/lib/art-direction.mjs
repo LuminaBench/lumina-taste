@@ -71,11 +71,14 @@ const SIGNATURES = {
   events: { name: 'The date, large', how: 'A statement hero with the date and the place above the headline and three figures under it, then the programme as timed rows. One dark band for the venue; no countdown.' },
   travel: { name: 'Dates and a place', how: 'A booking bar in the hero with dates and guests, art panels or photographs at one ratio, prices in full.' },
 };
+SIGNATURES.construction = { name: 'The job, the price, the phone', how: 'The fixed price of the main job set large in the hero, the jobs as tiles with their prices, the steps from site visit to start date, the phone number in the bar. Stencilled headings; one photograph of finished work or an art panel.' };
+SIGNATURES.education = { name: 'Plain and friendly', how: 'One large, friendly headline that says what children do here, the day or the steps as big numbered rows, and the times and place said plainly for parents. No mascots, no confetti.' };
+SIGNATURES.transport = { name: 'The timetable', how: 'Times and places set like a departure board: the next thing that matters set large, routes and times as ruled rows in one column, nothing decorative between them.' };
 SIGNATURES.cause = { name: 'The claim and the proof', how: 'A statement hero that says what you do as a plain fact with three true figures under it, then one bar that shows where each pound goes. Space and one dark band set the sections apart; no photographs of people in distress.' };
 /** Some pages have their signature whatever the subject's domain; others accept only the domains that suit them. */
 SIGNATURES.about = { name: 'Who, since when, and why', how: 'A statement hero that makes a claim someone could disagree with, the story as prose beside a rail, then the people by name. Dates and places, not adjectives; no stock team photographs.' };
 const TYPE_SIGNATURE = { about: 'about', event: 'events', cause: 'cause', venue: 'hospitality', portfolio: 'creative', 'dev-landing': 'devtool' };
-const TYPE_DOMAINS = { 'service-landing': ['health', 'professional', 'trades', 'beauty'], 'brand-landing': ['commerce', 'beauty'] };
+const TYPE_DOMAINS = { 'service-landing': ['health', 'professional', 'trades', 'beauty', 'construction', 'education'], 'brand-landing': ['commerce', 'beauty'] };
 const signatureFor = (type, domain) => {
   if (TYPE_SIGNATURE[type.id]) return SIGNATURES[TYPE_SIGNATURE[type.id]];
   const allowed = TYPE_DOMAINS[type.id];
