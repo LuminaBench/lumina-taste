@@ -401,3 +401,26 @@ test('drafts composed from five briefs carry no sample business: no brand, place
     assert.match(html, /<!-- TODO before this page ships[\s\S]*the people, with their names and roles/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
+
+test('each kind of subject gets its own lettering, with the reason in the plan; --typeface still wins', () => {
+  const cases = [
+    ['Website for an emergency plumber in Hull', 'stamped'],
+    ['Website for Brickwell Build, a construction firm in Bristol', 'stencil'],
+    ['Website for a two-day design conference in Leeds', 'stadium'],
+    ['Home page for Cedar Street Dental, a family dentist in Leeds', 'hyperlegible'],
+    ['Website for a ferry timetable between two islands', 'signage'],
+    ['Website for a walking holiday company', 'signage'],
+    ['Website for Harrow & Finch, an employment law firm', 'legal'],
+    ['Landing page for Relay, a webhooks API', 'workbench'],
+    ['Website for an after-school club for children', 'schoolbook'],
+  ];
+  for (const [brief, type] of cases) {
+    const p = compose(brief);
+    assert.equal(p.profile.typography, type, brief);
+    assert.ok(p.typeWhy && p.typeWhy.length > 20, `${brief}: a reason`);
+  }
+  assert.equal(compose('Landing page for Relay, a webhooks API').profile.mode, 'light', 'workbench sits on a light ground');
+  const own = compose('Website for Brickwell Build, a construction firm in Bristol', '--typeface', 'swiss');
+  assert.deepEqual([own.profile.typography, own.typeWhy], ['swiss', 'you chose it']);
+  assert.match(node([join(root, 'scripts/compose.mjs'), 'Website for an emergency plumber in Hull']).stdout, /type `stamped` \(stamped letters/);
+});

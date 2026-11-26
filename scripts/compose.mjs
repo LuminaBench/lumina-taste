@@ -78,7 +78,7 @@ const any = (list) => list.some(has);
 // Is the thing being made software? "A booking app for clinics" is a product page; "a clinic" is not.
 const software = any(['app', 'apps', 'software', 'saas', 'platform', 'tool', 'tools', 'api', 'sdk', 'dashboard', 'plugin', 'browser extension', 'chrome extension', 'chatbot', 'crm', 'startup']);
 const domainScores = kb.domains.filter((d) => !(software && d.service)).map((d) => ({ d, s: d.words.filter((w) => has(w)).length })).sort((a, b) => b.s - a.s);
-const domain = domainScores[0].s > 0 ? domainScores[0].d : null;
+let domain = domainScores[0].s > 0 ? domainScores[0].d : null;
 // A landing page is not always for software, and each kind of subject has its own page: a developer product
 // gets code, a terminal and an API; a practice or a trade gets services with fees, people and how to find
 // them; a place gets what is on offer, booking and opening hours; a maker gets the range and a price; a
@@ -93,13 +93,15 @@ if (type.id === 'landing' && !forceType) {
     : software ? null
     : occasion || domain?.id === 'events' ? 'event'
     : cause ? 'cause'
-    : ['professional', 'trades'].includes(domain?.id) || practice ? 'service-landing'
+    : ['professional', 'trades', 'construction'].includes(domain?.id) || practice ? 'service-landing'
     : domain?.id === 'hospitality' || place ? 'venue'
     : ['commerce', 'beauty'].includes(domain?.id) ? 'brand-landing'
     : domain?.id === 'creative' ? 'portfolio'
     : null;
   if (swap) type = kb.pageTypes.find((t) => t.id === swap) ?? type;
 }
+// A conference is an event first, whatever its subject ("a design conference" is not a design studio).
+if (type.id === 'event' && domain?.id !== 'events') domain = kb.domains.find((d) => d.id === 'events') ?? domain;
 const moodHits = Object.entries(kb.moods).filter(([w]) => has(w));
 const mood = Object.assign({}, ...moodHits.map(([, v]) => v));
 // A style is applied only when the brief names a mood; the domain's style is offered, not imposed.
@@ -132,6 +134,13 @@ if (brandSrc) {
 for (const [k, v] of Object.entries(lookFlags)) if (v) profile[k] = v;
 const overrideArgs = Object.entries(brand?.overrides ?? {}).flatMap(([k, v]) => ['--override', `${k}=${v}`]);
 const styleOffer = !profile.style && domain?.style ? domain.style : null;
+// Why this typeface: a flag the person passed, the brand they gave, the subject's own lettering, or its use.
+const pairingUse = (id) => JSON.parse(readFileSync(join(root, 'tokens/typography/source.json'), 'utf8')).pairings.find((x) => x.id === id)?.use ?? '';
+const typeWhy = lookFlags.typography ? 'you chose it'
+  : brand?.type?.typography === profile.typography ? brand.type.reason
+  : mood.typography === profile.typography ? 'the brief names the mood'
+  : domain?.typography === profile.typography && domain?.typeWhy ? domain.typeWhy
+  : `it is made for ${pairingUse(profile.typography).split('. ')[0].replace(/\.$/, '').toLowerCase()}` || null;
 
 // ---------------------------------------------------------------- product name for copy
 const quoted = brief.match(/["“']([^"”']{2,40})["”']/)?.[1];
@@ -212,7 +221,7 @@ const directions = {
 };
 // Ask only what the brief leaves open, most useful first, three at most. Everything else has a sound default.
 const saysAction = ['sign up', 'signup', 'waitlist', 'demo', 'buy', 'install', 'download', 'subscribe', 'contact', 'book', 'trial', 'donate', 'apply', 'shop', 'order', 'reserve', 'action', 'booking', 'appointment', 'appointments', 'tour', 'cta', 'enquire', 'get a quote', 'join', 'register'].some(has);
-const actionDefault = { commerce: 'one "Shop" or "Add to bag" action, with the price beside it', beauty: 'one "Shop" action, with the price beside it', hospitality: '"Book", leading to dates and party size', health: '"Book an appointment", with a phone number as the quiet alternative', travel: '"Check availability", with dates', property: '"Get a quote" or "Book a viewing"', media: '"Listen" or "Subscribe"', public: 'the one task the page exists for, as a verb ("Apply", "Renew")' }[domain?.id] ?? 'a free start ("Start free"), with a quieter second link to a demo or the docs';
+const actionDefault = { construction: '"Get a quote", with the phone number beside it', education: '"Book a place" or "Visit us"', transport: '"See times" or "Plan a journey"', commerce: 'one "Shop" or "Add to bag" action, with the price beside it', beauty: 'one "Shop" action, with the price beside it', hospitality: '"Book", leading to dates and party size', health: '"Book an appointment", with a phone number as the quiet alternative', travel: '"Check availability", with dates', property: '"Get a quote" or "Book a viewing"', media: '"Listen" or "Subscribe"', public: 'the one task the page exists for, as a verb ("Apply", "Renew")' }[domain?.id] ?? 'a free start ("Start free"), with a quieter second link to a demo or the docs';
 const typeAction = { event: '"Get a ticket", with the price in the button', cause: '"Donate"; if people also come here for help, that route is the first button in the hero and Donate stays in the bar', 'service-landing': '"Book a call" or "Book an appointment", with the phone number beside it; a mailto: or tel: link is a real action when there is no booking system', 'brand-landing': 'one "Shop" action, with the price beside it', venue: '"Book" or "Plan your visit", leading to dates and party size', portfolio: '"Get in touch", leading to an email address', about: '"Contact us" or "See open roles"' }[type.id];
 const questions = [
   restyle && { id: 'keep', ask: 'What must stay as it is (logo, brand colour, copy, layout)?', why: 'A restyle changes the surface; it should not move what people already know.', default: 'keep the content and structure, change tokens and components only' },
@@ -223,7 +232,7 @@ const questions = [
 ].filter(Boolean).slice(0, 3);
 
 const typeAudience = { 'service-landing': 'people with a problem who are choosing whom to trust: they need what you do, what it costs and how to reach a person', cause: 'two readers: people who need help now, and people deciding whether to give; both need plain facts', event: 'people deciding whether to come: they need the date, the place, the programme and the price', venue: 'guests deciding where to go, who need what is on offer, the hours and a way to book', 'brand-landing': 'shoppers comparing, who need the object, the price, delivery and returns up front', portfolio: 'clients judging taste, so the work leads and words stay short', about: 'people checking who is behind this before they buy, apply or call' }[type.id];
-const domainAudience = { finance: 'people who check figures and need to trust them', trading: 'people watching numbers change who need speed and density', devtool: 'developers who want the facts, the code and the limits', analytics: 'people who need one answer fast, then the detail', health: 'people who may be anxious and need calm, plain steps', public: 'anyone, on any device, including people with low vision or little time', commerce: 'shoppers comparing, who need the price, delivery and returns up front', editorial: 'readers who came to read, so the text comes first', productivity: 'teams who want to see the product working, not adjectives', creative: 'clients judging taste, so the work leads and words stay short', playful: 'families and younger users who need big targets and friendly words', enterprise: 'buyers and admins who need proof, controls and compliance', travel: 'people planning, who need dates, prices and photos they trust', beauty: 'people choosing with their eyes, so the product and its result lead and the words stay few', hospitality: 'guests deciding where to go, who need the menu or rooms, the hours and a way to book', media: 'listeners and viewers who came for the thing itself, so controls stay out of the way', property: 'people making a large, slow decision who need plain numbers and no pressure', social: 'people here for each other, so their content leads and the chrome stays quiet' };
+const domainAudience = { finance: 'people who check figures and need to trust them', trading: 'people watching numbers change who need speed and density', devtool: 'developers who want the facts, the code and the limits', analytics: 'people who need one answer fast, then the detail', health: 'people who may be anxious and need calm, plain steps', public: 'anyone, on any device, including people with low vision or little time', commerce: 'shoppers comparing, who need the price, delivery and returns up front', editorial: 'readers who came to read, so the text comes first', productivity: 'teams who want to see the product working, not adjectives', creative: 'clients judging taste, so the work leads and words stay short', playful: 'families and younger users who need big targets and friendly words', enterprise: 'buyers and admins who need proof, controls and compliance', travel: 'people planning, who need dates, prices and photos they trust', beauty: 'people choosing with their eyes, so the product and its result lead and the words stay few', hospitality: 'guests deciding where to go, who need the menu or rooms, the hours and a way to book', media: 'listeners and viewers who came for the thing itself, so controls stay out of the way', property: 'people making a large, slow decision who need plain numbers and no pressure', social: 'people here for each other, so their content leads and the chrome stays quiet', construction: 'homeowners about to spend a lot, who want the price, the time it takes and a phone number they can ring', education: 'parents deciding where their children go, who need the times, the place, the cost and who is in charge', transport: 'people on the move, who need the next time and the place, fast, on a phone' };
 const audience = typeAudience ?? (domain && domainAudience[domain.id]) ?? 'not clear from the brief: write one line (who they are, what they came to do) and state it with your plan';
 const plan = {
   brief,
@@ -237,6 +246,7 @@ const plan = {
     product: product ?? 'not named in the brief; ask or use the product\'s real name, never a placeholder',
   },
   profile,
+  typeWhy,
   brand,
   styleOffer,
   questions,
@@ -548,7 +558,7 @@ if (brand) {
   if (brand.contrastFailures?.length) L.push(`Contrast: ${brand.contrastFailures.join('; ')}.`);
   L.push('');
 }
-L.push(`Palette \`${profile.palette}\` (${profile.mode}), type \`${profile.typography}\`, density \`${profile.density}\`${profile.style ? `, style \`${profile.style}\`` : ', no style'}.${brand?.palette ? ' Palette and type come from the brand (above).' : domain ? ` Chosen for the ${domain.id} domain.` : ' No domain recognised, so these are the neutral defaults.'}`);
+L.push(`Palette \`${profile.palette}\` (${profile.mode}), type \`${profile.typography}\`${typeWhy ? ` (${typeWhy})` : ''}, density \`${profile.density}\`${profile.style ? `, style \`${profile.style}\`` : ', no style'}.${brand?.palette ? ' Palette and type come from the brand (above).' : domain ? ` Chosen for the ${domain.id} domain.` : ' No domain recognised, so these are the neutral defaults.'}`);
 if (styleOffer) L.push(`If the brief wants more character, add \`--style ${styleOffer}\`.`);
 L.push('', '```sh', install, '```', '');
 if (startWith === 'blueprint') {
