@@ -38,6 +38,33 @@
 }
 @media (prefers-reduced-motion: reduce) { :root { --dur-entrance: 1ms; --dur-count: 1ms; --dur-moment: 1ms; } }
 
+/* Micro-interactions: how a control answers a touch. Small, quick and physical: a button sinks a pixel and
+   springs back, a switch thumb overshoots and settles, a tick draws itself, a field that will not take its
+   value shakes once, a copy button says it copied. Used by button, toggle-switch, checkbox, text-field and
+   copy-button. Transform and opacity only (the tick's stroke is paint), never layout; all of it is still under
+   reduced motion, the profile's data-motion="reduced", and in print. */
+:root {
+  --press-settle: 1.5px;                              /* how far a pressed button sinks; never a scale-up on hover */
+  --dur-press: 70ms;                                  /* going down: at once */
+  --dur-release: 360ms;                               /* coming back: a spring that passes its rest and settles */
+  --ease-release: cubic-bezier(0.3, 1.9, 0.45, 1);
+  --dur-toggle: 320ms;                                /* a switch thumb crossing its track */
+  --ease-overshoot: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --press-stretch: 1.22;                              /* a held switch thumb stretches toward where it will go */
+  --dur-draw: 240ms;                                  /* a tick drawing itself, after the box fills */
+  --delay-draw: 50ms;
+  --dur-shake: 420ms;                                 /* a field that failed: one damped shake */
+  --shake-x: 6px;
+  --dur-confirm: 260ms;                               /* a message or a "Copied" arriving */
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --press-settle: 0px; --press-stretch: 1; --shake-x: 0px; --dur-press: 1ms; --dur-release: 1ms; --dur-toggle: 1ms; --dur-draw: 1ms; --delay-draw: 0ms; --dur-shake: 1ms; --dur-confirm: 1ms; --ease-release: linear; --ease-overshoot: linear; }
+}
+[data-motion="reduced"] { --press-settle: 0px; --press-stretch: 1; --shake-x: 0px; --dur-press: 1ms; --dur-release: 1ms; --dur-toggle: 1ms; --dur-draw: 1ms; --delay-draw: 0ms; --dur-shake: 1ms; --dur-confirm: 1ms; --ease-release: linear; --ease-overshoot: linear; }
+@keyframes lt-shake { 0%, 100% { transform: none; } 16% { transform: translateX(calc(var(--shake-x) * -1)); } 34% { transform: translateX(calc(var(--shake-x) * 0.8)); } 52% { transform: translateX(calc(var(--shake-x) * -0.45)); } 70% { transform: translateX(calc(var(--shake-x) * 0.2)); } }
+@keyframes lt-arrive { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@keyframes lt-roll-in { from { opacity: 0; transform: translateY(60%); } to { opacity: 1; transform: none; } }
+
 /* Figures that count keep their width: every digit is the same width, so the line never jumps. */
 [data-count=""] { font-variant-numeric: tabular-nums; }
 
@@ -92,3 +119,8 @@
   [data-entrance] *, [data-scroll] *, [data-zoom], [data-parallax] { animation: none !important; opacity: 1 !important; transform: none !important; clip-path: none !important; }
 }
 [data-motion="reduced"] :is([data-entrance] *, [data-scroll] *, [data-zoom], [data-parallax]) { animation: none !important; }
+/* The profile's reduced motion stills the scroll moments that are pure CSS too: the statement lights at once
+   and the stack is a list. (Their scripts already read data-motion.) */
+[data-motion="reduced"] .lt-statement :is(h1, h2, [data-w]) { animation: none !important; opacity: 1 !important; color: inherit; }
+[data-motion="reduced"] .lt-stack-cards li { position: static !important; }
+@media print { :is(.lt-btn, .lt-switch, .lt-check, .lt-field, .lt-copy), :is(.lt-btn, .lt-switch, .lt-check, .lt-field, .lt-copy) * { animation: none !important; transition: none !important; } }
