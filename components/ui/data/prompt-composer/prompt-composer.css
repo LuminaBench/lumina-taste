@@ -21,3 +21,8 @@
   [data-part="sent"]:empty { display: none; }
   @container (max-width: 380px) { [data-part="hint"], [data-part="count"] { display: none; } [data-part="send"] { margin-left: auto; } }
 }
+/* Touch: the 32px buttons and the mode pills keep their look and get a 44px hit area (an inset ::before). */
+@media (pointer: coarse) {
+  .lt-composer :is([data-part="attach"], [data-part="send"], [data-part="mode"] button) { position: relative; }
+  .lt-composer :is([data-part="attach"], [data-part="send"], [data-part="mode"] button)::before { content: ""; position: absolute; inset: min(0px, calc((100% - var(--hit, 44px)) / 2)); }
+}

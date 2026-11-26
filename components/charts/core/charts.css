@@ -77,3 +77,8 @@
   .lt-spark-table .lt-spark { width: 64px; height: auto; }
   .lt-spark-table td:last-child .lt-spark { width: 40px; }
 }
+/* Hold a chart's place before its script draws it, so drawing after load moves nothing below it. Put data-chart-slot on
+   the host (a card or the element you render into) and set --chart-slot to the height it renders at; the defaults fit a
+   chart at its default height with a title, and a compact KPI. */
+[data-chart-slot] { min-height: var(--chart-slot, 380px); }
+[data-chart-slot="kpi"] { min-height: var(--chart-slot, 100px); }

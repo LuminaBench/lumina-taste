@@ -32,3 +32,10 @@
   :scope[data-collapsed] a > span, :scope[data-collapsed] [data-part="count"] { display: none; }
   :scope[data-collapsed] [data-part="section"] { height: 1px; margin: var(--gap-sm) 8px; overflow: hidden; color: transparent; background: var(--border-hairline); }
 }
+/* Touch: rows 44px tall, a wider rail when collapsed, and a 44px hit area on the collapse button. */
+@media (pointer: coarse) {
+  .lt-sidebar nav a { min-height: var(--hit, 44px); }
+  .lt-sidebar.lt-sidebar[data-collapsed] { --w: 64px; }
+  .lt-sidebar [data-part="collapse"] { position: relative; }
+  .lt-sidebar [data-part="collapse"]::before { content: ""; position: absolute; inset: min(0px, calc((100% - var(--hit, 44px)) / 2)); }
+}

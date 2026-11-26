@@ -29,3 +29,8 @@
   dt { color: var(--text-muted); font-size: var(--text-ui-xs); }
   dd { margin: 0; }
 }
+/* Touch: the sort buttons in the header keep their look and get a 44px hit area. */
+@media (pointer: coarse) {
+  .lt-table th button { position: relative; }
+  .lt-table th button::before { content: ""; position: absolute; inset: min(0px, calc((100% - var(--hit, 44px)) / 2)) 0; }
+}

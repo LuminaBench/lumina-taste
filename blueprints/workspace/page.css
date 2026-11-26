@@ -136,3 +136,5 @@ body { overflow: hidden; background: var(--bg-canvas); }
   .ws-count { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .ws-inspector { transition: none !important; } }
+/* Touch: the filter field is a full 44px target inside its frame. */
+@media (pointer: coarse) { .ws-find { height: auto; } .ws-find input { height: var(--hit, 44px); } }
