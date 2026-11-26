@@ -181,6 +181,46 @@ export const TYPOGRAPHY = [
     "id": "rounded",
     "name": "Friendly Rounded",
     "webfont": "https://fonts.googleapis.com/css2?family=Nunito:wght@400..800&display=swap"
+  },
+  {
+    "id": "signage",
+    "name": "Signage Grotesk",
+    "webfont": "https://fonts.googleapis.com/css2?family=Overpass:wght@400..800&family=Overpass+Mono:wght@400..600&display=swap"
+  },
+  {
+    "id": "hyperlegible",
+    "name": "Hyperlegible Care",
+    "webfont": "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400..700&family=Atkinson+Hyperlegible+Mono:wght@400..600&display=swap"
+  },
+  {
+    "id": "stamped",
+    "name": "Stamped Slab",
+    "webfont": "https://fonts.googleapis.com/css2?family=Bitter:wght@700..800&family=Work+Sans:wght@400..600&family=Courier+Prime&display=swap"
+  },
+  {
+    "id": "stadium",
+    "name": "Wide Sport Display",
+    "webfont": "https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,700..800&family=Barlow:wght@400;500;600&display=swap"
+  },
+  {
+    "id": "legal",
+    "name": "Document Serif",
+    "webfont": "https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400..700&display=swap"
+  },
+  {
+    "id": "workbench",
+    "name": "Workbench Sans + Mono",
+    "webfont": "https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400..700&family=Spline+Sans+Mono:wght@400..600&display=swap"
+  },
+  {
+    "id": "schoolbook",
+    "name": "Schoolbook Rounded",
+    "webfont": "https://fonts.googleapis.com/css2?family=Fredoka:wght@500..600&family=Lexend:wght@300..600&display=swap"
+  },
+  {
+    "id": "stencil",
+    "name": "Site Condensed",
+    "webfont": "https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,700..800&family=Sofia+Sans:wght@400..600&display=swap"
   }
 ];
 export const STYLES = [
