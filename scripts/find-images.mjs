@@ -106,34 +106,61 @@ async function commons(q) {
 }
 
 // Photographs of the thing, not artworks, documents or portraits of it.
-const ART = /\b(MET|NGA|DP\d+|painting|paintings|engraving|drawing|lithograph|etching|woodcut|illustration|poster|print|manuscript|holy|saint|madonna|portrait of|plate \d+|fig\.|scan(ned)?|map|diagram|logo|icon|clipart|clip art|vector|cartoon|chart|infographic|screenshot|book page|page \d+|newspaper|stamp|coin|banknote|postcard|catalog(ue)?|advert|advertisement|sculpture|statue|mosaic|fresco|tapestry)\b/i;
-// A person as the subject: a "customer", a "team member". Kept out of unattended fills.
-const PEOPLE = /\b(portrait|selfie|headshot|face|faces|woman|women|man|men|girl|girls|boy|boys|lady|gentleman|person|people|model|smiling|smile|posing|posed|bride|groom|wedding|family|couple|child|children|kid|kids|baby|crowd|businessman|businesswoman|student|students)\b/i;
+const ART = /\b(image art|MET|NGA|DP\d+|painting|paintings|engraving|drawing|lithograph|etching|woodcut|illustration|poster|print|manuscript|holy|saint|madonna|portrait of|plate \d+|fig\.|scan(ned)?|map|diagram|logo|icon|clipart|clip art|vector|cartoon|chart|infographic|screenshot|book page|page \d+|newspaper|stamp|coin|banknote|postcard|catalog(ue)?|advert|advertisement|sculpture|statue|mosaic|fresco|tapestry)\b/i;
+// The same, from a picture's tags (exact tags, since a tag like "coffee painting" is a strong sign).
+const ART_TAG = /^(ad|advertisement|art|artwork|modern art|fine art|painting|oil painting|watercolor|watercolour|illustration|drawing|sketch|vector|clipart|poster|print|lithograph|engraving|vintage illustration|public domain illustration|cartoon|graphic|pattern|texture|mockup|3d|render)$|\b(painting|illustration|drawing|artwork)\b/;
+// A person as the subject: a "customer", a "team member". Kept out of unattended fills, and ranked down when only
+// the tags mention people.
+const PEOPLE = /\b(portrait|selfie|headshot|face|faces|woman|women|man|men|girl|girls|boy|boys|lady|gentleman|person|people|model|smiling|smile|posing|posed|bride|groom|wedding|family|couple|child|children|kid|kids|baby|crowd|businessman|businesswoman|student|students|worker|workers|officer|officers|policeman|policemen|customer|customers|bartender|waiter|waitress|staff|team)\b/i;
+// The stock-photo stand-ins for "work": a laptop on a café table, a handshake. Ranked down unless searched for.
+const CLICHE = /\b(laptop|notebook|computer|smartphone|business|teamwork|meeting|handshake|startup|technology|working|coworking)\b/i;
 // Watermarked or stock-preview sources, and old or archival photographs that rarely suit a current business.
 const WATERMARK = /\b(watermark|watermarked|shutterstock|istock|getty|dreamstime|depositphotos|alamy|123rf|preview|sample)\b/i;
-const ARCHIVE = /\b(18\d\d|19[0-6]\d)s?\b|\b(archive|archival|historic|historical|vintage|antique|old photo|circa|c\.\s?\d{3,4}|library of congress|national archives)\b/i;
+const ARCHIVE = /\b(18\d\d|19[0-6]\d)s?\b|\b(archive|archival|historic|historical|history|vintage|antique|old photo|circa|c\.\s?\d{3,4}|library of congress|national archives|retro|analog|analogue|john margolies)\b/i;
+const ARCHIVE_PROVIDERS = /^(libraryofcongress|nypl|smithsonian|met|nasa|europeana|brooklynmuseum|clevelandmuseum|rijksmuseum|statensmuseum|thorvaldsensmuseum|woc|sciencemuseum|wellcome|digitaltmuseum|iha)$/i;
+// Weak picks even when on topic: black and white in a colour set, words printed in the picture, another business's
+// shop sign.
+const WEAK = { mono: /^(blackandwhite|black and white|black & white|monochrome|b&w|bw|grayscale|greyscale)$/, words: /^(letters|lettering|text|quote|quotes|typography|slogan|words|sign|signs|neon sign)$/, signage: /^(shopfront|shopfronts|storefront|storefronts|signage|shop sign)$|\bshopfronts? in\b/ };
+// Sources whose API address serves a preview of about this width, whatever size the original is.
+const SERVED = { rawpixel: 1024, stocksnap: 960, flickr: 1024 };
 
-/** Both sources, one request at a time, best first. strict: an unattended fill (Openverse photographs only, no people). */
+/** Both sources, one request at a time, best first. strict: an unattended fill (no people or old photographs at all). */
 async function search(q, { strict = false } = {}) {
   const all = [], failed = [];
-  for (const fn of strict ? [openverse] : [openverse, commons]) {
+  for (const fn of [openverse, commons]) {
     try { all.push(...await fn(q)); } catch (e) { failed.push(e.message); }
   }
   const want = orientation === 'wide' ? 1.5 : orientation === 'tall' ? 0.75 : orientation === 'square' ? 1 : null;
   const words = q.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
-  const text = (c) => `${c.title} ${c.page ?? ''} ${(c.tags ?? []).join(' ')} ${c.description ?? ''}`.replace(/[_-]+/g, ' ').toLowerCase();
+  const phrase = words.join(' ');
+  const tags = (c) => (c.tags ?? []).map((t) => t.replace(/[_-]+/g, ' ').trim()).filter(Boolean);
+  const text = (c) => `${c.title} ${c.page ?? ''} ${tags(c).join(' ')} ${c.description ?? ''}`.replace(/[_-]+/g, ' ').toLowerCase();
   const head = (c) => `${c.title} ${c.page ?? ''}`.replace(/[_-]+/g, ' ').toLowerCase();
   const subjectWords = subject.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
   const stem = (w) => w.replace(/(ies|es|s)$/, '');
-  const hits = (c, list) => list.filter((w) => text(c).includes(stem(w))).length;
-  const relevant = (c) => hits(c, words) > 0 && (!strict || !subjectWords.length || hits(c, subjectWords) > 0);
-  // Large and sharp counts; so does the title naming the thing (a tag alone is weaker); credit-needed and
-  // Commons files (more scans and diagrams) count against.
-  const score = (c) => Math.min(c.width, 2400) / 2400
+  // A word counts where it stands as a word ("office", "offices", not "officer"): in the title or address, in the
+  // description, or as a tag of its own; a tag only counts towards a longer search when it holds the whole phrase,
+  // so "law enforcement" is not half of "law office".
+  const has = (hay, w) => new RegExp(`\\b${stem(w).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(s|es|ies)?\\b`).test(hay);
+  const tagHit = (c, w) => tags(c).some((t) => t === w || t === stem(w) || has(t, w) && (words.length < 2 || t.includes(phrase) || t.split(' ').length === 1));
+  const hits = (c, list) => list.filter((w) => has(head(c), w) || has(c.description ?? '', w) || tagHit(c, w)).length;
+  // Every word of a short search must be there (a search for "law office" should not bring back "law enforcement"
+  // at a customs "office"), and an unattended fill must also name the business's subject.
+  const relevant = (c) => hits(c, words) >= (words.length <= 3 ? words.length : Math.ceil(words.length / 2)) && (!strict || !subjectWords.length || hits(c, subjectWords) > 0);
+  const phraseIn = (c) => words.length > 1 && (head(c).includes(phrase) || tags(c).some((t) => t.includes(phrase)));
+  const peopleTags = (c) => tags(c).filter((t) => PEOPLE.test(t)).length;
+  // Large counts; so do the title naming the thing and the whole search appearing as a phrase; credit-needed
+  // pictures, Commons files (more scans and diagrams), people in the tags and old photographs count against.
+  const served = (c) => Math.min(c.width, SERVED[c.provider] ?? Infinity);
+  const weak = (c) => Object.values(WEAK).filter((re) => tags(c).some((t) => re.test(t))).length;
+  const score = (c) => Math.min(served(c), 2400) / 2400
     + (want && c.height ? 1 - Math.min(1, Math.abs(c.width / c.height - want)) : 0)
-    + 0.35 * Math.min(1, words.filter((w) => head(c).includes(stem(w))).length / Math.max(1, words.length))
-    + 0.15 * Math.min(1, hits(c, words) / Math.max(1, words.length))
-    - (c.needsCredit ? 0.15 : 0) - (c.source === 'commons' ? 0.25 : 0)
+    + 0.35 * Math.min(1, words.filter((w) => has(head(c), w)).length / Math.max(1, words.length))
+    + (phraseIn(c) ? 0.5 : 0)
+    - (c.needsCredit ? 0.15 : 0) - (c.source === 'commons' ? 0.1 : 0) - weak(c) * 0.3
+    - Math.min(0.6, peopleTags(c) * 0.2)
+    - (CLICHE.test(`${head(c)} ${tags(c).join(' | ')}`) && !CLICHE.test(phrase) ? 0.3 : 0)
+    - (ARCHIVE.test(tags(c).join(' | ')) ? 0.5 : 0)
     - (c.height && (c.width / c.height > 2.4 || c.width / c.height < 0.45) ? 0.6 : 0);
   const seen = new Set();
   const why = (c) => {
@@ -144,10 +171,11 @@ async function search(q, { strict = false } = {}) {
     if (c.bytes && c.bytes < MIN_BYTES) return 'tiny file';
     if (c.mime && !/^image\/(jpeg|png|webp)$/.test(c.mime)) return `not a photograph (${c.mime})`;
     if (c.licenceCode && !LICENCES.includes(c.licenceCode)) return 'licence';
-    if (ART.test(head(c)) || (c.source === 'commons' && ART.test(text(c)))) return 'artwork or document';
+    if (ART.test(head(c)) || (c.source === 'commons' && ART.test(text(c))) || tags(c).some((t) => ART_TAG.test(t))) return 'artwork or document';
     if (WATERMARK.test(text(c))) return 'watermark';
-    if (strict && PEOPLE.test(head(c))) return 'people';
-    if (strict && ARCHIVE.test(head(c))) return 'archival';
+    // People and old photographs are left out unless the search asks for them.
+    if (!PEOPLE.test(phrase) && (strict ? PEOPLE.test(head(c)) || peopleTags(c) >= 2 : peopleTags(c) >= 3 || (PEOPLE.test(c.title) && peopleTags(c) >= 1))) return 'people';
+    if (!ARCHIVE.test(phrase) && (ARCHIVE.test(head(c)) || ARCHIVE_PROVIDERS.test(c.provider ?? '') || ARCHIVE_PROVIDERS.test(String(c.creator).replace(/\s+/g, '')) || tags(c).filter((t) => ARCHIVE.test(t)).length >= 2 || (strict && ARCHIVE.test(tags(c).join(' | '))))) return 'archival';
     if (!relevant(c)) return 'off topic';
     if (seen.has(c.url)) return 'duplicate';
     seen.add(c.url);
@@ -248,11 +276,11 @@ const briefed = empty.filter((m) => /data-shot="[^"]+"/.test(m[0]));
 if (!empty.length) { console.log('No empty picture stand-ins (art panels without a photograph) on this page.'); cleanup(); process.exit(0); }
 // The brief, minus the photographic notes ("window light, 4:5"), plus the subject, is the search.
 const STOP = /^(the|a|an|on|in|of|with|and|from|at|by|through|behind|beside|same|no|people|posed|shot|level|light|morning|evening|soft|side|window|table|counter|alone|pale|wooden|sitting|everyday|bright|across|road|nothing|else|its|their|our|your|one|two|three|four|five|six|full|half|close|wide|top|down|left|right|front|back|overcast|natural|steam|rising|handle|rim)$/i;
-// From the most specific search to the plainest: the brief's main words with the subject, the two main words,
-// then the subject alone. The first that finds an openly licensed photograph wins.
+// From the most specific search to the plainest: the brief's main words with the subject, its first noun with
+// the subject, the two main words, then the subject alone. The first that finds an openly licensed photograph wins.
 const queries = (shot) => {
   const words = shot.replace(/\b\d+:\d+\b/g, ' ').split(/[,.;·]/)[0].split(/\s+/).filter((w) => w && !STOP.test(w) && /[a-z]/i.test(w));
-  return [...new Set([`${words.slice(0, 3).join(' ')} ${subject}`.trim(), words.slice(0, 2).join(' '), words.slice(-2).join(' '), subject].filter((q) => q.trim().length > 2))];
+  return [...new Set([`${words.slice(0, 3).join(' ')} ${subject}`.trim(), `${words[0] ?? ''} ${subject}`.trim(), words.slice(0, 2).join(' '), words.slice(-2).join(' '), subject].filter((q) => q.trim().length > 2))];
 };
 const ratioOf = (tag) => /data-ratio="([\d.]+\/[\d.]+)"/.exec(tag)?.[1] ?? '4/5';
 // One ratio for the whole set: the one most panels already use, unless --ratio says otherwise.

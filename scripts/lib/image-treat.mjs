@@ -232,7 +232,7 @@ async function treatInPage({ url, ratio, widths, quality, grade, colours, streng
     const gam = Math.min(1.25, Math.max(0.8, 1 + (Math.log(0.48) / Math.log(Math.max(0.05, Math.min(0.95, medL))) - 1) * 0.6));
     // Colour strength to one level for the set.
     const satTarget = grade === 'mono' ? 0 : grade === 'duotone' ? 0.12 : 0.2;
-    const sf = grade === 'mono' ? 0 : Math.min(1.15, Math.max(0.55, satTarget / Math.max(0.02, sat)));
+    const sf = grade === 'mono' ? 0 : Math.min(1.15, Math.max(0.7, satTarget / Math.max(0.02, sat)));
     const ink = hex(colours.ink), paper = hex(colours.paper), accent = hex(colours.accent);
     // The tone ramp: shadows towards the ink, highlights towards the paper, mid-tones towards the accent.
     const ramp = grade === 'duotone' ? [mix(ink, accent, 0.35), mix(mix(accent, paper, 0.45), ink, 0.08), paper]

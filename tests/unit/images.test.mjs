@@ -114,6 +114,36 @@ test('find-images fills stand-ins with treated, responsive pictures, and draws t
   } finally { server.close(); rmSync(dir, { recursive: true, force: true }); }
 });
 
+test('ranking: every word of the search, no officers for "law office", no old or watermarked photographs, full-size sources first', async () => {
+  const server = createServer((req, res) => {
+    const u = new URL(req.url, 'http://x');
+    res.setHeader('content-type', 'application/json');
+    const r = (title, extra = {}) => ({ title, creator: 'A', license: 'cc0', url: `http://x/${encodeURIComponent(title)}.jpg`, foreign_landing_url: `http://x/${encodeURIComponent(title)}`, width: 4000, height: 3000, ...extra });
+    if (u.pathname === '/ov/') return res.end(JSON.stringify({ results: [
+      r('Customs officers at the border office', { tags: [{ name: 'law enforcement' }, { name: 'office' }, { name: 'person' }] }),
+      r('Police car outside the station', { tags: [{ name: 'law' }, { name: 'officer' }] }),
+      r('Law offices on Main Street', { creator: 'libraryofcongress', tags: [{ name: 'vintage' }, { name: 'history' }] }),
+      r('Law office with stamp, watermark', { tags: [{ name: 'law office' }] }),
+      r('Keep calm law office mug', { provider: 'stocksnap', tags: [{ name: 'law office' }, { name: 'blackandwhite' }, { name: 'letters' }] }),
+      r('Quiet law office desk and books', { provider: 'rawpixel', tags: [{ name: 'law office' }, { name: 'desk' }] }),
+    ] }));
+    if (u.pathname === '/cm') return res.end(JSON.stringify({ query: { pages: { 1: { title: 'File:Law office reading room.jpg', imageinfo: [{ url: 'http://x/c.jpg', thumburl: 'http://x/c1800.jpg', descriptionurl: 'http://x/File:Law_office', width: 5000, height: 3600, mime: 'image/jpeg', extmetadata: { LicenseShortName: { value: 'CC0' }, Categories: { value: 'Law offices|Libraries' } } }] } } } }));
+    res.statusCode = 404; res.end();
+  });
+  await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  try {
+    const env = { LT_OPENVERSE: `http://127.0.0.1:${server.address().port}/ov/`, LT_COMMONS: `http://127.0.0.1:${server.address().port}/cm` };
+    const { out } = await run('find-images.mjs', ['law office', '--json'], env);
+    const j = JSON.parse(out);
+    assert.deepEqual(j.candidates.map((c) => c.title), ['Law office reading room', 'Quiet law office desk and books', 'Keep calm law office mug']);
+    const why = Object.fromEntries(j.rejected.map((x) => [x.title, x.reason]));
+    assert.ok(['off topic', 'people'].includes(why['Customs officers at the border office']));
+    assert.equal(why['Police car outside the station'], 'off topic');
+    assert.equal(why['Law offices on Main Street'], 'archival');
+    assert.equal(why['Law office with stamp, watermark'], 'artwork or document');
+  } finally { server.close(); }
+});
+
 test('treat-images crops a set to one ratio, finds the subject, grades it and writes WebP; without a browser it copies', async () => {
   const dir = mkdtempSync(join(tmpdir(), 'lt-treat-'));
   try {
