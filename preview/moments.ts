@@ -151,7 +151,8 @@ async function playMicro(stage: HTMLElement, id: string, alive: () => boolean) {
     input.type = 'text'; input.type = 'email';
     await sleep(200);
     if (!alive()) return;
-    form.requestSubmit();
+    // The check that runs when someone leaves the field, without moving their focus: a replay never steals it.
+    input.dispatchEvent(new Event('blur'));
   } else if (id === 'copy') {
     const b = stage.querySelector<HTMLElement>('.lt-copy')!, text = b.querySelector('[data-part="text"]')!;
     await press(b, 120);

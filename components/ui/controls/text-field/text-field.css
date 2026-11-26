@@ -19,7 +19,7 @@
   [data-part="message"] { margin: 6px 2px 0; min-height: 1.35em; font-size: var(--text-ui-xs); color: var(--text-muted); }
   :scope[data-state="valid"] [data-part="valid"] { opacity: 1; scale: 1; }
   :scope[data-state="invalid"] input { border-color: var(--status-negative); }
-  :scope[data-state="invalid"] input:focus { box-shadow: 0 0 0 1px var(--status-negative); }
+  :scope[data-state="invalid"] input:focus { box-shadow: 0 0 0 1px var(--status-negative), 0 0 0 4px color-mix(in oklab, var(--status-negative) 26%, transparent); }
   :scope[data-state="invalid"] [data-part="message"] { color: var(--status-negative); }
   :scope:has(input:disabled) { opacity: 0.55; }
   /* A field that fails when it is checked (on leaving it, or on submit) shakes once, gently, and its message
