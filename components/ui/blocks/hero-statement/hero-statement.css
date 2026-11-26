@@ -17,6 +17,14 @@
   [data-part="foot"]:not(:has(> [data-part="facts"])) [data-part="cta"] { margin-top: 0; }
   [data-part="lede"] { margin: 0; max-width: 44ch; color: var(--text-secondary); font-size: var(--step-1); line-height: 1.5; text-wrap: pretty; }
   [data-part="cta"] { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  /* On a phone the actions stack from the start: two buttons that only just fit on one line would jump to two
+     when the web font arrives (or not, depending on the face), moving everything below. */
+  @media (max-width: 479.98px) {
+    [data-part="cta"] { flex-direction: column; align-items: flex-start; }
+    /* A text-style action under the button keeps the column's left edge: its padding hangs outside it. */
+    [data-part="cta"] > .lt-btn[data-variant="ghost"] { margin-inline-start: calc(-1 * var(--control-px)); }
+    [data-part="cta"] > .lt-btn[data-variant="ghost"][data-size="lg"] { margin-inline-start: calc(-1 * (var(--control-px) + 6px)); }
+  }
   [data-part="facts"] { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
   [data-part="facts"] > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 6px; padding: 0 20px; border-left: var(--bw) var(--border-style) var(--border-hairline); }
   [data-part="facts"] > div:first-child { padding-left: 0; border-left: 0; }

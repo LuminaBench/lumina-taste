@@ -70,3 +70,34 @@ test('Tailwind gets theme and utilities without Preflight, which would strip the
     assert.match(css, /@custom-variant dark \(&:where\(\[data-mode="dark"\]/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
+
+test('a first Next.js blueprint install takes the blueprint\'s own look; flags and an existing profile still win', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lt-next-theme-'));
+  try {
+    assert.equal(install(dir, ['--framework', 'next', '--blueprints', 'venue']).status, 0);
+    const p = JSON.parse(readFileSync(join(dir, 'taste-profile.json'), 'utf8'));
+    assert.deepEqual([p.palette, p.typography, p.density], ['forest-brass', 'stamped', 'spacious'], 'the venue blueprint\'s theme, not precision');
+    assert.match(readFileSync(join(dir, 'app/layout.tsx'), 'utf8'), /data-type="stamped"/);
+    assert.equal(install(dir, ['--framework', 'next', '--blueprints', 'practice']).status, 0);
+    assert.equal(JSON.parse(readFileSync(join(dir, 'taste-profile.json'), 'utf8')).typography, 'stamped', 'an existing profile is kept');
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+  const dir2 = mkdtempSync(join(tmpdir(), 'lt-next-theme-'));
+  try {
+    assert.equal(install(dir2, ['--framework', 'next', '--blueprints', 'practice', '--type', 'legal']).status, 0);
+    const p = JSON.parse(readFileSync(join(dir2, 'taste-profile.json'), 'utf8'));
+    assert.equal(p.typography, 'legal');
+    assert.equal(p.density, 'spacious', 'other axes still come from the blueprint');
+  } finally { rmSync(dir2, { recursive: true, force: true }); }
+});
+
+test('the install writes the pairing\'s fallback faces and the fonts line says to link them after the Google link', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lt-fallbacks-'));
+  try {
+    const r = install(dir, ['--framework', 'static', '--components', 'faq-section', '--type', 'stamped']);
+    assert.equal(r.status, 0, r.stderr);
+    const css = readFileSync(join(dir, 'lumina-taste/font-fallbacks.css'), 'utf8');
+    for (const fam of ['Bitter', 'Work Sans', 'Courier Prime']) assert.match(css, new RegExp(`font-family: "${fam} Fallback";`));
+    assert.doesNotMatch(css, /"Inter Fallback"/, 'only this pairing\'s families');
+    assert.match(r.stdout, /fonts\.googleapis\.com[^\n]*\n\s+and after it <link rel="stylesheet" href="lumina-taste\/font-fallbacks\.css">/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});

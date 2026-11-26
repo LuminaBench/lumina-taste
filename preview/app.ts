@@ -49,7 +49,7 @@ function openPanel(open: boolean) {
   themeBtn.setAttribute('aria-expanded', String(open));
   if (open) { renderPanel(); panel.querySelector<HTMLElement>('[aria-pressed="true"], [aria-checked="true"]')?.focus(); }
 }
-themeBtn.addEventListener('click', () => openPanel(panel.hidden));
+themeBtn.addEventListener('click', () => openPanel(panel.hidden !== false));
 panel.addEventListener('click', (e) => {
   const t = e.target as Element;
   if (t.closest('[data-close]')) return openPanel(false);

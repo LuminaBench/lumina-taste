@@ -244,14 +244,19 @@ const pct = (v) => `${+(v * 100).toFixed(2)}%`;
  * size for text, the desktop --step-4 for headlines (an opsz face is up to 10% narrower at headline size).
  */
 export function faceTargets(pairing, family) {
-  const roles = pairing.fonts?.find((f) => f.family === family)?.roles ?? ['body'];
+  const font = pairing.fonts?.find((f) => f.family === family);
+  const roles = font?.roles ?? ['body'];
   const display = roles.includes('display'), text = roles.includes('body') || !display;
-  const bodyOpsz = Math.round(pairing.base[1]), displayOpsz = Math.round(pairing.base[1] * pairing.ratio[1] ** 4);
   const bodyW = roles.includes('body') ? pairing.bodyWeight : 400;
-  return {
+  const at = (bodyOpsz, displayOpsz) => ({
     regular: { wght: text ? bodyW : pairing.displayWeight < 550 ? pairing.displayWeight : 400, opsz: text ? bodyOpsz : displayOpsz },
     bold: { wght: display && pairing.displayWeight >= 550 ? pairing.displayWeight : 600, opsz: display ? displayOpsz : bodyOpsz },
-  };
+  });
+  const out = at(Math.round(pairing.base[1]), Math.round(pairing.base[1] * pairing.ratio[1] ** 4));
+  // An optical-size face is narrower at headline size: on a phone the hero is far smaller (Fraunces' 40px hero is
+  // 10% wider per letter than its 76px one), so phones get faces matched at the phone's body size and hero size.
+  if (font?.axes?.opsz) out.phone = at(Math.round(pairing.base[0]), Math.round(pairing.base[0] * pairing.ratio[0] ** 5));
+  return out;
 }
 
 /**
@@ -272,7 +277,13 @@ export function fallbackFaces(family, metrics, kind = 'sans') {
     const size = sizeOf(which), m = v(which);
     return `@font-face {\n  font-family: "${family} Fallback";\n  src: ${base[which].local.map((n) => `local("${n}")`).join(', ')};\n  font-weight: ${range};\n  size-adjust: ${pct(size)};\n  ascent-override: ${pct(m.ascent / size)};\n  descent-override: ${pct(m.descent / size)};\n  line-gap-override: ${pct(m.lineGap / size)};\n}\n`;
   };
-  return { sizeAdjust: +sizeOf('regular').toFixed(4), sizeAdjustBold: +sizeOf('bold').toFixed(4), css: face('regular', '100 549') + face('bold', '550 1000'), generic: base.generic };
+  let css = face('regular', '100 549') + face('bold', '550 1000');
+  // Phone sizes for an optical-size face: the same faces, scaled for the phone's text and hero sizes.
+  if (perFace && metrics.phone) {
+    const phone = fallbackFaces(family, { regular: { ...metrics.regular, avgWidth: metrics.phone.regular.avgWidth }, bold: { ...metrics.bold, avgWidth: metrics.phone.bold.avgWidth } }, kind);
+    css += `@media (max-width: 767.98px) {\n${phone.css.replace(/^/gm, '  ').replace(/^  $/gm, '')}}\n`;
+  }
+  return { sizeAdjust: +sizeOf('regular').toFixed(4), sizeAdjustBold: +sizeOf('bold').toFixed(4), css, generic: base.generic };
 }
 
 /**
@@ -294,7 +305,7 @@ export function fallbackStylesheet(pairings) {
     + '   link it (the stacks\' installed faces look closer to the real one); self-hosted pages get these faces from fonts.mjs. */\n';
   for (const [family, { f }] of [...seen].sort(([a], [b]) => a.localeCompare(b))) {
     const m = f.metrics, v = { ascent: m.ascent, descent: m.descent, lineGap: m.lineGap };
-    css += fallbackFaces(family, { regular: { ...v, avgWidth: m.regular.avgWidth }, bold: { ...v, avgWidth: m.bold.avgWidth } }, f.fallback).css;
+    css += fallbackFaces(family, { regular: { ...v, avgWidth: m.regular.avgWidth }, bold: { ...v, avgWidth: m.bold.avgWidth }, ...(m.phone ? { phone: m.phone } : {}) }, f.fallback).css;
   }
   return css;
 }

@@ -124,7 +124,8 @@ test('source.json carries measured metrics for every family, and fallbacks.css i
   const css = readFileSync(join(root, 'tokens/typography/fallbacks.css'), 'utf8');
   assert.equal(css, fallbackStylesheet(source.pairings), 'fallbacks.css is current: run npm run tokens');
   const families = new Set(source.pairings.flatMap((p) => p.fonts.map((f) => f.family)));
-  for (const fam of families) assert.equal((css.match(new RegExp(`font-family: "${fam} Fallback";`, 'g')) ?? []).length, 2, fam);
+  const phoneFaces = new Set(source.pairings.flatMap((p) => p.fonts.filter((f) => f.metrics.phone).map((f) => f.family)));
+  for (const fam of families) assert.equal((css.match(new RegExp(`font-family: "${fam} Fallback";`, 'g')) ?? []).length, phoneFaces.has(fam) ? 4 : 2, fam);
   // Opt-in: typography.css names the fallbacks but never defines them, so pages with no web font keep their installed faces.
   assert.doesNotMatch(readFileSync(join(root, 'tokens/typography/typography.css'), 'utf8'), /@font-face/);
 });
@@ -200,3 +201,17 @@ function woff2Of(ttf) {
   const body = Buffer.concat([header, ...dir, compressed]); body.writeUInt32BE(body.length, 8);
   return body;
 }
+
+test('optical-size faces get phone fallbacks matched at the phone hero size, inside a phone media query', () => {
+  const editorial = source.pairings.find((p) => p.id === 'editorial');
+  const t = faceTargets(editorial, 'Fraunces');
+  assert.ok(t.phone, 'Fraunces has an opsz axis');
+  assert.ok(t.phone.regular.opsz < t.regular.opsz, 'the phone hero is smaller than the desktop heading it is matched at');
+  assert.equal(faceTargets(editorial, 'Inter Tight').phone, undefined, 'no opsz axis, one set of faces');
+  const m = editorial.fonts.find((f) => f.family === 'Fraunces').metrics;
+  assert.ok(m.phone.regular.avgWidth > m.regular.avgWidth, 'Fraunces is wider per letter at the smaller optical size');
+  const v = { ascent: m.ascent, descent: m.descent, lineGap: m.lineGap };
+  const css = fallbackFaces('Fraunces', { regular: { ...v, avgWidth: m.regular.avgWidth }, bold: { ...v, avgWidth: m.bold.avgWidth }, phone: m.phone }, 'serif').css;
+  assert.equal((css.match(/@font-face/g) ?? []).length, 4);
+  assert.match(css, /@media \(max-width: 767\.98px\) \{\n  @font-face \{\n    font-family: "Fraunces Fallback";/);
+});

@@ -31,11 +31,33 @@
   :scope[data-collapsed] a { justify-content: center; padding: 0; }
   :scope[data-collapsed] a > span, :scope[data-collapsed] [data-part="count"] { display: none; }
   :scope[data-collapsed] [data-part="section"] { height: 1px; margin: var(--gap-sm) 8px; overflow: hidden; color: transparent; background: var(--border-hairline); }
+  /* Before its script runs, a narrow screen already shows the rail the script will collapse it to (@media twins of
+     the script's test of the host's width: 560px, or data-collapse-below="1100"), so the page does not jump on load. */
+  @media (max-width: 559.98px) {
+    :scope:not([data-lt-ready]):not([data-collapse-below]) { --w: 60px; }
+    :scope:not([data-lt-ready]):not([data-collapse-below]) [data-part="collapse"] .lt-icon { rotate: 180deg; }
+    :scope:not([data-lt-ready]):not([data-collapse-below]) [data-part="head"] { flex-direction: column; height: auto; gap: 8px; padding: 6px 0; }
+    :scope:not([data-lt-ready]):not([data-collapse-below]) [data-part="ws-name"] { display: none; }
+    :scope:not([data-lt-ready]):not([data-collapse-below]) a { justify-content: center; padding: 0; }
+    :scope:not([data-lt-ready]):not([data-collapse-below]) a > span, :scope:not([data-lt-ready]):not([data-collapse-below]) [data-part="count"] { display: none; }
+    :scope:not([data-lt-ready]):not([data-collapse-below]) [data-part="section"] { height: 1px; margin: var(--gap-sm) 8px; overflow: hidden; color: transparent; background: var(--border-hairline); }
+  }
+  @media (max-width: 1099.98px) {
+    :scope:not([data-lt-ready])[data-collapse-below="1100"] { --w: 60px; }
+    :scope:not([data-lt-ready])[data-collapse-below="1100"] [data-part="collapse"] .lt-icon { rotate: 180deg; }
+    :scope:not([data-lt-ready])[data-collapse-below="1100"] [data-part="head"] { flex-direction: column; height: auto; gap: 8px; padding: 6px 0; }
+    :scope:not([data-lt-ready])[data-collapse-below="1100"] [data-part="ws-name"] { display: none; }
+    :scope:not([data-lt-ready])[data-collapse-below="1100"] a { justify-content: center; padding: 0; }
+    :scope:not([data-lt-ready])[data-collapse-below="1100"] a > span, :scope:not([data-lt-ready])[data-collapse-below="1100"] [data-part="count"] { display: none; }
+    :scope:not([data-lt-ready])[data-collapse-below="1100"] [data-part="section"] { height: 1px; margin: var(--gap-sm) 8px; overflow: hidden; color: transparent; background: var(--border-hairline); }
+  }
 }
 /* Touch: rows 44px tall, a wider rail when collapsed, and a 44px hit area on the collapse button. */
 @media (pointer: coarse) {
   .lt-sidebar nav a { min-height: var(--hit, 44px); }
   .lt-sidebar.lt-sidebar[data-collapsed] { --w: 64px; }
+  @media (max-width: 559.98px) { .lt-sidebar.lt-sidebar:not([data-lt-ready]):not([data-collapse-below]) { --w: 64px; } }
+  @media (max-width: 1099.98px) { .lt-sidebar.lt-sidebar:not([data-lt-ready])[data-collapse-below="1100"] { --w: 64px; } }
   .lt-sidebar [data-part="collapse"] { position: relative; }
   .lt-sidebar [data-part="collapse"]::before { content: ""; position: absolute; inset: min(0px, calc((100% - var(--hit, 44px)) / 2)); }
 }

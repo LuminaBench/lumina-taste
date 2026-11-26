@@ -29,7 +29,11 @@
             "descent": 0.255,
             "lineGap": 0,
             "regular": {"wght":500,"opsz":57,"avgWidth":0.4489},
-            "bold": {"wght":600,"opsz":57,"avgWidth":0.45643}
+            "bold": {"wght":600,"opsz":57,"avgWidth":0.45643},
+            "phone": {
+              "regular": {"wght":500,"opsz":40,"avgWidth":0.46253},
+              "bold": {"wght":600,"opsz":40,"avgWidth":0.46997}
+            }
           }
         },
         {
@@ -252,7 +256,11 @@
             "descent": 0.2412,
             "lineGap": 0,
             "regular": {"wght":400,"opsz":17,"avgWidth":0.4727},
-            "bold": {"wght":600,"opsz":62,"avgWidth":0.45314}
+            "bold": {"wght":600,"opsz":62,"avgWidth":0.45314},
+            "phone": {
+              "regular": {"wght":400,"opsz":15,"avgWidth":0.47748},
+              "bold": {"wght":600,"opsz":41,"avgWidth":0.45314}
+            }
           }
         },
         {
@@ -300,7 +308,11 @@
             "descent": 0.265,
             "lineGap": 0,
             "regular": {"wght":500,"opsz":51,"avgWidth":0.44742},
-            "bold": {"wght":600,"opsz":51,"avgWidth":0.4591}
+            "bold": {"wght":600,"opsz":51,"avgWidth":0.4591},
+            "phone": {
+              "regular": {"wght":500,"opsz":39,"avgWidth":0.4373},
+              "bold": {"wght":600,"opsz":39,"avgWidth":0.44823}
+            }
           }
         },
         {
@@ -315,7 +327,11 @@
             "descent": 0.335,
             "lineGap": 0,
             "regular": {"wght":400,"opsz":19,"avgWidth":0.45482},
-            "bold": {"wght":600,"opsz":19,"avgWidth":0.46139}
+            "bold": {"wght":600,"opsz":19,"avgWidth":0.46139},
+            "phone": {
+              "regular": {"wght":400,"opsz":17,"avgWidth":0.46459},
+              "bold": {"wght":600,"opsz":17,"avgWidth":0.47128}
+            }
           }
         },
         {
@@ -426,7 +442,7 @@
             "descent": 0.275,
             "lineGap": 0,
             "regular": {"wght":400,"opsz":15,"avgWidth":0.44898},
-            "bold": {"wght":600,"opsz":15,"avgWidth":0.465}
+            "bold": {"wght":600,"opsz":15,"avgWidth":0.46494}
           }
         }
       ]
@@ -523,7 +539,11 @@
             "descent": 0.2412,
             "lineGap": 0,
             "regular": {"wght":400,"opsz":17,"avgWidth":0.47986},
-            "bold": {"wght":600,"opsz":17,"avgWidth":0.48841}
+            "bold": {"wght":600,"opsz":17,"avgWidth":0.48841},
+            "phone": {
+              "regular": {"wght":400,"opsz":15,"avgWidth":0.47986},
+              "bold": {"wght":600,"opsz":15,"avgWidth":0.48841}
+            }
           }
         },
         {
@@ -875,7 +895,11 @@
             "descent": 0.308,
             "lineGap": 0,
             "regular": {"wght":400,"opsz":18,"avgWidth":0.47787},
-            "bold": {"wght":650,"opsz":51,"avgWidth":0.49853}
+            "bold": {"wght":650,"opsz":51,"avgWidth":0.49853},
+            "phone": {
+              "regular": {"wght":400,"opsz":16,"avgWidth":0.47819},
+              "bold": {"wght":650,"opsz":40,"avgWidth":0.5002}
+            }
           }
         }
       ]
@@ -1004,7 +1028,11 @@
             "descent": 0.2145,
             "lineGap": 0,
             "regular": {"wght":400,"opsz":68,"avgWidth":0.30952},
-            "bold": {"wght":800,"opsz":68,"avgWidth":0.38611}
+            "bold": {"wght":800,"opsz":68,"avgWidth":0.38611},
+            "phone": {
+              "regular": {"wght":400,"opsz":46,"avgWidth":0.32052},
+              "bold": {"wght":800,"opsz":46,"avgWidth":0.39395}
+            }
           }
         },
         {
