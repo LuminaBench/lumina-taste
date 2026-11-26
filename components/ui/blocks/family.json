@@ -1668,6 +1668,96 @@
       "note": "Five to twelve pictures at one ratio: a range, rooms, projects, colours. Never autoplay. For two to four things use offer-cards instead."
     },
     {
+      "id": "photo-words",
+      "name": "Photo words",
+      "summary": "One photograph across the screen with a few words set on it. The scrim sits only where the words sit, a pool of ink fading out from their corner, so the rest of the picture keeps its own light.",
+      "pattern": "<figure data-part=\"photo\"> + <div data-part=\"words\" data-tone=\"dark\">",
+      "states": ["words bottom start","words bottom end","words top start","phone (4:5, words at the foot)"],
+      "aliases": [
+        "text over image",
+        "text on photo",
+        "image with overlay text",
+        "full width photo with headline",
+        "photo banner",
+        "hero image section",
+        "scrim section",
+        "caption over photo"
+      ],
+      "react": "PhotoWords",
+      "api": "data-place=\"start-end|end-end|start-start\" · [data-part=\"photo|words|lede|cta\"]",
+      "w": 1000,
+      "preview": [],
+      "called": [
+        "a big photo with the headline on it",
+        "words over a picture that stay readable",
+        "the full-width photograph with a line of text in the corner"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"photo\"]",
+          "name": "Photograph",
+          "api": "object-fit: cover",
+          "text": "Across the screen, 72% of its height; 4:5 on a phone."
+        },
+        {
+          "sel": "[data-part=\"words\"]",
+          "name": "Words",
+          "api": "data-tone=\"dark\"",
+          "text": "A heading of up to eight words, one line under it, one action, on a scrim that fades from their corner."
+        }
+      ],
+      "prompt": "Build a photo-with-words section: one photograph across the full width of the screen (72svh tall, object-fit: cover), with a heading, one line and one button set in its bottom start corner. The scrim is not over the whole picture: it is a radial gradient of the dark ground, 82% at the corner to transparent, only behind the words, so the rest of the photograph keeps its light. Light text from the dark tokens. On a phone the photo turns 4:5 and the scrim becomes a gradient up from the bottom edge only. RTL mirrors the corner.",
+      "debug": "Debug my photo-with-words section. Rule out: a scrim over the whole picture; text over the bright part of the photo with no scrim under it; the words wider than 40em; the picture squashed instead of cropped; the corner not mirroring in RTL. The symptom:",
+      "added": 20,
+      "note": "Once a page, for the picture that says the most, with fewer than twenty words on it. The picture must be the business's own; until it exists the frame carries an art panel."
+    },
+    {
+      "id": "photo-collage",
+      "name": "Photo collage",
+      "summary": "Three to five photographs of one place or one day at different sizes, set close together: the room, the detail and the hands at work at once, with one caption for the set.",
+      "pattern": "<ul data-part=\"tiles\"><li><figure data-part=\"tile\"><img>",
+      "states": ["five tiles","four tiles","three tiles","phone (two columns)"],
+      "aliases": [
+        "collage",
+        "photo grid",
+        "bento photos",
+        "mosaic gallery",
+        "image collage",
+        "photos of the place",
+        "masonry photos",
+        "gallery grid"
+      ],
+      "react": "PhotoCollage",
+      "api": "[data-part=\"tiles|tile|caption\"] · data-tone=\"well\"",
+      "w": 1000,
+      "preview": [],
+      "called": ["a collage of photos of the shop","a grid of pictures at different sizes","the bento of photos"],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"tiles\"] > li:first-child",
+          "name": "Lead",
+          "api": "7 of 12 columns, two rows",
+          "text": "The picture that sets the place: the room, the counter, the view."
+        },
+        {
+          "sel": "[data-part=\"tiles\"] > li:nth-child(2)",
+          "name": "Around it",
+          "api": "object-fit: cover",
+          "text": "Details and hands at work, each cropped to its cell around its focal point."
+        },
+        {
+          "sel": "[data-part=\"caption\"]",
+          "name": "Caption",
+          "api": "",
+          "text": "One line for the set: what and where."
+        }
+      ],
+      "prompt": "Build a photo collage: a short heading, then three to five photographs in a 12-column grid with tight gaps (6 to 10px) and the page radius: the first spans 7 columns and two rows, the next two 5 columns and one row each beside it, then one of 4 columns and one of 8, each two rows. Every picture crops to its cell with object-fit: cover. One caption line under the set. On a phone: two columns, the first across both and tall, the rest in pairs.",
+      "debug": "Debug my photo collage. Rule out: every tile the same size; captions on every tile; gaps wider than the pictures can bear; pictures squashed instead of cropped; a hole in the grid with four pictures. The symptom:",
+      "added": 20,
+      "note": "Pictures of one place or one day, in one look (find-images --look). For many pictures in a row use gallery-rail; for one picture with words on it, photo-words."
+    },
+    {
       "id": "side-scroll",
       "name": "Side scroll",
       "summary": "A row of work that slides sideways while you scroll down through a tall section, pinned until the last piece arrives. On phones it is a row you swipe, with snap.",

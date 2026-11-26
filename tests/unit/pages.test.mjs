@@ -46,7 +46,15 @@ export const BRIEFS = {
   service: ['Website for Harrow & Finch, a three-partner employment law firm in Manchester, settlement agreement review from £450, phone 0161 496 0322', 'service-landing'],
   cause: ['Home page for Canal Street Food Bank, a volunteer-run charity in Birmingham that gave out 410 food parcels a week last winter', 'cause'],
   event: ['Website for Signal & Noise, a one-day data journalism conference in Glasgow, tickets £120', 'event'],
+  bank: ['Juniper bank app on the phone: balance, spending by category this month, pots for saving, send money to a contact, card freeze, settings', 'app-banking'],
+  running: ['Kestrel running app on the phone: today\'s run, weekly distance chart, a training plan for a 10k, routes near you, settings', 'app-fitness'],
+  grooming: ['Moss dog grooming bookings app: bookings with dog, owner, date and status, today\'s appointments, a calendar, add a booking, settings', 'app-booking'],
+  messaging: ['Moss chat app on the phone: conversations list, a thread with photos and voice notes, new message, contacts, settings', 'app-messaging'],
+  settingsApp: ['Settings-heavy app for Tern, an invoicing tool: invoices, payment terms, reminders, team, notifications, close account', 'app-settings'],
 };
+// Apps drafted from a blueprint of their own (a bank, a run, bookings, a chat, a settings-heavy tool) keep its
+// screens and its sample rows, marked data-sample, in the subject's own nouns; the name is the brief's.
+const FROM_BLUEPRINT = new Set(['bank', 'running', 'grooming', 'messaging', 'settingsApp']);
 
 // The sample businesses' words: each blueprint's brand (meta.json), the proper nouns, prices and string
 // literals in its copy and script, and the nouns of its subject. A word the brief also uses is the brief's.
@@ -94,6 +102,7 @@ test('drafts of every page type carry no sample business: no brand, name, price 
       const r = compose(brief, join(dir, slug));
       assert.equal(r.status, 0, `${slug}: ${r.stderr}`);
       const plan = JSON.parse(r.stdout);
+      if (FROM_BLUEPRINT.has(slug)) { assert.equal(plan.draft.kind, 'blueprint', slug); assert.match(readFileSync(join(dir, slug, 'index.html'), 'utf8'), /data-sample/, `${slug}: sample rows are marked`); continue; }
       assert.ok(['composed', 'page'].includes(plan.draft.kind), `${slug}: drafted from the brief, not a blueprint copy (${plan.draft.kind})`);
       const html = readFileSync(join(dir, slug, 'index.html'), 'utf8');
       // What a visitor, a screen reader or a search engine meets: text, labels, placeholders, the title.

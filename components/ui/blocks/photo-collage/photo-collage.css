@@ -1,0 +1,34 @@
+/* Photo collage: three to five photographs of one place or one day, set close together at different sizes, so
+   the page shows the room, the detail and the hands at work at once instead of one picture after another. The
+   first picture leads (large); the others fill around it. Tight gaps, the page's own corner radius, one caption for
+   the set. Pictures of any ratio: each tile crops to its cell (object-fit: cover, with the focal point from
+   find-images in object-position). Without photographs the tiles carry art panels. */
+@scope (.lt-photo-collage) {
+  :scope { container-type: inline-size; display: block; width: 100%; padding: var(--block-y, calc(var(--section-y) / 2)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  :scope[data-tone="well"] { background: var(--bg-surface-2); }
+  @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  header { max-width: 40em; margin: 0 0 clamp(20px, 3cqi, 36px); }
+  h2 { margin: 0; font-family: var(--font-display); font-size: clamp(1.75rem, 1rem + 2.6cqi, 3.25rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.05; text-wrap: balance; }
+  [data-part="lede"] { margin: 10px 0 0; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.5; }
+  /* Five: a large lead, two beside it, a short one and a wide one under. Four: the wide one goes. Three: lead and
+     two beside it. */
+  [data-part="tiles"] { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: clamp(120px, 15cqi, 220px); gap: clamp(6px, 0.8cqi, 10px); margin: 0; padding: 0; list-style: none; }
+  [data-part="tiles"] > li { min-width: 0; grid-column: span 5; grid-row: span 1; }
+  [data-part="tiles"] > li:first-child { grid-column: span 7; grid-row: span 2; }
+  [data-part="tiles"] > li:nth-child(4) { grid-column: span 4; grid-row: span 2; }
+  [data-part="tiles"] > li:nth-child(5) { grid-column: span 8; grid-row: span 2; }
+  [data-part="tiles"] > li:nth-child(4):last-child { grid-column: span 12; grid-row: span 2; }
+  [data-part="tile"] { position: relative; height: 100%; margin: 0; overflow: hidden; border-radius: var(--radius-md); background: var(--bg-surface-2); }
+  [data-part="tile"] > :is(img, picture, video) { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+  [data-part="tile"] > .lt-art { --art-ratio: auto; position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 0; }
+  [data-part="tile"] > .lt-art > :is([data-part="name"], [data-part="fact"], [data-part="index"]) { display: none; }
+  [data-part="caption"] { margin: 14px 0 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  /* A phone: two columns, the lead across both and tall, the rest in pairs, an odd last one across both. */
+  @container (max-width: 640px) {
+    [data-part="tiles"] { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 38cqi; }
+    [data-part="tiles"] > li, [data-part="tiles"] > li:nth-child(n) { grid-column: span 1; grid-row: span 1; }
+    [data-part="tiles"] > li:first-child { grid-column: span 2; grid-row: span 2; }
+    [data-part="tiles"] > li:nth-child(even):last-child { grid-column: span 2; }
+  }
+}

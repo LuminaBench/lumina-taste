@@ -8,12 +8,15 @@
 //
 // --grade tint (default: shadows towards the palette's ink, highlights towards its paper, a little accent in the
 // mid-tones), duotone (ink to paper), mono, warm, cool, natural (levels only) or none (crop and resize only).
+// --look bright|moody|editorial sets the art direction on top (auto reads it from --subject "<the business>").
+// --cutout keys out a plain ground (a sweep, a wall, a table top of one colour) to a transparent WebP, so the object
+// can stand on a coloured panel (<figure class="lt-art" data-variant="cutout">); a busy ground is kept, and said.
 // The palette comes from --palette, --profile taste-profile.json, or the page's taste-profile.json / data-palette.
 // file@x,y (per cent or 0..1) or --focus x,y sets the focal point by hand; otherwise it is found from the picture.
 // The work runs in headless Chromium through Playwright; without it the files are copied as they are.
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { basename, dirname, extname, join, relative, resolve } from 'node:path';
-import { GRADES, paletteColours, parseFocus, parseRatio, treatImages, WIDTHS } from './lib/image-treat.mjs';
+import { GRADES, LOOKS, lookFor, paletteColours, parseFocus, parseRatio, treatImages, WIDTHS } from './lib/image-treat.mjs';
 import { imgTag, onFirstScreen, writeCredits } from './lib/image-html.mjs';
 import { imageSize } from './lib/image-size.mjs';
 
@@ -24,6 +27,9 @@ const pageArg = opt('page', null);
 const out = resolve(opt('out', pageArg ? join(dirname(resolve(pageArg)), 'images') : 'images'));
 const ratioArg = opt('ratio', null);
 const grade = opt('grade', 'tint');
+const lookArg = opt('look', 'none');
+const cutout = flag('cutout');
+const subjectArg = opt('subject', '');
 const palette = opt('palette', null);
 const profile = opt('profile', null);
 const focus = parseFocus(opt('focus', null));
@@ -31,8 +37,12 @@ const quality = Math.min(0.95, Math.max(0.4, Number(opt('quality', '0.8')) || 0.
 const widths = (opt('widths', '') || '').split(',').map(Number).filter((n) => n > 0);
 const asJson = flag('json');
 if (!GRADES.includes(grade)) { console.error(`--grade must be one of ${GRADES.join(', ')}`); process.exit(2); }
+if (lookArg !== 'auto' && lookArg !== 'none' && !LOOKS[lookArg]) { console.error(`--look must be one of ${Object.keys(LOOKS).join(', ')}, auto (from --subject) or none`); process.exit(2); }
+const chosenLook = lookArg === 'auto' ? lookFor(subjectArg) : { look: lookArg === 'none' ? null : lookArg, why: 'asked for' };
+const look = chosenLook.look;
+if (lookArg === 'auto') console.log(`Look: ${look} (${chosenLook.why}).`);
 if (!pageArg && !args.length) {
-  console.error('Usage: node scripts/treat-images.mjs <file[@x,y]>… [--out images] [--ratio 4/5] [--grade tint|duotone|mono|warm|cool|natural|none] [--palette <id> | --profile taste-profile.json] [--focus x,y]\n       node scripts/treat-images.mjs --page index.html [--out images] […]');
+  console.error('Usage: node scripts/treat-images.mjs <file[@x,y]>… [--out images] [--ratio 4/5] [--grade tint|duotone|mono|warm|cool|natural|none] [--look bright|moody|editorial|auto] [--palette <id> | --profile taste-profile.json] [--focus x,y]\n       node scripts/treat-images.mjs --page index.html [--out images] […]');
   process.exit(2);
 }
 
@@ -57,12 +67,13 @@ if (!pageArg) {
   const missing = jobs.filter((j) => !existsSync(j.input));
   if (missing.length) { console.error(`Not found: ${missing.map((j) => j.input).join(', ')}`); process.exit(2); }
   const ratio = parseRatio(ratioArg ?? commonRatio(jobs.map((j) => j.input)));
-  const results = await treatImages(jobs, { out, ratio, widths: widths.length ? widths : WIDTHS, quality, grade, colours });
+  const results = await treatImages(jobs, { out, ratio, widths: widths.length ? widths : WIDTHS, quality, grade, look, cutout, colours });
   record(results);
   if (asJson) { console.log(JSON.stringify(results, null, 2)); process.exit(0); }
   for (const r of results) {
     if (r.warning) console.log(`! ${r.warning}`);
-    console.log(`${basename(r.input)} → ${r.files.map((f) => `${f.file} (${Math.round(f.bytes / 1024)} kB)`).join(', ')}${r.treated ? `\n  ${r.grade} grade on ${r.palette}, focus ${Math.round(r.focus.x * 100)}% ${Math.round(r.focus.y * 100)}% (${r.focusFrom})` : ''}\n  ${imgTag(r, { base: relative(process.cwd(), out), alt: '<what it shows>' })}`);
+    if (r.cutNote) console.log(`${r.cutout ? '' : '! '}${basename(r.input)}: ${r.cutNote}.`);
+    console.log(`${basename(r.input)} → ${r.files.map((f) => `${f.file} (${Math.round(f.bytes / 1024)} kB)`).join(', ')}${r.treated ? `\n  ${r.grade} grade${r.look ? `, ${r.look} look` : ''} on ${r.palette}, focus ${Math.round(r.focus.x * 100)}% ${Math.round(r.focus.y * 100)}% (${r.focusFrom})` : ''}\n  ${imgTag(r, { base: relative(process.cwd(), out), alt: '<what it shows>' })}`);
   }
   process.exit(0);
 }
@@ -78,7 +89,7 @@ if (!imgs.length) { console.log('No local pictures to treat on this page (pictur
 const ratio = parseRatio(ratioArg ?? commonRatio(imgs.map((x) => x.file)));
 const seen = new Map();
 const jobs = imgs.map((x) => { let n = stem(x.file); const k = (seen.get(n) ?? 0) + 1; seen.set(n, k); if (k > 1) n = `${n}-${k}`; return { input: x.file, name: n, focus: parseFocus(/data-focus="([^"]+)"/.exec(x.m[0])?.[1]) ?? focus }; });
-const results = await treatImages(jobs, { out, ratio, widths: widths.length ? widths : WIDTHS, quality, grade, colours });
+const results = await treatImages(jobs, { out, ratio, widths: widths.length ? widths : WIDTHS, quality, grade, look, cutout, colours });
 record(results);
 const first = imgs.findIndex((x) => onFirstScreen(html, x.m.index));
 for (let i = imgs.length - 1; i >= 0; i--) {
@@ -100,7 +111,7 @@ function record(results) {
     const prior = known.find((k) => (k.original?.file ?? '') === basename(r.input) || (k.files ?? []).some((f) => r.files.some((g) => g.file === f.file)));
     return {
       file: r.files.at(-1).file, ...(prior ? {} : { title: basename(r.input), creator: 'Own picture', licence: 'Own' }),
-      files: r.files, width: r.width, height: r.height, ratio: r.ratio, focus: r.focus, focusFrom: r.focusFrom, grade: r.treated ? r.grade : 'none', palette: r.palette ?? null,
+      files: r.files, width: r.width, height: r.height, ratio: r.ratio, focus: r.focus, focusFrom: r.focusFrom, grade: r.treated ? r.grade : 'none', look: r.treated ? r.look ?? null : null, cutout: !!r.cutout, palette: r.palette ?? null,
       original: { file: basename(r.input), width: r.source?.width ?? r.width, height: r.source?.height ?? r.height, bytes: readFileSync(r.input).length },
     };
   }));

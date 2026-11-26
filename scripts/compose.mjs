@@ -11,6 +11,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { lookFor } from './lib/image-treat.mjs';
 import { search } from './lib/search-core.mjs';
 import { direct, sectionAttrs } from './lib/art-direction.mjs';
 import { planRhythm, orderSections, rhythmStrip, checkRhythm, STRIP_KEY, PROOF, CHROME } from '../engine/compose/rhythm.mjs';
@@ -82,8 +83,6 @@ function pickType() {
   if (/ settings(-heavy| heavy)? apps? /.test(head) && byId('app-settings')) return { type: byId('app-settings'), confident: true };
   if (/ apps? /.test(head) && !headNames && !/ (website|site|landing page|home page|homepage) /.test(head)) {
     const sells = / (a|per) (month|year|seat|user) | how it works | free trial | pricing | sign up | download | for (sole traders|teams|small businesses|freelancers) /.test(text);
-    if (/ (api|sdk|sdks|cli) /.test(text) && sells) return { type: byId('dev-landing'), confident: true };
-    if (sells) return { type: byId('landing'), confident: true };
     // An app whose subject has a blueprint of its own: a bank, a run, a chat, bookings, a settings-heavy tool.
     const own = / (bank|banking|money|wallet|budget|budgeting|savings) /.test(head) ? 'app-banking'
       : / (running|run|runner|fitness|workout|workouts|gym|training|exercise|cycling|swimming|steps) /.test(head) ? 'app-fitness'
@@ -92,6 +91,8 @@ function pickType() {
       : / (settings|preferences) /.test(head) ? 'app-settings' : null;
     if (own && byId(own)) return { type: byId(own), confident: true };
     if (/ (phone|mobile|ios|android|iphone) apps? /.test(head)) return { type: byId('app-phone'), confident: true };
+    if (/ (api|sdk|sdks|cli) /.test(text) && sells) return { type: byId('dev-landing'), confident: true };
+    if (sells) return { type: byId('landing'), confident: true };
     if (/ (on the phone|phone|mobile|ios|android|iphone) /.test(text)) return { type: byId('app-phone'), confident: true };
     if (/ (desktop|calendar|appointments|records|table|dispatch|rota|schedule|staff) /.test(text)) return { type: byId('workspace'), confident: true };
     return { type: byId('app-phone'), confident: true };
@@ -733,9 +734,11 @@ if (writeDraft) {
   if (draft.todo) plan.words.missing = [...new Set([...plan.words.missing, ...draft.todo])];
   if (withImages && draft.kind === 'composed') {
     // The subject is the business, never its town: a photograph of Edinburgh is not the restaurant.
-    const r = spawnSync(process.execPath, [join(root, 'scripts/find-images.mjs'), '--fill', draft.path, '--subject', facts.kind || brief, '--out', join(dirname(draft.path), 'images')], { encoding: 'utf8', env: process.env });
+    // The set's art direction (bright, moody, editorial) comes from the business first, then the rest of the brief.
+    const look = lookFor(facts.kind || '', brief);
+    const r = spawnSync(process.execPath, [join(root, 'scripts/find-images.mjs'), '--fill', draft.path, '--subject', facts.kind || brief, '--look', look.look, '--out', join(dirname(draft.path), 'images')], { encoding: 'utf8', env: process.env });
     const set = (readFileSync(draft.path, 'utf8').match(/<img src="images\//g) ?? []).length;
-    plan.draft.images = { ran: true, status: r.status, set, note: r.status === 0 ? `${set} photograph${set === 1 ? '' : 's'} set from openly licensed sources (credits in images/credits.json); look at each one` : `find-images could not run: ${(r.stderr || r.stdout).trim().split('\n').pop()}` };
+    plan.draft.images = { ran: true, status: r.status, set, look: look.look, lookWhy: look.why, note: r.status === 0 ? `${set} photograph${set === 1 ? '' : 's'} set from openly licensed sources (credits in images/credits.json), ${look.look} look (${look.why}); look at each one` : `find-images could not run: ${(r.stderr || r.stdout).trim().split('\n').pop()}` };
   } else if (draft.kind === 'composed') plan.draft.images = { ran: false, note: 'no photographs fetched: the panels show the subject\'s drawings. Add --images to search public-domain and CC0 photographs for them (find-images --fill; it downloads)' };
 }
 

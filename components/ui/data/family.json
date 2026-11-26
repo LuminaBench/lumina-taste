@@ -1597,7 +1597,18 @@
       "name": "Art panel",
       "summary": "What stands in for a photograph until there is one: the thing's name set large on a tinted panel, with a flat spot illustration of the subject's own thing (a cup, a loaf, a crane, a document) on a disc, an arch or a floor. Variants: one large figure, the product's own colour, a keyline frame.",
       "pattern": "<figure> + <figcaption>",
-      "states": ["accent","figure","framed","ink","plain","swatch","with a motif","with a photograph","with a scene"],
+      "states": [
+        "accent",
+        "figure",
+        "framed",
+        "ink",
+        "plain",
+        "swatch",
+        "with a motif",
+        "with a photograph",
+        "with a scene",
+        "cut-out on colour"
+      ],
       "aliases": [
         "image stand-in",
         "no photo",
@@ -1616,7 +1627,7 @@
         "drawing of a counter with a cup"
       ],
       "react": "ArtPanel",
-      "api": "data-motif=\"cup | loaf | crane | document | …\" (47 drawings) · data-scene=\"cup bag\" (two or three on one ground) · data-pattern=\"sun | arch | floor | none\" · data-tone=\"accent | ink | swatch\" · data-variant=\"figure\" · data-frame · data-ratio · data-shot",
+      "api": "data-motif=\"cup | loaf | crane | document | …\" (47 drawings) · data-scene=\"cup bag\" (two or three on one ground) · data-pattern=\"sun | arch | floor | none\" · data-tone=\"accent | ink | swatch\" · data-variant=\"figure\" · data-frame · data-ratio · data-shot · data-variant=\"cutout\"",
       "w": 900,
       "called": [
         "what do I put where the photo goes",

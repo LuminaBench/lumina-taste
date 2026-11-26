@@ -102,6 +102,12 @@
   :scope[data-variant="figure"] > [data-part="motif"] { height: 46%; }
   /* With a photograph: it fills the frame and the placeholder type is hidden (the caption still describes it). */
   img, video, picture { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+  /* data-variant="cutout": a cut-out (treat-images --cutout, a transparent WebP) stands on the panel's own colour,
+     its foot on the line above the name, which stays. Use data-tone="accent" or "swatch" for the ground. */
+  :scope[data-variant="cutout"] { align-content: end; }
+  :scope[data-variant="cutout"] > :is(img, picture) { inset: 7% 8% var(--cut-foot, 34%); width: auto; height: auto; object-fit: contain; object-position: 50% 100%; }
+  :scope[data-variant="cutout"] > :is([data-part="name"], [data-part="fact"], [data-part="index"]) { position: relative; z-index: 2; }
+  :scope[data-variant="cutout"]:not(:has(> [data-part="fact"])) { --cut-foot: 26%; }
 }
 .lt-art-demo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; width: 100%; }
 @media (max-width: 560px) { .lt-art-demo { grid-template-columns: minmax(0, 1fr); } .lt-art-demo .lt-art { --art-ratio: 16 / 9; --art-figure: 14cqi; } }

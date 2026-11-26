@@ -28,12 +28,16 @@
 // srcset, sizes, width, height and loading. A panel with no fitting photograph keeps (or gets) a spot
 // illustration of the subject (data-motif) instead.
 //
+// --look sets the set's art direction on top of the grade: bright (daylight, opened shadows), moody (evening: deep
+// blacks, colour quietened, a soft vignette) or editorial (matte blacks, rolled highlights, colour down). With
+// --fill and --subject it is chosen from the subject (auto) and the reason is printed; --look none keeps the grade
+// alone. The look is recorded in credits.json.
 // Pictures are a means, not decoration: one ratio per set, the subject itself, never a stranger's face as a
 // "customer". See references/images.md.
 import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, dirname, extname, join, relative, resolve } from 'node:path';
-import { GRADES, paletteColours, parseFocus, parseRatio, treatImages, WIDTHS } from './lib/image-treat.mjs';
+import { GRADES, LOOKS, lookFor, paletteColours, parseFocus, parseRatio, treatImages, WIDTHS } from './lib/image-treat.mjs';
 import { imgTag, onFirstScreen, writeCredits } from './lib/image-html.mjs';
 import { motifSvg, rankMotifs } from './lib/image-motifs.mjs';
 import { imageSize } from './lib/image-size.mjs';
@@ -55,6 +59,8 @@ const fill = opt('fill', null);
 const subject = opt('subject', '');
 const ratioArg = opt('ratio', null);
 const grade = opt('grade', 'tint');
+// The set's art direction (bright, moody, editorial; auto reads it from --subject; none leaves the grade alone).
+const lookArg = opt('look', fill && subject ? 'auto' : 'none');
 const palette = opt('palette', null);
 const profile = opt('profile', null);
 const focusArg = parseFocus(opt('focus', null));
@@ -71,10 +77,13 @@ if (!query && !fill && !starterArg) {
   console.error(`Usage: node scripts/find-images.mjs "<what the picture shows>" [--pick 1,3] [--out ./images] [--orientation wide|tall|square] [--license open|by]
        node scripts/find-images.mjs --fill page.html [--subject "<the business>"] [--starter <set|domain>] [--out ./images] [--dry-run]
        node scripts/find-images.mjs --starter <set|domain> [--pick 1,3|all] [--out ./images]
-Treatment: [--ratio 4/5] [--grade ${GRADES.join('|')}] [--palette <id> | --profile taste-profile.json] [--focus x,y] [--no-treat] [--keep-originals]`);
+Treatment: [--ratio 4/5] [--grade ${GRADES.join('|')}] [--look ${Object.keys(LOOKS).join('|')}|auto|none] [--palette <id> | --profile taste-profile.json] [--focus x,y] [--no-treat] [--keep-originals]`);
   process.exit(2);
 }
 if (!GRADES.includes(grade)) { console.error(`--grade must be one of ${GRADES.join(', ')}`); process.exit(2); }
+if (lookArg !== 'auto' && lookArg !== 'none' && !LOOKS[lookArg]) { console.error(`--look must be one of ${Object.keys(LOOKS).join(', ')}, auto or none`); process.exit(2); }
+const chosenLook = lookArg === 'auto' ? lookFor(subject) : { look: lookArg === 'none' ? null : lookArg, why: lookArg === 'none' ? '' : 'asked for' };
+const look = chosenLook.look;
 
 // The services, overridable for tests.
 const OPENVERSE = process.env.LT_OPENVERSE ?? 'https://api.openverse.org/v1/images/';
@@ -238,7 +247,7 @@ async function finish(items, ratio) {
     });
   } else {
     const colours = paletteColours({ palette, profile, page: fill ? resolve(fill) : undefined });
-    results = await treatImages(items.map(({ file, name, focus }) => ({ input: file, name: slug(name), focus })), { out, ratio, widths: WIDTHS, quality, grade, colours });
+    results = await treatImages(items.map(({ file, name, focus }) => ({ input: file, name: slug(name), focus })), { out, ratio, widths: WIDTHS, quality, grade, look, colours });
     for (const r of results) if (r.warning) console.log(`! ${r.warning}`);
   }
   if (keepOriginals) for (const it of items) { mkdirSync(join(out, 'originals'), { recursive: true }); copyFileSync(it.file, join(out, 'originals', basename(it.file))); }
@@ -247,7 +256,7 @@ async function finish(items, ratio) {
     return {
       file: r.files.at(-1).file, title: c.title, creator: c.creator, licence: c.licence, licenceUrl: c.licenceUrl, source: c.page, provider: c.provider, creditRequired: c.needsCredit,
       files: r.files.map((f) => ({ file: f.file, width: f.width, height: f.height, bytes: f.bytes })),
-      width: r.width, height: r.height, ratio: r.ratio ?? null, focus: r.focus ?? null, focusFrom: r.focusFrom ?? null, grade: r.treated ? r.grade : 'none', palette: r.palette ?? null,
+      width: r.width, height: r.height, ratio: r.ratio ?? null, focus: r.focus ?? null, focusFrom: r.focusFrom ?? null, grade: r.treated ? r.grade : 'none', look: r.treated ? r.look ?? null : null, palette: r.palette ?? null,
       original: { width: r.source?.width ?? c.width, height: r.source?.height ?? c.height, bytes: readFileSync(file).length, kept: keepOriginals ? `originals/${basename(file)}` : null },
     };
   }));
@@ -424,6 +433,6 @@ for (const m of [...empty].reverse()) { // from the end, so earlier offsets stay
   if (!has) { drawn++; console.log(`Drew “${motif}” in the panel for “${(shot || 'no brief').slice(0, 50)}”.`); }
 }
 if (!dry && (filled || drawn)) writeFileSync(page, html);
-if (filled) console.log(`\n${filled} picture(s) set on ${relative(process.cwd(), page)}${noTreat ? '' : `, one ratio (${+setRatio.toFixed(3)}) and one grade (${grade})`}. Credits: ${relative(process.cwd(), join(out, 'CREDITS.md'))}. Look at every one: replace any that do not show the subject itself.`);
+if (filled) console.log(`\n${filled} picture(s) set on ${relative(process.cwd(), page)}${noTreat ? '' : `, one ratio (${+setRatio.toFixed(3)}) and one grade (${grade})${look ? `, ${look} look: ${chosenLook.why}` : ''}`}. Credits: ${relative(process.cwd(), join(out, 'CREDITS.md'))}. Look at every one: replace any that do not show the subject itself.`);
 if (drawn) console.log(`${drawn} art panel(s) drew the subject instead. Look at them too: data-motif="<name>" picks another (scripts/lib/image-motifs.mjs lists them).`);
 cleanup();

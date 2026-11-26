@@ -163,12 +163,15 @@ export function pictureBand(ctx) {
   const m = motifParts(motifFor(`${head} ${ctx.facts.kind ?? ''}`, ctx, ctx.heroMotif) ?? ctx.heroMotif, { small: true });
   if (!m.attr) return null;
   const name = ctx.facts.kind ? cap(ctx.facts.kind) : ctx.product;
-  return { id: 'media-band', slug: 'picture', label: name ?? 'Picture', html: `<section class="lt-section" aria-labelledby="h-picture">
-  <header><h2 id="h-picture">${keepHyphens(esc(`${name ?? ''}${ctx.facts.place ? ` in ${ctx.facts.place}` : ''}`))}</h2></header>
-  <figure class="lt-art"${m.attr} data-pattern="floor" data-ratio="16/9" data-zoom data-shot="${esc(`A wide photograph of ${ctx.product ?? 'the place'} at work${ctx.facts.place ? ` in ${ctx.facts.place}` : ''}, 16:9`)}">
-    ${m.svg}<p data-part="name">${esc(ctx.product ?? name ?? '')}</p>${ctx.facts.place ? `<p data-part="fact">${esc(ctx.facts.place)}</p>` : ''}
-    <figcaption class="lt-visually-hidden">${esc(`${ctx.product ?? name}${ctx.facts.place ? `, ${ctx.facts.place}` : ''}`)}</figcaption>
+  // Set as photo-words: the picture across the screen, its name on it over a scrim that sits only behind the words.
+  return { id: 'media-band', slug: 'picture', label: name ?? 'Picture', html: `<section class="lt-photo-words" aria-labelledby="h-picture">
+  <figure data-part="photo" data-tone="dark">
+    <figure class="lt-art"${m.attr} data-pattern="none" data-ratio="16/9" data-shot="${esc(`A wide photograph of ${ctx.product ?? 'the place'} at work${ctx.facts.place ? ` in ${ctx.facts.place}` : ''}, 16:9`)}">
+      ${m.svg}<p data-part="name">${esc(ctx.product ?? name ?? '')}</p>${ctx.facts.place ? `<p data-part="fact">${esc(ctx.facts.place)}</p>` : ''}
+      <figcaption class="lt-visually-hidden">${esc(`${ctx.product ?? name}${ctx.facts.place ? `, ${ctx.facts.place}` : ''}`)}</figcaption>
+    </figure>
   </figure>
+  <div data-part="words" data-tone="dark"><h2 id="h-picture">${keepHyphens(esc(`${name ?? ''}${ctx.facts.place ? ` in ${ctx.facts.place}` : ''}`))}</h2></div>
 </section>` };
 }
 

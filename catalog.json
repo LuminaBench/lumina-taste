@@ -2,7 +2,7 @@
   "name": "lumina-taste",
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
-  "counts": {"ui":219,"charts":48,"blueprints":32,"palettes":24,"themes":48,"typography":20,"styles":39},
+  "counts": {"ui":221,"charts":48,"blueprints":32,"palettes":24,"themes":48,"typography":20,"styles":39},
   "families": [
     {
       "id": "controls",
@@ -51,7 +51,7 @@
       "title": "Sections for pages",
       "summary": "Whole page sections (heroes, pricing, FAQs, sign-in) built from the same tokens, so a page can be assembled in minutes and still look designed.",
       "order": 7,
-      "count": 38
+      "count": 40
     },
     {
       "id": "backdrops",
@@ -1124,6 +1124,60 @@
         "components/ui/blocks/gallery-rail/gallery-rail.ts"
       ],
       "path": "components/ui/blocks/gallery-rail"
+    },
+    {
+      "id": "photo-words",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Photo words",
+      "summary": "One photograph across the screen with a few words set on it. The scrim sits only where the words sit, a pool of ink fading out from their corner, so the rest of the picture keeps its own light.",
+      "aliases": [
+        "text over image",
+        "text on photo",
+        "image with overlay text",
+        "full width photo with headline",
+        "photo banner",
+        "hero image section",
+        "scrim section",
+        "caption over photo"
+      ],
+      "pattern": "<figure data-part=\"photo\"> + <div data-part=\"words\" data-tone=\"dark\">",
+      "states": ["words bottom start","words bottom end","words top start","phone (4:5, words at the foot)"],
+      "react": "PhotoWords",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/photo-words/photo-words.css",
+        "components/ui/blocks/photo-words/photo-words.html",
+        "components/ui/blocks/photo-words/photo-words.react.tsx"
+      ],
+      "path": "components/ui/blocks/photo-words"
+    },
+    {
+      "id": "photo-collage",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Photo collage",
+      "summary": "Three to five photographs of one place or one day at different sizes, set close together: the room, the detail and the hands at work at once, with one caption for the set.",
+      "aliases": [
+        "collage",
+        "photo grid",
+        "bento photos",
+        "mosaic gallery",
+        "image collage",
+        "photos of the place",
+        "masonry photos",
+        "gallery grid"
+      ],
+      "pattern": "<ul data-part=\"tiles\"><li><figure data-part=\"tile\"><img>",
+      "states": ["five tiles","four tiles","three tiles","phone (two columns)"],
+      "react": "PhotoCollage",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/photo-collage/photo-collage.css",
+        "components/ui/blocks/photo-collage/photo-collage.html",
+        "components/ui/blocks/photo-collage/photo-collage.react.tsx"
+      ],
+      "path": "components/ui/blocks/photo-collage"
     },
     {
       "id": "side-scroll",
@@ -2888,7 +2942,18 @@
         "drawing of a counter with a cup"
       ],
       "pattern": "<figure> + <figcaption>",
-      "states": ["accent","figure","framed","ink","plain","swatch","with a motif","with a photograph","with a scene"],
+      "states": [
+        "accent",
+        "figure",
+        "framed",
+        "ink",
+        "plain",
+        "swatch",
+        "with a motif",
+        "with a photograph",
+        "with a scene",
+        "cut-out on colour"
+      ],
       "react": "ArtPanel",
       "deps": [],
       "files": [

@@ -1,0 +1,33 @@
+/* Photo words: one photograph across the screen with a few words set on it. The scrim sits only where the words
+   sit (a soft pool of the ink from their corner), so the rest of the picture keeps its own light. data-place puts
+   the words in a corner: "start-end" (the default: bottom, start side), "end-end", "start-start". On a phone the
+   picture turns 4:5 and the words sit at its foot. Use it once on a page, for the picture that says the most. */
+@scope (.lt-photo-words) {
+  :scope { container-type: inline-size; display: grid; width: 100%; padding: var(--block-y, calc(var(--section-y) / 2)) 0; background: var(--bg-canvas); color: var(--text-primary); }
+  :scope > * { grid-area: 1 / 1; min-width: 0; }
+  /* The frame holds dark tokens (data-tone="dark"), so an art panel waiting for the photograph is dark too and the
+     words' pool sits on it as it will on a picture. */
+  [data-part="photo"] { position: relative; margin: 0; min-height: clamp(440px, 72svh, 820px); overflow: hidden; background: var(--bg-surface-2); }
+  [data-part="photo"] > :is(img, picture, video) { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+  [data-part="photo"] > .lt-art { --art-ratio: auto; position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 0; }
+  [data-part="photo"] > .lt-art > :is([data-part="name"], [data-part="fact"], [data-part="index"]) { display: none; }
+  /* The words: dark tokens (data-tone="dark" on this box) over a pool of the ink that fades out from their corner. */
+  /* The pool is an ellipse the size of the words' box, centred on their corner, so it has faded to nothing at the
+     box's far edges (no seam on the picture); the padding on the far sides keeps the words in its dark middle. */
+  [data-part="words"] { --pw-x: 0%; --pw-y: 100%; position: relative; z-index: 2; display: grid; align-content: end; justify-items: start; gap: 16px; align-self: end; justify-self: start; width: min(100%, 54em); margin: 0; padding: clamp(112px, 16cqi, 240px) clamp(80px, 10cqi, 160px) clamp(32px, 5cqi, 72px) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: radial-gradient(100% 100% at var(--pw-x) var(--pw-y), color-mix(in oklab, var(--bg-canvas) 86%, transparent) 0%, color-mix(in oklab, var(--bg-canvas) 76%, transparent) 50%, transparent 100%); color: var(--text-primary); }
+  :scope:dir(rtl) > [data-part="words"] { --pw-x: 100%; }
+  :scope[data-place="end-end"] > [data-part="words"] { --pw-x: 100%; justify-self: end; justify-items: end; text-align: end; padding-inline: clamp(96px, 14cqi, 220px) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); }
+  :scope[data-place="end-end"]:dir(rtl) > [data-part="words"] { --pw-x: 0%; }
+  :scope[data-place="start-start"] > [data-part="words"] { --pw-y: 0%; align-self: start; padding-block: clamp(32px, 5cqi, 72px) clamp(112px, 16cqi, 240px); }
+  h2 { margin: 0; max-width: 14em; font-family: var(--font-display); font-size: clamp(2rem, 1rem + 4cqi, 4.5rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.02; text-wrap: balance; }
+  [data-part="lede"] { margin: 0; max-width: 30em; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.5; text-wrap: pretty; }
+  [data-part="cta"] { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+  /* A phone: the picture 4:5, the words at its foot, the pool from the bottom edge only. */
+  @container (max-width: 640px) {
+    [data-part="photo"] { min-height: 0; aspect-ratio: 4 / 5; }
+    [data-part="words"], :scope[data-place] > [data-part="words"] { align-self: end; justify-self: stretch; justify-items: start; width: 100%; padding: 120px var(--block-x-sm, 16px) 24px; text-align: start; background: linear-gradient(to top, color-mix(in oklab, var(--bg-canvas) 86%, transparent) 0%, color-mix(in oklab, var(--bg-canvas) 76%, transparent) 60%, transparent 100%); }
+  }
+  @media (max-width: 640px) { :scope { padding-block: var(--block-y-sm, calc(var(--section-y) / 2)); } }
+  @container (max-width: 640px) { h2 { font-size: clamp(1.75rem, 8.5cqi, 2.5rem); } }
+  @media print { [data-part="words"] { background: none; color: inherit; } }
+}
