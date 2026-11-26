@@ -64,6 +64,10 @@
   :scope[data-variant="poster"] > [data-part="date"] > span { font-size: clamp(1.75rem, 0.6rem + 4cqi, 3.5rem); letter-spacing: -0.02em; }
   :scope[data-variant="poster"] > h1 { grid-column: 1 / span 8; max-width: 17ch; margin-top: clamp(20px, 3cqi, 36px); font-size: clamp(2.125rem, 1rem + 3.4cqi, 3.75rem); line-height: 1.02; }
   :scope[data-variant="poster"] > [data-part="visual"] { grid-column: 9 / -1; grid-row: 2 / span 2; align-self: stretch; min-height: 280px; }
+  /* No picture: the date takes the whole width, and the month sits beside it on a wide screen. */
+  :scope[data-variant="poster"]:not(:has(> [data-part="visual"])) > [data-part="date"] { grid-column: 1 / -1; }
+  :scope[data-variant="poster"]:not(:has(> [data-part="visual"])) > [data-part="date"] > time { font-size: clamp(4.5rem, 1rem + 19cqi, 17rem); }
+  :scope[data-variant="poster"]:not(:has(> [data-part="visual"])) > h1 { grid-column: 1 / span 9; }
   :scope[data-variant="poster"] > [data-part="foot"] { border-top-color: color-mix(in oklab, currentColor 40%, transparent); }
   :scope[data-variant="poster"] [data-part="facts"] > div { border-left-color: color-mix(in oklab, currentColor 24%, transparent); }
   :scope[data-variant="poster"][data-tone="accent"] [data-part="eyebrow"] { color: var(--text-primary); }
