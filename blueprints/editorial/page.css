@@ -19,3 +19,10 @@
 .ed-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); padding-block: var(--space-6); border-top: var(--bw) var(--border-style) var(--border-hairline); color: var(--text-muted); font-size: var(--text-ui-sm); }
 .ed-footer a { color: var(--text-secondary); }
 @media (max-width: 760px) { .ed-grid { grid-template-columns: 1fr; } .ed-grid .ed-feature { grid-row: auto; } .ed-intro { padding-block: var(--space-7) var(--space-5); } .ed-header .lt-pillnav a:not([data-part="cta"]):nth-child(n + 4) { display: none; } }
+/* Selected work: six results as figure panels in a row that slides sideways (side-scroll). */
+.lt-side-scroll [data-part="caption"] a { color: var(--text-primary); font-weight: 600; text-decoration: none; }
+.lt-side-scroll [data-part="caption"] a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.lt-side-scroll [data-part="lede"] .bp-link { display: block; margin-top: var(--space-2); }
+.lt-side-scroll .lt-art [data-part="figure"] { font-size: clamp(3rem, 24cqi, 6.5rem); }
+/* At rest (phones, reduced motion) the row keeps the page's section spacing. */
+.lt-side-scroll:not([data-pin]) { padding-block: var(--section-y); }

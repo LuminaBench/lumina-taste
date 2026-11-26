@@ -6,3 +6,12 @@
 .lt-hero-split [data-part="note"] { color: var(--text-secondary); }
 .lt-footer-min { padding-block: var(--space-6); }
 @media (max-width: 760px) { .sh-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; } }
+/* The making: the pinned picture is one art panel per step, the same frame with the day's figure. */
+.lt-story [data-part="visual"] > .lt-art { --art-ratio: auto; width: 100%; height: 100%; aspect-ratio: auto; border-radius: var(--radius-xl); padding: clamp(28px, 4cqi, 48px); }
+.lt-story [data-part="visual"] > .lt-art [data-part="figure"] { font-size: clamp(3rem, 22cqi, 6rem); }
+/* The glaze slider: each side is one swatch panel filling the frame. */
+.lt-before-after [data-part="compare"] .lt-art { --art-ratio: auto; aspect-ratio: auto; border-radius: 0; padding: clamp(24px, 5cqi, 48px); }
+.lt-before-after [data-part="compare"] .lt-art [data-part="name"] { font-size: clamp(1.5rem, 4cqi, 2.5rem); }
+/* Each side's words sit in its own half, so the divider never cuts through a line. */
+.lt-before-after [data-part="compare"] .lt-art > p { max-width: 44%; }
+.lt-before-after [data-part="after"] .lt-art { justify-items: end; text-align: right; }

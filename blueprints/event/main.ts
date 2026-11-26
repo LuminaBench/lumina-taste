@@ -10,5 +10,7 @@ import '../../components/ui/blocks/faq-section/faq-section.css';
 import '../../components/ui/navigation/footer-minimal/footer-minimal.css';
 import './page.css';
 import { enhance as navbar } from '../../components/ui/navigation/navbar-simple/navbar-simple';
+import { enhance as settle } from '../../components/ui/motion/number-settle/number-settle';
 
-boot({ 'navbar-simple': navbar });
+// The hero's three true figures settle into place once (data-count); no scroll moment.
+boot({ 'number-settle': settle, 'navbar-simple': navbar });

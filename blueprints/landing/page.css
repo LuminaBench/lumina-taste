@@ -33,3 +33,22 @@
 .bp-footer-contrast.lt-footer [data-part="legal"] { border-top-color: color-mix(in oklab, var(--bg-canvas) 25%, transparent); }
 .bp-footer-contrast.lt-footer :focus-visible { outline-color: var(--bg-canvas); }
 @media (max-width: 640px) { .bp-hero { padding-block: var(--space-7) var(--space-6); } .bp-frame-body { padding: var(--space-4); } }
+/* Setting up, pinned: one browser window in three states. */
+.lt-story [data-part="visual"] > .lt-device { width: min(100% - 48px, 600px); }
+[data-mock="ln"] { display: grid; align-content: start; gap: 16px; min-height: 340px; padding: 24px; font-size: var(--text-ui-sm); }
+[data-ln="h"] { margin: 0; font-family: var(--font-display); font-size: var(--step-1); font-weight: var(--weight-display); letter-spacing: -0.01em; }
+[data-ln="rows"] { display: grid; margin: 0; padding: 0; list-style: none; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-md); }
+[data-ln="rows"] li { display: flex; justify-content: space-between; gap: 16px; padding: 12px 14px; }
+[data-ln="rows"] li + li { border-top: var(--bw) var(--border-style) var(--border-hairline); }
+[data-ln="rows"] b { font-weight: 600; }
+[data-ln="rows"] span { color: var(--text-secondary); text-align: right; }
+[data-ln="rows"] [data-ln="ok"] { color: var(--status-positive); font-weight: 600; }
+[data-ln="foot"] { margin: 0; color: var(--text-muted); font-size: var(--text-ui-xs); }
+[data-ln="kpis"] { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+[data-ln="kpis"] p { display: grid; gap: 4px; margin: 0; padding: 12px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-md); }
+[data-ln="kpis"] span { color: var(--text-secondary); font-size: var(--text-ui-xs); }
+[data-ln="kpis"] b { font-size: var(--step-1); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+[data-ln="chart"] { width: 100%; height: 130px; }
+[data-ln="chart"] path { stroke: var(--accent-solid); stroke-width: 2; vector-effect: non-scaling-stroke; }
+[data-ln="chart"] [data-ln="area"] { stroke: none; fill: color-mix(in oklab, var(--accent-solid) 14%, transparent); }
+@media (max-width: 640px) { [data-mock="ln"] { min-height: 0; padding: 16px; } [data-ln="rows"] li { flex-direction: column; gap: 2px; } [data-ln="rows"] span { text-align: left; } }

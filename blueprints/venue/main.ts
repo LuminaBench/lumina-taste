@@ -16,8 +16,9 @@ import { enhance as datePicker } from '../../components/ui/controls/date-picker/
 import { enhance as stepper } from '../../components/ui/controls/number-stepper/number-stepper';
 import { enhance as booking } from '../../components/ui/controls/booking-bar/booking-bar';
 import { enhance as visit } from '../../components/ui/blocks/visit-info/visit-info';
+import { enhance as art } from '../../components/ui/data/art-panel/art-panel';
 
-boot({ 'navbar-simple': navbar, 'date-picker': datePicker, 'number-stepper': stepper, 'booking-bar': booking, 'visit-info': visit });
+boot({ 'navbar-simple': navbar, 'date-picker': datePicker, 'number-stepper': stepper, 'booking-bar': booking, 'visit-info': visit, 'art-panel': art });
 
 // Availability: a stand-in. Replace this handler with a call to your booking system and put its answer in
 // the result line. Here tastings run at weekends, with eight places each.

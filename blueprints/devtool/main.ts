@@ -20,5 +20,7 @@ import { enhance as circuit } from '../../components/ui/backdrops/backdrop-circu
 import { enhance as chip } from '../../components/ui/controls/command-chip/command-chip';
 import { enhance as terminal } from '../../components/ui/data/terminal-window/terminal-window';
 import { enhance as code } from '../../components/ui/data/code-block/code-block';
+import { enhance as stats } from '../../components/ui/blocks/stats-band/stats-band';
 
-boot({ 'navbar-simple': navbar, 'backdrop-circuit': circuit, 'command-chip': chip, 'terminal-window': terminal, 'code-block': code });
+// No pinned moment: a developer reads code, so the page holds still. The figures settle once (stats-band).
+boot({ 'stats-band': stats, 'navbar-simple': navbar, 'backdrop-circuit': circuit, 'command-chip': chip, 'terminal-window': terminal, 'code-block': code });

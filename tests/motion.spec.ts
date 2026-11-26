@@ -375,3 +375,91 @@ test('React wrappers mount and wire their behaviour', async ({ page }) => {
   expect(await page.locator('[data-case="names"] figure').evaluate((el) => getComputedStyle(el).viewTransitionName)).toBe('react-chair');
   expect(errors).toEqual([]);
 });
+
+// ---- the marketing blueprints: at most two scroll moments each, never side by side, and each one works
+const MARKETING = ['landing', 'devtool', 'assistant', 'shop', 'store', 'practice', 'cause', 'event', 'venue', 'editorial', 'episode', 'pricing'];
+const MOMENTS = '.lt-story, .lt-side-scroll, .lt-stack-cards, .lt-statement, [data-zoom], [data-parallax]';
+
+test('marketing blueprints keep the motion budget: two moments at most, never neighbours', async ({ page }) => {
+  const report: Record<string, { moments: number; adjacent: boolean }> = {};
+  for (const id of MARKETING) {
+    await page.goto(`/blueprints/${id}/`);
+    report[id] = await page.evaluate((sel) => {
+      const bands = [...document.querySelectorAll('main > *')];
+      const has = bands.map((b) => b.matches(sel) || !!b.querySelector(sel));
+      return { moments: document.querySelectorAll(`main :is(${sel})`).length, adjacent: has.some((h, i) => h && has[i + 1]) };
+    }, MOMENTS);
+  }
+  for (const [id, r] of Object.entries(report)) {
+    expect(r.moments, `${id} moments`).toBeLessThanOrEqual(2);
+    expect(r.adjacent, `${id} has two moments side by side`).toBe(false);
+  }
+  // The pages that carry one, carry the one their subject calls for.
+  expect(report.landing.moments).toBe(1);
+  expect(report.editorial.moments).toBe(1);
+  expect(report.shop.moments).toBe(1);
+  expect(report.practice.moments).toBe(2);
+});
+
+test('landing: setting up is a pinned scene that changes with each step', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/blueprints/landing/');
+  const story = page.locator('#how');
+  await expect(story).toHaveAttribute('data-pin', '');
+  for (let i = 0; i < 3; i++) {
+    await centre(page, '#how [data-part="text"]', i);
+    await settle(page);
+    const op = await opacities(page, '#how li > [data-part="visual"]');
+    expect(op[i]).toBeGreaterThan(0.9);
+    const box = (await page.locator('#how li > [data-part="visual"]').nth(i).boundingBox())!;
+    expect(box.y).toBeGreaterThanOrEqual(0);
+    expect(box.y + box.height).toBeLessThanOrEqual(900);
+  }
+});
+
+test('editorial: the work slides sideways on a wide screen and swipes on a phone', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/blueprints/editorial/');
+  const s = page.locator('#work');
+  await expect(s).toHaveAttribute('data-pin', '');
+  const first = async () => (await s.locator('[data-part="track"] > li').first().boundingBox())!.x;
+  await page.evaluate(() => { const el = document.querySelector<HTMLElement>('#work')!; scrollTo(0, el.offsetTop + 10); });
+  await settle(page);
+  const a = await first();
+  await page.evaluate(() => { const el = document.querySelector<HTMLElement>('#work')!; scrollTo(0, el.offsetTop + (el.offsetHeight - innerHeight) * 0.9); });
+  await settle(page);
+  expect(await first()).toBeLessThan(a - 300);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(s).not.toHaveAttribute('data-pin', '');
+  expect(await s.locator('[data-part="track"]').evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(true);
+});
+
+test('shop: the making is pinned; the glaze slider moves by keyboard', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/blueprints/shop/');
+  await expect(page.locator('#made')).toHaveAttribute('data-pin', '');
+  await expect(page.locator('#made .lt-art [data-part="motif"]')).toHaveCount(3);
+  const range = page.locator('#glaze [data-part="range"]');
+  await range.focus();
+  await page.keyboard.press('ArrowLeft');
+  await page.keyboard.press('ArrowLeft');
+  await expect(range).toHaveValue('48');
+  await expect(range).toHaveAttribute('aria-valuetext', '48% before, 52% after');
+});
+
+test('cause, event and devtool: the true figures settle to their exact values', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  for (const [id, sel, want] of [['cause', '.lt-hero-statement dd', ['410', '64', '82p']], ['event', '.lt-hero-statement dd', ['18', '6', '320']], ['devtool', '.lt-stats-band dd', ['41 billion', '640 ms', '99.99%', '0']]] as const) {
+    await page.goto(`/blueprints/${id}/`);
+    await page.locator(sel).first().scrollIntoViewIfNeeded();
+    await expect(page.locator(`${sel}[data-counted]`).first()).toBeAttached({ timeout: 4000 });
+    await expect.poll(() => page.locator(sel).allTextContents(), { timeout: 4000 }).toEqual([...want]);
+  }
+});
+
+test('the subject sets the type: a clinic is hyperlegible, a roastery stamped, an event stadium, a light developer tool workbench', async ({ page }) => {
+  for (const [id, type] of [['practice', 'hyperlegible'], ['venue', 'stamped'], ['event', 'stadium'], ['devtool', 'workbench']]) {
+    await page.goto(`/blueprints/${id}/`);
+    expect(await page.evaluate(() => document.documentElement.dataset.type)).toBe(type);
+  }
+});
