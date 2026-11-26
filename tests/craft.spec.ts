@@ -1,7 +1,7 @@
 // Craft: art-panel scenes drawn in a real panel, micro-interactions with motion on and with reduced motion, and
 // the gallery's Moments and Before / after views playing their stages.
 import { expect, test, type Page } from '@playwright/test';
-import { mkdirSync, renameSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { sceneSvg } from '../scripts/lib/image-motifs.mjs';
@@ -296,4 +296,71 @@ test.describe('pages inside frames', () => {
     }));
     expect(types).toBe('true');
   });
+});
+
+test.describe('scene panels hold their words', () => {
+  const pairings = (JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'tokens/typography/source.json'), 'utf8')).pairings as Array<{ id: string }>).map((p) => p.id);
+  const cases = [
+    ['figure Free', 'data-variant="figure"', '<p data-part="figure">Free</p><p data-part="name">First visit</p>'],
+    ['figure £40,000', 'data-variant="figure" data-tone="accent"', '<p data-part="figure">£40,000</p><p data-part="name">Fixed price, start to finish</p><p data-part="fact">Kitchens and extensions</p>'],
+    ['two-line name', 'data-frame', '<p data-part="index">Roasted Tuesday</p><p data-part="name">Huila and Sidamo, side by side</p><p data-part="fact">Two coffees · 250 g each</p>'],
+    ['name, square', 'data-ratio="1/1" data-tone="ink"', '<p data-part="name">Kestrel Roasters</p><p data-part="fact">Leith · open Tuesday to Saturday</p>'],
+    ['wide figure', 'data-ratio="16/9" data-variant="figure"', '<p data-part="figure">£40,000</p><p data-part="name">Fixed price</p>'],
+    ['wide name', 'data-ratio="3/2"', '<p data-part="name">Huila and Sidamo</p><p data-part="fact">Two coffees</p>'],
+    ['alone', '', ''],
+    ['alone, square', 'data-ratio="1/1"', ''],
+  ] as const;
+  for (const [w, h] of [[1440, 900], [768, 1024], [390, 844]] as const) {
+    test(`at ${w}px, in all ${pairings.length} type pairings, words and scene never overlap`, async ({ page }) => {
+      await page.setViewportSize({ width: w, height: h });
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await page.goto('/?stage=after-hero');
+      await expect(page.locator('html[data-stage-ready]')).toHaveCount(1);
+      const svg = sceneSvg('bag cup jar');
+      await page.evaluate(([cs, svg]) => {
+        document.getElementById('g-main')!.innerHTML = (cs as unknown as string[][]).map(([id, attrs, words]) => `<section class="lt-hero-split"><div data-part="copy"><h2>${id}</h2></div><div data-part="visual"><figure class="lt-art" data-case="${id}" data-scene="bag cup jar" ${attrs}>${svg}${words}<figcaption class="lt-visually-hidden">${id}</figcaption></figure></div></section>`).join('');
+      }, [cases, svg] as const);
+      const bad: string[] = [];
+      for (const type of pairings) {
+        const r = await page.evaluate((type) => {
+          document.documentElement.dataset.type = type;
+          const out: string[] = [];
+          for (const fig of document.querySelectorAll<HTMLElement>('.lt-art[data-case]')) {
+            const id = fig.dataset.case!;
+            const f = fig.getBoundingClientRect();
+            const sc = fig.querySelector<SVGSVGElement>('[data-part="scene"]')!;
+            const box = sc.getBoundingClientRect();
+            const ctm = sc.getScreenCTM()!;
+            const ground = ctm.d * 176 + ctm.f;
+            const things = [...sc.querySelectorAll<SVGGElement>(':scope > g[data-role]')].map((g) => g.getBoundingClientRect());
+            const words = [...fig.querySelectorAll<HTMLElement>(':scope > p')];
+            for (const p of words) {
+              const t = p.getBoundingClientRect();
+              const name = `${id} ${p.dataset.part}`;
+              if (t.right > f.right + 1 || t.left < f.left - 1) out.push(`${name} leaves the panel (${Math.round(t.right - f.right)}px)`);
+              if (p.scrollWidth > p.clientWidth + 1) out.push(`${name} overflows its line`);
+              if (t.bottom > f.bottom + 1) out.push(`${name} runs off the foot of the panel (${Math.round(t.bottom - f.bottom)}px)`);
+              for (const g of things) {
+                const ix = Math.min(t.right, g.right) - Math.max(t.left, g.left), iy = Math.min(t.bottom, g.bottom) - Math.max(t.top, g.top);
+                if (ix > 1 && iy > 1) out.push(`${name} overlaps a drawing by ${Math.round(ix)}×${Math.round(iy)}px`);
+              }
+              // Below the ground line, or (a wide panel) beside the scene's own stretch of ground.
+              const beside = t.right <= box.left + 1;
+              if (!beside && t.top < ground - 1 && t.bottom > ground - 400 && p.dataset.part !== 'index') out.push(`${name} crosses the ground line (${Math.round(ground - t.top)}px)`);
+            }
+            if (!words.length) {
+              // A scene with no words fills the panel: as wide as it can be drawn, in the middle, not up in a corner.
+              const u = things.reduce((a, g) => ({ top: Math.min(a.top, g.top), bottom: Math.max(a.bottom, g.bottom), left: Math.min(a.left, g.left), right: Math.max(a.right, g.right) }), { top: Infinity, bottom: -Infinity, left: Infinity, right: -Infinity });
+              const mid = ((u.top + u.bottom) / 2 - f.top) / f.height;
+              if (u.right - u.left < f.width * 0.6) out.push(`${id}: a scene alone spans only ${Math.round(((u.right - u.left) / f.width) * 100)}% of the panel's width`);
+              if (mid < 0.3 || mid > 0.7) out.push(`${id}: a scene alone sits off-centre (${Math.round(mid * 100)}%)`);
+            } else if (things.length && Math.max(...things.map((g) => g.bottom)) - Math.min(...things.map((g) => g.top)) < 24) out.push(`${id}: the scene is squeezed out`);
+          }
+          return out;
+        }, type);
+        bad.push(...r.map((x) => `${type}: ${x}`));
+      }
+      expect(bad).toEqual([]);
+    });
+  }
 });
