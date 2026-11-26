@@ -1,9 +1,15 @@
 <div class="lt-vt-demo" data-lt="view-transition">
-  <div class="lt-segmented" data-part="layout" role="radiogroup" aria-label="Layout"><span data-part="indicator" aria-hidden="true"></span><button type="button" role="radio" aria-checked="true" tabindex="0" data-value="grid">Grid</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="list">List</button></div>
-  <ul data-part="items" data-layout="grid">
-    <li style="view-transition-name: lt-vt-a"><b>Revenue</b><span>£24.4k</span></li>
-    <li style="view-transition-name: lt-vt-b"><b>Accounts</b><span>1,284</span></li>
-    <li style="view-transition-name: lt-vt-c"><b>Churn</b><span>2.1%</span></li>
-    <li style="view-transition-name: lt-vt-d"><b>Latency</b><span>182 ms</span></li>
-  </ul>
+  <div data-part="list">
+    <p data-part="kicker">Juniper Workshop · seating</p>
+    <ul data-part="items">
+      <li><button type="button" data-vt-open="larkspur" aria-label="Open the Larkspur chair"><figure class="lt-art" data-tone="accent" data-pattern="sun" data-ratio="4/5" data-vt-name="vt-larkspur"><p data-part="name">Larkspur chair</p></figure><span data-part="meta"><b>Larkspur chair</b><span>£640</span></span></button></li>
+      <li><button type="button" data-vt-open="moss" aria-label="Open the Moss stool"><figure class="lt-art" data-pattern="steps" data-ratio="4/5" data-vt-name="vt-moss"><p data-part="name">Moss stool</p></figure><span data-part="meta"><b>Moss stool</b><span>£280</span></span></button></li>
+      <li><button type="button" data-vt-open="kestrel" aria-label="Open the Kestrel bench"><figure class="lt-art" data-tone="ink" data-pattern="bands" data-ratio="4/5" data-vt-name="vt-kestrel"><p data-part="name">Kestrel bench</p></figure><span data-part="meta"><b>Kestrel bench</b><span>£920</span></span></button></li>
+    </ul>
+  </div>
+  <div data-part="detail" hidden>
+    <button type="button" data-part="back" class="lt-btn" data-variant="ghost" data-size="sm"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg>All seating</button>
+    <div data-part="hero"></div>
+    <div data-part="copy"><h3 data-part="title"></h3><p data-part="price"></p><p data-part="line">Steam-bent ash, made to order in eight weeks.</p></div>
+  </div>
 </div>

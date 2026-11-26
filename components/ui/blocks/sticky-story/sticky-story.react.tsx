@@ -3,9 +3,13 @@ import { cx, useEnhance } from '../../_shared/react';
 import { enhance } from './sticky-story';
 import './sticky-story.css';
 
-export interface StoryStep { title: string; text: string; visual: ReactNode }
+export interface StoryStep { title: string; text: string; visual: ReactNode; caption?: string }
 
-/** Three or four steps on the left; the visual for the step being read stays pinned on the right. */
+/**
+ * A pinned scroll scene: three or four steps scroll on the left while the picture on the right stays pinned
+ * and changes with each step. Give each step's visual the same frame in a different state; put data-mark on
+ * the part a step is about and it is ringed as the step arrives.
+ */
 export function StickyStory({ eyebrow, title, steps, className }: { eyebrow?: string; title: string; steps: StoryStep[]; className?: string }) {
   const ref = useEnhance<HTMLElement>(enhance, undefined, [steps.length]);
   return (
@@ -14,8 +18,8 @@ export function StickyStory({ eyebrow, title, steps, className }: { eyebrow?: st
       <ol data-part="steps">
         {steps.map((s, i) => (
           <li key={s.title} data-active={i === 0 ? '' : undefined}>
-            <div data-part="text"><span data-part="n">{i + 1}</span><h3>{s.title}</h3><p>{s.text}</p></div>
-            <figure>{s.visual}</figure>
+            <div data-part="text"><h3>{s.title}</h3><p>{s.text}</p></div>
+            <figure data-part="visual">{s.visual}{s.caption && <figcaption className="lt-visually-hidden">{s.caption}</figcaption>}</figure>
           </li>
         ))}
       </ol>

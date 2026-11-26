@@ -1,0 +1,21 @@
+<section class="lt-hero-video" data-lt="hero-video" aria-labelledby="lt-hv-title">
+  <div data-part="copy">
+    <h1 id="lt-hv-title">Across to Moss Quay in 22 minutes</h1>
+    <div data-part="side">
+      <p data-part="lede">Kestrel Ferries sails every half hour from 06:40, with room for bikes, buggies and dogs.</p>
+      <div data-part="cta"><a class="lt-btn" data-variant="primary" data-size="lg" href="#times">See today’s sailings</a></div>
+    </div>
+  </div>
+  <div data-part="media">
+    <figure class="lt-art" data-part="poster" data-tone="accent" data-pattern="bands" data-frame data-shot="Still from the film: the ferry leaving Kestrel Point at first light, wake behind it, 16:9">
+      <p data-part="name">The 06:40 leaving Kestrel Point</p><p data-part="fact">Film, 18 seconds, no sound</p>
+    </figure>
+    <!-- The film: put its path in data-src (MP4, H.264, muted, 8 to 20 seconds, under 4 MB) and add a poster="" still.
+         It plays muted and looped only when motion is allowed and Save-Data is off; the button pauses it. -->
+    <video data-part="video" muted loop playsinline preload="none" aria-hidden="true" hidden><source data-src="" type="video/mp4"></video>
+    <button type="button" data-part="toggle" aria-label="Pause the film" hidden>
+      <svg data-icon="pause" class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5.5v13M15 5.5v13"/></svg>
+      <svg data-icon="play" class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>
+    </button>
+  </div>
+</section>
