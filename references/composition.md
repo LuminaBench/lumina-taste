@@ -79,8 +79,8 @@ Placing the picture:
 - Its top lines up with the top of the headline or its centre with the centre of the text block. Not in between.
 - It may touch the right edge of the container. It never floats with equal space on all sides inside its half.
 - A caption states what it shows in one line, in secondary ink, when that is not obvious.
-- No picture is better than a wrong one. No stock photographs, no drawings of the product, no decorative shapes.
-- No photograph yet? The stand-in must still say something true, large. An `art-panel` with `data-frame` and the name; or `data-variant="figure"` with the one number that matters ("20 min", "410 a week", "£26"); or, when the thing has a colour of its own, `data-tone="swatch"` in that colour. A panel that only repeats the headline is a grey box with words on it.
+- No picture is better than a wrong one. No stock photographs, no detailed drawing of the product in place of its photograph, no decorative shapes that stand for nothing.
+- No photograph yet? The stand-in must still say something true, large. An `art-panel` with the name and a flat motif of the subject's own thing (`data-motif`: a cup for a café, a crane for a builder; a sign of the subject, not a portrait of the product); or `data-frame` and the name; or `data-variant="figure"` with the one number that matters ("20 min", "410 a week", "£26"); or, when the thing has a colour of its own, `data-tone="swatch"` in that colour. A panel that only repeats the headline is a grey box with words on it.
 - No photographs of people? Do not tile initials on grey squares: set the people as ruled rows (`team-grid` with `data-variant="list"`: name, role, one line).
 
 ## 6. Colour budget
