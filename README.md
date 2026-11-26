@@ -2,9 +2,9 @@
 
 **Pages that look designed, not generated.** A design skill for coding agents: it plans a page from a one-line brief, builds it from a library of tasteful parts, and critiques the result the way a designer would, including the habits that make AI-built pages recognisable.
 
-- **Plans before it builds.** `compose.mjs` turns "website for my bakery" into a page type, a look taken from the subject, sections in order with copy formulas, and a first draft.
-- **Shows instead of tells.** Picture-led sections, figures set large, scroll statements, stacking cards, dark media bands, and openly licensed photographs found and credited for you.
-- **Catches the defaults.** A Playwright critic flags indigo-and-Inter, cream-serif-and-terracotta, labels over every heading, walls of words, invented stats and stock faces, and scores the page out of 100.
+- **Plans before it builds.** `compose.mjs` turns "website for my bakery" into a page type, a look and typeface taken from the subject, a rhythm of quiet and loud sections, one bold idea, and a first draft written from the brief's own facts.
+- **Shows instead of tells.** Picture-led sections, Apple-style scroll moments (a pinned scene, a sideways rail, a product reveal, figures that count up), openly licensed photographs graded to the palette, and 47 drawings of the subject's own things when there are no photographs.
+- **Catches the defaults.** A Playwright critic flags indigo-and-Inter, cream-serif-and-terracotta, labels over every heading, walls of words, sections with nothing to look at, the same layout twice, too much motion, small touch targets and slow pictures, and scores the page out of 100.
 
 ## Install
 
@@ -47,17 +47,17 @@ npx skills remove lumina-taste -g
 
 | | | |
 | --- | ---: | --- |
-| **Page blueprints** | 25 | Complete pages to start from: landing, developer tool, practice, venue, shop, charity, event, dashboard, docs, checkout, assistant chat, agent workspace and more, each with its empty, loading and error states |
-| **UI patterns** | 204 | Sections, controls, data views and motion parts, in vanilla TypeScript and React, found by describing them ("the bar that appears when I tick rows") |
-| **Charts** | 46 | From leaderboards and Pareto frontiers to forecasts with ranges, all theme-aware and readable in both modes |
+| **Page blueprints** | 27 | Complete pages to start from: landing, developer tool, practice, venue, shop, charity, event, a phone app flow, a desktop workspace, dashboard, docs, checkout, assistant chat and more, each with its empty, loading and error states |
+| **UI patterns** | 211 | Sections, controls, data views and motion parts, in vanilla TypeScript and React, found by describing them ("the bar that appears when I tick rows") |
+| **Charts** | 48 | From leaderboards and Pareto frontiers to story charts that build as you scroll, all theme-aware and readable in both modes |
 | **Palettes** | 24 × 2 | Light and dark, every text, control and chart pair contrast-checked |
-| **Type pairings** | 12 | Fluid scales with tabular figures where numbers matter |
+| **Type pairings** | 20 | Chosen by subject (a slab for trades, stencil lettering for builders, a legal serif that is not the AI default), variable axes, self-hostable with metric-matched fallbacks |
 | **Styles** | 39 | Whole-page looks, each with its own radius, density and surface treatment |
-| **Motion** | 3 layers | A hero entrance, sections that rise into place, pictures that settle as they scroll in. Plain CSS, still under reduced motion |
-| **Composer** | 27 page types | Brief → plan → draft, with a look taken from the subject rather than a default |
-| **Critic** | `--taste` | Layout, type, colour, rhythm, words against pictures, and the looks models fall back on |
-| **Pictures** | `find-images.mjs` | Public-domain and CC0 photographs for a page's picture slots, downloaded with a credits file |
-| **Evals** | 36 briefs | Score any page an agent builds; run your agent over all of them |
+| **Motion** | 8 moments | Pinned scene, sideways scroll, product reveal, counting figures, before-and-after slider, video hero, page transitions, picture zoom. Plain CSS scroll timelines, at most two per page, still under reduced motion |
+| **Composer** | 27 page types | Brief → plan → draft, with a rhythm, one bold idea and the brief's own words; brand from a colour, logo or old site; Tailwind v4 and Next.js output |
+| **Critic** | `--taste` | Layout, type, colour, rhythm, words against pictures, motion budget, app rules, speed, and the looks models fall back on; plus a review pack and blind side-by-side comparisons |
+| **Pictures** | `find-images.mjs` | Public-domain and CC0 photographs for a page's picture slots: one crop, one colour grade, focal points and WebP sizes, with a credits file |
+| **Evals** | 36 briefs | Score any page an agent builds, run any agent over all of them, and keep a score history per agent |
 
 ## How an agent uses it
 
@@ -85,7 +85,11 @@ node scripts/sniff.mjs http://localhost:3000
 node scripts/export-tokens.mjs --format shadcn --palette navy-sand > app/globals.css
 node scripts/sample-data.mjs invoices --rows 20 --format csv
 node scripts/find-images.mjs --fill index.html --subject "bakery"     # openly licensed photographs, credited
+node scripts/compose.mjs "builder in Glasgow, extensions from £40,000" --brand-from "#c8102e"
+node scripts/review-page.mjs ./index.html --out ./review     # screenshots, squint view, checklist
+node scripts/fonts.mjs --pairing stamped --out ./fonts        # self-host a pairing
 node scripts/eval-score.mjs ./out --brief saas-landing-invoicing
+node scripts/pack-skill.mjs --out ~/skills/lumina-taste       # lean copy for an agent's skills folder
 ```
 
 The installer copies only what you ask for plus the files those import, and writes `taste-profile.json`. Colour overrides are contrast-checked before they are accepted. The auditor needs Playwright (`npm i -D @playwright/test && npx playwright install chromium`).
