@@ -1,19 +1,10 @@
-// lumina-taste gallery. Vanilla TS, bundled by scripts/build.mjs.
-import '../tokens/base.css';
-import '../tokens/layout.css';
-import '../tokens/backdrops.css';
-import '../tokens/composition.css';
-import '../tokens/scroll.css';
-import '../tokens/palettes/all.css';
-import '../tokens/typography/typography.css';
-import '../tokens/styles/styles.css';
-import '../components/ui/_shared/shared.css';
-import './gallery.css';
+// The gallery app: every view and the router. Loaded by gallery.ts unless the page is a stage (stage.ts).
 import { BLUEPRINTS, CHARTS, COMPARE, STYLES, UI } from './generated/registry';
 import { PALETTES, TYPOGRAPHY } from '../engine/profiles/options.mjs';
 import { ICON, announce, copyText, ensureFont, esc, html, setTheme, syncRoots, theme, themeAttrs } from './core';
 import { byId, unmountPreviews, viewElement, viewIndex } from './elements';
 import { viewCompare } from './compare';
+import { viewBeforeAfter, viewMoments } from './moments';
 import { rank } from './search';
 
 const main = document.getElementById('g-main')!;
@@ -273,6 +264,8 @@ function render() {
   else if (r.name === 'pages' || r.name === 'blueprints') viewPages(r.id);
   else if (r.name === 'palettes') viewPalettes(r.id);
   else if (r.name === 'compare') viewCompare(main, r.id);
+  else if (r.name === 'moments') cleanups.push(viewMoments(main, r.id));
+  else if (r.name === 'before-after') cleanups.push(viewBeforeAfter(main));
   else if (r.id && byId(r.id)) viewElement(main, r.id);
   else viewIndex(main, q.value.trim(), state.family, state.sort);
 }
