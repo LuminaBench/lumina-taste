@@ -495,7 +495,7 @@ test('--images runs find-images over the draft (off by default; no network here:
     const brief = 'Website for Brickwell Build, a construction firm in Bristol, a £40,000 single-storey extension in 12 weeks';
     const off = node([join(root, 'scripts/compose.mjs'), brief, '--project', join(dir, 'a'), '--write']);
     assert.match(off.stdout, /Photographs: no photographs fetched[\s\S]*Add --images/);
-    const env = { ...process.env, LT_OPENVERSE: `http://127.0.0.1:${server.address().port}/ov/`, LT_COMMONS: `http://127.0.0.1:${server.address().port}/cm` };
+    const env = { ...process.env, LT_OPENVERSE: `http://127.0.0.1:${server.address().port}/ov/`, LT_COMMONS: `http://127.0.0.1:${server.address().port}/cm`, LT_PHOTOS: join(dir, 'no-sets') };
     const r = await new Promise((res) => { const c = spawn(process.execPath, [join(root, 'scripts/compose.mjs'), brief, '--project', join(dir, 'b'), '--write', '--images', '--json'], { env }); let out = ''; c.stdout.on('data', (d) => { out += d; }); c.on('close', (code) => res({ code, out })); });
     assert.equal(r.code, 0);
     const plan = JSON.parse(r.out);

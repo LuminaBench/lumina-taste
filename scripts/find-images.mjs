@@ -5,6 +5,15 @@
 //   node scripts/find-images.mjs "stoneware mug kiln"                      # list candidates (nothing is downloaded)
 //   node scripts/find-images.mjs "stoneware mug kiln" --pick 2,5 --out ./images
 //   node scripts/find-images.mjs --fill index.html --subject "stoneware pottery" --out ./images
+//   node scripts/find-images.mjs --starter cafe                             # the curated set for a kind of business
+//   node scripts/find-images.mjs --starter cafe --pick 2,5 --out ./images
+//
+// Curated first: engine/photos/<set>.json holds a hand-checked starter set per kind of business (public domain or
+// CC0, the subject itself, no faces, no text, one light). --starter names a set or a page-types domain; with --fill
+// the set is also found from --subject. Briefs the set fits get its photographs (with the focal point chosen by
+// eye); the rest are searched for. Where a third of a section or more is then photographed, its other panels get
+// the closest unused curated photographs as stand-ins (--no-complete keeps their drawings). --no-starter searches
+// only.
 //
 // Sources: Openverse (Flickr, Wikimedia, museums and more) and Wikimedia Commons, asked one at a time. By default
 // only public domain and CC0 pictures are offered, which need no credit; --license by also allows CC BY and
@@ -28,6 +37,7 @@ import { GRADES, paletteColours, parseFocus, parseRatio, treatImages, WIDTHS } f
 import { imgTag, onFirstScreen, writeCredits } from './lib/image-html.mjs';
 import { motifSvg, rankMotifs } from './lib/image-motifs.mjs';
 import { imageSize } from './lib/image-size.mjs';
+import { assignStarters, completeSet, fitScore, starterCandidate, starterFor } from './lib/image-starter.mjs';
 
 const args = process.argv.slice(2);
 const opt = (name, def) => { const i = args.indexOf(`--${name}`); if (i < 0) return def; const v = args[i + 1]; args.splice(i, 2); return v; };
@@ -36,7 +46,11 @@ const out = resolve(opt('out', 'images'));
 const count = Math.max(1, Math.min(30, Number(opt('count', '8'))));
 const orientation = opt('orientation', null); // wide | tall | square
 const licence = opt('license', opt('licence', 'open')); // open = cc0 + public domain; by = adds CC BY / BY-SA
-const pick = (opt('pick', '') || '').split(',').map((s) => Number(s.trim())).filter((n) => n > 0);
+const pickArg = opt('pick', '') || '';
+const starterArg = opt('starter', null);
+const noStarter = flag('no-starter');
+const noComplete = flag('no-complete');
+const pick = pickArg.split(',').map((s) => Number(s.trim())).filter((n) => n > 0);
 const fill = opt('fill', null);
 const subject = opt('subject', '');
 const ratioArg = opt('ratio', null);
@@ -53,9 +67,10 @@ const noMotif = flag('no-motif');
 const dry = flag('dry-run');
 const asJson = flag('json');
 const query = args.join(' ').trim();
-if (!query && !fill) {
+if (!query && !fill && !starterArg) {
   console.error(`Usage: node scripts/find-images.mjs "<what the picture shows>" [--pick 1,3] [--out ./images] [--orientation wide|tall|square] [--license open|by]
-       node scripts/find-images.mjs --fill page.html [--subject "<the business>"] [--out ./images] [--dry-run]
+       node scripts/find-images.mjs --fill page.html [--subject "<the business>"] [--starter <set|domain>] [--out ./images] [--dry-run]
+       node scripts/find-images.mjs --starter <set|domain> [--pick 1,3|all] [--out ./images]
 Treatment: [--ratio 4/5] [--grade ${GRADES.join('|')}] [--palette <id> | --profile taste-profile.json] [--focus x,y] [--no-treat] [--keep-originals]`);
   process.exit(2);
 }
@@ -90,7 +105,7 @@ async function openverse(q) {
 /** Wikimedia Commons: bitmaps whose licence metadata is public domain or CC0 (or CC BY with --license by). */
 async function commons(q) {
   const u = new URL(COMMONS);
-  for (const [k, v] of Object.entries({ action: 'query', format: 'json', generator: 'search', gsrsearch: `filetype:bitmap ${q}`, gsrnamespace: '6', gsrlimit: String(Math.min(20, count * 2 + 4)), prop: 'imageinfo', iiprop: 'url|size|mime|extmetadata', iiurlwidth: '1800', origin: '*' })) u.searchParams.set(k, v);
+  for (const [k, v] of Object.entries({ action: 'query', format: 'json', generator: 'search', gsrsearch: `filetype:bitmap ${q}`, gsrnamespace: '6', gsrlimit: String(Math.min(20, count * 2 + 4)), prop: 'imageinfo', iiprop: 'url|size|mime|extmetadata', iiurlwidth: '1920', origin: '*' })) u.searchParams.set(k, v);
   const j = await getJson(u.href);
   return Object.values(j.query?.pages ?? {}).map((p) => {
     const ii = p.imageinfo?.[0] ?? {}, m = ii.extmetadata ?? {};
@@ -236,30 +251,38 @@ async function finish(items, ratio) {
   return results;
 }
 
-const line = (c, i) => `${String(i + 1).padStart(2)}. ${c.title.slice(0, 60)}  ·  ${c.creator.slice(0, 32)}  ·  ${c.licence}${c.needsCredit ? ' (credit required)' : ''}  ·  ${c.width}×${c.height}\n    ${c.page ?? c.url}`;
+const line = (c, i) => `${String(i + 1).padStart(2)}. ${c.source === 'starter' ? `[curated] ${c.shows.slice(0, 60)}  ·  ` : ''}${c.title.slice(0, 60)}  ·  ${c.creator.slice(0, 32)}  ·  ${c.licence}${c.needsCredit ? ' (credit required)' : ''}  ·  ${c.width}×${c.height}\n    ${c.page ?? c.url}`;
 const tmp = mkdtempSync(join(tmpdir(), 'lt-find-'));
 const cleanup = () => rmSync(tmp, { recursive: true, force: true });
 
 // ------------------------------------------------------------------ search and pick
+const starterSet = noStarter ? null : starterFor({ starter: starterArg, subject });
+if (starterArg && !starterSet) { console.error(`No starter set "${starterArg}". The sets are the files in engine/photos/ (a set id or a page-types domain).`); process.exit(2); }
+
 if (!fill) {
-  const { list, failed, rejected } = await search(query);
+  // A curated set first (all of it for --starter alone, the photographs that fit the words otherwise), then search.
+  const curated = starterSet ? starterSet.photos.map((p) => ({ p, s: query ? fitScore(p, query, { subjectWords: starterSet.words ?? [] }) : 1 })).filter((x) => x.s > 0).sort((a, b) => b.s - a.s).map((x) => starterCandidate(starterSet, x.p)) : [];
+  const { list: found, failed, rejected } = query ? await search(query) : { list: [], failed: [], rejected: [] };
+  const list = [...curated, ...found.filter((c) => !curated.some((k) => k.page === c.page))];
   if (asJson) { console.log(JSON.stringify({ query, candidates: list, rejected, failed }, null, 2)); cleanup(); process.exit(0); }
   if (failed.length) console.log(`(Not reached: ${failed.join('; ')})`);
-  if (!list.length) { console.log(`No openly licensed photographs found for “${query}”. Try fewer, plainer words, or keep the art panel (it draws the subject: data-motif).`); cleanup(); process.exit(0); }
-  console.log(`Openly licensed photographs for “${query}” (${licence === 'by' ? 'public domain, CC0, CC BY' : 'public domain and CC0 only'}):\n`);
+  if (!list.length) { console.log(`No openly licensed photographs found for “${query || starterArg}”. Try fewer, plainer words, or keep the art panel (it draws the subject: data-motif).`); cleanup(); process.exit(0); }
+  if (curated.length) console.log(`Curated starter set “${starterSet.id}”: ${curated.length} hand-checked photograph(s) first${query ? ', then search results' : ''}.`);
+  console.log(`Openly licensed photographs for “${query || starterSet.id}” (${licence === 'by' ? 'public domain, CC0, CC BY' : 'public domain and CC0 only'}):\n`);
   list.forEach((c, i) => console.log(line(c, i)));
-  if (!pick.length) { console.log(`\nOpen the source pages and choose the ones that show the subject itself. Then: --pick 1,3 --out ${relative(process.cwd(), out) || '.'}`); cleanup(); process.exit(0); }
+  if (!pick.length && pickArg.trim() !== 'all') { console.log(`\nOpen the source pages and choose the ones that show the subject itself. Then: --pick 1,3 --out ${relative(process.cwd(), out) || '.'}`); cleanup(); process.exit(0); }
   const items = [];
-  for (const n of pick) {
+  for (const n of pickArg.trim() === 'all' ? list.map((_, i) => i + 1) : pick) {
     const c = list[n - 1];
     if (!c) { console.error(`No candidate ${n}.`); continue; }
     if (dry) { console.log(`Would download ${n}: ${c.url}`); continue; }
-    try { items.push({ c, file: await download(c, tmp, `${query} ${n}`), name: `${query} ${n}`, focus: focusArg }); } catch (e) { console.error(`Skipped ${n}: ${e.message}`); }
+    const name = c.source === 'starter' ? c.id : `${query} ${n}`;
+    try { items.push({ c, file: await download(c, tmp, name), name, focus: focusArg ?? c.focus ?? null }); } catch (e) { console.error(`Skipped ${n}: ${e.message}`); }
   }
   if (items.length) {
     const ratio = parseRatio(ratioArg ?? (orientation === 'wide' ? '3/2' : orientation === 'square' ? '1/1' : '4/5'));
     const results = await finish(items, ratio);
-    for (const r of results) console.log(`Saved ${r.files.map((f) => relative(process.cwd(), join(out, f.file))).join(', ')}\n  ${imgTag(r, { base: relative(process.cwd(), out), alt: '<what it shows>' })}`);
+    results.forEach((r, i) => console.log(`Saved ${r.files.map((f) => relative(process.cwd(), join(out, f.file))).join(', ')}\n  ${imgTag(r, { base: relative(process.cwd(), out), alt: items[i].c.shows ?? '<what it shows>' })}`));
     console.log(`Credits: ${relative(process.cwd(), join(out, 'CREDITS.md'))}`);
   }
   cleanup();
@@ -291,10 +314,22 @@ const shotOf = (m) => /data-shot="([^"]+)"/.exec(m[0])?.[1] ?? '';
 
 const chosen = new Map(); // figure index → { c, file, name, shot }
 const used = new Set();
+// Curated photographs first: each brief the set fits gets one, each photograph once.
+const fromSet = starterSet ? assignStarters(starterSet, briefed.map((m, i) => ({ key: m.index, shot: shotOf(m), weight: i === 0 && onFirstScreen(html, m.index) ? 2 : 1 })), { ratio: setRatio, subject }) : new Map();
+if (starterSet) console.log(`Starter set “${starterSet.id}”: ${fromSet.size} of ${briefed.length} brief(s) fit a curated photograph${fromSet.size < briefed.length ? '; searching for the rest' : ''}.`);
 for (const m of briefed) {
   const shot = shotOf(m);
+  const fit = fromSet.get(m.index);
+  if (fit) {
+    const c = starterCandidate(starterSet, fit.photo);
+    used.add(c.url);
+    if (dry) { console.log(`Would fill “${shot.slice(0, 50)}” with curated ${c.id} (${c.shows.slice(0, 50)}), fit ${fit.score}`); continue; }
+    try { chosen.set(m.index, { c, file: await download(c, tmp, c.id), name: c.id, shot, focus: c.focus }); continue; } catch (e) { console.log(`Could not use curated ${c.id}: ${e.message}; searching instead.`); }
+  }
   let c = null, q = '';
-  for (q of queries(shot)) {
+  // With a curated set, the bare subject is not searched: it brings back another business's shopfront, not the
+  // thing the brief asks for. A drawing of the subject is better than that.
+  for (q of queries(shot).filter((x) => !starterSet || x !== subject.trim())) {
     const { list } = await search(q, { strict: true }).catch(() => ({ list: [] }));
     c = list.find((x) => !used.has(x.url) && (setRatio < 1.2 || x.width >= x.height) && (setRatio > 0.9 || x.height >= x.width * 0.75)) ?? null;
     if (c) break;
@@ -305,8 +340,26 @@ for (const m of briefed) {
   try { chosen.set(m.index, { c, file: await download(c, tmp, shot.split(/[,.]/)[0]), name: shot.split(/[,.]/)[0], shot }); } catch (e) { console.log(`Could not use ${c.url}: ${e.message}.`); }
 }
 
+// One set, not a collage: in a section where a third or more of the panels now hold a photograph, the rest get the closest unused
+// curated photographs instead of drawings (stand-ins until the business's own pictures; --no-complete keeps the
+// drawings).
+if (starterSet && !noComplete && !dry) {
+  const sectionOf = (i) => (html.slice(0, i).match(/<section\b/gi) ?? []).length;
+  const groups = {};
+  for (const m of briefed) (groups[sectionOf(m.index)] ??= []).push(m);
+  for (const list of Object.values(groups)) {
+    const filled = list.filter((m) => chosen.has(m.index)), rest = list.filter((m) => !chosen.has(m.index));
+    if (!rest.length || filled.length * 3 < list.length) continue;
+    const extra = completeSet(starterSet, rest.map((m) => ({ key: m.index, shot: shotOf(m) })), [...chosen.values()].filter((v) => v.c.source === 'starter').map((v) => starterSet.photos.find((p) => p.id === v.c.id)).filter(Boolean), { ratio: setRatio, subject });
+    for (const [key, { photo }] of extra) {
+      const c = starterCandidate(starterSet, photo);
+      try { chosen.set(key, { c, file: await download(c, tmp, c.id), name: c.id, shot: shotOf(list.find((m) => m.index === key)), focus: c.focus, standIn: true }); } catch (e) { console.log(`Could not use curated ${c.id}: ${e.message}.`); }
+    }
+  }
+}
+
 const items = [...chosen.entries()];
-const results = items.length ? await finish(items.map(([, v]) => ({ ...v, focus: null })), setRatio) : [];
+const results = items.length ? await finish(items.map(([, v]) => ({ ...v, focus: v.focus ?? null })), setRatio) : [];
 const byIndex = new Map(items.map(([idx], i) => [idx, results[i]]));
 const firstIdx = Math.min(...[...byIndex.keys()].filter((i) => onFirstScreen(html, i)), Infinity);
 
@@ -334,11 +387,14 @@ for (const m of [...empty].reverse()) { // from the end, so earlier offsets stay
   const shot = shotOf(m);
   if (r) {
     const src = relative(dirname(page), out).split('\\').join('/');
-    const alt = shot.split(/[,.]/)[0];
+    const alt = chosen.get(start).c.shows ?? shot.split(/[,.]/)[0];
     const sizes = /data-sizes="([^"]+)"/.exec(m[0])?.[1] ?? sizesArg ?? undefined;
     let rest = html.slice(openEnd).replace(/^\s*<svg data-part="motif"[\s\S]*?<\/svg>/, '');
-    html = html.slice(0, openEnd) + imgTag(r, { base: src, alt, first: start === firstIdx, sizes }) + rest;
-    console.log(`Filled “${shot.slice(0, 50)}” with ${r.files.map((f) => f.file).join(', ')} (${chosen.get(start).c.licence}, ${chosen.get(start).c.creator.slice(0, 30)})${r.treated ? `, ${r.grade} grade, focus ${Math.round(r.focus.x * 100)}% ${Math.round(r.focus.y * 100)}%` : ''}`);
+    // A photograph takes the panel over: the stand-in's pattern and drawing go, so the placeholder type stays
+    // under the picture (art-panel.css raises it above the ground only for a drawn panel).
+    const open = m[0].replace(/\s+data-(pattern|motif)="[^"]*"/g, '');
+    html = html.slice(0, start) + open + imgTag(r, { base: src, alt, first: start === firstIdx, sizes }) + rest;
+    console.log(`Filled “${shot.slice(0, 50)}”${chosen.get(start).c.source === 'starter' ? ` (curated${chosen.get(start).standIn ? ' stand-in, to complete the set' : ''}: ${chosen.get(start).c.id})` : ''} with ${r.files.map((f) => f.file).join(', ')} (${chosen.get(start).c.licence}, ${chosen.get(start).c.creator.slice(0, 30)})${r.treated ? `, ${r.grade} grade, focus ${Math.round(r.focus.x * 100)}% ${Math.round(r.focus.y * 100)}%` : ''}`);
     filled++;
     continue;
   }

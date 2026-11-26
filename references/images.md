@@ -5,10 +5,46 @@ A page with the right photograph beats any amount of type. When the person has t
 ## Finding them
 
 ```sh
-node scripts/find-images.mjs "sourdough loaf crust"                 # a numbered list; nothing is downloaded
+node scripts/find-images.mjs --fill index.html --subject "coffee shop in York" --out ./images   # curated set first, then search
+node scripts/find-images.mjs --starter bakery                       # the curated set for a kind of business
+node scripts/find-images.mjs --starter bakery --pick 2,5 --out ./images
+node scripts/find-images.mjs "sourdough loaf crust"                 # search: a numbered list; nothing is downloaded
 node scripts/find-images.mjs "sourdough loaf crust" --pick 2 --out ./images
-node scripts/find-images.mjs --fill index.html --subject "bakery" --out ./images
 ```
+
+### Starter sets: curated first
+
+Search results are a first draft; a starter set is a finished one. `engine/photos/<set>.json` holds 6 to 12 photographs per kind of business, each downloaded, looked at and kept only if a good designer would put it on a real site: the subject itself, no faces, no watermark, no words in the picture, no artworks or old archive photographs, sharp, well lit, at least 1600 px on the long side, and one light across the set. Only public domain and CC0, so no credit is owed (it is recorded anyway). The files are data, not pictures: `find-images` downloads, treats and credits them like any other photograph.
+
+- **Which set.** `--starter <set>` names one (a set id, or a page-types domain such as `hospitality`). With `--fill` and no `--starter`, the set comes from `--subject`: a set whose own `words` the subject names (the longest wins, so "coffee shop" finds `cafe` before `commerce`), else the set of the subject's page-types domain. `--no-starter` searches only.
+- **Which photograph for which panel.** Each panel's `data-shot` brief is matched against the photographs' `shot` keywords (earlier words in the brief count more; words that only name the business, such as "coffee" on a café page, count a third). Pairs are taken best first across the whole page, each photograph once, and once one is chosen, others of the same `tone` get a small lift so the set holds together. Briefs no photograph fits are searched for; with a set, the bare subject is never searched on its own (it brings back other businesses' shopfronts), so a panel nothing fits keeps its drawing. The hero (the first panel on the first screen) chooses first. A brief's first two words that are not just the business (for "builders in Glasgow", "extension" counts and "builders" does not) must be among a photograph's `shot` words, so a stone wall never stands in for "a finished extension".
+- **One set, not a collage.** When a third or more of a section's panels have a photograph, its remaining panels get the closest unused photographs of the set rather than a mix of photographs and drawings; the log marks them "stand-in". They are on subject but not the brief: replace them with the business's own pictures. `--no-complete` keeps the drawings.
+- **Treatment.** Each curated photograph's `focus` (chosen by eye) leads the crop, so a 3:2 picture cut to 4:5 keeps the cup, not the wall beside it. `alt` is the photograph's `shows`, which says what is actually in it.
+- **Sets:** one per page-types domain (`professional`, `construction`, `trades`, `beauty`, `hospitality`, `media`, `property`, `social`, `finance`, `trading`, `devtool`, `analytics`, `health`, `public`, `commerce`, `editorial`, `productivity`, `creative`, `events`, `playful`, `enterprise`, `travel`, `education`, `transport`), plus finer sets where a domain holds very different places: `cafe` and `bakery`. For software (`devtool`, `analytics`, `productivity`, `trading`), the set is atmosphere for one band at most; the picture of a software product is the product working (device frames, below).
+
+A photograph in a set:
+
+```json
+{
+  "id": "filter-coffee-dripping-through",
+  "shows": "Filter coffee dripping through a pour-over cone into a glass server",
+  "shot": ["filter", "pour over", "drip", "dripper", "glass", "brew", "coffee", "kettle"],
+  "orientation": "wide", "tone": "dark", "focus": {"x": 0.55, "y": 0.4},
+  "title": "Drip brewing (Unsplash)", "creator": "…", "licence": "CC0 1.0",
+  "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/", "provider": "wikimedia",
+  "page": "https://commons.wikimedia.org/wiki/File:…", "url": "https://upload.wikimedia.org/…/1920px-….jpg",
+  "width": 1920, "height": 1280, "original": {"width": 5472, "height": 3648}
+}
+```
+
+### Adding or changing a set
+
+1. Search Wikimedia Commons (and Openverse) for public domain or CC0 photographs, one request at a time with a descriptive User-Agent. Commons holds tens of thousands of CC0 photographs imported from photo sites (titles ending "(Unsplash)"): `intitle:unsplash <noun>` finds modern, well-lit pictures of things.
+2. Download the candidates to `qa/artifacts/` (never into the repo) and look at every one, full size. Keep only those that pass the list above; then look at the kept ones side by side and drop any that break the set's light.
+3. For each: `shows` (one plain sentence, what is in it; it becomes the `alt`), `shot` (8 to 12 lower-case nouns a brief would use for it: the thing, the place, the action), `tone` (`light`, `dark`, `warm` or `cool`: the one a designer would name first), `orientation`, and `focus`: the point a crop must keep, chosen by looking (0 to 1 from the left and top of the picture).
+4. `url` is the file at 1920 px wide (a standard Commons thumbnail size; the original when it is smaller), with no query string. Check that it still answers 200 with an image.
+5. `domains` lists the page-types domains the set serves; `words` lists the subject words that pick it ahead of its domain. Write the file with `formatJson`. `tests/unit/photos.test.mjs` checks every set: 6 to 12 photographs, licences, sizes, sources, fields, and that every domain has one.
+6. Delete the downloads.
 
 - Sources: Openverse (photo sites, Flickr, Wikimedia and more) and Wikimedia Commons, asked one at a time.
 - Licences: public domain and CC0 by default, which need no credit. `--license by` adds CC BY and CC BY-SA, which must be credited where they appear.
