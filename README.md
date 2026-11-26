@@ -56,7 +56,7 @@ npx skills remove lumina-taste -g
 | **Motion** | 8 moments | Pinned scene, sideways scroll, product reveal, counting figures, before-and-after slider, video hero, page transitions, picture zoom. Plain CSS scroll timelines, at most two per page, still under reduced motion |
 | **Composer** | 29 page types | Brief → plan → draft for every page type and app flow, with a rhythm, one bold idea and the brief's own words; brand from a colour, logo or old site; Tailwind v4 and Next.js output |
 | **Critic** | `--taste` | Layout, type, colour, rhythm, words against pictures, motion budget, app rules, speed, and the looks models fall back on; plus a review pack and blind side-by-side comparisons |
-| **Pictures** | `find-images.mjs` | Public-domain and CC0 photographs for a page's picture slots: one crop, one colour grade, focal points and WebP sizes, with a credits file |
+| **Pictures** | 26 photo sets | Hand-checked public-domain and CC0 photographs for each kind of business, filled into a page with one crop, one grade, focal points and WebP sizes; 47 drawings of the subject's own things, composable into scenes, when there are none |
 | **Evals** | 36 briefs | Score any page an agent builds, run any agent over all of them, and keep a score history per agent |
 
 ## How an agent uses it
@@ -82,7 +82,7 @@ node scripts/install-taste.mjs --project /path/to/app --attach --root "#panel" -
 node scripts/install-taste.mjs --project /path/to/app --density dense            # locked axes stay put
 node scripts/audit-ui.mjs http://localhost:3000 --taste
 node scripts/sniff.mjs http://localhost:3000
-node scripts/export-tokens.mjs --format shadcn --palette navy-sand > app/globals.css
+node scripts/export-tokens.mjs --format shadcn --palette navy-sand > app/globals.css   # also swiftui, compose, figma
 node scripts/sample-data.mjs invoices --rows 20 --format csv
 node scripts/find-images.mjs --fill index.html --subject "bakery"     # openly licensed photographs, credited
 node scripts/compose.mjs "builder in Glasgow, extensions from £40,000" --brand-from "#c8102e"
