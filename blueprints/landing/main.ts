@@ -6,13 +6,17 @@ import '../../components/ui/navigation/site-footer/site-footer.css';
 import '../../components/ui/data/bento-grid/bento-grid.css';
 import '../../components/ui/data/stat-strip/stat-strip.css';
 import '../../components/ui/blocks/faq-section/faq-section.css';
+import '../../components/ui/blocks/sticky-story/sticky-story.css';
+import '../../components/ui/data/device-frame/device-frame.css';
 import './page.css';
 import { enhance as navbar } from '../../components/ui/navigation/navbar-mega/navbar-mega';
 import { enhance as segmented } from '../../components/ui/controls/segmented-control/segmented-control';
+import { enhance as story } from '../../components/ui/blocks/sticky-story/sticky-story';
 import { render as multiLine } from '../../components/charts/multi-line-chart/multi-line-chart';
 import { months, round, walk } from '../../components/charts/core/demo-data';
 
-boot({ 'navbar-mega': navbar, 'segmented-control': segmented });
+// One scroll moment: setting up, pinned (sticky-story). The hero enters; every section rises into place.
+boot({ 'navbar-mega': navbar, 'segmented-control': segmented, 'sticky-story': story });
 
 const all = months(24);
 const series = [

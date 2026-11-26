@@ -25,7 +25,7 @@
         <p data-part="note">From £24 · free UK delivery over £60 · 30 days to return</p>
       </div>
       <div data-part="visual">
-        <figure class="lt-art" data-tone="swatch" data-pattern="sun" data-frame data-ratio="5/4" style="--art: oklch(0.83 0.035 75)" data-shot="The everyday mug on a pale wooden table beside a window, steam rising, shot level with the rim, 5:4. Nothing else on the table.">
+        <figure class="lt-art" data-lt="art-panel" data-motif="cup" data-tone="swatch" data-pattern="sun" data-frame data-ratio="5/4" style="--art: oklch(0.83 0.035 75)" data-shot="The everyday mug on a pale wooden table beside a window, steam rising, shot level with the rim, 5:4. Nothing else on the table.">
           
           <p data-part="name">The everyday mug</p>
           <p data-part="fact">300 ml · speckled oat · £28</p>
@@ -61,12 +61,21 @@
       </ul>
     </section>
 
-    <section class="lt-how-it-works" id="made" data-tone="well" data-layout="rail" aria-labelledby="sh-ma-h">
-      <header><h2 id="sh-ma-h">Nine days from a ball of clay to your door</h2><p data-part="lede">All of it happens in one room behind the shop on Gloucester Street. Come and watch on a Friday.</p></header>
-      <ol>
-        <li><span data-part="n">1</span><h3>Thrown and trimmed</h3><p>Each piece starts as 450 g of Staffordshire stoneware on the wheel. It dries for a day, then the foot is trimmed and the handle pulled.</p></li>
-        <li><span data-part="n">2</span><h3>Fired, glazed, fired again</h3><p>A first firing to 1,000°C, a dip in the oat glaze, then eleven hours at 1,240°C. The speckle is iron in the clay coming through.</p></li>
-        <li><span data-part="n">3</span><h3>Checked and packed</h3><p>Nell checks every rim and base by hand. Seconds are sold in the shop, never posted. Yours goes out in paper and card, no plastic.</p></li>
+    <section class="lt-story" id="made" data-tone="well" data-lt="sticky-story" aria-labelledby="sh-ma-h" style="--steps: 3">
+      <header><h2 id="sh-ma-h">Nine days from a ball of clay to your door</h2></header>
+      <ol data-part="steps">
+        <li data-active>
+          <div data-part="text"><h3>Thrown and trimmed</h3><p>450 g of Staffordshire stoneware on the wheel. A day to dry, then the foot is trimmed and the handle pulled.</p></div>
+          <figure data-part="visual"><div class="lt-art" data-lt="art-panel" data-variant="figure" data-motif="vase" data-pattern="arch" data-shot="Nell at the wheel from above, wet clay, hands only, 4:5"><p data-part="figure">450<small>g</small></p><p data-part="name">Thrown and trimmed</p><p data-part="fact">Day one, on the wheel</p></div><figcaption class="lt-visually-hidden">450 grams of clay on the wheel</figcaption></figure>
+        </li>
+        <li>
+          <div data-part="text"><h3>Fired, glazed, fired again</h3><p>A first firing to 1,000°C, a dip in the oat glaze, then eleven hours at 1,240°C. The speckle is iron in the clay.</p></div>
+          <figure data-part="visual"><div class="lt-art" data-lt="art-panel" data-variant="figure" data-motif="vase" data-pattern="arch" data-tone="accent" data-shot="The kiln door open, a shelf of glazed mugs still warm, 4:5"><p data-part="figure" data-mark>1,240<small>°C</small></p><p data-part="name">Fired, glazed, fired again</p><p data-part="fact">Days two to eight, in the kiln</p></div><figcaption class="lt-visually-hidden">Eleven hours in the kiln at 1,240 degrees</figcaption></figure>
+        </li>
+        <li>
+          <div data-part="text"><h3>Checked and packed</h3><p>Nell checks every rim and base by hand. Seconds stay in the shop. Yours goes out in paper and card, no plastic.</p></div>
+          <figure data-part="visual"><div class="lt-art" data-lt="art-panel" data-variant="figure" data-motif="bag" data-pattern="arch" data-tone="ink" data-shot="A mug wrapped in brown paper in a card box on the packing bench, 4:5"><p data-part="figure">9<small>days</small></p><p data-part="name">Checked and packed</p><p data-part="fact">Day nine, to your door</p></div><figcaption class="lt-visually-hidden">Packed in paper and card on day nine</figcaption></figure>
+        </li>
       </ol>
     </section>
 
@@ -80,6 +89,23 @@
         <div><dt>Oven</dt><dd>Bowls up to 180°C, from a cold oven</dd></div>
         <div><dt>If it chips</dt><dd>Within a year, we replace it once, free</dd></div>
       </dl>
+    </section>
+
+    <section class="lt-before-after" id="glaze" data-tone="well" data-lt="before-after" aria-labelledby="sh-gl-h">
+      <header><h2 id="sh-gl-h">The same mug, either side of the kiln</h2><p data-part="lede">Drag across, or use the arrow keys.</p></header>
+      <div data-part="compare">
+        <div data-part="before" role="img" aria-label="Before firing: the mug dipped in raw glaze, chalky and pale">
+          <div class="lt-art" data-lt="art-panel" data-tone="swatch" data-motif="cup" data-pattern="floor" style="--art: oklch(0.9 0.008 80)" data-shot="The raw-glazed mug on the kiln shelf before firing, 16:9"><p data-part="name">Raw oat glaze</p><p data-part="fact">Powdery, pale, rubs off on a finger</p></div>
+          <span data-part="tag">Before</span>
+        </div>
+        <div data-part="after" role="img" aria-label="After firing: speckled oat, matt outside and gloss inside">
+          <div class="lt-art" data-lt="art-panel" data-tone="swatch" data-motif="cup" data-pattern="floor" style="--art: oklch(0.8 0.045 72)" data-shot="The same mug after the glaze firing, same shelf and light, 16:9"><p data-part="name">Speckled oat</p><p data-part="fact">Iron speckle through a matt glaze</p></div>
+          <span data-part="tag">After</span>
+        </div>
+        <span data-part="handle" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span>
+        <input type="range" data-part="range" min="0" max="100" value="50" step="1" aria-label="Divider between before and after firing" aria-valuetext="50% before, 50% after">
+      </div>
+      <p data-part="captions"><span><b>Before</b> Dipped in raw glaze</span><span><b>After</b> Eleven hours at 1,240°C</span></p>
     </section>
 
     <section class="lt-faq-section" id="questions" aria-labelledby="sh-faq-h">

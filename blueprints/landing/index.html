@@ -39,8 +39,8 @@
     </div>
   </header>
 
-  <main id="main">
-    <section class="bp-hero bp-container">
+  <main id="main" data-scroll>
+    <section class="bp-hero bp-container" data-entrance>
       <p class="lt-eyebrow">Analytics for product teams</p>
       <h1 class="lt-display">The numbers your whole team <em>actually reads</em></h1>
       <p class="lt-lede">Halyard turns your warehouse into dashboards, alerts and weekly notes that people open. Set up in an afternoon, no SQL required.</p>
@@ -73,6 +73,35 @@
     <section class="bp-container bp-proof" id="customers" aria-label="Customers">
       <p>Trusted by 2,400 product teams, from seed-stage startups to public companies</p>
       <ul><li>Moss Studio</li><li>Kestrel Labs</li><li>Harbour &amp; Co</li><li>Juniper Health</li><li>Fjord Mobility</li></ul>
+    </section>
+
+    <section class="lt-story" id="how" data-tone="well" data-lt="sticky-story" aria-labelledby="ln-how-h" style="--steps: 3">
+      <header><h2 id="ln-how-h">From warehouse to Monday’s numbers in an afternoon</h2></header>
+      <ol data-part="steps">
+        <li data-active>
+          <div data-part="text"><h3>Connect your warehouse</h3><p>A read-only key for Postgres, BigQuery or Snowflake. Halyard reads the schema, never the rows, until you ask for a chart.</p></div>
+          <figure data-part="visual"><div class="lt-device" data-kind="browser"><div data-part="bar" aria-hidden="true"><i></i><i></i><i></i><span data-part="url">app.halyard.dev/sources</span></div><div data-part="screen" data-mock="ln" aria-hidden="true">
+            <p data-ln="h">Sources</p>
+            <ul data-ln="rows"><li><b>Postgres · production</b><span data-ln="ok" data-mark>Connected</span></li><li><b>Stripe</b><span data-ln="ok">Connected</span></li><li><b>HubSpot</b><span>Reading schema</span></li></ul>
+            <p data-ln="foot">142 tables found · read only</p>
+          </div></div><figcaption class="lt-visually-hidden">Three sources connected in Halyard</figcaption></figure>
+        </li>
+        <li>
+          <div data-part="text"><h3>Pick the numbers that matter</h3><p>Choose from the measures it finds, or write one in SQL. Each gets a name, a unit and an owner.</p></div>
+          <figure data-part="visual"><div class="lt-device" data-kind="browser"><div data-part="bar" aria-hidden="true"><i></i><i></i><i></i><span data-part="url">app.halyard.dev/revenue</span></div><div data-part="screen" data-mock="ln" aria-hidden="true">
+            <p data-ln="h">Revenue · this quarter</p>
+            <div data-ln="kpis"><p><span>MRR</span><b>£248k</b></p><p data-mark><span>Net retention</span><b>118%</b></p><p><span>Churn</span><b>1.9%</b></p></div>
+            <svg data-ln="chart" viewBox="0 0 600 150" preserveAspectRatio="none"><path data-ln="area" d="M0 118 C70 112 110 96 170 92 S290 70 350 62 S500 34 600 22 V150 H0Z"/><path d="M0 118 C70 112 110 96 170 92 S290 70 350 62 S500 34 600 22" fill="none"/></svg>
+          </div></div><figcaption class="lt-visually-hidden">A revenue report with three measures and a rising line</figcaption></figure>
+        </li>
+        <li>
+          <div data-part="text"><h3>Share one link, with an alert</h3><p>Everyone sees the same figures, refreshed every hour. Set a threshold and Halyard writes when it moves.</p></div>
+          <figure data-part="visual"><div class="lt-device" data-kind="browser"><div data-part="bar" aria-hidden="true"><i></i><i></i><i></i><span data-part="url">app.halyard.dev/revenue/share</span></div><div data-part="screen" data-mock="ln" aria-hidden="true">
+            <p data-ln="h">Share “Revenue · this quarter”</p>
+            <ul data-ln="rows"><li><b>Link</b><span>halyard.dev/r/q4-revenue</span></li><li><b>Who can see it</b><span>Everyone at Moss Studio</span></li><li data-mark><b>Alert</b><span>Churn above 2.5%</span></li><li><b>Refreshes</b><span>Every hour</span></li></ul>
+          </div></div><figcaption class="lt-visually-hidden">Sharing a report with an alert on churn</figcaption></figure>
+        </li>
+      </ol>
     </section>
 
     <section class="bp-section bp-container" id="features" aria-labelledby="features-h">

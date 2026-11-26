@@ -16,5 +16,7 @@ import './page.css';
 import { enhance as navbar } from '../../components/ui/navigation/navbar-simple/navbar-simple';
 import { enhance as statement } from '../../components/ui/blocks/scroll-statement/scroll-statement';
 import { enhance as visit } from '../../components/ui/blocks/visit-info/visit-info';
+import { enhance as art } from '../../components/ui/data/art-panel/art-panel';
 
-boot({ 'navbar-simple': navbar, 'scroll-statement': statement, 'visit-info': visit });
+// Two scroll moments, apart: the statement (the price promise) and the first visit as stacking cards.
+boot({ 'navbar-simple': navbar, 'scroll-statement': statement, 'visit-info': visit, 'art-panel': art });
