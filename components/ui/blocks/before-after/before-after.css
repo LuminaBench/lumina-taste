@@ -25,6 +25,8 @@
   :is([data-part="before"], [data-part="after"]) > :not([data-part="tag"]) { position: absolute; top: 0; width: 100cqi; max-width: none; height: 100%; }
   [data-part="before"] > :not([data-part="tag"]) { left: 0; }
   [data-part="after"] > :not([data-part="tag"]) { right: 0; }
+  /* Art panels on both sides: centre the drawing, so the line cuts through one object in two states. */
+  :is([data-part="before"], [data-part="after"]) .lt-art > [data-part="motif"] { right: auto; left: 50%; translate: -50% 0; }
   :is([data-part="before"], [data-part="after"]) > :is(img, picture, video) { object-fit: cover; }
   [data-part="tag"] { position: absolute; top: 14px; z-index: 1; padding: 5px 11px; border-radius: var(--radius-pill); background: color-mix(in oklab, var(--bg-surface-1) 90%, transparent); color: var(--text-primary); font-size: var(--text-ui-xs); font-weight: 650; box-shadow: 0 0 0 1px var(--border-hairline); transition: opacity var(--dur-3) var(--ease-out); }
   [data-part="before"] [data-part="tag"] { left: 14px; }

@@ -65,6 +65,8 @@
   [data-part="motif"] :is([data-m="ink"], [data-m="sil"]) { fill: none; stroke: var(--mi); stroke-width: var(--motif-stroke, 3); stroke-linecap: round; stroke-linejoin: round; }
   [data-part="motif"] [data-m="sil"] { stroke-width: calc(var(--motif-stroke, 3) * 2); }
   :scope:has(> :is(img, video, picture)) > [data-part="motif"] { display: none; }
+  /* A figure set large and a drawing on one panel: the drawing steps back so the figure has the lower half. */
+  :scope[data-variant="figure"] > [data-part="motif"] { height: 46%; }
   /* With a photograph: it fills the frame and the placeholder type is hidden (the caption still describes it). */
   img, video, picture { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
 }
