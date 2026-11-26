@@ -148,6 +148,42 @@
       "width": 1920,
       "height": 1280,
       "original": {"width":6000,"height":4000}
+    },
+    {
+      "id": "coffee-phone-sofa-table",
+      "shows": "Coffee, a phone and flowers on a low table by a sofa",
+      "shot": ["coffee","phone","home","messages","table","cosy"],
+      "orientation": "wide",
+      "tone": "warm",
+      "focus": {"x":0.5,"y":0.5},
+      "title": "Coffee, flowers and books (Unsplash)",
+      "creator": "Juja Han juja_han",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Coffee%2C_flowers_and_books_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Coffee%2C_flowers_and_books_%28Unsplash%29.jpg/1920px-Coffee%2C_flowers_and_books_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1280,
+      "original": {"width":2449,"height":1633}
+    },
+    {
+      "id": "long-dining-table-window",
+      "shows": "A long dining table set by a big window",
+      "shot": ["dining","table","dinner","friends","meal","home"],
+      "orientation": "wide",
+      "tone": "light",
+      "focus": {"x":0.5,"y":0.55},
+      "title": "Grovemade 2017-04-13 (Unsplash vfIx29EsLHA)",
+      "creator": "Grovemade grovemade",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Grovemade_2017-04-13_(Unsplash_vfIx29EsLHA).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/Grovemade_2017-04-13_%28Unsplash_vfIx29EsLHA%29.jpg/1920px-Grovemade_2017-04-13_%28Unsplash_vfIx29EsLHA%29.jpg",
+      "width": 1920,
+      "height": 1280,
+      "original": {"width":4896,"height":3264}
     }
   ]
 }

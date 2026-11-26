@@ -148,6 +148,42 @@
       "width": 1920,
       "height": 1280,
       "original": {"width":5160,"height":3440}
+    },
+    {
+      "id": "monitors-desk-night",
+      "shows": "Two monitors on a desk at night, a lamp lighting the keyboard",
+      "shot": ["monitors","desk","screens","night","trading","workstation"],
+      "orientation": "wide",
+      "tone": "dark",
+      "focus": {"x":0.45,"y":0.5},
+      "title": "Designer's two-screen setup (Unsplash)",
+      "creator": "Lee Campbell leecampbell",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Designer's_two-screen_setup_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/Designer%27s_two-screen_setup_%28Unsplash%29.jpg/1920px-Designer%27s_two-screen_setup_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1282,
+      "original": {"width":6016,"height":4016}
+    },
+    {
+      "id": "two-monitors-charts",
+      "shows": "Two monitors with charts and code on a desk",
+      "shot": ["monitors","charts","screens","markets","trading","desk"],
+      "orientation": "wide",
+      "tone": "dark",
+      "focus": {"x":0.5,"y":0.45},
+      "title": "Coding workstation (Unsplash)",
+      "creator": "Farzad Nazifi euwars",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Coding_workstation_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/Coding_workstation_%28Unsplash%29.jpg/1920px-Coding_workstation_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1275,
+      "original": {"width":4288,"height":2848}
     }
   ]
 }

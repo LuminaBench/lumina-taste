@@ -190,6 +190,24 @@
       "width": 1920,
       "height": 1278,
       "original": {"width":3000,"height":1997}
+    },
+    {
+      "id": "code-laptop-screen",
+      "shows": "Code in an editor on a laptop screen, close up",
+      "shot": ["code","laptop","editor","screen","developer","programming"],
+      "orientation": "wide",
+      "tone": "light",
+      "focus": {"x":0.5,"y":0.5},
+      "title": "Macro laptop coding (Unsplash)",
+      "creator": "Marc Mueller seven11nash",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Macro_laptop_coding_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/Macro_laptop_coding_%28Unsplash%29.jpg/1920px-Macro_laptop_coding_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1280,
+      "original": {"width":6000,"height":4000}
     }
   ]
 }

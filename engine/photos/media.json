@@ -148,6 +148,42 @@
       "width": 1920,
       "height": 2560,
       "original": {"width":2448,"height":3264}
+    },
+    {
+      "id": "headphones-table-bokeh",
+      "shows": "A pair of headphones on a table, warm lights behind",
+      "shot": ["headphones","music","audio","listening","sound","studio"],
+      "orientation": "wide",
+      "tone": "warm",
+      "focus": {"x":0.5,"y":0.6},
+      "title": "Alphacolor 13 2016 (Unsplash)",
+      "creator": "Alphacolor 13 duck58cth",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Alphacolor_13_2016_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Alphacolor_13_2016_%28Unsplash%29.jpg/1920px-Alphacolor_13_2016_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1280,
+      "original": {"width":5616,"height":3744}
+    },
+    {
+      "id": "headphones-tablet-wood",
+      "shows": "Brown headphones beside a tablet on a wooden table",
+      "shot": ["headphones","tablet","music","podcast","audio","listening"],
+      "orientation": "wide",
+      "tone": "warm",
+      "focus": {"x":0.6,"y":0.5},
+      "title": "Brown headphones iPad (Unsplash)",
+      "creator": "Alphacolor 13 duck58cth",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Brown_headphones_iPad_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Brown_headphones_iPad_%28Unsplash%29.jpg/1920px-Brown_headphones_iPad_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1280,
+      "original": {"width":5616,"height":3744}
     }
   ]
 }

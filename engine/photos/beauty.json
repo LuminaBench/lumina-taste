@@ -166,6 +166,24 @@
       "width": 1920,
       "height": 1280,
       "original": {"width":7364,"height":4909}
+    },
+    {
+      "id": "manicured-hands-flowers",
+      "shows": "Manicured hands with rings among pink flowers",
+      "shot": ["nails","manicure","hands","flowers","beauty","salon"],
+      "orientation": "wide",
+      "tone": "warm",
+      "focus": {"x":0.55,"y":0.5},
+      "title": "Hands in the spring (Unsplash)",
+      "creator": "Tiko Giorgadze domenika",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Hands_in_the_spring_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Hands_in_the_spring_%28Unsplash%29.jpg/1920px-Hands_in_the_spring_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1278,
+      "original": {"width":4256,"height":2832}
     }
   ]
 }

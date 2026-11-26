@@ -189,6 +189,24 @@
       "width": 1920,
       "height": 1280,
       "original": {"width":5955,"height":3970}
+    },
+    {
+      "id": "stage-lights-hall",
+      "shows": "Stage lights in yellow haze at the front of a concert hall",
+      "shot": ["stage","lights","concert","festival","event","music"],
+      "orientation": "wide",
+      "tone": "dark",
+      "focus": {"x":0.5,"y":0.4},
+      "title": "Nainoa Shizuru 2016 (Unsplash)",
+      "creator": "Nainoa Shizuru nainoa",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Nainoa_Shizuru_2016_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Nainoa_Shizuru_2016_%28Unsplash%29.jpg/1920px-Nainoa_Shizuru_2016_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1280,
+      "original": {"width":5184,"height":3456}
     }
   ]
 }

@@ -148,6 +148,42 @@
       "width": 1920,
       "height": 1442,
       "original": {"width":4592,"height":3448}
+    },
+    {
+      "id": "balloons-brick-wall",
+      "shows": "A bunch of spotted balloons against a white brick wall",
+      "shot": ["balloons","party","colour","celebration","fun","bright"],
+      "orientation": "tall",
+      "tone": "light",
+      "focus": {"x":0.45,"y":0.4},
+      "title": "Party balloons (Unsplash)",
+      "creator": "Sofiya Levchenko sofelini",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Party_balloons_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/Party_balloons_%28Unsplash%29.jpg/1920px-Party_balloons_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 2235,
+      "original": {"width":3889,"height":4528}
+    },
+    {
+      "id": "colour-stripes-sky",
+      "shows": "A wall of bright colour stripes under a blue sky",
+      "shot": ["colour","stripes","bright","pattern","fun","rainbow"],
+      "orientation": "wide",
+      "tone": "light",
+      "focus": {"x":0.5,"y":0.6},
+      "title": "Colorful (Unsplash)",
+      "creator": "Scott Webb scottwebb",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Colorful_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/Colorful_%28Unsplash%29.jpg/1920px-Colorful_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1265,
+      "original": {"width":5877,"height":3872}
     }
   ]
 }

@@ -180,6 +180,24 @@
       "width": 1920,
       "height": 1277,
       "original": {"width":6016,"height":4000}
+    },
+    {
+      "id": "boutique-shelves-boots",
+      "shows": "Boots, a camera and goods on the shelves of a small boutique",
+      "shot": ["shop","boutique","shelves","products","retail","store"],
+      "orientation": "wide",
+      "tone": "warm",
+      "focus": {"x":0.5,"y":0.5},
+      "title": "Vintage apparel store interior (Unsplash)",
+      "creator": "Clark Street Mercantile mercantile",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Vintage_apparel_store_interior_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cb/Vintage_apparel_store_interior_%28Unsplash%29.jpg/1920px-Vintage_apparel_store_interior_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1281,
+      "original": {"width":7360,"height":4912}
     }
   ]
 }

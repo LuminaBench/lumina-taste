@@ -166,6 +166,24 @@
       "width": 1920,
       "height": 1268,
       "original": {"width":5914,"height":3906}
+    },
+    {
+      "id": "open-book-table",
+      "shows": "An open book on a wooden table",
+      "shot": ["book","reading","study","school","learning","pages"],
+      "orientation": "wide",
+      "tone": "warm",
+      "focus": {"x":0.45,"y":0.55},
+      "title": "Aaron Burden 2015-09-24 (Unsplash)",
+      "creator": "Aaron Burden aaronburden",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Aaron_Burden_2015-09-24_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Aaron_Burden_2015-09-24_%28Unsplash%29.jpg/1920px-Aaron_Burden_2015-09-24_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1442,
+      "original": {"width":4413,"height":3314}
     }
   ]
 }

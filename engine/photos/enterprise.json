@@ -158,6 +158,42 @@
       "width": 1920,
       "height": 1280,
       "original": {"width":4000,"height":2667}
+    },
+    {
+      "id": "long-boardroom-table",
+      "shows": "A long boardroom table with black chairs in a bright room",
+      "shot": ["boardroom","meeting","office","table","chairs","room"],
+      "orientation": "wide",
+      "tone": "light",
+      "focus": {"x":0.5,"y":0.6},
+      "title": "Large meeting room (Unsplash)",
+      "creator": "Breather breather",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Large_meeting_room_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Large_meeting_room_%28Unsplash%29.jpg/1920px-Large_meeting_room_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1280,
+      "original": {"width":4920,"height":3280}
+    },
+    {
+      "id": "meeting-room-whiteboard",
+      "shows": "A meeting room with white chairs, a table and a whiteboard",
+      "shot": ["meeting room","office","whiteboard","table","chairs","room"],
+      "orientation": "wide",
+      "tone": "light",
+      "focus": {"x":0.5,"y":0.55},
+      "title": "White conference room (Unsplash)",
+      "creator": "Breather breather",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:White_conference_room_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/White_conference_room_%28Unsplash%29.jpg/1920px-White_conference_room_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1280,
+      "original": {"width":5616,"height":3744}
     }
   ]
 }

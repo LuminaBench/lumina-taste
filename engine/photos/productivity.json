@@ -179,6 +179,24 @@
       "width": 1920,
       "height": 1277,
       "original": {"width":4000,"height":2660}
+    },
+    {
+      "id": "notebook-phone-glasses-desk",
+      "shows": "An open notebook, a phone, a pencil and glasses on a white desk",
+      "shot": ["notebook","desk","planning","notes","tasks","work"],
+      "orientation": "wide",
+      "tone": "light",
+      "focus": {"x":0.5,"y":0.5},
+      "title": "White work table with notes, smartphone and laptop (Unsplash)",
+      "creator": "JESHOOTS.COM jeshoots",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:White_work_table_with_notes%2C_smartphone_and_laptop_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dc/White_work_table_with_notes%2C_smartphone_and_laptop_%28Unsplash%29.jpg/1920px-White_work_table_with_notes%2C_smartphone_and_laptop_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1280,
+      "original": {"width":4600,"height":3067}
     }
   ]
 }

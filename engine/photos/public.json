@@ -179,6 +179,24 @@
       "width": 1920,
       "height": 1276,
       "original": {"width":4912,"height":3264}
+    },
+    {
+      "id": "library-hall-shelves",
+      "shows": "A grand library hall with shelves of books under a coffered ceiling",
+      "shot": ["library","books","hall","public","reading room","council"],
+      "orientation": "wide",
+      "tone": "warm",
+      "focus": {"x":0.5,"y":0.5},
+      "title": "Chantilly library study (Unsplash)",
+      "creator": "Gabriel Ghnassia gabrielghnassia",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Chantilly_library_study_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Chantilly_library_study_%28Unsplash%29.jpg/1920px-Chantilly_library_study_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1280,
+      "original": {"width":5065,"height":3377}
     }
   ]
 }

@@ -160,6 +160,42 @@
       "width": 1920,
       "height": 1398,
       "original": {"width":5364,"height":3907}
+    },
+    {
+      "id": "magazine-table-window-light",
+      "shows": "A magazine on a wooden table in a bar of window light",
+      "shot": ["magazine","reading","table","light","print","journal"],
+      "orientation": "wide",
+      "tone": "warm",
+      "focus": {"x":0.35,"y":0.6},
+      "title": "Designer style magazines (Unsplash)",
+      "creator": "m0851 m0851",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Designer_style_magazines_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3c/Designer_style_magazines_%28Unsplash%29.jpg/1920px-Designer_style_magazines_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1281,
+      "original": {"width":6868,"height":4584}
+    },
+    {
+      "id": "newspaper-espresso-wood",
+      "shows": "A folded newspaper and an espresso on a dark wooden table",
+      "shot": ["newspaper","news","coffee","reading","print","morning"],
+      "orientation": "wide",
+      "tone": "warm",
+      "focus": {"x":0.5,"y":0.5},
+      "title": "Morning Break (Unsplash)",
+      "creator": "Bino Storyteller curiousbino",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Morning_Break_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Morning_Break_%28Unsplash%29.jpg/1920px-Morning_Break_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1280,
+      "original": {"width":5396,"height":3597}
     }
   ]
 }

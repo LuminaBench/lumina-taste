@@ -161,6 +161,42 @@
       "width": 1920,
       "height": 1440,
       "original": {"width":3072,"height":2304}
+    },
+    {
+      "id": "studio-jars-brushes",
+      "shows": "Jars of brushes and paint on a studio bench",
+      "shot": ["studio","brushes","paint","workshop","art","craft"],
+      "orientation": "wide",
+      "tone": "warm",
+      "focus": {"x":0.5,"y":0.55},
+      "title": "Art supplies clutter (Unsplash)",
+      "creator": "Khara Woods kharaoke",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Art_supplies_clutter_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Art_supplies_clutter_%28Unsplash%29.jpg/1920px-Art_supplies_clutter_%28Unsplash%29.jpg",
+      "width": 1920,
+      "height": 1280,
+      "original": {"width":6000,"height":4000}
+    },
+    {
+      "id": "hand-painting-watercolour",
+      "shows": "A hand painting blue watercolour strokes on paper",
+      "shot": ["watercolour","painting","brush","hands","paper","art"],
+      "orientation": "wide",
+      "tone": "light",
+      "focus": {"x":0.55,"y":0.5},
+      "title": "Bench Accounting 2015-11-30 (Unsplash unG80SBSfMU)",
+      "creator": "Bench Accounting benchaccounting",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Bench_Accounting_2015-11-30_(Unsplash_unG80SBSfMU).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/48/Bench_Accounting_2015-11-30_%28Unsplash_unG80SBSfMU%29.jpg/1920px-Bench_Accounting_2015-11-30_%28Unsplash_unG80SBSfMU%29.jpg",
+      "width": 1920,
+      "height": 1280,
+      "original": {"width":3500,"height":2333}
     }
   ]
 }
