@@ -310,7 +310,7 @@ test.describe('scene panels hold their words', () => {
     ['alone', '', ''],
     ['alone, square', 'data-ratio="1/1"', ''],
   ] as const;
-  for (const [w, h] of [[1440, 900], [768, 1024], [390, 844]] as const) {
+  for (const [w, h] of [[1440, 900], [960, 800], [820, 1180], [768, 1024], [390, 844]] as const) {
     test(`at ${w}px, in all ${pairings.length} type pairings, words and scene never overlap`, async ({ page }) => {
       await page.setViewportSize({ width: w, height: h });
       await page.emulateMedia({ reducedMotion: 'reduce' });
