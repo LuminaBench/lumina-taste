@@ -6,7 +6,7 @@
   <title>Moss · messaging app</title>
   <meta name="description" content="Blueprint: a messaging app on a phone that widens to a sidebar and two panes: conversations with unread counts, a thread with grouped bubbles, day separators, a photo and a voice note, read state, and a composer above the home indicator and the keyboard, built with lumina-taste.">
 </head>
-<body class="as">
+<body class="as" data-pane="onboard" data-screen="welcome">
   <a class="bp-skip" href="#main">Skip to content</a>
   <nav class="as-side" aria-label="Sections">
     <p class="as-side-name"><i aria-hidden="true"></i><span>Moss</span></p>
@@ -15,18 +15,19 @@
   </nav>
   <main id="main" class="as-main">
     <h1 class="lt-visually-hidden">Moss, a messaging app</h1>
+    <div class="as-panes">
     
-  <section class="as-screen" id="screen-welcome" data-screen="welcome" data-pane="onboard" aria-labelledby="wl-h">
+  <article class="as-screen" id="screen-welcome" data-screen="welcome" data-pane="onboard" data-current aria-labelledby="wl-h">
     <div class="as-scroll"><div class="as-onboard">
       <figure class="lt-art" data-scene="chat envelope" data-tone="accent" data-shot="Two phones on a café table, one lit with a message"><svg data-part="scene" viewBox="68 19 232 181" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><g data-role="lead" transform="translate(70 20) scale(1)" style="--k:1"><path data-m="a" d="M32 30H106A10 10 0 0 1 116 40V84A10 10 0 0 1 106 94H58L38 110V94H32A10 10 0 0 1 22 84V40A10 10 0 0 1 32 30Z"/><path data-m="ink" d="M32 30H106A10 10 0 0 1 116 40V84A10 10 0 0 1 106 94H58L38 110V94H32A10 10 0 0 1 22 84V40A10 10 0 0 1 32 30ZM36 48H96M36 62H54"/><path data-m="b" d="M74 66H128A10 10 0 0 1 138 76V112A10 10 0 0 1 128 122H124V138L106 122H74A10 10 0 0 1 64 112V76A10 10 0 0 1 74 66Z"/><path data-m="ink" d="M74 66H128A10 10 0 0 1 138 76V112A10 10 0 0 1 128 122H124V138L106 122H74A10 10 0 0 1 64 112V76A10 10 0 0 1 74 66Z"/><g data-m="dot"><circle cx="86" cy="94" r="4"/><circle cx="101" cy="94" r="4"/><circle cx="116" cy="94" r="4"/></g></g><g data-role="rest" transform="translate(206 8.5) scale(0.5)" style="--k:0.5"><rect data-m="b" x="20" y="40" width="120" height="86" rx="6"/><rect data-m="a" x="106" y="50" width="22" height="26" rx="2"/><g data-m="ink"><rect x="20" y="40" width="120" height="86" rx="6"/><path d="M20 46L80 92L140 46M20 126L64 88M140 126L96 88"/><rect x="106" y="50" width="22" height="26" rx="2"/></g><circle data-m="dot" cx="80" cy="92" r="6"/></g></svg><figcaption class="lt-visually-hidden">A speech bubble and a letter</figcaption></figure>
       <ol class="as-dots" aria-label="Step 1 of 2"><li aria-current="step"></li><li></li></ol>
-      <h1 id="wl-h" tabindex="-1">The people you know, and nothing else</h1>
+      <h2 id="wl-h" tabindex="-1">The people you know, and nothing else</h2>
       <p>Messages, photos and voice notes, end to end encrypted. No feed, no ads.</p>
       <button type="button" class="lt-btn" data-variant="primary" data-size="lg" data-go="chats"><span data-part="label">Continue with my number</span></button>
     </div></div>
-  </section>
+  </article>
     
-  <section class="as-screen" id="screen-chats" data-screen="chats" data-tab="chats" data-pane="list" data-detail="thread" aria-labelledby="ch-h">
+  <article class="as-screen" id="screen-chats" data-screen="chats" data-tab="chats" data-pane="list" data-detail="thread" aria-labelledby="ch-h">
     <div class="as-scroll">
       <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
         <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Chats</p><button type="button" data-part="action" data-go="people" aria-label="New message"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16Z"/></svg></button></div>
@@ -60,9 +61,9 @@
         </section>
       </div>
     </div>
-  </section>
+  </article>
     
-  <section class="as-screen" id="screen-thread" data-screen="thread" data-pane="detail" data-parent="chats" aria-labelledby="th-h">
+  <article class="as-screen" id="screen-thread" data-screen="thread" data-pane="detail" data-parent="chats" aria-labelledby="th-h">
     <div class="as-scroll ms-scroll" id="ms-scroll">
       <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
         <div data-part="row"><button type="button" data-part="back" data-go="chats" data-dir="back" aria-label="Back to Chats"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>Chats</span></button><p data-part="small" aria-hidden="true">Priya Shah</p><span></span></div>
@@ -87,9 +88,9 @@
       <label data-part="field"><span class="lt-visually-hidden">Message</span><textarea rows="1" placeholder="Message" enterkeyhint="send"></textarea></label>
       <button type="submit" data-part="send" aria-label="Send" disabled><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
     </form>
-  </section>
+  </article>
     
-  <section class="as-screen" id="screen-people" data-screen="people" data-tab="people" data-pane="full" aria-labelledby="pp-h">
+  <article class="as-screen" id="screen-people" data-screen="people" data-tab="people" data-pane="full" aria-labelledby="pp-h">
     <div class="as-scroll">
       <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
         <div data-part="row"><span></span><p data-part="small" aria-hidden="true">People</p><span></span></div>
@@ -101,9 +102,9 @@
         <ul class="as-rows"><li><button type="button" class="as-row" data-go="thread" data-who="Mara Quist"><span class="as-mark" data-n="3" aria-hidden="true">MQ</span><span><b>Mara Quist</b><small>Bristol</small></span><span></span></button></li><li><button type="button" class="as-row" data-go="thread" data-who="Nell Arkwright"><span class="as-mark" data-n="0" aria-hidden="true">NA</span><span><b>Nell Arkwright</b><small>Stroud</small></span><span></span></button></li><li><button type="button" class="as-row" data-go="thread" data-who="Owen Hart"><span class="as-mark" data-n="1" aria-hidden="true">OH</span><span><b>Owen Hart</b><small>Frome</small></span><span></span></button></li><li><button type="button" class="as-row" data-go="thread" data-who="Priya Shah"><span class="as-mark" data-n="0" aria-hidden="true">PS</span><span><b>Priya Shah</b><small>Bath</small></span><span></span></button></li><li><button type="button" class="as-row" data-go="thread" data-who="Sam Okafor"><span class="as-mark" data-n="2" aria-hidden="true">SO</span><span><b>Sam Okafor</b><small>Bristol</small></span><span></span></button></li><li><button type="button" class="as-row" data-go="thread" data-who="Tom Brennan"><span class="as-mark" data-n="2" aria-hidden="true">TB</span><span><b>Tom Brennan</b><small>Leeds</small></span><span></span></button></li></ul>
       </div>
     </div>
-  </section>
+  </article>
     
-  <section class="as-screen" id="screen-settings" data-screen="settings" data-tab="settings" data-pane="full" aria-labelledby="st-h">
+  <article class="as-screen" id="screen-settings" data-screen="settings" data-tab="settings" data-pane="full" aria-labelledby="st-h">
     <div class="as-scroll">
       <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
         <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Settings</p><span></span></div>
@@ -123,7 +124,8 @@
         </div>
       </div>
     </div>
-  </section>
+  </article>
+    </div>
   </main>
   <nav class="lt-bottom-nav as-tabs" data-lt="bottom-nav" aria-label="Tabs">
     <span data-part="pill" aria-hidden="true"></span>

@@ -5,7 +5,7 @@
 .bo-book .as-h { margin: 0; font-size: var(--text-ui); color: var(--text-secondary); font-weight: 600; }
 .lt-segmented.bo-seg { width: 100%; }
 .lt-segmented.bo-seg button { flex: 1; height: 44px; font-size: var(--text-ui); }
-.bo-services { display: grid; gap: 0; border-radius: 18px; background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); overflow: hidden; }
+.bo-services { display: grid; gap: 0; border-radius: var(--radius-lg); background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); overflow: hidden; }
 .bo-services button { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; padding: 10px 16px; border: 0; background: none; color: var(--text-primary); font: inherit; text-align: start; cursor: pointer; }
 .bo-services button + button { box-shadow: inset 16px 1px 0 var(--bg-surface-1), inset 0 1px 0 var(--border-hairline); }
 .bo-services button > span:first-child { display: grid; gap: 2px; }
@@ -22,7 +22,7 @@
 .bo-sheet-when { display: grid; gap: 2px; margin: 4px 0 0; }
 .bo-sheet-when b { font-family: var(--font-display); font-size: 1.75rem; font-weight: var(--weight-display); letter-spacing: -0.02em; }
 .bo-sheet-when span { color: var(--text-secondary); font-variant-numeric: tabular-nums; }
-.bo-facts { display: grid; margin: 0; border-radius: 16px; background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); }
+.bo-facts { display: grid; margin: 0; border-radius: var(--radius-lg); background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); }
 .bo-facts > div { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 52px; padding: 8px 16px; }
 .bo-facts > div + div { box-shadow: inset 16px 1px 0 var(--bg-surface-1), inset 0 1px 0 var(--border-hairline); }
 .bo-facts dt { flex: none; color: var(--text-secondary); }
@@ -31,7 +31,7 @@
 .bo-sheet > .lt-btn { width: 100%; }
 
 /* Bookings: the next one is the one card on the screen. */
-.bo-next { display: grid; gap: 4px; padding: 22px; border-radius: 26px; background: var(--accent-solid); color: var(--accent-ink); text-decoration: none; box-shadow: none; }
+.bo-next { display: grid; gap: 4px; padding: 22px; border-radius: var(--radius-xl); background: var(--accent-solid); color: var(--accent-ink); text-decoration: none; box-shadow: none; }
 .bo-next:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 3px; }
 .bo-next-when { font-size: var(--text-ui-sm); font-weight: 600; opacity: 0.86; }
 .bo-next-day { font-size: var(--step-1); font-weight: 600; }
@@ -44,7 +44,7 @@
 .as-mark [data-part="mark-motif"] [data-m="a"] { fill: currentColor; }
 .as-mark [data-part="mark-motif"] :is([data-m="b"], [data-m="cut"]) { fill: transparent; }
 .as-mark [data-part="mark-motif"] :is([data-m="ink"], [data-m="sil"]) { fill: none; stroke: currentColor; stroke-width: 7; }
-.bo-date { display: grid; place-items: center; align-content: center; width: 52px; height: 52px; border-radius: 14px; background: var(--bg-surface-2); line-height: 1.05; }
+.bo-date { display: grid; place-items: center; align-content: center; width: 52px; height: 52px; border-radius: var(--radius-md); background: var(--bg-surface-2); line-height: 1.05; }
 .bo-date b { font-size: var(--step-1); font-variant-numeric: tabular-nums; }
 .bo-date span { color: var(--text-secondary); font-size: var(--text-ui-xs); font-weight: 600; }
 .bo-past .as-row { color: var(--text-secondary); }
@@ -53,7 +53,7 @@
 /* Dogs */
 .bo-dogs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 0; padding: 0; list-style: none; }
 .bo-dogs li { display: grid; gap: 8px; }
-.bo-dogs .lt-art { --art-ratio: 1 / 1; border-radius: 22px; }
+.bo-dogs .lt-art { --art-ratio: 1 / 1; border-radius: var(--radius-xl); }
 .bo-dogs p { display: grid; gap: 2px; margin: 0; }
 .bo-dogs small { color: var(--text-secondary); font-size: var(--text-ui-sm); }
 @media (min-width: 768px) {

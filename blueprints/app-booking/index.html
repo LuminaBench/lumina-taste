@@ -6,7 +6,7 @@
   <title>Moss Grooming · booking app</title>
   <meta name="description" content="Blueprint: a booking app on a phone that widens to a sidebar and two panes: who and what, a calm strip of days and a grid of free times, a sheet to check and book, and your bookings with the next one set large, built with lumina-taste.">
 </head>
-<body class="as">
+<body class="as" data-pane="onboard" data-screen="welcome">
   <a class="bp-skip" href="#main">Skip to content</a>
   <nav class="as-side" aria-label="Sections">
     <p class="as-side-name"><i aria-hidden="true"></i><span>Moss Grooming</span></p>
@@ -15,18 +15,19 @@
   </nav>
   <main id="main" class="as-main">
     <h1 class="lt-visually-hidden">Moss Grooming, a booking app</h1>
+    <div class="as-panes">
     
-  <section class="as-screen" id="screen-welcome" data-screen="welcome" data-pane="onboard" aria-labelledby="wl-h">
+  <article class="as-screen" id="screen-welcome" data-screen="welcome" data-pane="onboard" data-current aria-labelledby="wl-h">
     <div class="as-scroll"><div class="as-onboard">
       <figure class="lt-art" data-scene="paw scissors" data-tone="accent" data-shot="A freshly groomed terrier on the table, looking at the camera, soft window light"><svg data-part="scene" viewBox="67 12 232 188" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><g data-role="lead" transform="translate(70 17) scale(1)" style="--k:1"><path data-m="a" d="M80 136C60 136 46 124 50 108C54 94 66 88 80 88S106 94 110 108C114 124 100 136 80 136Z"/><g data-m="b"><ellipse cx="44" cy="80" rx="11" ry="15" transform="rotate(-24 44 80)"/><ellipse cx="66" cy="54" rx="11" ry="15" transform="rotate(-8 66 54)"/><ellipse cx="94" cy="54" rx="11" ry="15" transform="rotate(8 94 54)"/><ellipse cx="116" cy="80" rx="11" ry="15" transform="rotate(24 116 80)"/></g><g data-m="ink"><path d="M80 136C60 136 46 124 50 108C54 94 66 88 80 88S106 94 110 108C114 124 100 136 80 136Z"/><ellipse cx="44" cy="80" rx="11" ry="15" transform="rotate(-24 44 80)"/><ellipse cx="66" cy="54" rx="11" ry="15" transform="rotate(-8 66 54)"/><ellipse cx="94" cy="54" rx="11" ry="15" transform="rotate(8 94 54)"/><ellipse cx="116" cy="80" rx="11" ry="15" transform="rotate(24 116 80)"/></g></g><g data-role="rest" transform="translate(206 11.5) scale(0.5)" style="--k:0.5"><path data-m="b" d="M60 100L104 20L112 24L72 104Z"/><path data-m="b" d="M100 100L56 20L48 24L88 104Z"/><circle data-m="a" cx="54" cy="116" r="18"/><circle data-m="a" cx="106" cy="116" r="18"/><circle data-m="cut" cx="54" cy="116" r="8"/><circle data-m="cut" cx="106" cy="116" r="8"/><g data-m="ink"><path d="M60 100L104 20L112 24L72 104M100 100L56 20L48 24L88 104"/><circle cx="54" cy="116" r="18"/><circle cx="106" cy="116" r="18"/><circle cx="54" cy="116" r="8"/><circle cx="106" cy="116" r="8"/></g><circle data-m="dot" cx="80" cy="70" r="4"/></g></svg><figcaption class="lt-visually-hidden">A paw print and scissors</figcaption></figure>
       <ol class="as-dots" aria-label="Step 1 of 2"><li aria-current="step"></li><li></li></ol>
-      <h1 id="wl-h" tabindex="-1">A groom for Biscuit, booked in a minute</h1>
+      <h2 id="wl-h" tabindex="-1">A groom for Biscuit, booked in a minute</h2>
       <p>Pick a day and a time that is free. We send a reminder the evening before.</p>
       <button type="button" class="lt-btn" data-variant="primary" data-size="lg" data-go="book"><span data-part="label">Book a groom</span></button>
     </div></div>
-  </section>
+  </article>
     
-  <section class="as-screen" id="screen-book" data-screen="book" data-tab="book" data-pane="full" aria-labelledby="bk-h">
+  <article class="as-screen" id="screen-book" data-screen="book" data-tab="book" data-pane="full" aria-labelledby="bk-h">
     <div class="as-scroll">
       <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
         <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Book a groom</p><span></span></div>
@@ -58,9 +59,9 @@
       <p><b id="bo-sum-price">£48</b><small id="bo-sum-when">Fri 4 Dec, 10:30</small></p>
       <button type="button" class="lt-btn" data-variant="primary" data-size="lg" id="bo-review" aria-haspopup="dialog"><span data-part="label">Book</span></button>
     </div>
-  </section>
+  </article>
     
-  <section class="as-screen" id="screen-bookings" data-screen="bookings" data-tab="bookings" data-pane="list" data-detail="booking" aria-labelledby="bs-h">
+  <article class="as-screen" id="screen-bookings" data-screen="bookings" data-tab="bookings" data-pane="list" data-detail="booking" aria-labelledby="bs-h">
     <div class="as-scroll">
       <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
         <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Bookings</p><span></span></div>
@@ -97,9 +98,9 @@
         </section>
       </div>
     </div>
-  </section>
+  </article>
     
-  <section class="as-screen" id="screen-booking" data-screen="booking" data-pane="detail" data-parent="bookings" aria-labelledby="bd-h">
+  <article class="as-screen" id="screen-booking" data-screen="booking" data-pane="detail" data-parent="bookings" aria-labelledby="bd-h">
     <div class="as-scroll">
       <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
         <div data-part="row"><button type="button" data-part="back" data-go="bookings" data-dir="back" aria-label="Back to Bookings"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>Bookings</span></button><p data-part="small" aria-hidden="true">Friday 4 December</p><span></span></div>
@@ -124,9 +125,9 @@
         </div>
       </div>
     </div>
-  </section>
+  </article>
     
-  <section class="as-screen" id="screen-dogs" data-screen="dogs" data-tab="dogs" data-pane="full" aria-labelledby="dg-h">
+  <article class="as-screen" id="screen-dogs" data-screen="dogs" data-tab="dogs" data-pane="full" aria-labelledby="dg-h">
     <div class="as-scroll">
       <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
         <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Dogs</p><span></span></div>
@@ -147,7 +148,8 @@
         </div>
       </div>
     </div>
-  </section>
+  </article>
+    </div>
   </main>
   <nav class="lt-bottom-nav as-tabs" data-lt="bottom-nav" aria-label="Tabs">
     <span data-part="pill" aria-hidden="true"></span>

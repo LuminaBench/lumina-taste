@@ -9,7 +9,7 @@
 .se-me b { font-size: var(--step-1); }
 .se-me small { color: var(--text-secondary); overflow-wrap: anywhere; }
 .se-version { margin: 0; color: var(--text-muted); font-size: var(--text-ui-sm); text-align: center; }
-.se-facts { display: grid; margin: 0; border-radius: 16px; background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); }
+.se-facts { display: grid; margin: 0; border-radius: var(--radius-lg); background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); }
 .se-facts > div { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 52px; padding: 8px 16px; }
 .se-facts > div + div { box-shadow: inset 16px 1px 0 var(--bg-surface-1), inset 0 1px 0 var(--border-hairline); }
 .se-facts dt { flex: none; color: var(--text-secondary); }
@@ -25,7 +25,7 @@
 .se-what .lt-icon { flex: none; margin-top: 2px; color: var(--text-secondary); }
 .se-type { display: grid; gap: 8px; color: var(--text-secondary); }
 .se-type b { color: var(--text-primary); letter-spacing: 0.04em; }
-.se-type input { height: 52px; padding: 0 16px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: 14px; background: var(--bg-surface-1); color: var(--text-primary); font: 600 var(--step-0) var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; }
+.se-type input { height: 52px; padding: 0 16px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-1); color: var(--text-primary); font: 600 var(--step-0) var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; }
 .se-type input:focus-visible { outline: none; border-color: var(--focus-ring); box-shadow: var(--field-ring); }
 .lt-btn.se-danger { --btn-bg: var(--status-negative); --btn-hover: color-mix(in oklab, var(--status-negative) 88%, black); --btn-border: var(--status-negative); color: var(--bg-canvas); }
 .lt-btn.se-danger:disabled { --btn-bg: var(--bg-surface-3); --btn-border: transparent; color: var(--text-muted); }

@@ -2,7 +2,7 @@
    the time; unread counts are the only accent on the list. A thread is the kit's chat in its phone variant with
    a photo, a voice note and the read state, and the composer rides above the home indicator and the keyboard. */
 .ms-list { gap: 16px; }
-.ms-search { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: 12px; background: var(--bg-surface-2); color: var(--text-secondary); }
+.ms-search { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: var(--radius-md); background: var(--bg-surface-2); color: var(--text-secondary); }
 .ms-search:focus-within { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 1px; }
 .ms-search input { flex: 1; min-width: 0; height: 100%; border: 0; background: none; color: var(--text-primary); font: inherit; outline: none; }
 .ms-search input::placeholder { color: var(--text-muted); }
@@ -20,7 +20,7 @@
 
 /* The thread */
 .as-screen[data-screen="thread"] .as-body { padding-bottom: 16px; }
-.ms-photo.lt-art { --art-ratio: 4 / 5; width: min(240px, 66vw); border-radius: 20px; }
+.ms-photo.lt-art { --art-ratio: 4 / 5; width: min(240px, 66vw); border-radius: var(--radius-lg); }
 .lt-chat [data-part="bubble"].ms-voice { display: flex; align-items: center; gap: 10px; min-width: 220px; padding-block: 6px; }
 .ms-play { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: var(--bg-canvas); color: var(--text-primary); cursor: pointer; }
 .ms-play:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }

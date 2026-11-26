@@ -20,7 +20,10 @@ html[data-app] { height: 100%; }
   display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; overflow: hidden;
 }
 .as .bp-skip { border-radius: var(--radius-md); }
-.as-main { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); min-height: 0; }
+/* At large text sizes a button's words wrap rather than run off the screen. */
+.as .lt-btn[data-size="lg"] { height: auto; min-height: var(--control-h-lg); padding-block: 10px; white-space: normal; text-align: center; }
+.as-main { display: grid; grid-template-rows: minmax(0, 1fr); min-height: 0; }
+.as-panes { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); min-height: 0; }
 .as-screen { grid-area: 1 / 1; display: flex; flex-direction: column; min-width: 0; min-height: 0; background: var(--bg-canvas); }
 .as-screen:not([data-current]) { display: none; }
 .as-scroll { position: relative; flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-top: env(safe-area-inset-top); scrollbar-width: none; }
@@ -30,6 +33,7 @@ html[data-app] { height: 100%; }
 .as-scroll .lt-appbar [data-part="large"]:focus { outline: none; }
 .as-scroll .lt-appbar [data-part="large"] { padding-inline: var(--as-pad); }
 .as-scroll .lt-appbar [data-part="row"] { padding-inline: calc(var(--as-pad) - 12px); }
+.as-scroll .lt-appbar [data-part="action"] { min-width: 44px; justify-content: center; }
 .as-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; align-content: start; padding: 8px var(--as-pad) 40px; }
 .as-body > * { min-width: 0; }
 
@@ -64,7 +68,7 @@ button.as-row, a.as-row { cursor: pointer; transition: background-color var(--du
 .as-day:first-child { margin-top: 0; }
 
 /* A card is used only for the one thing set large on a screen (the next booking, the card, the workout). */
-.as-card { display: grid; gap: 10px; padding: 20px; border-radius: 24px; background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); }
+.as-card { display: grid; gap: 10px; padding: 20px; border-radius: var(--radius-xl); background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); }
 
 /* The action bar: the one action, low, in reach of a thumb, above the home indicator. */
 .as-actionbar { flex: none; z-index: 2; display: flex; align-items: center; gap: 14px; padding: 12px var(--as-pad) calc(12px + env(safe-area-inset-bottom)); background: var(--bg-canvas); box-shadow: 0 -1px 0 var(--border-hairline); }
@@ -82,9 +86,9 @@ button.as-row, a.as-row { cursor: pointer; transition: background-color var(--du
 .as[data-pane="detail"] .as-tabs, .as[data-pane="onboard"] .as-tabs, .as[data-pane="sheet"] .as-tabs { display: none; }
 
 /* Onboarding: the drawing, one sentence, one action. */
-.as-onboard { display: grid; align-content: end; gap: 18px; min-height: 100%; padding: calc(24px + env(safe-area-inset-top)) var(--as-pad) 24px; }
-.as-onboard .lt-art { --art-ratio: 1 / 1; border-radius: 32px; }
-.as-onboard h1, .as-onboard h2 { margin: 8px 0 0; font-family: var(--font-display); font-size: var(--as-title); font-weight: var(--weight-display); letter-spacing: -0.025em; line-height: 1.08; text-wrap: balance; }
+.as-onboard { display: grid; grid-template-columns: minmax(0, 1fr); align-content: end; gap: 18px; min-height: 100%; padding: calc(24px + env(safe-area-inset-top)) var(--as-pad) 24px; }
+.as-onboard .lt-art { --art-ratio: 1 / 1; border-radius: var(--radius-xl); }
+.as-onboard h2 { margin: 8px 0 0; font-family: var(--font-display); font-size: var(--as-title); font-weight: var(--weight-display); letter-spacing: -0.025em; line-height: 1.08; text-wrap: balance; }
 .as-onboard p { margin: 0; color: var(--text-secondary); font-size: var(--step-0); line-height: 1.45; text-wrap: pretty; }
 .as-onboard .lt-btn { width: 100%; }
 .as-dots { display: flex; justify-content: center; gap: 6px; margin: 0; padding: 0; list-style: none; }
@@ -99,7 +103,7 @@ button.as-row, a.as-row { cursor: pointer; transition: background-color var(--du
 .as-state .lt-btn { margin-top: 6px; }
 .as-skel { display: grid; gap: 14px; }
 .as-skel .lt-skeleton { height: 16px; border-radius: 8px; }
-.as-skel [data-big] { height: 52px; width: 64%; border-radius: 12px; }
+.as-skel [data-big] { height: 52px; width: 64%; border-radius: var(--radius-md); }
 .as-skel [data-row] { display: grid; grid-template-columns: 44px 1fr 64px; align-items: center; gap: 14px; min-height: 64px; }
 .as-skel [data-row] > :first-child { width: 44px; height: 44px; border-radius: 50%; }
 
@@ -131,7 +135,7 @@ button.as-row, a.as-row { cursor: pointer; transition: background-color var(--du
   .as-side a[aria-current="page"] .lt-icon { color: var(--accent-text); }
   .as-side a:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -2px; }
   .as-side-foot { margin-top: auto; padding: 12px; color: var(--text-muted); font-size: var(--text-ui-xs); }
-  .as-main { grid-template-columns: minmax(320px, 400px) minmax(0, 1fr); }
+  .as-panes { grid-template-columns: minmax(320px, 400px) minmax(0, 1fr); }
   .as-screen[data-pane="list"] { grid-area: 1 / 1; }
   .as-screen[data-pane="detail"] { grid-area: 1 / 2; box-shadow: inset 1px 0 0 var(--border-hairline); }
   .as-screen:is([data-pane="full"], [data-pane="onboard"]) { grid-area: 1 / 1 / 2 / 3; }
@@ -151,7 +155,7 @@ button.as-row, a.as-row { cursor: pointer; transition: background-color var(--du
   .as-onboard .lt-btn { width: auto; justify-self: start; min-width: 220px; }
   .as-onboard .as-dots { justify-content: flex-start; }
   /* Sheets become a centred panel. */
-  .as .lt-sheet, .as .lt-sheet[data-detents] { inset: 0; width: min(460px, 100vw - 48px); height: fit-content; max-height: calc(100dvh - 80px); margin: auto; padding: 24px; border-radius: 24px; translate: 0 8px; opacity: 0; transition: translate var(--dur-3) var(--ease-out), opacity var(--dur-3) var(--ease-out), display var(--dur-3) allow-discrete, overlay var(--dur-3) allow-discrete; }
+  .as .lt-sheet, .as .lt-sheet[data-detents] { inset: 0; width: min(460px, 100vw - 48px); height: fit-content; max-height: calc(100dvh - 80px); margin: auto; padding: 24px; border-radius: var(--radius-xl); translate: 0 8px; opacity: 0; transition: translate var(--dur-3) var(--ease-out), opacity var(--dur-3) var(--ease-out), display var(--dur-3) allow-discrete, overlay var(--dur-3) allow-discrete; }
   .as .lt-sheet[open] { translate: 0 0; opacity: 1; }
   @starting-style { .as .lt-sheet[open] { translate: 0 8px; opacity: 0; } }
   .as .lt-sheet [data-part="grab"] { display: none; }
@@ -163,11 +167,11 @@ button.as-row, a.as-row { cursor: pointer; transition: background-color var(--du
   .as-side-name span, .as-side-foot { display: none; }
   .as-side-name { justify-content: center; margin-inline: 0; }
   .as-side a { flex-direction: column; justify-content: center; gap: 4px; min-height: 60px; padding: 6px 4px; font-size: var(--text-ui-xs); text-align: center; }
-  .as-main { grid-template-columns: minmax(300px, 340px) minmax(0, 1fr); }
+  .as-panes { grid-template-columns: minmax(300px, 340px) minmax(0, 1fr); }
 }
 @media (min-width: 1280px) {
   .as { grid-template-columns: 260px minmax(0, 1fr); }
-  .as-main { grid-template-columns: minmax(360px, 420px) minmax(0, 1fr); }
+  .as-panes { grid-template-columns: minmax(360px, 420px) minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: no-preference) {
   html[data-nav="forward"]::view-transition-old(root) { animation: as-out 300ms var(--ease-out) both; }

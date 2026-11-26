@@ -6,7 +6,7 @@
   <title>Juniper · settings</title>
   <meta name="description" content="Blueprint: a settings-heavy app done right, on a phone that widens to a sidebar and two panes: search that filters as you type, grouped rows that are switches or links with their value, a detail page for notifications, and closing the account on a page of its own that says what happens, built with lumina-taste.">
 </head>
-<body class="as">
+<body class="as" data-pane="onboard" data-screen="welcome">
   <a class="bp-skip" href="#main">Skip to content</a>
   <nav class="as-side" aria-label="Sections">
     <p class="as-side-name"><i aria-hidden="true"></i><span>Juniper</span></p>
@@ -15,18 +15,19 @@
   </nav>
   <main id="main" class="as-main">
     <h1 class="lt-visually-hidden">Juniper, an invoicing app</h1>
+    <div class="as-panes">
     
-  <section class="as-screen" id="screen-welcome" data-screen="welcome" data-pane="onboard" aria-labelledby="wl-h">
+  <article class="as-screen" id="screen-welcome" data-screen="welcome" data-pane="onboard" data-current aria-labelledby="wl-h">
     <div class="as-scroll"><div class="as-onboard">
       <figure class="lt-art" data-scene="document coins" data-tone="accent" data-shot="An invoice on a phone beside a cup of tea on a desk"><svg data-part="scene" viewBox="44 32 232 168" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><circle data-m="sky" cx="147.6" cy="101.6" r="60"/><path data-m="ink" d="M-2000 176H2320"/><g data-role="lead" transform="translate(44.4 36) scale(1)" style="--k:1"><path data-m="b" d="M42 20H104L126 42V140H42Z"/><circle data-m="a" cx="110" cy="118" r="22"/><g data-m="ink"><path d="M42 20H104L126 42V140H42Z"/><path d="M104 20V42H126"/><path d="M58 54H98M58 68H110M58 82H110M58 96H88"/><path d="M56 124C62 112 66 130 72 118S82 126 86 118"/><circle cx="110" cy="118" r="22"/><circle cx="110" cy="118" r="13"/></g></g><g data-role="rest" transform="translate(128 68.8) scale(0.8)" style="--k:0.8"><path data-m="a" d="M30 66V122A30 10 0 0 0 90 122V66Z"/><ellipse data-m="b" cx="60" cy="66" rx="30" ry="10"/><path data-m="a" d="M84 98V126A24 8 0 0 0 132 126V98Z"/><ellipse data-m="b" cx="108" cy="98" rx="24" ry="8"/><g data-m="ink"><ellipse cx="60" cy="66" rx="30" ry="10"/><path d="M30 66V122A30 10 0 0 0 90 122V66M30 80A30 10 0 0 0 90 80M30 94A30 10 0 0 0 90 94M30 108A30 10 0 0 0 90 108"/><ellipse cx="108" cy="98" rx="24" ry="8"/><path d="M84 98V126A24 8 0 0 0 132 126V98M84 112A24 8 0 0 0 132 112"/></g></g></svg><figcaption class="lt-visually-hidden">An invoice and coins</figcaption></figure>
       <ol class="as-dots" aria-label="Step 1 of 3"><li aria-current="step"></li><li></li><li></li></ol>
-      <h1 id="wl-h" tabindex="-1">Send an invoice in a minute, and see when it is paid</h1>
+      <h2 id="wl-h" tabindex="-1">Send an invoice in a minute, and see when it is paid</h2>
       <p>Juniper chases late payers for you on day 7, 14 and 30.</p>
       <button type="button" class="lt-btn" data-variant="primary" data-size="lg" data-go="invoices"><span data-part="label">Get started</span></button>
     </div></div>
-  </section>
+  </article>
     
-  <section class="as-screen" id="screen-invoices" data-screen="invoices" data-tab="invoices" data-pane="list" data-detail="invoice" aria-labelledby="iv-h">
+  <article class="as-screen" id="screen-invoices" data-screen="invoices" data-tab="invoices" data-pane="list" data-detail="invoice" aria-labelledby="iv-h">
     <div class="as-scroll">
       <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
         <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Invoices</p><span></span></div>
@@ -61,9 +62,9 @@
         </section>
       </div>
     </div>
-  </section>
+  </article>
     
-  <section class="as-screen" id="screen-invoice" data-screen="invoice" data-pane="detail" data-parent="invoices" aria-labelledby="id-h">
+  <article class="as-screen" id="screen-invoice" data-screen="invoice" data-pane="detail" data-parent="invoices" aria-labelledby="id-h">
     <div class="as-scroll">
       <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
         <div data-part="row"><button type="button" data-part="back" data-go="invoices" data-dir="back" aria-label="Back to Invoices"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>Invoices</span></button><p data-part="small" aria-hidden="true">INV-0118</p><span></span></div>
@@ -85,9 +86,9 @@
     <div class="as-actionbar">
       <button type="button" class="lt-btn" data-variant="primary" data-size="lg" id="se-remind"><span data-part="label">Send a reminder</span></button>
     </div>
-  </section>
+  </article>
     
-  <section class="as-screen" id="screen-settings" data-screen="settings" data-tab="settings" data-pane="list" data-detail="notifications" aria-labelledby="st-h">
+  <article class="as-screen" id="screen-settings" data-screen="settings" data-tab="settings" data-pane="list" data-detail="notifications" aria-labelledby="st-h">
     <div class="as-scroll">
       <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
         <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Settings</p><span></span></div>
@@ -109,9 +110,9 @@
         <p class="se-version">Juniper 4.12 · made-up invoicing</p>
       </div>
     </div>
-  </section>
+  </article>
     
-  <section class="as-screen" id="screen-notifications" data-screen="notifications" data-pane="detail" data-parent="settings" aria-labelledby="nt-h">
+  <article class="as-screen" id="screen-notifications" data-screen="notifications" data-pane="detail" data-parent="settings" aria-labelledby="nt-h">
     <div class="as-scroll">
       <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
         <div data-part="row"><button type="button" data-part="back" data-go="settings" data-dir="back" aria-label="Back to Settings"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>Settings</span></button><p data-part="small" aria-hidden="true">Notifications</p><span></span></div>
@@ -125,9 +126,9 @@
         </div>
       </div>
     </div>
-  </section>
+  </article>
     
-  <section class="as-screen" id="screen-close" data-screen="close" data-pane="detail" data-parent="settings" aria-labelledby="cl-h">
+  <article class="as-screen" id="screen-close" data-screen="close" data-pane="detail" data-parent="settings" aria-labelledby="cl-h">
     <div class="as-scroll">
       <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
         <div data-part="row"><button type="button" data-part="back" data-go="settings" data-dir="back" aria-label="Back to Settings"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>Settings</span></button><p data-part="small" aria-hidden="true">Close account</p><span></span></div>
@@ -142,7 +143,8 @@
     <div class="as-actionbar">
       <button type="button" class="lt-btn se-danger" data-variant="primary" data-size="lg" id="se-close" disabled><span data-part="label">Close my account</span></button>
     </div>
-  </section>
+  </article>
+    </div>
   </main>
   <nav class="lt-bottom-nav as-tabs" data-lt="bottom-nav" aria-label="Tabs">
     <span data-part="pill" aria-hidden="true"></span>

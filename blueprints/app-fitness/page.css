@@ -4,7 +4,7 @@
 .ft-date { margin: -12px 0 4px; color: var(--text-secondary); font-weight: 550; }
 .ft-ready .lt-rings { --rings-size: 220px; }
 .ft-chart { --chart-1: var(--highlight); --border-strong: color-mix(in oklab, var(--accent-solid) 34%, var(--bg-canvas)); }
-.ft-streak { display: flex; align-items: baseline; gap: 10px; margin: 0; padding: 16px 18px; border-radius: 20px; background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); }
+.ft-streak { display: flex; align-items: baseline; gap: 10px; margin: 0; padding: 16px 18px; border-radius: var(--radius-lg); background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); }
 .ft-streak b { flex: none; font-family: var(--font-display); font-size: 2.25rem; font-weight: var(--weight-display); letter-spacing: -0.03em; line-height: 1; color: var(--accent-text); font-variant-numeric: tabular-nums; }
 .ft-streak span { color: var(--text-secondary); }
 .as-row .as-mark { color: var(--accent-text); }
@@ -30,7 +30,7 @@
 .ft-stats dd { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
 .ft-stats dd b { color: var(--text-primary); font-family: var(--font-display); font-size: 1.75rem; font-weight: var(--weight-display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .ft-controls { justify-content: space-between; box-shadow: none; padding-block: 16px calc(20px + env(safe-area-inset-bottom)); }
-.ft-controls > .lt-btn.ft-pause { flex: 0 1 220px; min-height: 64px; border-radius: 32px; font-size: var(--step-1); }
+.ft-controls > .lt-btn.ft-pause { flex: 0 1 220px; min-height: 64px; border-radius: var(--radius-xl); font-size: var(--step-1); }
 .ft-controls > .lt-btn[data-variant="ghost"] { flex: 0 0 auto; }
 .ft-pause[aria-pressed="true"] .lt-icon { display: none; }
 

@@ -12,16 +12,16 @@
   p { margin: 0; }
   [data-part="meta"] { margin-bottom: 2px; padding: 0 4px; font-size: var(--text-ui-xs); color: var(--text-muted); }
   [data-part="meta"] strong { color: var(--text-secondary); font-weight: 600; }
-  [data-part="bubble"] { padding: 8px 12px; border-radius: 16px; line-height: 1.45; text-wrap: pretty; overflow-wrap: anywhere; }
+  [data-part="bubble"] { padding: 8px 12px; border-radius: var(--radius-lg); line-height: 1.45; text-wrap: pretty; overflow-wrap: anywhere; }
   [data-from="them"] [data-part="bubble"] { background: var(--bg-surface-2); color: var(--text-primary); border-bottom-left-radius: 6px; }
   [data-from="them"] [data-part="bubble"] + [data-part="bubble"] { border-top-left-radius: 6px; }
   [data-from="me"] [data-part="bubble"] { background: var(--accent-solid); color: var(--accent-ink); border-bottom-right-radius: 6px; }
   [data-from="me"] [data-part="bubble"] + [data-part="bubble"] { border-top-right-radius: 6px; }
-  [data-part="attachment"] { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: 12px; background: var(--bg-surface-1); color: var(--text-secondary); }
+  [data-part="attachment"] { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-md); background: var(--bg-surface-1); color: var(--text-secondary); }
   [data-part="attachment"] > span { display: grid; font-size: var(--text-ui-xs); }
   [data-part="attachment"] strong { color: var(--text-primary); font-size: var(--text-ui-sm); font-weight: 600; }
   [data-part="status"] { padding: 0 4px; font-size: var(--text-ui-xs); color: var(--text-muted); }
-  [data-part="typing"] { display: inline-flex; gap: 4px; padding: 12px 14px; border-radius: 16px 16px 16px 6px; background: var(--bg-surface-2); }
+  [data-part="typing"] { display: inline-flex; gap: 4px; padding: 12px 14px; border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) var(--radius-sm); background: var(--bg-surface-2); }
   [data-part="typing"] i { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); animation: lt-typing 1.2s infinite ease-in-out; }
   [data-part="typing"] i:nth-child(3) { animation-delay: 0.15s; } [data-part="typing"] i:nth-child(4) { animation-delay: 0.3s; }
   /* data-variant="phone": a one-to-one thread on a phone. No avatars and no names (there are two of you), a day
@@ -33,11 +33,11 @@
   :scope[data-variant="phone"] [data-part="avatar"], :scope[data-variant="phone"] [data-part="meta"] strong { display: none; }
   :scope[data-variant="phone"] [data-part="stack"] { gap: 2px; max-width: 80%; }
   :scope[data-variant="phone"] [data-part="meta"] { order: 9; margin: 2px 0 0; }
-  :scope[data-variant="phone"] [data-part="bubble"] { padding: 10px 14px; border-radius: 20px; font-size: var(--step-0, 1.0625rem); line-height: 1.38; }
-  :scope[data-variant="phone"] [data-from="them"] [data-part="bubble"] { border-radius: 20px; border-start-start-radius: 6px; border-end-start-radius: 6px; }
-  :scope[data-variant="phone"] [data-from="them"] [data-part="meta"] + [data-part="bubble"] { border-start-start-radius: 20px; }
-  :scope[data-variant="phone"] [data-from="me"] [data-part="bubble"] { border-radius: 20px; border-start-end-radius: 6px; border-end-end-radius: 6px; }
-  :scope[data-variant="phone"] [data-from="me"] [data-part="meta"] + [data-part="bubble"] { border-start-end-radius: 20px; }
+  :scope[data-variant="phone"] [data-part="bubble"] { padding: 10px 14px; border-radius: var(--radius-lg); font-size: var(--step-0, 1.0625rem); line-height: 1.38; }
+  :scope[data-variant="phone"] [data-from="them"] [data-part="bubble"] { border-radius: var(--radius-lg); border-start-start-radius: var(--radius-sm); border-end-start-radius: var(--radius-sm); }
+  :scope[data-variant="phone"] [data-from="them"] [data-part="meta"] + [data-part="bubble"] { border-start-start-radius: var(--radius-lg); }
+  :scope[data-variant="phone"] [data-from="me"] [data-part="bubble"] { border-radius: var(--radius-lg); border-start-end-radius: var(--radius-sm); border-end-end-radius: var(--radius-sm); }
+  :scope[data-variant="phone"] [data-from="me"] [data-part="meta"] + [data-part="bubble"] { border-start-end-radius: var(--radius-lg); }
   :scope[data-variant="phone"] [data-part="status"] { order: 10; color: var(--text-secondary); }
 }
 @keyframes lt-typing { 0%, 60%, 100% { translate: 0 0; opacity: 0.5; } 30% { translate: 0 -3px; opacity: 1; } }
