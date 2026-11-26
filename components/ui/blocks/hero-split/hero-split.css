@@ -46,4 +46,119 @@
   [data-part="chart"] [data-part="area"] { stroke: none; fill: color-mix(in oklab, var(--accent-solid) 14%, transparent); }
   /* The line over the headline is context (what, where), in sentence case at reading size: not a small stamp. */
   [data-part="eyebrow"] { font-size: max(var(--text-ui), 0.95rem); font-weight: 550; letter-spacing: 0; text-transform: none; color: var(--text-secondary); }
+
+  /* ---------------------------------------------------------------- compositions
+     data-variant changes the whole first screen while the parts stay the same (copy + visual). The default above
+     is the kit's habit; reach for it only when nothing below fits the subject better.
+       overlap  the picture breaks the grid to the page edge and the words sit on a paper block over its edge
+       edge     a quiet split: the picture runs full height to the top, bottom and end edge of the screen
+       product  the device or object first and large, the words beneath it in two columns
+       bleed    a photograph across the whole screen, the words on its calm side (data-calm="start|end|bottom")
+                over a scrim only where they sit; put data-tone="dark" on the section for light words
+     The visual slot fills its frame with whatever it holds: a photograph covers it, an art panel (or scene) fills
+     it, a device frame sits on the panel's ground. */
+  :scope[data-variant] > * { --hs-bleed: max(var(--block-x, 24px), calc((100cqi - var(--container, 1180px)) / 2)); }
+  @container (max-width: 640px) { :scope[data-variant] > * { --hs-bleed: var(--block-x-sm, 16px); } }
+  :scope[data-variant] > [data-part="visual"] { position: relative; isolation: isolate; display: grid; place-items: center; min-width: 0; overflow: hidden; border-radius: var(--radius-xl); background: var(--bg-surface-2); }
+  :scope[data-variant] > [data-part="visual"] > :is(img, picture, video) { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 0; object-fit: cover; }
+  :scope[data-variant] > [data-part="visual"] > picture > img { width: 100%; height: 100%; object-fit: cover; }
+  :scope[data-variant] > [data-part="visual"] > .lt-art { --art-ratio: auto; position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 0; }
+  :scope[data-variant] > [data-part="visual"] > .lt-device { width: min(86%, 760px); margin: clamp(24px, 5cqi, 56px); }
+  :scope[data-variant] > [data-part="visual"] > .lt-device[data-kind="phone"] { --device-w: clamp(200px, 24cqi, 300px); width: auto; }
+  :scope[data-variant] [data-part="cta"] { margin-top: clamp(20px, 3svh, 32px); }
+  :scope[data-variant] [data-part="lede"] { max-width: 40ch; }
+
+  /* overlap: twelve columns; the picture takes eight and runs off the end edge, the words sit on a block of the
+     page's own ground that overlaps the picture's start edge by two columns. */
+  /* No end padding: a thirteenth track as wide as the page's margin takes the picture to the edge of the screen. */
+  :scope[data-variant="overlap"] { grid-template-columns: repeat(12, minmax(0, 1fr)) max(var(--block-x, 24px), calc(100% - var(--container, 1180px))); gap: 0; align-items: stretch; padding-inline-end: 0; }
+  :scope[data-variant="overlap"] > [data-part="visual"] { grid-column: 5 / -1; grid-row: 1; min-height: clamp(440px, 74svh, 780px); border-start-end-radius: 0; border-end-end-radius: 0; }
+  :scope[data-variant="overlap"] > [data-part="copy"] { position: relative; z-index: 1; grid-column: 1 / span 6; grid-row: 1; align-self: end; margin-block-end: clamp(32px, 7svh, 80px); padding-block: clamp(24px, 3.4cqi, 44px); padding-inline-end: clamp(24px, 4cqi, 56px); background: var(--bg-canvas); border-start-end-radius: var(--radius-xl); }
+  :scope[data-variant="overlap"][data-tone="well"] > [data-part="copy"] { background: var(--bg-surface-2); }
+  :scope[data-variant="overlap"] > [data-part="copy"] > :first-child { margin-top: 0; }
+
+  /* edge: no padding at the top, bottom or end; the picture is the whole right half, square-cornered. */
+  :scope[data-variant="edge"] { grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); gap: 0; align-items: stretch; min-height: clamp(520px, calc(100svh - 64px), 920px); padding-block: 0; padding-inline-end: 0; }
+  :scope[data-variant="edge"] > [data-part="copy"] { align-self: center; padding-block: clamp(48px, 9svh, 112px); padding-inline-end: clamp(32px, 6cqi, 96px); }
+  :scope[data-variant="edge"] > [data-part="visual"] { border-radius: 0; }
+  :scope[data-variant="edge"] :is(h1, h2) { font-size: max(var(--step-5), clamp(2.5rem, 1.2rem + 3.2vw, 4rem)); }
+
+  /* product: the picture first, as wide as the page allows but never pushing the headline out of the first
+     screen; the headline under it on the start side, the lede and the action on the end side. The headline stays
+     first in the source. */
+  :scope[data-variant="product"] { grid-template-columns: minmax(0, 1fr); gap: clamp(28px, 4.5svh, 56px); }
+  :scope[data-variant="product"] > [data-part="visual"] { grid-row: 1; width: 100%; aspect-ratio: 21 / 9; max-height: calc(100svh - 400px); min-height: 260px; }
+  :scope[data-variant="product"] > [data-part="visual"]:has(> .lt-device) { aspect-ratio: auto; max-height: none; min-height: 0; overflow: visible; background: none; }
+  :scope[data-variant="product"] > [data-part="visual"] > .lt-device:not([data-kind="phone"]) { width: min(100%, 940px, calc((100svh - 400px) * 1.6)); margin: 0; }
+  :scope[data-variant="product"] > [data-part="visual"] > .lt-device[data-kind="phone"] { --device-w: min(300px, calc((100svh - 400px) * 0.46)); margin: 0; }
+  :scope[data-variant="product"] > [data-part="copy"] { grid-row: 2; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); grid-template-areas: "eyebrow ." "title lede" "title cta" "title note"; column-gap: clamp(32px, 6cqi, 96px); align-items: end; }
+  :scope[data-variant="product"] > [data-part="copy"] > [data-part="eyebrow"] { grid-area: eyebrow; }
+  :scope[data-variant="product"] > [data-part="copy"] > :is(h1, h2) { grid-area: title; max-width: 18ch; font-size: max(var(--step-5), clamp(2.5rem, 1rem + 3.2vw, 4rem)); }
+  :scope[data-variant="product"] > [data-part="copy"] > [data-part="lede"] { grid-area: lede; margin: 0; }
+  :scope[data-variant="product"] > [data-part="copy"] > [data-part="cta"] { grid-area: cta; }
+  :scope[data-variant="product"] > [data-part="copy"] > [data-part="note"] { grid-area: note; }
+
+  /* bleed: the picture is the ground of the whole first screen. The words sit on its calm side over a scrim in the
+     section's own ground colour, strongest under the words and gone by the middle of the picture. */
+  :scope[data-variant="bleed"] { position: relative; isolation: isolate; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 0 24px; align-items: end; min-height: clamp(560px, calc(100svh - 64px), 940px); padding-block: clamp(48px, 9svh, 112px); background: var(--bg-canvas); }
+  :scope[data-variant="bleed"] > [data-part="visual"] { position: absolute; inset: 0; z-index: -1; border-radius: 0; }
+  :scope[data-variant="bleed"] > [data-part="copy"] { grid-column: 1 / span 6; grid-row: 1; }
+  :scope[data-variant="bleed"][data-calm="end"] > [data-part="copy"] { grid-column: 7 / -1; }
+  :scope[data-variant="bleed"][data-calm="bottom"] > [data-part="copy"] { grid-column: 1 / span 8; }
+  :scope[data-variant="bleed"][data-calm="top"] { align-items: start; }
+  :scope[data-variant="bleed"] > [data-part="visual"]::after { --s: var(--hs-scrim, 80%); content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(var(--hs-scrim-dir, 90deg), color-mix(in oklab, var(--bg-canvas) var(--s), transparent) 0%, color-mix(in oklab, var(--bg-canvas) calc(var(--s) * 0.86), transparent) 44%, transparent 72%); }
+  :scope[data-variant="bleed"]:dir(rtl) > [data-part="visual"]::after { --hs-scrim-dir: 270deg; }
+  :scope[data-variant="bleed"][data-calm="end"] > [data-part="visual"]::after { --hs-scrim-dir: 270deg; }
+  :scope[data-variant="bleed"][data-calm="end"]:dir(rtl) > [data-part="visual"]::after { --hs-scrim-dir: 90deg; }
+  :scope[data-variant="bleed"][data-calm="bottom"] > [data-part="visual"]::after { --hs-scrim-dir: 0deg; }
+  :scope[data-variant="bleed"][data-calm="top"] > [data-part="visual"]::after { --hs-scrim-dir: 180deg; }
+  :scope[data-variant="bleed"][data-scrim="strong"] { --hs-scrim: 90%; }
+  :scope[data-variant="bleed"][data-scrim="none"] > [data-part="visual"]::after { content: none; }
+  /* A drawing stands on the far side of the words; a device sits there on the ground, with no scrim. */
+  :scope[data-variant="bleed"] > [data-part="visual"] > .lt-art > :is(p, [data-part="name"], [data-part="fact"], [data-part="index"], [data-part="figure"]) { display: none; }
+  :scope[data-variant="bleed"] > [data-part="visual"] > .lt-art > [data-part="scene"] { position: absolute; inset-block: 10% 0; inset-inline-end: 0; width: 56%; height: auto; margin: 0; }
+  :scope[data-variant="bleed"] > [data-part="visual"] > .lt-art > [data-part="motif"] { inset-inline-end: 8%; inset-inline-start: auto; right: auto; top: 14%; height: 70%; }
+  :scope[data-variant="bleed"][data-calm="end"] > [data-part="visual"] > .lt-art > [data-part="scene"] { inset-inline: 0 auto; }
+  :scope[data-variant="bleed"] > [data-part="visual"]:has(> .lt-device) { place-items: center end; padding-inline-end: var(--hs-bleed); }
+  :scope[data-variant="bleed"][data-calm="end"] > [data-part="visual"]:has(> .lt-device) { place-items: center start; padding-inline: var(--hs-bleed) 0; }
+  :scope[data-variant="bleed"] > [data-part="visual"]:has(> .lt-device)::after { content: none; }
+  :scope[data-variant="bleed"] > [data-part="visual"] > .lt-device { width: min(52%, 720px); }
+  :scope[data-variant="bleed"] :is(h1, h2) { font-size: max(var(--step-5), clamp(2.75rem, 1rem + 4.4vw, 5rem)); max-width: 13ch; }
+
+  /* Below 960px every composition stacks; each keeps its character. */
+  @container (max-width: 960px) {
+    :scope[data-variant="overlap"] { grid-template-columns: minmax(0, 1fr); padding-inline-end: var(--block-x, 24px); }
+    :scope[data-variant="edge"] { grid-template-columns: minmax(0, 1fr); min-height: 0; padding-inline-end: var(--block-x, 24px); }
+    :scope[data-variant="bleed"] { grid-template-columns: minmax(0, 1fr); min-height: min(86svh, 760px); padding-block: 40px; }
+    :scope[data-variant="bleed"]:has(> [data-part="visual"] > .lt-device) { min-height: 0; align-items: start; padding-block: 0 calc(var(--section-y) / 2); }
+    :scope[data-variant="overlap"] > [data-part="visual"] { grid-column: 1 / -1; grid-row: 1; min-height: 0; aspect-ratio: 4 / 3; margin-inline: calc(-1 * var(--hs-bleed)); border-radius: 0; }
+    :scope[data-variant="overlap"] > [data-part="copy"] { grid-column: 1 / -1; grid-row: 2; margin-block: -64px 0; margin-inline: calc(-1 * var(--hs-bleed)) 12%; padding-inline: var(--hs-bleed) clamp(20px, 5cqi, 40px); padding-block-end: 0; }
+    :scope[data-variant="edge"] > [data-part="visual"] { grid-row: 1; aspect-ratio: 16 / 10; margin-inline: calc(-1 * var(--hs-bleed)); }
+    :scope[data-variant="edge"] > [data-part="copy"] { padding-block: 32px calc(var(--section-y) / 2); padding-inline-end: var(--hs-bleed); }
+    :scope[data-variant="product"] > [data-part="copy"] { grid-template-columns: minmax(0, 1fr); grid-template-areas: "eyebrow" "title" "lede" "cta" "note"; }
+    :scope[data-variant="product"] > [data-part="copy"] > [data-part="lede"] { margin-top: 14px; }
+    :scope[data-variant="product"] > [data-part="visual"] { aspect-ratio: 16 / 10; max-height: none; min-height: 0; }
+    :scope[data-variant="bleed"] > [data-part="copy"], :scope[data-variant="bleed"][data-calm] > [data-part="copy"] { grid-column: 1 / -1; }
+    :scope[data-variant="bleed"] > [data-part="visual"]::after, :scope[data-variant="bleed"][data-calm] > [data-part="visual"]::after { --hs-scrim-dir: 0deg; background: linear-gradient(var(--hs-scrim-dir), color-mix(in oklab, var(--bg-canvas) var(--s), transparent) 0%, color-mix(in oklab, var(--bg-canvas) calc(var(--s) * 0.9), transparent) 46%, transparent 74%); }
+    :scope[data-variant="bleed"] > [data-part="visual"] > .lt-art > [data-part="scene"], :scope[data-variant="bleed"][data-calm] > [data-part="visual"] > .lt-art > [data-part="scene"] { inset: 4% 0 auto; width: 100%; height: 54%; }
+    /* A device cannot sit under words: on a narrow screen it stands above them on the ground. */
+    :scope[data-variant="bleed"] > [data-part="visual"]:has(> .lt-device) { position: relative; inset: auto; z-index: 0; grid-column: 1 / -1; grid-row: 1; place-items: center; margin-inline: calc(-1 * var(--hs-bleed)); padding: 32px var(--hs-bleed); }
+    :scope[data-variant="bleed"] > [data-part="visual"] > .lt-device { width: min(100%, 560px); }
+    :scope[data-variant="bleed"]:has(> [data-part="visual"] > .lt-device) > [data-part="copy"] { grid-row: 2; padding-top: 32px; }
+  }
+  @media (max-width: 960px) {
+    :scope[data-variant="overlap"] { grid-template-columns: minmax(0, 1fr); padding-inline-end: var(--block-x, 24px); }
+    :scope[data-variant="edge"] { grid-template-columns: minmax(0, 1fr); min-height: 0; padding-inline-end: var(--block-x, 24px); }
+    :scope[data-variant="bleed"] { grid-template-columns: minmax(0, 1fr); min-height: min(86svh, 760px); padding-block: 40px; }
+    :scope[data-variant="bleed"]:has(> [data-part="visual"] > .lt-device) { min-height: 0; align-items: start; padding-block: 0 calc(var(--section-y) / 2); }
+  }
+  @media (max-width: 640px) {
+    :scope:is([data-variant="edge"], [data-variant="overlap"]) { padding-inline-end: var(--block-x-sm, 16px); }
+    :scope[data-variant="overlap"] > [data-part="visual"] { aspect-ratio: 1; }
+  }
+  @container (max-width: 640px) {
+    :scope[data-variant="edge"] > [data-part="visual"] { aspect-ratio: 4 / 3; }
+    :scope[data-variant="product"] > [data-part="visual"] { aspect-ratio: 4 / 3; }
+    :scope[data-variant="bleed"] :is(h1, h2) { font-size: clamp(2.5rem, 11cqi, 3.25rem); }
+  }
 }
