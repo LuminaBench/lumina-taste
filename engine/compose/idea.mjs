@@ -62,7 +62,8 @@ export function boldIdea({ facts, type, hero, signature, accent, sections }) {
     if (kind === 'duration' && dur) {
       const claim = facts.claims.find((c) => c.includes(dur.text));
       const caption = claim ? cap(claim.replace(new RegExp(`\\s*(?:in|within|under)?\\s*${dur.text}`), '')) : cap(dur.phrase ?? dur.what ?? 'Time');
-      const place = visual ?? bandPlace ?? 'statement';
+      // Software shows the product in the first screen, so its figure goes to the picture band.
+      const place = ['landing', 'dev-landing'].includes(type.id) ? (bandPlace ?? visual ?? 'statement') : (visual ?? bandPlace ?? 'statement');
       return pick(dur.value, caption, `${claim ? `"${claim}", shown rather than said: ` : ''}${dur.value} set huge on ${place === 'media-band' ? 'the dark band' : accent}`, place);
     }
   }
