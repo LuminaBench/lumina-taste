@@ -52,7 +52,21 @@ Search results are a first draft. Look at every picture before you keep it.
 
 ## No photograph: the subject's own thing (art panel motifs)
 
-An art panel with `data-motif` draws a flat spot illustration of the business's own thing above its name: `cup`, `loaf`, `crane`, `document`, `scales`, `leaf`, `phone`, `chart`, `key`, `ticket`, `tool`, `house`, `tooth`, `bowl`, `scissors`, `book`, `vase`, `bag`. They share one 160 grid, one round-capped stroke weight and three token colours (ink, the accent, a pale tint), so they look like one illustrator's set in every palette, light and dark, and at any size.
+An art panel with `data-motif` draws a flat spot illustration of the business's own thing above its name, one of 47:
+
+| For | Motifs |
+| --- | --- |
+| Food and drink | `cup`, `loaf`, `bowl`, `glass` |
+| Shops and makers | `bag`, `vase`, `hanger`, `bottle`, `gift`, `pot`, `box` |
+| Building and trades | `crane`, `house`, `tool`, `key`, `van` |
+| Professional, money and security | `document`, `scales`, `chart`, `coins`, `lens`, `lock` |
+| Health and care | `stethoscope`, `tooth`, `glasses`, `paw`, `leaf` |
+| Software | `terminal`, `server`, `phone`, `chat` |
+| Places, travel and transport | `pin`, `suitcase`, `mountain`, `boat`, `bus`, `train`, `bike` |
+| Events, media and making things | `ticket`, `calendar`, `mic`, `camera`, `pencil`, `envelope`, `book`, `scissors` |
+| Charity and community | `jar`, `chat`, `bowl` |
+
+Every domain the composer knows has at least two. They share one 160 grid, one round-capped stroke weight and three token colours (ink, the accent, a pale tint), so they look like one illustrator's set in every palette, light and dark, and at any size.
 
 ```html
 <figure class="lt-art" data-motif="loaf" data-shot="The rye loaf on a floured bench, 4:5">
@@ -62,7 +76,7 @@ An art panel with `data-motif` draws a flat spot illustration of the business's 
 </figure>
 ```
 
-- Copy the SVG from the art panel's snippet, or let `find-images --fill` write it: it picks the motif from the brief and the subject's keywords, gives neighbouring panels different drawings where the brief allows, and a different ground when one repeats. With `data-lt="art-panel"` the script draws a `data-motif` that has no SVG yet; `data-motif="auto"` picks from `data-shot`.
+- Copy the SVG from the art panel's snippet, or let `find-images --fill` write it: it picks the motif from the brief and the subject's keywords (`pickMotif` / `rankMotifs` in art-panel.ts and scripts/lib/image-motifs.mjs, the same rules: the first words of a brief count most, and pairs such as "house blend", "box office" or "personal trainer" are read as what they mean), gives neighbouring panels different drawings where the brief allows, and a different ground when one repeats. With `data-lt="art-panel"` the script draws a `data-motif` that has no SVG yet; `data-motif="auto"` picks from `data-shot`.
 - The ground: a soft disc by default; `data-pattern="arch"` sets the drawing in a niche that runs to the foot of the panel, `"floor"` on a lower band, `"none"` on the bare panel. One ground per panel, at most three grounds in a set.
 - Vary the tone across a set (plain, `accent`, `ink`); the drawing follows. With `data-tone="swatch"` it is drawn in the swatch's own ink.
 - A photograph covers it: put the `<img>` first in the figure (`--fill` removes the SVG when it sets a photograph).
