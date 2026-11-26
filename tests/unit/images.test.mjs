@@ -73,7 +73,8 @@ test('find-images fills stand-ins with treated, responsive pictures, and draws t
       <figure class="lt-art" data-shot="The kiln shed at dusk, 4:5"><p data-part="name">Kiln</p></figure>
       <figure class="lt-art" data-shot="Already done"><img src="x.jpg" alt=""></figure>
     </main></html>`);
-    const env = { LT_OPENVERSE: `http://127.0.0.1:${port}/ov/`, LT_COMMONS: `http://127.0.0.1:${port}/none` };
+    // No curated starter sets here: this test is about search (tests/unit/photos.test.mjs covers the sets).
+    const env = { LT_OPENVERSE: `http://127.0.0.1:${port}/ov/`, LT_COMMONS: `http://127.0.0.1:${port}/none`, LT_PHOTOS: join(dir, 'no-sets') };
     const r = await run('find-images.mjs', ['--fill', join(dir, 'index.html'), '--subject', 'stoneware', '--out', join(dir, 'images')], env);
     assert.equal(r.code, 0, r.out);
     const html = readFileSync(join(dir, 'index.html'), 'utf8');
