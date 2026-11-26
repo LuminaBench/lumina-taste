@@ -1,0 +1,20 @@
+{
+  "id": "chart-story-scroll",
+  "order": 55,
+  "name": "Scroll-built chart story",
+  "group": "Trends",
+  "summary": "The chart holds still while two to four steps scroll past; each step lights one moment and draws the line up to it. Still and complete under reduced motion and in print.",
+  "bestFor": "A story with two to four beats: what was normal, what broke, what fixed it",
+  "avoidFor": "Dashboards and app screens (no scroll moments there), or a single point (use the chart story)",
+  "dataShape": "x + series (first is the focus) + steps: from, to, label, title, text",
+  "aliases": [
+    "scrollytelling",
+    "scroll story chart",
+    "steps chart",
+    "chart that builds as you scroll",
+    "sticky chart with steps",
+    "narrative chart"
+  ],
+  "react": "ChartStoryScroll",
+  "wide": true
+}
