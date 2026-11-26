@@ -9,8 +9,12 @@
   [data-part="lede"] { margin: 12px 0 0; max-width: 56ch; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.55; text-wrap: pretty; }
 
   :scope { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); align-items: center; gap: 48px; }
-  @container (max-width: 760px) { :scope { grid-template-columns: 1fr; gap: 32px; } }
-  @media (max-width: 760px) { :scope { grid-template-columns: 1fr; gap: 32px; } }
+  /* Below 960px two columns leave the picture a third of a tablet's width: the words go on top and the picture
+     takes the full width under them. Between 641 and 960px it is drawn at 16:10, so it stays a picture, not a poster. */
+  @container (max-width: 960px) { :scope { grid-template-columns: 1fr; gap: 32px; } }
+  @media (max-width: 960px) { :scope { grid-template-columns: 1fr; gap: 32px; } }
+  @container (min-width: 641px) and (max-width: 960px) { :scope { --hs-art-ratio: 16 / 10; } }
+  @media (min-width: 641px) and (max-width: 960px) { :scope { --hs-art-ratio: 16 / 10; } }
   :scope { padding-block: var(--block-y, calc(var(--section-y) * 0.75)); }
   /* A hero headline has a display-size floor, whatever the type pairing. */
   /* The headline is the largest thing in the first screen after the picture: up to 68px on a wide screen. */
@@ -30,7 +34,7 @@
   /* The right-hand side is a slot. data-part="frame" is a product window; data-part="visual" is a bare slot for
      an art panel, a device frame, a code block, a chart or a photograph. */
   [data-part="visual"] { min-width: 0; }
-  [data-part="visual"] > .lt-art { --art-ratio: 5 / 4; }
+  [data-part="visual"] > .lt-art { --art-ratio: var(--hs-art-ratio, 5 / 4); }
   [data-part="visual"] > :is(img, picture, video) { display: block; width: 100%; border-radius: var(--radius-xl); }
   [data-part="bar"] { display: flex; gap: 6px; }
   [data-part="bar"] i { width: 9px; height: 9px; border-radius: 50%; background: var(--bg-surface-3); }

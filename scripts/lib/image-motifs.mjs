@@ -125,5 +125,8 @@ export function sceneSvg(list) {
   const xs = all.flatMap((t) => [t.cx - w(t) / 2, t.cx + w(t) / 2]);
   const vw = Math.max(232, Math.max(...xs) - Math.min(...xs) + 40);
   const vx = (Math.max(...xs) + Math.min(...xs)) / 2 - vw / 2;
-  return `<svg data-part="scene" viewBox="${r1(vx)} 0 ${r1(vw)} 200" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false">${sky}${floor}${stand.map(g).join('')}${float.map(g).join('')}</svg>`;
+  // And the empty sky above them (the disc behind the biggest thing included), so they draw larger.
+  const tops = [...all.map((t) => t.cy - h(t) / 2), ...(back ? [GROUND - h(back) * 1.12] : [])];
+  const vy = Math.max(0, Math.round(Math.min(...tops) - 10));
+  return `<svg data-part="scene" viewBox="${r1(vx)} ${vy} ${r1(vw)} ${200 - vy}" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false">${sky}${floor}${stand.map(g).join('')}${float.map(g).join('')}</svg>`;
 }

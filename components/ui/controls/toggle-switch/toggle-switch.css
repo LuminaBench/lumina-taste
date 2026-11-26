@@ -13,6 +13,8 @@
     transform-origin: left center;
     transition: transform var(--dur-toggle, 320ms) var(--ease-overshoot, var(--ease-spring)), scale var(--dur-press, 70ms) var(--ease-out), background-color var(--dur-2) var(--ease-out);
   }
+  /* Right to left the thumb starts on the right, so it stretches from there. */
+  [data-part="thumb"]:dir(rtl) { transform-origin: right center; }
   /* Held down, the thumb stretches toward where it will go (scale, so nothing reflows). */
   :scope:is(:active, [data-pressing]) [data-part="thumb"] { scale: var(--press-stretch, 1.22) 1; }
   input:checked + [data-part="track"] { background: var(--accent-solid); }

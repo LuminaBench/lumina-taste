@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Kestrel tide tables</title>
+<!-- A face with tall vertical metrics (as Literata, Nunito or Playfair Display have) set tight: each line's box reaches
+     far above and below its letters, so the boxes of neighbouring lines cross while the letters never touch. The overlap
+     rule must pass this page. Used by tests/unit/critic.test.mjs. -->
+<style>
+  @font-face { font-family: "Tall Sans"; src: local("Helvetica Neue"), local("Helvetica"), local("Arial"), local("Liberation Sans"), local("DejaVu Sans"); ascent-override: 150%; descent-override: 70%; line-gap-override: 0%; }
+  body { margin: 0; padding: 48px 32px; font: 16px/1.5 "Tall Sans", sans-serif; color: #1d232a; background: #f6f7f8; }
+  h1 { margin: 0; max-width: 9ch; font-size: 64px; line-height: 0.95; }
+  .figure { display: grid; grid-template-columns: auto 1fr; align-items: end; gap: 0 16px; margin-top: 24px; }
+  .figure b { font-size: 72px; line-height: 0.9; font-variant-numeric: tabular-nums; }
+  .figure span { font-size: 16px; line-height: 1.2; padding-bottom: 8px; }
+  .stack p { margin: 0; font-size: 28px; line-height: 1; }
+</style></head>
+<body><main>
+  <h1>High water at Kestrel</h1>
+  <div class="figure"><b>4.2</b><span>metres at 06:14</span></div>
+  <div class="stack"><p>Ardmore 05:40</p><p>Larkspur 06:02</p><p>Kestrel 06:14</p></div>
+</main></body></html>

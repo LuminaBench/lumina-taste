@@ -12,6 +12,10 @@
     position: relative; display: block; margin: 0; min-width: 0; color: var(--text-primary);
   }
   [data-part="screen"] { position: relative; container-type: inline-size; background: var(--bg-canvas); overflow: hidden; }
+  /* A table inside a screen cannot grow past the frame (the frame clips it): it keeps the screen's width and a long
+     word breaks inside its cell instead of being cut off. */
+  [data-part="screen"] table { table-layout: fixed; max-width: 100%; }
+  [data-part="screen"] :is(th, td) { overflow-wrap: anywhere; }
   [data-part="screen"] > :is(img, video, picture) { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
 
   /* Browser and desktop window: a 36px bar with three quiet dots; the browser adds an address pill. */

@@ -316,15 +316,28 @@ const chosen = new Map(); // figure index → { c, file, name, shot }
 const used = new Set();
 // Curated photographs first: each brief the set fits gets one, each photograph once.
 const fromSet = starterSet ? assignStarters(starterSet, briefed.map((m, i) => ({ key: m.index, shot: shotOf(m), weight: i === 0 && onFirstScreen(html, m.index) ? 2 : 1 })), { ratio: setRatio, subject }) : new Map();
-if (starterSet) console.log(`Starter set “${starterSet.id}”: ${fromSet.size} of ${briefed.length} brief(s) fit a curated photograph${fromSet.size < briefed.length ? '; searching for the rest' : ''}.`);
+// A thin match (level "stand-in": the photograph shares the subject but not what the brief names) is said so. On a
+// panel that stands alone in its section it is not used: one off-brief photograph reads as a mistake, a drawing
+// does not. In a set of siblings it is kept, marked, so the set stays whole.
+const sectionOf = (i) => (html.slice(0, i).match(/<section\b/gi) ?? []).length;
+const alone = (m) => briefed.filter((x) => sectionOf(x.index) === sectionOf(m.index)).length < 2;
+const keepDrawing = new Set();
+for (const m of briefed) {
+  const fit = fromSet.get(m.index);
+  if (fit?.level !== 'stand-in') continue;
+  if (alone(m)) { fromSet.delete(m.index); keepDrawing.add(m.index); console.log(`Only a stand-in-level match for “${shotOf(m).slice(0, 50)}” (${fit.photo.id}); a single panel keeps its drawing.`); }
+}
+if (starterSet) console.log(`Starter set “${starterSet.id}”: ${fromSet.size} of ${briefed.length} brief(s) fit a curated photograph${fromSet.size + keepDrawing.size < briefed.length ? '; searching for the rest' : ''}.`);
 for (const m of briefed) {
   const shot = shotOf(m);
   const fit = fromSet.get(m.index);
+  if (keepDrawing.has(m.index)) continue;
   if (fit) {
+    if (fit.level === 'stand-in') console.log(`Stand-in-level match for “${shot.slice(0, 50)}” (${fit.photo.id}): on subject, not what the brief names. Replace it with the business's own picture.`);
     const c = starterCandidate(starterSet, fit.photo);
     used.add(c.url);
     if (dry) { console.log(`Would fill “${shot.slice(0, 50)}” with curated ${c.id} (${c.shows.slice(0, 50)}), fit ${fit.score}`); continue; }
-    try { chosen.set(m.index, { c, file: await download(c, tmp, c.id), name: c.id, shot, focus: c.focus }); continue; } catch (e) { console.log(`Could not use curated ${c.id}: ${e.message}; searching instead.`); }
+    try { chosen.set(m.index, { c, file: await download(c, tmp, c.id), name: c.id, shot, focus: c.focus, standIn: fit.level === 'stand-in' }); continue; } catch (e) { console.log(`Could not use curated ${c.id}: ${e.message}; searching instead.`); }
   }
   let c = null, q = '';
   // With a curated set, the bare subject is not searched: it brings back another business's shopfront, not the
@@ -344,13 +357,12 @@ for (const m of briefed) {
 // curated photographs instead of drawings (stand-ins until the business's own pictures; --no-complete keeps the
 // drawings).
 if (starterSet && !noComplete && !dry) {
-  const sectionOf = (i) => (html.slice(0, i).match(/<section\b/gi) ?? []).length;
   const groups = {};
   for (const m of briefed) (groups[sectionOf(m.index)] ??= []).push(m);
   for (const list of Object.values(groups)) {
     const filled = list.filter((m) => chosen.has(m.index)), rest = list.filter((m) => !chosen.has(m.index));
     if (!rest.length || filled.length * 3 < list.length) continue;
-    const extra = completeSet(starterSet, rest.map((m) => ({ key: m.index, shot: shotOf(m) })), [...chosen.values()].filter((v) => v.c.source === 'starter').map((v) => starterSet.photos.find((p) => p.id === v.c.id)).filter(Boolean), { ratio: setRatio, subject });
+    const extra = completeSet(starterSet, rest.map((m) => ({ key: m.index, shot: shotOf(m) })), [...chosen.values()].filter((v) => v.c.source === 'starter').map((v) => starterSet.photos.find((p) => p.id === v.c.id)).filter(Boolean), { ratio: setRatio, subject, siblings: list.map(shotOf) });
     for (const [key, { photo }] of extra) {
       const c = starterCandidate(starterSet, photo);
       try { chosen.set(key, { c, file: await download(c, tmp, c.id), name: c.id, shot: shotOf(list.find((m) => m.index === key)), focus: c.focus, standIn: true }); } catch (e) { console.log(`Could not use curated ${c.id}: ${e.message}.`); }
@@ -394,7 +406,7 @@ for (const m of [...empty].reverse()) { // from the end, so earlier offsets stay
     // under the picture (art-panel.css raises it above the ground only for a drawn panel).
     const open = m[0].replace(/\s+data-(pattern|motif)="[^"]*"/g, '');
     html = html.slice(0, start) + open + imgTag(r, { base: src, alt, first: start === firstIdx, sizes }) + rest;
-    console.log(`Filled “${shot.slice(0, 50)}”${chosen.get(start).c.source === 'starter' ? ` (curated${chosen.get(start).standIn ? ' stand-in, to complete the set' : ''}: ${chosen.get(start).c.id})` : ''} with ${r.files.map((f) => f.file).join(', ')} (${chosen.get(start).c.licence}, ${chosen.get(start).c.creator.slice(0, 30)})${r.treated ? `, ${r.grade} grade, focus ${Math.round(r.focus.x * 100)}% ${Math.round(r.focus.y * 100)}%` : ''}`);
+    console.log(`Filled “${shot.slice(0, 50)}”${chosen.get(start).c.source === 'starter' ? ` (curated${chosen.get(start).standIn ? ' stand-in' : ''}: ${chosen.get(start).c.id})` : ''} with ${r.files.map((f) => f.file).join(', ')} (${chosen.get(start).c.licence}, ${chosen.get(start).c.creator.slice(0, 30)})${r.treated ? `, ${r.grade} grade, focus ${Math.round(r.focus.x * 100)}% ${Math.round(r.focus.y * 100)}%` : ''}`);
     filled++;
     continue;
   }

@@ -79,7 +79,7 @@ test('scenes: picked from the brief, the subject first, never only floating thin
 test('scenes: tokens only, one accent, one line weight at every scale', () => {
   for (const s of ['cup bag', 'crane house', 'bag cup jar', 'tooth calendar stethoscope', 'boat mountain', 'van box']) {
     const svg = sceneSvg(s);
-    assert.match(svg, /^<svg data-part="scene" viewBox="[-\d.]+ 0 [\d.]+ 200" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false">/);
+    assert.match(svg, /^<svg data-part="scene" viewBox="[-\d.]+ \d+ [\d.]+ \d+" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false">/);
     assert.doesNotMatch(svg, /#[0-9a-f]{3,6}\b|rgb\(|oklch\(|stroke-width=|fill="(?!none)/i, s);
     assert.equal((svg.match(/data-role="lead"/g) ?? []).length, 1, `${s}: one subject in the accent`);
     // Each placed thing divides the stroke by its own scale, so lines match across sizes.

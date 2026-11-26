@@ -201,6 +201,14 @@ test('audit-ui --taste beyond the basics: right-to-left, long words, forced colo
   for (const rule of ['a11y-rtl-overflow', 'a11y-long-words', 'a11y-reduced-data']) assert.ok(phone.rules.has(rule), rule);
 });
 
+test('overlap is measured on the letters: tall-metric line boxes that do not touch pass, letters on letters fail', () => {
+  // The same face with tall vertical metrics (ascent-override 150%) in both: line boxes cross, letters do not.
+  assert.ok(!audit('overlap-tall-metrics', ['--viewports', 'desktop,mobile']).rules.has('overlap'));
+  const real = audit('overlap-real', ['--viewports', 'desktop']).findings.filter((f) => f.rule === 'overlap').map((f) => f.message).join(' ');
+  assert.match(real, /“1,240” and “degrees in the kiln”/);
+  assert.match(real, /“Tide tables” and “Updated 06:00”/);
+});
+
 test('audit-ui --perf: a lazy, unsized, oversized first picture', () => {
   const { j, findings } = audit('critic-perf', ['--perf', '--viewports', 'desktop']);
   const lazy = findings.find((f) => f.rule === 'perf-lcp-lazy');
