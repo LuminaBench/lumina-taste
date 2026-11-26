@@ -93,8 +93,12 @@ test.describe('phone app', () => {
 
   test('swipe rows: a drag opens the actions, and a keyboard button does the same', async ({ page }) => {
     await page.goto(app('?screen=home'));
+    // Two races under load: the enhancer (a module) may not have booted, and the board scrolls Today into view on the
+    // next frame, which moves the row after it is measured. Wait for the part to be live and the row to stand still.
+    await expect(page.locator('#ap-later')).toHaveAttribute('data-edge-guard', '20');
     const row = page.locator('#ap-later [data-part="row"]').first();
-    const box = (await row.boundingBox())!;
+    let box = (await row.boundingBox())!;
+    await expect.poll(async () => { const now = (await row.boundingBox())!; const still = Math.abs(now.x - box.x) < 1 && Math.abs(now.y - box.y) < 1; box = now; return still; }, { intervals: [100, 100, 200, 400] }).toBe(true);
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     await page.mouse.down();
     await page.mouse.move(box.x + box.width / 2 - 120, box.y + box.height / 2, { steps: 8 });
