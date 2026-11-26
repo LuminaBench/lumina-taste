@@ -58,7 +58,7 @@
 
   :scope[data-variant="poster"] { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(12px, 2cqi, 24px); align-items: end; }
   :scope[data-variant="poster"] > * { grid-column: 1 / -1; }
-  :scope[data-variant="poster"] > [data-part="date"] { grid-column: 1 / span 8; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 0.2em; margin: 0; font-family: var(--font-display); font-weight: var(--weight-display); font-variant-numeric: lining-nums tabular-nums; letter-spacing: -0.045em; line-height: 0.86; }
+  :scope[data-variant="poster"] > [data-part="date"] { grid-column: 1 / span 8; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.16em 0.2em; margin: 0; font-family: var(--font-display); font-weight: var(--weight-display); font-variant-numeric: lining-nums tabular-nums; letter-spacing: -0.045em; line-height: 0.86; }
   /* A date reads left to right in any language. */
   :scope[data-variant="poster"] > [data-part="date"] > time { direction: ltr; unicode-bidi: isolate; font-size: clamp(4.5rem, 1rem + 15cqi, 13.5rem); }
   :scope[data-variant="poster"] > [data-part="date"] > span { font-size: clamp(1.75rem, 0.6rem + 4cqi, 3.5rem); letter-spacing: -0.02em; }
