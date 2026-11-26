@@ -7,13 +7,16 @@
   [data-part="box"] {
     display: grid; place-items: center; flex: none; width: 18px; height: 18px;
     border: var(--bw-strong) var(--border-style) var(--border-strong); border-radius: min(var(--radius-xs), 6px); background: var(--bg-surface-1);
-    transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1), scale var(--dur-1) var(--ease-out);
+    /* Pressed it gives a little; let go it springs back past its size and settles. */
+    transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1), scale var(--dur-release, 360ms) var(--ease-release, var(--ease-out));
   }
   svg { width: 14px; height: 14px; fill: none; stroke: var(--accent-ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  [data-part="tick"] { stroke-dasharray: 16; stroke-dashoffset: 16; transition: stroke-dashoffset var(--dur-3) var(--ease-out); }
+  /* Unticked it goes at once; ticked it draws itself, stroke by stroke, just after the box fills. */
+  [data-part="tick"] { stroke-dasharray: 16; stroke-dashoffset: 16; transition: stroke-dashoffset var(--dur-1) var(--ease-out); }
+  input:checked + [data-part="box"] [data-part="tick"] { transition: stroke-dashoffset var(--dur-draw, 240ms) var(--ease-out) var(--delay-draw, 50ms); }
   [data-part="dash"] { opacity: 0; }
   :scope:hover [data-part="box"] { border-color: var(--text-secondary); }
-  :scope:active [data-part="box"] { scale: 0.9; }
+  :scope:is(:active, [data-pressing]) [data-part="box"] { scale: 0.86; transition-duration: var(--dur-1), var(--dur-1), var(--dur-press, 70ms); }
   input:checked + [data-part="box"], input:indeterminate + [data-part="box"] { background: var(--accent-solid); border-color: var(--accent-solid); }
   input:checked + [data-part="box"] [data-part="tick"] { stroke-dashoffset: 0; }
   input:indeterminate + [data-part="box"] [data-part="dash"] { opacity: 1; }

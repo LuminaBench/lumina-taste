@@ -34,8 +34,8 @@
   /* data-pattern: a bold shape behind the type, in the panel's own tones, so a stand-in is a composition, not a box.
      sun (one large disc), bands (two broad diagonal bands), steps (stacked blocks rising to the right), split
      (the panel halved in two tones). One pattern per set, or one per panel in a set of three at most. */
-  :scope:is([data-pattern], :has(> [data-part="motif"])) > :not(img, video, picture, [data-part="motif"]) { position: relative; z-index: 1; }
-  :scope:is([data-pattern], :has(> [data-part="motif"])) > [data-part="index"] { position: absolute; }
+  :scope:is([data-pattern], :has(> :is([data-part="motif"], [data-part="scene"]))) > :not(img, video, picture, [data-part="motif"], [data-part="scene"]) { position: relative; z-index: 1; }
+  :scope:is([data-pattern], :has(> :is([data-part="motif"], [data-part="scene"]))) > [data-part="index"] { position: absolute; }
   :scope[data-pattern]::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; --pa: color-mix(in oklab, currentColor 12%, transparent); --pb: color-mix(in oklab, var(--accent-solid) 34%, transparent); }
   :scope[data-tone="accent"][data-pattern]::before, :scope[data-tone="swatch"][data-pattern]::before { --pb: color-mix(in oklab, currentColor 16%, transparent); }
   :scope[data-tone="ink"][data-pattern]::before { --pa: color-mix(in oklab, currentColor 10%, transparent); --pb: color-mix(in oklab, var(--accent-solid) 70%, transparent); }
@@ -62,9 +62,32 @@
   [data-part="motif"] [data-m="b"] { fill: var(--mb); }
   [data-part="motif"] [data-m="cut"] { fill: var(--art-ground); }
   [data-part="motif"] [data-m="dot"] { fill: var(--mi); }
-  [data-part="motif"] :is([data-m="ink"], [data-m="sil"]) { fill: none; stroke: var(--mi); stroke-width: var(--motif-stroke, 3); stroke-linecap: round; stroke-linejoin: round; }
+  [data-part="motif"] :is([data-m="ink"], [data-m="sil"]) { fill: none; stroke: var(--mi); stroke-width: var(--motif-stroke, 3); stroke-linecap: var(--motif-cap, round); stroke-linejoin: var(--motif-join, round); }
   [data-part="motif"] [data-m="sil"] { stroke-width: calc(var(--motif-stroke, 3) * 2); }
-  :scope:has(> :is(img, video, picture)) > [data-part="motif"] { display: none; }
+  :scope:has(> :is(img, video, picture)) > :is([data-part="motif"], [data-part="scene"]) { display: none; }
+  /* data-scene: two or three motifs on one ground (art-panel.ts, sceneSvg), for a hero-sized panel. The ground
+     runs from edge to edge; the biggest thing stands behind, the next in front of it, anything that does not
+     stand hangs above. Only the subject (data-role="lead") carries the accent; the rest are a quieter tone. */
+  [data-part="scene"] { --mi: var(--text-primary); --ma: var(--accent-solid); --mb: color-mix(in oklab, var(--accent-solid) 16%, var(--bg-surface-1)); --mg: color-mix(in oklab, var(--accent-solid) 13%, var(--art-ground)); --mr: color-mix(in oklab, var(--text-primary) 30%, var(--art-ground)); --mf: color-mix(in oklab, var(--text-primary) 7%, var(--art-ground)); position: absolute; z-index: 0; top: 4%; left: 0; width: 100%; height: var(--scene-h, 60%); overflow: visible; pointer-events: none; }
+  :scope[data-tone="accent"] [data-part="scene"] { --mb: var(--bg-surface-1); --mg: color-mix(in oklab, var(--bg-surface-1) 42%, var(--art-ground)); --mr: color-mix(in oklab, var(--text-primary) 34%, var(--art-ground)); --mf: color-mix(in oklab, var(--bg-surface-1) 26%, var(--art-ground)); }
+  :scope[data-tone="ink"] [data-part="scene"] { --mi: var(--bg-canvas); --ma: color-mix(in oklab, var(--accent-solid) 78%, var(--bg-canvas)); --mb: color-mix(in oklab, var(--bg-canvas) 16%, var(--text-primary)); --mg: color-mix(in oklab, var(--bg-canvas) 8%, var(--art-ground)); --mr: color-mix(in oklab, var(--bg-canvas) 36%, var(--art-ground)); --mf: color-mix(in oklab, var(--bg-canvas) 7%, var(--art-ground)); }
+  :scope[data-tone="swatch"] [data-part="scene"] { --mi: currentColor; --ma: color-mix(in oklab, currentColor 24%, var(--art-ground)); --mb: color-mix(in oklab, var(--art-ground) 55%, var(--art-ink, var(--bg-canvas))); --mg: color-mix(in oklab, currentColor 9%, var(--art-ground)); --mr: color-mix(in oklab, currentColor 14%, var(--art-ground)); --mf: color-mix(in oklab, currentColor 6%, var(--art-ground)); }
+  /* A figure panel gives the scene less height. A wide, short panel sets it on the right half on its own
+     stretch of ground, and keeps the name to the left half. */
+  :scope[data-variant="figure"] { --scene-h: 48%; }
+  :scope:is([data-ratio="16/9"], [data-ratio="3/2"]) > [data-part="scene"] { top: auto; bottom: 0; left: auto; right: 0; width: 58%; height: 86%; overflow: hidden; }
+  :scope:is([data-ratio="16/9"], [data-ratio="3/2"]):has(> [data-part="scene"]) > :is([data-part="name"], [data-part="fact"], [data-part="figure"]) { max-width: 44%; }
+  [data-part="scene"] [data-m="sky"] { fill: var(--mg); }
+  [data-part="scene"] [data-m="floor"] { fill: var(--mf); }
+  [data-part="scene"] [data-m="a"] { fill: var(--ma); }
+  [data-part="scene"] [data-role="rest"] [data-m="a"] { fill: var(--mr); }
+  [data-part="scene"] [data-m="b"] { fill: var(--mb); }
+  [data-part="scene"] [data-m="cut"] { fill: var(--art-ground); }
+  [data-part="scene"] [data-m="dot"] { fill: var(--mi); }
+  [data-part="scene"] :is([data-m="ink"], [data-m="sil"]) { fill: none; stroke: var(--mi); stroke-width: calc(var(--motif-stroke, 3) / var(--k, 1)); stroke-linecap: var(--motif-cap, round); stroke-linejoin: var(--motif-join, round); }
+  [data-part="scene"] [data-m="sil"] { stroke-width: calc(var(--motif-stroke, 3) * 2 / var(--k, 1)); }
+  [data-part="scene"] [data-g="dash"] { stroke-dasharray: 18 14; }
+  [data-part="scene"] [data-g="thin"] { opacity: 0.5; }
   /* A figure set large and a drawing on one panel: the drawing steps back so the figure has the lower half. */
   :scope[data-variant="figure"] > [data-part="motif"] { height: 46%; }
   /* With a photograph: it fills the frame and the placeholder type is hidden (the caption still describes it). */
@@ -72,3 +95,20 @@
 }
 .lt-art-demo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; width: 100%; }
 @media (max-width: 560px) { .lt-art-demo { grid-template-columns: minmax(0, 1fr); } .lt-art-demo .lt-art { --art-ratio: 16 / 9; --art-figure: 14cqi; } }
+/* The drawing's line follows the lettering: a heavy slab, stencil or stadium face gets a heavy line; a didone,
+   legal or editorial face a fine one. One token set per type pairing (tokens/typography/source.json ids), set
+   wherever data-type is (the page root, or a preview box), so drawings and headings always agree.
+     --motif-stroke  line weight on the 160 grid (3 is the default)
+     --motif-cap / --motif-join  round, or butt and miter for faces cut from straight strokes */
+:where([data-type]) { --motif-cap: round; --motif-join: round; }
+:where([data-type="didone"]) { --motif-stroke: 2; }
+:where([data-type="editorial"], [data-type="bookish"], [data-type="legal"]) { --motif-stroke: 2.25; }
+:where([data-type="financial"], [data-type="technical"], [data-type="dense"]) { --motif-stroke: 2.5; }
+:where([data-type="precision"], [data-type="swiss"], [data-type="workbench"]) { --motif-stroke: 2.75; }
+:where([data-type="humanist"], [data-type="geometric"]) { --motif-stroke: 3; }
+:where([data-type="signage"]) { --motif-stroke: 3.25; }
+:where([data-type="hyperlegible"], [data-type="schoolbook"]) { --motif-stroke: 3.5; }
+:where([data-type="rounded"]) { --motif-stroke: 3.75; }
+:where([data-type="slab"], [data-type="stamped"]) { --motif-stroke: 4; }
+:where([data-type="stadium"], [data-type="stencil"]) { --motif-stroke: 4.25; }
+:where([data-type="stencil"], [data-type="technical"], [data-type="workbench"]) { --motif-cap: butt; --motif-join: miter; }

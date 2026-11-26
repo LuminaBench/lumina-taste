@@ -12,9 +12,18 @@
       "aliases": ["easing curves","animation timing","spring easing","transition presets","durations"],
       "react": "MOTION",
       "deps": ["button"],
-      "api": "--ease-out · --ease-spring · --dur-*",
+      "api": "--ease-out · --ease-spring · --dur-* · --press-settle · --ease-release · --ease-overshoot",
       "w": 420,
-      "called": ["easing curves","animation timing values","spring easing for toggles","how long should animations be"],
+      "called": [
+        "easing curves",
+        "animation timing values",
+        "spring easing for toggles",
+        "how long should animations be",
+        "button press spring",
+        "switch overshoot",
+        "checkmark draw animation",
+        "shake on invalid input"
+      ],
       "anatomy": [
         {
           "sel": "[data-part=\"lane\"]:nth-child(1)",
@@ -35,7 +44,7 @@
           "text": "Feels mechanical for UI."
         }
       ],
-      "prompt": "Use motion tokens only: --dur-1 (90ms) to --dur-3 (200ms) for controls, --dur-4 (320ms) for sheets and drawers, --ease-out for entrances, --ease-in-out for swaps, --ease-spring for small indicators. All durations collapse to 1ms under prefers-reduced-motion.",
+      "prompt": "Use motion tokens only: --dur-1 (90ms) to --dur-3 (200ms) for controls, --dur-4 (320ms) for sheets and drawers, --ease-out for entrances, --ease-in-out for swaps, --ease-spring for small indicators. Micro-interactions have their own (tokens/scroll.css): a pressed button sinks --press-settle (1.5px) over --dur-press and springs back over --dur-release on --ease-release, never scaling up on hover; a switch thumb crosses on --ease-overshoot; a tick draws over --dur-draw; a failed field shakes by --shake-x. Transform and opacity only. All of it collapses under prefers-reduced-motion and data-motion=\"reduced\": durations 1ms, distances zero.",
       "debug": "Debug my motion. Rule out: hard-coded durations that ignore reduced motion; ease-in on entrances; spring overshoot on large surfaces; transitions over 300ms on small controls. The symptom:",
       "code": [
         ["CSS","transition: scale var(--dur-1) var(--ease-out)",""],

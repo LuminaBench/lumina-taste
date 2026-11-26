@@ -41,6 +41,7 @@ The pinned scene and the stack both tell steps: pick the scene when the *same fr
 | `--dur-moment` | 1100ms | A moment played on a timer (inside a preview box) |
 | `--dur-count` | 1400ms | A figure counting to its value |
 | `--dur-1` to `--dur-4`, `--ease-out`, `--ease-spring` | 90 to 320ms | Controls: buttons, the slider knob, toggles (`tokens/base.css`) |
+| `--dur-press`, `--dur-release`, `--ease-release`, `--dur-toggle`, `--ease-overshoot`, `--dur-draw`, `--dur-shake`, `--dur-confirm` | 70 to 420ms | Micro-interactions (section 8, `tokens/scroll.css`) |
 | *(none)* | `linear` | Anything scrubbed by scroll. The scroll is the easing; an eased scrub feels like lag |
 
 Scrubbed ranges: a reveal runs over `entry 0%` to `entry 70%`; a zoom or reveal is finished by `cover 40–45%` (the picture is still in the lower half of the screen); a pinned slide uses the pinned stretch, `contain 6%` to `contain 94%`, so the first and last frames rest for a moment. If a picture is still moving when it reaches the middle of the screen, the range is too long.
@@ -80,6 +81,30 @@ Cross-document view transitions make a multi-page site feel like one place: the 
 ## 7. Checking it
 
 1. Audit at rest: `node scripts/audit-ui.mjs <page> --taste` (reduced motion).
-2. Look with motion on: screenshots at several scroll positions with motion allowed (`reducedMotion: 'no-preference'` in Playwright), at 1440 and 390. At every position, is one thing clearly moving and everything else still? Is any text being read while it moves?
+2. Look with motion on: the gallery's Moments view (`#/moments`) plays every moment and micro-interaction in its own stage, with a replay button and a reduced-motion switch on each. On your own page: screenshots at several scroll positions with motion allowed (`reducedMotion: 'no-preference'` in Playwright), at 1440 and 390. At every position, is one thing clearly moving and everything else still? Is any text being read while it moves?
 3. Scroll with the keyboard (Space, Page Down) and tab through a pinned rail: every link must come into view.
 4. Turn on reduced motion in the system and scroll the page once more: it should read as a finished, still page.
+
+## 8. Micro-interactions: how a control answers a touch
+
+Small, quick and physical, so a control feels made rather than painted. They are built into the controls; use the tokens if you make your own.
+
+| Control | What it does | Tokens |
+| --- | --- | --- |
+| Button (`button`, `copy-button`) | Pressed, it sinks 1.5px at once; let go, it springs back past its rest by a hair and settles. Hover changes the fill only: a button never grows | `--press-settle`, `--dur-press`, `--dur-release`, `--ease-release` |
+| Switch (`toggle-switch`) | Held, the thumb stretches toward where it will go; it crosses with a small overshoot and settles | `--press-stretch`, `--dur-toggle`, `--ease-overshoot` |
+| Checkbox (`checkbox`) | The box gives a little and springs back; the tick draws itself just after the box fills, and goes at once when unticked | `--dur-draw`, `--delay-draw` |
+| Field (`text-field`) | A field that fails its check on leaving it, or on submit, shakes once, gently, and its message arrives from just above. Never while typing | `--dur-shake`, `--shake-x`, `--dur-confirm` |
+| Copy (`copy-button`) | The icon turns to a tick and "Copied" rolls up in the label's place; the label keeps its width | `--dur-confirm` |
+
+Rules:
+
+- `transform` and `opacity` only (the tick's stroke is paint, not layout). Nothing reflows, so nothing next to the control moves.
+- Overshoot belongs to small things: a thumb, a tick, a button's last pixel. Never a card, a sheet or a page.
+- No scale-up on hover, anywhere. A hover changes a fill, a border or a shadow.
+- Under `prefers-reduced-motion: reduce` and `data-motion="reduced"` every one of these is still: the distances are zero, the durations 1ms, the curves linear, and the shake and the arrivals do not run. In print nothing animates.
+- `data-pressing` on a button, switch, checkbox or copy button holds its pressed look, for demos and tests.
+
+## 9. Drawings that match the lettering
+
+Art-panel drawings (`data-motif`, `data-scene`) take their line weight from the page's type pairing: `--motif-stroke` is set per pairing in `art-panel.css`, heavy for slab, stamped, stencil and stadium, fine for didone, legal, editorial and bookish. A scene (`data-scene="cup bag"`: two or three motifs on one ground, the biggest behind, the first name in the accent) keeps one line weight across its sizes. Nothing about them moves.

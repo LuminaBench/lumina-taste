@@ -9,12 +9,14 @@
   [data-part="thumb"] {
     position: absolute; top: 2px; left: 2px; width: calc(var(--h) - 4px); height: calc(var(--h) - 4px);
     border-radius: var(--radius-pill); background: var(--bg-surface-1); box-shadow: var(--shadow-sm);
-    transition: transform var(--dur-3) var(--ease-spring), width var(--dur-1) var(--ease-out);
+    /* It crosses with a little overshoot and settles (--dur-toggle, --ease-overshoot in tokens/scroll.css). */
+    transform-origin: left center;
+    transition: transform var(--dur-toggle, 320ms) var(--ease-overshoot, var(--ease-spring)), scale var(--dur-press, 70ms) var(--ease-out), background-color var(--dur-2) var(--ease-out);
   }
-  :scope:active [data-part="thumb"] { width: calc(var(--h) + 1px); }
+  /* Held down, the thumb stretches toward where it will go (scale, so nothing reflows). */
+  :scope:is(:active, [data-pressing]) [data-part="thumb"] { scale: var(--press-stretch, 1.22) 1; }
   input:checked + [data-part="track"] { background: var(--accent-solid); }
-  input:checked + [data-part="track"] [data-part="thumb"] { transform: translateX(calc(var(--w) - var(--h))); background: var(--accent-ink); }
-  :scope:active input:checked + [data-part="track"] [data-part="thumb"] { transform: translateX(calc(var(--w) - var(--h) - 5px)); }
+  input:checked + [data-part="track"] [data-part="thumb"] { transform: translateX(calc(var(--w) - var(--h))); transform-origin: right center; background: var(--accent-ink); }
   input:focus-visible + [data-part="track"] { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
   :scope:has(input:disabled) { cursor: not-allowed; color: var(--text-muted); }
   input:disabled + [data-part="track"] { opacity: 0.45; }
