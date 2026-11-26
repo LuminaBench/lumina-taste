@@ -2,7 +2,7 @@
   "name": "lumina-taste",
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
-  "counts": {"ui":204,"charts":46,"blueprints":25,"palettes":24,"themes":48,"typography":12,"styles":39},
+  "counts": {"ui":204,"charts":46,"blueprints":25,"palettes":24,"themes":48,"typography":20,"styles":39},
   "families": [
     {
       "id": "controls",
@@ -6418,6 +6418,78 @@
       "summary": "Kids, games, casual consumer, playful onboarding without going childish.",
       "aliases": ["friendly rounded"],
       "webfont": "https://fonts.googleapis.com/css2?family=Nunito:wght@400..800&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "signage",
+      "kind": "typography",
+      "name": "Signage Grotesk",
+      "summary": "Transport, timetables, stations, routes, maps, parking, logistics and wayfinding.",
+      "aliases": ["signage grotesk"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Overpass:wght@400..800&family=Overpass+Mono:wght@400..600&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "hyperlegible",
+      "kind": "typography",
+      "name": "Hyperlegible Care",
+      "summary": "Health, clinics, pharmacies, care homes, public health notices and accessibility-first services.",
+      "aliases": ["hyperlegible care"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400..700&family=Atkinson+Hyperlegible+Mono:wght@400..600&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "stamped",
+      "kind": "typography",
+      "name": "Stamped Slab",
+      "summary": "Trades, workshops, coffee roasters, breweries, bakeries, hardware and workwear: goods sold in a stamped bag or crate.",
+      "aliases": ["stamped slab"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Bitter:wght@700..800&family=Work+Sans:wght@400..600&family=Courier+Prime&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "stadium",
+      "kind": "typography",
+      "name": "Wide Sport Display",
+      "summary": "Sport, races, fixtures, leagues, festivals, events and tickets.",
+      "aliases": ["wide sport display"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,700..800&family=Barlow:wght@400;500;600&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "legal",
+      "kind": "typography",
+      "name": "Document Serif",
+      "summary": "Law firms, contracts, policy, compliance, courts, public records and long formal documents.",
+      "aliases": ["document serif"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400..700&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "workbench",
+      "kind": "typography",
+      "name": "Workbench Sans + Mono",
+      "summary": "Developer tools on a light ground: APIs, SDK docs, command-line tools, open-source projects and changelogs.",
+      "aliases": ["workbench sans + mono"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400..700&family=Spline+Sans+Mono:wght@400..600&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "schoolbook",
+      "kind": "typography",
+      "name": "Schoolbook Rounded",
+      "summary": "Children's learning, schools, reading apps, after-school clubs, libraries and family services.",
+      "aliases": ["schoolbook rounded"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Fredoka:wght@500..600&family=Lexend:wght@300..600&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "stencil",
+      "kind": "typography",
+      "name": "Site Condensed",
+      "summary": "Construction, civil works, plant hire, site safety, builders' merchants and engineering firms.",
+      "aliases": ["site condensed"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,700..800&family=Sofia+Sans:wght@400..600&display=swap",
       "files": ["tokens/typography/typography.css"]
     }
   ],
