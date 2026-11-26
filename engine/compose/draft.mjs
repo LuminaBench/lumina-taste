@@ -70,7 +70,9 @@ export const figureHtml = (v) => { const m = /^([£$€]?[\d.,:]+)\s+(.+)$/.exec
 /** A long figure ("£40,000") is set smaller so it never runs out of its panel: about 130cqi shared by its characters. */
 export const figureStyle = (v) => { const n = String(v).split(/\s+/)[0].length; return n > 4 ? ` style="font-size: clamp(2.5rem, ${Math.floor(128 / n)}cqi, 11rem)"` : ''; };
 /** Hyphenated words in a heading never break at the hyphen ("single-storey" stays on one line). */
-export const keepHyphens = (s) => String(s).replace(/([A-Za-z])-([A-Za-z])/g, '$1\u2011$2');
+/** Hyphenated words in a heading never break at the hyphen ("single-storey" stays on one line). Takes escaped
+ *  HTML and wraps each such word in a no-wrap span: a U+2011 hyphen is missing from many faces and falls back. */
+export const keepHyphens = (html) => String(html).replace(/([A-Za-z0-9£]+(?:-[A-Za-z0-9]+)+)/g, '<span style="white-space: nowrap">$1</span>');
 
 /**
  * The first screen in the brief's words. Missing pieces stay as the sample and are listed in a TODO
@@ -83,7 +85,7 @@ export function applyHeroCopy(html, copy) {
   if (copy.eyebrow) out = setPart(out, 'eyebrow', esc(copy.eyebrow)); else drop('eyebrow');
   if (!copy.lede) drop('lede');
   if (!copy.note) drop('note');
-  if (copy.headline) out = out.replace(/(<h1\b[^>]*>)[\s\S]*?(<\/h1>)/, `$1${esc(keepHyphens(copy.headline))}$2`);
+  if (copy.headline) out = out.replace(/(<h1\b[^>]*>)[\s\S]*?(<\/h1>)/, `$1${keepHyphens(esc(copy.headline))}$2`);
   if (copy.secondary) out = out.replace(/(<a class="lt-btn"[^>]*data-variant="(?:ghost|secondary)"[^>]*>)[^<]*/, `$1${esc(copy.secondary)} `);
   if (copy.action) {
     // The primary action in the subject's words: every button that said the sample's action says this one.
@@ -137,7 +139,7 @@ export function applyMediaIdea(html, idea, headline) {
 /** The closing band says the action and one true fact from the brief. */
 export function applyClose(html, { heading, lede }) {
   let out = html;
-  if (heading) out = out.replace(/(<h2\b[^>]*>)[\s\S]*?(<\/h2>)/, `$1${esc(keepHyphens(heading))}$2`);
+  if (heading) out = out.replace(/(<h2\b[^>]*>)[\s\S]*?(<\/h2>)/, `$1${keepHyphens(esc(heading))}$2`);
   if (lede) out = setPart(out, 'lede', esc(lede));
   return out;
 }

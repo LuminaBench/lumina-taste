@@ -34,7 +34,7 @@ export function itemsFrom(facts) {
 const listName = (items) => {
   const names = items.map((i, k) => (k ? i.name : cap(i.name)));
   const s = names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names[0];
-  return s.length <= 64 ? s : null;
+  return s.length <= 44 ? s : null;
 };
 
 /** What each band asks for when the brief has nothing to fill it with. */
@@ -103,11 +103,11 @@ function offers(ctx) {
   if (items.length < 2) return null;
   const tones = ['', ' data-tone="accent"', ' data-tone="ink"', ''];
   const li = items.slice(0, 4).map((it, k) => `    <li><article>
-      <figure class="lt-art"${tones[k]}${it.price ? ' data-variant="figure"' : ''} data-shot="${esc(`A photograph of the ${it.name}${ctx.facts.place ? ` in ${ctx.facts.place}` : ''}, same light and ratio as the others, 4:5`)}">${it.price ? `${it.from ? '<p data-part="index">From</p>' : ''}<p data-part="figure"${figureStyle(it.price)}>${esc(it.price)}</p>` : `<p data-part="name">${esc(keepHyphens(cap(it.name)))}</p>`}${it.meta ? `<p data-part="fact">${esc(it.meta)}</p>` : ''}<figcaption class="lt-visually-hidden">${esc(`${cap(it.name)}${it.price ? `, ${it.from ? 'from ' : ''}${it.price}` : ''}`)}</figcaption></figure>
-      <h3>${esc(keepHyphens(cap(it.name)))}</h3>${it.per ? `\n      <p>${esc(cap(it.per))}</p>` : ''}
+      <figure class="lt-art"${tones[k]}${it.price ? ' data-variant="figure"' : ''} data-shot="${esc(`A photograph of the ${it.name}${ctx.facts.place ? ` in ${ctx.facts.place}` : ''}, same light and ratio as the others, 4:5`)}">${it.price ? `${it.from ? '<p data-part="index">From</p>' : ''}<p data-part="figure"${figureStyle(it.price)}>${esc(it.price)}</p>` : `<p data-part="name">${keepHyphens(esc(cap(it.name)))}</p>`}${it.meta ? `<p data-part="fact">${esc(it.meta)}</p>` : ''}<figcaption class="lt-visually-hidden">${esc(`${cap(it.name)}${it.price ? `, ${it.from ? 'from ' : ''}${it.price}` : ''}`)}</figcaption></figure>
+      <h3>${keepHyphens(esc(cap(it.name)))}</h3>${it.per ? `\n      <p>${esc(cap(it.per))}</p>` : ''}
     </article></li>`).join('\n');
   return { slug: 'range', label: 'Prices', html: `<section class="lt-offers" aria-labelledby="h-range">
-  <header><h2 id="h-range">${esc(keepHyphens(listName(items.slice(0, 4)) ?? 'What it costs'))}</h2></header>
+  <header><h2 id="h-range">${keepHyphens(esc(listName(items.slice(0, 4)) ?? 'What it costs'))}</h2></header>
   <ul>
 ${li}
   </ul>
@@ -124,10 +124,10 @@ function tiles(ctx) {
     // A long price ("£48,000") is set a step smaller so it never runs out of a narrow tile.
     const long = it.price && it.price.length > 5 ? ' style="font-size: clamp(2rem, 0.8rem + 4.2cqi, 3.75rem)"' : '';
     const fig = it.price ? `<p data-part="figure"${long}>${it.from ? '<small>from</small>' : ''}${esc(it.price)}</p>` : '';
-    return `    <article${span}>${it.meta ? `<span class="lt-eyebrow">${esc(it.meta)}</span>` : ''}<h3>${esc(keepHyphens(cap(it.name)))}</h3>${it.per ? `<p>${esc(cap(it.per))}</p>` : ''}${fig}</article>`;
+    return `    <article${span}>${it.meta ? `<span class="lt-eyebrow">${esc(it.meta)}</span>` : ''}<h3>${keepHyphens(esc(cap(it.name)))}</h3>${it.per ? `<p>${esc(cap(it.per))}</p>` : ''}${fig}</article>`;
   }).join('\n');
   return { id: 'bento-grid', slug: 'prices', label: 'Prices', html: `<section class="lt-section" aria-labelledby="h-prices">
-  <header><h2 id="h-prices">${esc(keepHyphens(listName(items) ?? 'What it costs'))}</h2></header>
+  <header><h2 id="h-prices">${keepHyphens(esc(listName(items) ?? 'What it costs'))}</h2></header>
   <div class="lt-bento" aria-label="What it costs">
 ${art}
   </div>
@@ -139,7 +139,7 @@ function steps(ctx) {
   if (st.length < 3) return null;
   const items = st.slice(0, 5).map((s, k) => {
     const m = /\b(\d+)\s+(minutes?|hours?|days?|weeks?)\b/.exec(s);
-    return `<li><span data-part="n">${k + 1}</span><h3>${esc(keepHyphens(cap(s)))}</h3>${m ? `<p>${esc(`${m[1]} ${m[2]}`)}</p>` : ''}</li>`;
+    return `<li><span data-part="n">${k + 1}</span><h3>${keepHyphens(esc(cap(s)))}</h3></li>`;
   }).join('');
   return { id: 'how-it-works', slug: 'how', label: 'How it works', html: `<section class="lt-how-it-works" aria-labelledby="h-how">
   <header><h2 id="h-how">${esc(`${['', '', 'Two', 'Three', 'Four', 'Five'][Math.min(st.length, 5)]} steps`)}${ctx.product ? ` with ${esc(ctx.product)}` : ''}</h2></header>
@@ -186,7 +186,7 @@ function visit(ctx) {
 function panel(slug, heading, lede, primary, secondary) {
   return `<section class="lt-cta-band" aria-labelledby="h-${slug}">
   <div data-part="panel">
-    <div><h2 id="h-${slug}">${esc(keepHyphens(heading))}</h2>${lede ? `<p data-part="lede">${esc(lede)}</p>` : ''}</div>
+    <div><h2 id="h-${slug}">${keepHyphens(esc(heading))}</h2>${lede ? `<p data-part="lede">${esc(lede)}</p>` : ''}</div>
     <div data-part="cta"><a class="lt-btn" data-variant="primary" data-size="lg" href="${esc(primary.href)}">${esc(primary.label)}</a>${secondary ? `<a class="lt-btn" data-variant="ghost" data-size="lg" href="${esc(secondary.href)}">${esc(secondary.label)}</a>` : ''}</div>
   </div>
 </section>`;
@@ -211,7 +211,8 @@ function close(ctx) {
   const other = facts.prices.find((p) => plainPrice(p.value) !== ctx.idea.figure && !String(hero.headline ?? '').includes(plainPrice(p.value)));
   const heading = said ? cap(said) : service && ctx.action && product ? `${ctx.action} ${/^(give|donate)/i.test(ctx.action) ? 'to' : /^get/i.test(ctx.action) ? 'from' : 'with'} ${product}` : (other ?? price) ? ((p) => `${p.what ? `${cap(p.what.replace(/^fixed[-\s](?:fee|price)\s+/i, ''))}, ` : product ? `${product}, ` : ''}${p.from ? 'from ' : ''}${p.value}`)(other ?? price) : price ? `${price.what ? `${cap(price.what.replace(/^fixed[-\s](?:fee|price)\s+/i, ''))}, ` : product ? `${product}, ` : ''}${price.from ? 'from ' : ''}${price.value}` : ctx.action && product ? `${ctx.action} ${/^(give|donate)/i.test(ctx.action) ? 'to' : /^get/i.test(ctx.action) ? 'from' : 'with'} ${product}` : null;
   if (!heading) return null;
-  const lede = facts.claims.length ? `${product ?? 'It'} ${facts.claims[0]}.` : hero.lede && !hero.lede.includes(heading) ? hero.lede : null;
+  // The lede says what happens next when the brief gives the steps; otherwise one true line not yet on screen.
+  const lede = facts.steps.length >= 2 ? `${cap(facts.steps.join(', then '))}.` : facts.claims.length ? `${product ?? 'It'} ${facts.claims[0]}.` : hero.lede && !hero.lede.includes(heading) ? hero.lede : null;
   const secondary = facts.phone ? { label: `Call ${facts.phone}`, href: `tel:${facts.phone.replace(/[^\d+]/g, '')}` } : null;
   return { slug: 'start', label: ctx.action ?? 'Start', html: panel('start', heading, lede, { label: ctx.action ?? 'Get in touch', href: facts.phone && !secondary ? contactHref(facts) : facts.email ? `mailto:${facts.email}` : '#top' }, secondary) };
 }
@@ -251,7 +252,7 @@ export function navBar({ product, links, action, facts }) {
   return `<header class="lt-nav-simple" data-lt="navbar-simple">
   <a href="#top" data-part="brand"><span data-part="mark" aria-hidden="true"></span>${esc(product ?? 'Home')}</a>
   <nav aria-label="Main"><ul data-part="links">${li}</ul></nav>
-  <div data-part="actions">${facts.phone ? `<a href="tel:${esc(facts.phone.replace(/[^\d+]/g, ''))}">${esc(facts.phone)}</a>` : ''}<a class="lt-btn" data-variant="primary" data-size="sm" href="${esc(action.href)}">${esc(action.label)}</a></div>
+  <div data-part="actions">${facts.phone ? `<a data-part="signin" href="tel:${esc(facts.phone.replace(/[^\d+]/g, ''))}">${esc(facts.phone)}</a>` : ''}<a class="lt-btn" data-variant="primary" data-size="sm" href="${esc(action.href)}">${esc(action.label)}</a></div>
   <button type="button" data-part="toggle" aria-expanded="false" aria-controls="lt-ns-panel" aria-label="Menu"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   <div id="lt-ns-panel" data-part="panel" hidden><ul>${li}</ul></div>
 </header>`;

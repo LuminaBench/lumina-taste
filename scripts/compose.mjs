@@ -292,7 +292,8 @@ function subjectHero(html, id) {
   if (idea.place === 'hero-visual' && idea.figure) { out = setHeroVisual(out, heroIdeaPanel(idea, facts)); used.add(idea.figure); }
   else if (heroInvoice && id === 'hero-split') out = setHeroVisual(out, `<h2 class="lt-visually-hidden">An invoice${product ? ` sent with ${esc(product)}` : ''}</h2>\n        ` + readFileSync(join(root, cat.ui.find((u) => u.id === 'invoice-sheet').files.find((f) => f.endsWith('.html'))), 'utf8').trim().split('\n').join('\n        '));
   if (idea.place === 'hero-headline' && idea.figure) used.add(idea.figure);
-  // A statement hero's three facts come from the brief, or go.
+  // A statement hero's three facts come from the brief, or go; a figure the lede already says is not repeated.
+  for (const f of figures) if (out.includes(esc(f.value))) used.add(f.value);
   if (/data-part="facts"/.test(out)) out = setFacts(out, figuresLeft(), { min: 2 });
   if (hero.todo.length) out = out.replace(/^(<\w+[^>]*>)/, `$1\n  <!-- ${askFor(hero.todo)} -->`);
   for (const f of figures) if (out.includes(esc(f.value))) used.add(f.value);

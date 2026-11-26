@@ -331,7 +331,7 @@ test('compose --write puts the subject in the draft: headline, bold idea, rhythm
     const r = node([join(root, 'scripts/compose.mjs'), 'Website for Brickwell Build, a construction firm in Bristol building house extensions and loft conversions, fixed-price quotes, a £40,000 single-storey extension in 12 weeks', '--project', dir, '--write']);
     assert.equal(r.status, 0, r.stderr);
     const html = readFileSync(join(dir, 'index.html'), 'utf8');
-    assert.match(html, /<h1[^>]*>Single‑storey extensions in 12 weeks<\/h1>/, 'hyphens never break in the headline');
+    assert.match(html, /<h1[^>]*><span style="white-space: nowrap">Single-storey<\/span> extensions in 12 weeks<\/h1>/, 'hyphens never break in the headline');
     assert.match(html, /<!-- Bold idea: the £40,000 fixed price/);
     assert.match(html, /data-tone="(swatch|ink)"[\s\S]*?<p data-part="figure"[^>]*>£40,000<\/p>/);
     assert.match(html, /<p data-part="eyebrow">Construction firm · Bristol<\/p>/);
