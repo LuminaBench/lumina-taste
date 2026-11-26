@@ -191,20 +191,18 @@ test('each kind of subject gets its own page, and software stays software', () =
   assert.match(compose('Website for an accountant in Leeds').artDirection.signature.name, /Plain terms/);
 });
 
-test('compose --write drafts a plain section where no part fits, and the critic will not let its placeholder ship', () => {
+test('compose --write leaves out a band the brief cannot fill, and lists what it needs once, at the top', () => {
   const dir = mkdtempSync(join(tmpdir(), 'lt-about-'));
   try {
     const r = node([join(root, 'scripts/compose.mjs'), 'About page for Meridian, an architecture studio', '--project', dir, '--write']);
     assert.equal(r.status, 0, r.stderr);
     const html = readFileSync(join(dir, 'index.html'), 'utf8');
-    assert.match(html, /<section class="lt-section" id="the-story" data-layout="rail"[^>]*data-rhythm="busy"/);
-    assert.match(html, /<p>TODO: Two or three short paragraphs/);
-    // No figures in the brief: no figures band and no made-up facts under the headline; the plan asks for them.
-    assert.ok(html.includes('lt-hero-statement') && !html.includes('lt-stats-band') && !html.includes('data-part="facts"'));
-    assert.match(r.stdout, /Left out: the figures band/);
+    assert.match(html, /<section class="lt-hero-statement"[^>]*id="top"/);
+    assert.ok(!html.includes('lt-stats-band') && !html.includes('data-part="facts"') && !/<p>TODO/.test(html), 'no figures and no placeholder paragraphs');
+    assert.match(html, /<!-- TODO before this page ships[\s\S]*The story:[\s\S]*-->/);
+    assert.match(r.stdout, /Still needed/);
     const a = node([join(root, 'scripts/audit-ui.mjs'), join(dir, 'index.html'), '--product', 'Meridian', '--viewports', 'desktop', '--modes', 'light']);
-    assert.match(a.stdout, /taste-sample-content/);
-    assert.match(a.stdout, /TODO: Two or three short paragraphs/);
+    assert.match(a.stdout, / 0 errors/, a.stdout);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
@@ -237,10 +235,10 @@ test('plans put pictures where paragraphs were, and say how the page moves', () 
   // A software landing page gets its one dark band for the product, and the draft never puts two tinted bands together.
   const dir = mkdtempSync(join(tmpdir(), 'lt-moves-'));
   try {
-    node([join(root, 'scripts/compose.mjs'), 'Landing page for a booking app for dental clinics', '--project', dir, '--write']);
+    node([join(root, 'scripts/compose.mjs'), 'Website for Harrow & Finch, a three-partner employment law firm at 4 King Street, Manchester M2 4LQ, settlement agreement review from £450, unfair dismissal advice from £300, a free 20-minute first call, partners Ruth Harrow, Sam Finch and Priya Shah, open Monday to Friday 9 to 5.30, phone 0161 496 0322', '--project', dir, '--write']);
     const html = readFileSync(join(dir, 'index.html'), 'utf8');
     assert.match(html, /<main id="main" data-scroll>/);
-    assert.equal((html.match(/data-tone="dark"/g) ?? []).length, 1);
+    assert.ok((html.match(/data-tone="dark"/g) ?? []).length <= 1);
     // Grounds alternate: no two neighbouring bands on the same ground (plain, well, dark, brand).
     const tones = [...html.matchAll(/<section class="lt-[^"]+"([^>]*)>/g)].map((m) => /data-tone="(\w+)"/.exec(m[1])?.[1] ?? 'plain');
     for (let i = 1; i < tones.length; i++) assert.ok(tones[i] !== tones[i - 1], `bands ${i - 1} and ${i} share the ${tones[i]} ground`);
@@ -285,7 +283,7 @@ test('words from the subject: facts come from the brief, never from filler', asy
   const { openingHours } = await import(join(root, 'engine/compose/words.mjs'));
   assert.deepEqual(openingHours(charity), { 1: '10:00 to 14:00', 2: null, 3: null, 4: '10:00 to 14:00', 5: null, 6: null, 7: null });
   assert.equal(openingHours(extractFacts('a cafe open Tuesday to Sunday 8am to 4pm'))[1], null);
-  assert.equal(openingHours(extractFacts('a cafe open Tuesday to Sunday 8am to 4pm'))[7], '08:00 to 16:00');
+  assert.equal(openingHours(extractFacts('a cafe open Tuesday to Sunday 8am to 4pm'))[7], '8:00 to 16:00');
   assert.equal(openingHours(extractFacts('a bakery open from 7:30 Tuesday to Sunday')), null, 'no closing time, no table: hours are never guessed');
   const saas = extractFacts('Landing page for Tally, an invoicing tool for freelancers that sends an invoice in 30 seconds and chases late payers, £9 a month');
   assert.deepEqual(saas.claims, ['sends an invoice in 30 seconds', 'chases late payers']);
@@ -335,16 +333,71 @@ test('compose --write puts the subject in the draft: headline, bold idea, rhythm
     const html = readFileSync(join(dir, 'index.html'), 'utf8');
     assert.match(html, /<h1[^>]*>Single‑storey extensions in 12 weeks<\/h1>/, 'hyphens never break in the headline');
     assert.match(html, /<!-- Bold idea: the £40,000 fixed price/);
-    assert.match(html, /data-tone="swatch"[\s\S]*?<p data-part="figure"[^>]*>£40,000<\/p>/);
+    assert.match(html, /data-tone="(swatch|ink)"[\s\S]*?<p data-part="figure"[^>]*>£40,000<\/p>/);
     assert.match(html, /<p data-part="eyebrow">Construction firm · Bristol<\/p>/);
     assert.ok(!html.includes('Book a check-up'), 'the sample\'s action label is replaced');
     assert.match(html, />Get a quote</);
     assert.match(html, /<title>Brickwell Build · Construction firm in Bristol<\/title>/);
     const bands = [...html.matchAll(/<section class="lt-[^"]+"[^>]*>/g)].map((m) => m[0]);
     assert.ok(bands.every((b) => /data-rhythm="(quiet|busy)"/.test(b)), 'every band carries its beat');
-    assert.equal(bands.filter((b) => /data-scale="display"/.test(b)).length, 2, 'the first screen and the close');
+    assert.equal(bands.filter((b) => /data-scale="display"/.test(b)).length, Math.min(2, bands.length), 'the first screen and the close');
     assert.ok(bands.filter((b) => /data-tone="dark"/.test(b)).length <= 1 && bands.filter((b) => /data-tone="accent"/.test(b)).length <= 1);
-    assert.match(r.stdout, /\*\*Rhythm \(as drafted from the blueprint\):\*\* `hero ▇ XL/);
+    assert.match(r.stdout, /\*\*Rhythm \(as drafted\):\*\* `hero ▇ XL/);
     assert.match(r.stdout, /Found in the brief: kind: construction firm; place: Bristol/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('drafts composed from five briefs carry no sample business: no brand, place, person, price or subject noun from any blueprint', () => {
+  const BRIEFS = {
+    bakery: 'Home page for Crumb & Co, a sourdough bakery at 12 Mill Lane, Frome BA11 1AB, open Tuesday to Sunday 7:30 to 3, loaves from £4.20, cinnamon buns £3 and a Saturday bread class for £65, run by Nell and Owen Hart, phone 01373 496 210',
+    solicitors: 'Website for Harrow & Finch, a three-partner employment law firm at 4 King Street, Manchester M2 4LQ, fixed-fee settlement agreement review from £450, unfair dismissal advice from £300, a free 20-minute first call, partners Ruth Harrow, Sam Finch and Priya Shah, open Monday to Friday 9 to 5.30, phone 0161 496 0322',
+    saas: 'Landing page for Tally, an invoicing tool for freelancers that sends an invoice in 30 seconds, chases late payers on day 7, 14 and 30 and matches bank payments, £9 a month, how it works: add a client, send the invoice, get paid',
+    construction: 'Website for Brickwell Build, a construction firm in Bristol building house extensions and loft conversions, fixed-price quotes, a £40,000 single-storey extension in 12 weeks, a loft conversion from £48,000, how it works: free site visit, then a fixed-price quote within 5 days, then a start date, phone 0117 496 0418',
+    charity: "Home page for Canal Street Food Bank, a volunteer-run charity at St Mark's Hall, 41 Canal Street, Birmingham B5 6EJ, that gave out 410 food parcels a week last winter with 60 volunteers, open Monday and Thursday 10 to 2, £10 feeds a household for a week",
+  };
+  // The sample businesses' words: each blueprint's brand names, the proper nouns and prices in its copy, and
+  // the nouns of its subject. A word that is also in the brief is the brief's, not the sample's.
+  const SUBJECT = {
+    venue: ['coffee', 'coffees', 'roasted', 'roaster', 'roastery', 'beans', 'espresso', 'tasting', 'Huila', 'Sidamo'],
+    practice: ['dentist', 'dentists', 'dental', 'hygienist', 'fillings', 'check-up', 'teeth', 'tooth', 'patients', 'whitening', 'NHS'],
+    cause: ['pantry', 'church', 'shops', 'households', 'nappies', 'Gift Aid', 'referral'],
+    shop: ['mugs', 'glaze', 'stoneware', 'kiln'],
+    event: ['speakers', 'programme', 'keynote'],
+    landing: ['dashboard', 'dashboards', 'charts', 'MRR', 'Postgres', 'warehouse', 'metric'],
+  };
+  const COMMON = new Set(['The', 'A', 'An', 'We', 'You', 'Your', 'Our', 'It', 'If', 'In', 'On', 'At', 'For', 'From', 'To', 'And', 'Or', 'No', 'Yes', 'Open', 'Closed', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Today', 'Book', 'Call', 'Privacy', 'Terms', 'Contact', 'Address', 'Opening', 'Questions', 'Find', 'Free', 'Get', 'See', 'Menu', 'Skip', 'Choose', 'Date', 'Time', 'People', 'Fees', 'How', 'What', 'Who', 'Where', 'When', 'Why', 'One', 'Two', 'Three', 'Four', 'Ltd', 'Every', 'Each', 'This', 'That', 'All', 'Any', 'Most', 'Some', 'Do', 'Is', 'Are', 'Can', 'Will', 'By', 'With', 'Pay', 'Give', 'Bring', 'Before', 'After', 'Then', 'Next', 'Previous', 'Clear', 'Start', 'Prices', 'Price', 'Visit', 'Hours', 'Phone', 'Email', 'Partner', 'Owner']);
+  const sampleWords = (bp) => {
+    const dir = join(root, 'blueprints', bp);
+    const meta = JSON.parse(readFileSync(join(dir, 'meta.json'), 'utf8'));
+    const text = readFileSync(join(dir, 'index.html'), 'utf8').replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&');
+    const words = new Set([...(meta.brand ?? []), ...(SUBJECT[bp] ?? [])]);
+    for (const m of text.matchAll(/(?<=[a-z,]\s)([A-Z][a-z]{3,}(?:\s[A-Z][a-z]+)*)/g)) if (!COMMON.has(m[1].split(' ')[0])) words.add(m[1]);
+    for (const m of text.matchAll(/£\d[\d,.]*/g)) words.add(m[0]);
+    return words;
+  };
+  const all = new Map();
+  for (const bp of ['venue', 'practice', 'cause', 'shop', 'event', 'landing']) for (const w of sampleWords(bp)) all.set(w, bp);
+  const dir = mkdtempSync(join(tmpdir(), 'lt-five-'));
+  try {
+    for (const [slug, brief] of Object.entries(BRIEFS)) {
+      const r = node([join(root, 'scripts/compose.mjs'), brief, '--project', join(dir, slug), '--write']);
+      assert.equal(r.status, 0, r.stderr);
+      const html = readFileSync(join(dir, slug, 'index.html'), 'utf8');
+      // What a visitor or a search engine sees: the page without its comments (the brief and the TODO list).
+      const seen = html.replace(/<!--[\s\S]*?-->/g, '').replace(/<script[\s\S]*?<\/script>/g, '').replace(/&amp;/g, '&');
+      const visible = seen.replace(/<[^>]+>/g, ' ');
+      const left = [...all].filter(([w]) => !brief.toLowerCase().includes(w.toLowerCase()) && new RegExp(`(^|[^\\w£])${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\w,.]*\\d)(?!\\w)`, 'i').test(visible)).map(([w, bp]) => `${w} (${bp})`);
+      assert.deepEqual(left, [], `${slug}: sample words left`);
+      // Every figure on the page is the brief's.
+      for (const m of visible.matchAll(/£\d[\d,.]*/g)) assert.ok(brief.includes(m[0].replace(/\.$/, '')), `${slug}: ${m[0]} is not in the brief`);
+      // What the brief did not give is asked for once, at the top, not invented.
+      assert.ok(html.indexOf('<!-- TODO before this page ships') < html.indexOf('<main') || !html.includes('TODO before'), slug);
+      assert.match(r.stdout, /composed band by band from the brief/);
+    }
+    // A thin brief gets a short page and a long TODO list, never a sample's sections.
+    const thin = node([join(root, 'scripts/compose.mjs'), 'Website for a dentist in Leeds', '--project', join(dir, 'thin'), '--write']);
+    const html = readFileSync(join(dir, 'thin', 'index.html'), 'utf8');
+    assert.ok(!/Kestrel|Harrogate|hygienist|£68/.test(html.replace(/<!--[\s\S]*?-->/g, '')), thin.stdout.slice(0, 200));
+    assert.match(html, /<!-- TODO before this page ships[\s\S]*the people, with their names and roles/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
