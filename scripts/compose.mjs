@@ -459,7 +459,8 @@ function writeComposed(dir, run) {
   }
   // Rhythm over the bands that exist, then a layout for each.
   const asSections = bands.map((b, i) => ({ n: i + 1, id: b.id, role: b.label }));
-  const r = planRhythm({ type, sections: asSections, canInsert: false, brandClose: !onBrand });
+  // A first screen already on the brand colour (the poster) keeps the close off it: one brand band a page.
+  const r = planRhythm({ type, sections: asSections, canInsert: false, brandClose: !onBrand && !/^<section[^>]*data-tone="accent"/.test(bands[0].html) });
   const ordered = r.beats.map((b) => ({ ...bands[b.n - 1], beat: b }));
   // Moments: at most two, never neighbours, never the first screen; chosen here and named in the strip.
   const moments = chooseMoments(ordered, ctx);

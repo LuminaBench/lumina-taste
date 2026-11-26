@@ -90,14 +90,14 @@ export function chooseHero({ type, domain, facts, items = [], software = false }
 export function chooseChrome({ type, domain, facts, hero }) {
   const d = domain?.id ?? null;
   const contact = !!(facts?.phone || facts?.email) && !!(facts?.street || facts?.postcode || facts?.days);
+  // Every bar is ink (paper on a dark page): the top of the page always contrasts with its ground, and the
+  // brand colour is kept for the close. The shape of the bar follows the first screen.
   let nav, navWhy;
-  if (hero.id === 'cover') { nav = { id: 'minimal', variant: 'minimal', tone: null }; navWhy = 'the masthead is the brand: the bar keeps only the name and the action'; }
+  if (hero.id === 'cover') { nav = { id: 'minimal', variant: 'minimal', tone: 'dark' }; navWhy = 'the masthead is the brand: an ink bar with only the name and the action'; }
+  else if (['mosaic', 'overlap'].includes(hero.id) && type.id === 'brand-landing') { nav = { id: 'split', variant: 'split', tone: 'dark' }; navWhy = 'a maker\'s name sits in the middle of an ink bar, the range on one side and the action on the other'; }
   else if (hero.id === 'departures' || d === 'transport') { nav = { id: 'ink', variant: null, tone: 'dark' }; navWhy = 'an ink bar, like the signs: the page under it is not one colour'; }
-  else if (['mosaic', 'overlap'].includes(hero.id) && ['brand-landing'].includes(type.id)) { nav = { id: 'split', variant: 'split', tone: null }; navWhy = 'a maker\'s name sits in the middle of the bar, the range on one side and the action on the other'; }
   else if (['bleed', 'film', 'wide', 'product'].includes(hero.id)) { nav = { id: 'ink', variant: null, tone: 'dark' }; navWhy = 'an ink bar frames the wide picture under it and gives the top of the page contrast'; }
-  else if (['poster', 'tucked', 'menu'].includes(hero.id) || ['service-landing', 'cause'].includes(type.id)) { nav = { id: 'brand', variant: null, tone: 'accent' }; navWhy = 'a bar in the brand colour, so the top of the page is not the same hue as the ground'; }
-  else { nav = { id: 'brand', variant: null, tone: 'accent' }; navWhy = 'a bar in the brand colour gives the page a contrasting top'; }
-  if (hero.id === 'poster' && nav.tone === 'accent') { nav = { id: 'ink', variant: null, tone: 'dark' }; navWhy = 'the poster is already on the brand colour: an ink bar above it, not a second band of the same hue'; }
+  else { nav = { id: 'ink', variant: null, tone: 'dark' }; navWhy = 'an ink bar (paper on a dark page), so the top of the page is never the same hue as its ground'; }
   let footer, footerWhy;
   if (contact && ['venue', 'service-landing', 'cause'].includes(type.id)) { footer = { id: 'contact', block: 'site-footer', variant: 'contact', tone: null }; footerWhy = 'people end the page looking for the phone number and the address: they are the foot, set large'; }
   else if (['brand-landing', 'portfolio', 'event'].includes(type.id) || ['cover', 'mosaic', 'menu'].includes(hero.id)) { footer = { id: 'wordmark', block: 'site-footer', variant: 'wordmark', tone: null }; footerWhy = 'the name is the brand: it closes the page, set across the column'; }

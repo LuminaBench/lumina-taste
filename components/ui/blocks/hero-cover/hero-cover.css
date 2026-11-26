@@ -4,7 +4,7 @@
    The masthead's size comes from its length: put style="--cover-len: <characters>" on the h1 (the composer does)
    and it fills the column without running out of it; without it the name may wrap to two lines. */
 @scope (.lt-hero-cover) {
-  :scope { container-type: inline-size; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(12px, 2cqi, 24px); width: 100%; padding: var(--block-y, calc(var(--section-y) * 0.45)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)) var(--block-y, calc(var(--section-y) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  :scope { container-type: inline-size; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(12px, 2cqi, 24px); width: 100%; padding: var(--block-y, calc(var(--section-y) / 2)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)) var(--block-y, calc(var(--section-y) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
   :scope[data-tone="well"] { background: var(--bg-surface-2); }
   @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 3)) var(--block-x-sm, 16px) var(--block-y-sm, calc(var(--section-y) / 2)); } }
   @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 3)) var(--block-x-sm, 16px) var(--block-y-sm, calc(var(--section-y) / 2)); } }

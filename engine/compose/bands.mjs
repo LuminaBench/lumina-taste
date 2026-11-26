@@ -528,7 +528,7 @@ export function footer({ product, facts, year, style = null, links = [], hours =
     <div data-part="reach"><p>${esc(facts.phone ? 'Ring, or write' : 'Write to us')}</p>${facts.phone ? `<a href="tel:${esc(facts.phone.replace(/[^\d+]/g, ''))}">${esc(facts.phone)}</a>` : ''}${facts.email ? `<a href="mailto:${esc(facts.email)}">${esc(facts.email)}</a>` : ''}</div>
     <div data-part="where">${addr.length > 1 ? `<address>${addr.map(esc).join('<br>')}</address>` : ''}${open ? `<p>${esc(open)}</p>` : ''}</div>
   </div>
-  <div data-part="legal"><span>© ${year} ${esc(name)}</span><nav aria-label="Footer"><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></nav></div>
+  <div data-part="legal"><span>© ${year} ${esc(name)}</span><span><a href="/privacy">Privacy</a></span><span><a href="/terms">Terms</a></span></div>
 </footer>`;
   }
   return `<footer class="lt-footer-min">

@@ -5,7 +5,7 @@
    (times in the mono face, a place, a stop and a status). An optional <div data-part="visual"> (a photograph,
    an art panel, a device) sits behind the board's top edge. */
 @scope (.lt-hero-board) {
-  :scope { container-type: inline-size; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(12px, 2cqi, 24px); align-items: center; width: 100%; padding: var(--block-y, calc(var(--section-y) * 0.6)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  :scope { container-type: inline-size; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(12px, 2cqi, 24px); align-items: center; width: 100%; padding: var(--block-y, calc(var(--section-y) * 0.75)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
   :scope[data-tone="well"] { background: var(--bg-surface-2); }
   @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
   @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
