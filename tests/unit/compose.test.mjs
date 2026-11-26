@@ -295,7 +295,7 @@ test('words from the subject: facts come from the brief, never from filler', asy
   assert.deepEqual(build.offers, ['house extensions', 'loft conversions']);
   // A brief with nothing specific gets a TODO asking for facts, not invented ones.
   const thin = heroCopy(extractFacts('website for a dentist'), { typeId: 'service-landing', product: null });
-  assert.equal(thin.headline, null);
+  assert.equal(thin.headline, 'A dentist', 'nothing specific: what it is, still true');
   assert.ok(thin.todo.includes('one real price'));
   // Every value found is a substring of the brief.
   for (const brief of ['Home page for Crumb & Co, a sourdough bakery on Mill Lane in Frome, open from 7:30, loaves from £4.20', 'Website for Harrow & Finch, an employment law firm in Manchester, settlement agreement review from £450, free 20-minute first call']) {

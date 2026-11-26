@@ -132,7 +132,7 @@ export function setFacts(html, figures, { part = 'facts', min = 2 } = {}) {
 export function applyMediaIdea(html, idea, headline) {
   let out = html;
   if (headline) out = out.replace(/(<h2\b[^>]*>)[\s\S]*?(<\/h2>)/, `$1${esc(headline)}$2`);
-  out = out.replace(/(<figure data-part="media"[^>]*>)[\s\S]*?(<\/figure>)/, `$1\n    <div class="lt-art" data-variant="figure" style="--art-ratio: 12 / 5" role="img" aria-label="${esc(`${idea.figure}: ${idea.caption}`)}">\n      <p data-part="figure"${figureStyle(idea.figure)}>${figureHtml(idea.figure)}</p>\n      <p data-part="name">${esc(idea.caption)}</p>\n    </div>\n  $2`);
+  out = out.replace(/(<figure data-part="media"[^>]*>)[\s\S]*?(<\/figure>)/, `$1\n    <div class="lt-art" data-variant="figure" data-ratio="16/9" role="img" aria-label="${esc(`${idea.figure}: ${idea.caption}`)}">\n      <p data-part="figure"${figureStyle(idea.figure)}>${figureHtml(idea.figure)}</p>\n      <p data-part="name">${esc(idea.caption)}</p>\n    </div>\n  $2`);
   return out;
 }
 

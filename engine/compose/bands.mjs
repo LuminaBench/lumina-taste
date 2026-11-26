@@ -126,7 +126,7 @@ export function pictureBand(ctx) {
   // The head noun of the brief's main count names the thing ("food parcels" → a parcel), else its kind.
   const head = (ctx.facts.counts[0]?.what ?? '').split(' ').pop();
   // A different drawing from the first screen's where the subject has one; else the same one on another ground.
-  const m = motifParts(motifFor(`${head} ${ctx.facts.kind ?? ''}`, ctx, ctx.heroMotif) ?? ctx.heroMotif);
+  const m = motifParts(motifFor(`${head} ${ctx.facts.kind ?? ''}`, ctx, ctx.heroMotif) ?? ctx.heroMotif, { small: true });
   if (!m.attr) return null;
   const name = ctx.facts.kind ? cap(ctx.facts.kind) : ctx.product;
   return { id: 'media-band', slug: 'picture', label: name ?? 'Picture', html: `<section class="lt-section" aria-labelledby="h-picture">
