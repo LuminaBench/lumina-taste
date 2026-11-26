@@ -1255,11 +1255,64 @@
       "added": 12
     },
     {
+      "id": "swipe-row",
+      "name": "Swipe row",
+      "summary": "A list row that slides aside to reveal its actions, with a keyboard button that opens the same actions.",
+      "pattern": "List + disclosure (aria-expanded)",
+      "states": ["closed","dragging","open","keyboard open","leaving"],
+      "aliases": [
+        "swipe to reveal",
+        "trailing swipe actions",
+        "ios swipe actions",
+        "swipe left for options",
+        "leading swipe",
+        "row actions on swipe"
+      ],
+      "react": "SwipeRow",
+      "api": "[data-part=\"more\"] aria-expanded · actions inert until open",
+      "w": 420,
+      "called": [
+        "swipe a row left to see buttons",
+        "the red delete button behind a list row",
+        "slide a message to show options",
+        "swipe actions like the mail app"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-swiperow [data-part=\"row\"]:first-child [data-part=\"main\"]",
+          "name": "Row",
+          "api": "<a> or <button>",
+          "text": "The whole row is one target, 64px tall. Drag it towards the start to open."
+        },
+        {
+          "sel": ".lt-swiperow [data-part=\"row\"]:first-child [data-part=\"actions\"]",
+          "name": "Actions",
+          "api": "inert until open",
+          "text": "Two at most, waiting underneath. The first in the accent, a destructive one last."
+        },
+        {
+          "sel": ".lt-swiperow [data-part=\"row\"]:first-child [data-part=\"more\"]",
+          "name": "Keyboard path",
+          "api": "aria-expanded · aria-controls",
+          "text": "Appears on focus (and on hover with a mouse). Opens the actions and moves focus into them; Escape closes."
+        }
+      ],
+      "prompt": "Build swipe rows: each list row slides towards its start edge under a pointer drag (touch-action: pan-y so vertical scrolling still works, a rubber band past either end) to reveal up to two action buttons underneath; release past half their width or with a quick flick to leave it open, otherwise it springs back. One row open at a time; a tap on any row closes it instead of following the link. Give every row a real button (aria-expanded, aria-controls) that is visually hidden until focused or hovered with a mouse and opens the same actions, moving focus to the first; actions are inert while closed; Escape closes and returns focus. Announce what an action did in a status region.",
+      "debug": "Debug my swipe rows. Rule out: the drag starting on vertical scrolls (decide the axis after 8px); a link followed after a drag (swallow the click); actions reachable by Tab while hidden (inert); no way to reach the actions without a swipe (keyboard, switch and voice users); two rows open at once; the row jumping because it animates width instead of translate. The symptom:",
+      "code": [
+        ["UIKit","UISwipeActionsConfiguration",""],
+        ["SwiftUI",".swipeActions",""],
+        ["Material","SwipeToDismissBox",""],
+        ["lumina-taste","<SwipeRow rows actions>","React"]
+      ],
+      "added": 17
+    },
+    {
       "id": "mobile-app-bar",
       "name": "Mobile app bar",
-      "summary": "The top bar of a phone screen: back, title and one action, with an optional large title that collapses as you scroll.",
+      "summary": "The top bar of a phone screen: back, title and one action, with an optional large title that shrinks and hands over to the small one as you scroll.",
       "pattern": "<header> + position: sticky",
-      "states": ["large title","collapsed","plain"],
+      "states": ["large title","shrinking","collapsed","plain"],
       "aliases": [
         "navigation bar",
         "top app bar",

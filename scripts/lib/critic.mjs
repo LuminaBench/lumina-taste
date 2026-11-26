@@ -221,11 +221,13 @@ export const MEASURE = (opts = {}) => {
   };
   const filled = (el) => { const c = rgba(getComputedStyle(el).backgroundColor); return c[3] > 0.9 && !(c[0] === c[1] && c[1] === c[2] && (c[0] > 240 || c[0] < 16)); };
   const inBar = (el) => fixedBottom.some((b) => b.contains(el)) || !!el.closest('[class*="app-bar"], [class*="tab-bar"], [class*="tabbar"], [class*="bottom-nav"]');
-  const primary = [...document.querySelectorAll('button, a, [role="button"], [role="tab"], input[type="submit"], input[type="button"]')].filter((el) => {
+  const primary = [...document.querySelectorAll(appMarked ? 'button, a[href], [role="button"], [role="tab"], [role="switch"], [role="checkbox"], [role="radio"], [role="option"], [role="menuitem"], input:not([type="hidden"]), select, textarea, summary' : 'button, a, [role="button"], [role="tab"], input[type="submit"], input[type="button"]')].filter((el) => {
     if (!shown(el) || el.closest('[aria-hidden="true"], svg, p, li > p, td, [role="dialog"]:not([open]), [data-audit-ignore]')) return false;
     // A skip link waits off screen until it is focused.
     const r = rectOf(el); if (r.bottom + scrollY <= 0 || r.right <= 0 || /skip/i.test(el.className) || /^#main/.test(el.getAttribute('href') ?? '') && r.top + scrollY < 4) return false;
     if (el.matches('a') && el.closest('p, figcaption, small')) return false;
+    // On a page marked data-app every control is a touch target; elsewhere the primary ones.
+    if (appMarked) return !el.matches('a') || !el.closest('p, li > span, small, figcaption');
     return inBar(el) || el.matches('[type="submit"], .lt-btn[data-variant="primary"]') || (filled(el) && rectOf(el).width >= 64);
   }).map((el) => ({ selector: sel(el), label: (el.getAttribute('aria-label') || el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 30), bar: inBar(el), ...hit(el) }));
 

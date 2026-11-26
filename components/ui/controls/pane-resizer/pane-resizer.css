@@ -1,0 +1,18 @@
+@scope (.lt-resizer) {
+  /* A thin edge with a wide, invisible hit area. It lights up on hover, drag and keyboard focus. */
+  :scope { position: relative; z-index: 2; flex: none; width: 1px; align-self: stretch; background: var(--border-hairline); cursor: col-resize; touch-action: none; outline: none; }
+  :scope[aria-orientation="horizontal"] { width: auto; height: 1px; cursor: row-resize; }
+  :scope::before { content: ""; position: absolute; inset: 0 -6px; }
+  :scope[aria-orientation="horizontal"]::before { inset: -6px 0; }
+  [data-part="grip"] { position: absolute; inset: 0 -1px; background: transparent; transition: background-color var(--dur-2) var(--ease-out); }
+  :scope[aria-orientation="horizontal"] [data-part="grip"] { inset: -1px 0; }
+  :scope:hover [data-part="grip"], :scope[data-dragging] [data-part="grip"] { background: var(--accent-solid); }
+  :scope:focus-visible [data-part="grip"] { inset: 0 -2px; background: var(--focus-ring); }
+}
+html[data-resizing], html[data-resizing] * { cursor: col-resize !important; user-select: none !important; }
+html[data-resizing="row"], html[data-resizing="row"] * { cursor: row-resize !important; }
+/* Gallery demo: two panes, the right one sized by --side-w. */
+.lt-resizer-demo { display: flex; width: 100%; max-width: 560px; height: 200px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); overflow: hidden; color: var(--text-primary); font-size: var(--text-ui-sm); }
+.lt-resizer-demo > section { flex: 1; min-width: 0; padding: var(--gap-md); }
+.lt-resizer-demo > aside { width: var(--side-w); flex: none; padding: var(--gap-md); background: var(--bg-surface-2); color: var(--text-secondary); }
+.lt-resizer-demo p { margin: 0 0 8px; }

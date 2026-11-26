@@ -2,14 +2,22 @@
   :scope {
     position: fixed; inset: auto 0 0 0; width: min(560px, 100vw); max-width: none; max-height: 85dvh; margin: 0 auto; padding: 0 var(--gap-md) calc(var(--gap-md) + env(safe-area-inset-bottom));
     border: 0; border-radius: var(--radius-xl) var(--radius-xl) 0 0; background: var(--bg-surface-1); color: var(--text-primary); box-shadow: var(--shadow-overlay); overscroll-behavior: contain;
-    translate: 0 calc(100% + var(--drag, 0px)); transition: translate var(--dur-4) var(--ease-out), display var(--dur-4) allow-discrete, overlay var(--dur-4) allow-discrete;
+    translate: 0 calc(100% + var(--drag, 0px)); transition: translate var(--dur-4) var(--ease-out), height var(--dur-4) var(--ease-out), display var(--dur-4) allow-discrete, overlay var(--dur-4) allow-discrete;
   }
-  :scope[open] { display: grid; gap: var(--gap-sm); translate: 0 var(--drag, 0px); }
+  :scope[open] { display: grid; gap: var(--gap-sm); align-content: start; translate: 0 var(--drag, 0px); }
   @starting-style { :scope[open] { translate: 0 100%; } }
   :scope[data-dragging] { transition: none; }
   :scope::backdrop { background: var(--scrim); }
+  /* Detents: the sheet has a height and its content scrolls under a grabber that stays put. Dragging up grows it live. */
+  :scope[data-detents] { --sheet-h: min(calc(var(--sheet-medium, 52dvh) + var(--grow, 0px)), var(--sheet-large, 92dvh)); height: var(--sheet-h); max-height: none; overflow-y: auto; }
+  :scope[data-detents][data-detent="large"] { --sheet-h: var(--sheet-large, 92dvh); }
   [data-part="grab"] { display: grid; place-items: center; height: 24px; cursor: grab; touch-action: none; }
-  [data-part="grab"] span { width: 36px; height: 4px; border-radius: 2px; background: var(--border-strong); }
+  [data-part="grab"] span { width: 36px; height: 4px; border-radius: 2px; background: var(--border-strong); transition: width var(--dur-2) var(--ease-out); }
+  /* As a button the grabber is a full-width 44px target that sits close to the title below it. */
+  button[data-part="grab"] { position: sticky; top: 0; z-index: 1; width: calc(100% + var(--gap-md) * 2); height: 44px; margin: 0 calc(var(--gap-md) * -1) -12px; padding: 0 0 12px; border: 0; border-radius: var(--radius-xl) var(--radius-xl) 0 0; background: var(--bg-surface-1); color: inherit; }
+  button[data-part="grab"]:hover span { width: 44px; background: var(--text-muted); }
+  button[data-part="grab"]:focus-visible { outline: none; }
+  button[data-part="grab"]:focus-visible span { width: 48px; height: 6px; border-radius: 3px; background: var(--focus-ring); box-shadow: 0 0 0 3px color-mix(in oklab, var(--focus-ring) 30%, transparent); }
   h2 { margin: 0 0 4px; font-size: var(--text-ui); font-weight: 600; text-align: center; color: var(--text-secondary); }
   [data-part="actions"] { display: grid; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--bg-surface-2); overflow: hidden; }
   [data-part="actions"] li + li { border-top: var(--bw) var(--border-style) var(--border-hairline); }
@@ -19,5 +27,11 @@
   [data-part="actions"] .lt-icon { color: var(--text-secondary); }
   [data-tone="danger"], [data-tone="danger"] .lt-icon { color: var(--status-negative) !important; }
   [data-part="cancel"] { width: 100%; height: 48px; }
+  /* Extras that would crowd the first view show only at the large detent. */
+  [data-detent-only] { display: none; }
 }
-[data-contained] .lt-sheet[data-contained-open] { position: absolute; inset: auto 0 0 0; width: 100%; max-height: 90%; }
+.lt-sheet[data-detent="large"] [data-detent-only="large"] { display: revert; }
+@media (prefers-reduced-motion: reduce) { .lt-sheet { transition: none; } }
+/* A contained sheet opens without ::backdrop: a spread shadow dims the box it opens in (and is clipped by it). */
+[data-contained] .lt-sheet[data-contained-open] { position: absolute; inset: auto 0 0 0; z-index: 2; width: 100%; max-height: 90%; box-shadow: 0 0 0 200vmax var(--scrim); }
+[data-contained] .lt-sheet[data-contained-open][data-detents] { --sheet-medium: 56%; --sheet-large: 94%; max-height: none; }

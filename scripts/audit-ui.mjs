@@ -401,9 +401,12 @@ const TASTE_CHECKS = (arg = null) => {
     return k.C >= 0.08 && r.height >= 28 && r.width >= 64 && !el.closest('nav, header, [role="tablist"], [role="radiogroup"], .lt-segmented, [data-part="tabs"]') && el.dataset.tone !== 'danger';
   });
   const H = innerHeight;
+  // An app board shows several phone screens side by side ([data-screen] or [data-mock] phones): each is its own screen.
+  const appBoard = document.documentElement.hasAttribute('data-app') || document.body.hasAttribute('data-app');
+  const screenOf = (el) => (appBoard ? el.closest('[data-screen], [data-mock]') : null);
   for (let i = 0; i < primaries.length; i++) {
     const a = primaries[i].getBoundingClientRect().top + scrollY;
-    const band = primaries.filter((p) => { const t = p.getBoundingClientRect().top + scrollY; return t >= a && t < a + H * 0.6; });
+    const band = primaries.filter((p) => { const t = p.getBoundingClientRect().top + scrollY; return t >= a && t < a + H * 0.6 && screenOf(p) === screenOf(primaries[i]); });
     if (band.length > 2) { add('taste-primary-count', primaries[i], `${band.length} filled accent buttons within one screen. Keep one primary; make the others secondary or ghost.`); break; }
   }
 
@@ -847,6 +850,10 @@ async function auditOne(browser, url, vpName, mode) {
       // Judge only what is on screen: clip to the viewport, and skip controls that cannot be scrolled fully into view.
       const x0 = Math.max(0, r.left - 8), y0 = Math.max(0, r.top - 8), x1 = Math.min(innerWidth, r.right + 8), y1 = Math.min(innerHeight, r.bottom + 8);
       if (r.top < 0 || r.left < 0 || r.bottom > innerHeight || r.right > innerWidth) return null;
+      // Under an open dialog or sheet that is not its own (a preview opens its sheet over its trigger): not reachable now.
+      const top = document.elementFromPoint(Math.min(innerWidth - 1, r.left + r.width / 2), Math.min(innerHeight - 1, r.top + r.height / 2));
+      const over = top?.closest('dialog[open], [data-contained-open], [role="dialog"], [popover]:popover-open');
+      if (over && !over.contains(el)) return null;
       return { x: x0, y: y0, width: x1 - x0, height: y1 - y0 };
     }, i);
     if (!box || box.width < 4 || box.height < 4) continue;

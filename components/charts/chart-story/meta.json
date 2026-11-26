@@ -1,0 +1,21 @@
+{
+  "id": "chart-story",
+  "order": 54,
+  "name": "Chart story",
+  "group": "Trends",
+  "summary": "The chart that answers one question: the answer set beside it as the headline, one moment lit with a sentence, the rest of the data muted.",
+  "bestFor": "The one chart on a page or a report that has to make a point: a recovery, a turning point, an outlier",
+  "avoidFor": "Exploring data (use a plain line chart), or more than one point to make (use the scroll-built story)",
+  "dataShape": "x + series (first is the focus) + moment: from, to, label + headline",
+  "aliases": [
+    "data story",
+    "annotated chart with headline",
+    "chart with takeaway",
+    "explanatory chart",
+    "highlight one moment",
+    "storytelling chart",
+    "chart that makes a point"
+  ],
+  "react": "ChartStory",
+  "wide": true
+}

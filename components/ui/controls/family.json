@@ -989,6 +989,52 @@
       "code": [["UIKit","UIStepper",""],["WAI-ARIA","Spinbutton",""],["lumina-taste","<NumberStepper>","React"]]
     },
     {
+      "id": "pane-resizer",
+      "name": "Pane resizer",
+      "summary": "The edge between two panes: drag it, or focus it and use the arrow keys, to make a sidebar or an inspector wider.",
+      "pattern": "WAI-ARIA Window Splitter",
+      "states": ["default","hover","dragging","focus-visible","at limit"],
+      "aliases": [
+        "resize handle",
+        "split view divider",
+        "draggable divider",
+        "resizable sidebar",
+        "inspector width",
+        "gutter"
+      ],
+      "react": "PaneResizer",
+      "api": "role=\"separator\" · data-var · aria-valuenow (px)",
+      "w": 560,
+      "called": [
+        "line you drag to make the sidebar wider",
+        "resizable panel edge",
+        "drag the divider between panes",
+        "make the inspector bigger"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-resizer",
+          "name": "Edge",
+          "api": "role=\"separator\" tabindex=\"0\"",
+          "text": "One hairline with a 13px hit area. Lights up on hover, drag and focus."
+        },
+        {
+          "sel": ".lt-resizer-demo > aside",
+          "name": "Pane",
+          "api": "width: var(--side-w)",
+          "text": "Sized by the custom property the edge writes, so the layout stays in CSS."
+        }
+      ],
+      "prompt": "Add a pane resizer: a 1px edge with role=\"separator\", tabindex=\"0\", aria-orientation, aria-controls, aria-valuemin/max/now in px, and a 12px invisible hit area. Dragging writes one CSS custom property (px) on the layout so the pane is sized in CSS; arrows move 16px, Shift 64px, Home and End jump to the limits, Enter and a double click restore the start. Keep the cursor while dragging over other elements and stop text selection. Optionally remember the size in localStorage.",
+      "debug": "Debug my pane resizer. Rule out: the pane sized in JS on every frame instead of one custom property; text getting selected while dragging; the drag stopping when the pointer leaves the thin edge (setPointerCapture); no keyboard path; limits that let a pane collapse to nothing; the size not remembered. The symptom:",
+      "code": [
+        ["AppKit","NSSplitView",""],
+        ["WAI-ARIA","Window Splitter",""],
+        ["lumina-taste","<PaneResizer cssVar min max>","React"]
+      ],
+      "added": 17
+    },
+    {
       "id": "rating",
       "name": "Star rating",
       "summary": "Five stars on native radios: hover previews, arrows change it, the caption says it in words.",
