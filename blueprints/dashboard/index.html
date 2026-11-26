@@ -55,28 +55,43 @@
           <button type="button" data-part="add"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add filter</button>
           <button type="button" data-part="reset">Reset</button>
         </div>
-        <section class="bp-kpis" aria-labelledby="bp-kpi-h"><h2 id="bp-kpi-h" class="lt-visually-hidden">Key figures</h2><div id="k1"></div><div id="k2"></div><div id="k3"></div><div id="k4"></div></section>
-        <section class="bp-grid" aria-label="Charts">
-          <div class="bp-card bp-span-2" id="c-mrr"></div>
-          <div class="bp-card" id="c-plan"></div>
-          <div class="bp-card" id="c-pay"></div>
-          <div class="bp-card bp-span-2" id="c-region"></div>
+        <section class="bp-kpis" aria-labelledby="bp-kpi-h" data-view="ready">
+          <h2 id="bp-kpi-h" class="lt-visually-hidden">Key figures</h2>
+          <div id="k1"></div><div id="k2"></div><div id="k3"></div><div id="k4"></div><div id="k5"></div>
+          <div id="k6"></div><div id="k7"></div><div id="k8"></div><div id="k9"></div><div id="k10"></div>
         </section>
-        <section class="bp-card" aria-labelledby="t-h">
-          <h2 class="bp-card-title" id="t-h">Top accounts</h2>
-          <div class="lt-table-wrap" data-lt="data-table" tabindex="0" role="region" aria-label="Top accounts table">
+        <section class="bp-main" aria-label="Charts" data-view="ready">
+          <div class="bp-card" id="c-mrr"></div>
+          <div class="bp-card" id="c-region"></div>
+        </section>
+        <section class="bp-card bp-accounts" aria-labelledby="t-h" data-view="ready">
+          <header class="bp-card-head"><h2 class="bp-card-title" id="t-h">Accounts</h2><p class="lt-secondary" id="t-count">24 accounts · sorted by MRR</p></header>
+          <div class="lt-table-wrap bp-table" data-lt="data-table" tabindex="0" role="region" aria-label="Accounts table">
             <table class="lt-table">
-              <caption class="lt-visually-hidden">Top accounts by MRR. Column headers sort the table.</caption>
+              <caption class="lt-visually-hidden">Accounts by MRR. Column headers sort the table.</caption>
               <thead><tr>
                 <th scope="col" aria-sort="none"><button type="button" data-sort="name">Account<span data-part="sort" aria-hidden="true"></span></button></th>
                 <th scope="col" aria-sort="none"><button type="button" data-sort="plan">Plan<span data-part="sort" aria-hidden="true"></span></button></th>
+                <th scope="col" aria-sort="none" data-col="region"><button type="button" data-sort="region">Region<span data-part="sort" aria-hidden="true"></span></button></th>
+                <th scope="col" data-num aria-sort="none" data-col="seats"><button type="button" data-sort="seats" data-type="number">Seats<span data-part="sort" aria-hidden="true"></span></button></th>
                 <th scope="col" data-num aria-sort="descending"><button type="button" data-sort="mrr" data-type="number">MRR<span data-part="sort" aria-hidden="true"></span></button></th>
-                <th scope="col" data-num aria-sort="none"><button type="button" data-sort="chg" data-type="number">30-day change<span data-part="sort" aria-hidden="true"></span></button></th>
+                <th scope="col" data-num aria-sort="none"><button type="button" data-sort="chg" data-type="number">30 days<span data-part="sort" aria-hidden="true"></span></button></th>
+                <th scope="col" data-col="trend">Last 12 months</th>
                 <th scope="col" aria-sort="none"><button type="button" data-sort="status">Health<span data-part="sort" aria-hidden="true"></span></button></th>
               </tr></thead>
               <tbody id="rows"></tbody>
             </table>
           </div>
+        </section>
+        <div class="bp-loading" data-view="loading" aria-busy="true" aria-label="Loading revenue" hidden>
+          <div class="bp-kpis bp-skel-kpis"><span class="lt-skeleton"></span><span class="lt-skeleton"></span><span class="lt-skeleton"></span><span class="lt-skeleton"></span><span class="lt-skeleton"></span><span class="lt-skeleton"></span><span class="lt-skeleton"></span><span class="lt-skeleton"></span><span class="lt-skeleton"></span><span class="lt-skeleton"></span></div>
+          <div class="bp-main"><span class="lt-skeleton bp-skel-chart"></span><span class="lt-skeleton bp-skel-chart"></span></div>
+        </div>
+        <section class="lt-empty bp-error" data-view="error" aria-labelledby="bp-err-h" hidden>
+          <span data-part="icon" aria-hidden="true"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 4.3 2.9 17.2A2 2 0 0 0 4.6 20h14.8a2 2 0 0 0 1.7-2.8L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9.5v4M12 17h.01"/></svg></span>
+          <h2 id="bp-err-h">Revenue could not load</h2>
+          <p>The billing ledger did not answer in time. The figures you saw at 09:12 are not shown, so nothing here is out of date.</p>
+          <div data-part="actions"><button type="button" class="lt-btn" data-variant="secondary" data-set-state="ready"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6L20 8.5M20 4v4.5h-4.5"/></svg><span data-part="label">Try again</span></button></div>
         </section>
       </main>
     </div>

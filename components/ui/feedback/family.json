@@ -273,6 +273,52 @@
       "code": [["WAI-ARIA","aria-busy",""],["lumina-taste","<Skeleton shape>","React"]]
     },
     {
+      "id": "pull-refresh",
+      "name": "Pull to refresh",
+      "summary": "Pull a list down past a mark and let go to reload it; a Refresh button does the same without the gesture.",
+      "pattern": "Cancelable lt-refresh event + role=\"status\"",
+      "states": ["idle","pulling","armed","refreshing","done"],
+      "aliases": ["pull down to reload","swipe down to refresh","refresh control","drag to refresh","ptr"],
+      "react": "PullRefresh",
+      "api": "lt-refresh · e.detail.done(label)",
+      "w": 380,
+      "called": [
+        "pull down the list to load new items",
+        "the spinner when you drag a feed down",
+        "swipe down to refresh",
+        "refresh by pulling"
+      ],
+      "anatomy": [
+        {
+          "sel": ".lt-pull [data-part=\"indicator\"]",
+          "name": "Indicator",
+          "api": "--p (0 to 1)",
+          "text": "Fills as the list is pulled and turns once it is past the mark."
+        },
+        {
+          "sel": ".lt-pull [data-part=\"when\"]",
+          "name": "Stamp",
+          "api": "",
+          "text": "When the list was last updated, in words."
+        },
+        {
+          "sel": ".lt-pull [data-part=\"refresh\"]",
+          "name": "Refresh button",
+          "api": "<button>",
+          "text": "The same refresh for keyboard, mouse and switch users."
+        }
+      ],
+      "prompt": "Add pull to refresh: only when the list is scrolled to the top, a downward drag moves the content with resistance (half the finger distance, capped) and fills a small ring above it; past 64px the ring is armed and letting go starts a refresh: content stays down by about 52px with the ring spinning until the data arrives, then settles back and the \"Updated\" stamp changes. Use touch events with a non-passive touchmove that only prevents default while pulling, and pointer events for a mouse. Fire a cancelable lt-refresh event with a done() callback. Always offer a visible Refresh button and announce \"Refreshing\" and the result in a status region. No spin under reduced motion.",
+      "debug": "Debug my pull to refresh. Rule out: the pull starting when the list is not at the top; page scrolling fighting the pull (preventDefault only while pulling, on a non-passive listener); a tap on a row firing after a pull; no way to refresh without the gesture; the spinner never stopping because done() is never called. The symptom:",
+      "code": [
+        ["UIKit","UIRefreshControl",""],
+        ["SwiftUI",".refreshable",""],
+        ["Material","PullToRefreshBox",""],
+        ["lumina-taste","<PullRefresh onRefresh>","React"]
+      ],
+      "added": 17
+    },
+    {
       "id": "empty-state",
       "name": "Empty state",
       "summary": "A calm block that explains why a list is empty and offers one clear action.",

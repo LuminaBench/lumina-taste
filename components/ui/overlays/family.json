@@ -475,13 +475,22 @@
     {
       "id": "bottom-sheet",
       "name": "Mobile bottom sheet",
-      "summary": "An action sheet that rises from the bottom and drags down to dismiss.",
+      "summary": "A sheet that rises from the bottom, rests at a medium or large height (detents) and drags down to dismiss.",
       "pattern": "Modal dialog",
-      "states": ["closed","open","dragging"],
-      "aliases": ["action sheet","drawer from bottom","swipe up panel","mobile sheet"],
+      "states": ["closed","open","medium","large","dragging"],
+      "aliases": [
+        "action sheet",
+        "drawer from bottom",
+        "swipe up panel",
+        "mobile sheet",
+        "sheet detents",
+        "half sheet",
+        "medium and large sheet",
+        "drag handle"
+      ],
       "react": "BottomSheet",
       "deps": ["button"],
-      "api": "<dialog> · inset: auto 0 0",
+      "api": "<dialog> · data-detents=\"medium large\" · data-detent",
       "w": 440,
       "preview": [["click","[data-part=\"open\"]"]],
       "called": [
@@ -494,8 +503,8 @@
         {
           "sel": ".lt-sheet [data-part=\"grab\"]",
           "name": "Grabber",
-          "api": "pointer drag",
-          "text": "Drag down or flick to dismiss."
+          "api": "pointer drag · <button> with detents",
+          "text": "Drag up for the large detent, down to the medium one or to dismiss. A button press and the arrow keys do the same."
         },
         {
           "sel": ".lt-sheet [data-part=\"actions\"]",
@@ -510,8 +519,8 @@
           "text": "Separate and always there."
         }
       ],
-      "prompt": "Add a bottom sheet on <dialog>: slides up from the bottom, a grab handle that drags it down (dismiss past 30% or on a quick flick), large action rows, a separate Cancel, and padding for the home indicator.",
-      "debug": "Debug my bottom sheet. Rule out: drag fighting with page scroll (touch-action: none on the handle only); no Cancel for keyboard users; content under the home indicator. The symptom:",
+      "prompt": "Add a bottom sheet on <dialog>: slides up from the bottom, a grab handle that drags it down (dismiss past 30% or on a quick flick), large action rows, a separate Cancel, and padding for the home indicator. For a form or a list, give it detents (data-detents=\"medium large\"): it opens at medium, drags up to large, and the grabber is a full-width 44px <button> that switches detents on press and with ArrowUp and ArrowDown. Escape closes.",
+      "debug": "Debug my bottom sheet. Rule out: drag fighting with page scroll (touch-action: none on the handle only); no Cancel for keyboard users; content under the home indicator; a grabber that only works with a finger (make it a button); the sheet content not scrolling at the medium detent. The symptom:",
       "code": [
         ["UIKit","UISheetPresentationController",""],
         ["SwiftUI",".sheet + presentationDetents",""],
