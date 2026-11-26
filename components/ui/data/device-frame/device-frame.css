@@ -1,33 +1,134 @@
-/* Device frame: an outline browser window, desktop window or phone around a screenshot or live markup.
-   Drawn with hairlines, not photoreal bezels, so it sits in any theme. */
+/* Device frame: a laptop, phone, tablet, browser window or desktop window around a screenshot or a live screen.
+   A product shot, not a wireframe: a near-black bezel with a thin metal band, radii that follow the real device,
+   and a soft layered shadow kept under the critic's limits. The screen holds an <img> (a real screenshot) or a
+   small app built from the kit's own parts ([data-app="phone"|"desktop"]), drawn at the device's own size and
+   zoomed to fit, so a 390px phone screen reads as a phone at any width. */
 @scope (.lt-device) {
-  :scope { display: block; margin: 0; min-width: 0; border: var(--bw) var(--border-style) var(--border-strong); background: var(--bg-surface-2); color: var(--text-primary); overflow: hidden; }
-  [data-part="screen"] { position: relative; background: var(--bg-canvas); overflow: hidden; }
+  :scope {
+    --device-band: color-mix(in oklab, var(--text-primary) 38%, var(--bg-surface-3));
+    --device-bezel: color-mix(in oklab, black 88%, var(--text-primary));
+    --device-shadow: 0 1px 2px color-mix(in oklab, black 10%, transparent), 0 12px 24px -12px color-mix(in oklab, black 24%, transparent), 0 30px 30px -24px color-mix(in oklab, black 26%, transparent);
+    position: relative; display: block; margin: 0; min-width: 0; color: var(--text-primary);
+  }
+  [data-part="screen"] { position: relative; container-type: inline-size; background: var(--bg-canvas); overflow: hidden; }
   [data-part="screen"] > :is(img, video, picture) { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
 
-  /* Browser and desktop window: a 36px bar with three dots; the browser adds an address pill. */
-  :scope:is([data-kind="browser"], [data-kind="window"]) { width: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
+  /* Browser and desktop window: a 36px bar with three quiet dots; the browser adds an address pill. */
+  :scope:is([data-kind="browser"], [data-kind="window"]) { width: 100%; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-2); box-shadow: 0 0 0 1px color-mix(in oklab, var(--border-strong) 30%, transparent), var(--device-shadow); overflow: hidden; }
   [data-part="bar"] { position: relative; display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
   [data-part="bar"] i { width: 9px; height: 9px; border-radius: 50%; background: var(--border-strong); opacity: 0.55; }
   [data-part="url"], [data-part="title"] { position: absolute; left: 50%; translate: -50% 0; max-width: 60%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--text-secondary); font-size: var(--text-ui-xs); }
   [data-part="url"] { padding: 3px 14px; border-radius: 999px; background: var(--bg-surface-3); font-family: var(--font-mono); }
   [data-part="title"] { font-weight: 600; }
 
-  /* Phone: 9 / 19.5, a thin frame and a camera pill. Width comes from --device-w. */
-  :scope[data-kind="phone"] { width: min(100%, var(--device-w, 264px)); aspect-ratio: 9 / 19.5; padding: 7px; border-radius: 42px; box-shadow: var(--shadow-md); }
-  :scope[data-kind="phone"] [data-part="screen"] { height: 100%; border-radius: 35px; }
-  :scope[data-kind="phone"] [data-part="screen"]::before { content: ""; position: absolute; z-index: 1; top: 9px; left: 50%; translate: -50% 0; width: 30%; height: 20px; border-radius: 999px; background: color-mix(in oklab, var(--text-primary) 92%, var(--bg-canvas)); }
-  /* Tablet: the same frame, wider. */
-  :scope[data-kind="tablet"] { width: min(100%, var(--device-w, 520px)); aspect-ratio: 4 / 3; padding: 10px; border-radius: 26px; box-shadow: var(--shadow-md); }
-  :scope[data-kind="tablet"] [data-part="screen"] { height: 100%; border-radius: 16px; }
+  /* Phone: 9 / 19.5, a 2.5px metal band, a near-black bezel, an island and the side buttons. Width from --device-w. */
+  :scope[data-kind="phone"] { width: min(100%, var(--device-w, 300px)); aspect-ratio: 9 / 19.5; padding: 2.5px; border-radius: 48px; background: var(--device-band); box-shadow: inset 0 0 0 1px color-mix(in oklab, white 18%, transparent), var(--device-shadow); }
+  :scope[data-kind="phone"] [data-part="screen"] { height: 100%; border: 8px solid var(--device-bezel); border-radius: 45.5px; }
+  :scope:is([data-kind="phone"], [data-kind="tablet"]) [data-part="screen"]::before { content: ""; position: absolute; z-index: 2; top: 3cqi; left: 50%; translate: -50% 0; width: 31cqi; height: 9cqi; border-radius: 999px; background: var(--device-bezel); }
+  :scope[data-kind="phone"]::before, :scope[data-kind="phone"]::after { content: ""; position: absolute; width: 3px; border-radius: 2px; background: var(--device-band); }
+  :scope[data-kind="phone"]::before { left: -2px; top: 17%; height: 26%; background: linear-gradient(var(--device-band) 0 16%, transparent 16% 30%, var(--device-band) 30% 63%, transparent 63% 69%, var(--device-band) 69%); }
+  :scope[data-kind="phone"]::after { right: -2px; top: 26%; height: 13%; }
+  /* Tablet: the same build, 4 / 3, with a camera dot instead of the island. */
+  :scope[data-kind="tablet"] { width: min(100%, var(--device-w, 560px)); aspect-ratio: 4 / 3; padding: 2.5px; border-radius: 30px; background: var(--device-band); box-shadow: inset 0 0 0 1px color-mix(in oklab, white 18%, transparent), var(--device-shadow); }
+  :scope[data-kind="tablet"] [data-part="screen"] { height: 100%; border: 14px solid var(--device-bezel); border-radius: 27.5px; }
+  :scope[data-kind="tablet"] [data-part="screen"]::before { top: -9px; width: 5px; height: 5px; translate: -50% 0; background: color-mix(in oklab, var(--device-bezel) 70%, white); }
+
+  /* Laptop: the lid (16 / 10 screen in a thin bezel with a camera) on a wider aluminium base with a thumb notch. */
+  :scope[data-kind="laptop"] { container-type: inline-size; width: 100%; padding-top: 1px; }
+  :scope[data-kind="laptop"] [data-part="screen"] { width: 82%; margin-inline: auto; aspect-ratio: 16 / 10; box-sizing: content-box; border: 1.7cqi solid var(--device-bezel); border-bottom-width: 2.6cqi; border-radius: 2.4cqi 2.4cqi 0.6cqi 0.6cqi; box-shadow: 0 0 0 0.22cqi var(--device-band), var(--device-shadow); }
+  :scope[data-kind="laptop"] [data-part="screen"]::after { content: ""; position: absolute; z-index: 2; top: -1.1cqi; left: 50%; width: 0.5cqi; height: 0.5cqi; translate: -50% 0; border-radius: 50%; background: color-mix(in oklab, var(--device-bezel) 70%, white); }
+  :scope[data-kind="laptop"]::after { content: ""; position: relative; z-index: 1; display: block; height: 2cqi; margin-top: -0.2cqi; border-radius: 0.3cqi 0.3cqi 1.4cqi 1.4cqi / 0.3cqi 0.3cqi 1.8cqi 1.8cqi;
+    background: radial-gradient(ellipse 6.5% 45% at 50% 0, color-mix(in oklab, var(--device-band) 88%, black) 0 96%, transparent 100%), linear-gradient(color-mix(in oklab, var(--device-band) 55%, white), var(--device-band) 45%, color-mix(in oklab, var(--device-band) 82%, black));
+    box-shadow: 0 14px 18px -12px color-mix(in oklab, black 30%, transparent); }
+  /* The screen keeps the overflow clip; the bezel corners stay round. */
+  :scope[data-kind="laptop"] [data-part="screen"] { overflow: clip; }
+
+  /* ------------------------------------------------------------ a live screen built from the kit's parts */
+  /* Drawn at the device's own width (390px phone, 1280px desktop) and zoomed to the screen. Browsers without
+     typed division in calc() get the nearest fixed zoom from the screen's width. */
+  [data-app] { --app-w: 1280px; --z: 0.5; zoom: var(--z); width: calc(100cqi / var(--z)); height: 100%; overflow: hidden; background: var(--bg-canvas); color: var(--text-primary); font-family: var(--font-body); font-size: 14px; line-height: 1.4; text-align: left; }
+  [data-app="phone"] { --app-w: 390px; --z: 0.72; }
+  @supports (zoom: calc(1px / 1px)) { [data-app] { zoom: calc(100cqi / var(--app-w)); width: var(--app-w); } }
+  [data-app] p, [data-app] ul { margin: 0; }
+  [data-app] b { font-weight: 600; }
+  [data-app] .lt-segmented button[aria-checked="true"] { background: var(--bg-surface-1); box-shadow: var(--shadow-sm), 0 0 0 1px var(--border-hairline); }
+
+  /* Phone app */
+  [data-app="phone"] { position: relative; display: flex; flex-direction: column; }
+  [data-a="status"] { display: flex; flex: none; align-items: center; justify-content: space-between; height: 54px; padding: 16px 28px 0 40px; font-size: 16px; font-weight: 650; font-variant-numeric: tabular-nums; }
+  [data-a="status"] svg { width: 64px; height: 14px; fill: currentColor; }
+  [data-a="head"] { display: flex; flex: none; align-items: flex-end; justify-content: space-between; padding: 18px 20px 14px; }
+  [data-a="title"] { font-family: var(--font-display); font-size: 34px; font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.05; }
+  [data-a="round"] { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--bg-surface-2); color: var(--text-secondary); }
+  [data-a="body"] { display: grid; flex: 1; align-content: start; gap: 16px; min-height: 0; padding: 2px 20px 0; overflow: hidden; }
+  [data-app="phone"] .lt-segmented { width: 100%; }
+  [data-app="phone"] .lt-segmented button { flex: 1; }
+  [data-a="hero"] { display: grid; gap: 4px; padding: 18px 18px 14px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: 22px; background: var(--bg-surface-1); }
+  [data-a="label"] { color: var(--text-secondary); font-size: 14px; }
+  [data-a="big"] { font-family: var(--font-display); font-size: 42px; font-weight: var(--weight-display); letter-spacing: -0.03em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  [data-a="big"] small { color: var(--text-muted); font-size: 0.55em; letter-spacing: 0; }
+  [data-a="bars"] { display: grid; grid-template-columns: repeat(7, 1fr); align-items: end; gap: 10px; height: 92px; margin-top: 12px; }
+  [data-a="bars"] i { height: calc(var(--h) * 1%); border-radius: 6px; background: color-mix(in oklab, var(--accent-solid) 22%, var(--bg-surface-2)); }
+  [data-a="bars"] i[data-today] { background: var(--accent-solid); }
+  [data-a="days"] { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; color: var(--text-muted); font-size: 12px; text-align: center; }
+  [data-a="list"] { display: grid; padding: 0; list-style: none; }
+  [data-a="list"] li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 0; border-top: var(--bw) var(--border-style) var(--border-hairline); }
+  [data-a="list"] li > span { display: grid; gap: 3px; }
+  [data-a="list"] li > span:last-child { justify-items: end; }
+  [data-a="list"] b { font-size: 16px; font-variant-numeric: tabular-nums; }
+  [data-a="list"] small { color: var(--text-muted); font-size: 13px; }
+  [data-a="cta"] { flex: none; padding: 10px 20px 14px; }
+  [data-a="cta"] .lt-btn { width: 100%; height: 52px; border-radius: 16px; font-size: 17px; }
+  [data-app="phone"] .lt-bottom-nav { flex: none; padding-bottom: 30px; }
+  [data-app="phone"] .lt-bottom-nav a[aria-current="page"] { background: var(--accent-soft); }
+  [data-app="phone"]::after { content: ""; position: absolute; bottom: 9px; left: 50%; width: 36%; height: 5px; translate: -50% 0; border-radius: 999px; background: var(--text-primary); }
+
+  /* Desktop app */
+  [data-app="desktop"] { display: grid; grid-template-columns: 232px minmax(0, 1fr); }
+  [data-a="side"] { display: grid; align-content: start; gap: 2px; padding: 22px 14px; border-right: var(--bw) var(--border-style) var(--border-hairline); background: var(--bg-surface-1); }
+  [data-a="brand"] { display: flex; align-items: center; gap: 10px; margin-bottom: 18px !important; padding: 0 10px; font-size: 17px; font-weight: 650; }
+  [data-a="brand"] svg { width: 22px; height: 22px; fill: var(--accent-solid); }
+  [data-a="nav"] { display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 10px; border-radius: var(--radius-md); color: var(--text-secondary); font-weight: 550; }
+  [data-a="nav"][aria-current="page"] { background: var(--bg-surface-3); color: var(--text-primary); }
+  [data-a="nav"][aria-current="page"] .lt-icon { color: var(--accent-text); }
+  [data-a="main"] { display: grid; align-content: start; gap: 22px; min-width: 0; padding: 30px 36px; }
+  [data-a="top"] { display: flex; align-items: center; gap: 16px; }
+  [data-a="top"] > div:first-child { flex: 1; }
+  [data-a="h"] { font-family: var(--font-display); font-size: 28px; font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.1; }
+  [data-a="sub"] { margin-top: 4px !important; color: var(--text-secondary); }
+  [data-a="kpis"] { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  [data-a="kpi"], [data-a="card"] { display: grid; justify-items: start; gap: 6px; padding: 18px 20px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
+  [data-a="kpi"] > span:first-child { color: var(--text-secondary); font-size: 13px; }
+  [data-a="kpi"] b { margin-bottom: 4px; font-size: 30px; letter-spacing: -0.02em; line-height: 1.15; font-variant-numeric: tabular-nums; }
+  [data-a="card"] { justify-items: stretch; gap: 12px; }
+  [data-a="card-h"] { display: flex; justify-content: space-between; }
+  [data-a="card-h"] span { color: var(--text-muted); font-size: 13px; }
+  [data-a="chart"] { display: block; width: 100%; height: 200px; overflow: visible; }
+  [data-a="grid"] { fill: none; stroke: var(--border-hairline); stroke-dasharray: 3 5; vector-effect: non-scaling-stroke; }
+  [data-a="area"] { fill: color-mix(in oklab, var(--accent-solid) 14%, transparent); }
+  [data-a="line"] { fill: none; stroke: var(--accent-solid); stroke-width: 2.5; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  [data-a="ticks"] { display: flex; justify-content: space-between; color: var(--text-muted); font-size: 12px; }
+  [data-a="table"] { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  [data-a="table"] th { padding: 0 0 10px; color: var(--text-muted); font-size: 12px; font-weight: 550; text-align: left; }
+  [data-a="table"] td { padding: 12px 0; border-top: var(--bw) var(--border-style) var(--border-hairline); }
+  [data-a="table"] :is(th, td):last-child { text-align: right; }
+  [data-a="table"] td:first-child { font-weight: 600; }
+  [data-a="table"] td:nth-child(2) { color: var(--text-secondary); }
+  :scope:is([data-kind="browser"], [data-kind="window"]) [data-app] { height: auto; }
 }
 
-[data-mode="dark"] .lt-device[data-kind="phone"] [data-part="screen"]::before { background: var(--bg-surface-3); }
+[data-mode="dark"] .lt-device { --device-band: color-mix(in oklab, var(--text-primary) 30%, var(--bg-surface-3)); --device-bezel: color-mix(in oklab, black 70%, var(--bg-canvas)); --device-shadow: 0 1px 2px color-mix(in oklab, black 30%, transparent), 0 12px 24px -12px color-mix(in oklab, black 30%, transparent), 0 30px 30px -24px color-mix(in oklab, black 30%, transparent); }
 
-/* Preview frame and sample screens: not part of the component. */
-.lt-device-demo { container-type: inline-size; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 28px; width: 100%; }
-@container (max-width: 620px) { .lt-device-demo > .lt-device[data-kind="browser"] { display: none; } }
-@container (max-width: 620px) { .lt-device-demo > .lt-device[data-kind="phone"] { justify-self: center; } }
+/* Preview frame: not part of the component. A laptop with the phone in front of its right corner. */
+.lt-device-demo { container-type: inline-size; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; width: 100%; padding: 8px 0 24px; }
+.lt-device-demo > .lt-device[data-kind="laptop"] { grid-area: 1 / 1 / 2 / 3; width: 84%; }
+.lt-device-demo > .lt-device[data-kind="phone"] { grid-area: 1 / 2; z-index: 1; width: 24cqi; margin-bottom: -12px; }
+@container (max-width: 620px) {
+  .lt-device-demo > .lt-device[data-kind="laptop"] { width: 100%; }
+  .lt-device-demo > .lt-device[data-kind="phone"] { width: 44cqi; justify-self: end; margin: -40cqi 3cqi 0 0; grid-area: 2 / 1 / 3 / 3; }
+}
+
+/* Earlier sample screens ([data-mock]): kept so pages built with them still render. */
 .lt-device [data-mock] { font-size: var(--text-ui-sm); }
 .lt-device [data-mock] p { margin: 0; }
 .lt-device [data-mock="report"] { display: grid; gap: 16px; padding: 20px; }
