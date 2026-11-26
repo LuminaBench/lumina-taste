@@ -50,6 +50,14 @@ Components are rarely what makes a page look generated; the plan is. Run this lo
 
 `evals/evals.json` holds 36 real briefs; `node scripts/eval-score.mjs <output> --brief <slug>` scores any page you build for one of them (audit, taste, brief checks and hygiene, out of 100). The blueprints score 99 on average as reference answers.
 
+## Look at it like a designer
+
+The auditor measures; your eyes judge. After the audit passes:
+
+1. `node scripts/review-page.mjs <page> --out <dir>` writes a review pack: the first screen at 1440×900 and 390×844 in light and dark, a squint (blurred, grey) of each with what stands out, the whole page in screen-height slices, `review.json` (per section: what it gives the eye, layout, ground, density; the type jump; scroll moments; app checks; speed) and `review.md`.
+2. Open every picture and answer the seven questions in `review.md` in your own words: clear in 3 seconds? what stands out at a squint, and is it the right thing? one bold idea? any section a template? every section something to look at? does the type jump? would a demanding designer ship it, and if not, the three changes? Name sections and sizes; "looks good" is not an answer (`references/review.md` has a worked example). Fix, then run the pack again.
+3. Before and after, or yours against another page: `node scripts/compare-pages.mjs ours=<page> other=<page> --out <dir>` letters them at random; score with `judge.md`, then `--record "A>B" --reason "…"` reveals the names and keeps a tally per source.
+
 ## Find the right thing first
 
 People describe UI loosely. Search the catalog before writing anything:
@@ -241,6 +249,13 @@ node scripts/lint-copy.mjs src/                                # hype words, cli
 | `taste-empty-visual` | A big frame with nothing inside reads as a missing image: put a real screenshot or a small live mockup in it, or remove it. CSS illustrations need `role="img"` and an `aria-label`. |
 | `taste-button-label` | Verb + object, five words at most. Questions and example prompts (`data-suggest`) are exempt. |
 | `taste-sample-copy` (`--product`) | Error: the kit's demo brands or people are still on the page. Replace them with the product's own. |
+| `taste-no-visual` | A section of words only: give it a picture, a motif, a figure set large, a document or a chart, or fold it into a neighbour. |
+| `taste-same-layout` | Two neighbours with the same block, columns and ground: change one's layout or ground. |
+| `taste-density` | Three dense sections in a row: put a quiet one (a statement, a picture band) between them. |
+| `taste-type-jump` | The headline is under 2.5× the body on a marketing page: set it larger, or the body smaller. |
+| `taste-motion-*` | More than two scroll moments, two side by side, two pinned scenes, film with sound or no pause, a counter with no number, a pinned scene under `overflow: hidden`. Keep the two best. |
+| `app-touch-target` · `app-safe-area` · `app-states` | On app screens at phone width: controls under 44px, a fixed bottom bar without `env(safe-area-inset-bottom)`, a declared state with no view. |
+| `perf-*` (`--perf`, and `--strict` as warnings) | A lazy largest picture, no `fetchpriority`, layout shift over 0.1, heavy fonts, JS or CSS, images without width and height or more than twice their box. |
 
 Requires Playwright in the skill or the project (`npm i -D @playwright/test && npx playwright install chromium`). Exit code 1 on any error.
 
