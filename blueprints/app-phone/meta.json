@@ -1,0 +1,34 @@
+{
+  "id": "app-phone",
+  "order": 26,
+  "name": "Phone app, whole flow",
+  "summary": "A made-up ferry app as six working phone screens: choose a harbour, today's sailings, one sailing with a tickets sheet, pay, tickets and settings. Side by side on a desktop, one at a time (with push and back) on a phone. Loading, empty and error states.",
+  "anatomy": "Board title → rail of phones: harbour list → large title + segmented + pull to refresh + next sailing + swipe rows + tab bar → back + crossing + facts + action bar + sheet with detents → pass + lines + pay → ticket + swipe rows → grouped settings",
+  "aliases": [
+    "phone app flow",
+    "mobile app screens",
+    "app prototype",
+    "ios app",
+    "android app",
+    "native feeling web app",
+    "app screens side by side",
+    "mobile checkout flow",
+    "tab bar app",
+    "pwa"
+  ],
+  "uses": [
+    "mobile-app-bar",
+    "bottom-nav",
+    "swipe-row",
+    "pull-refresh",
+    "bottom-sheet",
+    "segmented-control",
+    "number-stepper",
+    "toggle-switch",
+    "badge",
+    "skeleton",
+    "empty-state",
+    "button"
+  ],
+  "states": ["loading","empty","error"]
+}

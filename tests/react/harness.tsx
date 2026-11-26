@@ -27,6 +27,11 @@ import { AmountInput } from '../../components/ui/controls/amount-input/amount-in
 import { StickyStory } from '../../components/ui/blocks/sticky-story/sticky-story.react';
 import { MediaPlayer } from '../../components/ui/data/media-player/media-player.react';
 import { RowList } from '../../components/ui/navigation/row-list/row-list.react';
+import { SwipeRow } from '../../components/ui/navigation/swipe-row/swipe-row.react';
+import { PullRefresh } from '../../components/ui/feedback/pull-refresh/pull-refresh.react';
+import { PaneResizer } from '../../components/ui/controls/pane-resizer/pane-resizer.react';
+import { ChartStory } from '../../components/charts/chart-story/chart-story.react';
+import { ChartStoryScroll } from '../../components/charts/chart-story-scroll/chart-story-scroll.react';
 import { MobileAppBar } from '../../components/ui/navigation/mobile-app-bar/mobile-app-bar.react';
 import { DatePicker } from '../../components/ui/controls/date-picker/date-picker.react';
 import { ArtPanel } from '../../components/ui/data/art-panel/art-panel.react';
@@ -492,6 +497,11 @@ function App() {
       <Case id="service-list"><ServiceList eyebrow="Fees" title="What we do" services={[{ title: 'Check-up', text: 'Forty-five minutes.', meta: '45 min', price: '£68', href: '#c' }, { when: '10:00', title: 'Doors', text: 'Coffee in the foyer.' }]} note="Prices from September." /></Case>
       <Case id="hero-statement"><HeroStatement eyebrow="Studio" title="We design the tools finance teams open every morning" lede="Nine people in Bristol." facts={[{ value: '2,400', label: 'teams' }]} /></Case>
       <Case id="stagger"><Stagger><span>One</span><span>Two</span></Stagger></Case>
+      <Case id="swipe-row"><SwipeRow label="Sailings" rows={[{ id: '1015', lead: '10:15', title: 'Larkspur Bay', sub: 'MV Kestrel', meta: '£9.50', href: '#s' }]} actions={[{ id: 'remind', label: 'Remind', icon: 'bell' }, { id: 'hide', label: 'Hide', icon: 'x', danger: true }]} onAction={(a, id) => log.push(`swipe:${a}:${id}`)} /></Case>
+      <Case id="pull-refresh"><PullRefresh label="Departures" updated="Updated 09:38" onRefresh={() => Promise.resolve('Updated 09:41')}><p>08:40 Kestrel Isle</p></PullRefresh></Case>
+      <Case id="pane-resizer"><div style={{ display: 'flex', height: 80 }}><div style={{ flex: 1 }}>List</div><PaneResizer label="Resize the inspector" controls="rz-side" cssVar="--side" min={120} max={300} initial={180} onResize={(px) => log.push(`resize:${px}`)} /><aside id="rz-side" style={{ width: 'var(--side, 180px)' }}>Inspector</aside></div></Case>
+      <Case id="chart-story"><ChartStory data={{ x: ['2026-09-01', '2026-10-01', '2026-11-01'], series: [{ name: 'Route', values: [80, 91, 96] }] }} options={{ headline: 'It recovered', moment: { from: '2026-10-01', to: '2026-11-01', label: 'New timetable' }, format: { suffix: '%' } }} /></Case>
+      <Case id="chart-story-scroll"><ChartStoryScroll data={{ x: ['2026-09-01', '2026-10-01', '2026-11-01'], series: [{ name: 'Route', values: [80, 91, 96] }] }} options={{ headline: 'It recovered', steps: [{ from: '2026-09-01', label: 'Low', title: 'It was low', text: 'Eighty.' }, { from: '2026-11-01', label: 'High', title: 'Then high', text: 'Ninety-six.' }] }} /></Case>
     </ToastProvider>
   );
 }

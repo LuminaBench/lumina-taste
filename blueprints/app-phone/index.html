@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en" data-palette="petrol-peach" data-mode="light" data-type="financial" data-density="balanced" data-radius="soft" data-motion="snappy" data-app>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Halyard Ferries · phone app</title>
+  <meta name="description" content="Blueprint: a ferry app's whole flow as phone screens (choose a harbour, today's sailings, one sailing with a tickets sheet, checkout, tickets, settings), side by side on a desktop and one at a time on a phone, built with lumina-taste.">
+</head>
+<body>
+  <a class="bp-skip" href="#main">Skip to content</a>
+  <main id="main" class="ap">
+    <header class="ap-head">
+      <h1>Halyard Ferries, on a phone</h1>
+      <p>Six screens from choosing a harbour to a paid ticket. Every control works: tap through, drag, or use the keyboard.</p>
+      <div class="ap-pager">
+        <button type="button" class="lt-btn" data-variant="secondary" data-icon-only id="ap-prev" aria-label="Previous screen"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>
+        <button type="button" class="lt-btn" data-variant="secondary" data-icon-only id="ap-next" aria-label="Next screen"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+      </div>
+    </header>
+
+    <div class="ap-rail" id="ap-rail" role="region" aria-label="App screens" tabindex="0">
+
+      <!-- 1 · Choose a harbour -->
+      <figure class="ap-frame" id="screen-start" data-screen="start">
+        <div class="ap-device">
+          <div class="ap-status" aria-hidden="true"><span>9:41</span><span class="ap-status-icons"><i></i><i></i><i></i></span></div>
+          <section class="ap-screen" aria-labelledby="st-h">
+            <div class="ap-scroll ap-start">
+              <div class="ap-board" data-tone="dark" role="img" aria-label="Departures from Ardmore: 08:40 to Kestrel Isle, on time. 10:15 to Larkspur Bay, on time. 12:30 to Kestrel Isle, 10 minutes late.">
+                <p><span>Ardmore</span><span>Departures</span></p>
+                <ol>
+                  <li><b>08:40</b><span>Kestrel Isle</span><em>On time</em></li>
+                  <li><b>10:15</b><span>Larkspur Bay</span><em>On time</em></li>
+                  <li><b>12:30</b><span>Kestrel Isle</span><em data-late>+10 min</em></li>
+                </ol>
+              </div>
+              <h2 id="st-h" class="ap-title" tabindex="-1">Every sailing from your harbour, live</h2>
+              <p class="ap-lede">Pick where you sail from. You can change it in Settings.</p>
+              <ul class="ap-choices" aria-label="Harbours">
+                <li><button type="button" data-harbour="Ardmore" data-go="home"><span><b>Ardmore</b><small>To Kestrel Isle and Larkspur Bay</small></span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></li>
+                <li><button type="button" data-harbour="Kestrel Isle" data-go="home"><span><b>Kestrel Isle</b><small>To Ardmore</small></span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></li>
+                <li><button type="button" data-harbour="Larkspur Bay" data-go="home"><span><b>Larkspur Bay</b><small>To Ardmore</small></span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></li>
+              </ul>
+            </div>
+          </section>
+        </div>
+        <figcaption><b>Choose a harbour.</b> A tap goes straight on: no Continue button.</figcaption>
+      </figure>
+
+      <!-- 2 · Today -->
+      <figure class="ap-frame" id="screen-home" data-screen="home">
+        <div class="ap-device">
+          <div class="ap-status" aria-hidden="true"><span>9:41</span><span class="ap-status-icons"><i></i><i></i><i></i></span></div>
+          <section class="ap-screen" aria-labelledby="home-h">
+            <div class="ap-scroll">
+              <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+                <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Today</p><button type="button" data-part="action" data-go="start" data-dir="back" id="ap-harbour" aria-label="Change harbour, now Ardmore">Ardmore</button></div>
+                <h2 data-part="large" id="home-h" tabindex="-1">Today</h2>
+              </header>
+              <div class="ap-body">
+                <div class="lt-segmented ap-seg" data-lt="segmented-control" role="radiogroup" aria-label="Where to" id="ap-dest">
+                  <span data-part="indicator" aria-hidden="true"></span>
+                  <button type="button" role="radio" aria-checked="true" tabindex="0" data-value="kestrel">Kestrel Isle</button>
+                  <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="larkspur">Larkspur Bay</button>
+                </div>
+                <div class="lt-pull" data-lt="pull-refresh" id="ap-pull">
+                  <div data-part="indicator" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="9" data-part="track"/><circle cx="12" cy="12" r="9" data-part="arc" pathLength="1"/></svg></div>
+                  <div data-part="body">
+                    <p data-part="stamp"><span data-part="when">Updated 09:38</span><button type="button" data-part="refresh"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6L20 8.5M20 4v4.5h-4.5"/></svg><span>Refresh</span></button></p>
+                    <div data-view="ready" class="ap-today">
+                      <a class="ap-next" href="#screen-sailing" data-go="sailing">
+                        <span class="ap-next-when">Next sailing · leaves in <span id="ap-mins">24</span> min</span>
+                        <b class="ap-next-time" id="ap-next-time">08:40</b>
+                        <span class="ap-next-route" id="ap-next-route">Ardmore to Kestrel Isle</span>
+                        <span class="ap-next-meta"><span class="lt-badge" data-tone="positive" data-dot>On time</span><span>MV Juniper · Gate 2</span></span>
+                        <span class="ap-deck"><span>Car deck</span><span class="ap-meter" aria-hidden="true"><i style="--v: 82%"></i></span><span>82% full</span></span>
+                      </a>
+                      <h3 class="ap-section">Later today</h3>
+                      <div class="lt-swiperow ap-rows" data-lt="swipe-row" id="ap-later">
+                        <ul data-part="list" aria-label="Later sailings">
+                          <li data-part="row" data-id="1015" data-dest="larkspur"><div data-part="content"><a data-part="main" href="#screen-sailing" data-go="sailing"><b data-part="lead">10:15</b><span data-part="title">Larkspur Bay</span><span data-part="sub">MV Kestrel · 55 min</span><span data-part="meta">£9.50</span></a><button type="button" data-part="more" aria-expanded="false" aria-controls="ap-a1015" aria-label="Actions for the 10:15 to Larkspur Bay"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18.5" cy="12" r="1"/></svg></button></div><div data-part="actions" id="ap-a1015"><button type="button" data-action="remind"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15ZM10 20.5a2 2 0 0 0 4 0"/></svg><span>Remind</span></button><button type="button" data-action="share"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg><span>Share</span></button></div></li>
+                          <li data-part="row" data-id="1230" data-dest="kestrel"><div data-part="content"><a data-part="main" href="#screen-sailing" data-go="sailing"><b data-part="lead">12:30</b><span data-part="title">Kestrel Isle</span><span data-part="sub">MV Juniper · 1 h 25 min</span><span data-part="meta">£12.50</span></a><button type="button" data-part="more" aria-expanded="false" aria-controls="ap-a1230" aria-label="Actions for the 12:30 to Kestrel Isle"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18.5" cy="12" r="1"/></svg></button></div><div data-part="actions" id="ap-a1230"><button type="button" data-action="remind"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15ZM10 20.5a2 2 0 0 0 4 0"/></svg><span>Remind</span></button><button type="button" data-action="share"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg><span>Share</span></button></div></li>
+                          <li data-part="row" data-id="1445" data-dest="kestrel"><div data-part="content"><a data-part="main" href="#screen-sailing" data-go="sailing"><b data-part="lead">14:45</b><span data-part="title">Kestrel Isle</span><span data-part="sub">MV Moss · 1 h 30 min</span><span data-part="meta"><span class="lt-badge" data-tone="warning">15 min late</span></span></a><button type="button" data-part="more" aria-expanded="false" aria-controls="ap-a1445" aria-label="Actions for the 14:45 to Kestrel Isle"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18.5" cy="12" r="1"/></svg></button></div><div data-part="actions" id="ap-a1445"><button type="button" data-action="remind"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15ZM10 20.5a2 2 0 0 0 4 0"/></svg><span>Remind</span></button><button type="button" data-action="share"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg><span>Share</span></button></div></li>
+                          <li data-part="row" data-id="1710" data-dest="larkspur"><div data-part="content"><a data-part="main" href="#screen-sailing" data-go="sailing"><b data-part="lead">17:10</b><span data-part="title">Larkspur Bay</span><span data-part="sub">MV Kestrel · 55 min</span><span data-part="meta">£9.50</span></a><button type="button" data-part="more" aria-expanded="false" aria-controls="ap-a1710" aria-label="Actions for the 17:10 to Larkspur Bay"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18.5" cy="12" r="1"/></svg></button></div><div data-part="actions" id="ap-a1710"><button type="button" data-action="remind"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15ZM10 20.5a2 2 0 0 0 4 0"/></svg><span>Remind</span></button><button type="button" data-action="share"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg><span>Share</span></button></div></li>
+                          <li data-part="row" data-id="1930" data-dest="kestrel"><div data-part="content"><a data-part="main" href="#screen-sailing" data-go="sailing"><b data-part="lead">19:30</b><span data-part="title">Kestrel Isle</span><span data-part="sub">MV Juniper · last sailing</span><span data-part="meta">£12.50</span></a><button type="button" data-part="more" aria-expanded="false" aria-controls="ap-a1930" aria-label="Actions for the 19:30 to Kestrel Isle"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18.5" cy="12" r="1"/></svg></button></div><div data-part="actions" id="ap-a1930"><button type="button" data-action="remind"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15ZM10 20.5a2 2 0 0 0 4 0"/></svg><span>Remind</span></button><button type="button" data-action="share"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg><span>Share</span></button></div></li>
+                        </ul>
+                        <p data-part="live" role="status" class="lt-visually-hidden"></p>
+                      </div>
+                    </div>
+                    <div data-view="loading" class="ap-today" aria-busy="true" aria-label="Loading sailings" hidden>
+                      <div class="ap-next ap-skel"><span class="lt-skeleton" style="width: 52%"></span><span class="lt-skeleton ap-skel-time"></span><span class="lt-skeleton" style="width: 64%"></span><span class="lt-skeleton" style="width: 100%"></span></div>
+                      <ul class="ap-skels"><li><span class="lt-skeleton ap-skel-lead"></span><span class="lt-skeleton" style="width: 60%"></span></li><li><span class="lt-skeleton ap-skel-lead"></span><span class="lt-skeleton" style="width: 48%"></span></li><li><span class="lt-skeleton ap-skel-lead"></span><span class="lt-skeleton" style="width: 56%"></span></li><li><span class="lt-skeleton ap-skel-lead"></span><span class="lt-skeleton" style="width: 44%"></span></li></ul>
+                    </div>
+                    <section class="lt-empty ap-state" data-view="empty" aria-labelledby="ap-empty-h" hidden>
+                      <span data-part="icon" aria-hidden="true"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></span>
+                      <h3 id="ap-empty-h">No more sailings today</h3>
+                      <p>The first one tomorrow leaves Ardmore at 07:10.</p>
+                      <div data-part="actions"><button type="button" class="lt-btn" data-variant="secondary" data-set-state="ready"><span data-part="label">See tomorrow</span></button></div>
+                    </section>
+                    <section class="lt-empty ap-state" data-view="error" aria-labelledby="ap-error-h" hidden>
+                      <span data-part="icon" aria-hidden="true"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 4.3 2.9 17.2A2 2 0 0 0 4.6 20h14.8a2 2 0 0 0 1.7-2.8L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9.5v4M12 17h.01"/></svg></span>
+                      <h3 id="ap-error-h">Can’t reach the timetable</h3>
+                      <p>You look offline. These times are from 09:12 and may have changed.</p>
+                      <div data-part="actions"><button type="button" class="lt-btn" data-variant="secondary" data-set-state="ready"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6L20 8.5M20 4v4.5h-4.5"/></svg><span data-part="label">Try again</span></button></div>
+                    </section>
+                  </div>
+                  <p data-part="live" role="status" class="lt-visually-hidden"></p>
+                </div>
+              </div>
+            </div>
+            <nav class="lt-bottom-nav ap-tabs" data-lt="bottom-nav" aria-label="Tabs">
+              <span data-part="pill" aria-hidden="true"></span>
+              <a href="#screen-home" aria-current="page"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>Today</span></a>
+              <a href="#screen-tickets"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg><span>Tickets</span></a>
+              <a href="#screen-settings"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg><span>Settings</span></a>
+            </nav>
+          </section>
+        </div>
+        <figcaption><b>Today.</b> Pull down to refresh. Swipe a sailing left to set a reminder.</figcaption>
+      </figure>
+
+      <!-- 3 · One sailing, with the tickets sheet -->
+      <figure class="ap-frame" id="screen-sailing" data-screen="sailing">
+        <div class="ap-device">
+          <div class="ap-status" aria-hidden="true"><span>9:41</span><span class="ap-status-icons"><i></i><i></i><i></i></span></div>
+          <section class="ap-screen" aria-labelledby="sail-h">
+            <div class="ap-scroll">
+              <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+                <div data-part="row"><button type="button" data-part="back" data-go="home" data-dir="back" aria-label="Back to Today"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>Today</span></button><p data-part="small" aria-hidden="true">08:40 to Kestrel Isle</p><span></span></div>
+                <h2 data-part="large" id="sail-h" tabindex="-1">08:40 to Kestrel Isle</h2>
+              </header>
+              <div class="ap-body">
+                <ol class="ap-crossing" aria-label="The crossing">
+                  <li><time>08:40</time><span><b>Ardmore</b><small>Gate 2 · boarding from 08:10</small></span></li>
+                  <li data-leg><span>1 h 25 min at sea</span></li>
+                  <li><time>10:05</time><span><b>Kestrel Isle</b><small>Pier 1 · buses meet the boat</small></span></li>
+                </ol>
+                <dl class="ap-facts">
+                  <div><dt>Car deck</dt><dd><span class="ap-meter" aria-hidden="true"><i style="--v: 82%"></i></span><span>82% full</span></dd></div>
+                  <div><dt>Foot passengers</dt><dd><span class="ap-meter" aria-hidden="true"><i style="--v: 47%"></i></span><span>140 of 300</span></dd></div>
+                  <div><dt>Ship</dt><dd>MV Juniper</dd></div>
+                  <div><dt>On board</dt><dd>Café, quiet lounge, dog deck</dd></div>
+                </dl>
+              </div>
+            </div>
+            <div class="ap-actionbar">
+              <p><b>£12.50</b><span>per adult</span></p>
+              <button type="button" class="lt-btn" data-variant="primary" data-size="lg" id="ap-choose" aria-haspopup="dialog"><span data-part="label">Choose tickets</span></button>
+            </div>
+          </section>
+          <div data-lt="bottom-sheet" class="ap-sheet-root">
+            <dialog class="lt-sheet ap-sheet" id="ap-sheet" data-detents="medium large" aria-labelledby="ap-sheet-h">
+              <button type="button" data-part="grab" aria-label="Make the sheet bigger" aria-expanded="false"><span></span></button>
+              <div class="ap-sheet-head"><h2 id="ap-sheet-h">Tickets for the 08:40</h2><button type="button" class="lt-btn" data-variant="ghost" data-part="cancel"><span data-part="label">Close</span></button></div>
+              <div class="ap-ticketform">
+                <div class="lt-stepper ap-stepper" data-lt="number-stepper">
+                  <label for="ap-adults">Adults <small>£12.50</small></label>
+                  <div data-part="control"><button type="button" data-part="dec" aria-label="One adult fewer"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button><input id="ap-adults" type="number" inputmode="numeric" min="0" max="9" step="1" value="2"><button type="button" data-part="inc" aria-label="One more adult"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
+                </div>
+                <div class="lt-stepper ap-stepper" data-lt="number-stepper">
+                  <label for="ap-children">Under 16 <small>£6.25</small></label>
+                  <div data-part="control"><button type="button" data-part="dec" aria-label="One child fewer"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button><input id="ap-children" type="number" inputmode="numeric" min="0" max="9" step="1" value="0"><button type="button" data-part="inc" aria-label="One more child"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
+                </div>
+                <div class="ap-field"><span id="ap-veh-l">Vehicle</span>
+                  <div class="lt-segmented ap-seg" data-lt="segmented-control" role="radiogroup" aria-labelledby="ap-veh-l" id="ap-vehicle">
+                    <span data-part="indicator" aria-hidden="true"></span>
+                    <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="0">None</button>
+                    <button type="button" role="radio" aria-checked="true" tabindex="0" data-value="13.5">Car</button>
+                    <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="22">Van</button>
+                  </div>
+                </div>
+                <fieldset class="ap-extras" data-detent-only="large">
+                  <legend>Extras</legend>
+                  <label class="lt-switch"><input type="checkbox" role="switch" id="ap-dog" data-price="3"><span data-part="track" aria-hidden="true"><span data-part="thumb"></span></span><span data-part="label">Dog on board <small>£3.00</small></span></label>
+                  <label class="lt-switch"><input type="checkbox" role="switch" id="ap-bike" data-price="2"><span data-part="track" aria-hidden="true"><span data-part="thumb"></span></span><span data-part="label">Bicycle <small>£2.00</small></span></label>
+                </fieldset>
+                <p class="ap-more-hint" data-hint>Drag up for a dog or a bicycle.</p>
+                <button type="button" class="lt-btn" data-variant="primary" data-size="lg" id="ap-to-pay"><span data-part="label">Continue · <span id="ap-sheet-total">£38.50</span></span></button>
+              </div>
+            </dialog>
+          </div>
+        </div>
+        <figcaption><b>One sailing.</b> The tickets sheet opens at half height; drag it up, or press its handle, for extras.</figcaption>
+      </figure>
+
+      <!-- 4 · Checkout -->
+      <figure class="ap-frame" id="screen-pay" data-screen="pay">
+        <div class="ap-device">
+          <div class="ap-status" aria-hidden="true"><span>9:41</span><span class="ap-status-icons"><i></i><i></i><i></i></span></div>
+          <section class="ap-screen" aria-labelledby="pay-h">
+            <div class="ap-scroll">
+              <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+                <div data-part="row"><button type="button" data-part="back" data-go="sailing" data-dir="back" aria-label="Back to the 08:40 sailing"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>Sailing</span></button><p data-part="small" aria-hidden="true">Pay</p><span></span></div>
+                <h2 data-part="large" id="pay-h" tabindex="-1">Pay</h2>
+              </header>
+              <div class="ap-body">
+                <div class="ap-pass" aria-label="Tuesday 26 November, 08:40 from Ardmore, arriving at Kestrel Isle at 10:05">
+                  <p class="ap-pass-day">Tue 26 Nov</p>
+                  <p class="ap-pass-times"><b>08:40</b><span aria-hidden="true"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><b>10:05</b></p>
+                  <p class="ap-pass-ports"><span>Ardmore</span><span>Kestrel Isle</span></p>
+                </div>
+                <table class="ap-lines">
+                  <caption class="lt-visually-hidden">What you are paying for</caption>
+                  <tbody id="ap-lines">
+                    <tr><th scope="row">2 adults</th><td>£25.00</td></tr>
+                    <tr><th scope="row">Car, up to 5 m</th><td>£13.50</td></tr>
+                  </tbody>
+                  <tfoot><tr><th scope="row">Total</th><td id="ap-pay-total-row">£38.50</td></tr></tfoot>
+                </table>
+                <div class="ap-field">
+                  <label for="ap-email">Send the tickets to</label>
+                  <input class="ap-input" id="ap-email" type="email" autocomplete="email" value="rowan@post.example" spellcheck="false">
+                </div>
+                <fieldset class="ap-paywith">
+                  <legend>Pay with</legend>
+                  <label><input type="radio" name="ap-pay" value="card" checked><span><b>Card ending 4821</b><small>Saved on this phone</small></span></label>
+                  <label><input type="radio" name="ap-pay" value="gate"><span><b>Pay at the gate</b><small>Car spaces are held until 08:00</small></span></label>
+                </fieldset>
+              </div>
+            </div>
+            <div class="ap-actionbar">
+              <p><b id="ap-pay-total">£38.50</b><span>incl. harbour dues</span></p>
+              <button type="button" class="lt-btn" data-variant="primary" data-size="lg" id="ap-pay"><span data-part="label">Pay <span id="ap-pay-label">£38.50</span></span></button>
+            </div>
+          </section>
+        </div>
+        <figcaption><b>Pay.</b> One total, and the price on the button.</figcaption>
+      </figure>
+
+      <!-- 5 · Tickets -->
+      <figure class="ap-frame" id="screen-tickets" data-screen="tickets">
+        <div class="ap-device">
+          <div class="ap-status" aria-hidden="true"><span>9:41</span><span class="ap-status-icons"><i></i><i></i><i></i></span></div>
+          <section class="ap-screen" aria-labelledby="tix-h">
+            <div class="ap-scroll">
+              <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+                <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Tickets</p><span></span></div>
+                <h2 data-part="large" id="tix-h" tabindex="-1">Tickets</h2>
+              </header>
+              <div class="ap-body">
+                <article class="ap-ticket" data-tone="dark" aria-labelledby="ap-ticket-h">
+                  <header><h3 id="ap-ticket-h">Tue 26 Nov · 08:40</h3><span class="lt-badge" data-tone="accent" id="ap-ticket-state">Upcoming</span></header>
+                  <p class="ap-ticket-route"><b>Ardmore</b><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><b>Kestrel Isle</b></p>
+                  <p class="ap-ticket-who" id="ap-ticket-who">2 adults · car</p>
+                  <p class="ap-ticket-ref"><small>Show this at the gate</small><code>HLY 4K7Q</code></p>
+                </article>
+                <h3 class="ap-section">Earlier trips</h3>
+                <div class="lt-swiperow ap-rows" data-lt="swipe-row" id="ap-trips">
+                  <ul data-part="list" aria-label="Earlier trips">
+                    <li data-part="row" data-id="t1"><div data-part="content"><div data-part="main"><b data-part="lead">17:10</b><span data-part="title">To Ardmore</span><span data-part="sub">Sun 9 Nov · 2 adults</span><span data-part="meta">£25.00</span></div><button type="button" data-part="more" aria-expanded="false" aria-controls="ap-t1" aria-label="Actions for the trip on 9 November"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18.5" cy="12" r="1"/></svg></button></div><div data-part="actions" id="ap-t1"><button type="button" data-action="receipt"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4 7 8 6 8-6"/></svg><span>Receipt</span></button><button type="button" data-action="remove" data-tone="danger"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 7h15M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 1.8h6a2 2 0 0 0 2-1.8L18 7M9 7V5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 5v2"/></svg><span>Remove</span></button></div></li>
+                    <li data-part="row" data-id="t2"><div data-part="content"><div data-part="main"><b data-part="lead">08:40</b><span data-part="title">To Kestrel Isle</span><span data-part="sub">Fri 7 Nov · 2 adults, car</span><span data-part="meta">£38.50</span></div><button type="button" data-part="more" aria-expanded="false" aria-controls="ap-t2" aria-label="Actions for the trip on 7 November"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18.5" cy="12" r="1"/></svg></button></div><div data-part="actions" id="ap-t2"><button type="button" data-action="receipt"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4 7 8 6 8-6"/></svg><span>Receipt</span></button><button type="button" data-action="remove" data-tone="danger"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 7h15M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 1.8h6a2 2 0 0 0 2-1.8L18 7M9 7V5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 5v2"/></svg><span>Remove</span></button></div></li>
+                    <li data-part="row" data-id="t3"><div data-part="content"><div data-part="main"><b data-part="lead">10:15</b><span data-part="title">To Larkspur Bay</span><span data-part="sub">Sat 18 Oct · 1 adult, bicycle</span><span data-part="meta">£11.50</span></div><button type="button" data-part="more" aria-expanded="false" aria-controls="ap-t3" aria-label="Actions for the trip on 18 October"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18.5" cy="12" r="1"/></svg></button></div><div data-part="actions" id="ap-t3"><button type="button" data-action="receipt"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4 7 8 6 8-6"/></svg><span>Receipt</span></button><button type="button" data-action="remove" data-tone="danger"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 7h15M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 1.8h6a2 2 0 0 0 2-1.8L18 7M9 7V5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 5v2"/></svg><span>Remove</span></button></div></li>
+                  </ul>
+                  <p data-part="live" role="status" class="lt-visually-hidden"></p>
+                </div>
+              </div>
+            </div>
+            <nav class="lt-bottom-nav ap-tabs" data-lt="bottom-nav" aria-label="Tabs">
+              <span data-part="pill" aria-hidden="true"></span>
+              <a href="#screen-home"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>Today</span></a>
+              <a href="#screen-tickets" aria-current="page"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg><span>Tickets</span></a>
+              <a href="#screen-settings"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg><span>Settings</span></a>
+            </nav>
+          </section>
+        </div>
+        <figcaption><b>Tickets.</b> The reference is the ticket; old trips swipe away.</figcaption>
+      </figure>
+
+      <!-- 6 · Settings -->
+      <figure class="ap-frame" id="screen-settings" data-screen="settings">
+        <div class="ap-device">
+          <div class="ap-status" aria-hidden="true"><span>9:41</span><span class="ap-status-icons"><i></i><i></i><i></i></span></div>
+          <section class="ap-screen" aria-labelledby="set-h">
+            <div class="ap-scroll">
+              <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+                <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Settings</p><span></span></div>
+                <h2 data-part="large" id="set-h" tabindex="-1">Settings</h2>
+              </header>
+              <div class="ap-body ap-settings">
+                <section aria-labelledby="ap-s1"><h3 id="ap-s1">Harbour</h3>
+                  <ul class="ap-group"><li><button type="button" data-go="start" data-dir="back" class="ap-row"><span>Sail from</span><span class="ap-row-value" id="ap-home-value">Ardmore</span><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></li></ul>
+                </section>
+                <section aria-labelledby="ap-s2"><h3 id="ap-s2">Alerts</h3>
+                  <ul class="ap-group">
+                    <li class="ap-row"><label class="lt-switch"><input type="checkbox" role="switch" checked><span data-part="track" aria-hidden="true"><span data-part="thumb"></span></span><span data-part="label">Delays and cancellations</span></label></li>
+                    <li class="ap-row"><label class="lt-switch"><input type="checkbox" role="switch" id="ap-remind" checked><span data-part="track" aria-hidden="true"><span data-part="thumb"></span></span><span data-part="label">Remind me before I sail</span></label></li>
+                    <li class="ap-row ap-row-col" id="ap-remind-when"><span id="ap-remind-l">How long before</span>
+                      <div class="lt-segmented ap-seg" data-lt="segmented-control" role="radiogroup" aria-labelledby="ap-remind-l">
+                        <span data-part="indicator" aria-hidden="true"></span>
+                        <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="15">15 min</button>
+                        <button type="button" role="radio" aria-checked="true" tabindex="0" data-value="30">30 min</button>
+                        <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="60">1 hour</button>
+                      </div>
+                    </li>
+                  </ul>
+                </section>
+                <section aria-labelledby="ap-s3"><h3 id="ap-s3">Appearance</h3>
+                  <ul class="ap-group"><li class="ap-row ap-row-col">
+                    <div class="lt-segmented ap-seg" data-lt="segmented-control" role="radiogroup" aria-label="Appearance" id="ap-appearance">
+                      <span data-part="indicator" aria-hidden="true"></span>
+                      <button type="button" role="radio" aria-checked="true" tabindex="0" data-value="system">System</button>
+                      <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="light">Light</button>
+                      <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="dark">Dark</button>
+                    </div>
+                  </li></ul>
+                </section>
+                <section aria-labelledby="ap-s4"><h3 id="ap-s4">Account</h3>
+                  <ul class="ap-group">
+                    <li class="ap-row"><span>Saved card</span><span class="ap-row-value">Ending 4821</span></li>
+                    <li><button type="button" class="ap-row" data-tone="danger" data-go="start" data-dir="back" id="ap-signout"><span>Sign out</span></button></li>
+                  </ul>
+                </section>
+                <p class="ap-version">Halyard Ferries 3.2 · winter timetable from 3 November</p>
+              </div>
+            </div>
+            <nav class="lt-bottom-nav ap-tabs" data-lt="bottom-nav" aria-label="Tabs">
+              <span data-part="pill" aria-hidden="true"></span>
+              <a href="#screen-home"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>Today</span></a>
+              <a href="#screen-tickets"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg><span>Tickets</span></a>
+              <a href="#screen-settings" aria-current="page"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg><span>Settings</span></a>
+            </nav>
+          </section>
+        </div>
+        <figcaption><b>Settings.</b> Switches act at once; there is nothing to save.</figcaption>
+      </figure>
+    </div>
+  </main>
+  <p class="ap-toast" role="status" id="ap-toast"></p>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

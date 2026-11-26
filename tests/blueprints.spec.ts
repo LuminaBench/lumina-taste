@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ids = readdirSync(join(root, 'blueprints')).filter((d) => existsSync(join(root, 'blueprints', d, 'meta.json')));
 
-test('there are 25 blueprints', () => expect(ids.length).toBe(25));
+test('there are 27 blueprints', () => expect(ids.length).toBe(27));
 
 for (const id of ids) {
   for (const vp of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {

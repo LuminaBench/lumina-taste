@@ -1,0 +1,34 @@
+{
+  "id": "workspace",
+  "order": 27,
+  "name": "Desktop work app",
+  "summary": "A ferry operator's desk: saved views in a resizable sidebar, a dense table of the day's sailings with a sticky header, an inspector for the selected one, a command menu (⌘K), keyboard shortcuts shown where they apply, and resizable panes. One pane at a time on a narrow window. Loading, empty and error states.",
+  "anatomy": "Sidebar (views, counts) | edge | top bar (title, day, ⌘K, shortcuts) → filters in one row → sortable table → status line with keys | edge | inspector (time, status, load, crew, log, actions with keys) · delay dialog",
+  "aliases": [
+    "desktop app",
+    "work app",
+    "ops console",
+    "master detail",
+    "list and inspector",
+    "three pane layout",
+    "linear style app",
+    "command menu app",
+    "keyboard first app",
+    "internal tool"
+  ],
+  "uses": [
+    "app-sidebar",
+    "pane-resizer",
+    "command-palette",
+    "shortcuts-sheet",
+    "data-table",
+    "segmented-control",
+    "modal-dialog",
+    "badge",
+    "kbd",
+    "skeleton",
+    "empty-state",
+    "button"
+  ],
+  "states": ["loading","empty","error"]
+}

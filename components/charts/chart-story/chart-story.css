@@ -1,0 +1,55 @@
+/* Chart story: the answer beside the chart, one moment lit. The steps variant holds the chart still while the
+   steps scroll past; [data-static] (reduced motion, no IntersectionObserver) and print show it complete. */
+@scope (.lt-chartstory) {
+  :scope { container-type: inline-size; width: 100%; min-width: 0; margin: 0; color: var(--text-primary); }
+  [data-part="layout"] { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gap-lg); align-items: start; }
+  [data-part="words"] { display: grid; gap: 10px; align-content: start; max-width: 34rem; }
+  [data-part="question"] { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 550; }
+  [data-part="headline"] { margin: 0; font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.1; text-wrap: balance; }
+  [data-part="figure"] { display: grid; gap: 2px; margin: 8px 0 0; }
+  [data-part="figure"] data { font-family: var(--font-display); font-size: var(--step-4); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1; font-variant-numeric: tabular-nums; }
+  [data-part="figure"] span { color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  [data-part="stage"] { display: grid; gap: 8px; min-width: 0; }
+  [data-part="subtitle"] { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  [data-part="source"] { margin: 0; color: var(--text-muted); font-size: var(--text-ui-xs); }
+  .lt-story-note { font-size: 12px; font-weight: 600; fill: var(--text-primary); paint-order: stroke; stroke: var(--bg-surface-1); stroke-width: 4px; stroke-linejoin: round; }
+  .lt-story-moment { transition: opacity var(--dur-4) var(--ease-out); }
+  [data-part="reveal"] { transition: width 700ms var(--ease-out); }
+
+  /* Steps */
+  [data-part="steps"] { display: grid; margin: 0; padding: 0; list-style: none; }
+  [data-part="step"] { display: grid; align-content: center; min-height: 72vh; }
+  [data-part="step"]:first-child { min-height: 56vh; align-content: start; padding-top: 8vh; }
+  [data-part="step"] > div { display: grid; gap: 6px; max-width: 30rem; padding: var(--gap-md) var(--gap-lg); border-radius: var(--radius-lg); background: var(--bg-surface-1); box-shadow: var(--shadow-sm); opacity: 0.5; transition: opacity var(--dur-4) var(--ease-out); }
+  [data-part="step"][data-active] > div { opacity: 1; }
+  [data-part="step"] :is(h3, h4, h5) { margin: 0; font-size: var(--step-1); font-weight: 650; line-height: 1.25; text-wrap: balance; }
+  [data-part="step"] p { margin: 0; color: var(--text-secondary); font-size: var(--text-ui); line-height: 1.5; }
+  :scope[data-variant="steps"]:not([data-static]) [data-part="stage"] { position: sticky; top: var(--story-stick, var(--story-top, 0px)); z-index: 1; padding-block: var(--story-pad, 8px); background: var(--story-stage-bg, var(--story-bg, var(--bg-canvas))); }
+  :scope[data-variant="steps"]:not([data-static]) .lt-story-moment:not([data-on]) { opacity: 0; }
+
+  /* Still: every moment lit, the whole line, the steps as captions under the chart. */
+  :scope[data-static] [data-part="reveal"] { width: 100% !important; }
+  :scope[data-static] [data-part="steps"] { gap: var(--gap-md); }
+  :scope[data-static] [data-part="step"] { min-height: 0; padding: 0; align-content: start; }
+  :scope[data-static] [data-part="step"] > div { padding: 0; background: none; box-shadow: none; opacity: 1; }
+}
+@container (min-width: 760px) {
+  .lt-chartstory [data-part="layout"] { grid-template-columns: minmax(220px, 4fr) minmax(0, 8fr); gap: var(--gap-lg) var(--gap-xl); }
+  .lt-chartstory[data-variant="steps"] [data-part="words"] { grid-column: 1 / -1; }
+  .lt-chartstory[data-variant="steps"]:not([data-static]) [data-part="layout"] { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .lt-chartstory[data-variant="steps"]:not([data-static]) [data-part="layout"] { --story-stick: max(calc(var(--story-top, 0px) + 16px), calc(50vh - 220px)); --story-pad: 0px; --story-stage-bg: transparent; }
+  .lt-chartstory[data-variant="steps"]:not([data-static]) [data-part="stage"] { grid-column: 2; grid-row: 2; }
+  .lt-chartstory[data-variant="steps"]:not([data-static]) [data-part="steps"] { grid-column: 1; grid-row: 2; }
+  .lt-chartstory[data-variant="steps"][data-static] [data-part="stage"], .lt-chartstory[data-variant="steps"][data-static] [data-part="steps"] { grid-column: 1 / -1; }
+  .lt-chartstory[data-static] [data-part="steps"] { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--gap-lg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lt-chartstory .lt-story-moment, .lt-chartstory [data-part="reveal"], .lt-chartstory [data-part="step"] > div { transition: none; }
+}
+@media print {
+  .lt-chartstory .lt-story-moment { opacity: 1 !important; }
+  .lt-chartstory [data-part="reveal"] { width: 100% !important; }
+  .lt-chartstory [data-part="stage"] { position: static !important; }
+  .lt-chartstory [data-part="step"] { min-height: 0 !important; padding: 0 !important; }
+  .lt-chartstory [data-part="step"] > div { opacity: 1 !important; box-shadow: none !important; }
+}

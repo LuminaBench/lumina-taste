@@ -11,8 +11,17 @@
   [data-part="small"] { margin: 0; max-width: 46vw; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: var(--text-ui); font-weight: 650; text-align: center; }
   :scope[data-size="large"] [data-part="small"] { opacity: 0; transition: opacity var(--dur-2); }
   :scope[data-size="large"][data-scrolled] [data-part="small"] { opacity: 1; }
-  [data-part="large"] { margin: 0; padding: 4px 16px 10px; height: var(--appbar-large, 52px); font-family: var(--font-display); font-size: 1.875rem; font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.2; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  [data-part="large"] { margin: 0; padding: 4px 16px 10px; height: var(--appbar-large, 52px); font-family: var(--font-display); font-size: 1.875rem; font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.2; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; transform-origin: 16px 100%; }
+  /* The large title shrinks and fades over the first 52px of scroll, tied to the scroll position itself
+     (a scroll timeline, no script), so it follows the finger and stops when the finger stops. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      :scope[data-size="large"] [data-part="large"] { animation: lt-appbar-shrink linear both; animation-timeline: scroll(nearest block); animation-range: 0px var(--appbar-large, 52px); }
+    }
+  }
 }
+@keyframes lt-appbar-shrink { to { scale: 0.82; opacity: 0; translate: 0 -6px; } }
+@media print { .lt-appbar [data-part="large"] { animation: none; } }
 .lt-appbar-demo { width: min(100%, 340px); height: 300px; overflow-y: auto; border: var(--bw) var(--border-style) var(--border-strong); border-radius: 22px; background: var(--bg-canvas); color: var(--text-primary); }
 .lt-appbar-demo ul { margin: 0; padding: 0 16px 16px; list-style: none; }
 .lt-appbar-demo li { display: flex; justify-content: space-between; gap: 12px; padding: 14px 0; border-bottom: var(--bw) var(--border-style) var(--border-hairline); font-size: var(--text-ui); }

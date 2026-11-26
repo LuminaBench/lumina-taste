@@ -2,23 +2,63 @@
 .bp-app > .lt-sidebar { position: sticky; top: 0; height: 100dvh; }
 .bp-app-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .bp-topbar { position: sticky; top: 0; z-index: var(--z-sticky); display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); height: 60px; padding: 0 var(--space-5); background: color-mix(in oklab, var(--bg-canvas) 92%, transparent); backdrop-filter: blur(8px); border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
-.bp-dash { display: grid; gap: var(--space-5); width: 100%; max-width: 1320px; padding: var(--space-6) var(--space-5) var(--space-8); }
+/* A dense page that stays calm: one surface per block, space instead of rules, the hierarchy title → figures → one chart → table. */
+.bp-dash { display: grid; gap: var(--space-5); width: 100%; max-width: 1440px; padding: var(--space-6) var(--space-5) var(--space-8); }
 .bp-dash-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--space-3); }
 .bp-dash-head p { margin: 4px 0 0; font-size: var(--text-ui-sm); }
-.bp-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
-.bp-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
 .bp-card { min-width: 0; padding: var(--space-5); border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
-.bp-span-2 { grid-column: span 2; }
-.bp-card-title { margin: 0 0 var(--space-4); font-size: var(--step-0); font-weight: 650; }
-.bp-card .lt-table-wrap { border: 0; max-height: none; }
-.bp-card .lt-kpi { border: 0; padding: 0; }
+.bp-card-title { margin: 0; font-size: var(--step-0); font-weight: 650; }
+
+/* Ten figures on one surface, five to a row, set apart by space only. */
+.bp-kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-5) var(--space-6); padding: var(--space-5) var(--space-5) var(--space-4); border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
 .bp-kpis > div > .lt-kpi { height: 100%; }
-@media (max-width: 1100px) { .bp-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.bp-kpis .lt-kpi h3 { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+/* One main chart, with the breakdown that explains it beside it. */
+.bp-main { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: start; gap: var(--space-4); }
+
+/* The table holds every account; its header stays put while it scrolls. */
+.bp-accounts { display: grid; gap: var(--space-4); padding-bottom: 0; }
+.bp-card-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-4); }
+.bp-card-head p { margin: 0; font-size: var(--text-ui-sm); }
+.bp-table.lt-table-wrap { --cell-py: 6px; max-height: 560px; margin-inline: calc(var(--space-5) * -1); width: auto; border: 0; border-top: var(--bw) var(--border-style) var(--border-hairline); border-radius: 0 0 var(--radius-lg) var(--radius-lg); background: none; }
+.bp-table .lt-table td:first-child { width: auto; padding-right: var(--cell-px); font-weight: 550; }
+.bp-table .lt-table :is(th, td):first-child { padding-left: var(--space-5); }
+.bp-table .lt-table :is(th, td):last-child { padding-right: var(--space-5); }
+.bp-table [data-spark] .lt-spark { display: block; }
+
+/* States */
+.bp-loading { display: grid; gap: var(--space-5); }
+.bp-skel-kpis .lt-skeleton { height: 64px; }
+.bp-loading .bp-main .bp-skel-chart { height: 360px; border-radius: var(--radius-lg); }
+.bp-error { margin-block: var(--space-7); }
+
+@media (max-width: 1240px) {
+  .bp-kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .bp-table [data-col="region"] { display: none; }
+}
+@media (max-width: 1040px) {
+  .bp-main { grid-template-columns: 1fr; }
+  .bp-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 @media (max-width: 760px) {
-  .bp-grid { grid-template-columns: 1fr; } .bp-span-2 { grid-column: auto; }
   .bp-dash { padding: var(--space-5) var(--space-4) var(--space-7); }
   .bp-topbar { padding: 0 var(--space-4); }
   .bp-topbar .lt-search { width: auto; flex: 1; }
   .bp-topbar [data-part="who"] { display: none; }
+  .bp-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5) var(--space-4); padding: var(--space-4); }
+  .bp-table [data-col="seats"], .bp-table [data-col="trend"] { display: none; }
 }
-@media (max-width: 480px) { .bp-kpis { grid-template-columns: 1fr; } .bp-card { padding: var(--space-4); } .bp-topbar .lt-search kbd { display: none; } }
+@media (max-width: 480px) {
+  .bp-card { padding: var(--space-4); }
+  .bp-table.lt-table-wrap { margin-inline: calc(var(--space-4) * -1); }
+  .bp-table .lt-table :is(th, td):first-child { padding-left: var(--space-4); }
+  .bp-topbar .lt-search kbd { display: none; }
+}
+/* On a phone each figure stacks its change under it, and the comparison line goes: the sparkline says it. */
+@media (max-width: 760px) {
+  .bp-kpis .lt-kpi[data-size="compact"] { grid-template-columns: minmax(0, 1fr); grid-template-areas: "label" "value" "delta" "spark"; }
+  .bp-kpis .lt-kpi[data-size="compact"] .lt-kpi-delta { justify-self: start; }
+  .bp-kpis .lt-kpi-cmp { display: none; }
+  .bp-kpis .lt-kpi[data-size="compact"] h3 { white-space: normal; text-wrap: balance; }
+}
