@@ -12,7 +12,7 @@
     "tokens": "node scripts/build-tokens.mjs",
     "test:contrast": "node scripts/test-contrast.mjs",
     "catalog": "node scripts/build-catalog.mjs",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "node scripts/build.mjs && tsc --noEmit",
     "build": "node scripts/build.mjs",
     "preview": "node scripts/build.mjs && node scripts/serve.mjs --open",
     "serve": "node scripts/serve.mjs",
@@ -22,7 +22,7 @@
     "search": "node scripts/search.mjs",
     "install-taste": "node scripts/install-taste.mjs",
     "lint:copy": "node scripts/lint-copy.mjs components blueprints SKILL.md references README.md",
-    "test": "npm run test:contrast && npm run lint:copy && npm run test:unit && npm run typecheck && npm run test:ui && npm run audit:all",
+    "test": "npm run test:contrast && npm run lint:copy && npm run test:unit && npm run typecheck && playwright test -c tests/playwright.config.ts && npm run audit:all",
     "test:unit": "node --test tests/unit/profile.test.mjs tests/unit/cli.test.mjs tests/unit/compose.test.mjs tests/unit/adapters.test.mjs tests/unit/css.test.mjs tests/unit/images.test.mjs"
   },
   "devDependencies": {

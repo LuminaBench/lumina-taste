@@ -8,7 +8,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const port = 4411;
+const port = Number(process.env.LT_AUDIT_PORT) || 4411;
 const base = `http://127.0.0.1:${port}/`;
 if (!existsSync(join(root, 'preview/dist/index.html'))) spawnSync(process.execPath, [join(root, 'scripts/build.mjs')], { stdio: 'inherit' });
 const server = spawn(process.execPath, [join(root, 'scripts/serve.mjs'), '--port', String(port)], { stdio: 'ignore' });
