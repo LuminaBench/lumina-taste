@@ -20,7 +20,10 @@
   @supports (color: oklch(from red l c h)) { :scope[data-tone="swatch"] { --art-ink: oklch(from var(--art, var(--accent-solid)) clamp(0.16, (0.6 - l) * 1000, 0.98) 0.01 h); } }
   :scope[data-tone="swatch"] :is([data-part="fact"], [data-part="index"]) { color: inherit; }
   /* data-variant="figure": one number carries the panel ("20 min", "410", "£75"), with what it counts under it. */
-  [data-part="figure"] { margin: 0 0 4px; font-family: var(--font-display); font-size: clamp(3.5rem, 34cqi, 11rem); font-weight: var(--weight-display); letter-spacing: -0.04em; line-height: 1; font-variant-numeric: lining-nums tabular-nums; }
+  [data-part="figure"] { margin: 0 0 0.14em; font-family: var(--font-display); font-size: clamp(2.5rem, var(--art-figure, 34cqi), 11rem); font-weight: var(--weight-display); letter-spacing: -0.04em; line-height: 1.1; font-variant-numeric: lining-nums tabular-nums; }
+  /* A wide panel is short, so its figure is smaller: it must leave room for the index above and the name below. */
+  :scope:is([data-ratio="16/9"], [data-ratio="3/2"]) { --art-figure: 14cqi; }
+  :scope[data-ratio="5/4"] { --art-figure: 26cqi; }
   [data-part="figure"] small { margin-left: 0.14em; font-size: 0.24em; font-weight: 500; letter-spacing: 0; }
   :scope[data-variant="figure"] [data-part="name"] { padding-top: 14px; border-top: var(--bw) var(--border-style) color-mix(in oklab, currentColor 22%, transparent); font-size: clamp(1.125rem, 5.4cqi, 1.75rem); line-height: 1.15; }
   /* data-frame: a keyline inside the edge, like a printed plate. For a large panel standing in for the hero picture. */
@@ -66,4 +69,4 @@
   img, video, picture { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
 }
 .lt-art-demo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; width: 100%; }
-@media (max-width: 560px) { .lt-art-demo { grid-template-columns: minmax(0, 1fr); } .lt-art-demo .lt-art { --art-ratio: 16 / 9; } }
+@media (max-width: 560px) { .lt-art-demo { grid-template-columns: minmax(0, 1fr); } .lt-art-demo .lt-art { --art-ratio: 16 / 9; --art-figure: 14cqi; } }

@@ -4,7 +4,7 @@
 // so the tests always run against the shipped snippets. Used by tests/motion.spec.ts (served with
 // page.route) and by local QA scripts (written to a folder with --out <dir>).
 import { build } from 'esbuild';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -70,9 +70,33 @@ export async function reactFiles() {
   return out;
 }
 
+/** Blocks that set a figure large, for the type-pairing overlap test: every component stylesheet, no script
+ *  (the page at rest), one block after another. { 'figures.js', 'figures.css', 'figures.html' }. */
+export const FIGURE_BLOCKS = [
+  ['blocks', 'stack-cards'], ['blocks', 'stats-band'], ['blocks', 'media-band'], ['blocks', 'hero-statement'], ['blocks', 'product-reveal'],
+  ['blocks', 'project-grid'], ['blocks', 'blog-grid'], ['blocks', 'scroll-statement'], ['blocks', 'sticky-story'], ['blocks', 'side-scroll'],
+  ['blocks', 'offer-cards'], ['data', 'art-panel'], ['motion', 'number-settle'],
+];
+export async function figuresFiles() {
+  const all = [];
+  const walk = (d) => { for (const f of readdirSync(d)) { const p = join(d, f); if (statSync(p).isDirectory()) walk(p); else if (f.endsWith('.css')) all.push(p); } };
+  walk(join(root, 'components/ui'));
+  const tokens = ['tokens/base.css', 'tokens/layout.css', 'tokens/backdrops.css', 'tokens/composition.css', 'tokens/scroll.css', 'tokens/palettes/all.css', 'tokens/typography/typography.css']
+    .map((t) => join(root, t));
+  const res = await build({
+    stdin: { contents: [...tokens, ...all.sort()].map((f) => `import ${JSON.stringify(f)};`).join('\n'), resolveDir: root, loader: 'ts', sourcefile: 'figures-entry.ts' },
+    bundle: true, write: false, format: 'esm', target: 'es2022', outdir: '/out', entryNames: 'figures', logLevel: 'error',
+  });
+  const out = {};
+  for (const f of res.outputFiles) out[f.path.split('/').pop()] = f.text;
+  const body = FIGURE_BLOCKS.map(([f, id]) => `<div data-block="${id}">${snippet(f, id).replace(/\sdata-lt="[^"]*"/g, '')}</div>`).join('\n');
+  out['figures.html'] = shell('Figures under every pairing', `<main>${body}</main>`).replace('./motion.css', './figures.css').replace('<script type="module" src="./motion.js"></script>', '');
+  return out;
+}
+
 if (process.argv.includes('--out')) {
   const dir = process.argv[process.argv.indexOf('--out') + 1];
   mkdirSync(dir, { recursive: true });
-  for (const [k, v] of Object.entries({ ...(await motionFiles()), ...(await reactFiles()) })) writeFileSync(join(dir, k), v);
+  for (const [k, v] of Object.entries({ ...(await motionFiles()), ...(await reactFiles()), ...(await figuresFiles()) })) writeFileSync(join(dir, k), v);
   console.log('motion pages →', dir);
 }
