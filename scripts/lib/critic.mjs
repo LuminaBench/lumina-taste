@@ -266,8 +266,33 @@ export const MEASURE = (opts = {}) => {
     return el.matches('[type="submit"], [data-variant="primary"]') || (filled(el) && r.width >= 64 && r.height >= 32 && !el.closest('nav, [role="tablist"], [role="radiogroup"]') && (() => { const c = rgba(getComputedStyle(el).backgroundColor); const mx = Math.max(c[0], c[1], c[2]), mn = Math.min(c[0], c[1], c[2]); return mx - mn > 40; })());
   }).map((el) => ({ selector: sel(el), label: (el.getAttribute('aria-label') || el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 30), cy: Math.round(rectOf(el).top + rectOf(el).height / 2) }));
 
+  // ---- colour: is the page one hue? Ground, top bar, footer and section grounds against the accent (OKLab hue).
+  const oklch = (c) => {
+    const lin = (v) => { v /= 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+    const [r, g, b] = c.slice(0, 3).map(lin);
+    const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b), m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b), s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+    const L = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, A = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, B = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
+    return { L: Math.round(L * 1000) / 1000, C: Math.round(Math.hypot(A, B) * 1000) / 1000, H: Math.round(((Math.atan2(B, A) * 180) / Math.PI + 360) % 360) };
+  };
+  const bgOf = (el) => { for (let e = el; e; e = e.parentElement) { const c = rgba(getComputedStyle(e).backgroundColor); if (c[3] > 0.5) return oklch(c); } return oklch([255, 255, 255, 1]); };
+  const accentRaw = getComputedStyle(html).getPropertyValue('--accent-solid').trim();
+  const topBar = [...document.querySelectorAll('body > header, body > nav, header[class*="nav"], nav[class*="nav"], [class*="navbar"]')].find((e) => shown(e) && rectOf(e).top < 80);
+  const foot = [...document.querySelectorAll('body > footer, footer[class*="footer"], [class*="site-footer"]')].find((e) => shown(e));
+  const colour = {
+    canvas: bgOf(body), accent: accentRaw ? oklch(rgba(accentRaw)) : null,
+    bar: topBar ? bgOf(topBar) : null, foot: foot ? bgOf(foot) : null,
+    grounds: bands.map((b) => (groundOf(b) === 'picture' ? null : bgOf(b))).filter(Boolean),
+  };
+  // ---- words in the first screen: the hero's visible words, the lede and notes included.
+  const firstWords = (() => {
+    if (!hero || !shown(hero)) return 0;
+    const copy = hero.cloneNode(true);
+    copy.querySelectorAll('[data-part="visual"], figure, picture, img, svg, .lt-art, .lt-device, [data-mock], [data-app], [data-audit-ignore], .lt-visually-hidden, [hidden]').forEach((n) => n.remove());
+    return words(copy.textContent);
+  })();
+
   return {
-    url: location.href, width: vw, height: vh, pageHeight: html.scrollHeight,
+    url: location.href, width: vw, height: vh, pageHeight: html.scrollHeight, colour, firstWords,
     hero: !!hero, app, appMarked, sections, looseMoments, motion,
     type: { headline: Math.round(headline), h1: h1 ? Math.round(parseFloat(getComputedStyle(h1).fontSize)) : 0, body: bodySize, ratio: bodySize ? Math.round((headline / bodySize) * 100) / 100 : 0 },
     bars: fixedBottom.map((b) => ({ selector: sel(b), height: Math.round(rectOf(b).height) })),
@@ -290,6 +315,9 @@ export const LIMITS = {
   target: 44,            // primary touch targets at phone width, in CSS px
   edge: 20,              // the strip at each side of a phone screen that belongs to the system's back gesture
   reach: 0.5,            // the primary action sits below this share of a phone screen's height, where the thumb is
+  heroWords: 40,         // words in a marketing hero (headline, lede, actions, notes): above this it is a paragraph, not a first screen
+  pageWords: 140,        // words per screen of page, on average, on a marketing page
+  hueSpan: 35,           // degrees: grounds and accent within this of each other read as one colour
 };
 
 const plural = (n, one, many = one + 's') => `${n} ${n === 1 ? one : many}`;
@@ -349,6 +377,22 @@ export function judgeMeasures(m, { wide = m.width >= 900, limits = LIMITS } = {}
   if (mo.countersNoDigit.length) add('taste-motion-counter', mo.countersNoDigit[0], `A data-count element has no number in it (${mo.countersNoDigit.length}): it has nothing to count. Put the figure in the element, or remove data-count.`, 'error');
   for (const v of mo.videos) add('taste-motion-video', null, `${v}. Film never plays sound on its own, and a moving hero always has a visible pause.`, 'error');
   if (mo.pinBroken.length) add('taste-motion-pin', mo.pinBroken[0], `A pinned scene sits inside a box with overflow hidden, auto or scroll, so it will not pin (${mo.pinBroken.join(', ')}). Use overflow: clip on that ancestor, or move the scene out of it.`, 'error');
+
+  // 5b. Fewer words: a first screen is a headline, one line and one action; a page is pictures with captions.
+  if (marketing && wide && m.firstWords > limits.heroWords) add('taste-word-budget', null, `The first screen holds ${m.firstWords} words. Keep the hero under ${limits.heroWords}: the headline, one sentence, one action. Move the rest down the page or into the picture.`);
+  const screens = Math.max(1, m.pageHeight / m.height);
+  const pageWords = m.sections.reduce((n, x) => n + (x.use ? 0 : x.words), 0);
+  if (marketing && wide && pageWords / screens > limits.pageWords) add('taste-word-budget', null, `About ${Math.round(pageWords / screens)} words per screen (${pageWords} over ${Math.round(screens * 10) / 10} screens, forms and questions not counted). Pictures carry a page further than paragraphs: aim under ${limits.pageWords}, words as captions.`);
+
+  // 5c. One colour everywhere: the ground, the top bar and the section grounds all in the accent's hue family.
+  if (marketing && m.colour?.accent && m.colour.accent.C >= 0.05) {
+    const near = (x) => Math.abs(((x.H - m.colour.accent.H + 540) % 360) - 180) < limits.hueSpan;
+    const tinted = [m.colour.canvas, m.colour.bar, m.colour.foot, ...m.colour.grounds].filter((x) => x && x.C >= 0.012);
+    const groundTinted = m.colour.canvas.C >= 0.005 && near(m.colour.canvas);
+    const barFlat = !m.colour.bar || Math.abs(m.colour.bar.L - m.colour.canvas.L) < 0.2;
+    const others = [m.colour.canvas, m.colour.bar, m.colour.foot, ...m.colour.grounds].filter((x) => x && x.C >= 0.02 && !near(x));
+    if (groundTinted && barFlat && !others.length && tinted.every(near)) add('taste-monotone', null, `The ground (hue ${m.colour.canvas.H}), the top bar and every coloured band sit in the accent's own hue (${m.colour.accent.H}): a one-colour page. Put the page on neutral or warm paper, give the top bar contrast (an ink or paper bar), and use the palette's second colour (--highlight) for one figure.`);
+  }
 
   // 6. Apps, at phone width: touch targets, the home-indicator gap, declared states.
   if (!wide && (m.app || m.bars.length)) {

@@ -15,6 +15,8 @@ export const RULES = [
   ['accent-solid', ['bg-canvas', 'bg-surface-1'], 3],
   ['accent-text', [...SURFACES, 'accent-soft'], 4.5],
   ['focus-ring', READING, 3],
+  ['highlight', ['bg-canvas', 'bg-surface-1'], 3],
+  ['highlight-text', [...READING, 'highlight-soft'], 4.5],
   ['border-strong', ['bg-canvas', 'bg-surface-1'], 3],
   ...STATUS.map((s) => [`status-${s}`, [...READING, `status-${s}-soft`], 4.5]),
   ...Array.from({ length: CHART_SERIES }, (_, i) => [`chart-${i + 1}`, ['bg-canvas', 'bg-surface-1'], 3]),

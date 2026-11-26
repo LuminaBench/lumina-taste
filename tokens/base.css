@@ -103,6 +103,9 @@
 
 /* A dark band anywhere: the scoped dark tokens, painted. Blocks set their own ground; a plain section gets it here. */
 :where([data-tone="dark"], :is(section, header, footer, aside)[data-tone="accent"]) { background-color: var(--bg-canvas); color: var(--text-primary); }
+/* The palette's second colour, for one figure, price or word with intent (never a second button colour). */
+:where([data-highlight]) { color: var(--highlight-text); }
+:where([data-highlight="mark"]) { color: var(--highlight); }
 
 :where([data-mode="dark"], [data-tone="dark"]) {
   --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.3);
