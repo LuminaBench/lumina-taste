@@ -50,6 +50,10 @@
   [data-app] { --app-w: 1280px; --z: 0.5; zoom: var(--z); width: calc(100cqi / var(--z)); height: 100%; overflow: hidden; background: var(--bg-canvas); color: var(--text-primary); font-family: var(--font-body); font-size: 14px; line-height: 1.4; text-align: left; }
   [data-app="phone"] { --app-w: 390px; --z: 0.72; }
   @supports (zoom: calc(1px / 1px)) { [data-app] { zoom: calc(100cqi / var(--app-w)); width: var(--app-w); } }
+  /* The laptop screen's height comes from its 16:10 ratio. WebKit resolves height: 100% inside it against the border
+     box (the app ran 31px under the bezel), so the app takes the ratio's height itself. */
+  :scope[data-kind="laptop"] [data-app] { height: calc(100cqi / var(--z) * 0.625); }
+  @supports (zoom: calc(1px / 1px)) { :scope[data-kind="laptop"] [data-app] { height: calc(var(--app-w) * 0.625); } }
   [data-app] p, [data-app] ul { margin: 0; }
   [data-app] b { font-weight: 600; }
   [data-app] .lt-segmented button[aria-checked="true"] { background: var(--bg-surface-1); box-shadow: var(--shadow-sm), 0 0 0 1px var(--border-hairline); }

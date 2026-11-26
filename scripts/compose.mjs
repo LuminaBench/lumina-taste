@@ -57,6 +57,9 @@ const uiIds = new Set(cat.ui.map((u) => u.id));
 const blueprintIds = new Set(cat.blueprints.map((b) => b.id));
 const text = ` ${brief.toLowerCase().replace(/[^a-z0-9'’-]+/g, ' ')} `;
 const has = (phrase) => text.includes(` ${phrase.toLowerCase()} `);
+// Words that name a thing, not a look: a "flat white" is a coffee, not the flat style.
+const lookText = text.replace(/ (flat white|flat whites|long black|black coffee|black pudding|paper bags?|glass jars?) /g, ' ');
+const hasLook = (phrase) => lookText.includes(` ${phrase.toLowerCase()} `);
 
 // ---------------------------------------------------------------- page type
 function pickType() {
@@ -109,12 +112,12 @@ if (type.id === 'landing' && !forceType) {
 }
 // A conference is an event first, whatever its subject ("a design conference" is not a design studio).
 if (type.id === 'event' && domain?.id !== 'events') domain = kb.domains.find((d) => d.id === 'events') ?? domain;
-const moodHits = Object.entries(kb.moods).filter(([w]) => has(w));
+const moodHits = Object.entries(kb.moods).filter(([w]) => hasLook(w));
 const mood = Object.assign({}, ...moodHits.map(([, v]) => v));
 // A style is applied only when the brief names a mood; the domain's style is offered, not imposed.
 // A style the brief names outright ("a glass landing page", "in the terminal style") counts; a loose search
 // match does not ("home page … from 7:30" once read as the ember style's "launch page … from below").
-const namedStyle = cat.styles.find((st) => has(st.id) || (st.aliases ?? []).some((a) => has(a)))?.id ?? null;
+const namedStyle = cat.styles.find((st) => hasLook(st.id) || (st.aliases ?? []).some((a) => hasLook(a)))?.id ?? null;
 const explicitStyle = Object.prototype.hasOwnProperty.call(mood, 'style') ? mood.style : namedStyle ?? search(cat, brief, { kind: 'style', limit: 1 }).find((x) => x.s > 24)?.d.id ?? null;
 // A marketing page with no recognisable subject still gets a headline face distinct from the stock sans.
 const defaults = { marketing: ['slate-forest', 'geometric'], app: ['slate-forest', 'precision'], reading: ['paper-ink', 'editorial'], flow: ['slate-forest', 'precision'] }[type.kind];

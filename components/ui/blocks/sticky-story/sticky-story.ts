@@ -42,8 +42,11 @@ export function enhance(root: HTMLElement): Cleanup {
       steps.forEach((li) => { const t = li.querySelector('[data-part="text"]'); if (t) io!.observe(t); });
     }
   };
-  const ro = new ResizeObserver(([e]) => { const w = e.contentRect.width > 760; if (w !== wide) { wide = w; apply(); } });
+  // Re-laid out on the next frame, not inside the observer: switching layouts resizes the observed root, which
+  // WebKit reports as a ResizeObserver loop error.
+  let raf = 0;
+  const ro = new ResizeObserver(([e]) => { const w = e.contentRect.width > 760; if (w !== wide) { wide = w; cancelAnimationFrame(raf); raf = requestAnimationFrame(apply); } });
   ro.observe(root);
   motion.addEventListener('change', apply);
-  return () => { stop(); ro.disconnect(); motion.removeEventListener('change', apply); ['data-pin', 'data-play', 'data-io'].forEach((a) => root.removeAttribute(a)); };
+  return () => { stop(); cancelAnimationFrame(raf); ro.disconnect(); motion.removeEventListener('change', apply); ['data-pin', 'data-play', 'data-io'].forEach((a) => root.removeAttribute(a)); };
 }

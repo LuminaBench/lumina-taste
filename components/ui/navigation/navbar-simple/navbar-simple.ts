@@ -10,5 +10,5 @@ export function enhance(root: HTMLElement): Cleanup {
     undismiss?.(); undismiss = open ? dismissable(root, () => set(false)) : null;
     emit(root, { open });
   };
-  return combine(on(toggle, 'click', () => set(panel.hidden)), on(panel, 'click', (e) => { if ((e.target as Element).closest('a')) set(false); }), () => undismiss?.());
+  return combine(on(toggle, 'click', () => set(panel.hidden !== false)), on(panel, 'click', (e) => { if ((e.target as Element).closest('a')) set(false); }), () => undismiss?.());
 }
