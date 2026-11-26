@@ -53,7 +53,7 @@
   /* The ground behind the motif: a disc by default; data-pattern="arch" a niche that runs to the foot of the
      panel; "floor" a lower band; "none" nothing. Drawn on the motif's own box, so it always sits behind it. */
   :scope:not([data-pattern]) > [data-part="motif"], :scope[data-pattern="sun"] > [data-part="motif"] { background: radial-gradient(closest-side, var(--mg) 0 86%, transparent 86.5%); }
-  :scope[data-pattern="arch"] > [data-part="motif"] { background: var(--mg); border-radius: 50% 50% 0 0 / 50% 50% 0 0; box-shadow: 0 40cqi 0 var(--mg), 0 80cqi 0 var(--mg); }
+  :scope[data-pattern="arch"] > [data-part="motif"] { background: var(--mg); border-radius: 50% 50% 0 0 / 50% 50% 0 0; box-shadow: 0 10cqi 0 var(--mg), 0 20cqi 0 var(--mg), 0 30cqi 0 var(--mg), 0 40cqi 0 var(--mg), 0 50cqi 0 var(--mg), 0 60cqi 0 var(--mg), 0 70cqi 0 var(--mg), 0 80cqi 0 var(--mg), 0 90cqi 0 var(--mg), 0 100cqi 0 var(--mg), 0 110cqi 0 var(--mg); }
   :scope:has(> [data-part="motif"]):is([data-pattern="sun"], [data-pattern="arch"])::before { content: none; }
   [data-part="motif"] [data-m="a"] { fill: var(--ma); }
   [data-part="motif"] [data-m="b"] { fill: var(--mb); }
