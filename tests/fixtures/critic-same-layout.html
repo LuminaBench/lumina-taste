@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en" data-look-reason="a test page: only the section rules are under test"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The same layout twice</title>
+<!-- Two neighbouring sections built from one block on one ground. Used by tests/unit/critic.test.mjs. -->
+<style>
+  body { margin: 0; font: 17px/1.6 Georgia, serif; color: #1d232a; background: #f6f7f8; }
+  section { padding: 96px max(24px, calc((100% - 1100px) / 2)); }
+  h1 { font-size: 72px; line-height: 1; margin: 0 0 24px; }
+  h2 { font-size: 36px; line-height: 1.1; margin: 0 0 16px; }
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .art { height: 320px; border-radius: 8px; background: #c9d6cf; }
+</style></head>
+<body><main>
+  <section class="hero"><h1>Kestrel tunes pianos in your home</h1><p>One visit a year keeps it at pitch.</p></section>
+  <section class="lt-feature-split"><div class="split"><div><h2>We come to you</h2><p>An hour in your front room, no moving the piano.</p></div><div class="art" role="img" aria-label="A tuner at an upright piano"></div></div></section>
+  <section class="lt-feature-split"><div class="split"><div><h2>Pitch you can hear</h2><p>Every string checked against a fork, then by ear.</p></div><div class="art" role="img" aria-label="A tuning fork on the keys"></div></div></section>
+</main></body></html>

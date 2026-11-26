@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en" data-look-reason="a test page: only the motion rules are under test"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Motion that breaks</title>
+<!-- A film that plays with sound, a counter with nothing to count, two entrances, and a pinned scene in a clipping box. Used by tests/unit/critic.test.mjs. -->
+<style>
+  body { margin: 0; font: 17px/1.6 Georgia, serif; color: #1d232a; background: #f6f7f8; }
+  section { padding: 96px max(24px, calc((100% - 1100px) / 2)); }
+  h1 { font-size: 72px; line-height: 1; margin: 0 0 24px; text-wrap: balance; }
+  h2 { font-size: 36px; margin: 0 0 16px; }
+  .clip { overflow: hidden; }
+  .art { height: 320px; border-radius: 8px; background: #c9d6cf; }
+  video { display: block; width: 480px; height: 270px; background: #41594f; }
+</style></head>
+<body><main>
+  <section class="hero" data-entrance><h1>Juniper Ferries cross twice an hour</h1><video autoplay loop playsinline aria-label="The ferry leaving the quay"></video></section>
+  <section data-entrance><h2>Crossings last year</h2><p><b data-count>a lot</b> people crossed with us.</p><div class="art" role="img" aria-label="The ferry at the quay"></div></section>
+  <div class="clip"><section class="lt-story"><h2>One crossing, start to end</h2><div class="art" role="img" aria-label="The deck at sunrise"></div></section></div>
+</main></body></html>

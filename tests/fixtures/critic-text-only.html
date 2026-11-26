@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en" data-look-reason="a test page: only the section rules are under test"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Text-only sections</title>
+<!-- A marketing page whose second section is words and nothing else. Used by tests/unit/critic.test.mjs. -->
+<style>
+  body { margin: 0; font: 17px/1.6 Georgia, serif; color: #1d232a; background: #f6f7f8; }
+  section { padding: 96px max(24px, calc((100% - 1100px) / 2)); }
+  h1 { font-size: 72px; line-height: 1; margin: 0 0 24px; max-width: 12ch; }
+  h2 { font-size: 40px; line-height: 1.1; margin: 0 0 16px; }
+  p { max-width: 60ch; margin: 0 0 12px; }
+  .art { width: 100%; height: 360px; border-radius: 8px; background: #c9d6cf; }
+  .btn { display: inline-block; padding: 12px 20px; background: #24524a; color: #fff; text-decoration: none; }
+</style></head>
+<body><main>
+  <section class="hero"><h1>Moss repairs bicycles while you wait</h1><p>Most jobs take forty minutes. Bring it before noon.</p><a class="btn" href="#book">Book a slot</a></section>
+  <section id="about"><h2>How the workshop runs</h2><p>Three stands, two mechanics and a kettle. We look at the bike with you, write the price on a tag and start straight away.</p><p>If a part has to be ordered we tell you the day it arrives and keep the bike safe until then.</p></section>
+  <section id="book"><h2>The workshop</h2><div class="art" role="img" aria-label="The three repair stands"></div></section>
+</main></body></html>

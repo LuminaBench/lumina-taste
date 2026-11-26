@@ -95,7 +95,9 @@ for (const bp of blueprints) {
   const out = join(dist, 'blueprints', bp.id);
   mkdirSync(out, { recursive: true });
   await build({ ...common, entryPoints: { main: join(src, 'main.ts') }, outdir: out });
-  const page = readFileSync(join(src, 'index.html'), 'utf8').replace(/<script type="module" src="\.\/main\.ts"><\/script>/, '<link rel="stylesheet" href="./main.css"><script type="module" src="./main.js"></script>');
+  // The stylesheet goes in the head, so the first paint is styled (a link at the end of the body painted the page
+  // bare for a frame, then moved it: a layout shift of up to 0.9). The script stays where the page put it.
+  const page = readFileSync(join(src, 'index.html'), 'utf8').replace('</head>', '  <link rel="stylesheet" href="./main.css">\n</head>').replace(/<script type="module" src="\.\/main\.ts"><\/script>/, '<script type="module" src="./main.js"></script>');
   writeFileSync(join(out, 'index.html'), page);
 }
 
