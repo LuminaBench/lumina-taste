@@ -202,7 +202,10 @@ button.ap-row:active { background: var(--bg-surface-3); }
 @media (max-width: 599px) {
   body { background: var(--bg-canvas); }
   .ap { padding: 0; }
-  .ap-head { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  /* The board title stays for screen readers as the page h1; on a phone the screen titles carry the eye. */
+  .ap-head { display: block; width: auto; padding: 0; }
+  .ap-head p { display: none; }
+  .ap-head h1 { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   .ap-rail { display: block; padding: 0; overflow: visible; }
   .ap-frame { display: none; width: 100%; }
   .ap-frame[data-current] { display: block; }
