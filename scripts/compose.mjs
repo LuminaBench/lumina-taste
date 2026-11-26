@@ -20,6 +20,7 @@ import { extractFacts, figuresFrom, heroCopy, askFor, openingHours } from '../en
 import { boldIdea, colourName } from '../engine/compose/idea.mjs';
 import { brandFrom } from '../engine/compose/brand.mjs';
 import { renderBand, navBar, footer as footerBar, heroPicture, pictureBand, pinnedSteps, sideScroll, motifFor, motifParts, sceneFor, sceneParts, isSoftware, itemsFrom } from '../engine/compose/bands.mjs';
+import { rankMotifs } from './lib/image-motifs.mjs';
 import { splitMain, joinMain, idOfBlock, applyBeat, applyHeroCopy, heroIdeaPanel, setHeroVisual, setFacts, applyMediaIdea, applyClose, applyHours, ideaComment, esc } from '../engine/compose/draft.mjs';
 import { pageModel, appFlow } from '../engine/compose/model.mjs';
 import { composeHero, fitWords } from '../engine/compose/hero.mjs';
@@ -503,8 +504,19 @@ function writeComposed(dir, run) {
     const r = renderBand(x, ctx);
     if (r.todo) { todo.push(r.todo); continue; }
     if (bands.some((b) => b.slug === r.slug || (b.id === 'cta-band' && r.id === 'cta-band'))) continue;
-    // A menu board already shows the prices: a rail of the same prices under it says them twice.
-    if (comp.id === 'menu' && r.slug === 'range') continue;
+    // A menu board already shows the prices: the rail under it becomes pictures of the same things, without the
+    // figures (or goes, when the person's own photographs are too few to fill it).
+    if (comp.id === 'menu' && r.slug === 'range') {
+      const own = media?.filter((i) => i.kind === 'photo').length ?? 0;
+      if (media && own < 3) continue;
+      r.html = r.html.replace(/<p data-part="(?:figure|index)"[^>]*>[^<]*<\/p>/g, '').replace(/(<h2 id="h-range">)What it costs(<\/h2>)/, '$1Up close$2').replace(/(<figure class="lt-art"[^>]*?) data-variant="figure"/g, '$1');
+      // A tile whose only content was its price is empty now: it gets the thing's own drawing, never a blank.
+      r.html = r.html.replace(/(<figure class="lt-art"[^>]*>)(?!\s*<(?:svg|img|picture))([\s\S]*?<figcaption[^>]*>([^<]*)<\/figcaption>)/g, (m, open, rest, cap) => {
+        // The thing's own drawing, else the subject's (a bun on a bakery page is drawn as bread), never an unrelated one.
+        const mp = motifParts(rankMotifs(cap.split(',')[0])[0] ?? rankMotifs(facts.kind ?? '')[0] ?? motifFor(`${cap.split(',')[0]} ${facts.kind ?? ''}`, ctx));
+        return `${open.replace(/>$/, mp.attr + '>')}${mp.svg}${rest}`;
+      });
+    }
     bands.push(r);
   }
   // A thin brief still gets one picture between the first screen and the close.
