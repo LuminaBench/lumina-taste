@@ -6,7 +6,7 @@
 // both pass. Every result is contrast-checked against the kit's rules before it is offered.
 import { contrast, round, toCss, parseOklch } from '../../scripts/lib/color.mjs';
 import { RULES } from '../../scripts/lib/contrast-rules.mjs';
-import { pickAccent, fix, MARGIN } from '../../scripts/lib/accent.mjs';
+import { pickAccent, fix, MARGIN } from './accent.mjs';
 
 // ---------------------------------------------------------------- colour maths
 const lin = (v) => { v /= 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };

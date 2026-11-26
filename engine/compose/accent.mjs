@@ -1,8 +1,8 @@
 // The accent solver every palette shares: given a brand or seed colour, the lightness nearest it at which
 // text on the accent (one of the inks) passes 4.5:1, its hover passes too, and the accent passes 3:1 on every
-// ground it sits on. build-tokens.mjs solves each shipped palette with it; engine/compose/brand.mjs solves a
+// ground it sits on. build-tokens.mjs solves each shipped palette with it; brand.mjs solves a
 // brand colour onto a palette's ground with it (for both modes at once, by passing both grounds).
-import { clampChroma, contrast, round } from './color.mjs';
+import { clampChroma, contrast, round } from '../../scripts/lib/color.mjs';
 
 export const MARGIN = 0.05; // solve slightly past each threshold so rounding never tips a pair under
 export const fix = (lch) => round(clampChroma(lch));

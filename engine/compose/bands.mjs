@@ -21,17 +21,28 @@ const DAYS = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Satur
  * The subject's own drawing for a panel, from the art panel's motif table: the best match for the thing's
  * name (and the business's kind), never the same as the panel before it. Null when nothing fits.
  */
-export function motifFor(text, ctx, avoid = null) {
+const PROCESS = new Set(['document', 'calendar', 'envelope', 'coins', 'chat']);
+export function motifFor(text, ctx, avoid = null, { item = false } = {}) {
   // The page's own words, not the request's: "home page", "website", phone numbers and "tool" in "invoicing
   // tool" would otherwise draw a house, a phone and a spanner. Plurals are read as their singular (loaves → loaf).
-  const plain = (t) => String(t ?? '').replace(/\b(home ?page|web ?site|landing page|page|site|phone|tel|tool|tools)\b/gi, ' ').replace(/\d[\d\s]{5,}/g, ' ').replace(/\b(\w+?)ves\b/g, '$1f').replace(/\b(\w{4,})s\b/g, '$1');
+  const plain = (t) => String(t ?? '').replace(/\b(home ?page|web ?site|landing page|phone|tel|tool|tools)\b/gi, ' ').replace(/\d[\d\s]{5,}/g, ' ').replace(/\b(\w+?)ves\b/g, '$1f').replace(/\b(\w{4,})s\b/g, '$1');
   const subject = `${ctx.facts.kind ?? ''} ${ctx.facts.offers.join(' ')} ${ctx.facts.claims.join(' ')} ${ctx.facts.prices.map((p) => p.what ?? '').join(' ')}`;
   // Only drawings of the subject's own world: a step's words pick among them ("quote" → the document), but
   // never bring in another ("start date" is not a startup's phone).
-  const world = rankMotifs(plain(subject));
+  // The subject's domain lends its own drawings too (a dentist's page may also draw the stethoscope), so a page
+  // has more than one to choose from.
+  const world = [...new Set([...rankMotifs(plain(subject)), ...rankMotifs(ctx.domainWords ?? '').slice(0, 3)])];
   const own = rankMotifs(plain(text));
-  const ranked = world.length ? [...own.filter((m) => world.includes(m)), ...world] : own;
-  return ranked.find((m) => m !== avoid) ?? null;
+  // Drawings of a process (a quote, a date, a message, a payment) fit any subject's steps.
+  const ownFit = world.length ? own.filter((m) => world.includes(m) || PROCESS.has(m)) : own;
+  // One drawing per page where the subject offers another that fits; never the same as the neighbour's. A
+  // thing's own drawing may come back on a later panel only when nothing else fits that thing.
+  const used = (ctx.usedMotifs ??= new Set());
+  const fresh = (list) => list.find((m) => m !== avoid && !used.has(m));
+  const anyOf = (list) => list.find((m) => m !== avoid);
+  const pick = item ? (fresh(ownFit) ?? anyOf(ownFit) ?? null) : (fresh(ownFit) ?? fresh(world) ?? anyOf(ownFit) ?? anyOf(world) ?? null);
+  if (pick) used.add(pick);
+  return pick;
 }
 /** The attributes and first child that put a motif in an art panel. */
 export const motifParts = (name, { small = false } = {}) => (name ? { attr: ` data-motif="${name}"`, svg: small ? motifSvg(name).replace('<svg data-part="motif"', '<svg data-part="motif" style="height: 40%; top: 8%"') : motifSvg(name) } : { attr: '', svg: '' });
@@ -94,14 +105,15 @@ export function productScreen(ctx, { kind = null, current = 0, stepsOnly = false
             </div>
             ${figs.length ? `<div data-a="kpis">${figs.map((f) => `<p data-a="kpi"><span>${esc(cap(f.label))}</span><b>${esc(f.value)}</b></p>`).join('')}</div>` : ''}
             ${rows.length ? `<table data-a="table"><thead><tr><th>Step</th><th>What</th><th>Status</th></tr></thead><tbody>${rows.map((r, k) => `<tr${k === current ? ' data-mark' : ''}><td>${k + 1}</td><td>${esc(r.name)}</td><td>${badge(r)}</td></tr>`).join('')}</tbody></table>` : ''}
-            ${!stepsOnly && facts.claims.length ? `<table data-a="table"><thead><tr><th>${esc(product ?? 'It')} does</th><th>Status</th></tr></thead><tbody>${facts.claims.slice(0, 4).map((c) => `<tr><td>${esc(cap(c))}</td><td><span class="lt-badge" data-tone="positive">On</span></td></tr>`).join('')}</tbody></table>` : ''}
+            ${!stepsOnly && (facts.claims.length || facts.offers.length) ? `<div data-a="card"><p data-a="card-h"><b>${esc(product ?? 'It')} does this for you</b><span>${esc(`${facts.claims.length + facts.offers.length} things`)}</span></p><ul data-a="list">${[...facts.claims, ...facts.offers].slice(0, 5).map((c) => `<li><span><b>${esc(cap(c))}</b>${facts.audience ? `<small>${esc(`For ${facts.audience}`)}</small>` : ''}</span><span><span class="lt-badge" data-tone="positive">On</span></span></li>`).join('')}</ul></div>` : ''}
           </div>
         </div>` };
 }
 /** The product screen inside a device frame. */
 export function deviceFigure(ctx, opts = {}) {
   const sc = productScreen(ctx, opts);
-  return `<figure class="lt-device" data-kind="${sc.kind}">
+  // A device shot is a picture of the product, so the critic leaves its own corners and type alone (as the kit's own shots do).
+  return `<figure class="lt-device" data-kind="${sc.kind}" data-audit-ignore>
       <div data-part="screen">
         ${sc.html}
       </div>
@@ -234,7 +246,7 @@ function motifsFor(items, ctx) {
   for (const it of items) {
     const prev = out[out.length - 1] ?? null;
     // A drawing that fits the thing, different from its neighbour's; none rather than one that does not fit.
-    const m = motifFor(it.name, ctx, prev);
+    const m = motifFor(it.name, ctx, prev, { item: true });
     out.push(m);
   }
   return out;
@@ -296,14 +308,15 @@ ${art}
 </section>` };
 }
 
-/** Steps for a product: the same device as the first screen, its screen moving on with each step (a moment: it pins). */
+/** Steps for a product: a phone whose screen moves on with each step (a moment: it pins). A phone, not the
+ *  hero's laptop: it reads at full size on a 390px screen, where a laptop's screen would be a thumbnail. */
 export function pinnedSteps(ctx) {
   const st = ctx.facts.steps;
   if (st.length < 3 || !isSoftware(ctx)) return null;
   const li = st.slice(0, 4).map((step, k) => `    <li${k === 0 ? ' data-active' : ''}>
       <div data-part="text"><h3>${keepHyphens(esc(cap(step)))}</h3></div>
       <figure data-part="visual">
-        ${deviceFigure(ctx, { current: k, stepsOnly: true }).replace(/^<figure class="lt-device"([^>]*)>/, '<div class="lt-device"$1>').replace(/<figcaption[\s\S]*?<\/figcaption>\s*<\/figure>$/, '</div>')}
+        ${deviceFigure(ctx, { kind: 'phone', current: k, stepsOnly: true }).replace(/^<figure class="lt-device"([^>]*)>/, '<div class="lt-device"$1>').replace(/<figcaption[\s\S]*?<\/figcaption>\s*<\/figure>$/, '</div>')}
         <figcaption class="lt-visually-hidden">${esc(`${ctx.product ?? 'The product'}, step ${k + 1}: ${step}`)}</figcaption>
       </figure>
     </li>`).join('\n');
@@ -321,7 +334,7 @@ function stepPanels(ctx) {
   const tones = ['', ' data-tone="accent"', ' data-tone="dark"', ''];
   const out = [];
   const li = st.map((step, k) => {
-    const m = motifFor(step, ctx, out[k - 1] ?? null); out.push(m);
+    const m = motifFor(step, ctx, out[k - 1] ?? null, { item: true }); out.push(m);
     const mp = motifParts(m);
     const fact = /\bfree\b/i.test(step) ? 'Free' : /\b(?:within|in)\s+(\d+\s+\w+)/i.exec(step)?.[1] ?? null;
     return `    <li><article>
@@ -355,8 +368,10 @@ function steps(ctx) {
 function people(ctx) {
   const ppl = ctx.facts.people;
   if (!ppl.length) return null;
-  const li = ppl.map((p) => `<li><strong>${esc(p.name)}</strong><span>${esc(p.role ?? '')}</span></li>`).join('');
-  return { slug: 'people', label: 'People', html: `<section class="lt-team-grid" data-variant="list" aria-labelledby="h-people">
+  // Something to look at without faces: each person's initials in a disc of the palette's own tints.
+  const initials = (n) => n.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+  const li = ppl.map((p, k) => `<li><span data-part="avatar" data-n="${k % 4}" style="border-radius: 50%" aria-hidden="true">${esc(initials(p.name))}</span><strong>${esc(p.name)}</strong><span>${esc(p.role ?? '')}</span></li>`).join('');
+  return { slug: 'people', label: 'People', html: `<section class="lt-team-grid"${ppl.length > 4 ? ' data-variant="list"' : ''} aria-labelledby="h-people">
   <header><h2 id="h-people">${esc(ppl.every((p) => p.role === 'Partner') ? `The ${ppl.length === 2 ? 'two' : ppl.length === 3 ? 'three' : ppl.length} partners` : ppl.every((p) => p.role === 'Owner') ? `Who runs ${ctx.product ?? `the ${ctx.facts.kind ?? 'place'}`}` : 'Who you will deal with')}</h2></header>
   <ul>${li}</ul>
 </section>` };
