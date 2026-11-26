@@ -1682,7 +1682,7 @@
      "id": "hero-split",
      "role": "Hero",
      "copy": "Headline: what the product does for the person, in their words. Lede: what it is, in one plain sentence with what is in the box. Under the buttons: delivery and returns facts.",
-     "rule": "Right side: a photograph of the product, or an art-panel with its name and one fact until there is one. Never draw the product."
+     "rule": "Right side: a photograph of the product, or an art-panel with its name, one fact and a flat motif of the subject until there is one. Never a detailed drawing of the product in place of its photograph."
     },
     {
      "id": "offer-cards",
