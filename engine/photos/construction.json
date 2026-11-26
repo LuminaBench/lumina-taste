@@ -49,7 +49,20 @@
     {
       "id": "tower-cranes-rising-block",
       "shows": "Tower cranes over a rising block at dusk",
-      "shot": ["crane","cranes","skyline","block","flats","site","dusk","evening","building","construction","office"],
+      "shot": [
+        "crane",
+        "cranes",
+        "skyline",
+        "block",
+        "flats",
+        "site",
+        "dusk",
+        "evening",
+        "building",
+        "construction",
+        "under construction",
+        "progress"
+      ],
       "orientation": "wide",
       "tone": "cool",
       "focus": {"x":0.55,"y":0.6},
@@ -204,7 +217,7 @@
     {
       "id": "corner-new-block-flats",
       "shows": "The corner of a new block of flats: white render, brick panels and balconies",
-      "shot": ["flats","block","building","new build","apartments","corner","balconies","office","housing"],
+      "shot": ["flats","block","building","new build","apartments","corner","balconies","housing"],
       "orientation": "wide",
       "tone": "light",
       "focus": {"x":0.7,"y":0.45},
