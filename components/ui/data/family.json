@@ -1446,7 +1446,7 @@
         ["lumina-taste","<DeviceFrame kind url label>","React"]
       ],
       "added": 12,
-      "note": "One product shot is enough on a page: a laptop with the phone in front of its corner (the .lt-device-demo wrapper does that), or one device alone. Put the real screenshot in the screen as an <img> when there is one; until then the live screen ([data-app=\"desktop\"] or [data-app=\"phone\"]) shows the product with the kit's own parts and your real words and numbers. It is drawn at the device's own width and zoomed, so it looks right at any size; keep it inert. --device-w sets a phone's or tablet's width."
+      "note": "One product shot is enough on a page: a laptop with the phone in front of its corner (the .lt-device-demo wrapper does that), or one device alone. Put the real screenshot in the screen as an <img> when there is one; until then the live screen ([data-app=\"desktop\"] or [data-app=\"phone\"]) shows the product with the kit's own parts and your real words and numbers. It is drawn at the device's own width and zoomed, so it looks right at any size; keep it inert. --device-w sets a phone's or tablet's width. The figure carries data-audit-ignore: it is a picture, so the critic does not count its hardware radii as page UI."
     },
     {
       "id": "api-endpoint",
@@ -1598,25 +1598,25 @@
       "pattern": "<figure> + <figcaption>",
       "states": ["accent","figure","framed","ink","plain","swatch","with a motif","with a photograph"],
       "aliases": [
-        "image placeholder",
+        "image stand-in",
         "no photo",
         "product image fallback",
         "typographic card",
         "photo slot",
         "cover panel",
         "poster card",
-        "media placeholder",
+        "missing photo",
         "spot illustration",
-        "illustration placeholder",
+        "illustration instead of a photo",
         "subject illustration",
         "flat illustration"
       ],
       "react": "ArtPanel",
-      "api": "data-motif=\"cup | loaf | crane | document | scales | leaf | phone | chart | key | ticket | tool | house | tooth | bowl | scissors | book | vase | bag\" · data-pattern=\"sun | arch | floor | none\" · data-tone=\"accent | ink | swatch\" · data-variant=\"figure\" · data-frame · data-ratio · data-shot",
+      "api": "data-motif=\"cup | loaf | crane | document | …\" (47 drawings) · data-pattern=\"sun | arch | floor | none\" · data-tone=\"accent | ink | swatch\" · data-variant=\"figure\" · data-frame · data-ratio · data-shot",
       "w": 900,
       "called": [
         "what do I put where the photo goes",
-        "nice placeholder for a product picture",
+        "something nice until the product photos arrive",
         "card with just the name in big letters",
         "a little drawing of a coffee cup instead of a photo",
         "illustration of what the business does"
@@ -1654,7 +1654,7 @@
         ["lumina-taste","<ArtPanel name fact label shot motif pattern>","React"]
       ],
       "added": 13,
-      "note": "Make the panel say one true thing, large, and show the subject's own thing above it: data-motif names one of 18 drawings (art-panel.ts lists them with their keywords; find-images --fill picks one from the brief when no photograph fits), and the inline <svg data-part=\"motif\"> carries it, so it works without JavaScript (data-lt=\"art-panel\" draws a missing one). data-pattern=\"arch\" sets it in a niche, \"floor\" on a ground band, \"none\" on the bare panel. For a hero, data-frame with the name, or data-variant=\"figure\" with the one number that matters. data-tone=\"swatch\" with style=\"--art: <colour>\" shows the thing's own colour. Across a set vary the tone (plain, accent, ink) and keep one ratio. When the photograph arrives, put the <img> first inside the figure."
+      "note": "Make the panel say one true thing, large, and show the subject's own thing above it: data-motif names one of 47 drawings (art-panel.ts lists them with their keywords; find-images --fill picks one from the brief when no photograph fits), and the inline <svg data-part=\"motif\"> carries it, so it works without JavaScript (data-lt=\"art-panel\" draws a missing one). data-pattern=\"arch\" sets it in a niche, \"floor\" on a ground band, \"none\" on the bare panel. For a hero, data-frame with the name, or data-variant=\"figure\" with the one number that matters. data-tone=\"swatch\" with style=\"--art: <colour>\" shows the thing's own colour. Across a set vary the tone (plain, accent, ink) and keep one ratio. When the photograph arrives, put the <img> first inside the figure."
     },
     {
       "id": "task-list",

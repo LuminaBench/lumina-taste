@@ -11,7 +11,7 @@ import './device-frame.css';
 export function DeviceFrame({ kind = 'browser', url, title, label, width, app, className, children }: { kind?: 'browser' | 'window' | 'laptop' | 'phone' | 'tablet'; url?: string; title?: string; label: string; width?: number; app?: 'phone' | 'desktop'; className?: string; children: ReactNode }) {
   const bar = kind === 'browser' || kind === 'window';
   return (
-    <figure className={cx('lt-device', className)} data-kind={kind} style={width ? ({ '--device-w': `${width}px` } as React.CSSProperties) : undefined}>
+    <figure className={cx('lt-device', className)} data-kind={kind} data-audit-ignore="" style={width ? ({ '--device-w': `${width}px` } as React.CSSProperties) : undefined}>
       {bar && <div data-part="bar" aria-hidden><i /><i /><i />{kind === 'browser' ? url && <span data-part="url">{url}</span> : title && <span data-part="title">{title}</span>}</div>}
       <div data-part="screen">{app ? <div data-app={app} inert>{children}</div> : children}</div>
       <figcaption className="lt-visually-hidden">{label}</figcaption>

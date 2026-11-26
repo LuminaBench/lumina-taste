@@ -41,7 +41,7 @@ const BREATHERS = [
   { id: 'scroll-statement', role: 'The one claim', copy: 'The bold idea as one sentence of 12 to 25 words, its second half in data-part="quiet".' },
   { id: 'stats-band', role: 'Figures', copy: 'Two to four figures from the brief, each with its unit and period. No figures, no band.' },
 ];
-const SHORT = { 'hero-split': 'hero', 'hero-centered': 'hero', 'hero-statement': 'hero', 'scroll-statement': 'statement', 'stats-band': 'figures', 'quote-feature': 'quote', 'media-band': 'picture', 'gallery-rail': 'gallery', 'cta-band': 'close', 'faq-section': 'questions', 'visit-info': 'visit', 'booking-bar': 'booking', 'bento-grid': 'tiles', 'stack-cards': 'steps', 'how-it-works': 'steps', 'offer-cards': 'offers', 'team-grid': 'people', 'pricing-tiers': 'pricing', 'feature-split': 'features', 'feature-grid': 'features', 'service-list': 'list', 'contact-section': 'contact', 'project-grid': 'work', 'newsletter-signup': 'newsletter', 'terminal-window': 'terminal', 'code-block': 'code', 'api-endpoint': 'api', 'comparison-table': 'compare', 'description-list': 'details', 'logo-cloud': 'logos', 'testimonial-grid': 'quotes', 'integrations-grid': 'integrations', 'blog-grid': 'posts', 'review-summary': 'reviews', 'radio-cards': 'options', 'carousel': 'more', 'data-table': 'table', 'filter-bar': 'filters', 'stat-strip': 'figures' };
+const SHORT = { 'sticky-story': 'steps', 'side-scroll': 'range', 'hero-split': 'hero', 'hero-centered': 'hero', 'hero-statement': 'hero', 'scroll-statement': 'statement', 'stats-band': 'figures', 'quote-feature': 'quote', 'media-band': 'picture', 'gallery-rail': 'gallery', 'cta-band': 'close', 'faq-section': 'questions', 'visit-info': 'visit', 'booking-bar': 'booking', 'bento-grid': 'tiles', 'stack-cards': 'steps', 'how-it-works': 'steps', 'offer-cards': 'offers', 'team-grid': 'people', 'pricing-tiers': 'pricing', 'feature-split': 'features', 'feature-grid': 'features', 'service-list': 'list', 'contact-section': 'contact', 'project-grid': 'work', 'newsletter-signup': 'newsletter', 'terminal-window': 'terminal', 'code-block': 'code', 'api-endpoint': 'api', 'comparison-table': 'compare', 'description-list': 'details', 'logo-cloud': 'logos', 'testimonial-grid': 'quotes', 'integrations-grid': 'integrations', 'blog-grid': 'posts', 'review-summary': 'reviews', 'radio-cards': 'options', 'carousel': 'more', 'data-table': 'table', 'filter-bar': 'filters', 'stat-strip': 'figures' };
 const labelOf = (s) => SHORT[s.id] ?? String(s.role ?? s.id ?? 'section').toLowerCase().replace(/^the\s+/, '');
 
 /** Is this page a run of bands (a marketing page) or one screen (an app, a flow, a reading view)? */
@@ -58,7 +58,7 @@ export function bandsOf(sections, { draft = true } = {}) {
  *   sections: [{ n, id, role, tone?, optional? }] in page order. canInsert: may add a breather part.
  * @returns {{ banded: boolean, beats: any[], moved: string[], inserted: any[] }}
  */
-export function planRhythm({ type, sections, canInsert = true, draft = true }) {
+export function planRhythm({ type, sections, canInsert = true, draft = true, brandClose = true }) {
   const bands = bandsOf(sections, { draft }).map((s) => ({ ...s }));
   if (!isBanded(type)) {
     const beats = bands.map((s) => ({ n: s.n, id: s.id ?? null, role: s.role, label: labelOf(s), density: BEAT[s.id]?.d ?? 'busy', ground: 'screen', scale: 'normal' }));
@@ -104,10 +104,12 @@ export function planRhythm({ type, sections, canInsert = true, draft = true }) {
   if (close) close.scale = 'display';
 
   // 2. Grounds: one brand band (the close, when it is a closing band), one picture or dark band from the middle on.
-  if (close && ['cta-band', 'newsletter-signup'].includes(close.id)) close.ground = 'brand';
+  // The brand band closes the page, unless the bold idea already sits on the brand colour in the first
+  // screen: then the close takes the dark ground, so the brand colour is one moment, not two.
+  if (close && ['cta-band', 'newsletter-signup'].includes(close.id)) close.ground = brandClose ? 'brand' : 'dark';
   for (const b of beats) if (b.ground === 'picture' && beats.filter((x) => x.ground === 'picture').indexOf(b) > 0) b.ground = null;
   const strong = (b) => ['dark', 'brand', 'picture'].includes(b?.ground);
-  if (!beats.some((b) => b.ground === 'picture') && beats.length >= 5) {
+  if (!beats.some((b) => b.ground === 'picture' || b.ground === 'dark') && beats.length >= 5) {
     const mid = beats.slice(1, close ? -1 : undefined).filter((b, k, a) => !strong(b) && !strong(beats[beats.indexOf(b) - 1]) && !strong(beats[beats.indexOf(b) + 1]));
     const hinted = mid.find((b) => b.hint === 'dark');
     const from = Math.floor(beats.length / 3);
@@ -159,9 +161,9 @@ const GLYPH = { busy: '▇', quiet: '▁' };
 const SIZE = { display: ' XL', large: ' L', normal: '' };
 /** The rhythm as one compact line: `hero ▇ XL · statement ▁ L well · fees ▇ · visit ▇ dark · close ▁ XL brand`. */
 export function rhythmStrip(rhythm) {
-  return rhythm.beats.map((b) => `${b.label} ${GLYPH[b.density] ?? '▇'}${SIZE[b.scale] ?? ''}${b.ground && !['plain', 'screen'].includes(b.ground) ? ` ${b.ground}` : ''}`).join(' · ');
+  return rhythm.beats.map((b) => `${b.label} ${GLYPH[b.density] ?? '▇'}${SIZE[b.scale] ?? ''}${b.ground && !['plain', 'screen'].includes(b.ground) ? ` ${b.ground}` : ''}${b.moment ? ` ✦ ${b.moment}` : ''}`).join(' · ');
 }
-export const STRIP_KEY = '▇ busy, ▁ quiet; XL display type (first screen and close only), L large type; the ground is named when it is not plain.';
+export const STRIP_KEY = '▇ busy, ▁ quiet; XL display type (first screen and close only), L large type; the ground is named when it is not plain; ✦ marks a moment.';
 
 /** The attributes a band carries in a draft: its tone for the ground, and the rhythm as data. */
 export function beatAttrs(b) {

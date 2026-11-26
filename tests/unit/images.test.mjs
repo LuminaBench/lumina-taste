@@ -197,6 +197,38 @@ test('motifs: one table for the component and the scripts, chosen from the brief
   assert.equal((ts.match(/^\s+[\w-]+: \['/gm) ?? []).length, names.length);
 });
 
+test('motifs: every page-types domain has at least two fitting drawings, and real briefs pick a sensible one', () => {
+  const pt = JSON.parse(readFileSync(join(root, 'engine/compose/page-types.json'), 'utf8'));
+  const thin = [];
+  for (const d of pt.domains) {
+    const tops = new Set(d.words.map((w) => pickMotif(w)).filter(Boolean));
+    if (tops.size < 2) thin.push(`${d.id}: ${[...tops].join(', ') || 'none'}`);
+  }
+  assert.deepEqual(thin, []);
+  // The 18 names the composer may already use stay stable.
+  for (const n of ['cup', 'loaf', 'crane', 'document', 'scales', 'leaf', 'phone', 'chart', 'key', 'ticket', 'tool', 'house', 'tooth', 'bowl', 'scissors', 'book', 'vase', 'bag']) assert.ok(loadMotifs()[n], n);
+  const evals = Object.fromEntries(JSON.parse(readFileSync(join(root, 'evals/evals.json'), 'utf8')).evals.map((e) => [e.slug, e.prompt]));
+  const want = { 'law-firm-landing': ['document', 'scales'], 'food-bank-cause': ['jar'], 'ceramics-shop': ['vase'], 'clinic-landing': ['stethoscope'], 'coffee-store-product': ['cup', 'bag'], 'conference-event': ['ticket', 'mic', 'calendar'], 'devtool-landing': ['terminal'], 'saas-landing-invoicing': ['document', 'coins'], 'ops-dashboard-dark': ['van', 'box'], 'portfolio-architect': ['house', 'pencil'], 'pricing-meditation': ['leaf'] };
+  for (const [slug, ok] of Object.entries(want)) assert.ok(ok.includes(pickMotif(evals[slug])), `${slug} picked ${pickMotif(evals[slug])}`);
+  // Words that mean something else beside their neighbour.
+  assert.notEqual(pickMotif('personal trainer in Hove'), 'train');
+  assert.equal(pickMotif('box office and tickets'), 'ticket');
+  assert.equal(pickMotif('the house blend from our roastery'), 'cup');
+  assert.equal(pickMotif('ferry crossings to the island'), 'boat');
+  assert.equal(pickMotif('independent opticians in Bath'), 'glasses');
+  assert.equal(pickMotif('dog groomer and walker'), 'paw');
+  assert.equal(pickMotif('API for webhooks'), 'terminal');
+});
+
+test('motifs: the component and the scripts match briefs by the same rules', () => {
+  const ts = readFileSync(join(root, 'components/ui/data/art-panel/art-panel.ts'), 'utf8');
+  const mjs = readFileSync(join(root, 'scripts/lib/image-motifs.mjs'), 'utf8');
+  for (const name of ['NOT', 'ENDING', 'STOP']) {
+    const re = new RegExp(`^const ${name} = (.+);$`, 'm');
+    assert.equal(re.exec(ts)?.[1], re.exec(mjs)?.[1], name);
+  }
+});
+
 test('imageSize reads PNG and JPEG headers', () => {
   assert.deepEqual(imageSize(png(37, 21)), { width: 37, height: 21, type: 'image/png' });
   const jpeg = Buffer.from('/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AKp//2Q==', 'base64');

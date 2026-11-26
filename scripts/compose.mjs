@@ -17,6 +17,7 @@ import { planRhythm, orderSections, rhythmStrip, checkRhythm, STRIP_KEY, PROOF, 
 import { extractFacts, figuresFrom, heroCopy, askFor, openingHours } from '../engine/compose/words.mjs';
 import { boldIdea, colourName } from '../engine/compose/idea.mjs';
 import { brandFrom } from '../engine/compose/brand.mjs';
+import { renderBand, navBar, footer as footerBar, heroPicture, pictureBand, pinnedSteps, sideScroll, motifFor, motifParts, isSoftware, itemsFrom } from '../engine/compose/bands.mjs';
 import { splitMain, joinMain, idOfBlock, applyBeat, applyHeroCopy, heroIdeaPanel, setHeroVisual, setFacts, applyMediaIdea, applyClose, applyHours, ideaComment, esc } from '../engine/compose/draft.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -25,6 +26,9 @@ const opt = (name, def) => { const i = args.indexOf(`--${name}`); if (i < 0) ret
 const flag = (name) => { const i = args.indexOf(`--${name}`); if (i < 0) return false; args.splice(i, 1); return true; };
 const asJson = flag('json');
 const writeDraft = flag('write');
+// --images: after --write, search openly licensed photographs for the draft's picture panels (find-images
+// --fill). It downloads, so it is off unless asked for.
+const withImages = flag('images');
 // --type is the page type. A typeface is --typeface (or --font); --palette, --mode and --style set the look.
 const forceTypeRaw = opt('type', null);
 const lookFlags = { palette: opt('palette', null), typography: opt('typeface', null) ?? opt('font', null), mode: opt('mode', null), style: opt('style', null) };
@@ -77,7 +81,7 @@ const any = (list) => list.some(has);
 // Is the thing being made software? "A booking app for clinics" is a product page; "a clinic" is not.
 const software = any(['app', 'apps', 'software', 'saas', 'platform', 'tool', 'tools', 'api', 'sdk', 'dashboard', 'plugin', 'browser extension', 'chrome extension', 'chatbot', 'crm', 'startup']);
 const domainScores = kb.domains.filter((d) => !(software && d.service)).map((d) => ({ d, s: d.words.filter((w) => has(w)).length })).sort((a, b) => b.s - a.s);
-const domain = domainScores[0].s > 0 ? domainScores[0].d : null;
+let domain = domainScores[0].s > 0 ? domainScores[0].d : null;
 // A landing page is not always for software, and each kind of subject has its own page: a developer product
 // gets code, a terminal and an API; a practice or a trade gets services with fees, people and how to find
 // them; a place gets what is on offer, booking and opening hours; a maker gets the range and a price; a
@@ -92,13 +96,15 @@ if (type.id === 'landing' && !forceType) {
     : software ? null
     : occasion || domain?.id === 'events' ? 'event'
     : cause ? 'cause'
-    : ['professional', 'trades'].includes(domain?.id) || practice ? 'service-landing'
+    : ['professional', 'trades', 'construction'].includes(domain?.id) || practice ? 'service-landing'
     : domain?.id === 'hospitality' || place ? 'venue'
     : ['commerce', 'beauty'].includes(domain?.id) ? 'brand-landing'
     : domain?.id === 'creative' ? 'portfolio'
     : null;
   if (swap) type = kb.pageTypes.find((t) => t.id === swap) ?? type;
 }
+// A conference is an event first, whatever its subject ("a design conference" is not a design studio).
+if (type.id === 'event' && domain?.id !== 'events') domain = kb.domains.find((d) => d.id === 'events') ?? domain;
 const moodHits = Object.entries(kb.moods).filter(([w]) => has(w));
 const mood = Object.assign({}, ...moodHits.map(([, v]) => v));
 // A style is applied only when the brief names a mood; the domain's style is offered, not imposed.
@@ -131,6 +137,13 @@ if (brandSrc) {
 for (const [k, v] of Object.entries(lookFlags)) if (v) profile[k] = v;
 const overrideArgs = Object.entries(brand?.overrides ?? {}).flatMap(([k, v]) => ['--override', `${k}=${v}`]);
 const styleOffer = !profile.style && domain?.style ? domain.style : null;
+// Why this typeface: a flag the person passed, the brand they gave, the subject's own lettering, or its use.
+const pairingUse = (id) => JSON.parse(readFileSync(join(root, 'tokens/typography/source.json'), 'utf8')).pairings.find((x) => x.id === id)?.use ?? '';
+const typeWhy = lookFlags.typography ? 'you chose it'
+  : brand?.type?.typography === profile.typography ? brand.type.reason
+  : mood.typography === profile.typography ? 'the brief names the mood'
+  : domain?.typography === profile.typography && domain?.typeWhy ? domain.typeWhy
+  : `it is made for ${pairingUse(profile.typography).split('. ')[0].replace(/\.$/, '').toLowerCase()}` || null;
 
 // ---------------------------------------------------------------- product name for copy
 const quoted = brief.match(/["“']([^"”']{2,40})["”']/)?.[1];
@@ -211,7 +224,7 @@ const directions = {
 };
 // Ask only what the brief leaves open, most useful first, three at most. Everything else has a sound default.
 const saysAction = ['sign up', 'signup', 'waitlist', 'demo', 'buy', 'install', 'download', 'subscribe', 'contact', 'book', 'trial', 'donate', 'apply', 'shop', 'order', 'reserve', 'action', 'booking', 'appointment', 'appointments', 'tour', 'cta', 'enquire', 'get a quote', 'join', 'register'].some(has);
-const actionDefault = { commerce: 'one "Shop" or "Add to bag" action, with the price beside it', beauty: 'one "Shop" action, with the price beside it', hospitality: '"Book", leading to dates and party size', health: '"Book an appointment", with a phone number as the quiet alternative', travel: '"Check availability", with dates', property: '"Get a quote" or "Book a viewing"', media: '"Listen" or "Subscribe"', public: 'the one task the page exists for, as a verb ("Apply", "Renew")' }[domain?.id] ?? 'a free start ("Start free"), with a quieter second link to a demo or the docs';
+const actionDefault = { construction: '"Get a quote", with the phone number beside it', education: '"Book a place" or "Visit us"', transport: '"See times" or "Plan a journey"', commerce: 'one "Shop" or "Add to bag" action, with the price beside it', beauty: 'one "Shop" action, with the price beside it', hospitality: '"Book", leading to dates and party size', health: '"Book an appointment", with a phone number as the quiet alternative', travel: '"Check availability", with dates', property: '"Get a quote" or "Book a viewing"', media: '"Listen" or "Subscribe"', public: 'the one task the page exists for, as a verb ("Apply", "Renew")' }[domain?.id] ?? 'a free start ("Start free"), with a quieter second link to a demo or the docs';
 const typeAction = { event: '"Get a ticket", with the price in the button', cause: '"Donate"; if people also come here for help, that route is the first button in the hero and Donate stays in the bar', 'service-landing': '"Book a call" or "Book an appointment", with the phone number beside it; a mailto: or tel: link is a real action when there is no booking system', 'brand-landing': 'one "Shop" action, with the price beside it', venue: '"Book" or "Plan your visit", leading to dates and party size', portfolio: '"Get in touch", leading to an email address', about: '"Contact us" or "See open roles"' }[type.id];
 const questions = [
   restyle && { id: 'keep', ask: 'What must stay as it is (logo, brand colour, copy, layout)?', why: 'A restyle changes the surface; it should not move what people already know.', default: 'keep the content and structure, change tokens and components only' },
@@ -222,7 +235,7 @@ const questions = [
 ].filter(Boolean).slice(0, 3);
 
 const typeAudience = { 'service-landing': 'people with a problem who are choosing whom to trust: they need what you do, what it costs and how to reach a person', cause: 'two readers: people who need help now, and people deciding whether to give; both need plain facts', event: 'people deciding whether to come: they need the date, the place, the programme and the price', venue: 'guests deciding where to go, who need what is on offer, the hours and a way to book', 'brand-landing': 'shoppers comparing, who need the object, the price, delivery and returns up front', portfolio: 'clients judging taste, so the work leads and words stay short', about: 'people checking who is behind this before they buy, apply or call' }[type.id];
-const domainAudience = { finance: 'people who check figures and need to trust them', trading: 'people watching numbers change who need speed and density', devtool: 'developers who want the facts, the code and the limits', analytics: 'people who need one answer fast, then the detail', health: 'people who may be anxious and need calm, plain steps', public: 'anyone, on any device, including people with low vision or little time', commerce: 'shoppers comparing, who need the price, delivery and returns up front', editorial: 'readers who came to read, so the text comes first', productivity: 'teams who want to see the product working, not adjectives', creative: 'clients judging taste, so the work leads and words stay short', playful: 'families and younger users who need big targets and friendly words', enterprise: 'buyers and admins who need proof, controls and compliance', travel: 'people planning, who need dates, prices and photos they trust', beauty: 'people choosing with their eyes, so the product and its result lead and the words stay few', hospitality: 'guests deciding where to go, who need the menu or rooms, the hours and a way to book', media: 'listeners and viewers who came for the thing itself, so controls stay out of the way', property: 'people making a large, slow decision who need plain numbers and no pressure', social: 'people here for each other, so their content leads and the chrome stays quiet' };
+const domainAudience = { finance: 'people who check figures and need to trust them', trading: 'people watching numbers change who need speed and density', devtool: 'developers who want the facts, the code and the limits', analytics: 'people who need one answer fast, then the detail', health: 'people who may be anxious and need calm, plain steps', public: 'anyone, on any device, including people with low vision or little time', commerce: 'shoppers comparing, who need the price, delivery and returns up front', editorial: 'readers who came to read, so the text comes first', productivity: 'teams who want to see the product working, not adjectives', creative: 'clients judging taste, so the work leads and words stay short', playful: 'families and younger users who need big targets and friendly words', enterprise: 'buyers and admins who need proof, controls and compliance', travel: 'people planning, who need dates, prices and photos they trust', beauty: 'people choosing with their eyes, so the product and its result lead and the words stay few', hospitality: 'guests deciding where to go, who need the menu or rooms, the hours and a way to book', media: 'listeners and viewers who came for the thing itself, so controls stay out of the way', property: 'people making a large, slow decision who need plain numbers and no pressure', social: 'people here for each other, so their content leads and the chrome stays quiet', construction: 'homeowners about to spend a lot, who want the price, the time it takes and a phone number they can ring', education: 'parents deciding where their children go, who need the times, the place, the cost and who is in charge', transport: 'people on the move, who need the next time and the place, fast, on a phone' };
 const audience = typeAudience ?? (domain && domainAudience[domain.id]) ?? 'not clear from the brief: write one line (who they are, what they came to do) and state it with your plan';
 const plan = {
   brief,
@@ -236,6 +249,7 @@ const plan = {
     product: product ?? 'not named in the brief; ask or use the product\'s real name, never a placeholder',
   },
   profile,
+  typeWhy,
   brand,
   styleOffer,
   questions,
@@ -267,7 +281,9 @@ function rootClasses() {
   return map;
 }
 // Software that makes a document (an invoicing or billing tool) shows that document in the first screen.
-const heroInvoice = type.kind === 'marketing' && domain?.id === 'finance' && idea.place !== 'hero-visual' && uiIds.has('invoice-sheet');
+// (A product's own document, such as an invoice, is shown only when the user supplies a real one: the kit's
+// sample document carries another business's names and prices.)
+const heroInvoice = false;
 const used = new Set();
 /** Figures from the brief not yet shown on the page (each figure is shown once). */
 const figuresLeft = (also = []) => { for (const a of also) used.add(a); const left = figures.filter((f) => !used.has(f.value) && !String(hero.headline ?? '').includes(f.value)); return left; };
@@ -279,7 +295,8 @@ function subjectHero(html, id) {
   if (idea.place === 'hero-visual' && idea.figure) { out = setHeroVisual(out, heroIdeaPanel(idea, facts)); used.add(idea.figure); }
   else if (heroInvoice && id === 'hero-split') out = setHeroVisual(out, `<h2 class="lt-visually-hidden">An invoice${product ? ` sent with ${esc(product)}` : ''}</h2>\n        ` + readFileSync(join(root, cat.ui.find((u) => u.id === 'invoice-sheet').files.find((f) => f.endsWith('.html'))), 'utf8').trim().split('\n').join('\n        '));
   if (idea.place === 'hero-headline' && idea.figure) used.add(idea.figure);
-  // A statement hero's three facts come from the brief, or go.
+  // A statement hero's three facts come from the brief, or go; a figure the lede already says is not repeated.
+  for (const f of figures) if (out.includes(esc(f.value))) used.add(f.value);
   if (/data-part="facts"/.test(out)) out = setFacts(out, figuresLeft(), { min: 2 });
   if (hero.todo.length) out = out.replace(/^(<\w+[^>]*>)/, `$1\n  <!-- ${askFor(hero.todo)} -->`);
   for (const f of figures) if (out.includes(esc(f.value))) used.add(f.value);
@@ -314,13 +331,145 @@ function retitle(page) {
     out = out.replace(/(<\/head>)/, `${css}\n$1`);
   }
   // The sample's action label, wherever it appears (the bar, the hero, the close), becomes this page's action.
-  if (sampleAction && hero.action) out = out.split(`>${sampleAction}<`).join(`>${esc(hero.action)}<`);
+  const actionLabel = hero.action ?? (type.kind === 'marketing' && !['landing', 'dev-landing'].includes(type.id) ? 'Get in touch' : /^start free$/i.test(sampleAction ?? '') && !/\b(free|trial)\b/i.test(brief) ? 'Sign up' : null);
+  if (sampleAction && actionLabel) out = out.split(`>${sampleAction}<`).join(`>${esc(actionLabel)}<`);
   if (title) out = out.replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`);
   if (desc) out = out.replace(/<meta name="description" content="[^"]*">/, `<meta name="description" content="${esc(desc.endsWith('.') ? desc : `${desc}.`)}">`);
   return out;
 }
 const hours = openingHours(facts);
 const withBeat = (html, n) => { const b = rhythm.beats.find((x) => x.n === n); return b ? applyBeat(html, b) : html; };
+
+// ---------------------------------------------------------------- the composed draft
+/** The kit's markup for one part, read from the catalog (its preview frame and comments dropped). */
+function partHtml(id) {
+  const c = cat.ui.find((u) => u.id === id);
+  const f = c?.files.find((x) => x.endsWith('.html'));
+  return f ? readFileSync(join(root, f), 'utf8').replace(/<!--[\s\S]*?-->\n?/g, '').trim() : '';
+}
+/** A figure people count (a price, a quantity), not a time of day, a range, a year or a phone number. */
+const COUNTABLE = /^\s*(?:<small>from<\/small>\s*)?[£$€]?\d[\d,]*(?:\.\d+)?(?:%|k)?(?:<small>[^<]*<\/small>)?\s*$/;
+/** Numbers that settle: data-count on every true quantity in a band, started by the number-settle enhancer. */
+function settleFigures(html) {
+  let out = html.replace(/<(dd|p data-part="figure"[^>]*|b data-a="big"|p data-a="big")>([\s\S]*?)<\/(dd|p|b)>/g, (m, open, inner, close) => (COUNTABLE.test(inner) && !/^(19|20)\d\d$/.test(inner.trim()) ? `<${open} data-count>${inner}</${close}>` : m));
+  return out;
+}
+/**
+ * The page's moments (references/motion.md): a pinned scene for a product's three or more steps, a sideways
+ * rail for five or more things, the picture band's zoom, the statement, figures that settle. At most two,
+ * never side by side, never the first screen; the first that fit, in that order.
+ */
+function chooseMoments(ordered, ctx) {
+  const cand = [];
+  ordered.forEach((b, k) => {
+    if (k === 0) return;
+    if (['how-it-works', 'stack-cards', 'sticky-story'].includes(b.id) && isSoftware(ctx) && ctx.facts.steps.length >= 3) cand.push({ at: k, name: 'pinned scene', rank: 0, why: `${ctx.facts.steps.length} steps and a product screen that moves on with each` });
+    if (['offer-cards', 'bento-grid'].includes(b.id) && itemsFrom(ctx.facts).length >= 5) cand.push({ at: k, name: 'side-scroll', rank: 1, why: `${itemsFrom(ctx.facts).length} things to browse` });
+    if (b.id === 'media-band') cand.push({ at: k, name: 'zoom', rank: 2, why: 'the picture band settles to full size' });
+    if (b.id === 'scroll-statement') cand.push({ at: k, name: 'statement', rank: 3, why: 'the one claim lights word by word' });
+    const counts = [...b.html.matchAll(/<(?:dd|p data-part="figure"[^>]*)>([\s\S]*?)<\/(?:dd|p)>/g)].filter((m) => COUNTABLE.test(m[1])).length;
+    if (counts >= 2) cand.push({ at: k, name: 'number-settle', rank: 4, why: `${counts} true figures count up once` });
+  });
+  const chosen = [];
+  for (const c of cand.sort((a, b) => a.rank - b.rank)) {
+    if (chosen.length >= 2) break;
+    if (chosen.some((x) => Math.abs(x.at - c.at) < 2)) continue;
+    chosen.push(c);
+  }
+  return chosen;
+}
+function writeComposed(dir, run) {
+  const todo = [...hero.todo];
+  const ctx = { facts, figures, product, hero, idea, action: hero.action, hours, used, typeId: type.id, snippet: partHtml };
+  const bands = [];
+  // The first screen: the kit's hero in the brief's words.
+  const heroSec = sections.find((x) => /^hero-/.test(x.id ?? ''));
+  let heroHtml = subjectHero(partHtml(heroSec.id), heroSec.id)
+    .replace(/\s*<a data-part="pill"[\s\S]*?<\/a>/, '')
+    .replace(/\s*<div data-part="shot"[\s\S]*?<\/div>\s*(?=<\/section>)/, idea.figure && heroSec.id === 'hero-centered' ? `\n  <div data-part="visual">${heroIdeaPanel(idea, facts)}</div>\n` : '\n');
+  // The first screen always shows something: the bold idea's figure, else the product working (software),
+  // else the subject's own drawing. Never the kit's sample frame.
+  if (!(idea.place === 'hero-visual' && idea.figure) && /<div data-part="(?:frame|visual)"/.test(heroHtml)) heroHtml = setHeroVisual(heroHtml, heroPicture(ctx));
+  else if (idea.place === 'hero-visual' && idea.figure) {
+    // The idea's panel carries the subject's drawing too, behind the figure.
+    const m = motifParts(motifFor(`${facts.kind ?? ''} ${facts.offers.join(' ')}`, ctx), { small: true });
+    heroHtml = heroHtml.replace(/<figure class="lt-art"([^>]*)>/, (x, a) => `<figure class="lt-art"${a}${m.attr}>${m.svg}`);
+  }
+  ctx.heroMotif = /data-motif="([a-z]+)"/.exec(heroHtml)?.[1] ?? null;
+  bands.push({ id: heroSec.id, html: heroHtml, slug: 'top', label: 'Top' });
+  // The close repeats the hero's action. Software with no word on price says "Sign up", not "Start free".
+  ctx.action = hero.action ?? (!isSoftware(ctx) ? 'Get in touch' : /^start free$/i.test(sampleAction ?? '') && !/\b(free|trial)\b/i.test(brief) ? 'Sign up' : sampleAction);
+  // Every other band from the facts, or left out with what it needs.
+  for (const x of sections.filter((y) => !/^hero-/.test(y.id ?? '') && !CHROME.test(y.id ?? '') && !(y.optional && PROOF.has(y.id ?? '')) && y.id !== 'billing-toggle')) {
+    const r = renderBand(x, ctx);
+    if (r.todo) { todo.push(r.todo); continue; }
+    if (bands.some((b) => b.slug === r.slug || (b.id === 'cta-band' && r.id === 'cta-band'))) continue;
+    bands.push(r);
+  }
+  // A thin brief still gets one picture between the first screen and the close.
+  // So does a page whose bands are all words and tables (a statement hero, an address, a close).
+  if (!bands.some((b) => b.id !== 'cta-band' && !/^hero-/.test(b.id)) || !bands.some((b) => /class="lt-(art|device)"/.test(b.html))) { const pb = pictureBand(ctx); if (pb) bands.splice(1, 0, pb); }
+  // The close says the action again: add one when the plan had none the brief could fill.
+  if (!bands.some((b) => b.id === 'cta-band')) { const c = renderBand({ id: 'cta-band', role: 'Closing action' }, ctx); if (!c.todo) bands.push(c); }
+  if (idea.ask) todo.push(`the bold idea: ${idea.ask}`);
+  // On a short page a panel in the brand colour is a wall of it: the idea goes on ink, and the brand colour
+  // closes the page instead. On a long page the panel keeps the brand colour and the close goes dark.
+  const onBrand = /data-tone="swatch"/.test(bands[0].html) && bands.length >= 5;
+  if (/data-tone="swatch"/.test(bands[0].html) && !onBrand) {
+    // A dark panel (the palette's own dark tokens, scoped to the panel) stays a dark object in both modes;
+    // the ink tone would turn near-white on a dark page.
+    bands[0].html = bands[0].html.replace('data-tone="swatch"', 'data-tone="dark"');
+    idea.text = idea.text.replace(/ on [a-z]+$/, ' on a dark panel');
+    idea.where = idea.where.replace('an art panel in the brand colour (data-variant="figure", data-tone="swatch")', 'a dark panel (data-variant="figure", data-tone="dark"), because on a page this short a brand-colour panel would be a wall of it');
+  }
+  // Rhythm over the bands that exist, then a layout for each.
+  const asSections = bands.map((b, i) => ({ n: i + 1, id: b.id, role: b.label }));
+  const r = planRhythm({ type, sections: asSections, canInsert: false, brandClose: !onBrand });
+  const ordered = r.beats.map((b) => ({ ...bands[b.n - 1], beat: b }));
+  // Moments: at most two, never neighbours, never the first screen; chosen here and named in the strip.
+  const moments = chooseMoments(ordered, ctx);
+  for (const mo of moments) {
+    const b = ordered[mo.at];
+    if (mo.name === 'pinned scene') { const pr = pinnedSteps(ctx); if (pr) Object.assign(b, { html: pr.html, id: pr.id }); }
+    if (mo.name === 'side-scroll') { const sr = sideScroll(ctx); if (sr) Object.assign(b, { html: sr.html, id: sr.id }); }
+    if (mo.name === 'number-settle') b.html = settleFigures(b.html);
+    b.beat.moment = mo.name;
+  }
+  // A band that would move on its own but was not chosen stays still.
+  for (const [k, b] of ordered.entries()) if (!moments.some((m) => m.at === k)) b.html = b.html.replace(/\sdata-zoom(="[^"]*")?/g, '').replace(/\sdata-lt="scroll-statement"/, '');
+  const lay = direct({ type, domain, profile, sections: ordered.map((b, i) => ({ n: i + 1, id: b.id })), uiIds });
+  const body = ordered.map((b, i) => {
+    const l = lay.sectionLayouts.find((x) => x.n === i + 1);
+    const attrs = [`id="${b.slug}"`, i === 0 ? 'data-entrance' : null, l ? sectionAttrs(l) : null].filter(Boolean).join(' ');
+    let html = b.html.replace(/^<(section|div)\b([^>]*)>/, (m, tag, rest) => `<${tag}${rest.replace(/\sid="[^"]*"/, '')}${attrs ? ' ' + attrs : ''}>`);
+    return applyBeat(html, b.beat);
+  });
+  const closeBand = ordered.find((b) => b.id === 'cta-band');
+  const action = { label: ctx.action ?? 'Get in touch', href: `#${closeBand?.slug ?? 'top'}` };
+  const links = ordered.slice(1).filter((b) => b !== closeBand).slice(0, 4).map((b) => ({ slug: b.slug, label: b.label }));
+  const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''}`;
+  const list = todo.length ? `<!-- TODO before this page ships. The brief did not say, so the draft leaves these out rather than inventing them:\n${todo.map((t) => `  - ${t.replace(/--/g, '–')}`).join('\n')}\n-->\n` : '';
+  let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${esc(product ?? 'TODO: page title')}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. Every word on it comes from the brief; check each one, then add what the TODO list asks for. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${list}${navBar({ product, links, action, facts })}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}${moments.some((m) => m.name === 'number-settle') ? ' data-lt="number-settle"' : ''}>${ideaComment(idea)}\n${body.join('\n\n')}\n</main>\n${footerBar({ product, facts, year: new Date().getFullYear() })}\n</body>\n</html>\n`;
+  // Buttons: the primary goes to the close; a secondary goes to the prices if they are on the page; any other is dropped.
+  const have = new Set([...page.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
+  const pricesSlug = ['range', 'prices'].find((x) => have.has(x));
+  page = page.replace(/<a class="lt-btn"([^>]*)href="([^"]+)"([^>]*)>([\s\S]*?)<\/a>/g, (m, pre, target, post, inner) => {
+    if (!target.startsWith('#') || have.has(target.slice(1))) return m;
+    if (/data-variant="primary"/.test(pre + post)) return `<a class="lt-btn"${pre}href="${action.href}"${post}>${inner}</a>`;
+    if (hero.secondary && pricesSlug && inner.includes(esc(hero.secondary))) return `<a class="lt-btn"${pre}href="#${pricesSlug}"${post}>${inner}</a>`;
+    return '';
+  });
+  page = retitle(page);
+  // Install exactly the parts the page uses.
+  const rc = rootClasses();
+  const ids = new Set(['button', 'navbar-simple', 'footer-minimal']);
+  for (const m of page.matchAll(/class="([^"]+)"/g)) for (const c of m[1].split(/\s+/)) if (rc.has(c)) ids.add(rc.get(c));
+  run(`${base} --components ${[...ids].join(',')}`);
+  const MARK = '<!-- lumina-taste draft for:';
+  const target = existsSync(join(dir, 'index.html')) && !readFileSync(join(dir, 'index.html'), 'utf8').includes(MARK) ? join(dir, 'index.draft.html') : join(dir, 'index.html');
+  writeFileSync(target, page);
+  return { path: target, kind: 'composed', sections: ordered.map((b) => b.id), left: todo.length, todo, moments: moments.map((m) => ({ name: m.name, band: ordered[m.at].slug, why: m.why })), rhythm: { strip: rhythmStrip(r), moved: r.moved, broken: checkRhythm(r, ordered.map((b, i) => (i === 0 ? null : lay.sectionLayouts.find((x) => x.n === i + 1)?.shape ?? null))) } };
+}
 
 // ---------------------------------------------------------------- --write: a composed first draft
 // Installs what the plan needs and writes the page itself: sections in order with their layouts, tones and
@@ -333,7 +482,11 @@ if (writeDraft) {
   const dir = resolve(project);
   mkdirSync(dir, { recursive: true });
   const run = (cmd, extra = []) => { const parts = cmd.replace(/ --override [a-z-]+="[^"]*"/g, '').replace(/\\\n\s*/g, ' ').replace(`--project ${project}`, '--project \u0000').split(/\s+/).slice(1).map((a) => (a === '\u0000' ? dir : a)); const r = spawnSync(process.execPath, [...parts, ...overrideArgs, ...extra], { cwd: root, encoding: 'utf8' }); if (r.status !== 0 && r.status !== 3) { console.error(r.stderr || r.stdout); process.exit(1); } return r.stdout; };
-  if (startWith === 'blueprint') {
+  // A marketing page with a first screen is composed band by band from the brief's own facts, whatever it
+  // would start from by hand: no sample business's words, names or prices can survive into it.
+  const composed = type.kind === 'marketing' && sections.some((x) => /^hero-/.test(x.id ?? ''));
+  if (composed) draft = writeComposed(dir, run);
+  else if (startWith === 'blueprint') {
     const out = run(installBlueprint, product ? ['--name', product] : []);
     const path = join(dir, /written to (\S+)\/ instead/.exec(out)?.[1] ?? '', 'index.html');
     // The blueprint's own bands, in the rhythm the plan gives them, with the subject's words in the first screen.
@@ -415,7 +568,7 @@ if (writeDraft) {
     const top = picked.filter((y) => /^(navbar|floating-pill-nav|hide-on-scroll)/.test(y.id ?? '')).map((y) => chrome(y.id)).join('\n');
     const foot = picked.filter((y) => /footer/.test(y.id ?? '')).map((y) => chrome(y.id)).join('\n');
     const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''}`;
-    let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${product ?? 'TODO: page title'}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. The first screen is written from the brief; every other sentence, name, number and link target is sample content: rewrite all of it. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${top}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}>${ideaComment(idea)}\n${body.join('\n\n')}\n</main>\n${foot}\n</body>\n</html>\n`;
+    let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${product ?? 'TODO: page title'}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. The first screen is written from the brief; every other sentence, name, number and link target is sample content: rewrite all of it. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${top}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}${moments.some((m) => m.name === 'number-settle') ? ' data-lt="number-settle"' : ''}>${ideaComment(idea)}\n${body.join('\n\n')}\n</main>\n${foot}\n</body>\n</html>\n`;
     // A button that led to one of the sample's pages: the primary one takes this page's action, the others go.
     { const have = new Set([...page.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
       page = page.replace(/<a class="lt-btn"([^>]*)href="#([^"]+)"([^>]*)>([\s\S]*?)<\/a>/g, (m, pre, target, post, inner) => have.has(target) ? m : /data-variant="primary"/.test(pre + post) ? `<a class="lt-btn"${pre}href="${action}"${post}>${inner}</a>` : ''); }
@@ -426,6 +579,12 @@ if (writeDraft) {
     draft = { path: target, kind: 'snippets', rhythm: { strip: rhythmStrip(rhythm), moved: rhythm0.moved, broken: plan.rhythm.broken }, sections: picked.filter((y) => !y.id || !isChrome(y.id)).map((y) => y.id ?? slugOf(y.role)), left: sections.filter((x) => x.optional && PROOF.has(x.id ?? '')).map((x) => x.id) };
   }
   plan.draft = { ...draft, path: relative(process.cwd(), draft.path) || draft.path };
+  if (draft.todo) plan.words.missing = [...new Set([...plan.words.missing, ...draft.todo])];
+  if (withImages && draft.kind === 'composed') {
+    const r = spawnSync(process.execPath, [join(root, 'scripts/find-images.mjs'), '--fill', draft.path, '--subject', [facts.kind, facts.place].filter(Boolean).join(' ') || brief, '--out', join(dirname(draft.path), 'images')], { encoding: 'utf8', env: process.env });
+    const set = (readFileSync(draft.path, 'utf8').match(/<img src="images\//g) ?? []).length;
+    plan.draft.images = { ran: true, status: r.status, set, note: r.status === 0 ? `${set} photograph${set === 1 ? '' : 's'} set from openly licensed sources (credits in images/credits.json); look at each one` : `find-images could not run: ${(r.stderr || r.stdout).trim().split('\n').pop()}` };
+  } else if (draft.kind === 'composed') plan.draft.images = { ran: false, note: 'no photographs fetched: the panels show the subject\'s drawings. Add --images to search public-domain and CC0 photographs for them (find-images --fill; it downloads)' };
 }
 
 // No process.exit() here: exiting straight after a large write can cut piped output short.
@@ -440,7 +599,9 @@ let h = 0; const H = (title) => `## ${++h}. ${title}`;
 L.push(`# Page plan: ${type.name}`, '', `> ${brief || `--type ${type.id}`}`, '');
 if (!confident) L.push(`Page type guessed from the catalog. If this is wrong, rerun with \`--type <id>\` (${kb.pageTypes.map((p) => p.id).join(', ')}).`, '');
 else if (runnerUp) L.push(`Also close: \`${runnerUp.id}\`. Rerun with \`--type ${runnerUp.id}\` if that fits better.`, '');
-if (draft) L.push(draft.kind === 'blueprint'
+if (draft?.kind === 'composed') L.push(`**A first draft is written: \`${draft.path}\`.** It is composed band by band from the brief's own facts (no sample business's words, names or prices), in the rhythm below. ${draft.todo.length ? `The brief left ${draft.todo.length} thing${draft.todo.length > 1 ? 's' : ''} open; they are listed once, at the top of the draft, and under "Still needed" below. Bands with nothing to show were left out rather than invented.` : 'Nothing was left open.'}`, '');
+if (draft?.kind === 'composed' && plan.draft?.images) L.push(`Photographs: ${plan.draft.images.note}.`, '');
+else if (draft) L.push(draft.kind === 'blueprint'
   ? `**A first draft is written: \`${draft.path}\`** (the \`${blueprint}\` blueprint, themed with this profile). Everything in it is sample content. Rewrite it section by section with the plan below, then do the detail pass and audit.`
   : `**A first draft is written: \`${draft.path}\`.** It has the sections below in order, with their layouts, bands, ids and navigation already applied, and the art direction on \`<main>\`. Every sentence, name and number in it is sample copy: rewrite each section with its copy formula below.${draft.left.length ? ` Not drafted, because they need real material from the user: ${draft.left.map((x) => `\`${x}\``).join(', ')}.` : ''}`, '');
 L.push(H('Design brief (confirm before writing code)'), '');
@@ -463,7 +624,7 @@ if (brand) {
   if (brand.contrastFailures?.length) L.push(`Contrast: ${brand.contrastFailures.join('; ')}.`);
   L.push('');
 }
-L.push(`Palette \`${profile.palette}\` (${profile.mode}), type \`${profile.typography}\`, density \`${profile.density}\`${profile.style ? `, style \`${profile.style}\`` : ', no style'}.${brand?.palette ? ' Palette and type come from the brand (above).' : domain ? ` Chosen for the ${domain.id} domain.` : ' No domain recognised, so these are the neutral defaults.'}`);
+L.push(`Palette \`${profile.palette}\` (${profile.mode}), type \`${profile.typography}\`${typeWhy ? ` (${typeWhy})` : ''}, density \`${profile.density}\`${profile.style ? `, style \`${profile.style}\`` : ', no style'}.${brand?.palette ? ' Palette and type come from the brand (above).' : domain ? ` Chosen for the ${domain.id} domain.` : ' No domain recognised, so these are the neutral defaults.'}`);
 if (styleOffer) L.push(`If the brief wants more character, add \`--style ${styleOffer}\`.`);
 L.push('', '```sh', install, '```', '');
 if (startWith === 'blueprint') {
@@ -480,10 +641,11 @@ L.push(`- **Bold idea: ${idea.text}.** It lives in ${idea.where}. ${idea.fromBri
 if (art.mainAttrs.length) L.push(`- **Page:** \`<main ${art.mainAttrs.join(' ')}>\`: each section rises into place as it scrolls in. Sections are set apart by space and a change of ground, not by rules or small labels over every heading.`);
 {
   const r = draft?.rhythm ?? { strip: plan.rhythm.strip, moved: rhythm0.moved };
-  L.push(`- **Rhythm${draft?.kind === 'blueprint' ? ' (as drafted from the blueprint)' : ''}:** \`${r.strip}\``);
+  L.push(`- **Rhythm${draft?.kind === 'blueprint' ? ' (as drafted from the blueprint)' : draft?.kind === 'composed' ? ' (as drafted)' : ''}:** \`${r.strip}\``);
   L.push(`  ${rhythm.banded ? STRIP_KEY : 'One screen: regions on one ground, as dense as the work needs.'}${r.moved?.length ? ` Moved: ${r.moved.join(', ')} (the close says the action again; parts with one layout never touch).` : ''}${rhythm0.inserted.length ? ` Added: ${rhythm0.inserted.join(', ')} (a pause between busy bands).` : ''}${figuresBandSkipped ? ' Left out: the figures band, because the brief has fewer than three figures.' : ''}`);
   L.push(`  ${art.rhythm}`);
   for (const b of rhythm.beats.filter((x) => x.note)) L.push(`  - ${b.label}: ${b.note}`);
+  if (draft?.moments) L.push(`  Moments (two at most, never side by side): ${draft.moments.length ? draft.moments.map((m) => `${m.name} in #${m.band} (${m.why})`).join('; ') : 'none: nothing in the brief carries one, and a page that does not move is better than one that moves for nothing'}.`);
 }
 L.push(`- **Look:** before you install, name three nouns from the subject's world and check that the palette and typeface come from them. If the result is a default look (indigo and Inter; cream, a book serif and terracotta; black and one acid colour), choose again or state why on the root: \`<html data-look-reason="…">\`. See references/ai-defaults.md.`);
 L.push(`- **Words:** ${art.words}`);
