@@ -15,6 +15,8 @@ It writes, into a new folder (printed at the end; delete it when you are done):
 | `first-desktop-light.png`, `first-desktop-dark.png`, `first-mobile-light.png`, `first-mobile-dark.png` | The first screen at 1440×900 and 390×844, in both modes: the three-second test |
 | `squint-desktop.png`, `squint-mobile.png` | The first screen blurred and grey: only size, weight and contrast are left, so you see what pulls the eye |
 | `slice-desktop-01.png …`, `slice-mobile-01.png …` | The whole page cut into screen-height pieces, in order: what a visitor sees one scroll at a time |
+| `first-tablet-light.png` | The first screen at 1024×768, where an app should change shape (a sidebar, two panes) |
+| `access-rtl-mobile.png`, `access-forced-desktop.png`, `access-text200-mobile.png` | The page right to left, in forced colours (a Windows contrast theme) and at 200% text: question 8 |
 | `review.json` | The measurements: for each section what it gives the eye (picture, drawing, chart, document, table, figure set large, rows), its layout (block, columns, heading position), its ground, its density; the type jump; the scroll moments; app checks at phone width; the three strongest areas at a squint and what is in them; the critic's findings and load speed |
 | `review.md` | The checklist below, with the picture names and the measured facts beside each question, and a blank answer under each |
 
@@ -29,6 +31,7 @@ The pack does not judge. **You open every picture and answer every question.** T
 5. **Is every section something to look at?**
 6. **Does the type scale jump enough?**
 7. **Would a demanding designer ship it?** If not, the three changes that would, most important first.
+8. **Does it hold for everyone?** A tablet, right to left, forced colours, the largest text.
 
 Rules for answering: name things (the section, the element, the size, the colour). Say what you see before what you think of it. "Looks good", "clean", "modern" and "professional" are not answers. An answer that would fit any page is wrong.
 
@@ -82,5 +85,18 @@ node scripts/compare-pages.mjs --out qa/compare/round-1 --record "B>A>C" --reaso
 | `app-touch-target` | On an app (`data-app`, or no hero and an app shell, side nav or bottom bar) at phone width, a primary control (a filled button, a submit, anything in a bottom or tab bar) is under 44×44px; on a page marked `data-app`, any control. On a `data-app` board of phones side by side, each `[data-screen]` or `[data-mock]` counts as its own screen for one-primary-per-screen |
 | `app-safe-area` | A fixed bar on the bottom edge of the phone screen has no `env(safe-area-inset-bottom)` in its own or its children's rules |
 | `app-states` | The page declares states (`meta.json` `states`, or `<html data-states="loading empty error">`) and has no `data-view` block for one of them |
+
+With `--taste` it also loads the page again for what a native app and assistive tech need (pages opened with `?state=` skip these):
+
+| Rule | Fires when |
+| --- | --- |
+| `app-sheet-handle`, `app-sheet-escape`, `app-sheet-focus` | On an app at phone width: a bottom sheet's grabber is missing or not a button; the sheet ignores Escape; focus does not go back to its opener |
+| `app-gesture-conflict`, `app-gesture-edge` | Swipe rows inside a sideways scroller; swipe rows within 20px of the screen edge without `data-edge-guard` |
+| `app-dynamic-type` | At 200% text: text set in px, text cut off, past the screen edge or on other text (measured at line height, fixed and sticky bars left out), controls that do not grow |
+| `app-reach` | The main action is in the top half of a phone screen (a warning) |
+| `a11y-rtl-mirror`, `a11y-rtl-overflow` | With `dir="rtl"`, headings, links, buttons and panels are not where the mirror of their place is (more than 24px off), or the page scrolls sideways |
+| `a11y-long-words` | A 58-letter German compound in the page's running text pushes the page wider or is cut off (text set `nowrap` on purpose is left alone) |
+| `a11y-forced-colors` | In forced colours, a chart mark, meter fill, switch track or selected segment drawn only with a background disappears, a text field loses its box, or a control shows no focus |
+| `a11y-reduced-data` | With Save-Data on, a film loads or plays, or pictures far below the first screen load at once |
 
 `--perf` (and `--strict`, as warnings) loads the page cold at each width and reports `perf-lcp-lazy` (the largest picture is `loading="lazy"`: an error), `perf-lcp-priority` (it lacks `fetchpriority="high"`), `perf-cls` (layout shift over 0.1, with what moved), `perf-font-bytes` (over 300 KB, or more than six files), `perf-js-bytes` and `perf-css-bytes` (over 400 KB and 200 KB gzipped), `perf-img-dimensions` (images without width and height or an aspect-ratio) and `perf-img-oversized` (an image more than twice its box in both directions).
