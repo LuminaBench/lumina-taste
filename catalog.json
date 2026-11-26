@@ -3089,10 +3089,10 @@
         "page transition",
         "shared element transition",
         "layout morph",
-        "magic move",
         "smooth page changes",
         "cross document view transition",
-        "hero image morphs into detail page"
+        "hero image morphs into detail page",
+        "morph between pages"
       ],
       "pattern": "View Transitions API",
       "states": ["list","detail","transitioning","between pages (cross-document)","off (reduced motion)"],

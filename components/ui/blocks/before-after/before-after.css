@@ -31,7 +31,7 @@
   [data-part="after"] [data-part="tag"] { right: 14px; }
   [data-part="compare"][data-edge="start"] [data-part="before"] [data-part="tag"], [data-part="compare"][data-edge="end"] [data-part="after"] [data-part="tag"] { opacity: 0; }
   /* The divider: a line of light the full height of the picture with a knob in the middle. */
-  [data-part="handle"] { position: absolute; top: 50%; left: var(--pos); z-index: 2; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: var(--bg-surface-1); color: var(--text-primary); box-shadow: 0 0 0 1px var(--border-hairline), 0 6px 16px -6px oklch(0 0 0 / 0.3); pointer-events: none; transition: transform var(--dur-2) var(--ease-spring); }
+  [data-part="handle"] { position: absolute; top: 50%; left: var(--pos); z-index: 2; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: var(--text-primary); color: var(--bg-canvas); box-shadow: 0 4px 12px -4px oklch(0 0 0 / 0.3); pointer-events: none; transition: transform var(--dur-2) var(--ease-spring); }
   [data-part="handle"]::before { content: ""; position: absolute; top: -100vh; bottom: -100vh; left: 50%; z-index: -1; width: 2px; margin-left: -1px; background: var(--text-primary); }
   [data-part="handle"] .lt-icon { width: 14px; margin: 0 -3px; }
   [data-part="compare"][data-dragging] [data-part="handle"] { transform: scale(1.08); }
