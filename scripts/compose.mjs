@@ -36,10 +36,13 @@ const writeDraft = flag('write');
 const withImages = flag('images');
 // --type is the page type. A typeface is --typeface (or --font); --palette, --mode and --style set the look.
 const forceTypeRaw = opt('type', null);
-const lookFlags = { palette: opt('palette', null), typography: opt('typeface', null) ?? opt('font', null), mode: opt('mode', null), style: opt('style', null) };
+const lookFlags = { palette: opt('palette', null), typography: opt('typeface', null) ?? opt('typography', null) ?? opt('font', null), mode: opt('mode', null), style: opt('style', null) };
 const brandSrc = opt('brand-from', null);
 const framework = opt('framework', 'static');
 const project = opt('project', '/abs/app');
+// A flag the composer does not know would otherwise become words of the brief and land on the page.
+const unknown = args.filter((a) => /^--[a-z]/.test(a));
+if (unknown.length) { console.error(`Unknown option ${unknown.join(', ')}. Options: --type, --palette, --typeface, --mode, --style, --brand-from, --framework, --project, --write, --json, --images (run with no brief for the full usage).`); process.exit(2); }
 const brief = args.join(' ').trim();
 if (!brief && !forceTypeRaw) {
   console.error('Usage: node scripts/compose.mjs "<one-line brief>" [--type <page-type>] [--brand-from <#hex | logo.png|svg | site.html | url>] [--framework static|tailwind|next|vanilla|react] [--project /abs/app] [--write] [--json]');
@@ -128,7 +131,7 @@ let domain = domainScores[0].s > 0 ? domainScores[0].d : null;
 if (type.id === 'landing' && !forceType) {
   const cause = any(['charity', 'charities', 'nonprofit', 'non-profit', 'food bank', 'foodbank', 'donate', 'donation', 'donations', 'fundraising', 'fundraiser', 'volunteer', 'volunteers', 'foundation', 'community group', 'campaign']);
   const practice = any(['construction', 'builder', 'builders', 'building firm', 'extension', 'extensions', 'loft conversion', 'loft conversions', 'renovation', 'renovations', 'refurbishment', 'roofer', 'plumber', 'electrician', 'joiner', 'kitchen fitter', 'landscaper', 'architect practice', 'dentist', 'dentists', 'dental', 'clinic', 'clinics', 'physio', 'physiotherapy', 'physiotherapist', 'osteopath', 'chiropractor', 'optician', 'opticians', 'vet', 'vets', 'veterinary', 'salon', 'barber', 'barbers', 'hairdresser', 'spa', 'yoga', 'pilates', 'gym', 'personal trainer', 'therapist', 'counselling', 'counsellor', 'doctor', 'doctors', 'gp', 'practice', 'appointment', 'appointments']);
-  const place = any(['restaurant', 'restaurants', 'cafe', 'café', 'bakery', 'distillery', 'brewery', 'winery', 'hotel', 'venue', 'museum', 'gallery', 'tour', 'tours', 'pub', 'bar', 'bistro', 'visit', 'visiting', 'opening hours', 'book a table', 'book a tour']);
+  const place = any(['coffee shop', 'coffee shops', 'coffee house', 'roastery', 'tea room', 'tearoom', 'gym', 'climbing wall', 'restaurant', 'restaurants', 'cafe', 'café', 'bakery', 'distillery', 'brewery', 'winery', 'hotel', 'venue', 'museum', 'gallery', 'tour', 'tours', 'pub', 'bar', 'bistro', 'visit', 'visiting', 'opening hours', 'book a table', 'book a tour']);
   const occasion = any(['conference', 'conferences', 'summit', 'festival', 'meetup', 'meetups', 'hackathon', 'retreat', 'exhibition', 'workshop', 'workshops', 'event', 'events', 'wedding website', 'wedding site', 'wedding page', 'our wedding', 'wedding invitation']);
   const swap = domain?.id === 'devtool' ? 'dev-landing'
     : software ? null
@@ -250,6 +253,8 @@ const accentLch = pal ? pal.modes[profile.mode === 'dark' ? 'dark' : 'light'].to
 const PANEL_HEROES = new Set(['split', 'overlap', 'edge', 'product']);
 const ideaHero = art.composition ? (PANEL_HEROES.has(art.composition.id) ? 'hero-split' : 'hero-statement') : sections.find((x) => /^hero-/.test(x.id ?? ''))?.id ?? null;
 const idea = boldIdea({ facts, type, hero: ideaHero, signature: art.signature, accent: colourName(accentLch), sections: drafted });
+// Software is judged by its screen: when the first screen shows the product, a price never takes its place.
+if (idea.place === 'hero-visual' && (software || ['landing', 'dev-landing'].includes(type.id)) && ['product', 'edge', 'wide'].includes(art.composition?.id)) idea.place = 'statement';
 const hero = heroCopy(facts, { typeId: type.id, product });
 // A first screen is a headline, one sentence and one action: no note under the buttons, 40 words at most.
 if (type.kind === 'marketing') Object.assign(hero, fitWords(hero));
@@ -727,7 +732,8 @@ if (writeDraft) {
   plan.draft = { ...draft, path: relative(process.cwd(), draft.path) || draft.path };
   if (draft.todo) plan.words.missing = [...new Set([...plan.words.missing, ...draft.todo])];
   if (withImages && draft.kind === 'composed') {
-    const r = spawnSync(process.execPath, [join(root, 'scripts/find-images.mjs'), '--fill', draft.path, '--subject', [facts.kind, facts.place].filter(Boolean).join(' ') || brief, '--out', join(dirname(draft.path), 'images')], { encoding: 'utf8', env: process.env });
+    // The subject is the business, never its town: a photograph of Edinburgh is not the restaurant.
+    const r = spawnSync(process.execPath, [join(root, 'scripts/find-images.mjs'), '--fill', draft.path, '--subject', facts.kind || brief, '--out', join(dirname(draft.path), 'images')], { encoding: 'utf8', env: process.env });
     const set = (readFileSync(draft.path, 'utf8').match(/<img src="images\//g) ?? []).length;
     plan.draft.images = { ran: true, status: r.status, set, note: r.status === 0 ? `${set} photograph${set === 1 ? '' : 's'} set from openly licensed sources (credits in images/credits.json); look at each one` : `find-images could not run: ${(r.stderr || r.stdout).trim().split('\n').pop()}` };
   } else if (draft.kind === 'composed') plan.draft.images = { ran: false, note: 'no photographs fetched: the panels show the subject\'s drawings. Add --images to search public-domain and CC0 photographs for them (find-images --fill; it downloads)' };

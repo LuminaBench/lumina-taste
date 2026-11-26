@@ -73,8 +73,10 @@ function screenNav(ctx) {
   for (const s of [...ctx.facts.steps, ...ctx.facts.claims]) {
     // The object of each step or claim ("add a client", "sends an invoice from your phone", "chases late payers"):
     // a section is a thing the product keeps, never a verb, an adverb or the phone it runs on.
-    const w = /^[a-z]+\s+(?:(?:a|an|the|your|their|each|every|new|late|all)\s+)?([a-z-]+)/i.exec(s.trim())?.[1]?.toLowerCase();
-    if (!w || /^(paid|done|it|them|up|out|in|phone|phones|time|money|minutes?|seconds?|hours?)$/.test(w) || /ly$/.test(w) || w.length < 4) continue;
+    const raw = /^[a-z]+\s+(?:(?:a|an|the|your|their|each|every|new|late|all)\s+)?([a-z-]+)/i.exec(s.trim())?.[1];
+    // An initialism keeps its capitals (PDFs, APIs); any other word is a plain noun.
+    const w = raw && /[A-Z]{2}/.test(raw) ? raw : raw?.toLowerCase();
+    if (!w || /^(paid|done|it|them|up|out|in|phone|phones|time|money|minutes?|seconds?|hours?)$/i.test(w) || /ly$/.test(w) || w.length < 4) continue;
     const plural = /s$/.test(w) ? w : /(ch|sh|x)$/.test(w) ? `${w}es` : `${w}s`;
     const label = cap(plural);
     if (!nouns.includes(label)) nouns.push(label);
@@ -495,7 +497,7 @@ export function navBar({ product, links, action, facts, style = null }) {
   const li = links.map((l) => `<li><a href="#${l.slug}">${esc(l.label)}</a></li>`).join('');
   const attrs = `${style?.variant ? ` data-variant="${style.variant}"` : ''}${style?.tone ? ` data-tone="${style.tone}"` : ''}`;
   return `<header class="lt-nav-simple" data-lt="navbar-simple"${attrs}>
-  <a href="#top" data-part="brand"><span data-part="mark" aria-hidden="true"></span>${esc(product ?? 'Home')}</a>
+  <a href="#top" data-part="brand"><span data-part="mark" aria-hidden="true"></span>${esc(product ?? 'TODO: name')}</a>
   <nav aria-label="Main"><ul data-part="links">${li}</ul></nav>
   <div data-part="actions">${facts.phone ? `<a data-part="signin" href="tel:${esc(facts.phone.replace(/[^\d+]/g, ''))}">${esc(facts.phone)}</a>` : ''}<a class="lt-btn" data-variant="primary" data-size="sm" href="${esc(action.href)}">${esc(action.label)}</a></div>
   <button type="button" data-part="toggle" aria-expanded="false" aria-controls="lt-ns-panel" aria-label="Menu"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>

@@ -72,7 +72,7 @@ export function chooseHero({ type, domain, facts, items = [], software = false }
   if (d === 'editorial' || has(brief, ['magazine', 'journal', 'newsletter', 'zine', 'publication', 'quarterly'])) return pick('cover', 'a publication: set the first screen like its cover');
   if (type.id === 'dev-landing') return pick('wide', 'developers want the thing itself: one claim centred over the product as wide as the page');
   // A phone app is one tall object: it stands in a panel that runs to the screen's edge, beside the words.
-  if ((software || type.id === 'landing') && has(brief, ['phone', 'mobile', 'ios', 'android', 'iphone'])) return pick('edge', 'a phone app: the phone stands in a panel that runs to the screen edge, the words beside it, all in the first screen');
+  if ((software || type.id === 'landing') && has(brief, ['phone', 'mobile', 'ios', 'android', 'iphone']) && !has(brief, ['web', 'mac', 'windows', 'desktop', 'browser', 'laptop'])) return pick('edge', 'a phone app: the phone stands in a panel that runs to the screen edge, the words beside it, all in the first screen');
   if (software || type.id === 'landing') return pick('product', 'software is judged by its screen: the product first and large, the words beneath');
   if (type.id === 'venue' || d === 'hospitality') {
     if (priced >= 3 && has(brief, ['cafe', 'café', 'coffee', 'roaster', 'roastery', 'bar', 'bakery', 'restaurant', 'bistro', 'pub', 'deli', 'tea', 'wine', 'menu', 'kitchen', 'brewery', 'distillery'])) return pick('menu', `${priced} things with their prices: the menu board is the picture`);

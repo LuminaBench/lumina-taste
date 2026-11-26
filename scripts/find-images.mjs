@@ -191,6 +191,9 @@ async function search(q, { strict = false } = {}) {
     // People and old photographs are left out unless the search asks for them.
     if (!PEOPLE.test(phrase) && (strict ? PEOPLE.test(head(c)) || peopleTags(c) >= 2 : peopleTags(c) >= 3 || (PEOPLE.test(c.title) && peopleTags(c) >= 1))) return 'people';
     if (!ARCHIVE.test(phrase) && (ARCHIVE.test(head(c)) || ARCHIVE_PROVIDERS.test(c.provider ?? '') || ARCHIVE_PROVIDERS.test(String(c.creator).replace(/\s+/g, '')) || tags(c).filter((t) => ARCHIVE.test(t)).length >= 2 || (strict && ARCHIVE.test(tags(c).join(' | '))))) return 'archival';
+    // A title with a street address or a postcode is someone's real premises, usually with its name on the sign:
+    // never the picture of a made-up or different business.
+    if (/\b\d{1,5}\s+(?:[NSEW]\.?\s+)?[A-Z][\w.'’-]*(?:\s+[A-Z][\w.'’-]*)*\s+(?:Ave|Avenue|St|Street|Rd|Road|Blvd|Boulevard|Way|Lane|Drive|Dr)\b|\b[A-Z]{2}\s+\d{5}\b|\b[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}\b/.test(c.title ?? '')) return 'real premises';
     if (!relevant(c)) return 'off topic';
     if (seen.has(c.url)) return 'duplicate';
     seen.add(c.url);
@@ -298,7 +301,8 @@ const empty = figs.filter((m) => !/<(img|picture|video)\b/.test(inner(m)));
 const briefed = empty.filter((m) => /data-shot="[^"]+"/.test(m[0]));
 if (!empty.length) { console.log('No empty picture stand-ins (art panels without a photograph) on this page.'); cleanup(); process.exit(0); }
 // The brief, minus the photographic notes ("window light, 4:5"), plus the subject, is the search.
-const STOP = /^(the|a|an|on|in|of|with|and|from|at|by|through|behind|beside|same|no|people|posed|shot|level|light|morning|evening|soft|side|window|table|counter|alone|pale|wooden|sitting|everyday|bright|across|road|nothing|else|its|their|our|your|one|two|three|four|five|six|full|half|close|wide|top|down|left|right|front|back|overcast|natural|steam|rising|handle|rim)$/i;
+// "photograph" and "picture" describe every result; "set" and "family" are never the thing itself.
+const STOP = /^(photograph|photographs|photo|photos|picture|image|real|set|family|small|the|a|an|on|in|of|with|and|from|at|by|through|behind|beside|same|no|people|posed|shot|level|light|morning|evening|soft|side|window|table|counter|alone|pale|wooden|sitting|everyday|bright|across|road|nothing|else|its|their|our|your|one|two|three|four|five|six|full|half|close|wide|top|down|left|right|front|back|overcast|natural|steam|rising|handle|rim)$/i;
 // From the most specific search to the plainest: the brief's main words with the subject, its first noun with
 // the subject, the two main words, then the subject alone. The first that finds an openly licensed photograph wins.
 const queries = (shot) => {
