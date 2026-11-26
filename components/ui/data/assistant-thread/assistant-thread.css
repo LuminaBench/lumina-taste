@@ -18,16 +18,16 @@
   td { padding: 8px 12px 8px 0; border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
   :is(th, td):not(:first-child) { text-align: right; padding-right: 0; padding-left: 12px; }
   [data-part="actions"] { display: flex; flex-wrap: wrap; align-items: center; gap: 2px; margin-left: -8px; color: var(--text-secondary); font-size: var(--text-ui-xs); }
-  [data-part="actions"] button { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px; border: 0; border-radius: var(--radius-sm); background: none; color: inherit; font: inherit; font-weight: 600; cursor: pointer; }
+  [data-part="actions"] button { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 0 8px; border: 0; border-radius: var(--radius-sm); background: none; color: inherit; font: inherit; font-weight: 600; cursor: pointer; }
   [data-part="actions"] button:hover { background: var(--bg-surface-2); color: var(--text-primary); }
-  [data-part="sources"] { margin-left: auto; }
+  [data-part="sources"] { margin-inline-start: auto; }
   /* Streaming: a caret at the end of the text, and no actions until the answer is complete. */
   [data-part="caret"] { display: inline-block; width: 0.5em; height: 1.05em; margin-left: 2px; border-radius: 1px; background: var(--text-primary); vertical-align: text-bottom; animation: lt-assistant-caret 1s steps(2, start) infinite; }
   [data-role="assistant"]:not([data-state="streaming"]) [data-part="caret"] { display: none; }
   [data-state="streaming"] [data-part="actions"] { display: none; }
   [data-part="error"] { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; padding: 10px 14px; border-radius: var(--radius-lg); background: var(--status-negative-soft); color: var(--text-primary); font-size: var(--text-ui-sm); }
   [data-part="error"] .lt-icon { color: var(--status-negative); }
-  [data-part="error"] button { margin-left: auto; height: 28px; padding: 0 10px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-sm); background: var(--bg-surface-1); color: var(--text-primary); font: 600 var(--text-ui-xs) var(--font-body); cursor: pointer; }
+  [data-part="error"] button { margin-inline-start: auto; min-height: 28px; padding: 0 10px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-sm); background: var(--bg-surface-1); color: var(--text-primary); font: 600 var(--text-ui-xs) var(--font-body); cursor: pointer; }
   @container (max-width: 480px) { [data-role="user"] { max-width: 92%; } [data-part="sources"] { margin-left: 8px; flex-basis: 100%; } }
 }
 @keyframes lt-assistant-caret { to { visibility: hidden; } }

@@ -15,7 +15,7 @@ body { overflow: hidden; background: var(--bg-canvas); }
 /* Top bar: the page's name and day, the command menu, shortcuts */
 .ws-main { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr) auto; min-width: 0; min-height: 0; }
 .ws-bar { display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 0 20px; border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
-.ws-title { display: flex; align-items: baseline; gap: 12px; min-width: 0; margin-right: auto; }
+.ws-title { display: flex; align-items: baseline; gap: 12px; min-width: 0; margin-inline-end: auto; }
 .ws-title h1 { margin: 0; font-family: var(--font-display); font-size: var(--step-2); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); }
 .ws-title p { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); white-space: nowrap; }
 .ws-cmd {
@@ -43,6 +43,7 @@ body { overflow: hidden; background: var(--bg-canvas); }
 .ws-table .lt-table tbody tr[data-row]:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: calc(var(--focus-width) * -1); }
 .ws-table .lt-table tbody tr[aria-selected="true"] td { background: var(--accent-soft); }
 .ws-table .lt-table tbody tr[aria-selected="true"] td:first-child { box-shadow: inset 3px 0 0 var(--accent-solid); }
+.ws-table .lt-table tbody tr[aria-selected="true"] td:first-child:dir(rtl) { box-shadow: inset -3px 0 0 var(--accent-solid); }
 .ws-table .lt-table tbody tr[data-past] td { color: var(--text-muted); }
 .ws-table time { font-weight: 600; }
 .ws-route { white-space: nowrap; }
@@ -166,3 +167,9 @@ body { overflow: hidden; background: var(--bg-canvas); }
 @media (prefers-reduced-motion: reduce) { .ws-inspector { transition: none !important; } }
 /* Touch: the filter field is a full 44px target inside its frame. */
 @media (pointer: coarse) { .ws-find { height: auto; } .ws-find input { height: var(--hit, 44px); } }
+/* Forced colours (Windows contrast themes) repaint fills: the deck meters keep an edge and a system-coloured fill. */
+@media (forced-colors: active) {
+  .ws-meter { border: 1px solid CanvasText; }
+  .ws-meter i, .ws-meter i[data-high], .ws-load .ws-meter i { forced-color-adjust: none; background: CanvasText; }
+  .ws-table .lt-table tbody tr[aria-selected="true"] td:first-child { box-shadow: none; border-inline-start: 3px solid Highlight; }
+}

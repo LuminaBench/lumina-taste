@@ -14,6 +14,7 @@
   [data-part="gap"] { display: grid; place-items: center; width: 24px; color: var(--text-muted); }
   [data-part="summary"] { flex-basis: 100%; margin: 4px 0 0; text-align: center; color: var(--text-muted); font-size: var(--text-ui-xs); font-variant-numeric: tabular-nums; }
   @container lt-pag (max-width: 420px) {
-    [data-part="prev"] span, [data-part="next"] span { display: none; }
+    /* The words step out of sight but stay the buttons' names for screen readers. */
+    [data-part="prev"] span, [data-part="next"] span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   }
 }

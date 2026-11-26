@@ -191,7 +191,7 @@ body { background: var(--bg-surface-2); }
 .ap-row { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; padding: 4px 16px; border: 0; background: none; color: var(--text-primary); font: inherit; font-size: var(--text-ui); text-align: left; }
 button.ap-row { cursor: pointer; }
 button.ap-row:active { background: var(--bg-surface-3); }
-.ap-row-value { margin-left: auto; color: var(--text-secondary); }
+.ap-row-value { margin-inline-start: auto; color: var(--text-secondary); }
 .ap-row-col { flex-direction: column; align-items: stretch; gap: 10px; padding-block: 12px; }
 .ap-row .lt-switch { flex-direction: row-reverse; justify-content: space-between; width: 100%; min-height: 44px; }
 .ap-row[data-tone="danger"] { color: var(--status-negative); }
@@ -299,3 +299,8 @@ button.ap-row:active { background: var(--bg-surface-3); }
 @keyframes ap-in { from { translate: 100% 0; } }
 @keyframes ap-out { to { translate: -30% 0; opacity: 0.6; } }
 @media print { .ap-rail { flex-wrap: wrap; overflow: visible; } .ap-pager { display: none; } }
+/* Forced colours (Windows contrast themes) repaint fills: the meters keep an edge and a system-coloured fill. */
+@media (forced-colors: active) {
+  .ap-meter { border: 1px solid CanvasText; }
+  .ap-meter i { forced-color-adjust: none; background: CanvasText; }
+}

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Moss harbour report</title>
+<!-- A page built with left and right instead of start and end, words that cannot break, a meter drawn only with a
+     background, a field without a border and a focus ring made of box-shadow, and a film and far pictures that load
+     whatever the connection. Used by tests/unit/critic.test.mjs (a11y-* rules). -->
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d232a; background: #f6f7f8; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+  .back { position: absolute; left: 16px; top: 8px; height: 32px; padding: 0 12px; border: 0; border-radius: 8px; background: #e2e6e4; color: #1d232a; font: 14px system-ui; }
+  h1 { margin: 40px 0 8px; font-size: 32px; text-align: left; }
+  .side { float: left; width: 200px; margin-right: 24px; }
+  .side h2 { font-size: 18px; text-align: left; }
+  .pill { display: inline-flex; padding: 4px 10px; margin-left: 40px; border-radius: 999px; background: #dde7e3; }
+  .cells { display: flex; gap: 8px; }
+  .cells > p { flex: none; min-width: 72px; margin: 0; padding: 8px; background: #fff; white-space: nowrap; }
+  .meter { width: 200px; height: 8px; border-radius: 4px; background: #d5dad8; }
+  .meter i { display: block; width: 70%; height: 100%; border-radius: inherit; background: #24524a; }
+  input { height: 40px; width: 220px; padding: 0 12px; border: 0; border-radius: 8px; background: #e8ecea; font: 15px system-ui; }
+  input:focus-visible, .go:focus-visible { outline: none; box-shadow: 0 0 0 3px #24524a; }
+  .go { height: 40px; padding: 0 16px; border: 0; border-radius: 8px; background: #24524a; color: #fff; font: 600 15px system-ui; }
+  .far { margin-top: 2400px; }
+  .hang { display: block; margin-left: -60px; color: #4b5651; }
+</style></head>
+<body><div class="wrap">
+  <button class="back" type="button" onclick="this.blur()">Back</button>
+  <h1>Harbour report</h1><span class="hang">Week of 24 November</span>
+  <aside class="side"><h2>This week</h2><span class="pill">Ardmore</span></aside>
+  <div class="cells"><p>Liegeplatz</p><p>Hafen</p><p>Kapitän</p></div>
+  <p>Car deck</p><div class="meter" role="img" aria-label="Car deck 70% full"><i></i></div>
+  <label>Find a sailing <input type="search" placeholder="Ship or port"></label> <button class="go" type="button" onclick="this.blur()">Search</button>
+  <video src="harbour.mp4" autoplay muted loop playsinline width="320" height="180"></video>
+  <div class="far"><img src="far-quay.jpg" alt="The far quay at dusk" width="320" height="200"></div>
+</div></body></html>

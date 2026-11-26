@@ -21,12 +21,13 @@
   /* Open or closed, right now, set as large as a headline: the one thing a visitor came to check. */
   [data-part="now"] { margin: 0 0 18px; font-family: var(--font-display); font-size: clamp(2rem, 1rem + 2.8cqi, 3.25rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.05; text-wrap: balance; }
   [data-part="now"]:empty { display: none; }
-  [data-part="now"][data-open]::before { content: ""; display: inline-block; width: 0.28em; height: 0.28em; margin-right: 0.3em; border-radius: 50%; background: var(--status-positive); vertical-align: 0.18em; box-shadow: 0 0 0 0.12em color-mix(in oklab, var(--status-positive) 22%, transparent); }
+  [data-part="now"][data-open]::before { content: ""; display: inline-block; width: 0.28em; height: 0.28em; margin-inline-end: 0.3em; border-radius: 50%; background: var(--status-positive); vertical-align: 0.18em; box-shadow: 0 0 0 0.12em color-mix(in oklab, var(--status-positive) 22%, transparent); }
   table { width: 100%; border-collapse: collapse; }
   tr { border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
   tr:first-child { border-top: var(--bw) var(--border-style) var(--border-hairline); }
-  th, td { padding: 11px 0; font-weight: 400; text-align: left; }
-  td { text-align: right; font-variant-numeric: tabular-nums; }
+  /* The hours table is not a scroller: a long day or note breaks rather than widening the page. */
+  th, td { padding: 11px 0; font-weight: 400; text-align: start; overflow-wrap: anywhere; }
+  td { text-align: end; font-variant-numeric: tabular-nums; }
   td[data-closed] { color: var(--text-secondary); }
   tr[data-today] th, tr[data-today] td { font-weight: 650; }
   tr[data-today] th::after { content: "Today"; margin-left: 10px; padding: 1px 7px; border-radius: 999px; background: var(--bg-surface-3); color: var(--text-secondary); font-size: 11px; font-weight: 600; }

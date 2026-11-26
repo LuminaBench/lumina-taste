@@ -247,6 +247,21 @@
   background: var(--accent-soft);
   color: var(--text-primary);
 }
+/* Long words (German and Finnish compounds, long names, addresses) break rather than push the page wider than
+   the screen. Table cells keep their width (a table scrolls in its own frame), so they only break when they must. */
+:where([data-palette]) :where(h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, figcaption, label, legend, summary, caption, a) {
+  overflow-wrap: anywhere;
+}
+:where([data-palette]) :where(td, th, td *, th *, pre, code, kbd, time, data, output) {
+  overflow-wrap: break-word;
+}
+/* Forced colours (Windows contrast themes) remove box-shadows, so a ring drawn with one disappears: there, focus
+   is always an outline in the system's highlight colour. */
+@media (forced-colors: active) {
+  [data-palette] :is(a, button, summary, input, select, textarea, [tabindex], [role="slider"]):focus-visible {
+    outline: var(--focus-width) solid Highlight !important;
+  }
+}
 /* Focus rings appear for keyboard focus only (:focus-visible), never on a mouse click. */
 :where([data-palette]) :where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
   outline: var(--focus-width) solid var(--focus-ring);

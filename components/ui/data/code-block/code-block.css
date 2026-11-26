@@ -6,8 +6,8 @@
   [role="tab"]:hover { color: var(--text-primary); }
   [role="tab"][aria-selected="true"] { background: var(--bg-surface-3); color: var(--text-primary); }
   /* The copy button sits at the right edge, after the file name when there is one. */
-  [data-part="bar"] > button[data-part="copy"]:not([data-part="file"] ~ *) { margin-left: auto; }
-  [data-part="file"] { margin-left: auto; font: var(--text-ui-xs) var(--font-mono); color: var(--text-muted); }
+  [data-part="bar"] > button[data-part="copy"]:not([data-part="file"] ~ *) { margin-inline-start: auto; }
+  [data-part="file"] { margin-inline-start: auto; font: var(--text-ui-xs) var(--font-mono); color: var(--text-muted); }
   pre { margin: 0; padding: var(--gap-md); overflow-x: auto; font: var(--text-ui-sm) / 1.65 var(--font-mono); color: var(--text-primary); tab-size: 2; outline: none; }
   pre:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: calc(var(--focus-width) * -1); }
   [data-t="k"] { color: var(--accent-text); font-weight: 550; }

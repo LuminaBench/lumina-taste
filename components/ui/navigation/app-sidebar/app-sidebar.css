@@ -26,7 +26,7 @@
   a:hover { background: var(--bg-surface-2); color: var(--text-primary); }
   a[aria-current="page"] { background: var(--bg-surface-3); color: var(--text-primary); font-weight: 600; }
   a[aria-current="page"]::before { content: ""; position: absolute; left: -8px; top: 8px; bottom: 8px; width: 3px; border-radius: 0 2px 2px 0; background: var(--accent-solid); }
-  [data-part="count"] { margin-left: auto; font-style: normal; font-size: var(--text-ui-xs); color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  [data-part="count"] { margin-inline-start: auto; font-style: normal; font-size: var(--text-ui-xs); color: var(--text-muted); font-variant-numeric: tabular-nums; }
   [data-part="section"] { margin: var(--gap-md) 10px 6px; font-size: var(--text-ui-xs); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); white-space: nowrap; }
   :scope[data-collapsed] a { justify-content: center; padding: 0; }
   :scope[data-collapsed] a > span, :scope[data-collapsed] [data-part="count"] { display: none; }

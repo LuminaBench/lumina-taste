@@ -2,10 +2,10 @@
 .lt-table-wrap:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
 @scope (.lt-table) {
   :scope { width: 100%; border-collapse: separate; border-spacing: 0; font-size: var(--text-ui); font-variant-numeric: tabular-nums; }
-  thead th { position: sticky; top: 0; z-index: 1; padding: 0 var(--cell-px); height: 38px; background: var(--bg-surface-2); border-bottom: var(--bw) var(--border-style) var(--border-hairline); text-align: left; font-weight: 600; font-size: var(--text-ui-xs); color: var(--text-secondary); white-space: nowrap; }
+  thead th { position: sticky; top: 0; z-index: 1; padding: 0 var(--cell-px); height: 38px; background: var(--bg-surface-2); border-bottom: var(--bw) var(--border-style) var(--border-hairline); text-align: start; font-weight: 600; font-size: var(--text-ui-xs); color: var(--text-secondary); white-space: nowrap; }
   th button { display: inline-flex; align-items: center; gap: 4px; height: 26px; margin: 0 -6px; padding: 0 6px; border: 0; border-radius: var(--radius-xs); background: none; color: inherit; font: inherit; cursor: pointer; }
   th button:hover { background: var(--bg-surface-3); color: var(--text-primary); }
-  [data-num] { text-align: right; }
+  [data-num] { text-align: end; }
   [data-num] button { flex-direction: row-reverse; }
   [data-part="sort"] { position: relative; width: 8px; height: 12px; opacity: 0.35; }
   [data-part="sort"]::before, [data-part="sort"]::after { content: ""; position: absolute; left: 0; border-inline: 4px solid transparent; transition: opacity var(--dur-1); }
@@ -17,7 +17,7 @@
   tbody td { height: calc(var(--cell-py) * 2 + 20px); padding: 0 var(--cell-px); border-bottom: var(--bw) var(--border-style) var(--border-hairline); color: var(--text-primary); white-space: nowrap; }
   tbody tr[data-row]:hover td { background: var(--bg-surface-2); }
   tbody tr:last-child td { border-bottom: 0; }
-  [data-part="expander-col"], td:first-child { width: 36px; padding-right: 0; }
+  [data-part="expander-col"], td:first-child { width: 36px; padding-inline-end: 0; }
   [data-part="expand"] { display: grid; place-items: center; width: 24px; height: 24px; border: 0; border-radius: var(--radius-xs); background: none; color: var(--text-muted); cursor: pointer; }
   [data-part="expand"]:hover { background: var(--bg-surface-3); color: var(--text-primary); }
   [data-part="expand"] .lt-icon { transition: rotate var(--dur-2) var(--ease-out); }
