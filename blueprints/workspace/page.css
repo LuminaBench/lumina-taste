@@ -3,12 +3,17 @@
 html, body { height: 100%; }
 body { overflow: hidden; background: var(--bg-canvas); }
 .ws { --inspector-w: 368px; display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto var(--inspector-w); height: 100dvh; }
-.ws > .lt-sidebar { height: 100dvh; border-right: 0; }
+.ws > .lt-sidebar { grid-column: 1; height: 100dvh; border-right: 0; }
+/* Every pane keeps its own column, so a collapsed sidebar (its edge hidden) leaves the others where they are. */
+.ws-r1 { grid-column: 2; }
+.ws-main { grid-column: 3; }
+.ws-r2 { grid-column: 4; }
+.ws-inspector { grid-column: 5; grid-row: 1; }
 .ws:has(> .lt-sidebar[data-collapsed]) .ws-r1 { display: none; }
 .ws:has(> .lt-sidebar[data-collapsed]) > .lt-sidebar { border-right: var(--bw) var(--border-style) var(--border-hairline); }
 
 /* Top bar: the page's name and day, the command menu, shortcuts */
-.ws-main { display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; min-width: 0; min-height: 0; }
+.ws-main { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr) auto; min-width: 0; min-height: 0; }
 .ws-bar { display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 0 20px; border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
 .ws-title { display: flex; align-items: baseline; gap: 12px; min-width: 0; margin-right: auto; }
 .ws-title h1 { margin: 0; font-family: var(--font-display); font-size: var(--step-2); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); }
@@ -31,7 +36,7 @@ body { overflow: hidden; background: var(--bg-canvas); }
 .ws-count { margin: 0 0 0 auto; color: var(--text-secondary); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; }
 
 /* The table: dense but calm. Thin rules between rows only, one tint for the selected row, numbers aligned. */
-.ws-table-area { display: grid; min-height: 0; padding: 0 20px; outline: none; }
+.ws-table-area { display: grid; grid-template-columns: minmax(0, 1fr); min-height: 0; padding: 0 20px; outline: none; }
 .ws-table.lt-table-wrap { --cell-py: 7px; --cell-px: 12px; max-height: none; height: 100%; min-height: 0; background: var(--bg-surface-1); }
 .ws-table .lt-table td:first-child { width: auto; padding-right: var(--cell-px); }
 .ws-table .lt-table tbody tr[data-row] { cursor: default; }
@@ -107,13 +112,36 @@ body { overflow: hidden; background: var(--bg-canvas); }
 .ws-toast { position: fixed; right: 24px; bottom: 52px; z-index: 80; max-width: min(420px, calc(100vw - 32px)); margin: 0; padding: 12px 16px; border-radius: var(--radius-md); background: var(--text-primary); color: var(--bg-canvas); font-size: var(--text-ui-sm); font-weight: 550; box-shadow: var(--shadow-overlay); }
 .ws-toast:empty { display: none; }
 
+/* A tablet or a small laptop window (768 to 1180px): the sidebar becomes a rail of icons (below 1100px, unless the
+   reader opened it) and the table and the inspector stay side by side, a split view. */
 @media (max-width: 1180px) {
   .ws { --inspector-w: 320px; }
   .ws-table [data-col="foot"] { display: none; }
+  .ws-find { flex: 1 1 0; min-width: 0; max-width: 260px; }
+  .ws-find input { width: 100%; }
 }
-/* Narrow windows: one pane at a time. The inspector slides over the table when a row is opened. */
-@media (max-width: 860px) {
+@media (min-width: 768px) and (max-width: 959px) {
+  /* A resized inspector keeps its width on a wide window; here the table needs the room. */
+  .ws { grid-template-columns: auto auto minmax(0, 1fr) auto min(var(--inspector-w), 288px); }
+  .ws-table [data-col="ship"], .ws-table [data-col="arr"] { display: none; }
+  .ws-route [data-from] { display: none; }
+  .ws-keys { display: none; }
+  .ws-cmd { width: auto; }
+  .ws-cmd span { display: none; }
+  .ws-title p { display: none; }
+  .ws-cars { grid-template-columns: 36px 4ch; gap: 8px; }
+  .ws-bar, .ws-filters, .ws-table-area, .ws-foot { padding-inline: 16px; }
+  .ws-i { padding-inline: 18px; }
+}
+/* A foldable open across two screens: the table on one, the inspector on the other, the hinge between them. */
+@media (horizontal-viewport-segments: 2) {
+  .ws { grid-template-columns: 0 0 env(viewport-segment-width 0 0, minmax(0, 1fr)) calc(env(viewport-segment-left 1 0, 0px) - env(viewport-segment-right 0 0, 0px)) env(viewport-segment-width 1 0, var(--inspector-w)); }
+  .ws > .lt-sidebar, .ws-r1, .ws-r2 { visibility: hidden; overflow: hidden; }
+}
+/* Narrow windows (a phone): one pane at a time. The inspector slides over the table when a row is opened. */
+@media (max-width: 767px) {
   .ws { grid-template-columns: auto minmax(0, 1fr); }
+  .ws-main { grid-column: 2; }
   .ws-r1, .ws-r2 { display: none; }
   .ws > .lt-sidebar { border-right: var(--bw) var(--border-style) var(--border-hairline); }
   .ws-inspector { position: fixed; inset: 0 0 0 auto; z-index: 30; width: min(100%, 440px); box-shadow: var(--shadow-overlay); translate: 100% 0; visibility: hidden; transition: translate var(--dur-4) var(--ease-out), visibility 0s var(--dur-4); }
@@ -129,7 +157,7 @@ body { overflow: hidden; background: var(--bg-canvas); }
   .ws-title p { display: none; }
   .ws-table [data-col="cars"] { display: none; }
   .ws-filters { flex-wrap: wrap; }
-  .ws-find { flex: 1 1 100%; }
+  .ws-find { flex: 1 1 100%; max-width: none; }
   /* The direction is clear from where it goes: "Kestrel Isle" or "Ardmore". */
   .ws-route [data-from] { display: none; }
   .ws-find input { width: 100%; }

@@ -163,7 +163,7 @@ const move = (by: number) => {
 // One pane at a time on a narrow window: opening a row brings the inspector over the table.
 const openInspector = () => { ws.dataset.pane = 'inspector'; $('#ws-i-h')!.focus({ preventScroll: true }); };
 const closeInspector = () => { delete ws.dataset.pane; selected()?.focus(); };
-tbody.addEventListener('click', (e) => { const r = (e.target as Element).closest<HTMLTableRowElement>('tr[data-row]'); if (r) { select(r); if (matchMedia('(max-width: 860px)').matches) openInspector(); } });
+tbody.addEventListener('click', (e) => { const r = (e.target as Element).closest<HTMLTableRowElement>('tr[data-row]'); if (r) { select(r); if (matchMedia('(max-width: 767px)').matches) openInspector(); } });
 tbody.addEventListener('dblclick', () => openInspector());
 $('#ws-i-back')!.addEventListener('click', closeInspector);
 

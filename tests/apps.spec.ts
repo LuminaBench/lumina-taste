@@ -277,3 +277,71 @@ test.describe('dense dashboard', () => {
     await expect(page.locator('.bp-kpis[data-view="ready"]')).toBeVisible();
   });
 });
+
+// Tablets (768 to 1180px) and foldables: the phone app becomes a sidebar and two panes, its sheet a popover;
+// the work app keeps the table and the inspector side by side with the sidebar as a rail of icons.
+test.describe('tablet and foldable layouts', () => {
+  test('the phone app on a tablet: a sidebar, Today beside the sailing, and pages that never scroll sideways', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 768 });
+    await page.goto(app('?screen=home'));
+    await expect(page.locator('#ap-side')).toBeVisible();
+    await expect(page.locator('#ap-side a[aria-current="page"]')).toHaveText('Today');
+    await expect(page.locator('#screen-home .ap-tabs')).toBeHidden();
+    const [list, detail] = await Promise.all([page.locator('#screen-home').boundingBox(), page.locator('#screen-sailing').boundingBox()]);
+    expect(list!.x + list!.width).toBeLessThanOrEqual(detail!.x + 1);
+    expect(detail!.height).toBeLessThanOrEqual(768);
+    await page.locator('#ap-later [data-id="1230"] [data-part="main"]').click();
+    await expect(page.locator('#screen-home')).toBeVisible();
+    await expect(page.locator('#sail-h')).toBeFocused();
+    await page.click('#ap-side a[data-tab="tickets"]');
+    await expect(page.locator('#screen-tickets')).toBeVisible();
+    await expect(page.locator('#screen-home')).toBeHidden();
+    await expect(page.locator('#ap-side a[aria-current="page"]')).toHaveText('Tickets');
+    for (const width of [768, 1024, 1180]) {
+      await page.setViewportSize({ width, height: 900 });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    }
+    // Upright, the sidebar is a rail of icons with their names under them.
+    await page.setViewportSize({ width: 768, height: 1024 });
+    expect((await page.locator('#ap-side').boundingBox())!.width).toBeLessThan(100);
+    // The foldable's two-pane rule is in the stylesheet, with the width rule as the fallback.
+    const css = await page.evaluate(() => [...document.styleSheets].flatMap((s) => [...s.cssRules].map((r) => r.cssText)).join('\n'));
+    expect(css).toContain('horizontal-viewport-segments: 2');
+  });
+
+  test('on a tablet the tickets sheet is a popover by its button: every option shown, Escape closes, focus returns', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 768 });
+    await page.goto(app('?screen=sailing'));
+    await page.click('#ap-choose');
+    const sheet = page.locator('#ap-sheet');
+    await expect(sheet).toBeVisible();
+    await expect(page.locator('#ap-sheet [data-part="grab"]')).toBeHidden();
+    await expect(page.locator('#ap-dog')).toBeAttached();
+    await expect(page.locator('.ap-extras')).toBeVisible();
+    await expect(page.locator('#ap-adults')).toBeFocused();
+    const box = (await sheet.boundingBox())!;
+    expect(box.width).toBeLessThanOrEqual(420);
+    expect(box.y + box.height).toBeLessThan(768 - 40);
+    await page.keyboard.press('Escape');
+    await expect(sheet).toBeHidden();
+    await expect(page.locator('#ap-choose')).toBeFocused();
+  });
+
+  test('the work app on a tablet: a rail of icons, the table and the inspector side by side', async ({ page }) => {
+    for (const width of [768, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('/blueprints/workspace/');
+      await expect(page.locator('.lt-sidebar')).toHaveAttribute('data-collapsed', '');
+      await expect(page.locator('#ws-inspector')).toBeVisible();
+      // The sidebar narrows with a short transition: wait for it to settle.
+      await expect.poll(async () => (await page.locator('.ws-main').boundingBox())!.width).toBeGreaterThan(380);
+      const [main, insp] = await Promise.all([page.locator('.ws-main').boundingBox(), page.locator('#ws-inspector').boundingBox()]);
+      expect(main!.x + main!.width).toBeLessThanOrEqual(insp!.x + 1);
+      // Every part of the main pane fits it: the table scrolls inside its own frame if it must.
+      const over = await page.evaluate(() => [...document.querySelectorAll('.ws-main > *')].filter((e) => e.scrollWidth > e.clientWidth + 1 && getComputedStyle(e).overflowX === 'visible').map((e) => e.className));
+      expect(over, `${width}`).toEqual([]);
+      await page.locator('#ws-rows tr').nth(9).click();
+      await expect(page.locator('#ws-inspector')).toBeVisible();
+    }
+  });
+});
