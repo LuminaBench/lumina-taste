@@ -124,7 +124,7 @@ test('art direction: one signature, no three neighbours with the same shape, a h
     }
   }
   const studio = compose('landing page for Meridian, an architecture studio');
-  assert.equal(studio.sections.find((s) => /^hero-/.test(s.id)).id, 'hero-statement');
+  assert.equal(studio.sections.find((s) => /^hero-/.test(s.id)).id, 'hero-cover');
   assert.deepEqual(studio.artDirection.mainAttributes, ['data-scroll']);
   const saas = compose('landing page for a project management app for agencies');
   assert.equal(saas.sections.find((s) => /^hero-/.test(s.id)).id, 'hero-split');
@@ -141,8 +141,8 @@ test('compose --write produces a composed draft that audits clean, with real anc
     const html = readFileSync(join(dir, 'index.html'), 'utf8');
     assert.match(html, /<main id="main" data-scroll>/);
     assert.doesNotMatch(html, /<header><p data-part="eyebrow">/);
-    assert.match(html, /<section class="lt-hero-statement"[^>]*data-entrance/);
-    assert.match(html, /<section class="lt-hero-statement"[^>]*id="top"/);
+    assert.match(html, /<section class="lt-hero-cover"[^>]*data-entrance/);
+    assert.match(html, /<section class="lt-hero-cover"[^>]*id="top"/);
     assert.ok(html.includes('Meridian') && !html.includes('Halyard'), 'the product name replaces the sample brand');
     assert.ok(!/lt-logo-cloud|lt-testimonial-grid/.test(html), 'proof from other people is never drafted');
     // The navigation points at sections that exist.
@@ -485,8 +485,8 @@ test('every band a draft writes has something to look at; software shows itself;
     const sol = node([join(root, 'scripts/compose.mjs'), 'Website for Harrow & Finch, a law firm in Manchester, partners Ruth Harrow, Sam Finch and Priya Shah, settlement agreement review from £450', '--project', join(dir, 'sol'), '--write']);
     assert.equal(sol.status, 0, sol.stderr);
     assert.match(readFileSync(join(dir, 'sol', 'index.html'), 'utf8'), /<li><span data-part="avatar" data-n="0" style="border-radius: 50%" aria-hidden="true">RH<\/span><strong>Ruth Harrow<\/strong>/);
-    // The bold idea's panel stays a dark object in both modes on a short page (the palette's own dark tokens).
-    assert.match(readFileSync(join(dir, 'bakery', 'index.html'), 'utf8'), /<figure class="lt-art" data-variant="figure" data-tone="dark"/);
+    // A bakery with three prices gets them as its first screen: a menu board on the palette's own dark ground.
+    assert.match(readFileSync(join(dir, 'bakery', 'index.html'), 'utf8'), /<section class="lt-hero-board"[^>]*data-variant="menu"[\s\S]*?<figure data-part="board" data-tone="dark">[\s\S]*?£4\.20/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 

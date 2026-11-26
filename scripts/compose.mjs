@@ -20,6 +20,7 @@ import { brandFrom } from '../engine/compose/brand.mjs';
 import { renderBand, navBar, footer as footerBar, heroPicture, pictureBand, pinnedSteps, sideScroll, motifFor, motifParts, sceneFor, sceneParts, isSoftware, itemsFrom } from '../engine/compose/bands.mjs';
 import { splitMain, joinMain, idOfBlock, applyBeat, applyHeroCopy, heroIdeaPanel, setHeroVisual, setFacts, applyMediaIdea, applyClose, applyHours, ideaComment, esc } from '../engine/compose/draft.mjs';
 import { pageModel, appFlow } from '../engine/compose/model.mjs';
+import { composeHero, fitWords } from '../engine/compose/hero.mjs';
 import { PAGES } from '../engine/compose/pages.mjs';
 import { PAGE_SCRIPT } from '../engine/compose/page-script.mjs';
 import { DRAFT_CSS } from '../engine/compose/page-css.mjs';
@@ -180,8 +181,13 @@ const flow = APP_TYPES.has(type.id) ? appFlow(model, facts, { typeId: type.id, p
 let sections = type.sections.map((s, i) => ({ n: i + 1, ...s, exists: !s.id || uiIds.has(s.id) }));
 // Developer products show code: a code-block figure takes the place of the hero's product frame.
 // Art direction: one signature, a hero, a layout for each section and where colour and type may go.
-const art0 = direct({ type, domain, profile, sections, uiIds });
-if (art0.hero && art0.hero !== sections.find((x) => /^hero-/.test(x.id ?? ''))?.id) for (const x of sections) if (/^hero-/.test(x.id ?? '')) { x.alt = [...new Set([x.id, ...(x.alt ?? [])])]; x.id = art0.hero; x.rule = `${x.rule ?? ''} Chosen because ${art0.heroWhy}; use ${x.alt[0]} instead if there is a real product screen or photograph to show.${sections.some((y) => y.id === 'stats-band') ? ' Leave its three facts out: this page has a figures section, and figures are shown once.' : ''}`.trim(); }
+const subjectInput = { facts, items: itemsFrom(facts), software: ['landing', 'dev-landing'].includes(type.id) };
+const art0 = direct({ type, domain, profile, sections, uiIds, ...subjectInput });
+for (const x of sections) if (/^hero-/.test(x.id ?? '') && art0.composition) {
+  if (art0.hero !== x.id) { x.alt = [...new Set([x.id, ...(x.alt ?? [])])]; x.id = art0.hero; }
+  x.variant = art0.composition.variant;
+  x.rule = `${x.rule ?? ''} Composition: ${art0.composition.name}${x.variant ? ` (data-variant="${x.variant}")` : ''}, because ${art0.heroWhy}.${x.id === 'hero-statement' && sections.some((y) => y.id === 'stats-band') ? ' Leave its three facts out: this page has a figures section, and figures are shown once.' : ''}`.trim();
+}
 const blueprint = type.blueprint && blueprintIds.has(type.blueprint) ? type.blueprint : null;
 // One way to start, not two: a blueprint when it already is this page, snippets when the plan differs from it.
 const startWith = blueprint && type.start !== 'snippets' ? 'blueprint' : 'snippets';
@@ -196,12 +202,17 @@ const ordered = orderSections(sections, rhythm0);
 sections = ordered.sections;
 const rhythm = ordered.rhythm;
 const drafted = sections.filter((s) => !(s.optional && PROOF.has(s.id ?? '')));
-const art = { ...direct({ type, domain, profile, sections: drafted, uiIds }), hero: art0.hero, heroWhy: art0.heroWhy };
+const art = { ...direct({ type, domain, profile, sections: drafted, uiIds, ...subjectInput }), hero: art0.hero, heroWhy: art0.heroWhy, composition: art0.composition, chrome: art0.chrome };
 const layoutOf = (n) => art.sectionLayouts.find((l) => l.n === n) ?? null;
 const pal = JSON.parse(readFileSync(join(root, 'tokens/palettes/palettes.json'), 'utf8')).palettes.find((p) => p.id === profile.palette);
 const accentLch = pal ? pal.modes[profile.mode === 'dark' ? 'dark' : 'light'].tokens['accent-solid'].oklch.match(/[\d.]+/g).map(Number) : [0.5, 0.1, 250];
-const idea = boldIdea({ facts, type, hero: sections.find((x) => /^hero-/.test(x.id ?? ''))?.id ?? null, signature: art.signature, accent: colourName(accentLch), sections: drafted });
+// The bold idea goes in the hero's picture only where the composition shows a panel's words; elsewhere it is the headline.
+const PANEL_HEROES = new Set(['split', 'overlap', 'edge', 'product']);
+const ideaHero = art.composition ? (PANEL_HEROES.has(art.composition.id) ? 'hero-split' : 'hero-statement') : sections.find((x) => /^hero-/.test(x.id ?? ''))?.id ?? null;
+const idea = boldIdea({ facts, type, hero: ideaHero, signature: art.signature, accent: colourName(accentLch), sections: drafted });
 const hero = heroCopy(facts, { typeId: type.id, product });
+// A first screen is a headline, one sentence and one action: no note under the buttons, 40 words at most.
+if (type.kind === 'marketing') Object.assign(hero, fitWords(hero));
 const wantsCode = type.kind === 'marketing' && (domain?.id === 'devtool' || has('code') || has('show code'));
 const components = [...new Set([...sections.filter((s) => s.id && !s.optional).map((s) => s.id), ...(wantsCode ? ['code-block'] : [])])].filter((id) => uiIds.has(id));
 const charts = type.charts ?? [];
@@ -272,7 +283,7 @@ const plan = {
   install,
   installAlternative: startWith === 'blueprint' ? installSnippets : installBlueprint,
   blueprint: blueprint ?? (type.blueprint ? `${type.blueprint} (not in this version; start from the sections below)` : null),
-  artDirection: { signature: art.signature, boldIdea: idea, mainAttributes: art.mainAttrs, sections: art.sectionLayouts.map((l) => ({ n: l.n, id: l.id, layout: l.layout, space: l.space, attributes: sectionAttrs(l) })), accent: art.accent, type: art.type, rhythm: art.rhythm, words: art.words, motion: art.motion },
+  artDirection: { signature: art.signature, hero: art.composition ? { composition: art.composition.id, block: art.composition.block, variant: art.composition.variant, name: art.composition.name, why: art.composition.why } : null, nav: art.chrome?.nav ?? null, footer: art.chrome?.footer ?? null, boldIdea: idea, mainAttributes: art.mainAttrs, sections: art.sectionLayouts.map((l) => ({ n: l.n, id: l.id, layout: l.layout, space: l.space, composition: l.composition, attributes: sectionAttrs(l) })), accent: art.accent, type: art.type, rhythm: art.rhythm, words: art.words, motion: art.motion },
   rhythm: { banded: rhythm.banded, strip: rhythmStrip(rhythm), key: STRIP_KEY, beats: rhythm.beats, moved: rhythm0.moved, inserted: rhythm0.inserted, broken: checkRhythm(rhythm, rhythm.beats.map((b, i) => (i === 0 && /^hero-/.test(b.id ?? '') ? null : layoutOf(b.n)?.shape ?? null))) },
   words: { facts, figures, firstScreen: hero, missing: [...(type.kind === 'marketing' || !PAGES[type.id] ? hero.todo : []), ...(figuresBandSkipped ? ['two to four real figures with their periods (the figures band was left out rather than filled with invented ones)'] : []), ...(idea.ask && type.kind === 'marketing' ? [idea.ask] : []), ...model.todo] },
   model: { records: model.records.map((r) => ({ one: r.one, many: r.many, fields: r.fields, fromBrief: r.fromBrief })), statuses: model.status },
@@ -400,12 +411,13 @@ function writeComposed(dir, run) {
   const bands = [];
   // The first screen: the kit's hero in the brief's words.
   const heroSec = sections.find((x) => /^hero-/.test(x.id ?? ''));
+  const comp = art.composition ?? { id: 'split', block: heroSec.id, variant: null };
   let heroHtml = subjectHero(partHtml(heroSec.id), heroSec.id)
     .replace(/\s*<a data-part="pill"[\s\S]*?<\/a>/, '')
     .replace(/\s*<div data-part="shot"[\s\S]*?<\/div>\s*(?=<\/section>)/, idea.figure && heroSec.id === 'hero-centered' ? `\n  <div data-part="visual">${heroIdeaPanel(idea, facts)}</div>\n` : '\n');
   // The first screen always shows something: the bold idea's figure, else the product working (software),
   // else the subject's own drawing. Never the kit's sample frame.
-  if (!(idea.place === 'hero-visual' && idea.figure) && /<div data-part="(?:frame|visual)"/.test(heroHtml)) heroHtml = setHeroVisual(heroHtml, heroPicture(ctx));
+  if (comp.block === 'hero-split' && !(idea.place === 'hero-visual' && idea.figure) && /<div data-part="(?:frame|visual)"/.test(heroHtml)) heroHtml = setHeroVisual(heroHtml, heroPicture(ctx));
   else if (idea.place === 'hero-visual' && idea.figure) {
     // The idea's panel carries the subject's drawing too, behind the figure.
     // The idea's panel carries the page's one scene behind the figure (a figure panel gives it less height);
@@ -416,6 +428,8 @@ function writeComposed(dir, run) {
     // Above a figure set this large the scene keeps to the top third, clear of the number.
     heroHtml = heroHtml.replace(/<figure class="lt-art"([^>]*)>/, (x, a) => `<figure class="lt-art"${a}${m.attr}${sc ? ' style="--scene-h: 24%"' : ''}>${m.svg}`);
   }
+  // The composition the plan chose: the same words and picture, set as this subject's first screen.
+  heroHtml = composeHero(comp, heroHtml, ctx);
   ctx.heroMotif = /data-motif="([a-z]+)"/.exec(heroHtml)?.[1] ?? /data-scene="([a-z]+)/.exec(heroHtml)?.[1] ?? null;
   bands.push({ id: heroSec.id, html: heroHtml, slug: 'top', label: 'Top' });
   // The close repeats the hero's action. Software with no word on price says "Sign up", not "Start free".
@@ -463,14 +477,17 @@ function writeComposed(dir, run) {
     const l = lay.sectionLayouts.find((x) => x.n === i + 1);
     const attrs = [`id="${b.slug}"`, i === 0 ? 'data-entrance' : null, l ? sectionAttrs(l) : null].filter(Boolean).join(' ');
     let html = b.html.replace(/^<(section|div)\b([^>]*)>/, (m, tag, rest) => `<${tag}${rest.replace(/\sid="[^"]*"/, '')}${attrs ? ' ' + attrs : ''}>`);
-    return applyBeat(html, b.beat);
+    // The first screen's own ground (a dark picture, the brand poster) belongs to its composition, not the rhythm.
+    const own = i === 0 ? /^<\w+[^>]*\sdata-tone="([^"]+)"/.exec(html)?.[1] : null;
+    html = applyBeat(html, b.beat);
+    return own ? html.replace(/^<(\w+)\b([^>]*)>/, (m, tag, rest) => `<${tag}${rest.replace(/\sdata-tone="[^"]*"/, '')} data-tone="${own}">`) : html;
   });
   const closeBand = ordered.find((b) => b.id === 'cta-band');
   const action = { label: ctx.action ?? 'Get in touch', href: `#${closeBand?.slug ?? 'top'}` };
   const links = ordered.slice(1).filter((b) => b !== closeBand).slice(0, 4).map((b) => ({ slug: b.slug, label: b.label }));
   const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''}`;
   const list = todo.length ? `<!-- TODO before this page ships. The brief did not say, so the draft leaves these out rather than inventing them:\n${todo.map((t) => `  - ${t.replace(/--/g, '–')}`).join('\n')}\n-->\n` : '';
-  let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${esc(product ?? 'TODO: page title')}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. Every word on it comes from the brief; check each one, then add what the TODO list asks for. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${list}${navBar({ product, links, action, facts })}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}${moments.some((m) => m.name === 'number-settle') ? ' data-lt="number-settle"' : ''}>${ideaComment(idea)}\n${body.join('\n\n')}\n</main>\n${footerBar({ product, facts, year: new Date().getFullYear() })}\n</body>\n</html>\n`;
+  let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${esc(product ?? 'TODO: page title')}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. Every word on it comes from the brief; check each one, then add what the TODO list asks for. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${list}${navBar({ product, links, action, facts, style: art.chrome?.nav })}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}${moments.some((m) => m.name === 'number-settle') ? ' data-lt="number-settle"' : ''}>${ideaComment(idea)}\n${body.join('\n\n')}\n</main>\n${footerBar({ product, facts, year: new Date().getFullYear(), style: art.chrome?.footer, links })}\n</body>\n</html>\n`;
   // Buttons: the primary goes to the close; a secondary goes to the prices if they are on the page; any other is dropped.
   const have = new Set([...page.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
   const pricesSlug = ['range', 'prices'].find((x) => have.has(x));
@@ -483,7 +500,7 @@ function writeComposed(dir, run) {
   page = retitle(page);
   // Install exactly the parts the page uses.
   const rc = rootClasses();
-  const ids = new Set(['button', 'navbar-simple', 'footer-minimal']);
+  const ids = new Set(['button', 'navbar-simple']);
   for (const m of page.matchAll(/class="([^"]+)"/g)) for (const c of m[1].split(/\s+/)) if (rc.has(c)) ids.add(rc.get(c));
   run(`${base} --components ${[...ids].join(',')}`);
   const MARK = '<!-- lumina-taste draft for:';
@@ -703,6 +720,8 @@ if (startWith === 'blueprint') {
 if (restyle) { L.push(H('Restyling an existing page'), ''); for (const n of kb.restyle.notes) L.push(`- ${n}`); L.push(''); }
 L.push(H('Art direction (what makes this page this page)'), '');
 L.push(`- **Signature: ${art.signature.name}.** ${art.signature.how}`);
+if (art.composition) L.push(`- **First screen: ${art.composition.name}** (\`${art.composition.block}\`${art.composition.variant ? ` with \`data-variant="${art.composition.variant}"\`` : ''}), because ${art.composition.why}. Not the kit's default split: a line above, three lines of headline, a paragraph, two buttons, a note and a picture on the right is what every generated page looks like. One sentence under the headline, one action and at most one quiet link, no note under the buttons, 40 words at most.`);
+if (art.chrome) L.push(`- **Bar and foot:** ${art.chrome.nav.id === 'ink' ? 'an ink bar (`data-tone="dark"` on the navbar)' : art.chrome.nav.id === 'brand' ? 'a bar in the brand colour (`data-tone="accent"` on the navbar)' : art.chrome.nav.id === 'split' ? 'a split bar, the name in the middle (`data-variant="split"`)' : art.chrome.nav.id === 'minimal' ? 'a minimal bar, the name and the action only (`data-variant="minimal"`)' : 'the simple bar'}, because ${art.chrome.nav.why}; ${art.chrome.footer.id === 'wordmark' ? 'a wordmark foot (`site-footer` with `data-variant="wordmark"`)' : art.chrome.footer.id === 'contact' ? 'a contact foot, the phone and address set large (`site-footer` with `data-variant="contact"`)' : 'a quiet foot (`footer-minimal`)'}, because ${art.chrome.footer.why}.`);
 L.push(`- **Bold idea: ${idea.text}.** It lives in ${idea.where}. ${idea.fromBrief ? 'Taken from the brief; everything else on the page stays quieter than it.' : `The brief has no figure to build it on: ask for ${idea.ask}.`}`);
 if (art.mainAttrs.length) L.push(`- **Page:** \`<main ${art.mainAttrs.join(' ')}>\`: each section rises into place as it scrolls in. Sections are set apart by space and a change of ground, not by rules or small labels over every heading.`);
 {

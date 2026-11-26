@@ -253,13 +253,13 @@ const RENDER = {
 };
 
 /** An art panel for one thing: its drawing, its price set large (or its name), one fact. */
-function thingPanel(it, ctx, tone, motif, ratio = null) {
+export function thingPanel(it, ctx, tone, motif, ratio = null) {
   // Beside a price set large the drawing is smaller and stays in its corner, clear of the figure.
   const m = motifParts(motif, { small: !!it.price });
   return `<figure class="lt-art"${tone}${m.attr}${it.price ? ' data-variant="figure"' : ''}${ratio ? ` data-ratio="${ratio}"` : ''} data-shot="${esc(`A photograph of the ${it.name}${ctx.facts.place ? ` in ${ctx.facts.place}` : ''}, same light and ratio as the others, 4:5`)}">${m.svg}${it.price ? `${it.from ? '<p data-part="index">From</p>' : ''}<p data-part="figure"${figureStyle(it.price)}>${esc(it.price)}</p>` : `<p data-part="name">${keepHyphens(esc(cap(it.name)))}</p>`}${it.meta ? `<p data-part="fact">${esc(it.meta)}</p>` : ''}<figcaption class="lt-visually-hidden">${esc(`${cap(it.name)}${it.price ? `, ${it.from ? 'from ' : ''}${it.price}` : ''}`)}</figcaption></figure>`;
 }
 /** Each thing's drawing, never the same as its neighbour's. */
-function motifsFor(items, ctx) {
+export function motifsFor(items, ctx) {
   const out = [];
   for (const it of items) {
     const prev = out[out.length - 1] ?? null;
@@ -478,7 +478,8 @@ function media(ctx) {
   if (ctx.idea.place !== 'media-band' || !ctx.idea.figure) return null;
   let html = ctx.snippet('media-band');
   const second = ctx.facts.claims[1];
-  html = applyMediaIdea(html, ctx.idea, second ? `${cap(second)}.` : null);
+  // The band's claim is the brief's own: a second claim, else what the figure counts. Never the sample's line.
+  html = applyMediaIdea(html, ctx.idea, second ? `${cap(second)}.` : `${cap(ctx.idea.caption ?? ctx.product ?? '')}.`);
   // The figure's panel carries the subject's drawing, so the band is a picture, not a number on a slab.
   const m = motifParts(motifFor(`${ctx.facts.claims.join(' ')} ${ctx.facts.kind ?? ''}`, ctx), { small: true });
   html = html.replace(/<div class="lt-art"([^>]*)>/, (x, a) => `<div class="lt-art"${a}${m.attr}>${m.svg}`);
@@ -488,9 +489,10 @@ function media(ctx) {
 }
 
 /** The bar: the name, links to the bands that exist, the phone number as text, and the one action. */
-export function navBar({ product, links, action, facts }) {
+export function navBar({ product, links, action, facts, style = null }) {
   const li = links.map((l) => `<li><a href="#${l.slug}">${esc(l.label)}</a></li>`).join('');
-  return `<header class="lt-nav-simple" data-lt="navbar-simple">
+  const attrs = `${style?.variant ? ` data-variant="${style.variant}"` : ''}${style?.tone ? ` data-tone="${style.tone}"` : ''}`;
+  return `<header class="lt-nav-simple" data-lt="navbar-simple"${attrs}>
   <a href="#top" data-part="brand"><span data-part="mark" aria-hidden="true"></span>${esc(product ?? 'Home')}</a>
   <nav aria-label="Main"><ul data-part="links">${li}</ul></nav>
   <div data-part="actions">${facts.phone ? `<a data-part="signin" href="tel:${esc(facts.phone.replace(/[^\d+]/g, ''))}">${esc(facts.phone)}</a>` : ''}<a class="lt-btn" data-variant="primary" data-size="sm" href="${esc(action.href)}">${esc(action.label)}</a></div>
@@ -499,12 +501,40 @@ export function navBar({ product, links, action, facts }) {
 </header>`;
 }
 
-/** The foot: the legal name, the two pages every site has, and where it is. */
-export function footer({ product, facts, year }) {
+/**
+ * The foot, in the style the plan chose: quiet (the legal name, two links and where it is), a wordmark (the name
+ * set across the column under the page's links) or contact (the phone, email and address set large).
+ */
+export function footer({ product, facts, year, style = null, links = [], hours = null }) {
+  const name = product ?? 'TODO: legal name';
+  const where = facts.street ? `${facts.street}, ${facts.place ?? ''}`.replace(/,\s*$/, '') : facts.place ?? null;
+  const legal = `<div data-part="legal"><span>© ${year} ${esc(name)}</span>${where ? `<span>${esc(where)}</span>` : ''}</div>`;
+  const legalLinks = '<li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li>';
+  if (style?.id === 'wordmark' && product) {
+    return `<footer class="lt-footer" data-variant="wordmark"${style.tone ? ` data-tone="${style.tone}"` : ''}>
+  <div data-part="top">
+    <div data-part="about"><a data-part="brand" href="#top">${esc(product)}</a>${facts.kind ? `<p>${esc(`${cap(facts.kind)}${facts.place ? `, ${facts.place}` : ''}`)}</p>` : ''}</div>
+    <nav data-part="cols" aria-label="Footer">${links.length ? `<div><h2>On this page</h2><ul>${links.map((l) => `<li><a href="#${l.slug}">${esc(l.label)}</a></li>`).join('')}</ul></div>` : ''}<div><h2>Legal</h2><ul>${legalLinks}</ul></div></nav>
+  </div>
+  <p data-part="wordmark" aria-hidden="true" style="--wordmark-len: ${product.length}">${esc(product)}</p>
+  ${legal}
+</footer>`;
+  }
+  if (style?.id === 'contact' && (facts.phone || facts.email)) {
+    const addr = [product, facts.building, facts.street, [facts.place, facts.postcode].filter(Boolean).join(' ')].filter(Boolean);
+    const open = facts.days ? `Open ${facts.days}${facts.times[0] ? `, ${facts.times[0].what === 'hours' ? '' : 'from '}${facts.times[0].value}` : ''}` : null;
+    return `<footer class="lt-footer" data-variant="contact"${style.tone ? ` data-tone="${style.tone}"` : ''}>
+  <div data-part="top">
+    <div data-part="reach"><p>${esc(facts.phone ? 'Ring, or write' : 'Write to us')}</p>${facts.phone ? `<a href="tel:${esc(facts.phone.replace(/[^\d+]/g, ''))}">${esc(facts.phone)}</a>` : ''}${facts.email ? `<a href="mailto:${esc(facts.email)}">${esc(facts.email)}</a>` : ''}</div>
+    <div data-part="where">${addr.length > 1 ? `<address>${addr.map(esc).join('<br>')}</address>` : ''}${open ? `<p>${esc(open)}</p>` : ''}</div>
+  </div>
+  <div data-part="legal"><span>© ${year} ${esc(name)}</span><nav aria-label="Footer"><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></nav></div>
+</footer>`;
+  }
   return `<footer class="lt-footer-min">
-  <p>© ${year} ${esc(product ?? 'TODO: legal name')}</p>
-  <nav aria-label="Footer"><ul><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></nav>
-  ${facts.place ? `<p data-part="made">${esc(facts.street ? `${facts.street}, ${facts.place}` : facts.place)}</p>` : ''}
+  <p>© ${year} ${esc(name)}</p>
+  <nav aria-label="Footer"><ul>${legalLinks}</ul></nav>
+  ${facts.place ? `<p data-part="made">${esc(where)}</p>` : ''}
 </footer>`;
 }
 

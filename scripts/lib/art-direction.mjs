@@ -4,6 +4,7 @@
 // in a row), and says where the accent colour and the type sizes are allowed to go.
 //
 // Pure functions, no I/O: compose.mjs calls direct(); tests call it directly.
+import { chooseHero, chooseChrome, sectionComposition } from '../../engine/compose/compositions.mjs';
 
 /** How a section block is laid out, and the visual shape that layout has (what must not repeat next door). */
 const LAYOUTS = {
@@ -30,7 +31,7 @@ const SHAPE = {
 const FIXED_SHAPE = {
   'scroll-statement': 'statement', 'stack-cards': 'stack', 'media-band': 'band', 'gallery-rail': 'rail-x', 'bento-grid': 'grid',
   'faq-section': 'rail', 'feature-split': 'alternating', 'quote-feature': 'split', 'cta-band': 'panel', 'logo-cloud': 'centre', 'pricing-tiers': 'centre',
-  'hero-split': 'split', 'hero-centered': 'centre', 'hero-statement': 'left', 'visit-info': 'split', 'booking-bar': 'panel', 'sticky-story': 'rail',
+  'hero-split': 'split', 'hero-centered': 'centre', 'hero-statement': 'left', 'hero-board': 'split', 'hero-cover': 'left', 'hero-mosaic': 'split', 'hero-video': 'left', 'visit-info': 'split', 'booking-bar': 'panel', 'sticky-story': 'rail',
   'terminal-window': 'split', 'code-block': 'left', 'api-endpoint': 'left', 'contact-section': 'split', 'newsletter-signup': 'panel', 'comparison-table': 'left', 'showcase-tabs': 'centre',
 };
 
@@ -44,8 +45,7 @@ export const fixedShape = (id) => {
 /** Styles and domains whose pages read as print: untinted bands, set apart by space and scale. */
 const PRINTLIKE_STYLES = new Set(['editorial', 'swiss', 'minimal', 'atelier', 'newsprint', 'zen', 'noir', 'linen', 'paper', 'mono', 'bauhaus', 'ledger', 'graph', 'kraft']);
 const PRINTLIKE_DOMAINS = new Set(['editorial', 'creative', 'beauty', 'hospitality', 'finance', 'public', 'professional', 'events']);
-/** Where the words carry the first screen better than a product picture. */
-const STATEMENT_DOMAINS = new Set(['creative', 'editorial', 'public', 'events']);
+/** Styles that set the words first. */
 const STATEMENT_STYLES = new Set(['editorial', 'swiss', 'minimal', 'noir', 'newsprint', 'bauhaus', 'zen', 'mono']);
 
 const SIGNATURES = {
@@ -88,20 +88,25 @@ const signatureFor = (type, domain) => {
 const DEFAULT_SIGNATURE = { name: 'One clear picture', how: 'Choose one thing to show large in the first screen (the product\'s real screen in a device-frame, one chart, or a statement headline) and let every other section be quieter than it.' };
 
 /**
- * @param {{ type: any, domain: any, profile: any, sections: any[], uiIds: Set<string> }} input
+ * @param {{ type: any, domain: any, profile: any, sections: any[], uiIds: Set<string>, facts?: any, items?: any[], software?: boolean }} input
  */
-export function direct({ type, domain, profile, sections, uiIds }) {
+export function direct({ type, domain, profile, sections, uiIds, facts = null, items = [], software = false }) {
   const marketing = type.kind === 'marketing';
   const style = profile.style ?? null;
   const printlike = (style && PRINTLIKE_STYLES.has(style)) || (!style && (PRINTLIKE_DOMAINS.has(domain?.id) || ['event', 'cause'].includes(type.id)));
   const signature = signatureFor(type, domain);
 
-  // Hero: swap in the statement hero where words carry the first screen.
+  // The first screen's composition, from the subject and the brief's facts: never the kit's default split by habit.
   const heroSection = sections.find((s) => /^hero-/.test(s.id ?? ''));
-  let hero = heroSection?.id ?? null, heroWhy = null;
-  if (marketing && heroSection && uiIds.has('hero-statement') && type.id !== 'dev-landing' && (STATEMENT_DOMAINS.has(domain?.id) || STATEMENT_STYLES.has(style))) {
-    hero = 'hero-statement';
-    heroWhy = 'the words carry this first screen better than a picture would';
+  let hero = heroSection?.id ?? null, heroWhy = null, composition = null, chrome = null;
+  if (marketing && heroSection) {
+    composition = chooseHero({ type, domain, facts: facts ?? { brief: '' }, items, software });
+    // A statement style (swiss, editorial…) keeps the words first when the subject has no shape of its own.
+    if (STATEMENT_STYLES.has(style) && ['overlap', 'edge', 'product', 'wide'].includes(composition.id) && type.id !== 'dev-landing' && type.id !== 'landing') composition = { ...composition, id: 'tucked', block: 'hero-statement', variant: 'tucked', name: 'huge type with a small picture tucked in', why: `the ${style} style sets the words first; one small picture beside them` };
+    if (!uiIds.has(composition.block)) composition = { id: 'split', block: 'hero-split', variant: null, name: 'split', why: 'the composition this subject needs is not installed' };
+    hero = composition.block;
+    heroWhy = composition.why;
+    chrome = chooseChrome({ type, domain, facts: facts ?? {}, hero: composition });
   }
 
   // Layouts: walk the sections in order, taking each block's most distinctive layout whose shape differs
@@ -137,7 +142,7 @@ export function direct({ type, domain, profile, sections, uiIds }) {
   };
   const picks = solve(0, heroShape, 0) ?? solve(0, null, 0) ?? live.map((x) => x.options[0]);
   live.forEach((x, i) => { x.pick = picks[i]; x.shape = shapeOf(x.id, picks[i]); });
-  const layouts = slots.map((x) => (x ? { n: x.n, id: x.id, ...(x.role ? { role: x.role } : {}), layout: x.pick === 'default' ? null : x.pick, shape: x.shape } : null));
+  const layouts = slots.map((x) => (x ? { n: x.n, id: x.id, ...(x.role ? { role: x.role } : {}), layout: x.pick === 'default' ? null : x.pick, shape: x.shape, composition: sectionComposition(x.id, null, x.pick === 'default' ? null : x.pick) } : null));
 
   // Space: the hero and a lone quote breathe; proof strips sit tight against what they support.
   const space = (id) => (id === 'logo-cloud' ? 'tight' : id === 'quote-feature' ? 'open' : null);
@@ -161,7 +166,7 @@ export function direct({ type, domain, profile, sections, uiIds }) {
   const rhythm = marketing
     ? `Grounds alternate (plain, tinted, the one dark band, the brand band at the close) so no two neighbours share one; density alternates so three busy bands never meet; the first screen and the close are set largest. No small label over every heading and no rules between sections. Shapes in order: ${sectionLayouts.map((l) => l.shape).join(' → ')}. No two neighbours share a shape.`
     : 'One primary view fills the screen; chrome stays quiet. Group with space and hairlines before reaching for cards.';
-  return { signature, hero, heroWhy, mainAttrs, printlike, sectionLayouts, accent, type: type_, rhythm, motion, words };
+  return { signature, hero, heroWhy, composition, chrome, mainAttrs, printlike, sectionLayouts, accent, type: type_, rhythm, motion, words };
 }
 
 /** The attribute string to put on a section for its assigned layout and space. */
