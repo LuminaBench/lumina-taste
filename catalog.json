@@ -573,10 +573,12 @@
         "alternating sections",
         "feature with image left right",
         "feature details",
-        "text image rows"
+        "text image rows",
+        "asymmetric rows",
+        "uneven split rows"
       ],
       "pattern": "<article> rows",
-      "states": ["alternating","stacked"],
+      "states": ["alternating","stacked","asym"],
       "react": "FeatureSplit",
       "deps": [],
       "files": [
@@ -776,10 +778,12 @@
         "rooms",
         "tour options",
         "collection grid",
-        "what we sell"
+        "what we sell",
+        "cards overlapping a photo",
+        "cards over a picture"
       ],
       "pattern": "<ul> of <article> + <dl>",
-      "states": ["three across","two across","stacked"],
+      "states": ["three across","two across","stacked","over"],
       "react": "OfferCards",
       "deps": ["art-panel"],
       "files": [
@@ -1054,10 +1058,12 @@
         "hero image band",
         "apple style section",
         "showcase",
-        "big picture section"
+        "big picture section",
+        "full bleed image band",
+        "edge to edge photo section"
       ],
       "pattern": "<section data-tone=\"dark\"> + <figure data-zoom>",
-      "states": ["dark","light","picture settling"],
+      "states": ["dark","light","picture settling","bleed"],
       "react": "MediaBand",
       "deps": [],
       "files": [
@@ -3682,10 +3688,19 @@
       "kind": "ui",
       "family": "navigation",
       "name": "Balanced footer",
-      "summary": "Brand line, four even link columns and a single legal row.",
-      "aliases": ["footer links","site footer","bottom of page","multi column footer"],
+      "summary": "Brand line, link columns and a single legal row. data-variant=\"wordmark\" sets the name across the column under the links; \"contact\" sets the phone and email large with the address and hours.",
+      "aliases": [
+        "footer links",
+        "site footer",
+        "bottom of page",
+        "multi column footer",
+        "big wordmark footer",
+        "giant logo footer",
+        "contact footer",
+        "footer with phone number large"
+      ],
       "pattern": "contentinfo landmark",
-      "states": ["default","hover"],
+      "states": ["default","hover","wordmark","contact"],
       "react": "SiteFooter",
       "deps": [],
       "files": [
@@ -3857,7 +3872,7 @@
       "kind": "ui",
       "family": "navigation",
       "name": "Navbar, simple",
-      "summary": "Brand, four links, Sign in and one primary button; a menu button and panel on narrow screens. data-variant=\"pill\" floats it as a centred rounded bar.",
+      "summary": "Brand, four links and one primary button; a menu button and panel on narrow screens. data-variant=\"pill\" floats it, \"split\" centres the name between the links and the action, \"minimal\" keeps only the name and the action; data-tone=\"dark\" or \"accent\" makes it a solid ink or brand bar in contrast with the page.",
       "aliases": [
         "top navigation bar",
         "website header",
@@ -3866,10 +3881,16 @@
         "navbar",
         "pill navbar",
         "floating nav",
-        "rounded nav bar"
+        "rounded nav bar",
+        "split navigation",
+        "logo in the middle with links either side",
+        "minimal header",
+        "dark top bar",
+        "coloured top bar",
+        "contrasting nav bar"
       ],
       "pattern": "<header> + <nav> + disclosure",
-      "states": ["wide","narrow closed","narrow open","current page","pill"],
+      "states": ["wide","narrow closed","narrow open","current page","pill","split","minimal","ink bar","brand bar"],
       "react": "NavbarSimple",
       "deps": [],
       "files": [
@@ -3913,7 +3934,7 @@
       "summary": "Shop and brand header: small uppercase links left, a spaced wordmark centred, icon actions right.",
       "aliases": ["centered logo header","fashion site nav","shop header","luxury brand navbar","logo in the middle nav"],
       "pattern": "<header> 3-column grid",
-      "states": ["wide","narrow (links hidden)"],
+      "states": ["wide","narrow (links hidden)","masthead"],
       "react": "NavbarCentered",
       "deps": [],
       "files": [

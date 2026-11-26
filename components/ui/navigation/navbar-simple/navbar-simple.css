@@ -27,6 +27,27 @@
   /* Between a phone and a laptop the links stay on one line: a phone number in the bar gives way first. */
   @container (max-width: 1000px) { [data-part="signin"][href^="tel:"] { display: none; } }
   @container (max-width: 680px) { nav, [data-part="signin"] { display: none; } [data-part="toggle"] { display: grid; } [data-part="actions"] { margin-inline-start: auto; } [data-part="toggle"] { margin-left: 0; } }
+
+  /* ---------------------------------------------------------------- bar styles
+     data-tone="dark" (an ink bar) or data-tone="accent" (the brand's own colour): a solid bar in contrast with the
+     page, so the top of a page is never the same hue as everything under it. The palette's scoped tokens do the
+     rest (the button turns to the bar's own ink). */
+  :scope[data-tone] { border-bottom-color: transparent; background: var(--bg-canvas); backdrop-filter: none; }
+  :scope[data-tone] [data-part="panel"] { border-bottom-color: transparent; }
+  /* data-variant="split": the links on the start side, the name in the middle, the action on the end side. */
+  :scope[data-variant="split"] { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 20px; }
+  :scope[data-variant="split"] > nav { grid-column: 1; grid-row: 1; }
+  :scope[data-variant="split"] > [data-part="brand"] { grid-column: 2; grid-row: 1; font-size: var(--step-1); }
+  :scope[data-variant="split"] > [data-part="actions"] { grid-column: 3; grid-row: 1; justify-self: end; }
+  :scope[data-variant="split"] > [data-part="toggle"] { grid-column: 1; grid-row: 1; justify-self: start; margin: 0; }
+  @container (max-width: 680px) { :scope[data-variant="split"] > [data-part="brand"] { font-size: inherit; } }
+  /* data-variant="minimal": the name and the one action, nothing else: for a page of one story. */
+  :scope[data-variant="minimal"] { border-bottom-color: transparent; }
+  :scope[data-variant="minimal"] > nav, :scope[data-variant="minimal"] > [data-part="toggle"], :scope[data-variant="minimal"] > [data-part="panel"] { display: none; }
+  :scope[data-variant="minimal"] > [data-part="actions"] { margin-inline-start: auto; }
 }
+/* An ink bar on a page that is already dark is lifted one step, so it still reads as the bar. */
+[data-mode="dark"] .lt-nav-simple[data-tone="dark"] { background: var(--bg-surface-2); }
+
 /* The first section under a floating pill gets the bar's height back as top padding. */
 .lt-nav-simple[data-variant="pill"] + main > :first-child, .lt-nav-simple[data-variant="pill"] + section { padding-top: calc(var(--block-y, calc(var(--section-y) * 0.75)) + 66px); }

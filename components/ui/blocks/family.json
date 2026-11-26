@@ -583,16 +583,18 @@
       "name": "Feature rows, alternating",
       "summary": "Text and a product picture side by side, swapping sides each row, with two ticked details.",
       "pattern": "<article> rows",
-      "states": ["alternating","stacked"],
+      "states": ["alternating","stacked","asym"],
       "aliases": [
         "zig zag features",
         "alternating sections",
         "feature with image left right",
         "feature details",
-        "text image rows"
+        "text image rows",
+        "asymmetric rows",
+        "uneven split rows"
       ],
       "react": "FeatureSplit",
-      "api": "order: 2 on odd rows",
+      "api": "order: 2 on odd rows · data-variant=\"asym\"",
       "w": 1000,
       "called": [
         "features with pictures alternating left and right",
@@ -624,7 +626,7 @@
       "debug": "Debug my feature rows. Rule out: pictures before text on mobile; stock illustrations instead of product; rows of different heights that feel random; more than three rows in a row. The symptom:",
       "code": [["CSS","grid + order",""],["lumina-taste","<FeatureSplit rows>","React"]],
       "added": 7,
-      "note": "Each row's visual is a slot too: a list mock or bar mock suits software; for a product, a place or a service use an art-panel or a photograph, and for a process a short numbered list."
+      "note": "Each row's visual is a slot too: a list mock or bar mock suits software; for a product, a place or a service use an art-panel or a photograph, and for a process a short numbered list. data-variant=\"asym\": uneven pairs, the picture the larger share, every second row stepping down; reads as a sequence rather than a zigzag of halves."
     },
     {
       "id": "logo-cloud",
@@ -945,7 +947,7 @@
       "name": "Offer cards",
       "summary": "Two to four things on offer, each with a picture or an art panel, one line, two facts, a price and a link.",
       "pattern": "<ul> of <article> + <dl>",
-      "states": ["three across","two across","stacked"],
+      "states": ["three across","two across","stacked","over"],
       "aliases": [
         "product cards",
         "product trio",
@@ -956,10 +958,12 @@
         "rooms",
         "tour options",
         "collection grid",
-        "what we sell"
+        "what we sell",
+        "cards overlapping a photo",
+        "cards over a picture"
       ],
       "react": "OfferCards",
-      "api": "<article> · <dl> · art panel",
+      "api": "<article> · <dl> · art panel · data-variant=\"over\" · [data-part=\"picture\"]",
       "w": 1000,
       "deps": ["art-panel"],
       "called": [
@@ -999,7 +1003,8 @@
         ["HTML","<ul><li><article><figure class=\"lt-art\">",""],
         ["lumina-taste","<OfferCards title offers>","React"]
       ],
-      "added": 13
+      "added": 13,
+      "note": "data-variant=\"over\": put <figure data-part=\"picture\"> (one wide photograph of the place or the range) before the list; the cards rise over its foot on the page ground. Breaks the grid without a second idea."
     },
     {
       "id": "visit-info",
@@ -1506,7 +1511,7 @@
       "name": "Media band",
       "summary": "One claim and one large picture on a dark ground, with three facts under it. The cinematic beat of a page; the picture settles into place as it scrolls in.",
       "pattern": "<section data-tone=\"dark\"> + <figure data-zoom>",
-      "states": ["dark","light","picture settling"],
+      "states": ["dark","light","picture settling","bleed"],
       "aliases": [
         "dark band",
         "full bleed section",
@@ -1514,10 +1519,12 @@
         "hero image band",
         "apple style section",
         "showcase",
-        "big picture section"
+        "big picture section",
+        "full bleed image band",
+        "edge to edge photo section"
       ],
       "react": "MediaBand",
-      "api": "data-tone=\"dark\" · data-zoom · [data-part=\"media|facts\"]",
+      "api": "data-tone=\"dark\" · data-zoom · [data-part=\"media|facts\"] · data-variant=\"bleed\"",
       "w": 1000,
       "preview": [],
       "called": [
@@ -1556,7 +1563,7 @@
         ["lumina-taste","<MediaBand media facts>","React"]
       ],
       "added": 16,
-      "note": "At most one dark band per page, from the middle on, for the strongest picture you have. Any block takes data-tone=\"dark\" the same way."
+      "note": "At most one dark band per page, from the middle on, for the strongest picture you have. Any block takes data-tone=\"dark\" the same way. data-variant=\"bleed\": the picture runs from one edge of the screen to the other (21:9, 4:3 on phones), square-cornered and without the glow; for a photograph or a drawing as wide as the page."
     },
     {
       "id": "product-reveal",

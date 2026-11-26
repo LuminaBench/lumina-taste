@@ -480,14 +480,23 @@
     {
       "id": "site-footer",
       "name": "Balanced footer",
-      "summary": "Brand line, four even link columns and a single legal row.",
+      "summary": "Brand line, link columns and a single legal row. data-variant=\"wordmark\" sets the name across the column under the links; \"contact\" sets the phone and email large with the address and hours.",
       "pattern": "contentinfo landmark",
-      "states": ["default","hover"],
-      "aliases": ["footer links","site footer","bottom of page","multi column footer"],
+      "states": ["default","hover","wordmark","contact"],
+      "aliases": [
+        "footer links",
+        "site footer",
+        "bottom of page",
+        "multi column footer",
+        "big wordmark footer",
+        "giant logo footer",
+        "contact footer",
+        "footer with phone number large"
+      ],
       "react": "SiteFooter",
       "fill": true,
       "wide": true,
-      "api": "<footer> · contentinfo",
+      "api": "<footer> · contentinfo · data-variant=\"wordmark|contact\"",
       "w": 900,
       "called": [
         "links at the very bottom of the site",
@@ -507,7 +516,8 @@
       ],
       "prompt": "Add a footer: a brand line, 3–5 balanced link columns under small uppercase headings in <nav aria-label=\"Footer\">, and a single legal row. Two columns on narrow screens.",
       "debug": "Debug my footer. Rule out: columns of very different lengths; tiny link text under 13px; low-contrast grey links; a newsletter, socials and a second sitemap competing below. The symptom:",
-      "code": [["HTML","<footer>","contentinfo landmark"],["lumina-taste","<SiteFooter columns>","React"]]
+      "code": [["HTML","<footer>","contentinfo landmark"],["lumina-taste","<SiteFooter columns>","React"]],
+      "note": "wordmark: add <p data-part=\"wordmark\" aria-hidden=\"true\" style=\"--wordmark-len: N\">Name</p> after the top row. contact: replace the top row's contents with <div data-part=\"reach\"> (a short line, then the phone and email as links) and <div data-part=\"where\"> (the <address> and the hours). Either takes data-tone=\"dark\". For a quiet foot, footer-minimal."
     },
     {
       "id": "floating-pill-nav",
@@ -840,9 +850,9 @@
     {
       "id": "navbar-simple",
       "name": "Navbar, simple",
-      "summary": "Brand, four links, Sign in and one primary button; a menu button and panel on narrow screens. data-variant=\"pill\" floats it as a centred rounded bar.",
+      "summary": "Brand, four links and one primary button; a menu button and panel on narrow screens. data-variant=\"pill\" floats it, \"split\" centres the name between the links and the action, \"minimal\" keeps only the name and the action; data-tone=\"dark\" or \"accent\" makes it a solid ink or brand bar in contrast with the page.",
       "pattern": "<header> + <nav> + disclosure",
-      "states": ["wide","narrow closed","narrow open","current page","pill"],
+      "states": ["wide","narrow closed","narrow open","current page","pill","split","minimal","ink bar","brand bar"],
       "aliases": [
         "top navigation bar",
         "website header",
@@ -851,10 +861,16 @@
         "navbar",
         "pill navbar",
         "floating nav",
-        "rounded nav bar"
+        "rounded nav bar",
+        "split navigation",
+        "logo in the middle with links either side",
+        "minimal header",
+        "dark top bar",
+        "coloured top bar",
+        "contrasting nav bar"
       ],
       "react": "NavbarSimple",
-      "api": "<nav aria-label> · aria-current · data-variant=\"pill\"",
+      "api": "<nav aria-label> · aria-current · data-variant=\"pill\" · data-variant=\"split|minimal\" · data-tone=\"dark|accent\"",
       "w": 980,
       "preview": [],
       "called": [
@@ -889,7 +905,8 @@
       "prompt": "Add a simple site header: 60px tall with a translucent background and hairline bottom border, brand mark and name on the left, 3–5 nav links (current page in primary ink via aria-current), a text \"Sign in\" and one small primary button on the right; under 680px of container width the links fold into a menu button that opens a panel below the bar.",
       "debug": "Debug my navbar. Rule out: two primary buttons; links that wrap onto two lines at tablet widths; the mobile menu not closing after a link is chosen; a sticky header covering anchor targets (scroll-margin-top). The symptom:",
       "code": [["HTML","<header><nav>",""],["lumina-taste","<NavbarSimple links cta>","React"]],
-      "added": 7
+      "added": 7,
+      "note": "A page whose ground, bands and accent share one hue reads as one flat colour: give its top bar contrast with data-tone=\"dark\" (ink) or \"accent\" (the brand colour). split suits a shop, a venue or an event with a name worth centring; minimal suits a one-story page, a portfolio or a full-bleed first screen."
     },
     {
       "id": "flyout-menu",
@@ -948,10 +965,10 @@
       "name": "Navbar, centred logo",
       "summary": "Shop and brand header: small uppercase links left, a spaced wordmark centred, icon actions right.",
       "pattern": "<header> 3-column grid",
-      "states": ["wide","narrow (links hidden)"],
+      "states": ["wide","narrow (links hidden)","masthead"],
       "aliases": ["centered logo header","fashion site nav","shop header","luxury brand navbar","logo in the middle nav"],
       "react": "NavbarCentered",
-      "api": "grid 1fr auto 1fr",
+      "api": "grid 1fr auto 1fr · data-variant=\"masthead\" · data-tone",
       "w": 980,
       "called": [
         "logo in the middle of the header",
@@ -977,7 +994,8 @@
       "prompt": "Add a centred-logo header for a brand or shop: a 3-column grid (1fr auto 1fr) with small spaced uppercase category links on the left, a letter-spaced wordmark centred, and search, account and bag icon links on the right (bag shows a count and says it in its label); links hide under 640px.",
       "debug": "Debug my centred header. Rule out: centring the logo with absolute positioning (overlaps links); icon links without names; the count only shown visually; the logo jumping when the link list changes length. The symptom:",
       "code": [["CSS","grid-template-columns: 1fr auto 1fr",""],["lumina-taste","<NavbarCentered>","React"]],
-      "added": 7
+      "added": 7,
+      "note": "data-variant=\"masthead\": the wordmark large on its own row and the links on a row under it, for a publication or a maker whose name is the brand."
     },
     {
       "id": "app-topbar",

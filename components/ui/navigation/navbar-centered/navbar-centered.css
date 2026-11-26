@@ -13,4 +13,13 @@
   @container (max-width: 640px) { nav { display: none; } [data-part="brand"] { font-size: var(--step-0); letter-spacing: 0.1em; } }
   @container (max-width: 420px) { [data-part="brand"] { font-size: var(--text-ui); letter-spacing: 0.06em; } }
   @media (max-width: 640px) { :scope { grid-template-columns: minmax(0, 1fr) auto; padding: 0 16px; } }
+
+  :scope[data-tone] { border-bottom-color: transparent; }
+  /* data-variant="masthead": the wordmark large on its own row, the links on a row under it. For a publication, a
+     maker or a shop whose name is the brand. */
+  :scope[data-variant="masthead"] { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); grid-template-rows: auto auto; height: auto; row-gap: 6px; padding-block: 18px 10px; }
+  :scope[data-variant="masthead"] > [data-part="brand"] { grid-column: 2; grid-row: 1; font-size: clamp(1.5rem, 1rem + 1.6vw, 2.25rem); letter-spacing: 0.04em; }
+  :scope[data-variant="masthead"] > nav { grid-column: 1 / -1; grid-row: 2; display: flex; justify-content: center; }
+  :scope[data-variant="masthead"] > [data-part="actions"] { grid-column: 3; grid-row: 1; }
+  @container (max-width: 640px) { :scope[data-variant="masthead"] > [data-part="brand"] { font-size: var(--step-1); letter-spacing: 0.02em; } }
 }

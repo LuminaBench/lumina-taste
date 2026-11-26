@@ -14,4 +14,21 @@
     [data-part="top"] { grid-template-columns: 1fr; gap: var(--gap-lg); }
     [data-part="cols"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
+
+  /* ---------------------------------------------------------------- footers with character
+     data-variant="wordmark": the name set across the whole column under the links (<p data-part="wordmark"
+     aria-hidden="true" style="--wordmark-len: N">), sized from its length so it never leaves the column.
+     data-variant="contact": the ways to reach a person set large (<div data-part="reach"> with links), the address
+     and hours beside them, then the legal row. data-tone="dark" on either makes it the page's ink foot. */
+  [data-part="wordmark"] { margin: var(--gap-xl) 0 0; color: var(--text-primary); font-family: var(--font-display); font-size: min(14rem, calc(100cqi / (var(--wordmark-len, 12) * 0.62))); font-weight: var(--weight-display); font-stretch: var(--stretch-display, normal); letter-spacing: -0.05em; line-height: 0.86; white-space: nowrap; }
+  :scope[data-variant="wordmark"] [data-part="legal"] { margin-top: var(--gap-md); }
+  :scope[data-variant="contact"] [data-part="top"] { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: end; }
+  [data-part="reach"] { display: grid; gap: 4px; }
+  [data-part="reach"] > p { margin: 0 0 8px; color: var(--text-secondary); font-size: var(--text-ui); }
+  [data-part="reach"] > a { justify-self: start; color: var(--text-primary); font-family: var(--font-display); font-size: clamp(1.75rem, 1rem + 2.6cqi, 3rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.12; font-variant-numeric: tabular-nums; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.16em; text-decoration-color: color-mix(in oklab, currentColor 36%, transparent); overflow-wrap: anywhere; }
+  [data-part="reach"] > a:hover { text-decoration-color: currentColor; }
+  [data-part="where"] { display: grid; gap: 10px; color: var(--text-secondary); font-size: var(--text-ui); line-height: 1.55; }
+  [data-part="where"] address { font-style: normal; color: var(--text-primary); }
+  [data-part="where"] p { margin: 0; }
+  @container lt-footer (max-width: 720px) { :scope[data-variant="contact"] [data-part="top"] { grid-template-columns: 1fr; } }
 }

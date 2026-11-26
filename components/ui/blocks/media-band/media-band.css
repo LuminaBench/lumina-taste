@@ -37,4 +37,16 @@
   .lt-mb-body svg { display: block; width: 100%; height: clamp(110px, 18cqi, 200px); }
   .lt-mb-line { fill: none; stroke: var(--accent-solid); stroke-width: 2.5; vector-effect: non-scaling-stroke; }
   .lt-mb-area { fill: color-mix(in oklab, var(--accent-solid) 16%, transparent); }
+  /* data-variant="bleed": the picture runs from one edge of the screen to the other, square-cornered, with no glow:
+     a photograph or a drawing as wide as the page. The words keep the page's column. */
+  :scope[data-variant="bleed"] { display: grid; grid-template-columns: [full-start] minmax(var(--block-x, 24px), 1fr) [content-start] minmax(0, var(--container, 1180px)) [content-end] minmax(var(--block-x, 24px), 1fr) [full-end]; padding-inline: 0; }
+  @media (max-width: 640px) { :scope[data-variant="bleed"] { grid-template-columns: [full-start] var(--block-x-sm, 16px) [content-start] minmax(0, 1fr) [content-end] var(--block-x-sm, 16px) [full-end]; padding-inline: 0; } }
+  @container (max-width: 640px) { :scope[data-variant="bleed"] { grid-template-columns: [full-start] var(--block-x-sm, 16px) [content-start] minmax(0, 1fr) [content-end] var(--block-x-sm, 16px) [full-end]; padding-inline: 0; } }
+  :scope[data-variant="bleed"] > * { grid-column: content; }
+  :scope[data-variant="bleed"] > [data-part="media"] { grid-column: full; width: 100%; max-width: none; overflow: hidden; }
+  :scope[data-variant="bleed"] > [data-part="media"]::before { content: none; }
+  :scope[data-variant="bleed"] > [data-part="media"] > :is(img, picture, video, .lt-art) { display: block; width: 100%; aspect-ratio: 21 / 9; height: auto; border-radius: 0; object-fit: cover; }
+  :scope[data-variant="bleed"] > [data-part="media"] > .lt-art { --art-ratio: 21 / 9; padding-inline: max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); }
+  :scope[data-variant="bleed"] > [data-part="media"] > figcaption { max-width: var(--container, 1180px); margin-inline: auto; padding-inline: var(--block-x, 24px); }
+  @container (max-width: 760px) { :scope[data-variant="bleed"] > [data-part="media"] > :is(img, picture, video, .lt-art) { aspect-ratio: 4 / 3; } }
 }

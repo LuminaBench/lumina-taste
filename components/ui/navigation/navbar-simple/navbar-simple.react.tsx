@@ -6,11 +6,11 @@ import './navbar-simple.css';
 export interface NavLink { label: string; href: string; current?: boolean }
 
 /** The plain, correct navbar: brand, four links, sign in and one primary action. Collapses to a menu. variant="pill" floats it as a centred rounded bar. */
-export function NavbarSimple({ brand, links, signIn, cta, variant = 'bar', className }: { brand: string; links: NavLink[]; signIn?: NavLink; cta?: NavLink; variant?: 'bar' | 'pill'; className?: string }) {
+export function NavbarSimple({ brand, links, signIn, cta, variant = 'bar', tone, className }: { brand: string; links: NavLink[]; signIn?: NavLink; cta?: NavLink; variant?: 'bar' | 'pill' | 'split' | 'minimal'; tone?: 'dark' | 'accent'; className?: string }) {
   const ref = useEnhance<HTMLElement>(enhance);
   const items = links.map((l) => <li key={l.href}><a href={l.href} aria-current={l.current ? 'page' : undefined}>{l.label}</a></li>);
   return (
-    <header ref={ref} className={cx('lt-nav-simple', className)} data-variant={variant === 'pill' ? 'pill' : undefined}>
+    <header ref={ref} className={cx('lt-nav-simple', className)} data-variant={variant === 'bar' ? undefined : variant} data-tone={tone}>
       <a href="#home" data-part="brand"><span data-part="mark" aria-hidden />{brand}</a>
       <nav aria-label="Main"><ul data-part="links">{items}</ul></nav>
       <div data-part="actions">{signIn && <a href={signIn.href} data-part="signin">{signIn.label}</a>}{cta && <a className="lt-btn" data-variant="primary" data-size="sm" href={cta.href}>{cta.label}</a>}</div>
