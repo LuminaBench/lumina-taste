@@ -6463,6 +6463,7 @@
       "states": ["loading","empty","error"],
       "type": "precision: a calm grotesk with tabular figures, because the app is read for numbers",
       "motion": "No scroll moments: an app moves only to answer the person. A pushed screen slides in from the trailing edge; the card frosts over when frozen.",
+      "brand": ["Larkspur Bank","Larkspur"],
       "kind": "blueprint",
       "files": [
         "blueprints/app-banking/index.html",
@@ -6502,6 +6503,7 @@
       "states": ["loading","empty","error"],
       "type": "geometric: round, open letters that read at arm's length while moving",
       "motion": "No scroll moments. The rings fill once when today opens; the timer counts; a pushed screen slides in.",
+      "brand": ["Kestrel"],
       "kind": "blueprint",
       "files": [
         "blueprints/app-fitness/index.html",
@@ -6543,6 +6545,7 @@
       "states": ["loading","empty","error"],
       "type": "humanist: warm, open letters for a small business people know by name",
       "motion": "No scroll moments. The chosen day slides into view; the sheet rises from the bottom.",
+      "brand": ["Moss Grooming"],
       "kind": "blueprint",
       "files": [
         "blueprints/app-booking/index.html",
@@ -6581,6 +6584,7 @@
       "states": ["loading","empty","error"],
       "type": "humanist: friendly, open letters that read well at 17px in a bubble",
       "motion": "No scroll moments. A thread opens at its newest message; a sent message joins your run of bubbles.",
+      "brand": ["Moss"],
       "kind": "blueprint",
       "files": [
         "blueprints/app-messaging/index.html",
@@ -6609,6 +6613,7 @@
       "states": ["loading","empty","error"],
       "type": "precision: a calm grotesk for an app that is mostly lists and numbers",
       "motion": "No scroll moments. A switch moves its thumb and says so once; a pushed page slides in.",
+      "brand": ["Juniper"],
       "kind": "blueprint",
       "files": [
         "blueprints/app-settings/index.html",

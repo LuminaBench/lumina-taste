@@ -75,11 +75,20 @@ function pickType() {
   const head = ` ${brief.toLowerCase().split(/[:,;—–]|\s-\s/)[0].replace(/[^a-z0-9'’-]+/g, ' ')} `;
   // A page the head names outright ("notes app pricing", "workspace settings") is that page.
   const headNames = kb.pageTypes.some((t) => t.id !== 'landing' && t.aliases.some((a) => !/\bapp\b/.test(a) && head.includes(` ${a} `)));
+  // "A settings app", "settings-heavy app": the settings are the app, not a settings page of another one.
+  if (/ settings(-heavy| heavy)? apps? /.test(head) && byId('app-settings')) return { type: byId('app-settings'), confident: true };
   if (/ apps? /.test(head) && !headNames && !/ (website|site|landing page|home page|homepage) /.test(head)) {
     const sells = / (a|per) (month|year|seat|user) | how it works | free trial | pricing | sign up | download | for (sole traders|teams|small businesses|freelancers) /.test(text);
-    if (/ (phone|mobile|ios|android|iphone) apps? /.test(head)) return { type: byId('app-phone'), confident: true };
     if (/ (api|sdk|sdks|cli) /.test(text) && sells) return { type: byId('dev-landing'), confident: true };
     if (sells) return { type: byId('landing'), confident: true };
+    // An app whose subject has a blueprint of its own: a bank, a run, a chat, bookings, a settings-heavy tool.
+    const own = / (bank|banking|money|wallet|budget|budgeting|savings) /.test(head) ? 'app-banking'
+      : / (running|run|runner|fitness|workout|workouts|gym|training|exercise|cycling|swimming|steps) /.test(head) ? 'app-fitness'
+      : / (chat|chats|messaging|messages|messenger|texting) /.test(head) ? 'app-messaging'
+      : / (booking|bookings|appointment|appointments|reservation|reservations|classes) /.test(head) ? 'app-booking'
+      : / (settings|preferences) /.test(head) ? 'app-settings' : null;
+    if (own && byId(own)) return { type: byId(own), confident: true };
+    if (/ (phone|mobile|ios|android|iphone) apps? /.test(head)) return { type: byId('app-phone'), confident: true };
     if (/ (on the phone|phone|mobile|ios|android|iphone) /.test(text)) return { type: byId('app-phone'), confident: true };
     if (/ (desktop|calendar|appointments|records|table|dispatch|rota|schedule|staff) /.test(text)) return { type: byId('workspace'), confident: true };
     return { type: byId('app-phone'), confident: true };
@@ -146,11 +155,12 @@ const explicitStyle = Object.prototype.hasOwnProperty.call(mood, 'style') ? mood
 // A marketing page with no recognisable subject still gets a headline face distinct from the stock sans.
 const defaults = { marketing: ['slate-forest', 'geometric'], app: ['slate-forest', 'precision'], reading: ['paper-ink', 'editorial'], flow: ['slate-forest', 'precision'] }[type.kind];
 // A consumer phone app reads friendlier than a developer console: humanist type, not the stock app sans.
-if (['app-phone', 'mobile-app'].includes(type.id)) defaults[1] = 'humanist';
+if (['app-phone', 'mobile-app', 'app-booking', 'app-messaging'].includes(type.id)) defaults[1] = 'humanist';
 const profile = {
-  palette: domain?.palette ?? defaults[0],
+  // An app type with a blueprint of its own brings that blueprint's look (the bank's navy, the run's coral).
+  palette: type.look?.palette ?? domain?.palette ?? defaults[0],
   mode: mood.mode ?? domain?.mode ?? 'light',
-  typography: mood.typography ?? domain?.typography ?? defaults[1],
+  typography: mood.typography ?? type.look?.typography ?? domain?.typography ?? defaults[1],
   density: mood.density ?? type.density,
   style: explicitStyle ?? null,
 };
@@ -201,9 +211,11 @@ const facts = extractFacts(brief, { product });
 const figures = figuresFrom(facts);
 // Pages that are not a marketing story (an app, a checkout, a status page) are drawn from a model of the
 // product: its records and their fields, statuses, plans, basket, services; apps are planned as a flow.
-const APP_TYPES = new Set(['dashboard', 'admin-table', 'settings', 'inbox', 'ai-chat', 'agent-app', 'mobile-app', 'app-phone', 'workspace', 'directory']);
+const APP_TYPES = new Set(['dashboard', 'admin-table', 'settings', 'inbox', 'ai-chat', 'agent-app', 'mobile-app', 'app-phone', 'workspace', 'directory', 'app-banking', 'app-fitness', 'app-booking', 'app-messaging', 'app-settings']);
 const model = pageModel(facts, { product, typeId: type.id });
-const flow = APP_TYPES.has(type.id) ? appFlow(model, facts, { typeId: type.id, product }) : null;
+const flow0 = APP_TYPES.has(type.id) ? appFlow(model, facts, { typeId: type.id, product }) : null;
+// An app with a blueprint of its own lists that blueprint's screens, in the order they are used.
+const flow = flow0 && type.screens ? { ...flow0, screens: type.screens.map(([id, name, what]) => ({ id, name, what, build: true })) } : flow0;
 
 // ---------------------------------------------------------------- plan
 let sections = type.sections.map((s, i) => ({ n: i + 1, ...s, exists: !s.id || uiIds.has(s.id) }));
@@ -581,6 +593,21 @@ function writePage(dir, run) {
   return { path: target, kind: 'page', todo, flow: flow ? flow.screens.filter((s) => s.build).map((s) => s.id) : null, charts: [...ctx.charts] };
 }
 
+/** The features a one-line app brief lists after its colon that the drafted page has no words for. */
+function missingAppFeatures(text, html) {
+  const list = text.split(':').slice(1).join(':').split(/,|\band\b/).map((x) => x.trim()).filter(Boolean);
+  const page = html.replace(/<[^>]+>/g, ' ').toLowerCase();
+  const STOP = new Set(['with', 'this', 'that', 'your', 'near', 'from', 'today', 'month', 'week', 'weekly', 'a', 'the', 'for', 'new', 'list']);
+  // The blueprint's own word for the same thing: a conversation is a chat, a contact is a person.
+  const SAME = { conversation: 'chat', contact: 'people', setting: 'search settings', appointment: 'booking', calendar: 'december', run: 'workout', distance: ' km', balance: '£', freeze: 'freeze' };
+  return list.filter((f) => {
+    // A single word after a comma is a field of the thing before it ("bookings with dog, owner, date"), not a feature.
+    if (f.split(/\s+/).length < 2) return false;
+    const words = f.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter((w) => w.length > 3 && !STOP.has(w)).map((w) => w.replace(/(ies)$/, 'y').replace(/s$/, ''));
+    return words.length && !words.some((w) => page.includes(w) || (SAME[w] && page.includes(SAME[w])));
+  });
+}
+
 // ---------------------------------------------------------------- --write: a composed first draft
 // Installs what the plan needs and writes the page itself: sections in order with their layouts, tones and
 // ids applied, the navigation pointing at them, and the art direction on <main>. Every sentence in it is
@@ -621,7 +648,15 @@ if (writeDraft) {
       parts.head += ideaComment(idea);
       writeFileSync(path, retitle(joinMain(parts)));
     }
-    draft = { path, kind: 'blueprint', rhythm: bpRhythm ? { strip: rhythmStrip(bpRhythm), moved: bpRhythm.moved, broken: checkRhythm(bpRhythm) } : null };
+    // An app drafted from its blueprint: the brief's features the blueprint has no screen for are one TODO list,
+    // and the page says its rows are samples in the subject's nouns until the real data replaces them.
+    let appTodo = null;
+    if (type.kind === 'app' && type.screens) {
+      appTodo = missingAppFeatures(brief, readFileSync(path, 'utf8'));
+      const note = `<!-- Draft of the ${type.name.toLowerCase()} for ${(product ?? 'the product').replace(/--/g, '–')}. Rows marked data-sample are believable samples in the subject's own nouns: replace them with real data before this ships.${appTodo.length ? `\n  TODO, the brief names these and the blueprint has no screen for them yet:\n${appTodo.map((t) => `  - ${t.replace(/--/g, '–')}`).join('\n')}` : ''} -->`;
+      writeFileSync(path, readFileSync(path, 'utf8').replace(/(<body[^>]*>)/, `$1\n  ${note}`));
+    }
+    draft = { path, kind: 'blueprint', todo: appTodo ?? undefined, rhythm: bpRhythm ? { strip: rhythmStrip(bpRhythm), moved: bpRhythm.moved, broken: checkRhythm(bpRhythm) } : null };
   } else {
     const SLUG = { 'feature-split': 'features', 'feature-grid': 'features', 'bento-grid': 'features', 'how-it-works': 'how', 'stats-band': 'figures', 'faq-section': 'questions', 'cta-band': 'start', 'pricing-tiers': 'pricing', 'offer-cards': 'range', 'visit-info': 'visit', 'booking-bar': 'book', 'contact-section': 'contact', 'team-grid': 'team', 'blog-grid': 'posts', 'project-grid': 'work', 'integrations-grid': 'integrations', 'code-block': 'code', 'terminal-window': 'quickstart', 'api-endpoint': 'api', 'description-list': 'details', 'comparison-table': 'compare', 'newsletter-signup': 'newsletter', 'sticky-story': 'story', 'showcase-tabs': 'examples', 'media-band': 'product', 'scroll-statement': 'promise' };
     const LABEL = { features: 'Features', how: 'How it works', figures: 'In numbers', questions: 'Questions', pricing: 'Pricing', range: 'The range', visit: 'Visit', book: 'Book', contact: 'Contact', team: 'Team', posts: 'Writing', work: 'Work', integrations: 'Integrations', code: 'Code', quickstart: 'Quickstart', api: 'API', details: 'Details', compare: 'Compare', story: 'How it works', examples: 'Examples', product: 'The product', promise: 'Our promise' };

@@ -1662,6 +1662,411 @@
    ]
   },
   {
+   "id": "app-banking",
+   "name": "Banking app (phone)",
+   "kind": "app",
+   "blueprint": "app-banking",
+   "density": "balanced",
+   "pattern": "single",
+   "layout": "A phone first: the balance large, the week of spending as one-hue bars, payments by day, a send sheet with a number pad, the card with a freeze switch; a sidebar and two panes from 768px.",
+   "aliases": [
+    "bank app",
+    "banking app",
+    "money app",
+    "wallet app",
+    "budgeting app",
+    "savings app",
+    "current account app"
+   ],
+   "primary": "Send in the sheet with the amount on the button; everything else is a row or a tab.",
+   "sections": [
+    {
+     "role": "The balance and its week"
+    },
+    {
+     "role": "Payments by day",
+     "id": "row-list"
+    },
+    {
+     "role": "Send money",
+     "id": "number-pad"
+    },
+    {
+     "role": "Card controls",
+     "id": "settings-group"
+    },
+    {
+     "role": "Tabs",
+     "id": "bottom-nav"
+    }
+   ],
+   "screens": [
+    [
+     "welcome",
+     "Welcome",
+     "A drawing, one sentence, Open an account."
+    ],
+    [
+     "home",
+     "Home",
+     "The balance, Send and Card, the week as bars, payments by day."
+    ],
+    [
+     "payment",
+     "One payment",
+     "Its mark, the amount large, the facts as rows."
+    ],
+    [
+     "card",
+     "Card",
+     "The card as an object, Freeze, limits, replace."
+    ],
+    [
+     "profile",
+     "Profile",
+     "Grouped settings."
+    ]
+   ],
+   "states": [
+    "loading: a skeleton of the figure and the rows on the first useful screen",
+    "empty: a drawing of the subject, one sentence in its words and the action that fills it",
+    "error: what failed in plain words and Try again"
+   ],
+   "avoid": [
+    "Pie charts of spending",
+    "More than one figure set large on a screen",
+    "A colour per category"
+   ],
+   "look": {
+    "palette": "navy-sand",
+    "typography": "precision"
+   },
+   "charts": [
+    "bar-chart"
+   ]
+  },
+  {
+   "id": "app-fitness",
+   "name": "Fitness app (phone)",
+   "kind": "app",
+   "blueprint": "app-fitness",
+   "density": "balanced",
+   "pattern": "single",
+   "layout": "A phone first: today as rings with the numbers beside them, the week as bars, a dark workout screen with a huge timer and one action, history by week; a sidebar and two panes from 768px.",
+   "aliases": [
+    "fitness app",
+    "running app",
+    "workout app",
+    "gym app",
+    "training app",
+    "activity app",
+    "exercise app",
+    "step counter app"
+   ],
+   "primary": "Start, low on Today; Pause, huge, on the workout.",
+   "sections": [
+    {
+     "role": "Today's goals",
+     "id": "activity-rings"
+    },
+    {
+     "role": "The week"
+    },
+    {
+     "role": "History",
+     "id": "row-list"
+    },
+    {
+     "role": "Goals",
+     "id": "settings-group"
+    },
+    {
+     "role": "Tabs",
+     "id": "bottom-nav"
+    }
+   ],
+   "screens": [
+    [
+     "welcome",
+     "Welcome",
+     "A drawing, one sentence, Set my goals."
+    ],
+    [
+     "today",
+     "Today",
+     "Rings and their numbers, the week as bars, the streak, workouts to pick up, Start low."
+    ],
+    [
+     "workout",
+     "Workout",
+     "The timer huge, intervals as bars, three figures, Pause."
+    ],
+    [
+     "history",
+     "History",
+     "The month as one figure, workouts by week."
+    ],
+    [
+     "summary",
+     "One workout",
+     "Distance large, three figures, splits."
+    ],
+    [
+     "profile",
+     "Goals",
+     "Grouped settings."
+    ]
+   ],
+   "states": [
+    "loading: a skeleton of the figure and the rows on the first useful screen",
+    "empty: a drawing of the subject, one sentence in its words and the action that fills it",
+    "error: what failed in plain words and Try again"
+   ],
+   "avoid": [
+    "A leaderboard of strangers",
+    "Badges and confetti",
+    "Three charts on one screen"
+   ],
+   "look": {
+    "palette": "seaglass-coral",
+    "typography": "geometric"
+   },
+   "charts": [
+    "bar-chart"
+   ]
+  },
+  {
+   "id": "app-booking",
+   "name": "Booking app (phone)",
+   "kind": "app",
+   "blueprint": "app-booking",
+   "density": "balanced",
+   "pattern": "single",
+   "layout": "A phone first: who and what, a calm strip of days, a grid of free times, a sheet that repeats the choices beside Confirm, bookings with the next one large; a sidebar and two panes from 768px.",
+   "aliases": [
+    "booking app",
+    "bookings app",
+    "appointment app",
+    "appointments app",
+    "reservation app",
+    "class booking app",
+    "salon app",
+    "groomer app"
+   ],
+   "primary": "Book, low, with the time on the button; Confirm in the sheet.",
+   "sections": [
+    {
+     "role": "Day",
+     "id": "date-strip"
+    },
+    {
+     "role": "Time",
+     "id": "time-slots"
+    },
+    {
+     "role": "Check and book",
+     "id": "bottom-sheet"
+    },
+    {
+     "role": "Settings",
+     "id": "settings-group"
+    },
+    {
+     "role": "Tabs",
+     "id": "bottom-nav"
+    }
+   ],
+   "screens": [
+    [
+     "welcome",
+     "Welcome",
+     "A drawing, one sentence, Book."
+    ],
+    [
+     "book",
+     "Book",
+     "Who, what, the day, the time, Book low."
+    ],
+    [
+     "bookings",
+     "Bookings",
+     "The next one as the one card, later, before."
+    ],
+    [
+     "booking",
+     "One booking",
+     "The time large, the facts, move, add to calendar, cancel."
+    ],
+    [
+     "dogs",
+     "You",
+     "The people or animals it is for, and grouped settings."
+    ]
+   ],
+   "states": [
+    "loading: a skeleton of the figure and the rows on the first useful screen",
+    "empty: a drawing of the subject, one sentence in its words and the action that fills it",
+    "error: what failed in plain words and Try again"
+   ],
+   "avoid": [
+    "A month calendar on a phone",
+    "Full times that can be tapped",
+    "Asking for an account before the time is chosen"
+   ],
+   "look": {
+    "palette": "sage-clay",
+    "typography": "humanist"
+   }
+  },
+  {
+   "id": "app-messaging",
+   "name": "Messaging app (phone)",
+   "kind": "app",
+   "blueprint": "app-messaging",
+   "density": "balanced",
+   "pattern": "single",
+   "layout": "A phone first: chats with unread counts, a thread with grouped bubbles, day separators, photos, voice notes and the read state, a composer above the keyboard; the list and the thread side by side from 768px.",
+   "aliases": [
+    "chat app",
+    "messaging app",
+    "messages app",
+    "messenger app",
+    "texting app"
+   ],
+   "primary": "Send, in the composer, lit only when there is text.",
+   "sections": [
+    {
+     "role": "Chats",
+     "id": "row-list"
+    },
+    {
+     "role": "Thread",
+     "id": "chat-thread"
+    },
+    {
+     "role": "Composer",
+     "id": "message-composer"
+    },
+    {
+     "role": "Settings",
+     "id": "settings-group"
+    },
+    {
+     "role": "Tabs",
+     "id": "bottom-nav"
+    }
+   ],
+   "screens": [
+    [
+     "welcome",
+     "Welcome",
+     "A drawing, one sentence, Continue."
+    ],
+    [
+     "chats",
+     "Chats",
+     "Search, rows with the last line, the time and unread counts."
+    ],
+    [
+     "thread",
+     "Thread",
+     "Grouped bubbles, day separators, a photo, a voice note, read state, composer."
+    ],
+    [
+     "people",
+     "People",
+     "Search and rows."
+    ],
+    [
+     "settings",
+     "Settings",
+     "Grouped settings."
+    ]
+   ],
+   "states": [
+    "loading: a skeleton of the figure and the rows on the first useful screen",
+    "empty: a drawing of the subject, one sentence in its words and the action that fills it",
+    "error: what failed in plain words and Try again"
+   ],
+   "avoid": [
+    "Avatars of strangers' faces",
+    "A Send button lit with nothing typed",
+    "The keyboard covering the field"
+   ],
+   "look": {
+    "palette": "mint-ocean",
+    "typography": "humanist"
+   }
+  },
+  {
+   "id": "app-settings",
+   "name": "Settings-heavy app (phone)",
+   "kind": "app",
+   "blueprint": "app-settings",
+   "density": "balanced",
+   "pattern": "single",
+   "layout": "A phone first: who you are, a search that filters every setting, groups of rows that are switches or links with their value, a detail page, closing the account on its own page; a sidebar and two panes from 768px.",
+   "aliases": [
+    "settings heavy app",
+    "settings-heavy app",
+    "app settings screen",
+    "preferences screen",
+    "settings on a phone"
+   ],
+   "primary": "Switches act at once; there is no Save. One destructive action, alone, on its own page.",
+   "sections": [
+    {
+     "role": "Search and groups",
+     "id": "settings-group"
+    },
+    {
+     "role": "Tabs",
+     "id": "bottom-nav"
+    }
+   ],
+   "screens": [
+    [
+     "welcome",
+     "Welcome",
+     "A drawing, one sentence, Get started."
+    ],
+    [
+     "invoices",
+     "The first useful screen",
+     "The main list of what the app keeps."
+    ],
+    [
+     "settings",
+     "Settings",
+     "Who you are, search, grouped rows, Close account."
+    ],
+    [
+     "notifications",
+     "A settings page",
+     "Grouped switches."
+    ],
+    [
+     "close",
+     "Close account",
+     "What happens, a typed word, one red button."
+    ]
+   ],
+   "states": [
+    "loading: a skeleton of the figure and the rows on the first useful screen",
+    "empty: a drawing of the subject, one sentence in its words and the action that fills it",
+    "error: what failed in plain words and Try again"
+   ],
+   "avoid": [
+    "A Save button for switches",
+    "A destructive action among ordinary rows",
+    "Settings that only match by label in search"
+   ],
+   "look": {
+    "palette": "slate-forest",
+    "typography": "precision"
+   }
+  },
+  {
    "id": "venue",
    "name": "Place or venue",
    "kind": "marketing",
