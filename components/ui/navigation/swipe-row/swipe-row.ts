@@ -91,7 +91,9 @@ export function enhance(root: HTMLElement): Cleanup {
         return;
       }
       // A drag, or a tap on a row while one is open, never follows the link underneath.
-      if (swallowClick || open) { e.preventDefault(); e.stopPropagation(); if (open) setOpen(open, false); }
+      // The click that ends a drag is swallowed (the row stays as the drag left it).
+      if (swallowClick) { e.preventDefault(); e.stopPropagation(); return; }
+      if (open) { e.preventDefault(); e.stopPropagation(); setOpen(open, false); }
     }, { capture: true }),
     on(root, 'keydown', (e: KeyboardEvent) => {
       if (e.key !== 'Escape' || !open) return;
@@ -100,7 +102,12 @@ export function enhance(root: HTMLElement): Cleanup {
       setOpen(row, false);
       part<HTMLElement>(row, 'more')?.focus();
     }),
-    on(document, 'pointerdown', (e: PointerEvent) => { if (open && !open.contains(e.target as Node)) setOpen(open, false); }),
+    on(document, 'pointerdown', (e: PointerEvent) => {
+      if (!open || open.contains(e.target as Node)) return;
+      setOpen(open, false);
+      // A tap on another row only closes the open one; it does not follow that row's link.
+      if (root.contains(e.target as Node)) { swallowClick = true; setTimeout(() => { swallowClick = false; }, 500); }
+    }),
   );
 }
 

@@ -205,7 +205,8 @@ $('#ws-cmdk')!.addEventListener('lt-change', (e) => {
     else if (cmd.startsWith('view:')) { setView(cmd.slice(5)); selected()?.focus(); }
   });
 });
-const typing = (t: EventTarget | null) => t instanceof HTMLElement && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
+// A field in a dialog that has just closed may still hold focus for a moment: that is not typing.
+const typing = (t: EventTarget | null) => t instanceof HTMLElement && !t.closest('dialog:not([open])') && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
 document.addEventListener('keydown', (e) => {
   if (e.metaKey || e.ctrlKey || e.altKey || e.defaultPrevented || document.querySelector('dialog[open]')) return;
   if (document.documentElement.dataset.pageState && document.documentElement.dataset.pageState !== 'ready') return;

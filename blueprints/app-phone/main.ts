@@ -65,14 +65,14 @@ function show(id: string, dir: 'forward' | 'back' | 'tab' = 'forward') {
   const heading = $<HTMLElement>('h2[tabindex="-1"]', frame);
   current = id;
   if (phone.matches) {
-    const swap = () => { mark(id); frame.querySelector('.ap-scroll')?.scrollTo(0, 0); };
+    const swap = () => { mark(id); frame.querySelector('.ap-scroll')?.scrollTo(0, 0); heading?.focus({ preventScroll: true }); };
     const vt = (document as Document & { startViewTransition?: (cb: () => void) => unknown }).startViewTransition;
     if (vt && !reducedMotion()) { html.dataset.nav = dir; vt.call(document, swap); } else swap();
   } else {
     mark(id);
     frame.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', inline: 'start', block: 'nearest' });
+    heading?.focus({ preventScroll: true });
   }
-  heading?.focus({ preventScroll: true });
 }
 
 document.addEventListener('click', (e) => {

@@ -95,3 +95,30 @@ Mix colours in **OKLab**, never OKLCH, when one side is a near-grey: OKLCH inter
 - [ ] Units in the subtitle and in every formatted number.
 - [ ] Series ≤ 6, slices ≤ 4, bubbles ≤ 40, layers ≤ 5.
 - [ ] Ran `node scripts/audit-ui.mjs <url>` and fixed every finding.
+
+## 6. Charts that tell a story
+
+A dashboard chart lets people look things up; a story chart makes one point. When a page, a report or a slide has a chart that has to make a point (a recovery, a turning point, an outlier), build it as a story.
+
+1. **One question, in the reader's words.** "Has the Ardmore route recovered from the dry dock?" Write it down first; if you cannot, the chart is for looking up, not for telling.
+2. **The answer is the headline, set beside the chart**, larger than anything in it: "Yes: since the September timetable it is our most punctual route". Add at most one figure that proves it ("96%, on time since September").
+3. **One moment lit.** The stretch that answers the question in the accent, with a soft band behind it and one short sentence on the chart, next to the point (not in a legend, not in a tooltip). Everything else is muted: the focus series in ink at half strength, context series thinner and lighter, named once at their ends.
+4. **Context, not competition.** A muted "other routes" line shows what normal is. Two lit series is two stories: split them.
+5. **Several beats? Scroll-build it.** Two to four steps, each lighting one moment and drawing the line up to it, the chart held still beside the steps. Never more than one scroll-built chart per page, never on an app screen or a dashboard.
+6. **Still is complete.** Under reduced motion, without IntersectionObserver and in print, the story shows the whole line with every moment lit and the steps as captions under it. Nothing is hidden waiting for a scroll.
+
+| Need | Engine | Key options |
+| --- | --- | --- |
+| One point, one moment | `chart-story` | `question`, `headline`, `figure`, `moment: { from, to, at, label }`, `focus` |
+| Two to four beats as the reader scrolls | `chart-story-scroll` | the same, plus `steps: [{ from, to, label, title, text }]`; set `--story-top` to the height of a sticky header |
+| Several events on a trend people explore | `annotated-line-chart` | `annotations: [{ at, label }]` |
+
+The note on the chart is a sentence under about 60 characters. The step text beside it is one or two sentences. If the note needs more, the moment is the wrong one.
+
+## 7. Dashboards that hold a lot
+
+- **Hierarchy before density:** the page title and one filter row, then the figures, then one main chart with its breakdown beside it, then the table. Never two main charts side by side.
+- **Eight to twelve figures on one surface** (`kpi-card` with `size: 'compact'`), five to a row on a desktop, two on a phone, set apart by space, not by a frame each.
+- **One filter row drives everything.** No filters on cards.
+- **Tables with 20 or more rows** scroll inside their own region with a sticky header, numbers right-aligned in `tabular-nums`, a sparkline column for trend, status as a badge only where it is an exception.
+- Fixed categorical order and colours across every chart on the page (Scale is always `--chart-1`); direct labels up to four series; marks thin (2px lines, 4–6px meters); no dual axes.
