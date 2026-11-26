@@ -10,6 +10,7 @@ The first public release. A design skill for coding agents that plans a page fro
 - Five app blueprints that feel native on a phone and open into panes on a desktop: a bank, a fitness tracker, a customer's booking app, messaging and a settings-heavy tool, each with its welcome, empty, loading and error screens, plus a number pad, date strip, activity rings, settings groups and a message composer.
 - Apps are planned as flows (first run, first useful screen, one record, settings) with their empty, loading and error wording.
 - The first screen is chosen from the subject, never by habit: product first, overlap, edge, bleed, a menu or departures board, a magazine cover, a mosaic, a tucked picture, a date poster, a full-screen film; with an ink, paper or brand top bar and a wordmark or contact foot.
+- Your own media first: `media-intake.mjs` reads a folder of the business's photographs, logo, film and menu; the composer places every photograph before any stock one (the hero gets the best), reads the menu into prices, puts the logo in the top bar and makes every favicon and app icon size from it, and shows where each picture goes before building.
 - Brand from what the user has: a colour, a logo or an old site. Never one of the looks every model falls back on.
 
 ### Build

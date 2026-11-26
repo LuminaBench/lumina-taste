@@ -5,6 +5,7 @@
 //   node scripts/find-images.mjs "stoneware mug kiln"                      # list candidates (nothing is downloaded)
 //   node scripts/find-images.mjs "stoneware mug kiln" --pick 2,5 --out ./images
 //   node scripts/find-images.mjs --fill index.html --subject "stoneware pottery" --out ./images
+//   node scripts/find-images.mjs --fill index.html --mine ./our-photos --subject "pottery" --out ./images   # yours first
 //   node scripts/find-images.mjs --starter cafe                             # the curated set for a kind of business
 //   node scripts/find-images.mjs --starter cafe --pick 2,5 --out ./images
 //
@@ -39,6 +40,7 @@ import { tmpdir } from 'node:os';
 import { basename, dirname, extname, join, relative, resolve } from 'node:path';
 import { GRADES, LOOKS, lookFor, paletteColours, parseFocus, parseRatio, treatImages, WIDTHS } from './lib/image-treat.mjs';
 import { imgTag, onFirstScreen, writeCredits } from './lib/image-html.mjs';
+import { scanMedia, assignMine } from './lib/media-intake.mjs';
 import { motifSvg, rankMotifs } from './lib/image-motifs.mjs';
 import { imageSize } from './lib/image-size.mjs';
 import { assignStarters, completeSet, fitScore, starterCandidate, starterFor } from './lib/image-starter.mjs';
@@ -54,6 +56,8 @@ const pickArg = opt('pick', '') || '';
 const starterArg = opt('starter', null);
 const noStarter = flag('no-starter');
 const noComplete = flag('no-complete');
+const offline = flag('offline'); // place only --mine and curated photographs; search nothing
+const mineDir = opt('mine', null); // the person's own media: used first, before any curated or searched photograph
 const pick = pickArg.split(',').map((s) => Number(s.trim())).filter((n) => n > 0);
 const fill = opt('fill', null);
 const subject = opt('subject', '');
@@ -215,6 +219,13 @@ async function search(q, { strict = false } = {}) {
 
 /** Download one picture into a folder outside the page. Returns the saved path. */
 async function download(c, dir, name) {
+  if (c.source === 'mine') {
+    const buf = readFileSync(c.path);
+    mkdirSync(dir, { recursive: true });
+    const file = join(dir, `${slug(name)}${extname(c.path).toLowerCase() === '.jpeg' ? '.jpg' : extname(c.path).toLowerCase()}`);
+    writeFileSync(file, buf);
+    return file;
+  }
   const r = await fetch(c.url, { headers: UA });
   if (!r.ok) throw new Error(`${r.status} downloading ${c.url}`);
   const type = (r.headers.get('content-type') ?? '').split(';')[0];
@@ -327,8 +338,27 @@ const shotOf = (m) => /data-shot="([^"]+)"/.exec(m[0])?.[1] ?? '';
 
 const chosen = new Map(); // figure index → { c, file, name, shot }
 const used = new Set();
-// Curated photographs first: each brief the set fits gets one, each photograph once.
-const fromSet = starterSet ? assignStarters(starterSet, briefed.map((m, i) => ({ key: m.index, shot: shotOf(m), weight: i === 0 && onFirstScreen(html, m.index) ? 2 : 1 })), { ratio: setRatio, subject }) : new Map();
+// The person's own photographs first (--mine): every one is used before a curated or searched picture, best fit
+// first, then in page order. They are theirs: no licence to record, and they are never graded away from themselves
+// beyond the set's shared ratio and grade.
+if (mineDir) {
+  const mine = scanMedia(resolve(mineDir));
+  const placed = assignMine(mine, briefed.map((m, i) => ({ key: m.index, shot: shotOf(m), weight: i === 0 && onFirstScreen(html, m.index) ? 2 : 1 })));
+  for (const m of briefed) {
+    const p = placed.get(m.index);
+    if (!p) continue;
+    const it = p.item;
+    const c = { source: 'mine', id: slug(it.file.replace(/\.[^.]+$/, '')), path: it.path, url: it.path, title: it.shows ?? it.file, shows: it.shows ?? it.words.join(' '), creator: 'Your own', licence: 'Your own', licenceUrl: null, page: null, provider: 'yours', needsCredit: false, focus: it.focus ?? null };
+    if (it.small) console.log(`! ${it.file} is ${it.width}×${it.height}: it will look soft on a large screen. A larger original is better.`);
+    if (dry) { console.log(`Would fill “${shotOf(m).slice(0, 50)}” with your ${it.file} (${p.how})`); continue; }
+    chosen.set(m.index, { c, file: await download(c, tmp, c.id), name: c.id, shot: shotOf(m), focus: c.focus });
+  }
+  const left = mine.filter((i) => i.kind === 'photo' && ![...placed.values()].some((p) => p.item === i));
+  console.log(`Your media: ${placed.size} of your photograph(s) placed${left.length ? `, ${left.length} not used (more photographs than picture slots: ${left.map((i) => i.file).join(', ')})` : ''}.`);
+}
+// Curated photographs next: each brief still open that the set fits gets one, each photograph once.
+const open = briefed.filter((m) => !chosen.has(m.index));
+const fromSet = starterSet && open.length ? assignStarters(starterSet, open.map((m, i) => ({ key: m.index, shot: shotOf(m), weight: i === 0 && onFirstScreen(html, m.index) ? 2 : 1 })), { ratio: setRatio, subject }) : new Map();
 // A thin match (level "stand-in": the photograph shares the subject but not what the brief names) is said so. On a
 // panel that stands alone in its section it is not used: one off-brief photograph reads as a mistake, a drawing
 // does not. In a set of siblings it is kept, marked, so the set stays whole.
@@ -340,11 +370,12 @@ for (const m of briefed) {
   if (fit?.level !== 'stand-in') continue;
   if (alone(m)) { fromSet.delete(m.index); keepDrawing.add(m.index); console.log(`Only a stand-in-level match for “${shotOf(m).slice(0, 50)}” (${fit.photo.id}); a single panel keeps its drawing.`); }
 }
-if (starterSet) console.log(`Starter set “${starterSet.id}”: ${fromSet.size} of ${briefed.length} brief(s) fit a curated photograph${fromSet.size + keepDrawing.size < briefed.length ? '; searching for the rest' : ''}.`);
+if (starterSet && open.length) console.log(`Starter set “${starterSet.id}”: ${fromSet.size} of ${open.length} brief(s) fit a curated photograph${fromSet.size + keepDrawing.size < briefed.length ? '; searching for the rest' : ''}.`);
 for (const m of briefed) {
   const shot = shotOf(m);
   const fit = fromSet.get(m.index);
-  if (keepDrawing.has(m.index)) continue;
+  if (keepDrawing.has(m.index) || chosen.has(m.index)) continue;
+  if (offline && !fit) continue;
   if (fit) {
     if (fit.level === 'stand-in') console.log(`Stand-in-level match for “${shot.slice(0, 50)}” (${fit.photo.id}): on subject, not what the brief names. Replace it with the business's own picture.`);
     const c = starterCandidate(starterSet, fit.photo);
@@ -419,7 +450,7 @@ for (const m of [...empty].reverse()) { // from the end, so earlier offsets stay
     // under the picture (art-panel.css raises it above the ground only for a drawn panel).
     const open = m[0].replace(/\s+data-(pattern|motif)="[^"]*"/g, '');
     html = html.slice(0, start) + open + imgTag(r, { base: src, alt, first: start === firstIdx, sizes }) + rest;
-    console.log(`Filled “${shot.slice(0, 50)}”${chosen.get(start).c.source === 'starter' ? ` (curated${chosen.get(start).standIn ? ' stand-in' : ''}: ${chosen.get(start).c.id})` : ''} with ${r.files.map((f) => f.file).join(', ')} (${chosen.get(start).c.licence}, ${chosen.get(start).c.creator.slice(0, 30)})${r.treated ? `, ${r.grade} grade, focus ${Math.round(r.focus.x * 100)}% ${Math.round(r.focus.y * 100)}%` : ''}`);
+    console.log(`Filled “${shot.slice(0, 50)}”${chosen.get(start).c.source === 'mine' ? ` (yours: ${basename(chosen.get(start).c.path)})` : chosen.get(start).c.source === 'starter' ? ` (curated${chosen.get(start).standIn ? ' stand-in' : ''}: ${chosen.get(start).c.id})` : ''} with ${r.files.map((f) => f.file).join(', ')} (${chosen.get(start).c.licence}, ${chosen.get(start).c.creator.slice(0, 30)})${r.treated ? `, ${r.grade} grade, focus ${Math.round(r.focus.x * 100)}% ${Math.round(r.focus.y * 100)}%` : ''}`);
     filled++;
     continue;
   }

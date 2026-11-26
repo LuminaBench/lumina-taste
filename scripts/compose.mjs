@@ -7,9 +7,10 @@
 //   node scripts/compose.mjs "dark admin users table for a devtool" --framework react --project /abs/app
 //   node scripts/compose.mjs "pricing page" --type pricing --json
 //   node scripts/compose.mjs "home page for Kiln & Co, a pottery in Penryn" --brand-from ./logo.svg --project /abs/site --write
+import { scanMedia, menuFrom } from './lib/media-intake.mjs';
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, join, relative, resolve } from 'node:path';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { lookFor } from './lib/image-treat.mjs';
 import { search } from './lib/search-core.mjs';
@@ -41,10 +42,14 @@ const lookFlags = { palette: opt('palette', null), typography: opt('typeface', n
 const brandSrc = opt('brand-from', null);
 const framework = opt('framework', 'static');
 const project = opt('project', '/abs/app');
+// --media <folder>: the person's own photographs, logo, video and menu, read first and used before anything else.
+const mediaDir = (() => { const i = args.indexOf('--media'); if (i < 0) return null; const v = args[i + 1]; args.splice(i, 2); return v ? resolve(v) : null; })();
+const media = mediaDir ? scanMedia(mediaDir) : null;
+const menuPhrases = media ? menuFrom(media) : [];
 // A flag the composer does not know would otherwise become words of the brief and land on the page.
 const unknown = args.filter((a) => /^--[a-z]/.test(a));
-if (unknown.length) { console.error(`Unknown option ${unknown.join(', ')}. Options: --type, --palette, --typeface, --mode, --style, --brand-from, --framework, --project, --write, --json, --images (run with no brief for the full usage).`); process.exit(2); }
-const brief = args.join(' ').trim();
+if (unknown.length) { console.error(`Unknown option ${unknown.join(', ')}. Options: --type, --palette, --typeface, --mode, --style, --media, --brand-from, --framework, --project, --write, --json, --images (run with no brief for the full usage).`); process.exit(2); }
+const brief = [args.join(' ').trim(), ...menuPhrases].filter(Boolean).join(', ');
 if (!brief && !forceTypeRaw) {
   console.error('Usage: node scripts/compose.mjs "<one-line brief>" [--type <page-type>] [--brand-from <#hex | logo.png|svg | site.html | url>] [--framework static|tailwind|next|vanilla|react] [--project /abs/app] [--write] [--json]');
   process.exit(2);
@@ -306,6 +311,7 @@ const questions = [
   !product && { id: 'product', ask: 'What is the product called, and what does it do in one line?', why: 'Sample names and sample numbers must not ship; the headline is written from this.', default: 'none: ask, or take the name from the repository or the existing site' },
   !profile.style && !restyle && { id: 'look', ask: `Which look fits: ${directions.styles.map((s, i) => `${'ABC'[i]} ${s.name}`).join(', ')}? (Render them side by side with the directions command and let the person point.)`, why: 'People choose a look faster by eye than from a description.', default: `the plain profile below (${profile.palette}, ${profile.typography}), no style` },
   ['marketing', 'flow'].includes(type.kind) && !saysAction && { id: 'action', ask: typeAction ? 'What is the one thing a visitor should do here: call, book, buy, give, come?' : 'What is the one thing a visitor should do here: start a trial, book a demo, join a waitlist, buy?', why: 'One primary action per screen; its label is the most-read words on the page.', default: typeAction ?? actionDefault },
+  !media && type.kind === 'marketing' && !software && { id: 'media', ask: 'What do you already have: photographs of the place or the work, a logo, a short film, a menu or price list? Put them in one folder (rerun with --media ./folder).', why: 'The business\'s own pictures beat any stock photograph; the draft uses them first, sized and graded as one set, and stands in only where there are none.', default: 'none: drawings of the subject stand in, marked to replace (or --images for public-domain photographs)' },
   !saidMode && { id: 'mode', ask: 'Light, dark, or both with a switch?', why: 'Dark is a second design, not an inversion; it is cheaper to know now.', default: `${profile.mode}, with the other mode working` },
 ].filter(Boolean).slice(0, 3);
 
@@ -480,6 +486,14 @@ function writeComposed(dir, run) {
   }
   // The composition the plan chose: the same words and picture, set as this subject's first screen.
   heroHtml = composeHero(comp, heroHtml, ctx);
+  // The person's own photographs: the first screen always has a slot for one (a board rises over it, a statement
+  // tucks it in), so their best picture leads instead of a drawing. --media fills it (find-images --mine).
+  const heroPhoto = media?.find((i) => i.kind === 'photo' && i.use === 'hero') ?? media?.find((i) => i.kind === 'photo' && i.orientation === 'wide') ?? media?.find((i) => i.kind === 'photo');
+  if (heroPhoto && !/data-shot="/.test(heroHtml.split('</section>')[0])) {
+    const slot = `<figure class="lt-art" data-ratio="16/10" data-shot="${esc(`${heroPhoto.shows ?? 'The place itself'}, the first picture, 16:10`)}"></figure>`;
+    if (/<div data-part="visual">[\s\S]*?<\/div>/.test(heroHtml)) heroHtml = heroHtml.replace(/<div data-part="visual">[\s\S]*?<\/div>/, `<div data-part="visual">${slot}</div>`);
+    else if (comp.block === 'hero-board') heroHtml = heroHtml.replace(/(\s*<figure data-part="board")/, `\n  <div data-part="visual">${slot}</div>$1`);
+  }
   ctx.heroMotif = /data-motif="([a-z]+)"/.exec(heroHtml)?.[1] ?? /data-scene="([a-z]+)/.exec(heroHtml)?.[1] ?? null;
   bands.push({ id: heroSec.id, html: heroHtml, slug: 'top', label: 'Top' });
   // The close repeats the hero's action. Software with no word on price says "Sign up", not "Start free".
@@ -489,11 +503,15 @@ function writeComposed(dir, run) {
     const r = renderBand(x, ctx);
     if (r.todo) { todo.push(r.todo); continue; }
     if (bands.some((b) => b.slug === r.slug || (b.id === 'cta-band' && r.id === 'cta-band'))) continue;
+    // A menu board already shows the prices: a rail of the same prices under it says them twice.
+    if (comp.id === 'menu' && r.slug === 'range') continue;
     bands.push(r);
   }
   // A thin brief still gets one picture between the first screen and the close.
   // So does a page whose bands are all words and tables (a statement hero, an address, a close).
-  if (!bands.some((b) => b.id !== 'cta-band' && !/^hero-/.test(b.id)) || !bands.some((b) => /class="lt-(art|device)"/.test(b.html))) { const pb = pictureBand(ctx); if (pb) bands.splice(1, 0, pb); }
+  // Not when the person brought photographs: the first screen holds theirs, and a drawing under it would be filler.
+  const ownPhotos = media?.some((i) => i.kind === 'photo');
+  if (!ownPhotos && (!bands.some((b) => b.id !== 'cta-band' && !/^hero-/.test(b.id)) || !bands.some((b) => /class="lt-(art|device)"/.test(b.html)))) { const pb = pictureBand(ctx); if (pb) bands.splice(1, 0, pb); }
   // The close says the action again: add one when the plan had none the brief could fill.
   if (!bands.some((b) => b.id === 'cta-band')) { const c = renderBand({ id: 'cta-band', role: 'Closing action' }, ctx); if (!c.todo) bands.push(c); }
   if (idea.ask) todo.push(`the bold idea: ${idea.ask}`);
@@ -736,14 +754,35 @@ if (writeDraft) {
   }
   plan.draft = { ...draft, path: relative(process.cwd(), draft.path) || draft.path };
   if (draft.todo) plan.words.missing = [...new Set([...plan.words.missing, ...draft.todo])];
-  if (withImages && draft.kind === 'composed') {
+  if ((withImages || media?.some((i) => i.kind === 'photo')) && draft.kind === 'composed') {
     // The subject is the business, never its town: a photograph of Edinburgh is not the restaurant.
     // The set's art direction (bright, moody, editorial) comes from the business first, then the rest of the brief.
     const look = lookFor(facts.kind || '', brief);
-    const r = spawnSync(process.execPath, [join(root, 'scripts/find-images.mjs'), '--fill', draft.path, '--subject', facts.kind || brief, '--look', look.look, '--out', join(dirname(draft.path), 'images')], { encoding: 'utf8', env: process.env });
+    const r = spawnSync(process.execPath, [join(root, 'scripts/find-images.mjs'), '--fill', draft.path, '--subject', facts.kind || brief, '--look', look.look, '--out', join(dirname(draft.path), 'images'), ...(mediaDir ? ['--mine', mediaDir] : []), ...(withImages ? [] : ['--no-starter', '--offline'])], { encoding: 'utf8', env: process.env });
+    const yours = (r.stdout.match(/\(yours: /g) ?? []).length;
     const set = (readFileSync(draft.path, 'utf8').match(/<img src="images\//g) ?? []).length;
-    plan.draft.images = { ran: true, status: r.status, set, look: look.look, lookWhy: look.why, note: r.status === 0 ? `${set} photograph${set === 1 ? '' : 's'} set from openly licensed sources (credits in images/credits.json), ${look.look} look (${look.why}); look at each one` : `find-images could not run: ${(r.stderr || r.stdout).trim().split('\n').pop()}` };
-  } else if (draft.kind === 'composed') plan.draft.images = { ran: false, note: 'no photographs fetched: the panels show the subject\'s drawings. Add --images to search public-domain and CC0 photographs for them (find-images --fill; it downloads)' };
+    plan.draft.images = { ran: true, status: r.status, set, look: look.look, lookWhy: look.why, yours, note: r.status === 0 ? `${set} photograph${set === 1 ? '' : 's'} set${yours ? ` (${yours} of them yours)` : ''}${set > yours ? ' from openly licensed sources' : ''} (credits in images/credits.json), ${look.look} look (${look.why}); look at each one` : `find-images could not run: ${(r.stderr || r.stdout).trim().split('\n').pop()}` };
+  }
+  // The person's logo: in the top bar in place of the drawn mark (on a fixed paper tile when it is dark and the bar
+  // is ink: the ink bar flips the page's surface tokens, so the tile cannot use them), and every icon size a site and an app ask for (brand-kit --logo).
+  const logo = media?.find((i) => i.kind === 'logo' && /\.(svg|png|webp|jpe?g)$/i.test(i.file));
+  if (logo && draft.kind === 'composed') {
+    const dir = dirname(draft.path);
+    mkdirSync(join(dir, 'images'), { recursive: true });
+    copyFileSync(logo.path, join(dir, 'images', `logo${extname(logo.file).toLowerCase()}`));
+    const mark = media.find((i) => i !== logo && i.kind === 'logo' && /\b(mark|symbol|icon)\b/i.test(i.words.join(' ')));
+    const r = spawnSync(process.execPath, [join(root, 'scripts/brand-kit.mjs'), '--name', product ?? 'TODO: name', '--line', facts.kind ?? '', '--subject', facts.kind ?? brief, '--palette', profile.palette, '--type', profile.typography, '--logo', logo.path, ...(mark ? ['--mark', mark.path] : []), '--out', join(dir, 'brand')], { encoding: 'utf8', env: process.env });
+    const dark = /a dark mark/.test(r.stdout);
+    let html = readFileSync(draft.path, 'utf8');
+    const tiled = dark && /data-tone="dark"/.test(html.split('</header>')[0]);
+    html = html.replace(/(<a href="#top" data-part="brand">)<span data-part="mark" aria-hidden="true"><\/span>([^<]*)<\/a>/, (m, a, nm) => `${a}<img class="lt-own-logo${tiled ? ' lt-own-logo--tile' : ''}" src="images/logo${extname(logo.file).toLowerCase()}" alt="${esc(nm.trim())}" height="28"></a>`);
+    // The tile is a fixed paper colour (the ink bar flips the surface tokens); on a dark page the bar is paper itself.
+    html = html.replace('</head>', `  <style>.lt-own-logo{display:block;height:28px;width:auto}.lt-own-logo--tile{padding:5px 9px;box-sizing:content-box;background:#fbfaf7;border-radius:var(--radius-sm)}[data-mode="dark"] .lt-own-logo--tile{padding:0;background:none}@media (prefers-color-scheme:dark){:root:not([data-mode="light"]) .lt-own-logo--tile{padding:0;background:none}}</style>\n</head>`);
+    try { const head = JSON.parse(readFileSync(join(dir, 'brand', 'brand.json'), 'utf8')).head.map((h) => h.replace(/href="\/icons\//, 'href="brand/icons/')).join('\n  '); html = html.replace('</head>', `  ${head}\n</head>`); } catch { /* the kit could not render icons */ }
+    writeFileSync(draft.path, html);
+    plan.draft.logo = { file: logo.file, status: r.status, onInk: dark ? 'on a paper tile in the ink bar' : 'on the bar as it is', icons: r.status === 0 ? 'brand/icons: favicons, apple-touch-icon, Android icons, maskable, site.webmanifest' : (r.stderr || '').trim().split('\n').pop() };
+  }
+  if (draft.kind === 'composed' && !plan.draft.images) plan.draft.images = { ran: false, note: 'no photographs fetched: the panels show the subject\'s drawings. Add --images to search public-domain and CC0 photographs for them (find-images --fill; it downloads)' };
 }
 
 // No process.exit() here: exiting straight after a large write can cut piped output short.

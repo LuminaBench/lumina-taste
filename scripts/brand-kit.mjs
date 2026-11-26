@@ -8,7 +8,7 @@
 //   node scripts/brand-kit.mjs --name "Granite Row" --line "Builders in Glasgow since 2006" --motif crane --palette arctic-red --type stencil --out ./brand
 //   node scripts/brand-kit.mjs --profile ./taste-profile.json --name "Wren" --out ./brand --no-png
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { basename, dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { pickMotif, motifSvg, pickScene, sceneSvg } from './lib/image-motifs.mjs';
 import { loadChromium } from './lib/browser.mjs';
@@ -32,6 +32,8 @@ const subject = opt('subject', line || name);
 const paletteId = opt('palette', axis('palette') ?? 'paper-ink');
 const typeId = opt('type', axis('type') ?? axis('typography') ?? 'humanist');
 const out = resolve(opt('out', './brand'));
+const logoFile = opt('logo') ? resolve(opt('logo')) : null; // the person's own logo: icons for the site and the app
+const markFile = opt('mark') ? resolve(opt('mark')) : null; // the symbol alone, for square icons (else taken from a wide logo's start)
 
 // ---------------------------------------------------------------- tokens
 const palettes = JSON.parse(readFileSync(join(root, 'tokens/palettes/palettes.json'), 'utf8')).palettes;
@@ -165,6 +167,46 @@ if (!flag('no-png')) {
       const p = await browser.newPage({ viewport: { width: size, height: size } });
       await p.setContent(`<html><body style="margin:0">${favicon.replace('<svg ', `<svg width="${size}" height="${size}" `)}</body></html>`);
       await p.screenshot({ path: join(out, `favicon-${size}.png`), omitBackground: true }); pngs.push(`favicon-${size}.png`); await p.close();
+    }
+    // --logo: the person's own mark, made into every size a site and an app ask for. It is placed, never redrawn.
+    if (logoFile) {
+      const ext = extname(logoFile).toLowerCase();
+      const mime = { '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp' }[ext];
+      if (!mime) throw new Error(`--logo must be an SVG, PNG, JPEG or WebP file (got ${ext || 'no extension'})`);
+      const src = `data:${mime};base64,${readFileSync(logoFile).toString('base64')}`;
+      mkdirSync(join(out, 'icons'), { recursive: true });
+      // How dark is the mark? A dark mark on the ink top bar needs a paper tile behind it.
+      const probe = await browser.newPage();
+      const tone = await probe.evaluate(async (u) => { const im = new Image(); im.src = u; await im.decode(); const c = document.createElement('canvas'); c.width = 96; c.height = Math.max(1, Math.round(96 * im.naturalHeight / im.naturalWidth)); const x = c.getContext('2d'); x.drawImage(im, 0, 0, c.width, c.height); const d = x.getImageData(0, 0, c.width, c.height).data; let sum = 0, n = 0, clear = 0; for (let i = 0; i < d.length; i += 4) { if (d[i + 3] < 40) { clear++; continue; } sum += 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2]; n++; } return { light: n ? sum / n / 255 : 0.5, transparent: clear / (d.length / 4) > 0.15, ratio: im.naturalWidth / im.naturalHeight }; }, src);
+      await probe.close();
+      // A square icon holds the symbol alone: a separate --mark, else the start of a wide logo (a symbol usually sits
+      // left of the name), never the whole wide logo shrunk until the name is a smudge.
+      const markSrc = markFile ? `data:${markFile.endsWith('.svg') ? 'image/svg+xml' : 'image/png'};base64,${readFileSync(markFile).toString('base64')}` : src;
+      const wide = !markFile && tone.ratio > 1.6;
+      const tile = (size, { pad, bg, radius = 0 }) => { const inner = Math.round(size * (1 - 2 * pad)); return `<html><body style="margin:0;background:transparent"><div style="width:${size}px;height:${size}px;display:grid;place-items:center;background:${bg};border-radius:${radius}px">${wide ? `<div style="width:${inner}px;height:${inner}px;overflow:hidden;display:flex;align-items:center"><img src="${markSrc}" style="height:${inner}px;width:auto;max-width:none;display:block"></div>` : `<img src="${markSrc}" style="width:${inner}px;height:${inner}px;object-fit:contain;display:block">`}</div></body></html>`; };
+      const shots = [
+        ['favicon-16.png', 16, { pad: 0, bg: 'transparent' }], ['favicon-32.png', 32, { pad: 0, bg: 'transparent' }], ['favicon-48.png', 48, { pad: 0.04, bg: 'transparent' }],
+        ['apple-touch-icon.png', 180, { pad: 0.16, bg: L('bg-canvas') }],
+        ['icon-192.png', 192, { pad: 0.14, bg: L('bg-canvas'), radius: 36 }], ['icon-512.png', 512, { pad: 0.14, bg: L('bg-canvas'), radius: 96 }],
+        // Android crops a maskable icon to a circle: the mark stays inside the middle 60%.
+        ['icon-maskable-512.png', 512, { pad: 0.22, bg: tone.light < 0.5 ? L('bg-canvas') : L('accent-solid') }],
+      ];
+      for (const [f, size, o] of shots) {
+        const p = await browser.newPage({ viewport: { width: size, height: size } });
+        await p.setContent(tile(size, o)); await p.waitForTimeout(50);
+        await p.screenshot({ path: join(out, 'icons', f), omitBackground: o.bg === 'transparent' || !!o.radius }); await p.close(); pngs.push(`icons/${f}`);
+      }
+      // The mark on the site's two grounds, to check it reads on both before it goes in the top bar.
+      const pair = await browser.newPage({ viewport: { width: 800, height: 200 } });
+      await pair.setContent(`<html><body style="margin:0;display:grid;grid-template-columns:1fr 1fr;height:200px"><div style="display:grid;place-items:center;background:${L('bg-canvas')}"><img src="${src}" style="height:80px;width:auto;max-width:340px"></div><div style="display:grid;place-items:center;background:${D('bg-canvas')}">${tone.light < 0.45 ? `<div style="padding:14px 18px;background:${L('bg-canvas')};border-radius:10px"><img src="${src}" style="height:68px;width:auto;max-width:300px;display:block"></div>` : `<img src="${src}" style="height:80px;width:auto;max-width:340px">`}</div></body></html>`);
+      await pair.waitForTimeout(50); await pair.screenshot({ path: join(out, 'icons', 'logo-on-grounds.png') }); await pair.close(); pngs.push('icons/logo-on-grounds.png');
+      writeFileSync(join(out, 'icons', 'site.webmanifest'), formatJson({ name, short_name: name.length <= 12 ? name : name.split(/\s+/)[0], icons: [{ src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' }, { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' }, { src: '/icons/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }], theme_color: L('bg-canvas'), background_color: L('bg-canvas'), display: 'standalone' }));
+      const bj = JSON.parse(readFileSync(join(out, 'brand.json'), 'utf8'));
+      bj.logo = { file: basename(logoFile), light: Math.round(tone.light * 100) / 100, transparent: tone.transparent, onInk: tone.light < 0.45 ? 'a dark mark: on the ink top bar it sits on a paper tile (icons/logo-on-grounds.png)' : 'reads on the ink top bar as it is' };
+      bj.head = [`<link rel="icon" href="/icons/favicon-32.png" sizes="32x32" type="image/png">`, `<link rel="icon" href="/icons/favicon-16.png" sizes="16x16" type="image/png">`, `<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">`, `<link rel="manifest" href="/icons/site.webmanifest">`, ...bj.head.filter((h) => !/rel="icon"/.test(h))];
+      writeFileSync(join(out, 'brand.json'), formatJson(bj));
+      if (wide) console.log('Your logo is wide: the square icons use its start (the symbol). Pass --mark <file> with the symbol alone if that is not right.');
+      console.log(`Your logo: ${tone.transparent ? 'transparent ground' : 'solid ground (a transparent PNG or an SVG sits better on coloured bars)'}, ${bj.logo.onInk}.`);
     }
     const s = await browser.newPage({ viewport: { width: 1200, height: 900 } });
     await s.goto(pathToFileURL(join(out, 'brand.html')).href); await s.waitForTimeout(200);

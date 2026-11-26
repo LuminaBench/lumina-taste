@@ -84,6 +84,8 @@ node scripts/audit-ui.mjs http://localhost:3000 --taste
 node scripts/sniff.mjs http://localhost:3000
 node scripts/export-tokens.mjs --format shadcn --palette navy-sand > app/globals.css   # also swiftui, compose, figma
 node scripts/sample-data.mjs invoices --rows 20 --format csv
+node scripts/media-intake.mjs ./our-media --page index.html          # your photos, logo, menu: where each would go
+node scripts/compose.mjs "<brief>" --media ./our-media --project . --write   # built with yours first
 node scripts/find-images.mjs --fill index.html --subject "bakery"     # openly licensed photographs, credited
 node scripts/compose.mjs "builder in Glasgow, extensions from £40,000" --brand-from "#c8102e"
 node scripts/review-page.mjs ./index.html --out ./review     # screenshots, squint view, checklist
