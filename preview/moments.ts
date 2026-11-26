@@ -241,7 +241,7 @@ export function viewBeforeAfter(main: HTMLElement): () => void {
     let h = { wide: 640, narrow: 720 };
     const fits = frames.map((f) => fitFrame(f.parentElement!, f, (wide) => (wide ? h.wide : h.narrow)));
     const measure = () => {
-      const heights = frames.map((f) => f.contentDocument?.documentElement.scrollHeight ?? 0);
+      const heights = frames.map((f) => f.contentDocument?.documentElement?.scrollHeight ?? 0);
       const wide = (frames[0].parentElement!.clientWidth ?? 0) >= 560;
       const tallest = Math.min(1200, Math.max(320, ...heights));
       h = wide ? { ...h, wide: tallest } : { ...h, narrow: tallest };
@@ -252,7 +252,7 @@ export function viewBeforeAfter(main: HTMLElement): () => void {
   }
   offs.push(onTheme(() => {
     const d = theme().mode === 'dark';
-    main.querySelectorAll<HTMLIFrameElement>('[data-side="before"] iframe').forEach((f) => f.contentDocument?.documentElement.classList.toggle('dark', d));
+    main.querySelectorAll<HTMLIFrameElement>('[data-side="before"] iframe').forEach((f) => f.contentDocument?.documentElement?.classList.toggle('dark', d));
     main.querySelectorAll<HTMLIFrameElement>('[data-side="after"] iframe').forEach((f) => {
       const r = f.contentDocument?.documentElement;
       if (r) for (const k of AXES) if (k !== 'motion') r.dataset[k] = doc.dataset[k]!;
