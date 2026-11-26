@@ -44,31 +44,51 @@
     },
     {
       "id": "view-transition",
-      "name": "View Transition helper",
-      "summary": "Morph elements between layouts with the View Transitions API and a no-op fallback.",
+      "name": "View transitions",
+      "summary": "Smooth changes inside a page and between pages: a picture in a list morphs into the detail view. Opt a whole site in with <html data-vt>; off under reduced motion.",
       "pattern": "View Transitions API",
-      "states": ["grid","list","transitioning"],
-      "aliases": ["page transition","shared element transition","layout morph","magic move"],
+      "states": ["list","detail","transitioning","between pages (cross-document)","off (reduced motion)"],
+      "aliases": [
+        "page transition",
+        "shared element transition",
+        "layout morph",
+        "smooth page changes",
+        "cross document view transition",
+        "hero image morphs into detail page",
+        "morph between pages"
+      ],
       "react": "useViewTransition",
-      "deps": ["segmented-control"],
-      "api": "document.startViewTransition",
-      "w": 460,
-      "called": ["smooth morph between grid and list","page transition","shared element animation","magic move"],
+      "deps": [],
+      "api": "html[data-vt] · data-vt-name · withViewTransition()",
+      "w": 640,
+      "called": [
+        "smooth morph between grid and list",
+        "page transition",
+        "the picture flies into the next page",
+        "shared element animation"
+      ],
       "anatomy": [
         {
-          "sel": "li:first-child",
-          "name": "Named element",
-          "api": "view-transition-name",
-          "text": "Each moving element needs a unique name."
+          "sel": "li:first-child figure",
+          "name": "Named picture",
+          "api": "data-vt-name",
+          "text": "Same name on the list and on the detail page: it morphs between them. Unique on each page."
+        },
+        {
+          "sel": "li:first-child [data-vt-open]",
+          "name": "Opener",
+          "api": "<button>",
+          "text": "Same-page sample of what a link does between pages."
         }
       ],
-      "prompt": "Animate layout changes with the View Transitions API: give moving elements unique view-transition-name values, wrap the DOM update in document.startViewTransition, and skip it under reduced motion or when unsupported.",
-      "debug": "Debug my view transition. Rule out: duplicate view-transition-name values (the transition is skipped); React updates not flushed inside the callback (flushSync); transitions running under reduced motion. The symptom:",
+      "prompt": "Add smooth page changes with cross-document view transitions: in CSS, @view-transition { navigation: auto; types: lt-page; } inside @media (prefers-reduced-motion: no-preference). Gate it with an attribute: html:not([data-vt]):active-view-transition-type(lt-page)::view-transition-group(*) (and -old, -new) get animation: none, so only pages with <html data-vt> animate. On those, the root old view fades out in 200ms and the new one fades up 12px in 380ms; named groups move in 460ms with cubic-bezier(0.22, 1, 0.36, 1). Give the list picture and the detail page's hero the same data-vt-name and copy it to view-transition-name (attr(data-vt-name type(<custom-ident>)) where supported, a small script elsewhere); names must be unique per page. Inside one page wrap DOM updates in document.startViewTransition, skipped under reduced motion.",
+      "debug": "Debug my view transition. Rule out: duplicate view-transition-name values on one page (the transition is skipped); the name only on one of the two pages; data-vt missing from the second page; a slow page (the old snapshot holds until the new one renders: keep pages fast); React updates not flushed inside the callback (flushSync); transitions running under reduced motion. The symptom:",
       "code": [
-        ["JS","document.startViewTransition()",""],
-        ["React","flushSync inside the callback",""],
-        ["lumina-taste","useViewTransition()","React"]
-      ]
+        ["CSS","@view-transition { navigation: auto }",""],
+        ["HTML","<html data-vt> … <figure data-vt-name=\"chair-larkspur\">",""],
+        ["lumina-taste","withViewTransition() · usePageTransitions()","vanilla · React"]
+      ],
+      "note": "One attribute on <html> of every page that takes part. Morph one thing per navigation (the picture someone clicked), not every card. Everything else cross-fades."
     },
     {
       "id": "scroll-reveal",
@@ -346,6 +366,50 @@
         ["lumina-taste","<TextReveal as=\"h1\">","React"]
       ],
       "added": 12
+    },
+    {
+      "id": "number-settle",
+      "name": "Numbers that settle",
+      "summary": "Large figures count up to their value once when they reach the screen. One attribute on any element; the real number is in the HTML, so no-script, reduced motion and print all show it.",
+      "pattern": "data-count + IntersectionObserver",
+      "states": ["before view","counting","settled","still (reduced motion, print, no script)"],
+      "aliases": [
+        "count up on scroll",
+        "animated numbers",
+        "number ticker",
+        "stats counter",
+        "odometer on scroll",
+        "numbers that count up",
+        "kpi count up"
+      ],
+      "react": "CountFigure",
+      "api": "data-count · data-count-from · data-count-duration",
+      "w": 760,
+      "preview": [],
+      "called": [
+        "the big numbers that count up when you scroll to them",
+        "stats that animate in",
+        "figures that tick up to their value"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"lead\"] b",
+          "name": "Counting figure",
+          "api": "data-count",
+          "text": "Counts from 0 (or data-count-from) to the number written in it, 1.4s ease-out, tabular figures so the width holds."
+        },
+        {
+          "sel": "dl > div:nth-child(2) dd",
+          "name": "Starts higher",
+          "api": "data-count-from",
+          "text": "96.4% counts from 90, so it settles rather than races."
+        }
+      ],
+      "prompt": "Make figures settle into place: any element with data-count holds its true value as text (\"2,400+\", \"£86\", \"96.4%\"). A small script finds the first number in that text, keeps its decimals, thousands separator and the words around it, and once the element is half on screen counts from 0 (or data-count-from) to it over 1.4s with an exponential ease-out, then puts the original text node back exactly. While it counts the moving figure is aria-hidden and the true text sits beside it, visually hidden; the element's width is reserved first and figures are tabular, so nothing moves. Nothing happens under reduced motion or without IntersectionObserver, and printing finishes every count.",
+      "debug": "Debug my count-up. Rule out: the starting value (0) in the HTML instead of the real one; the width jumping (proportional figures, no reserved width); counting every time it scrolls into view; counting things that are not quantities (years, phone numbers, times); screen readers hearing every step. The symptom:",
+      "code": [["HTML","<dd data-count>2,400+</dd>",""],["lumina-taste","<CountFigure>2,400+</CountFigure>","React"]],
+      "added": 17,
+      "note": "Put data-lt=\"number-settle\" on <main> (or any ancestor) once and mark the figures with data-count; stats-band brings its own. Only quantities people care about, three or four on a page. Use data-count-from for values near 100% so they settle rather than race. The outer .lt-count-demo is a preview frame."
     }
   ]
 }

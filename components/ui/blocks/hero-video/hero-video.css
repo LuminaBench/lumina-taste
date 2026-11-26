@@ -1,0 +1,38 @@
+/* Hero with video: the headline and one action above a wide picture. The picture is a still first (an <img>, or
+   an art panel until there is one); a muted, looping, inline film fades in over it once it is actually playing,
+   so nothing shifts. The film never starts under reduced motion or Save-Data, and the pause button is always
+   there while a film exists. */
+@scope (.lt-hero-video) {
+  :scope { container-type: inline-size; display: grid; gap: clamp(28px, 5cqi, 56px); width: 100%; padding: var(--block-y, calc(var(--section-y) * 0.6)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)) var(--block-y, calc(var(--section-y) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  :scope[data-tone="well"] { background: var(--bg-surface-2); }
+  @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  [data-part="copy"] { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: end; gap: 24px clamp(32px, 6cqi, 80px); }
+  h1 { margin: 0; max-width: 14ch; font-family: var(--font-display); font-size: max(var(--step-5), clamp(2.5rem, 1rem + 4.4cqi, 4.75rem)); font-weight: var(--weight-display); letter-spacing: calc(var(--tracking-display) * 1.15); line-height: 1.0; text-wrap: balance; }
+  [data-part="side"] { display: grid; gap: 22px; padding-bottom: 6px; }
+  [data-part="lede"] { margin: 0; max-width: 36ch; color: var(--text-secondary); font-size: max(var(--step-1), 1.0625rem); line-height: 1.5; text-wrap: pretty; }
+  [data-part="cta"] { display: flex; flex-wrap: wrap; gap: 10px; }
+  @container (max-width: 760px) { [data-part="copy"] { grid-template-columns: minmax(0, 1fr); } }
+
+  /* The picture keeps its shape whatever is in it: still, film, or both. */
+  [data-part="media"] { position: relative; isolation: isolate; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius-xl); background: var(--bg-surface-2); }
+  @container (min-width: 1100px) { [data-part="media"] { aspect-ratio: 2 / 1; } }
+  @container (max-width: 640px) { [data-part="media"] { aspect-ratio: 4 / 5; } }
+  [data-part="media"] > :is([data-part="poster"], img, picture, video) { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; border-radius: 0; object-fit: cover; }
+  [data-part="media"] > .lt-art { --art-ratio: auto; aspect-ratio: auto; padding: clamp(20px, 4cqi, 44px); }
+  [data-part="media"] > .lt-art [data-part="name"] { max-width: 18ch; font-size: clamp(1.5rem, 0.6rem + 2.6cqi, 2.75rem); }
+  [data-part="video"] { z-index: 1; opacity: 0; transition: opacity 700ms var(--ease-settle, ease-out); }
+  :scope[data-started] [data-part="video"] { opacity: 1; }
+
+  /* Pause and play: always on top of the film, 44px, on its own surface so it reads over any frame. */
+  [data-part="toggle"] { position: absolute; right: clamp(12px, 2cqi, 20px); bottom: clamp(12px, 2cqi, 20px); z-index: 2; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: color-mix(in oklab, var(--bg-surface-1) 88%, transparent); color: var(--text-primary); box-shadow: 0 0 0 1px var(--border-hairline), var(--shadow-sm); cursor: pointer; transition: background var(--dur-2), translate var(--dur-2) var(--ease-out); }
+  [data-part="toggle"][hidden] { display: none; }
+  [data-part="toggle"]:hover { background: var(--bg-surface-1); }
+  [data-part="toggle"]:active { translate: 0 1px; }
+  [data-part="toggle"]:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 3px; }
+  [data-part="toggle"] .lt-icon { width: 18px; height: 18px; }
+  [data-part="toggle"] [data-icon="play"] { display: none; }
+  :scope:not([data-state="playing"]) [data-part="toggle"] [data-icon="pause"] { display: none; }
+  :scope:not([data-state="playing"]) [data-part="toggle"] [data-icon="play"] { display: grid; }
+}
+@media print { .lt-hero-video [data-part="video"], .lt-hero-video [data-part="toggle"] { display: none !important; } }

@@ -1,13 +1,51 @@
+/* View transitions: smooth changes inside a page (withViewTransition) and between pages (cross-document, opt-in
+   with <html data-vt>). The scoped part styles the gallery's sample, where a picture in a list morphs into the
+   detail view inside one page; the outer .lt-vt-demo is a preview frame. */
 @scope (.lt-vt-demo) {
-  :scope { display: grid; gap: var(--gap-md); width: min(100%, 420px); }
-  .lt-segmented { justify-self: start; }
-  [data-part="items"] { display: grid; gap: var(--gap-sm); margin: 0; padding: 0; list-style: none; }
-  [data-layout="grid"] { grid-template-columns: repeat(2, 1fr); }
-  li { display: flex; flex-direction: column; gap: 2px; padding: var(--gap-md); border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-md); background: var(--bg-surface-1); }
-  [data-layout="list"] li { flex-direction: row; justify-content: space-between; padding: 10px var(--gap-md); }
-  b { font-size: var(--text-ui-sm); font-weight: 550; color: var(--text-secondary); }
-  span { font-size: var(--step-1); font-weight: 650; font-variant-numeric: tabular-nums; }
-  [data-layout="list"] span { font-size: var(--text-ui); }
+  :scope { container-type: inline-size; display: grid; width: 100%; min-height: 420px; color: var(--text-primary); }
+  [data-part="kicker"] { margin: 0 0 14px; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  [data-part="items"] { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+  [data-vt-open] { display: grid; gap: 10px; width: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; border-radius: var(--radius-lg); }
+  [data-vt-open]:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 4px; }
+  [data-vt-open] .lt-art [data-part="name"] { font-size: clamp(1.125rem, 8cqi, 1.75rem); }
+  [data-vt-open]:hover .lt-art { translate: 0 -2px; }
+  .lt-art { transition: translate var(--dur-2) var(--ease-out); }
+  [data-part="meta"] { display: flex; justify-content: space-between; gap: 8px; font-size: var(--text-ui-sm); }
+  [data-part="meta"] b { font-weight: 600; }
+  [data-part="meta"] span { color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+  [data-part="detail"] { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); grid-template-rows: auto 1fr; gap: 16px 28px; align-items: end; }
+  [data-part="detail"][hidden] { display: none; }
+  [data-part="back"] { grid-column: 1 / -1; justify-self: start; }
+  [data-part="hero"] > .lt-art { --art-ratio: 5 / 4; }
+  [data-part="hero"] > .lt-art [data-part="name"] { font-size: clamp(1.5rem, 7cqi, 2.5rem); }
+  [data-part="copy"] { display: grid; gap: 8px; padding-bottom: 8px; }
+  [data-part="title"] { margin: 0; font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.05; }
+  [data-part="price"] { margin: 0; font-size: var(--step-1); font-variant-numeric: tabular-nums; }
+  [data-part="line"] { margin: 0; max-width: 30ch; color: var(--text-secondary); line-height: 1.5; }
+  @container (max-width: 520px) {
+    [data-part="items"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    [data-part="detail"] { grid-template-columns: minmax(0, 1fr); }
+  }
 }
 ::view-transition-group(*) { animation-duration: var(--dur-4, 320ms); animation-timing-function: var(--ease-out, ease-out); }
 @media (prefers-reduced-motion: reduce) { ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; } }
+
+/* ------------------------------------------------------------ smooth page changes (cross-document view transitions)
+   Installing this component makes same-site navigations eligible (typed "lt-page"); a page without data-vt on
+   <html> snaps (its page transition has no animation), so a site opts in with one attribute. Both pages need data-vt;
+   elements that should morph carry the same data-vt-name on both (the view-transition enhancer copies it to
+   view-transition-name). Same-document transitions (withViewTransition) are not affected. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; types: lt-page; }
+}
+html:not([data-vt]):active-view-transition-type(lt-page)::view-transition-group(*),
+html:not([data-vt]):active-view-transition-type(lt-page)::view-transition-old(*),
+html:not([data-vt]):active-view-transition-type(lt-page)::view-transition-new(*) { animation: none; }
+html[data-vt]:active-view-transition-type(lt-page)::view-transition-group(*) { animation-duration: 460ms; animation-timing-function: var(--ease-settle); }
+html[data-vt]:active-view-transition-type(lt-page)::view-transition-old(root) { animation: 200ms ease-out both lt-vt-out; }
+html[data-vt]:active-view-transition-type(lt-page)::view-transition-new(root) { animation: 380ms var(--ease-settle) 80ms both lt-vt-in; }
+@keyframes lt-vt-out { to { opacity: 0; } }
+@keyframes lt-vt-in { from { opacity: 0; transform: translateY(12px); } }
+@media (prefers-reduced-motion: reduce) {
+  html::view-transition-group(*), html::view-transition-old(*), html::view-transition-new(*) { animation: none !important; }
+}

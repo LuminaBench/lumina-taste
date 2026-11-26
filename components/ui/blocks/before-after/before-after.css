@@ -1,15 +1,68 @@
+/* Before and after: one picture in two states with a divider you drag. The control is a native range input laid
+   invisibly over the whole picture, so it works by keyboard, pointer, a tap anywhere and touch, and screen
+   readers hear a slider. Before shows left of the divider, after shows right of it.
+   Put an <img> (or two of the same size) in place of the sample screens. The older two-list layout
+   ([data-part="cols"] with "old" and "new") still works. */
 @scope (.lt-before-after) {
-  :scope { container-type: inline-size; display: block; width: 100%; padding: var(--block-y, calc(var(--section-y) / 2)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  :scope { --pos: 50%; container-type: inline-size; display: block; width: 100%; padding: var(--block-y, calc(var(--section-y) / 2)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
   /* Blocks pad by half of --section-y, so the gap between two sections is exactly --section-y. data-tone="well" makes a tinted band. */
   :scope[data-tone="well"] { background: var(--bg-surface-2); }
   @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
   @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
   .lt-eyebrow, [data-part="eyebrow"] { margin: 0 0 10px; font-size: var(--text-ui-xs); font-weight: 650; letter-spacing: var(--eyebrow-tracking); text-transform: uppercase; color: var(--accent-text); }
-  h2 { margin: 0; font-family: var(--font-display); font-size: max(var(--step-3), 1.625rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
-  [data-part="lede"] { margin: 12px 0 0; max-width: 56ch; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.55; text-wrap: pretty; }
+  h2 { margin: 0 auto; max-width: 20ch; font-family: var(--font-display); font-size: max(var(--step-4), 1.875rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.04; text-wrap: balance; }
+  [data-part="lede"] { margin: 14px auto 0; max-width: 52ch; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.55; text-wrap: pretty; }
+  header { margin-bottom: clamp(28px, 5cqi, 48px); text-align: center; }
 
-  header { margin-bottom: 28px; text-align: center; }
-  h2 { margin-inline: auto; max-width: 22ch; }
+  /* ---------------------------------------------------------------- the slider */
+  [data-part="compare"] { position: relative; isolation: isolate; max-width: 1040px; margin: 0 auto; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius-xl); background: var(--bg-surface-2); container-type: inline-size; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+  @container (max-width: 640px) { [data-part="compare"] { aspect-ratio: 4 / 5; } }
+  /* Each side is a window onto a full-size picture: before is as wide as --pos from the left, after fills the
+     rest from the right, and the picture inside each keeps the frame's full width (100cqi), so the two line up. */
+  [data-part="before"], [data-part="after"] { position: absolute; top: 0; bottom: 0; overflow: hidden; }
+  [data-part="before"] { left: 0; width: var(--pos); }
+  [data-part="after"] { right: 0; width: calc(100% - var(--pos)); }
+  :is([data-part="before"], [data-part="after"]) > :not([data-part="tag"]) { position: absolute; top: 0; width: 100cqi; max-width: none; height: 100%; }
+  [data-part="before"] > :not([data-part="tag"]) { left: 0; }
+  [data-part="after"] > :not([data-part="tag"]) { right: 0; }
+  :is([data-part="before"], [data-part="after"]) > :is(img, picture, video) { object-fit: cover; }
+  [data-part="tag"] { position: absolute; top: 14px; z-index: 1; padding: 5px 11px; border-radius: var(--radius-pill); background: color-mix(in oklab, var(--bg-surface-1) 90%, transparent); color: var(--text-primary); font-size: var(--text-ui-xs); font-weight: 650; box-shadow: 0 0 0 1px var(--border-hairline); transition: opacity var(--dur-3) var(--ease-out); }
+  [data-part="before"] [data-part="tag"] { left: 14px; }
+  [data-part="after"] [data-part="tag"] { right: 14px; }
+  [data-part="compare"][data-edge="start"] [data-part="before"] [data-part="tag"], [data-part="compare"][data-edge="end"] [data-part="after"] [data-part="tag"] { opacity: 0; }
+  /* The divider: a line of light the full height of the picture with a knob in the middle. */
+  [data-part="handle"] { position: absolute; top: 50%; left: var(--pos); z-index: 2; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: var(--text-primary); color: var(--bg-canvas); box-shadow: 0 4px 12px -4px oklch(0 0 0 / 0.3); pointer-events: none; transition: transform var(--dur-2) var(--ease-spring); }
+  [data-part="handle"]::before { content: ""; position: absolute; top: -100vh; bottom: -100vh; left: 50%; z-index: -1; width: 2px; margin-left: -1px; background: var(--text-primary); }
+  [data-part="handle"] .lt-icon { width: 14px; margin: 0 -3px; }
+  [data-part="compare"][data-dragging] [data-part="handle"] { transform: scale(1.08); }
+  [data-part="range"] { position: absolute; inset: 0; z-index: 3; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; touch-action: pan-y; }
+  /* The input itself is invisible, so its focus shows twice: around the picture and on the knob. */
+  [data-part="compare"]:has([data-part="range"]:focus-visible) { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 3px; }
+  [data-part="compare"]:has([data-part="range"]:focus-visible) [data-part="handle"] { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 3px; }
+  [data-part="captions"] { display: flex; justify-content: space-between; gap: 24px; max-width: 1040px; margin: 16px auto 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  [data-part="captions"] span:last-child { text-align: right; }
+  [data-part="captions"] b { margin-right: 6px; color: var(--text-primary); font-weight: 650; }
+
+  /* ---------------------------------------------------------------- sample screens: a spreadsheet, then the same month sorted */
+  [data-mock="sheet"], [data-mock="sorted"] { display: grid; align-content: start; padding: clamp(48px, 8cqi, 72px) clamp(16px, 6cqi, 72px) 24px; }
+  [data-mock="sheet"] { background: var(--bg-surface-3); color: var(--text-secondary); font: 400 clamp(10px, 1.45cqi, 14px) / 1.2 var(--font-mono); }
+  [data-mock="sheet"] [data-m="file"] { margin: 0 0 10px; color: var(--text-secondary); }
+  [data-m="grid"] { display: grid; grid-template-columns: 2.4em 0.8fr 1.5fr 0.9fr 1fr; border-top: 1px solid var(--border-strong); border-left: 1px solid var(--border-strong); background: var(--bg-surface-1); }
+  [data-m="grid"] > span { min-height: 2.2em; padding: 0.55em 0.6em; overflow: hidden; border-right: 1px solid var(--border-hairline); border-bottom: 1px solid var(--border-hairline); white-space: nowrap; text-overflow: ellipsis; }
+  [data-m="grid"] > span:nth-child(-n + 5), [data-m="grid"] > span:nth-child(5n + 1) { background: var(--bg-surface-2); color: var(--text-secondary); text-align: center; }
+  [data-m="grid"] > span:nth-child(n + 7):nth-child(-n + 10) { color: var(--text-primary); font-weight: 600; }
+  [data-m="grid"] > [data-q] { background: var(--status-warning-soft); color: var(--text-primary); }
+  [data-mock="sorted"] { align-content: center; gap: clamp(14px, 3cqi, 28px); background: var(--bg-surface-1); }
+  [data-mock="sorted"] [data-m="title"] { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0; font-family: var(--font-display); font-size: clamp(1.25rem, 0.6rem + 2.6cqi, 2.25rem); font-weight: var(--weight-display); letter-spacing: -0.02em; }
+  [data-mock="sorted"] [data-m="title"] span { color: var(--text-secondary); font-family: var(--font-body); font-size: var(--text-ui-sm); font-weight: 500; letter-spacing: 0; }
+  [data-m="cats"] { display: grid; gap: clamp(10px, 2cqi, 16px); margin: 0; padding: 0; list-style: none; }
+  [data-m="cats"] li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; font-size: clamp(12px, 1.6cqi, 16px); }
+  [data-m="cats"] li::after { content: ""; grid-column: 1 / -1; height: clamp(6px, 1cqi, 10px); border-radius: 99px; background: linear-gradient(90deg, var(--accent-solid) var(--share), var(--bg-surface-3) var(--share)); }
+  [data-m="cats"] b, [data-m="vat"] b { font-weight: 650; font-variant-numeric: tabular-nums; }
+  [data-m="vat"] { display: flex; justify-content: space-between; margin: 0; padding-top: clamp(10px, 2cqi, 16px); border-top: var(--bw) var(--border-style) var(--border-hairline); font-size: clamp(12px, 1.6cqi, 16px); }
+  [data-m="vat"] b { color: var(--status-positive); }
+
+  /* ---------------------------------------------------------------- the older layout: two lists */
   [data-part="cols"] { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   @container (max-width: 680px) { [data-part="cols"] { grid-template-columns: 1fr; } }
   [data-part="old"], [data-part="new"] { padding: 24px; border-radius: var(--radius-xl); }
@@ -17,9 +70,9 @@
   [data-part="new"] { border: var(--bw) var(--border-style) var(--accent-solid); background: var(--bg-surface-1); box-shadow: 0 0 0 1px var(--accent-solid), var(--shadow-md); }
   h3 { margin: 0 0 14px; font-size: var(--text-ui); font-weight: 650; }
   [data-part="old"] h3 { color: var(--text-secondary); }
-  ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
-  li { display: flex; gap: 10px; font-size: var(--text-ui); line-height: 1.45; }
-  li .lt-icon { flex: none; width: 18px; height: 18px; margin-top: 1px; }
+  :is([data-part="old"], [data-part="new"]) ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  :is([data-part="old"], [data-part="new"]) li { display: flex; gap: 10px; font-size: var(--text-ui); line-height: 1.45; }
+  :is([data-part="old"], [data-part="new"]) li .lt-icon { flex: none; width: 18px; height: 18px; margin-top: 1px; }
   [data-part="old"] li { color: var(--text-secondary); }
   [data-part="old"] .lt-icon { color: var(--text-muted); }
   [data-part="new"] .lt-icon { color: var(--status-positive); }

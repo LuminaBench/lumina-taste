@@ -1,4 +1,4 @@
-/* lumina-taste scroll: how a page moves as it is read. A few attributes, no library, no script.
+/* lumina-taste scroll: how a page moves as it is read. A few attributes, almost no script.
 
    On <main> (or any ancestor):
      data-scroll                 every section block under it rises into place as it enters the screen
@@ -6,28 +6,55 @@
      data-entrance               on load, the headline lines rise in one after another, then the rest
    On a picture (a figure, .lt-device, .lt-art, an image, a chart frame):
      data-zoom                   it starts a little smaller and settles to full size as it scrolls in
+     data-zoom="open"            it starts tilted back and small, like a lid, and opens upright as it scrolls in
      data-parallax               it drifts a little slower than the page (backgrounds only, never text)
+   On any element whose text holds a figure ("2,400", "£86", "4.2 km"):
+     data-count                  (bare) the figure counts up to itself once when it reaches the screen. The true number
+                                 is in the HTML, so without script, under reduced motion and in print it is simply
+                                 the number. Optional: data-count-from="99" (start value), data-count-duration="1600".
+                                 Needs the number-settle enhancer (data-lt="number-settle" on <main> or any
+                                 ancestor); stats-band brings its own.
+   On <html> (with the view-transition component installed):
+     data-vt                     smooth page changes: same-site links cross-fade, and elements that carry the same
+                                 data-vt-name="…" on both pages (the hero picture and the detail page's picture)
+                                 morph from one to the other. Off under reduced motion. See references/motion.md.
 
    Built on CSS scroll-driven animations (animation-timeline: view()). Where they are not supported the
    page is simply still: nothing is ever hidden waiting for an animation, and nothing moves under
-   prefers-reduced-motion. Only opacity and transform are animated. Printing shows the page at rest.
+   prefers-reduced-motion or data-motion="reduced". Only opacity and transform are animated. Printing shows
+   the page at rest.
 
-   Rules of use (references/composition.md §8): one entrance, at most two scroll moments per page (a
-   statement, a stack, a zoom), and the reveal everywhere else. Never animate body text on its own. */
+   Rules of use (references/motion.md): one entrance, at most two scroll moments per page (a statement, a
+   stack, a pinned story, a sideways rail, a reveal, a zoom), and the reveal everywhere else. Never animate
+   body text on its own. */
+
+:root {
+  /* Scroll moments settle like a heavy object: fast out, long soft landing. Scrubbed animations stay linear
+     (the scroll is the easing); timed ones (entrance, counts, the gallery's replay) use --ease-settle. */
+  --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-entrance: 760ms;
+  --dur-count: 1400ms;
+  --dur-moment: 1100ms;
+}
+@media (prefers-reduced-motion: reduce) { :root { --dur-entrance: 1ms; --dur-count: 1ms; --dur-moment: 1ms; } }
+
+/* Figures that count keep their width: every digit is the same width, so the line never jumps. */
+[data-count=""] { font-variant-numeric: tabular-nums; }
 
 @keyframes lt-rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
 @keyframes lt-rise-sm { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @keyframes lt-settle { from { transform: scale(0.9); border-radius: calc(var(--radius-xl, 20px) * 1.6); } to { transform: none; } }
+@keyframes lt-open { from { opacity: 0.4; transform: perspective(1800px) translateY(8%) rotateX(24deg) scale(0.82); } 70% { opacity: 1; } to { opacity: 1; transform: none; } }
 @keyframes lt-drift { from { transform: translateY(-6%); } to { transform: translateY(6%); } }
 @keyframes lt-line { from { opacity: 0; transform: translateY(0.45em); clip-path: inset(0 0 100% 0); } to { opacity: 1; transform: none; clip-path: inset(0 0 -20% 0); } }
 
 @media (prefers-reduced-motion: no-preference) {
   /* ---------------------------------------------------------- entrance: once, on load */
-  :where([data-entrance]) :where(h1) { animation: lt-line 760ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-  :where([data-entrance]) :where([data-part="eyebrow"]) { animation: lt-rise-sm 520ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-  :where([data-entrance]) :where([data-part="lede"], [data-part="cta"], [data-part="note"], [data-part="foot"]) { animation: lt-rise-sm 620ms cubic-bezier(0.22, 1, 0.36, 1) 260ms both; }
+  :where([data-entrance]) :where(h1) { animation: lt-line var(--dur-entrance) var(--ease-settle) both; }
+  :where([data-entrance]) :where([data-part="eyebrow"]) { animation: lt-rise-sm 520ms var(--ease-settle) both; }
+  :where([data-entrance]) :where([data-part="lede"], [data-part="cta"], [data-part="note"], [data-part="foot"]) { animation: lt-rise-sm 620ms var(--ease-settle) 260ms both; }
   :where([data-entrance]) :where([data-part="cta"]) { animation-delay: 340ms; }
-  :where([data-entrance]) :where([data-part="visual"], [data-part="media"], figure, .lt-device) { animation: lt-rise 900ms cubic-bezier(0.22, 1, 0.36, 1) 180ms both; }
+  :where([data-entrance]) :where([data-part="visual"], [data-part="media"], figure, .lt-device) { animation: lt-rise 900ms var(--ease-settle) 180ms both; }
 
   @supports (animation-timeline: view()) {
     /* -------------------------------------------------------- reveal: each section block as it enters */
@@ -42,12 +69,26 @@
 
     /* -------------------------------------------------------- zoom: a picture settles to full size */
     :where([data-zoom]) { animation: lt-settle linear both; animation-timeline: view(); animation-range: entry 0% cover 40%; transform-origin: 50% 70%; }
+    /* open: it rises from lying back, like a lid, and is upright by the time it is a third of the way up the screen */
+    :where([data-zoom="open"]) { animation-name: lt-open; animation-range: entry 10% cover 45%; transform-origin: 50% 100%; }
 
     /* -------------------------------------------------------- parallax: a background drifts */
     :where([data-parallax]) { animation: lt-drift linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
   }
+
+  /* Inside a preview box (data-contained) nothing scrolls, so a scroll moment would hang half-way. It plays
+     once on its own instead, on a timer, so the gallery shows what it does. */
+  :where([data-contained]) :where([data-zoom]) { animation: lt-settle var(--dur-moment) var(--ease-settle) 200ms both; animation-timeline: auto; animation-range: normal; }
+  :where([data-contained]) :where([data-zoom="open"]) { animation-name: lt-open; }
+  :where([data-contained]) :where([data-parallax]) { animation: none; }
 }
 
+/* Smooth page changes (cross-document view transitions, <html data-vt>, data-vt-name) live with the
+   view-transition component (components/ui/motion/view-transition): install it to opt a site in. */
+[data-vt-name] { view-transition-name: attr(data-vt-name type(<custom-ident>)); }
+
+/* ------------------------------------------------------------ at rest: print, and the profile's reduced motion */
 @media print {
   [data-entrance] *, [data-scroll] *, [data-zoom], [data-parallax] { animation: none !important; opacity: 1 !important; transform: none !important; clip-path: none !important; }
 }
+[data-motion="reduced"] :is([data-entrance] *, [data-scroll] *, [data-zoom], [data-parallax]) { animation: none !important; }
