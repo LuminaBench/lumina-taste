@@ -275,3 +275,20 @@ test('compare-pages letters pages blindly, blocks outside requests, records verd
     assert.equal(node([join(root, 'scripts/compare-pages.mjs'), '--out', out, '--record', 'A>Z', '--reason', 'a letter that is not there']).status, 2);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
+
+test('judge: a wordy first screen and a page of paragraphs are over the word budget', () => {
+  assert.ok(rulesOf(page([section()], { firstWords: 52, pageHeight: 2700 })).has('taste-word-budget'));
+  assert.ok(!rulesOf(page([section()], { firstWords: 28, pageHeight: 2700 })).has('taste-word-budget'));
+  const wordy = Array.from({ length: 4 }, () => section({ words: 400 }));
+  assert.ok(rulesOf(page(wordy, { firstWords: 20, pageHeight: 4500 })).has('taste-word-budget'));
+  assert.ok(!rulesOf(page(wordy, { firstWords: 20, pageHeight: 4500, hero: false })).has('taste-word-budget'), 'not on app screens');
+});
+
+test('judge: a page in one hue is flagged; a contrasting bar or a neutral ground is not', () => {
+  const teal = { L: 0.42, C: 0.075, H: 218 }, tint = { L: 0.976, C: 0.008, H: 214 };
+  const one = { canvas: tint, accent: teal, bar: tint, foot: { L: 0.3, C: 0.05, H: 220 }, grounds: [tint, { L: 0.25, C: 0.04, H: 216 }] };
+  assert.ok(rulesOf(page([section()], { colour: one })).has('taste-monotone'));
+  assert.ok(!rulesOf(page([section()], { colour: { ...one, bar: { L: 0.18, C: 0.01, H: 60 } } })).has('taste-monotone'), 'an ink top bar');
+  assert.ok(!rulesOf(page([section()], { colour: { ...one, canvas: { L: 0.976, C: 0.006, H: 70 }, bar: { L: 0.976, C: 0.006, H: 70 } } })).has('taste-monotone'), 'warm paper');
+  assert.ok(!rulesOf(page([section()], { colour: { ...one, grounds: [...one.grounds, { L: 0.8, C: 0.1, H: 55 }] } })).has('taste-monotone'), 'a band in the second colour');
+});
