@@ -5,8 +5,9 @@
 //
 // Pure functions, no I/O: compose.mjs passes the block's markup and the draft's context.
 import { esc, keepHyphens, setHeroVisual } from './draft.mjs';
-import { heroPicture, itemsFrom, thingPanel, motifFor, isSoftware } from './bands.mjs';
+import { heroPicture, itemsFrom, thingPanel, isSoftware } from './bands.mjs';
 import { dateFrom, timetable } from './compositions.mjs';
+import { rankMotifs } from '../../scripts/lib/image-motifs.mjs';
 
 const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 const words = (s) => String(s ?? '').replace(/<[^>]+>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
@@ -93,7 +94,15 @@ export function composeHero(comp, html, ctx) {
     const tones = ['', ' data-tone="accent"', ' data-tone="ink"', '', ' data-tone="accent"'];
     // Each tile its own drawing: the thing's own, else another from the subject's world, never the neighbour's.
     const motifs = [];
-    for (const it of items) motifs.push(motifFor(it.name, ctx, motifs[motifs.length - 1] ?? null));
+    const used = (ctx.usedMotifs ??= new Set());
+    for (const it of items) {
+      const prev = motifs[motifs.length - 1] ?? null;
+      // The thing's own drawing (a mug is a cup), else one from the subject's world; never the neighbour's.
+      const own = rankMotifs(it.name.toLowerCase().replace(/(\w{3,})s\b/g, '$1')).find((m) => m !== prev && !used.has(m));
+      if (own) used.add(own);
+      // Else the subject's own kind of thing (a pottery's vase), never a drawing from another world.
+      motifs.push(own ?? rankMotifs((ctx.facts.kind ?? '').toLowerCase().replace(/\bstudios?\b/g, '')).find((m) => m !== prev) ?? null);
+    }
     const tiles = items.map((it, k) => `<li>${thingPanel({ ...it, price: null, meta: null }, ctx, tones[k], motifs[k])}</li>`);
     return out.replace(/<ul data-part="tiles">[\s\S]*?<\/ul>/, `<ul data-part="tiles">\n    ${tiles.join('\n    ')}\n  </ul>`);
   }
