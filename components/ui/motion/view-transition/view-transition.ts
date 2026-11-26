@@ -2,6 +2,32 @@ import { reducedMotion, type Cleanup } from '../../_shared/dom';
 
 type VTDoc = Document & { startViewTransition?: (cb: () => void) => { finished: Promise<void> } };
 
+/** True when the page is inside a frame. A cross-origin parent can make reading window.top throw: that is a frame too. */
+export function inFrame(): boolean {
+  try { return window.top !== window.self; } catch { return true; }
+}
+
+/**
+ * Never take part in page changes inside a frame. The opt-in is the CSS at-rule in view-transition.css, which
+ * cannot tell a frame from a tab, so any page that installs this component would otherwise run a cross-document
+ * view transition when its frame navigates; in Chromium that has crashed the renderer (a scrolled page with a
+ * pinned scene, then any navigation of the frame). A frame skips the transition on both sides, before the old
+ * page is captured and before the new one is shown. In a tab nothing changes.
+ */
+function skipInFrames() {
+  if (typeof window === 'undefined' || !inFrame()) return;
+  const skip = (e: Event) => {
+    const vt = (e as Event & { viewTransition?: ViewTransition | null }).viewTransition;
+    if (!vt) return;
+    for (const p of [vt.ready, vt.finished, vt.updateCallbackDone]) p.catch(() => {});
+    vt.skipTransition();
+  };
+  addEventListener('pageswap', skip);
+  addEventListener('pagereveal', skip);
+  document.documentElement.toggleAttribute('data-vt-frame', true);
+}
+skipInFrames();
+
 /**
  * Run a DOM update inside a View Transition when supported (and motion is allowed); otherwise apply it instantly.
  * Give moving elements a unique `view-transition-name` and they morph between layouts.

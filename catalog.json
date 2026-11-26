@@ -2680,10 +2680,13 @@
         "spot illustration",
         "illustration instead of a photo",
         "subject illustration",
-        "flat illustration"
+        "flat illustration",
+        "illustrated scene",
+        "little scene of the shop",
+        "drawing of a counter with a cup"
       ],
       "pattern": "<figure> + <figcaption>",
-      "states": ["accent","figure","framed","ink","plain","swatch","with a motif","with a photograph"],
+      "states": ["accent","figure","framed","ink","plain","swatch","with a motif","with a photograph","with a scene"],
       "react": "ArtPanel",
       "deps": [],
       "files": [

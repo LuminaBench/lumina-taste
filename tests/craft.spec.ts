@@ -1,7 +1,12 @@
 // Craft: art-panel scenes drawn in a real panel, micro-interactions with motion on and with reduced motion, and
 // the gallery's Moments and Before / after views playing their stages.
 import { expect, test, type Page } from '@playwright/test';
+import { mkdirSync, renameSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { sceneSvg } from '../scripts/lib/image-motifs.mjs';
+// @ts-expect-error: a plain ES module without types
+import { motionFiles } from './motion/build.mjs';
 
 const errorsOf = (page: Page) => { const e: string[] = []; page.on('pageerror', (x) => e.push(x.message)); page.on('console', (m) => { if (m.type() === 'error') e.push(m.text()); }); return e; };
 /** An element page's live stage, with motion as asked. */
@@ -235,4 +240,60 @@ test.describe('gallery: Moments and Before / after', () => {
       expect(hidden).toBe(0);
     });
   }
+});
+
+test.describe('pages inside frames', () => {
+  // The motion test pages (tests/motion/build.mjs) install view-transition, which opts a page in to cross-document
+  // view transitions. Written next to the gallery build like motion.spec.ts does, so the frames navigate for real.
+  test.beforeAll(async () => {
+    const dir = join(dirname(fileURLToPath(import.meta.url)), '..', 'preview/dist/_mt');
+    mkdirSync(dir, { recursive: true });
+    for (const [name, body] of Object.entries(await motionFiles() as Record<string, string>)) { const tmp = join(dir, `.${name}.craft.${process.pid}`); writeFileSync(tmp, body); renameSync(tmp, join(dir, name)); }
+  });
+  /** A host page with one frame (scaled, as the gallery shows pages); navigates it to each URL in turn, scrolled half-way first. */
+  async function navigateFrame(page: Page, urls: string[]) {
+    let crashed = false;
+    page.on('crash', () => (crashed = true));
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/_mt/plain.html');
+    await page.evaluate((u) => { document.body.innerHTML = `<iframe id="f" title="Embedded page" style="width:1280px;height:760px;border:0;transform:scale(.5);transform-origin:0 0" src="${u}"></iframe>`; }, urls[0]);
+    const frame = page.locator('#f');
+    const loaded = () => frame.evaluate((f: HTMLIFrameElement) => f.contentDocument?.readyState === 'complete' && f.contentWindow!.location.pathname !== 'blank');
+    await expect.poll(loaded).toBe(true);
+    const marks: Array<boolean | undefined> = [];
+    for (const u of urls.slice(1)) {
+      await page.waitForTimeout(400);
+      await frame.evaluate((f: HTMLIFrameElement) => f.contentWindow!.scrollTo(0, f.contentDocument!.documentElement.scrollHeight / 2));
+      await page.waitForTimeout(300);
+      marks.push(await frame.evaluate((f: HTMLIFrameElement) => f.contentDocument?.documentElement.hasAttribute('data-vt-frame')));
+      await frame.evaluate((f: HTMLIFrameElement, url: string) => { f.src = url; }, u);
+      await page.waitForTimeout(900);
+      expect(crashed, `navigating to ${u}`).toBe(false);
+      await expect.poll(() => frame.evaluate((f: HTMLIFrameElement) => f.contentWindow!.location.href)).toContain(u.replace(/^\//, ''));
+    }
+    return marks;
+  }
+
+  test('a blueprint in a frame navigates twice without crashing', async ({ page }) => {
+    await navigateFrame(page, ['/blueprints/venue/', '/blueprints/venue/?state=x', '/blueprints/landing/']);
+    expect(await page.locator('#f').evaluate((f: HTMLIFrameElement) => !!f.contentDocument!.querySelector('main'))).toBe(true);
+  });
+
+  test('a page that opts in to page transitions never runs one inside a frame, and still navigates', async ({ page }) => {
+    // A scrolled page with a pinned scene, navigated twice: this crashed the renderer before the frame guard.
+    const marks = await navigateFrame(page, ['/_mt/index.html', '/_mt/index.html?again=1', '/_mt/list.html']);
+    expect(marks, 'view-transition knows it is in a frame').toEqual([true, true]);
+  });
+
+  test('in a tab, page transitions are unchanged', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/_mt/list.html');
+    await page.waitForLoadState('networkidle');
+    expect(await page.evaluate(() => document.documentElement.hasAttribute('data-vt-frame'))).toBe(false);
+    const types = await page.evaluate(() => new Promise<string>((res) => {
+      addEventListener('pageswap', (e) => res(String(!!(e as Event & { viewTransition?: unknown }).viewTransition)), { once: true });
+      document.getElementById('open')!.click();
+    }));
+    expect(types).toBe('true');
+  });
 });

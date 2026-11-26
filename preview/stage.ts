@@ -12,14 +12,6 @@ export const STAGE = params.get('stage');
 type Comp = { id: string; enhance: ((el: HTMLElement) => () => void) | null };
 
 export function bootStage(id: string) {
-  // A stage is reloaded with new settings by its parent view. Never as a cross-document view transition: the
-  // kit's opt-in (view-transition.css) is in the bundle, and a transition inside a scaled iframe gains nothing.
-  for (const t of ['pageswap', 'pagereveal']) addEventListener(t, (e) => {
-    const vt = (e as Event & { viewTransition?: ViewTransition | null }).viewTransition;
-    if (!vt) return;
-    for (const p of [vt.ready, vt.finished, vt.updateCallbackDone]) p.catch(() => {});
-    vt.skipTransition();
-  });
   const root = document.documentElement;
   for (const k of ['palette', 'mode', 'type', 'density', 'radius', 'style'] as const) {
     const v = params.get(k);
