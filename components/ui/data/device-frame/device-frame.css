@@ -2,7 +2,8 @@
    A product shot, not a wireframe: a near-black bezel with a thin metal band, radii that follow the real device,
    and a soft layered shadow kept under the critic's limits. The screen holds an <img> (a real screenshot) or a
    small app built from the kit's own parts ([data-app="phone"|"desktop"]), drawn at the device's own size and
-   zoomed to fit, so a 390px phone screen reads as a phone at any width. */
+   zoomed to fit, so a 390px phone screen reads as a phone at any width. The figure carries data-audit-ignore:
+   it is a picture, so its hardware radii and inert screen are not judged as page UI. */
 @scope (.lt-device) {
   :scope {
     --device-band: color-mix(in oklab, var(--text-primary) 38%, var(--bg-surface-3));

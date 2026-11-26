@@ -126,11 +126,11 @@ html[data-mode="dark"] .g-mode-btn .g-moon, html[data-mode="light"] .g-mode-btn 
 .g-pin { position: absolute; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--accent-solid); color: var(--accent-ink); font: 700 10.5px/1 var(--font-body); font-variant-numeric: tabular-nums; box-shadow: 0 0 0 3px var(--bg-surface-1); animation: g-pin-in var(--dur-3) var(--ease-spring); }
 @keyframes g-pin-in { from { scale: 0.4; opacity: 0; } }
 .g-caption { margin: 0; padding: 0 4px; font-size: 0.8125rem; color: var(--text-muted); }
-.g-el-right { display: grid; gap: 14px; padding-bottom: 40px; }
+.g-el-right { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; padding-bottom: 40px; }
 .g-el-right h1, .g-chart-doc h1, .g-style-detail h1, .g-pal-head h1 { margin: 0; font-family: var(--font-display); font-size: clamp(2rem, 1.3rem + 2.4vw, 3.2rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.05; text-wrap: balance; }
-.g-apis { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; font-size: 0.875rem; color: var(--text-muted); }
-.g-apis code { font: 500 0.875rem/1.3 var(--font-mono); color: var(--accent-text); }
-.g-aka { margin: 0; color: var(--text-secondary); font-size: 0.9375rem; }
+.g-apis { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; max-width: var(--measure); margin: 0; font-size: 0.875rem; color: var(--text-muted); }
+.g-apis code { font: 500 0.875rem/1.3 var(--font-mono); color: var(--accent-text); overflow-wrap: anywhere; }
+.g-aka { max-width: var(--measure); margin: 0; color: var(--text-secondary); font-size: 0.9375rem; }
 .g-aka span { color: var(--text-muted); font-style: italic; }
 .g-about { margin: 4px 0 0; font-size: 1.0625rem; line-height: 1.65; color: var(--text-primary); max-width: 62ch; text-wrap: pretty; }
 .g-plain { margin: 0; color: var(--text-secondary); line-height: 1.6; }
