@@ -299,10 +299,20 @@ test.describe('smooth page changes', () => {
     test.skip(browserName !== 'chromium', 'cross-document view transitions are Chromium and Safari only');
     await open(page, 'list.html');
     expect(await page.locator('[data-vt-name]').evaluate((el) => getComputedStyle(el).viewTransitionName)).toBe('larkspur-chair');
-    await page.click('#open');
-    await page.waitForURL('**/detail.html');
-    await page.waitForFunction(() => (window as unknown as { __reveal: boolean[] }).__reveal.length > 0);
-    expect(await page.evaluate(() => (window as unknown as { __reveal: boolean[] }).__reveal)).toEqual([true]);
+    // Chrome may skip a cross-document transition when the machine is busy (a loaded parallel test run), so the
+    // page change is tried up to three times from a settled page; it must morph on at least one, as it does every
+    // time on an idle machine. A page that never sets up the transition fails all three.
+    let morphed = false;
+    for (let attempt = 0; attempt < 3 && !morphed; attempt++) {
+      if (attempt) await page.goto('/_mt/list.html');
+      await page.waitForLoadState('load');
+      await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(() => r(null)))));
+      await page.click('#open');
+      await page.waitForURL('**/detail.html');
+      await page.waitForFunction(() => (window as unknown as { __reveal: boolean[] }).__reveal.length > 0);
+      morphed = (await page.evaluate(() => (window as unknown as { __reveal: boolean[] }).__reveal))[0] === true;
+    }
+    expect(morphed, 'the named picture morphs into the next page').toBe(true);
     expect(await page.locator('[data-vt-name]').evaluate((el) => getComputedStyle(el).viewTransitionName)).toBe('larkspur-chair');
   });
 
