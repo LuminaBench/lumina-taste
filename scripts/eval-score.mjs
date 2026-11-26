@@ -6,8 +6,11 @@
 //   node scripts/eval-score.mjs --reference                       # score the blueprints as reference answers
 //   options: --quick (desktop + light only)   --json out.json   --baseline old-scores.json
 //
-// Score (0–100) = 35% audit (errors) + 35% taste (audit-ui --taste) + 20% brief checks + 10% hygiene
-// (copy lint hits and raw hex colours in the output's own CSS). Requires Playwright.
+// Score (0–100) = 35% audit (errors) + 35% taste (audit-ui --taste, which includes the designer's measures:
+// sections with nothing to look at, the same layout twice, density, type jump, motion budget, app checks)
+// + 20% brief checks + 10% hygiene (copy lint hits, raw hex colours in the output's own CSS, and load speed
+// from audit-ui --perf: a lazy largest picture, layout shift, heavy fonts, JS or CSS, unsized or oversized
+// images). Requires Playwright.
 import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -47,8 +50,8 @@ const toUrl = (t) => {
 };
 const walk = (dir, out = []) => { for (const f of readdirSync(dir)) { if (f === 'node_modules' || f.startsWith('.') || f === 'tokens') continue; const p = join(dir, f); if (statSync(p).isDirectory()) walk(p, out); else out.push(p); } return out; };
 
-function hygiene(localDir, inputs = []) {
-  if (!localDir) return { copy: 0, hex: 0, score: 100 };
+function hygiene(localDir, inputs = [], perf = 0) {
+  if (!localDir) return { copy: 0, hex: 0, perf, score: Math.max(0, 100 - perf * 10) };
   // The brief's own input files (e.g. the page to restyle) are not the agent's work.
   const skipNames = new Set(inputs.map((f) => f.split('/').pop()));
   const mine = walk(localDir).filter((f) => !skipNames.has(f.split('/').pop()) && !f.includes('/snippets/') && !/lumina\.(css|js)$/.test(f));
@@ -62,7 +65,7 @@ function hygiene(localDir, inputs = []) {
     const css = extname(f) === '.css' ? src : (src.match(/<style[\s\S]*?<\/style>|style="[^"]*"/gi) ?? []).join('\n');
     hex += (css.match(/(?<![\w&])#[0-9a-f]{3,8}\b|\brgba?\(\s*\d/gi) ?? []).length;
   }
-  return { copy, hex, score: Math.max(0, 100 - copy * 15 - Math.min(40, hex * 4)) };
+  return { copy, hex, perf, score: Math.max(0, 100 - copy * 15 - Math.min(40, hex * 4) - Math.min(40, perf * 10)) };
 }
 
 async function structure(browser, url, brief) {
@@ -85,11 +88,17 @@ function audit(url, product = null) {
   const out = join(mkdtempSync(join(tmpdir(), 'lt-eval-')), 'a.json');
   const extra = quick ? ['--viewports', 'desktop', '--modes', 'light'] : [];
   // With a product name the critic also fails pages that still carry the kit's sample brands and people.
-  spawnSync(process.execPath, [join(root, 'scripts/audit-ui.mjs'), url, '--taste', '--quiet', '--json', out, ...(product ? ['--product', product] : []), ...extra], { encoding: 'utf8' });
+  spawnSync(process.execPath, [join(root, 'scripts/audit-ui.mjs'), url, '--taste', '--perf', '--quiet', '--json', out, ...(product ? ['--product', product] : []), ...extra], { encoding: 'utf8' });
   const j = JSON.parse(readFileSync(out, 'utf8'));
   const rules = {};
   for (const r of j.report) for (const f of r.findings) rules[f.rule] = (rules[f.rule] ?? 0) + 1;
-  return { errors: j.errors, warnings: j.warnings, taste: j.score, rules };
+  // Speed is hygiene, not taste or a broken page: taken out of the audit's errors and scored there, once per rule.
+  const perfRules = Object.keys(rules).filter((k) => k.startsWith('perf-'));
+  const perfErrors = j.report.flatMap((r) => r.findings).filter((f) => f.rule.startsWith('perf-') && f.severity === 'error').length;
+  // What the page gives the eye, from the designer's measures (desktop run): for the report, not the score.
+  const m = j.report.find((r) => r.viewport === 'desktop' && r.measures)?.measures;
+  const look = m ? { sections: m.sections.length, bare: m.sections.filter((s) => !s.looks.length && !s.use).length, typeJump: m.type.ratio, moments: m.motion?.moments.length ?? 0 } : null;
+  return { errors: j.errors - perfErrors, warnings: j.warnings, taste: j.score, rules, perf: perfRules.length, look };
 }
 
 async function scoreOne(browser, t, brief) {
@@ -98,10 +107,10 @@ async function scoreOne(browser, t, brief) {
   const named = brief.prompt.match(/["“]([^"”]{2,40})["”]/)?.[1];
   const a = audit(url, reference ? null : (named ?? 'this product'));
   const s = await structure(browser, url, brief);
-  const h = hygiene(local, brief.files ?? []);
+  const h = hygiene(local, brief.files ?? [], a.perf);
   const auditScore = Math.max(0, 100 - a.errors * 10);
   const total = Math.round(0.35 * auditScore + 0.35 * a.taste + 0.2 * s.score + 0.1 * h.score);
-  return { slug: brief.slug, url, total, audit: { errors: a.errors, warnings: a.warnings, score: auditScore }, taste: a.taste, checks: s, hygiene: h, rules: a.rules };
+  return { slug: brief.slug, url, total, audit: { errors: a.errors, warnings: a.warnings, score: auditScore }, taste: a.taste, checks: s, hygiene: h, rules: a.rules, look: a.look };
 }
 
 // ---------------------------------------------------------------- modes
@@ -143,6 +152,7 @@ for (const r of results) {
   if (r.checks.failed.length) console.log(`${''.padEnd(26)}missing: ${r.checks.failed.join('; ')}`);
   const top = Object.entries(r.rules).sort((a, b) => b[1] - a[1]).slice(0, 4);
   if (top.length) console.log(`${''.padEnd(26)}findings: ${top.map(([k, v]) => `${k} ×${v}`).join(', ')}`);
+  if (r.look) console.log(`${''.padEnd(26)}look: ${r.look.sections} sections, ${r.look.bare} with nothing to look at, type jump ${r.look.typeJump}, ${r.look.moments} scroll moments${r.hygiene.perf ? ` · ${r.hygiene.perf} speed finding${r.hygiene.perf > 1 ? 's' : ''}` : ''}`);
 }
 const mean = results.length ? Math.round(results.reduce((a, r) => a + r.total, 0) / results.length) : 0;
 const firstTry = results.filter((r) => r.audit.errors === 0).length;
