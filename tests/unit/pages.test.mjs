@@ -215,3 +215,16 @@ test('briefs from the demo sites: the town in the address, a numbered street wit
   const plan = JSON.parse(compose('Home page for Copper Hare, a coffee shop in York, flat white £3.40').stdout);
   assert.equal(plan.profile.style, null, 'a flat white does not choose the flat style');
 });
+
+test('kit fixes from the demo sites: the gallery rail mirrors, the bar keeps its links on one line, a table in a device frame wraps', () => {
+  const css = (p) => readFileSync(join(root, p), 'utf8');
+  const rail = css('components/ui/blocks/gallery-rail/gallery-rail.css');
+  assert.doesNotMatch(rail.replace(/\/\*[\s\S]*?\*\//g, ''), /padding-(left|right)\s*:/, 'gallery-rail uses logical padding so it mirrors in right-to-left');
+  assert.match(rail, /padding-inline-end:/);
+  const nav = css('components/ui/navigation/navbar-simple/navbar-simple.css');
+  assert.match(nav, /ul a \{[^}]*white-space: nowrap/, 'links stay on one line');
+  assert.match(nav, /@container \(max-width: 1000px\) \{ \[data-part="signin"\]\[href\^="tel:"\] \{ display: none; \} \}/, 'a phone number in the bar gives way first');
+  const dev = readdirSync(join(root, 'components/ui')).map((f) => join('components/ui', f, 'device-frame/device-frame.css')).find((p) => existsSync(join(root, p)));
+  assert.match(css(dev), /\[data-part="screen"\] table \{ table-layout: fixed; max-width: 100%; \}/);
+  assert.match(css(dev), /\[data-part="screen"\] :is\(th, td\) \{ overflow-wrap: anywhere; \}/);
+});

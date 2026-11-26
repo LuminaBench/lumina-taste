@@ -4,7 +4,7 @@
   [data-part="mark"] { width: 20px; height: 20px; border-radius: 6px; background: var(--text-primary); box-shadow: inset -6px -6px 0 var(--accent-solid); }
   nav { flex: 1; }
   ul { display: flex; gap: 4px; margin: 0; padding: 0; list-style: none; }
-  ul a { display: block; padding: 6px 10px; border-radius: var(--radius-sm); color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 550; text-decoration: none; transition: color var(--dur-1), background-color var(--dur-1); }
+  ul a { display: block; padding: 6px 10px; white-space: nowrap; border-radius: var(--radius-sm); color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 550; text-decoration: none; transition: color var(--dur-1), background-color var(--dur-1); }
   ul a:hover { color: var(--text-primary); background: var(--bg-surface-2); }
   ul a[aria-current="page"] { color: var(--text-primary); }
   [data-part="actions"] { display: flex; align-items: center; gap: 14px; }
@@ -24,6 +24,8 @@
   :scope[data-variant="pill"] [data-part="panel"] { top: calc(100% + 8px); border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
   /* On a phone the three things in the bar sit closer, so a two-word name stays on one line next to the button. */
   @media (max-width: 680px) { :scope { gap: 12px; } }
+  /* Between a phone and a laptop the links stay on one line: a phone number in the bar gives way first. */
+  @container (max-width: 1000px) { [data-part="signin"][href^="tel:"] { display: none; } }
   @container (max-width: 680px) { nav, [data-part="signin"] { display: none; } [data-part="toggle"] { display: grid; } [data-part="actions"] { margin-inline-start: auto; } [data-part="toggle"] { margin-left: 0; } }
 }
 /* The first section under a floating pill gets the bar's height back as top padding. */
