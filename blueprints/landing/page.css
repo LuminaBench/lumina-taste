@@ -1,15 +1,6 @@
 .bp-sticky { position: sticky; top: 0; z-index: var(--z-sticky); background: color-mix(in oklab, var(--bg-canvas) 92%, transparent); backdrop-filter: blur(8px); }
 /* The hero sets the headline on the left and the lede, action and note beside it, so the product frame starts
    inside the first screen at 1440×900. */
-.bp-hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); grid-template-rows: auto 1fr auto auto; align-items: end; column-gap: var(--space-8); row-gap: var(--space-4); padding-block: var(--space-8) var(--space-7); }
-.bp-hero > .lt-eyebrow { grid-column: 1 / -1; }
-.bp-hero > h1 { grid-column: 1; grid-row: 2 / span 3; margin: 0; }
-.bp-hero > :is(.lt-lede, .bp-hero-cta, .bp-hero-note) { grid-column: 2; margin: 0; }
-@media (max-width: 900px) { .bp-hero { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; } .bp-hero > * { grid-column: 1 !important; grid-row: auto !important; } }
-.bp-hero .lt-display { max-width: 15ch; }
-.bp-hero .lt-display em { font-style: normal; color: var(--accent-text); }
-.bp-hero-cta { margin-top: var(--space-2); }
-.bp-hero-note { margin: 0; font-size: var(--text-ui-sm); color: var(--text-muted); }
 .bp-frame { border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); box-shadow: var(--shadow-md); overflow: hidden; }
 .bp-frame-bar { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-bottom: var(--bw) var(--border-style) var(--border-hairline); background: var(--bg-surface-2); }
 .bp-frame-bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--border-hairline); }
@@ -38,7 +29,7 @@
 .bp-footer-contrast.lt-footer a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .bp-footer-contrast.lt-footer [data-part="legal"] { border-top-color: color-mix(in oklab, var(--bg-canvas) 25%, transparent); }
 .bp-footer-contrast.lt-footer :focus-visible { outline-color: var(--bg-canvas); }
-@media (max-width: 640px) { .bp-hero { padding-block: var(--space-7) var(--space-6); } .bp-frame-body { padding: var(--space-4); } }
+@media (max-width: 640px) { .bp-frame-body { padding: var(--space-4); } }
 /* Setting up, pinned: one browser window in three states. */
 .lt-story [data-part="visual"] > .lt-device { width: min(100% - 48px, 600px); }
 [data-mock="ln"] { display: grid; align-content: start; gap: 16px; min-height: 340px; padding: 24px; font-size: var(--text-ui-sm); }
@@ -67,3 +58,12 @@
 .ln-fig small { margin-left: 0.12em; color: var(--text-secondary); font-size: 0.32em; font-weight: 500; letter-spacing: 0; }
 .ln-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
 .ln-chips span { padding: 4px 10px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-pill); color: var(--text-primary); font-size: var(--text-ui-sm); }
+
+/* The headline's second half in the accent: the one coloured word in the first screen. */
+.lt-hero-split h1 em { font-style: normal; color: var(--accent-text); }
+/* In the first screen the product is shown whole but short, so the headline under it is still in view. */
+.lt-hero-split[data-variant="product"] .bp-chart { min-height: 0; height: clamp(150px, calc(100svh - 720px), 240px); }
+.lt-hero-split[data-variant="product"] .bp-frame-head p { display: none; }
+.lt-hero-split[data-variant="product"] .bp-frame-body { gap: var(--space-4); padding: var(--space-4) var(--space-5); }
+/* The first screen pads like every other band, so the page keeps two vertical rhythms, not four. */
+.lt-hero-split#top { --block-y: calc(var(--section-y) / 2); }

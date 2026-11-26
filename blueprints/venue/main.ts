@@ -1,7 +1,7 @@
 import { boot } from '../_shared/boot';
 import '../../components/ui/controls/button/button.css';
 import '../../components/ui/navigation/navbar-simple/navbar-simple.css';
-import '../../components/ui/blocks/hero-split/hero-split.css';
+import '../../components/ui/blocks/hero-board/hero-board.css';
 import '../../components/ui/data/art-panel/art-panel.css';
 import '../../components/ui/blocks/offer-cards/offer-cards.css';
 import '../../components/ui/controls/date-picker/date-picker.css';
@@ -9,7 +9,7 @@ import '../../components/ui/controls/number-stepper/number-stepper.css';
 import '../../components/ui/controls/booking-bar/booking-bar.css';
 import '../../components/ui/blocks/visit-info/visit-info.css';
 import '../../components/ui/blocks/faq-section/faq-section.css';
-import '../../components/ui/navigation/footer-minimal/footer-minimal.css';
+import '../../components/ui/navigation/site-footer/site-footer.css';
 import './page.css';
 import { enhance as navbar } from '../../components/ui/navigation/navbar-simple/navbar-simple';
 import { enhance as datePicker } from '../../components/ui/controls/date-picker/date-picker';

@@ -35,14 +35,14 @@
   :scope[data-tone] { border-bottom-color: transparent; background: var(--bg-canvas); backdrop-filter: none; }
   :scope[data-tone] [data-part="panel"] { border-bottom-color: transparent; }
   /* data-variant="split": the links on the start side, the name in the middle, the action on the end side. */
-  :scope[data-variant="split"] { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 20px; }
+  :scope[data-variant="split"] { display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; }
   :scope[data-variant="split"] > nav { grid-column: 1; grid-row: 1; }
   :scope[data-variant="split"] > [data-part="brand"] { grid-column: 2; grid-row: 1; font-size: var(--step-1); }
   :scope[data-variant="split"] > [data-part="actions"] { grid-column: 3; grid-row: 1; justify-self: end; }
   :scope[data-variant="split"] > [data-part="toggle"] { grid-column: 1; grid-row: 1; justify-self: start; margin: 0; }
-  @container (max-width: 680px) { :scope[data-variant="split"] > [data-part="brand"] { font-size: inherit; } }
-  /* On a phone there is no room to centre the name: the bar reads like the simple one. */
-  @media (max-width: 680px) { :scope[data-variant="split"] { display: flex; } }
+  /* Below a laptop there is no room to centre the name between the links: the bar reads like the simple one. */
+  @media (max-width: 1100px) { :scope[data-variant="split"] { display: flex; } }
+  @container (max-width: 1100px) { :scope[data-variant="split"] > [data-part="brand"] { order: -1; font-size: inherit; } :scope[data-variant="split"] > [data-part="actions"] { margin-inline-start: auto; } :scope[data-variant="split"] > nav { display: none; } :scope[data-variant="split"] > [data-part="toggle"] { display: grid; order: 2; margin: 0; } }
   /* data-variant="minimal": the name and the one action, nothing else: for a page of one story. */
   :scope[data-variant="minimal"] { border-bottom-color: transparent; }
   :scope[data-variant="minimal"] > nav, :scope[data-variant="minimal"] > [data-part="toggle"], :scope[data-variant="minimal"] > [data-part="panel"] { display: none; }

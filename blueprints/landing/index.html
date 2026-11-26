@@ -8,7 +8,7 @@
 </head>
 <body>
   <a class="bp-skip" href="#main">Skip to content</a>
-  <header class="lt-navbar bp-sticky" data-lt="navbar-mega">
+  <header class="lt-navbar bp-sticky" data-lt="navbar-mega" data-tone="dark">
     <div data-part="bar" class="bp-container" style="padding: 0">
       <a data-part="brand" href="#top">Halyard</a>
       <button type="button" data-part="burger" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
@@ -40,18 +40,14 @@
   </header>
 
   <main id="main" data-scroll>
-    <section class="bp-hero bp-container" data-entrance>
-      <p class="lt-eyebrow">Analytics for product teams</p>
-      <h1 class="lt-display">The numbers your whole team <em>actually reads</em></h1>
-      <p class="lt-lede">Halyard turns your warehouse into dashboards, alerts and weekly notes that people open. Set up in an afternoon, no SQL required.</p>
-      <div class="bp-row bp-hero-cta">
-        <a href="#start" class="lt-btn" data-variant="primary" data-size="lg"><span data-part="label">Start free for 14 days</span></a>
-        <a href="#demo" class="lt-btn" data-variant="ghost" data-size="lg"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5Z"/></svg><span data-part="label">Watch a 2-minute tour</span></a>
+    <section class="lt-hero-split" id="top" data-variant="product" data-entrance aria-labelledby="ln-h">
+      <div data-part="copy">
+        <p data-part="eyebrow">Analytics for product teams</p>
+        <h1 id="ln-h">The numbers your whole team <em>actually reads</em></h1>
+        <p data-part="lede">Dashboards, alerts and weekly notes from the warehouse you already have.</p>
+        <div data-part="cta"><a href="#start" class="lt-btn" data-variant="primary" data-size="lg"><span data-part="label">Start free for 14 days</span></a><a href="#demo" class="lt-btn" data-variant="ghost" data-size="lg"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5Z"/></svg><span data-part="label">Watch a 2-minute tour</span></a></div>
       </div>
-      <p class="bp-hero-note">No card required · SOC 2 Type II · EU and US hosting</p>
-    </section>
-
-    <section class="bp-container bp-frame-wrap" aria-label="Product preview">
+      <div data-part="visual" aria-label="Product preview" role="group">
       <div class="bp-frame" data-mock>
         <div class="bp-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>app.halyard.dev/revenue</span></div>
         <div class="bp-frame-body">
@@ -67,6 +63,7 @@
           </dl>
           <div id="hero-chart" class="bp-chart"></div>
         </div>
+      </div>
       </div>
     </section>
 

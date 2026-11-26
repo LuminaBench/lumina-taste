@@ -5501,7 +5501,7 @@
       "id": "landing",
       "order": 1,
       "name": "Product / SaaS landing page",
-      "summary": "Top dropdown nav, one focused hero, a live product frame, bento features and a high-contrast footer.",
+      "summary": "An ink top bar, the live product first and large with the headline beneath it, bento features and a high-contrast footer.",
       "anatomy": "Navbar → hero (1 primary CTA) → product frame → proof → setting up, pinned → bento → quote → CTA band → footer",
       "aliases": ["landing page","marketing site","homepage","saas homepage","startup landing"],
       "uses": [
@@ -5516,6 +5516,7 @@
         "device-frame"
       ],
       "motion": "One scroll moment: setting up in three steps with one browser window pinned beside them, changing with each step (sticky-story). The hero enters; every section rises into place.",
+      "composition": "hero-split data-variant=\"product\": the live product frame first, the headline and the one action beneath it; an ink bar.",
       "kind": "blueprint",
       "files": [
         "blueprints/landing/index.html",
@@ -5572,9 +5573,10 @@
       "summary": "Serif + sans typography, generous margins, case-study cards and a comfortable reading measure.",
       "anatomy": "Quiet header → statement → selected work as six results in a row that slides sideways → essay excerpt with pull quote → contact → footer",
       "aliases": ["portfolio","agency site","case studies","designer portfolio","studio website","blog"],
-      "uses": ["floating-pill-nav","scroll-reveal","button","side-scroll","art-panel"],
+      "uses": ["floating-pill-nav","hero-cover","scroll-reveal","button","side-scroll","art-panel"],
       "type": "editorial: a soft, bookish serif for someone who writes as much as she designs, with a plain sans for the facts",
       "motion": "One scroll moment: the work slides sideways while the page scrolls down (side-scroll), each piece one measured result set large. A swipe row on phones; everything else is still.",
+      "composition": "hero-cover: the name as a masthead, a date line, one picture and the cover line; the pill nav alone in the bar.",
       "kind": "blueprint",
       "files": [
         "blueprints/editorial/index.html",
@@ -5610,6 +5612,7 @@
       "aliases": ["pricing page","plans page","pricing table","subscription tiers","compare plans"],
       "uses": ["segmented-control","button","comparison-table","accordion","badge"],
       "motion": "None on purpose: people compare prices here, and figures that count or panels that move get in the way of the comparison.",
+      "composition": "A top bar in the brand colour, edge to edge, so the page of white cards has a contrasting top.",
       "kind": "blueprint",
       "files": [
         "blueprints/pricing/index.html",
@@ -5811,8 +5814,8 @@
       "id": "devtool",
       "order": 15,
       "name": "Developer tool landing",
-      "summary": "A floating pill nav over a grid hero with circuit traces, an install command beside the one action, a typed terminal, tabbed code, six plain features, an API teaser, figures, one customer quote and a closing band.",
-      "anatomy": "Pill nav → hero (announcement, headline, action + install command) → quickstart + terminal → SDK code → the parts as real fragments (code, a held response, a replay, keys, regions, one figure) → API endpoints → figures → quote → CTA → footer",
+      "summary": "A floating pill nav over a grid hero with circuit traces, an install command beside the one action, no announcement, a typed terminal, tabbed code, six plain features, an API teaser, figures, one customer quote and a closing band.",
+      "anatomy": "Pill nav → hero (headline, one sentence, the action and the install command, over circuit traces) → quickstart + terminal → SDK code → the parts as real fragments (code, a held response, a replay, keys, regions, one figure) → API endpoints → figures → quote → CTA → footer",
       "aliases": [
         "developer landing page",
         "api product page",
@@ -5824,7 +5827,6 @@
       ],
       "uses": [
         "navbar-simple",
-        "announcement-pill",
         "command-chip",
         "backdrop-circuit",
         "hero-centered",
@@ -5839,6 +5841,7 @@
       ],
       "type": "workbench: a light, technical grotesk with a mono beside it, for a tool people use at a desk all day rather than a heavy developer-brand look",
       "motion": "No scroll moment: developers read code and copy commands, so nothing moves under them. Sections rise into place; the four figures in the numbers band count once to their true values (number-settle).",
+      "composition": "The centred statement over the circuit grid, with no announcement pill and no note: 30 words in the first screen.",
       "kind": "blueprint",
       "files": [
         "blueprints/devtool/index.html",
@@ -6025,7 +6028,7 @@
       ],
       "uses": [
         "navbar-simple",
-        "hero-split",
+        "hero-board",
         "art-panel",
         "offer-cards",
         "booking-bar",
@@ -6033,12 +6036,13 @@
         "number-stepper",
         "visit-info",
         "faq-section",
-        "footer-minimal",
+        "site-footer",
         "button"
       ],
       "brand": ["Juniper Coffee Roasters","Juniper Coffee"],
       "type": "stamped: Juniper stamps its name on every bag, so the headlines are a sturdy slab with stamped weight",
       "motion": "Entrance on the hero and the quiet reveal; no scroll moment. A roastery is visited for the coffee and the room, so the pictures carry it: the cup and the bags drawn on their panels until the photographs come.",
+      "composition": "hero-board data-variant=\"menu\": this week's bags and the tasting with their prices are the first screen's picture, rising over the roasting room; an ink bar; a wordmark foot.",
       "kind": "blueprint",
       "files": [
         "blueprints/venue/index.html",
@@ -6089,6 +6093,7 @@
       "brand": ["Kestrel Dental"],
       "type": "hyperlegible: a clinic is read by people who are anxious, in a hurry or without their glasses, so every letter is drawn to be told apart",
       "motion": "Two scroll moments, never adjacent: the scroll statement (the price promise) and the first visit as stacking cards. The hero panel carries the practice's own drawing, a tooth, until there is a photograph.",
+      "composition": "hero-split data-variant=\"edge\": the check-up price on a panel that runs full height to the screen edge; an ink bar with the phone number.",
       "kind": "blueprint",
       "files": [
         "blueprints/practice/index.html",
@@ -6120,6 +6125,7 @@
       "uses": [
         "navbar-simple",
         "hero-statement",
+        "art-panel",
         "visit-info",
         "bento-grid",
         "faq-section",
@@ -6129,6 +6135,7 @@
       ],
       "brand": ["Moss Lane Pantry"],
       "motion": "No scroll moment: a food bank asks for trust, not attention. The three figures in the hero count up once to their true values (number-settle); the hero enters, sections rise into place.",
+      "composition": "hero-statement data-variant=\"tucked\": the claim set huge with one small picture tucked into it, the three true figures under a rule; an ink bar.",
       "kind": "blueprint",
       "files": [
         "blueprints/cause/index.html",
@@ -6169,11 +6176,12 @@
         "before-after",
         "faq-section",
         "cta-band",
-        "footer-minimal",
+        "site-footer",
         "button"
       ],
       "brand": ["Larkspur Ceramics"],
       "type": "didone: a high-contrast serif with the thin and thick strokes of a brush-painted maker's mark under the glaze",
+      "composition": "hero-split data-variant=\"overlap\": the mug panel runs off the page edge and the words sit on a block over its edge; a split ink bar with the name in the middle; a wordmark foot.",
       "kind": "blueprint",
       "files": [
         "blueprints/shop/index.html",
@@ -6219,6 +6227,7 @@
       "brand": ["Larkspur Assembly"],
       "type": "stadium: a wide, heavy grotesk like the lettering on a venue's banners, so the date and the headline read from across a room",
       "motion": "One scroll moment: the picture of the hall settles in (data-zoom), set between the programme and the speakers so two sets of rows never meet. The hero's three figures count up once (number-settle); the venue is the page's one dark band.",
+      "composition": "hero-statement data-variant=\"poster\": the dates set enormous on the brand colour, the claim under them; an ink bar above.",
       "kind": "blueprint",
       "files": [
         "blueprints/event/index.html",

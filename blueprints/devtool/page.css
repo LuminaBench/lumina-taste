@@ -11,10 +11,8 @@
 .dv-steps li { position: relative; padding-left: 36px; counter-increment: dv; }
 .dv-steps li::before { content: counter(dv); position: absolute; left: 0; top: 1px; display: grid; place-items: center; width: 22px; height: 22px; border: 1px solid var(--border-strong); border-radius: 50%; color: var(--text-primary); font: 600 11px var(--font-mono); }
 .dv-steps b { color: var(--text-primary); font-weight: 650; }
-.dv-note { margin: 18px 0 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
 .dv-more { margin: var(--space-5) 0 0; }
 .lt-hero-centered [data-part="cta"] { align-items: center; }
-.lt-hero-centered .lt-pill { margin-bottom: 22px; }
 .lt-footer-min { padding-block: var(--space-6); }
 @media (max-width: 860px) {
   .dv-split { grid-template-columns: minmax(0, 1fr); gap: 32px; }

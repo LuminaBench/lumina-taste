@@ -74,6 +74,8 @@
   :scope[data-variant="overlap"] { grid-template-columns: repeat(12, minmax(0, 1fr)) max(var(--block-x, 24px), calc(100% - var(--container, 1180px))); gap: 0; align-items: stretch; padding-inline-end: 0; }
   :scope[data-variant="overlap"] > [data-part="visual"] { grid-column: 5 / -1; grid-row: 1; min-height: clamp(440px, 74svh, 780px); border-start-end-radius: 0; border-end-end-radius: 0; }
   :scope[data-variant="overlap"] > [data-part="copy"] { position: relative; z-index: 1; grid-column: 1 / span 6; grid-row: 1; align-self: end; margin-block-end: clamp(32px, 7svh, 80px); padding-block: clamp(24px, 3.4cqi, 44px); padding-inline-end: clamp(24px, 4cqi, 56px); background: var(--bg-canvas); border-start-end-radius: var(--radius-xl); }
+  /* The panel's own words move to the far side, clear of the block that overlaps it. */
+  :scope[data-variant="overlap"] > [data-part="visual"] > .lt-art { justify-items: end; text-align: end; }
   :scope[data-variant="overlap"][data-tone="well"] > [data-part="copy"] { background: var(--bg-surface-2); }
   :scope[data-variant="overlap"] > [data-part="copy"] > :first-child { margin-top: 0; }
 
@@ -87,13 +89,15 @@
      screen; the headline under it on the start side, the lede and the action on the end side. The headline stays
      first in the source. */
   :scope[data-variant="product"] { grid-template-columns: minmax(0, 1fr); gap: clamp(28px, 4.5svh, 56px); }
-  :scope[data-variant="product"] > [data-part="visual"] { grid-row: 1; width: 100%; aspect-ratio: 21 / 9; max-height: calc(100svh - 400px); min-height: 260px; }
-  :scope[data-variant="product"] > [data-part="visual"]:has(> .lt-device) { aspect-ratio: auto; max-height: none; min-height: 0; overflow: visible; background: none; }
+  :scope[data-variant="product"] > [data-part="visual"] { grid-row: 1; width: 100%; overflow: visible; border-radius: 0; background: none; }
+  /* A photograph or an art panel is cut to a wide frame; a device or a live mock keeps its own shape. */
+  :scope[data-variant="product"] > [data-part="visual"]:has(> :is(img, picture, video, .lt-art)) { aspect-ratio: 21 / 9; max-height: calc(100svh - 400px); min-height: 260px; overflow: hidden; border-radius: var(--radius-xl); background: var(--bg-surface-2); }
+  :scope[data-variant="product"] > [data-part="visual"] > :not(img, picture, video, .lt-art, .lt-device) { width: 100%; }
   :scope[data-variant="product"] > [data-part="visual"] > .lt-device:not([data-kind="phone"]) { width: min(100%, 940px, calc((100svh - 400px) * 1.6)); margin: 0; }
   :scope[data-variant="product"] > [data-part="visual"] > .lt-device[data-kind="phone"] { --device-w: min(300px, calc((100svh - 400px) * 0.46)); margin: 0; }
-  :scope[data-variant="product"] > [data-part="copy"] { grid-row: 2; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); grid-template-areas: "eyebrow ." "title lede" "title cta" "title note"; column-gap: clamp(32px, 6cqi, 96px); align-items: end; }
+  :scope[data-variant="product"] > [data-part="copy"] { grid-row: 2; display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); grid-template-areas: "eyebrow ." "title lede" "title cta" "title note"; column-gap: clamp(32px, 6cqi, 96px); align-items: end; }
   :scope[data-variant="product"] > [data-part="copy"] > [data-part="eyebrow"] { grid-area: eyebrow; }
-  :scope[data-variant="product"] > [data-part="copy"] > :is(h1, h2) { grid-area: title; max-width: 18ch; font-size: max(var(--step-5), clamp(2.5rem, 1rem + 3.2vw, 4rem)); }
+  :scope[data-variant="product"] > [data-part="copy"] > :is(h1, h2) { grid-area: title; max-width: 18ch; font-size: clamp(2.5rem, 1rem + 3.2vw, 4rem); }
   :scope[data-variant="product"] > [data-part="copy"] > [data-part="lede"] { grid-area: lede; margin: 0; }
   :scope[data-variant="product"] > [data-part="copy"] > [data-part="cta"] { grid-area: cta; }
   :scope[data-variant="product"] > [data-part="copy"] > [data-part="note"] { grid-area: note; }
@@ -106,13 +110,15 @@
   :scope[data-variant="bleed"][data-calm="end"] > [data-part="copy"] { grid-column: 7 / -1; }
   :scope[data-variant="bleed"][data-calm="bottom"] > [data-part="copy"] { grid-column: 1 / span 8; }
   :scope[data-variant="bleed"][data-calm="top"] { align-items: start; }
-  :scope[data-variant="bleed"] > [data-part="visual"]::after { --s: var(--hs-scrim, 80%); content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(var(--hs-scrim-dir, 90deg), color-mix(in oklab, var(--bg-canvas) var(--s), transparent) 0%, color-mix(in oklab, var(--bg-canvas) calc(var(--s) * 0.86), transparent) 44%, transparent 72%); }
+  /* The scrim holds nearly its full strength across the words' half (so even a white picture keeps the lede at
+     4.5:1) and fades out over the picture's far half. */
+  :scope[data-variant="bleed"] > [data-part="visual"]::after { --s: var(--hs-scrim, 86%); content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(var(--hs-scrim-dir, 90deg), color-mix(in oklab, var(--bg-canvas) var(--s), transparent) 0%, color-mix(in oklab, var(--bg-canvas) calc(var(--s) * 0.94), transparent) 46%, transparent 78%); }
   :scope[data-variant="bleed"]:dir(rtl) > [data-part="visual"]::after { --hs-scrim-dir: 270deg; }
   :scope[data-variant="bleed"][data-calm="end"] > [data-part="visual"]::after { --hs-scrim-dir: 270deg; }
   :scope[data-variant="bleed"][data-calm="end"]:dir(rtl) > [data-part="visual"]::after { --hs-scrim-dir: 90deg; }
   :scope[data-variant="bleed"][data-calm="bottom"] > [data-part="visual"]::after { --hs-scrim-dir: 0deg; }
   :scope[data-variant="bleed"][data-calm="top"] > [data-part="visual"]::after { --hs-scrim-dir: 180deg; }
-  :scope[data-variant="bleed"][data-scrim="strong"] { --hs-scrim: 90%; }
+  :scope[data-variant="bleed"][data-scrim="strong"] { --hs-scrim: 94%; }
   :scope[data-variant="bleed"][data-scrim="none"] > [data-part="visual"]::after { content: none; }
   /* A drawing stands on the far side of the words; a device sits there on the ground, with no scrim. */
   :scope[data-variant="bleed"] > [data-part="visual"] > .lt-art > :is(p, [data-part="name"], [data-part="fact"], [data-part="index"], [data-part="figure"]) { display: none; }
@@ -137,9 +143,9 @@
     :scope[data-variant="edge"] > [data-part="copy"] { padding-block: 32px calc(var(--section-y) / 2); padding-inline-end: var(--hs-bleed); }
     :scope[data-variant="product"] > [data-part="copy"] { grid-template-columns: minmax(0, 1fr); grid-template-areas: "eyebrow" "title" "lede" "cta" "note"; }
     :scope[data-variant="product"] > [data-part="copy"] > [data-part="lede"] { margin-top: 14px; }
-    :scope[data-variant="product"] > [data-part="visual"] { aspect-ratio: 16 / 10; max-height: none; min-height: 0; }
+    :scope[data-variant="product"] > [data-part="visual"]:has(> :is(img, picture, video, .lt-art)) { aspect-ratio: 16 / 10; max-height: none; min-height: 0; }
     :scope[data-variant="bleed"] > [data-part="copy"], :scope[data-variant="bleed"][data-calm] > [data-part="copy"] { grid-column: 1 / -1; }
-    :scope[data-variant="bleed"] > [data-part="visual"]::after, :scope[data-variant="bleed"][data-calm] > [data-part="visual"]::after { --hs-scrim-dir: 0deg; background: linear-gradient(var(--hs-scrim-dir), color-mix(in oklab, var(--bg-canvas) var(--s), transparent) 0%, color-mix(in oklab, var(--bg-canvas) calc(var(--s) * 0.9), transparent) 46%, transparent 74%); }
+    :scope[data-variant="bleed"] > [data-part="visual"]::after, :scope[data-variant="bleed"][data-calm] > [data-part="visual"]::after { --hs-scrim-dir: 0deg; background: linear-gradient(var(--hs-scrim-dir), color-mix(in oklab, var(--bg-canvas) var(--s), transparent) 0%, color-mix(in oklab, var(--bg-canvas) calc(var(--s) * 0.95), transparent) 58%, transparent 84%); }
     :scope[data-variant="bleed"] > [data-part="visual"] > .lt-art > [data-part="scene"], :scope[data-variant="bleed"][data-calm] > [data-part="visual"] > .lt-art > [data-part="scene"] { inset: 3% 0 auto; width: 100%; height: 42%; }
     /* A device cannot sit under words: on a narrow screen it stands above them on the ground. */
     :scope[data-variant="bleed"] > [data-part="visual"]:has(> .lt-device) { position: relative; inset: auto; z-index: 0; grid-column: 1 / -1; grid-row: 1; place-items: center; margin-inline: calc(-1 * var(--hs-bleed)); padding: 32px var(--hs-bleed); }
@@ -157,8 +163,11 @@
     :scope[data-variant="overlap"] > [data-part="visual"] { aspect-ratio: 1; }
   }
   @container (max-width: 640px) {
+    /* On a phone the action has to be in the first screen: the words come first and the product right under them. */
+    :scope[data-variant="product"] > [data-part="copy"] { grid-row: 1; }
+    :scope[data-variant="product"] > [data-part="visual"] { grid-row: 2; }
     :scope[data-variant="edge"] > [data-part="visual"] { aspect-ratio: 4 / 3; }
-    :scope[data-variant="product"] > [data-part="visual"] { aspect-ratio: 4 / 3; }
+    :scope[data-variant="product"] > [data-part="visual"]:has(> :is(img, picture, video, .lt-art)) { aspect-ratio: 4 / 3; }
     :scope[data-variant="bleed"] :is(h1, h2) { font-size: clamp(2.5rem, 11cqi, 3.25rem); }
   }
 }

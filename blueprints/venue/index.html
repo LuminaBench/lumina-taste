@@ -8,7 +8,7 @@
 </head>
 <body>
   <a class="bp-skip" href="#main">Skip to content</a>
-<header class="lt-nav-simple" data-lt="navbar-simple">
+<header class="lt-nav-simple" data-lt="navbar-simple" data-tone="dark">
   <a href="#top" data-part="brand"><span data-part="mark" aria-hidden="true"></span>Juniper Coffee</a>
   <nav aria-label="Main"><ul data-part="links"><li><a href="#range">Coffees</a></li><li><a href="#tastings">Tastings</a></li><li><a href="#visit">Visit</a></li><li><a href="#questions">Questions</a></li></ul></nav>
   <div data-part="actions"><a class="lt-btn" data-variant="primary" data-size="sm" href="#tastings">Book a tasting</a></div>
@@ -16,19 +16,25 @@
   <div id="lt-ns-panel" data-part="panel" hidden><ul><li><a href="#range">Coffees</a></li><li><a href="#tastings">Tastings</a></li><li><a href="#visit">Visit</a></li><li><a href="#questions">Questions</a></li></ul></div>
 </header>
   <main id="main" data-scroll>
-    <section class="lt-hero-split" id="top" data-entrance aria-labelledby="vn-h">
+    <section class="lt-hero-board" id="top" data-variant="menu" data-entrance aria-labelledby="vn-h">
       <div data-part="copy">
         <p data-part="eyebrow">Roastery and café · Bristol</p>
         <h1 id="vn-h">Coffee roasted forty steps from your cup</h1>
-        <p data-part="lede">We roast three coffees every Tuesday in the room behind the counter. Drink one here, take a bag home, or book a tasting and try all three.</p>
-        <div data-part="cta"><a class="lt-btn" data-variant="primary" data-size="lg" href="#tastings">Book a tasting</a><a class="lt-btn" data-variant="ghost" data-size="lg" href="#range">See this month's coffees <svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
-        <p data-part="note">Open Tuesday to Sunday · 14 Mill Lane, six minutes from Temple Meads</p>
+        <p data-part="lede">Roasted every Tuesday in the room behind the counter.</p>
+        <div data-part="cta"><a class="lt-btn" data-variant="primary" data-size="lg" href="#tastings">Book a tasting</a></div>
       </div>
+      <figure data-part="board" data-tone="dark">
+        <figcaption><b>This week’s bags</b><span>250 g, whole bean</span></figcaption>
+        <ol data-part="rows">
+          <li><b>Huila, Colombia</b><data value="11.50">£11.50</data><small>Dark chocolate, red apple</small></li>
+          <li><b>Sidamo, Ethiopia</b><data value="13.00">£13.00</data><small>Blueberry, jasmine</small></li>
+          <li><b>House espresso</b><data value="10.00">£10.00</data><small>Toffee, hazelnut</small></li>
+          <li><b>A tasting, all three</b><data value="18">£18</data><small>A head, Saturdays and Sundays</small></li>
+        </ol>
+      </figure>
       <div data-part="visual">
-        <figure class="lt-art" data-lt="art-panel" data-motif="cup" data-tone="accent" data-pattern="arch" data-shot="The roasting room through the hatch behind the counter, roaster running, morning light, 5:4">
-          
+        <figure class="lt-art" data-lt="art-panel" data-scene="cup bag" data-tone="accent" data-shot="The roasting room through the hatch behind the counter, roaster running, morning light, 16:10">
           <p data-part="name">The roasting room</p>
-          <p data-part="fact">One 15 kg drum roaster · 180 kg a week</p>
           <figcaption class="lt-visually-hidden">The roasting room at Juniper Coffee, with its 15 kilogram drum roaster</figcaption>
         </figure>
       </div>
@@ -122,10 +128,16 @@
       <div data-part="list"><details open><summary>Do I need to book a table?<span data-part="chev" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><p>No. The café is walk-in only. Tastings are the one thing to book, because each has eight places.</p></details><details><summary>Can you grind the beans for me?<span data-part="chev" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><p>Yes. Tell us how you brew when you order and we grind to suit, on the day we post.</p></details><details><summary>How fresh is the coffee?<span data-part="chev" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><p>We roast every Tuesday and post on Wednesday. Each bag has its roast date on the back.</p></details><details><summary>Is the roastery step-free?<span data-part="chev" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><p>Yes, from the lane to the counter and the tasting room. There is an accessible toilet by the yard door.</p></details></div>
     </section>
   </main>
-  <footer class="lt-footer-min">
-  <p>© 2026 Juniper Coffee Roasters Ltd</p>
-  <nav aria-label="Footer"><ul><li><a href="#questions">Privacy</a></li><li><a href="#questions">Terms</a></li><li><a href="#visit">Contact</a></li></ul></nav>
-  <p data-part="made">Roasted in Bristol</p>
+  <footer class="lt-footer" data-variant="wordmark">
+  <div data-part="top">
+    <div data-part="about"><a data-part="brand" href="#top">Juniper Coffee</a><p>Roasted on Mill Lane, Bristol.</p></div>
+    <nav data-part="cols" aria-label="Footer">
+      <div><h2>Visit</h2><ul><li><a href="#range">The coffees</a></li><li><a href="#tastings">Tastings</a></li><li><a href="#visit">Find us</a></li></ul></div>
+      <div><h2>Small print</h2><ul><li><a href="#questions">Privacy</a></li><li><a href="#questions">Terms</a></li></ul></div>
+    </nav>
+  </div>
+  <p data-part="wordmark" aria-hidden="true" style="--wordmark-len: 14">Juniper Coffee</p>
+  <div data-part="legal"><span>© 2026 Juniper Coffee Roasters Ltd</span><span>14 Mill Lane, Bristol</span></div>
 </footer>
   <script type="module" src="./main.ts"></script>
 </body>

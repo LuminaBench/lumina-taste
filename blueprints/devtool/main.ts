@@ -1,7 +1,6 @@
 import { boot } from '../_shared/boot';
 import '../../components/ui/controls/button/button.css';
 import '../../components/ui/navigation/navbar-simple/navbar-simple.css';
-import '../../components/ui/feedback/announcement-pill/announcement-pill.css';
 import '../../components/ui/controls/command-chip/command-chip.css';
 import '../../components/ui/backdrops/backdrop-circuit/backdrop-circuit.css';
 import '../../components/ui/blocks/hero-centered/hero-centered.css';

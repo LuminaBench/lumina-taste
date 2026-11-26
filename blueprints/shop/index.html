@@ -8,7 +8,7 @@
 </head>
 <body>
   <a class="bp-skip" href="#main">Skip to content</a>
-<header class="lt-nav-simple" data-lt="navbar-simple">
+<header class="lt-nav-simple" data-lt="navbar-simple" data-variant="split" data-tone="dark">
   <a href="#top" data-part="brand"><span data-part="mark" aria-hidden="true"></span>Larkspur Ceramics</a>
   <nav aria-label="Main"><ul data-part="links"><li><a href="#range">The range</a></li><li><a href="#made">How it is made</a></li><li><a href="#care">Materials and care</a></li><li><a href="#questions">Delivery</a></li></ul></nav>
   <div data-part="actions"><a class="lt-btn" data-variant="primary" data-size="sm" href="#range">Shop the range</a></div>
@@ -16,13 +16,12 @@
   <div id="lt-ns-panel" data-part="panel" hidden><ul><li><a href="#range">The range</a></li><li><a href="#made">How it is made</a></li><li><a href="#care">Materials and care</a></li><li><a href="#questions">Delivery</a></li></ul></div>
 </header>
   <main id="main" data-scroll>
-    <section class="lt-hero-split" id="top" data-entrance aria-labelledby="sh-h">
+    <section class="lt-hero-split" id="top" data-variant="overlap" data-entrance aria-labelledby="sh-h">
       <div data-part="copy">
         <p data-part="eyebrow">Stoneware, thrown in Stroud</p>
         <h1 id="sh-h">One pair of hands, every mug</h1>
-        <p data-part="lede">Three shapes in one speckled oat glaze, thrown on the wheel by Nell Arkwright and fired twice. Dishwasher safe, and heavy enough to feel like something.</p>
+        <p data-part="lede">Three shapes in one speckled oat glaze, from <span data-highlight>£24</span>.</p>
         <div data-part="cta"><a class="lt-btn" data-variant="primary" data-size="lg" href="#range">Shop the range</a><a class="lt-btn" data-variant="ghost" data-size="lg" href="#made">How they are made <svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
-        <p data-part="note">From £24 · free UK delivery over £60 · 30 days to return</p>
       </div>
       <div data-part="visual">
         <figure class="lt-art sh-oat" data-lt="art-panel" data-motif="cup" data-tone="swatch" data-pattern="sun" data-frame data-ratio="5/4" data-shot="The everyday mug on a pale wooden table beside a window, steam rising, shot level with the rim, 5:4. Nothing else on the table.">
@@ -134,10 +133,16 @@
       </div>
     </section>
   </main>
-  <footer class="lt-footer-min">
-  <p>© 2026 Larkspur Ceramics Ltd</p>
-  <nav aria-label="Footer"><ul><li><a href="/delivery">Delivery</a></li><li><a href="/returns">Returns</a></li><li><a href="/privacy">Privacy</a></li></ul></nav>
-  <p data-part="made">Thrown and fired in Stroud</p>
+  <footer class="lt-footer" data-variant="wordmark">
+  <div data-part="top">
+    <div data-part="about"><a data-part="brand" href="#top">Larkspur Ceramics</a><p>Thrown and fired in Stroud.</p></div>
+    <nav data-part="cols" aria-label="Footer">
+      <div><h2>Shop</h2><ul><li><a href="#range">The range</a></li><li><a href="#made">How it is made</a></li><li><a href="#care">Materials and care</a></li></ul></div>
+      <div><h2>Help</h2><ul><li><a href="/delivery">Delivery</a></li><li><a href="/returns">Returns</a></li><li><a href="/privacy">Privacy</a></li></ul></div>
+    </nav>
+  </div>
+  <p data-part="wordmark" aria-hidden="true" style="--wordmark-len: 17">Larkspur Ceramics</p>
+  <div data-part="legal"><span>© 2026 Larkspur Ceramics Ltd</span><span>Stroud, Gloucestershire</span></div>
 </footer>
   <script type="module" src="./main.ts"></script>
 </body>
