@@ -12,6 +12,11 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { search } from './lib/search-core.mjs';
 import { direct, sectionAttrs } from './lib/art-direction.mjs';
+import { planRhythm, orderSections, rhythmStrip, checkRhythm, STRIP_KEY, PROOF, CHROME } from '../engine/compose/rhythm.mjs';
+import { extractFacts, figuresFrom, heroCopy, askFor } from '../engine/compose/words.mjs';
+import { boldIdea, colourName } from '../engine/compose/idea.mjs';
+import { brandFrom } from '../engine/compose/brand.mjs';
+import { splitMain, joinMain, idOfBlock, applyBeat, applyHeroCopy, heroIdeaPanel, setHeroVisual, setFacts, applyMediaIdea, applyClose, ideaComment, esc } from '../engine/compose/draft.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -22,6 +27,7 @@ const writeDraft = flag('write');
 // --type is the page type. A typeface is --typeface (or --font); --palette, --mode and --style set the look.
 const forceTypeRaw = opt('type', null);
 const lookFlags = { palette: opt('palette', null), typography: opt('typeface', null) ?? opt('font', null), mode: opt('mode', null), style: opt('style', null) };
+const brandSrc = opt('brand-from', null);
 const framework = opt('framework', 'static');
 const project = opt('project', '/abs/app');
 const brief = args.join(' ').trim();
@@ -68,7 +74,7 @@ const { confident, runnerUp } = picked;
 // ---------------------------------------------------------------- domain, mood, profile
 const any = (list) => list.some(has);
 // Is the thing being made software? "A booking app for clinics" is a product page; "a clinic" is not.
-const software = any(['app', 'apps', 'software', 'saas', 'platform', 'tool', 'tools', 'api', 'sdk', 'dashboard', 'plugin', 'extension', 'chatbot', 'crm', 'startup']);
+const software = any(['app', 'apps', 'software', 'saas', 'platform', 'tool', 'tools', 'api', 'sdk', 'dashboard', 'plugin', 'browser extension', 'chrome extension', 'chatbot', 'crm', 'startup']);
 const domainScores = kb.domains.filter((d) => !(software && d.service)).map((d) => ({ d, s: d.words.filter((w) => has(w)).length })).sort((a, b) => b.s - a.s);
 const domain = domainScores[0].s > 0 ? domainScores[0].d : null;
 // A landing page is not always for software, and each kind of subject has its own page: a developer product
@@ -78,7 +84,7 @@ const domain = domainScores[0].s > 0 ? domainScores[0].d : null;
 // tickets; a studio gets its work. --type overrides all of this.
 if (type.id === 'landing' && !forceType) {
   const cause = any(['charity', 'charities', 'nonprofit', 'non-profit', 'food bank', 'foodbank', 'donate', 'donation', 'donations', 'fundraising', 'fundraiser', 'volunteer', 'volunteers', 'foundation', 'community group', 'campaign']);
-  const practice = any(['dentist', 'dentists', 'dental', 'clinic', 'clinics', 'physio', 'physiotherapy', 'physiotherapist', 'osteopath', 'chiropractor', 'optician', 'opticians', 'vet', 'vets', 'veterinary', 'salon', 'barber', 'barbers', 'hairdresser', 'spa', 'yoga', 'pilates', 'gym', 'personal trainer', 'therapist', 'counselling', 'counsellor', 'doctor', 'doctors', 'gp', 'practice', 'appointment', 'appointments']);
+  const practice = any(['construction', 'builder', 'builders', 'building firm', 'extension', 'extensions', 'loft conversion', 'loft conversions', 'renovation', 'renovations', 'refurbishment', 'roofer', 'plumber', 'electrician', 'joiner', 'kitchen fitter', 'landscaper', 'architect practice', 'dentist', 'dentists', 'dental', 'clinic', 'clinics', 'physio', 'physiotherapy', 'physiotherapist', 'osteopath', 'chiropractor', 'optician', 'opticians', 'vet', 'vets', 'veterinary', 'salon', 'barber', 'barbers', 'hairdresser', 'spa', 'yoga', 'pilates', 'gym', 'personal trainer', 'therapist', 'counselling', 'counsellor', 'doctor', 'doctors', 'gp', 'practice', 'appointment', 'appointments']);
   const place = any(['restaurant', 'restaurants', 'cafe', 'café', 'bakery', 'distillery', 'brewery', 'winery', 'hotel', 'venue', 'museum', 'gallery', 'tour', 'tours', 'pub', 'bar', 'bistro', 'visit', 'visiting', 'opening hours', 'book a table', 'book a tour']);
   const occasion = any(['conference', 'conferences', 'summit', 'festival', 'meetup', 'meetups', 'hackathon', 'retreat', 'exhibition', 'workshop', 'workshops', 'event', 'events', 'wedding website', 'wedding site', 'wedding page', 'our wedding', 'wedding invitation']);
   const swap = domain?.id === 'devtool' ? 'dev-landing'
@@ -95,7 +101,10 @@ if (type.id === 'landing' && !forceType) {
 const moodHits = Object.entries(kb.moods).filter(([w]) => has(w));
 const mood = Object.assign({}, ...moodHits.map(([, v]) => v));
 // A style is applied only when the brief names a mood; the domain's style is offered, not imposed.
-const explicitStyle = Object.prototype.hasOwnProperty.call(mood, 'style') ? mood.style : search(cat, brief, { kind: 'style', limit: 1 }).find((x) => x.s > 14)?.d.id ?? null;
+// A style the brief names outright ("a glass landing page", "in the terminal style") counts; a loose search
+// match does not ("home page … from 7:30" once read as the ember style's "launch page … from below").
+const namedStyle = cat.styles.find((st) => has(st.id) || (st.aliases ?? []).some((a) => has(a)))?.id ?? null;
+const explicitStyle = Object.prototype.hasOwnProperty.call(mood, 'style') ? mood.style : namedStyle ?? search(cat, brief, { kind: 'style', limit: 1 }).find((x) => x.s > 24)?.d.id ?? null;
 // A marketing page with no recognisable subject still gets a headline face distinct from the stock sans.
 const defaults = { marketing: ['slate-forest', 'geometric'], app: ['slate-forest', 'precision'], reading: ['paper-ink', 'editorial'], flow: ['slate-forest', 'precision'] }[type.kind];
 const profile = {
@@ -105,7 +114,21 @@ const profile = {
   density: mood.density ?? type.density,
   style: explicitStyle ?? null,
 };
+// --brand-from: a colour, a logo or a saved site sets the palette and typeface (explicit look flags still win).
+let brand = null;
+if (brandSrc) {
+  try {
+    brand = await brandFrom(brandSrc, {
+      palettes: JSON.parse(readFileSync(join(root, 'tokens/palettes/palettes.json'), 'utf8')).palettes,
+      current: profile.typography,
+      sniff: (target) => { const r = spawnSync(process.execPath, [join(root, 'scripts/sniff.mjs'), target, '--json'], { encoding: 'utf8' }); if (r.status !== 0) throw new Error(r.stderr || 'sniff failed'); return JSON.parse(r.stdout); },
+    });
+  } catch (err) { console.error(`--brand-from: ${err.message}`); process.exit(2); }
+  if (brand.palette) { profile.palette = brand.palette; if (!mood.mode) profile.mode = brand.mode; }
+  if (brand.type?.typography) profile.typography = brand.type.typography;
+}
 for (const [k, v] of Object.entries(lookFlags)) if (v) profile[k] = v;
+const overrideArgs = Object.entries(brand?.overrides ?? {}).flatMap(([k, v]) => ['--override', `${k}=${v}`]);
 const styleOffer = !profile.style && domain?.style ? domain.style : null;
 
 // ---------------------------------------------------------------- product name for copy
@@ -120,23 +143,45 @@ const leading = brief.match(new RegExp(`^(${NAME}),\\s+(?:an?|the)\\s`))?.[1];
 const product = quoted ?? named ?? afterFor ?? leading ?? null;
 const restyle = (kb.restyle?.words ?? []).some((w) => text.includes(` ${w} `) || text.includes(` ${w}`));
 
+// ---------------------------------------------------------------- words from the subject
+// The brief's own nouns, prices, times, places and figures: drafts are written from these, never from filler.
+const facts = extractFacts(brief, { product });
+const figures = figuresFrom(facts);
+
 // ---------------------------------------------------------------- plan
-const sections = type.sections.map((s, i) => ({ n: i + 1, ...s, exists: !s.id || uiIds.has(s.id) }));
+let sections = type.sections.map((s, i) => ({ n: i + 1, ...s, exists: !s.id || uiIds.has(s.id) }));
 // Developer products show code: a code-block figure takes the place of the hero's product frame.
 // Art direction: one signature, a hero, a layout for each section and where colour and type may go.
-const art = direct({ type, domain, profile, sections, uiIds });
-if (art.hero && art.hero !== sections.find((x) => /^hero-/.test(x.id ?? ''))?.id) for (const x of sections) if (/^hero-/.test(x.id ?? '')) { x.alt = [...new Set([x.id, ...(x.alt ?? [])])]; x.id = art.hero; x.rule = `${x.rule ?? ''} Chosen because ${art.heroWhy}; use ${x.alt[0]} instead if there is a real product screen or photograph to show.${sections.some((y) => y.id === 'stats-band') ? ' Leave its three facts out: this page has a figures section, and figures are shown once.' : ''}`.trim(); }
+const art0 = direct({ type, domain, profile, sections, uiIds });
+if (art0.hero && art0.hero !== sections.find((x) => /^hero-/.test(x.id ?? ''))?.id) for (const x of sections) if (/^hero-/.test(x.id ?? '')) { x.alt = [...new Set([x.id, ...(x.alt ?? [])])]; x.id = art0.hero; x.rule = `${x.rule ?? ''} Chosen because ${art0.heroWhy}; use ${x.alt[0]} instead if there is a real product screen or photograph to show.${sections.some((y) => y.id === 'stats-band') ? ' Leave its three facts out: this page has a figures section, and figures are shown once.' : ''}`.trim(); }
+const blueprint = type.blueprint && blueprintIds.has(type.blueprint) ? type.blueprint : null;
+// One way to start, not two: a blueprint when it already is this page, snippets when the plan differs from it.
+const startWith = blueprint && type.start !== 'snippets' ? 'blueprint' : 'snippets';
+// A band that only shows figures is planned only when the brief has figures for it: two or more not
+// already used by the first screen. Otherwise it is left out and the plan asks for them.
+const figuresBandSkipped = type.kind === 'marketing' && sections.some((s) => s.id === 'stats-band') && figures.length < 3;
+if (figuresBandSkipped) sections = sections.filter((s) => s.id !== 'stats-band').map((s, i) => ({ ...s, n: i + 1 }));
+// Rhythm: the order of the bands, and each one's density, ground and scale, before any code. A blueprint
+// draft cannot gain a section, so its plan is made without breathers.
+const rhythm0 = planRhythm({ type, sections, canInsert: startWith === 'snippets' });
+const ordered = orderSections(sections, rhythm0);
+sections = ordered.sections;
+const rhythm = ordered.rhythm;
+const drafted = sections.filter((s) => !(s.optional && PROOF.has(s.id ?? '')));
+const art = { ...direct({ type, domain, profile, sections: drafted, uiIds }), hero: art0.hero, heroWhy: art0.heroWhy };
 const layoutOf = (n) => art.sectionLayouts.find((l) => l.n === n) ?? null;
+const pal = JSON.parse(readFileSync(join(root, 'tokens/palettes/palettes.json'), 'utf8')).palettes.find((p) => p.id === profile.palette);
+const accentLch = pal ? pal.modes[profile.mode === 'dark' ? 'dark' : 'light'].tokens['accent-solid'].oklch.match(/[\d.]+/g).map(Number) : [0.5, 0.1, 250];
+const idea = boldIdea({ facts, type, hero: sections.find((x) => /^hero-/.test(x.id ?? ''))?.id ?? null, signature: art.signature, accent: colourName(accentLch), sections: drafted });
+const hero = heroCopy(facts, { typeId: type.id, product });
 const wantsCode = type.kind === 'marketing' && (domain?.id === 'devtool' || has('code') || has('show code'));
 const components = [...new Set([...sections.filter((s) => s.id && !s.optional).map((s) => s.id), ...(wantsCode ? ['code-block'] : [])])].filter((id) => uiIds.has(id));
 const charts = type.charts ?? [];
-const blueprint = type.blueprint && blueprintIds.has(type.blueprint) ? type.blueprint : null;
 const flags = [`--palette ${profile.palette}`, `--mode ${profile.mode}`, `--type ${profile.typography}`, `--density ${profile.density}`, profile.style ? `--style ${profile.style}` : null].filter(Boolean).join(' ');
 const base = `node scripts/install-taste.mjs --project ${project} --framework ${framework} ${flags}`;
-const installSnippets = `${base} \\\n  --components ${components.join(',')}${charts.length ? ` --charts ${charts.join(',')}` : ''}`;
-const installBlueprint = blueprint ? `${base} --blueprints ${blueprint}` : null;
-// One way to start, not two: a blueprint when it already is this page, snippets when the plan differs from it.
-const startWith = blueprint && type.start !== 'snippets' ? 'blueprint' : 'snippets';
+const overrideFlags = Object.entries(brand?.overrides ?? {}).map(([k, v]) => ` --override ${k}="${v}"`).join('');
+const installSnippets = `${base}${overrideFlags} \\\n  --components ${components.join(',')}${charts.length ? ` --charts ${charts.join(',')}` : ''}`;
+const installBlueprint = blueprint ? `${base}${overrideFlags} --blueprints ${blueprint}` : null;
 const install = startWith === 'blueprint' ? installBlueprint : installSnippets;
 // ---------------------------------------------------------------- three looks, and the few questions worth asking
 const styleDefs = JSON.parse(readFileSync(join(root, 'tokens/styles/source.json'), 'utf8')).styles;
@@ -190,6 +235,7 @@ const plan = {
     product: product ?? 'not named in the brief; ask or use the product\'s real name, never a placeholder',
   },
   profile,
+  brand,
   styleOffer,
   questions,
   directions,
@@ -197,7 +243,9 @@ const plan = {
   install,
   installAlternative: startWith === 'blueprint' ? installSnippets : installBlueprint,
   blueprint: blueprint ?? (type.blueprint ? `${type.blueprint} (not in this version; start from the sections below)` : null),
-  artDirection: { signature: art.signature, mainAttributes: art.mainAttrs, sections: art.sectionLayouts.map((l) => ({ n: l.n, id: l.id, layout: l.layout, space: l.space, attributes: sectionAttrs(l) })), accent: art.accent, type: art.type, rhythm: art.rhythm, words: art.words, motion: art.motion },
+  artDirection: { signature: art.signature, boldIdea: idea, mainAttributes: art.mainAttrs, sections: art.sectionLayouts.map((l) => ({ n: l.n, id: l.id, layout: l.layout, space: l.space, attributes: sectionAttrs(l) })), accent: art.accent, type: art.type, rhythm: art.rhythm, words: art.words, motion: art.motion },
+  rhythm: { banded: rhythm.banded, strip: rhythmStrip(rhythm), key: STRIP_KEY, beats: rhythm.beats, moved: rhythm0.moved, inserted: rhythm0.inserted, broken: checkRhythm(rhythm, rhythm.beats.map((b, i) => (i === 0 && /^hero-/.test(b.id ?? '') ? null : layoutOf(b.n)?.shape ?? null))) },
+  words: { facts, figures, firstScreen: hero, missing: [...hero.todo, ...(figuresBandSkipped ? ['two to four real figures with their periods (the figures band was left out rather than filled with invented ones)'] : []), ...(idea.ask ? [idea.ask] : [])] },
   sections,
   charts,
   restyle: restyle ? kb.restyle.notes : null,
@@ -210,6 +258,68 @@ const plan = {
   ],
 };
 
+// ---------------------------------------------------------------- subject helpers for the draft
+// The catalog id each lt- class belongs to (the roots of every component's @scope blocks).
+function rootClasses() {
+  const map = new Map();
+  for (const c of cat.ui) for (const f of c.files.filter((x) => x.endsWith('.css'))) for (const m of readFileSync(join(root, f), 'utf8').matchAll(/@scope\s*\(\.(lt-[a-z0-9-]+)\)/g)) if (!map.has(m[1])) map.set(m[1], c.id);
+  return map;
+}
+// Software that makes a document (an invoicing or billing tool) shows that document in the first screen.
+const heroInvoice = type.kind === 'marketing' && domain?.id === 'finance' && idea.place !== 'hero-visual' && uiIds.has('invoice-sheet');
+const used = new Set();
+/** Figures from the brief not yet shown on the page (each figure is shown once). */
+const figuresLeft = (also = []) => { for (const a of also) used.add(a); const left = figures.filter((f) => !used.has(f.value) && !String(hero.headline ?? '').includes(f.value)); return left; };
+const mediaHeadline = () => (facts.claims[1] ? `${facts.claims[1][0].toUpperCase()}${facts.claims[1].slice(1)}, on its own.` : null);
+let sampleAction = null;
+function subjectHero(html, id) {
+  sampleAction = /<a class="lt-btn"[^>]*data-variant="primary"[^>]*>([^<]+)</.exec(html)?.[1]?.trim() ?? null;
+  let out = applyHeroCopy(html, hero);
+  if (idea.place === 'hero-visual' && idea.figure) { out = setHeroVisual(out, heroIdeaPanel(idea, facts)); used.add(idea.figure); }
+  else if (heroInvoice && id === 'hero-split') out = setHeroVisual(out, `<h2 class="lt-visually-hidden">An invoice${product ? ` sent with ${esc(product)}` : ''}</h2>\n        ` + readFileSync(join(root, cat.ui.find((u) => u.id === 'invoice-sheet').files.find((f) => f.endsWith('.html'))), 'utf8').trim().split('\n').join('\n        '));
+  if (idea.place === 'hero-headline' && idea.figure) used.add(idea.figure);
+  // A statement hero's three facts come from the brief, or go.
+  if (/data-part="facts"/.test(out)) out = setFacts(out, figuresLeft(), { min: 2 });
+  if (hero.todo.length) out = out.replace(/^(<\w+[^>]*>)/, `$1\n  <!-- ${askFor(hero.todo)} -->`);
+  for (const f of figures) if (out.includes(esc(f.value))) used.add(f.value);
+  return out;
+}
+function closeCopy() {
+  // The close names the thing and its price again, next to the one action: repeating the price here is the point.
+  const price = facts.prices.find((p) => !String(hero.headline ?? '').includes(p.value.split(' ')[0])) ?? facts.prices[0];
+  const prep = /^(give|donate)/i.test(hero.action ?? '') ? 'to' : /^get/i.test(hero.action ?? '') ? 'from' : 'at';
+  const heading = price ? `${price.what ? `${price.what[0].toUpperCase()}${price.what.slice(1)}, ` : product ? `${product}, ` : ''}${price.from ? 'from ' : ''}${price.value}`
+    : hero.action && product ? `${hero.action} ${prep} ${product}` : null;
+  const lede = facts.claims.length ? `${product ?? 'It'} ${facts.claims.join(' and ')}.` : hero.lede;
+  return { heading, lede };
+}
+/** The page title and description from the brief: name, kind and place. */
+function retitle(page) {
+  const title = [product, facts.kind && facts.place ? `${facts.kind[0].toUpperCase()}${facts.kind.slice(1)} in ${facts.place}` : facts.kind ? `${facts.kind[0].toUpperCase()}${facts.kind.slice(1)}` : null].filter(Boolean).join(' · ');
+  const desc = [hero.headline, hero.lede].filter(Boolean).join('. ').replace(/\.\./g, '.');
+  let out = page;
+  // A brand accent solved from --brand-from: a static page has no profile script, so the page carries it.
+  const shades = brand?.overrides ? { light: brand.overrides, dark: brand.overrides } : brand?.perMode ?? null;
+  if (shades) {
+    const vars = (o) => `--accent-solid: ${o['accent-solid']}; --accent-hover: ${o['accent-hover']}; --accent-ink: ${o['accent-ink']}; --accent-text: ${o['accent-text']}; --focus-ring: ${o['accent-text']};`;
+    const band = (o) => `--bg-canvas: ${o['accent-solid']}; --bg-surface-1: color-mix(in oklab, ${o['accent-ink']} 10%, ${o['accent-solid']}); --bg-surface-2: color-mix(in oklab, ${o['accent-ink']} 14%, ${o['accent-solid']}); --text-primary: ${o['accent-ink']}; --text-secondary: ${o['accent-ink']}; --text-muted: ${o['accent-ink']}; --border-hairline: color-mix(in oklab, ${o['accent-ink']} 26%, ${o['accent-solid']}); --accent-solid: ${o['accent-ink']}; --accent-hover: color-mix(in oklab, ${o['accent-ink']} 88%, ${o['accent-solid']}); --accent-ink: ${o['accent-solid']}; --accent-text: ${o['accent-ink']}; --focus-ring: ${o['accent-ink']};`;
+    const rules = [];
+    for (const m of ['light', 'dark']) {
+      const o = shades[m]; if (!o) continue;
+      rules.push(`html[data-palette][data-mode="${m}"]${m === 'dark' ? ', html[data-palette][data-mode] [data-tone="dark"]' : ''} { ${vars(o)} }`);
+      rules.push(`html[data-palette][data-mode="${m}"] :is(section, header, footer, aside)[data-tone="accent"] { ${band(o)} }`);
+    }
+    const css = `\n  <style>/* The brand's accent from --brand-from (${esc(brand.src).replace(/\*\//g, '')}), solved for contrast in each mode. */\n    ${rules.join('\n    ')}\n  </style>`;
+    out = out.replace(/(<\/head>)/, `${css}\n$1`);
+  }
+  // The sample's action label, wherever it appears (the bar, the hero, the close), becomes this page's action.
+  if (sampleAction && hero.action) out = out.split(`>${sampleAction}<`).join(`>${esc(hero.action)}<`);
+  if (title) out = out.replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`);
+  if (desc) out = out.replace(/<meta name="description" content="[^"]*">/, `<meta name="description" content="${esc(desc.endsWith('.') ? desc : `${desc}.`)}">`);
+  return out;
+}
+const withBeat = (html, n) => { const b = rhythm.beats.find((x) => x.n === n); return b ? applyBeat(html, b) : html; };
+
 // ---------------------------------------------------------------- --write: a composed first draft
 // Installs what the plan needs and writes the page itself: sections in order with their layouts, tones and
 // ids applied, the navigation pointing at them, and the art direction on <main>. Every sentence in it is
@@ -217,35 +327,53 @@ const plan = {
 let draft = null;
 if (writeDraft) {
   if (project === '/abs/app') { console.error('--write needs --project <the folder the page should live in>.'); process.exit(2); }
-  if (framework !== 'static') { console.error('--write produces a plain HTML draft: use it with --framework static (the default).'); process.exit(2); }
+  if (!['static', 'tailwind'].includes(framework)) { console.error('--write produces a plain HTML draft: use it with --framework static (the default) or tailwind. For Next.js, run the install command it prints with --framework next: that writes app/page.tsx.'); process.exit(2); }
   const dir = resolve(project);
   mkdirSync(dir, { recursive: true });
-  const run = (cmd, extra = []) => { const parts = cmd.replace(/\\\n\s*/g, ' ').replace(`--project ${project}`, '--project \u0000').split(/\s+/).slice(1).map((a) => (a === '\u0000' ? dir : a)); const r = spawnSync(process.execPath, [...parts, ...extra], { cwd: root, encoding: 'utf8' }); if (r.status !== 0 && r.status !== 3) { console.error(r.stderr || r.stdout); process.exit(1); } return r.stdout; };
+  const run = (cmd, extra = []) => { const parts = cmd.replace(/ --override [a-z-]+="[^"]*"/g, '').replace(/\\\n\s*/g, ' ').replace(`--project ${project}`, '--project \u0000').split(/\s+/).slice(1).map((a) => (a === '\u0000' ? dir : a)); const r = spawnSync(process.execPath, [...parts, ...overrideArgs, ...extra], { cwd: root, encoding: 'utf8' }); if (r.status !== 0 && r.status !== 3) { console.error(r.stderr || r.stdout); process.exit(1); } return r.stdout; };
   if (startWith === 'blueprint') {
     const out = run(installBlueprint, product ? ['--name', product] : []);
-    draft = { path: join(dir, /written to (\S+)\/ instead/.exec(out)?.[1] ?? '', 'index.html'), kind: 'blueprint' };
+    const path = join(dir, /written to (\S+)\/ instead/.exec(out)?.[1] ?? '', 'index.html');
+    // The blueprint's own bands, in the rhythm the plan gives them, with the subject's words in the first screen.
+    const page = readFileSync(path, 'utf8');
+    const parts = splitMain(page);
+    let bpRhythm = null;
+    if (parts && type.kind === 'marketing') {
+      const rootClass = rootClasses();
+      const bpSections = parts.chunks.map((c, i) => ({ n: i + 1, id: idOfBlock(c.html, rootClass), role: /\sid="([^"]+)"/.exec(c.html.slice(0, c.html.indexOf('>')))?.[1] ?? `section ${i + 1}`, tone: /^<\w+[^>]*\sdata-tone="([^"]+)"/.exec(c.html)?.[1] ?? null }));
+      bpRhythm = planRhythm({ type, sections: bpSections, canInsert: false, draft: false });
+      const byN = new Map(parts.chunks.map((c, i) => [i + 1, c]));
+      parts.chunks = bpRhythm.beats.map((b, i) => {
+        const c = byN.get(b.n);
+        let html = applyBeat(c.html, b);
+        if (i === 0) html = subjectHero(html, b.id);
+        else if (b.id === 'stats-band') html = setFacts(html, figuresLeft(), { part: null });
+        else if (b.id === 'cta-band' && i === bpRhythm.beats.length - 1) html = applyClose(html, closeCopy());
+        return { pre: c.pre, html };
+      });
+      parts.head += ideaComment(idea);
+      writeFileSync(path, retitle(joinMain(parts)));
+    }
+    draft = { path, kind: 'blueprint', rhythm: bpRhythm ? { strip: rhythmStrip(bpRhythm), moved: bpRhythm.moved, broken: checkRhythm(bpRhythm) } : null };
   } else {
-    // Proof from other people (logos, quotes, reviews) is never drafted: it has to be real.
-    const PROOF = new Set(['logo-cloud', 'testimonial-grid', 'quote-feature', 'review-summary']);
     const SLUG = { 'feature-split': 'features', 'feature-grid': 'features', 'bento-grid': 'features', 'how-it-works': 'how', 'stats-band': 'figures', 'faq-section': 'questions', 'cta-band': 'start', 'pricing-tiers': 'pricing', 'offer-cards': 'range', 'visit-info': 'visit', 'booking-bar': 'book', 'contact-section': 'contact', 'team-grid': 'team', 'blog-grid': 'posts', 'project-grid': 'work', 'integrations-grid': 'integrations', 'code-block': 'code', 'terminal-window': 'quickstart', 'api-endpoint': 'api', 'description-list': 'details', 'comparison-table': 'compare', 'newsletter-signup': 'newsletter', 'sticky-story': 'story', 'showcase-tabs': 'examples' };
     const LABEL = { features: 'Features', how: 'How it works', figures: 'In numbers', questions: 'Questions', pricing: 'Pricing', range: 'The range', visit: 'Visit', book: 'Book', contact: 'Contact', team: 'Team', posts: 'Writing', work: 'Work', integrations: 'Integrations', code: 'Code', quickstart: 'Quickstart', api: 'API', details: 'Details', compare: 'Compare', story: 'How it works', examples: 'Examples' };
     const isChrome = (id) => /^(navbar|footer|site-footer|floating-pill-nav|hide-on-scroll)/.test(id);
     const picked = sections.filter((x) => (x.id ? uiIds.has(x.id) : type.kind === 'marketing' && x.role && x.copy) && !(x.optional && PROOF.has(x.id))).map((x) => ({ ...x, id: x.id === 'navbar-mega' && (x.alt ?? []).includes('navbar-simple') ? 'navbar-simple' : x.id }));
-    const ids = [...new Set([...picked.map((x) => x.id).filter(Boolean), 'button'])];
+    const ids = [...new Set([...picked.map((x) => x.id).filter(Boolean), 'button', ...(idea.place === 'hero-visual' || idea.place === 'media-band' ? ['art-panel'] : []), ...(heroInvoice ? ['invoice-sheet'] : [])])];
     run(`${base} --components ${ids.join(',')}${charts.length ? ` --charts ${charts.join(',')}` : ''}`);
     const kit = join(dir, 'lumina-taste');
     const snippet = (id) => readFileSync(join(kit, 'snippets', `${id}.html`), 'utf8').replace(/<!--[\s\S]*?-->\n?/, '').trim();
     const family = (id) => cat.ui.find((u) => u.id === id)?.family;
     const anchors = [];
     const body = [];
-    let lastTone = null;
     const slugOf = (role) => role.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     for (const x of picked.filter((y) => !y.id || !isChrome(y.id))) {
       if (!x.id) {
         // Nothing ready-made fits this section: a plain section with the heading in place and the brief for its words.
         const slug = slugOf(x.role), lay = layoutOf(x.n);
         anchors.push({ slug, label: x.role });
-        body.push(`${x.optional ? `<!-- Optional (${x.role}): keep it only if you have the real content for it. -->\n` : ''}<section class="lt-section" id="${slug}"${lay ? ' ' + sectionAttrs(lay) : ''} aria-labelledby="h-${slug}">\n  <header><h2 id="h-${slug}">${x.role}</h2></header>\n  <div class="lt-prose"><p>TODO: ${x.copy}</p></div>\n</section>`);
+        body.push(`${x.optional ? `<!-- Optional (${x.role}): keep it only if you have the real content for it. -->\n` : ''}${withBeat(`<section class="lt-section" id="${slug}"${lay ? ' ' + sectionAttrs(lay) : ''} aria-labelledby="h-${slug}">\n  <header><h2 id="h-${slug}">${x.role}</h2></header>\n  <div class="lt-prose"><p>TODO: ${x.copy}</p></div>\n</section>`, x.n)}`);
         continue;
       }
       let html = snippet(x.id);
@@ -254,16 +382,19 @@ if (writeDraft) {
       if (x.id === 'hero-statement' && picked.some((y) => y.id === 'stats-band')) html = html.replace(/\s*<dl data-part="facts">[\s\S]*?<\/dl>/, '');
       const slug = hero ? 'top' : SLUG[x.id] ?? slugOf(x.role ?? x.id);
       const lay = layoutOf(x.n);
-      // Never two tinted bands in a row: a tone that would touch the last one is dropped (a dark band always stays).
-      const tone = x.tone && (!art.printlike || x.tone === 'dark') && (x.tone === 'dark' || !lastTone) ? x.tone : null;
-      lastTone = tone;
-      const attrs = [slug && !/^<\w+[^>]*\sid=/.test(html) ? `id="${slug}"` : null, hero ? 'data-entrance' : null, tone ? `data-tone="${tone}"` : null, lay ? sectionAttrs(lay) : null].filter(Boolean).join(' ');
+      const attrs = [slug && !/^<\w+[^>]*\sid=/.test(html) ? `id="${slug}"` : null, hero ? 'data-entrance' : null, lay ? sectionAttrs(lay) : null].filter(Boolean).join(' ');
       if (family(x.id) === 'blocks') {
-        html = html.replace(/^<(section|div|footer)\b([^>]*)>/, (m, tag, rest) => `<${tag}${rest.replace(/\sid="[^"]*"/, slug ? '' : '$&').replace(/\sdata-tone="[^"]*"/, tone ? '' : '$&')}${attrs ? ' ' + attrs : ''}>`);
+        html = html.replace(/^<(section|div|footer)\b([^>]*)>/, (m, tag, rest) => `<${tag}${rest.replace(/\sid="[^"]*"/, slug ? '' : '$&')}${attrs ? ' ' + attrs : ''}>`);
       } else {
         // Not a section block: give it the same band, container and heading as one.
         html = `<section class="lt-section"${attrs ? ' ' + attrs : ''} aria-labelledby="h-${slug ?? x.n}">\n  <header><h2 id="h-${slug ?? x.n}">${x.role}</h2></header>\n  ${html.split('\n').join('\n  ')}\n</section>`;
       }
+      // The rhythm: this band's ground (data-tone), density and scale. Then the subject's own words.
+      html = withBeat(html, x.n);
+      if (hero) html = subjectHero(html, x.id);
+      else if (x.id === 'media-band') html = idea.place === 'media-band' ? setFacts(applyMediaIdea(html, idea, mediaHeadline()), figuresLeft([idea.figure]), { min: 2 }) : setFacts(html, figuresLeft(), { min: 2 });
+      else if (x.id === 'stats-band') html = setFacts(html, figuresLeft(), { part: null });
+      else if (x.id === 'cta-band' && x === picked.filter((y) => !y.id || !isChrome(y.id)).at(-1)) html = applyClose(html, closeCopy());
       if (slug && slug !== 'top' && !anchors.some((a) => a.slug === slug)) anchors.push({ slug, label: LABEL[slug] ?? x.role ?? slug });
       // The small label above the heading says what the plan calls this section, so the draft reads in the plan's order.
       if (!hero && x.role && !LABEL[slug]) html = html.replace(/(<(?:p|h2)[^>]*data-part="eyebrow"[^>]*>)[^<]*/, `$1${x.role}`);
@@ -280,15 +411,15 @@ if (writeDraft) {
     const top = picked.filter((y) => /^(navbar|floating-pill-nav|hide-on-scroll)/.test(y.id ?? '')).map((y) => chrome(y.id)).join('\n');
     const foot = picked.filter((y) => /footer/.test(y.id ?? '')).map((y) => chrome(y.id)).join('\n');
     const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''}`;
-    let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${product ?? 'TODO: page title'}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. Every sentence, name, number and link target below is sample content: rewrite all of it. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${top}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}>\n${body.join('\n\n')}\n</main>\n${foot}\n</body>\n</html>\n`;
+    let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${product ?? 'TODO: page title'}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. The first screen is written from the brief; every other sentence, name, number and link target is sample content: rewrite all of it. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${top}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}>${ideaComment(idea)}\n${body.join('\n\n')}\n</main>\n${foot}\n</body>\n</html>\n`;
     // A button that led to one of the sample's pages: the primary one takes this page's action, the others go.
     { const have = new Set([...page.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
       page = page.replace(/<a class="lt-btn"([^>]*)href="#([^"]+)"([^>]*)>([\s\S]*?)<\/a>/g, (m, pre, target, post, inner) => have.has(target) ? m : /data-variant="primary"/.test(pre + post) ? `<a class="lt-btn"${pre}href="${action}"${post}>${inner}</a>` : ''); }
     if (product) page = page.replaceAll('Halyard', product).replaceAll('halyard', product.toLowerCase().replace(/[^a-z0-9]+/g, ''));
     const MARK = '<!-- lumina-taste draft for:';
     const target = existsSync(join(dir, 'index.html')) && !readFileSync(join(dir, 'index.html'), 'utf8').includes(MARK) ? join(dir, 'index.draft.html') : join(dir, 'index.html');
-    writeFileSync(target, page);
-    draft = { path: target, kind: 'snippets', sections: picked.filter((y) => !y.id || !isChrome(y.id)).map((y) => y.id ?? slugOf(y.role)), left: sections.filter((x) => x.optional && PROOF.has(x.id ?? '')).map((x) => x.id) };
+    writeFileSync(target, retitle(page));
+    draft = { path: target, kind: 'snippets', rhythm: { strip: rhythmStrip(rhythm), moved: rhythm0.moved, broken: plan.rhythm.broken }, sections: picked.filter((y) => !y.id || !isChrome(y.id)).map((y) => y.id ?? slugOf(y.role)), left: sections.filter((x) => x.optional && PROOF.has(x.id ?? '')).map((x) => x.id) };
   }
   plan.draft = { ...draft, path: relative(process.cwd(), draft.path) || draft.path };
 }
@@ -322,7 +453,13 @@ if (questions.length) {
   if (questions.some((q) => q.id === 'look')) L.push('To show the looks instead of describing them:', '', '```sh', directions.command, '```', '', `It writes one page with ${directions.styles.map((s) => s.name).join(', ')} on the same content. Open it, or send a screenshot, and ask for A, B or C.`, '');
 }
 L.push(H('Profile and install'), '');
-L.push(`Palette \`${profile.palette}\` (${profile.mode}), type \`${profile.typography}\`, density \`${profile.density}\`${profile.style ? `, style \`${profile.style}\`` : ', no style'}.${domain ? ` Chosen for the ${domain.id} domain.` : ' No domain recognised, so these are the neutral defaults.'}`);
+if (brand) {
+  L.push(`**Brand from ${brand.kind === 'colour' ? 'the colour' : brand.kind === 'logo' ? 'the logo' : 'the site'} \`${brand.src}\`:** ${brand.colours?.length ? `colours found ${brand.colours.slice(0, 4).map((c) => `\`${c.css}\`${c.share ? ` (${Math.round(c.share * 100)}%)` : c.from ? ` (${c.from})` : ''}`).join(', ')}. ` : ''}${brand.note}`);
+  if (brand.type) L.push(`Type \`${brand.type.typography}\`, because ${brand.type.reason}. Tone: ${brand.tone}`);
+  if (brand.contrastFailures?.length) L.push(`Contrast: ${brand.contrastFailures.join('; ')}.`);
+  L.push('');
+}
+L.push(`Palette \`${profile.palette}\` (${profile.mode}), type \`${profile.typography}\`, density \`${profile.density}\`${profile.style ? `, style \`${profile.style}\`` : ', no style'}.${brand?.palette ? ' Palette and type come from the brand (above).' : domain ? ` Chosen for the ${domain.id} domain.` : ' No domain recognised, so these are the neutral defaults.'}`);
 if (styleOffer) L.push(`If the brief wants more character, add \`--style ${styleOffer}\`.`);
 L.push('', '```sh', install, '```', '');
 if (startWith === 'blueprint') {
@@ -335,14 +472,29 @@ if (startWith === 'blueprint') {
 if (restyle) { L.push(H('Restyling an existing page'), ''); for (const n of kb.restyle.notes) L.push(`- ${n}`); L.push(''); }
 L.push(H('Art direction (what makes this page this page)'), '');
 L.push(`- **Signature: ${art.signature.name}.** ${art.signature.how}`);
+L.push(`- **Bold idea: ${idea.text}.** It lives in ${idea.where}. ${idea.fromBrief ? 'Taken from the brief; everything else on the page stays quieter than it.' : `The brief has no figure to build it on: ask for ${idea.ask}.`}`);
 if (art.mainAttrs.length) L.push(`- **Page:** \`<main ${art.mainAttrs.join(' ')}>\`: each section rises into place as it scrolls in. Sections are set apart by space and a change of ground, not by rules or small labels over every heading.`);
-L.push(`- **Rhythm:** ${art.rhythm}`);
+{
+  const r = draft?.rhythm ?? { strip: plan.rhythm.strip, moved: rhythm0.moved };
+  L.push(`- **Rhythm${draft?.kind === 'blueprint' ? ' (as drafted from the blueprint)' : ''}:** \`${r.strip}\``);
+  L.push(`  ${rhythm.banded ? STRIP_KEY : 'One screen: regions on one ground, as dense as the work needs.'}${r.moved?.length ? ` Moved: ${r.moved.join(', ')} (the close says the action again; parts with one layout never touch).` : ''}${rhythm0.inserted.length ? ` Added: ${rhythm0.inserted.join(', ')} (a pause between busy bands).` : ''}${figuresBandSkipped ? ' Left out: the figures band, because the brief has fewer than three figures.' : ''}`);
+  L.push(`  ${art.rhythm}`);
+  for (const b of rhythm.beats.filter((x) => x.note)) L.push(`  - ${b.label}: ${b.note}`);
+}
 L.push(`- **Look:** before you install, name three nouns from the subject's world and check that the palette and typeface come from them. If the result is a default look (indigo and Inter; cream, a book serif and terracotta; black and one acid colour), choose again or state why on the root: \`<html data-look-reason="…">\`. See references/ai-defaults.md.`);
 L.push(`- **Words:** ${art.words}`);
 L.push(`- **Motion:** ${art.motion}`);
 L.push(`- **Colour:** ${art.accent}`);
 L.push(`- **Type:** ${art.type}`);
 L.push('- **Then the detail pass** in references/composition.md before you audit: alignment, line breaks, numbers, edges.', '');
+L.push(H('Words from the brief'), '');
+{
+  const got = [facts.kind && `kind: ${facts.kind}`, facts.place && `place: ${facts.place}`, facts.street && `street: ${facts.street}`, facts.days && `days: ${facts.days}`, ...figures.map((f) => `${f.value} (${f.label})`), ...facts.claims.map((c) => `"${c}"`), ...facts.offers.map((o) => `offer: ${o}`)].filter(Boolean);
+  L.push(got.length ? `Found in the brief: ${got.join('; ')}. Headlines and captions are written from these; nothing else is a fact.` : 'The brief names no place, price, time or figure.');
+  if (hero.headline) L.push('', `First screen: eyebrow "${hero.eyebrow ?? '(sample)'}", headline "${hero.headline}"${hero.lede ? `, lede "${hero.lede}"` : ''}${hero.action ? `, action "${hero.action}"` : ''}.`);
+  if (plan.words.missing.length) L.push('', `Still needed (the draft marks these TODO rather than inventing them): ${plan.words.missing.join('; ')}.`);
+  L.push('');
+}
 L.push(H('Sections, in order'), '');
 for (const s of sections) {
   const id = s.id ? `\`${s.id}\`` : '_(layout, no component)_';

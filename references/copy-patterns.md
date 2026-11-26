@@ -4,6 +4,17 @@ Words are half of what makes a page look designed. Generated pages fail on copy 
 
 The test for every line: could a competitor paste it onto their site unchanged? If yes, it says nothing. Rewrite it with something only this product can claim.
 
+## Words from the subject
+
+A draft is written from the brief's own words before any formula: the kind of business ("sourdough bakery"), the place and street ("Mill Lane, Frome"), prices with what they buy ("loaves from £4.20"), clock times and days ("from 7:30, Tuesday to Sunday"), durations ("in 12 weeks", "a free 20-minute first call"), counts with their period ("410 food parcels a week last winter") and the claims the brief makes ("sends an invoice in 30 seconds"). `compose.mjs` reads these (`engine/compose/words.mjs`) and lists them under "Words from the brief"; with `--write` it sets the eyebrow (kind · place), the headline, the lede, the line under the buttons, the hero's figure, the title, the description and the primary action from them.
+
+- **Use the nouns as written.** "Settlement agreement review from £450" beats "Expert legal advice". "A sourdough bakery on Mill Lane in Frome" beats "Artisan bread, made with love".
+- **A figure keeps its unit and its period.** "410 food parcels a week last winter", never "410+ families helped".
+- **Repeat the price at the close.** The closing band names the thing and its price again next to the action ("Tally, £9 a month").
+- **The action label comes from what the brief offers**: quotes → "Get a quote"; a first call → "Book a first call"; a class → "Book a class"; a food bank → "Give food or money". Every place the sample's label appeared (the bar, the hero, the close) takes the new one.
+- **Hyphenated words never break in a headline**: the draft writes "single‑storey" with a non-breaking hyphen.
+- **No fact, no line.** When the brief has no figure, the draft does not invent one: a line it has nothing for is removed rather than left describing the sample business, a figures band with fewer than three real figures is left out, and the plan's "Still needed" list (and a `<!-- TODO: ask for … -->` in the hero) asks for the missing facts: the address, the opening hours, one real price, one true figure with its period. The critic fails a visible TODO, so a draft with gaps cannot ship by accident.
+
 ## Headlines
 
 | Where | Formula | Before | After |

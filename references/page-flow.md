@@ -10,7 +10,7 @@ Where things go, and how a page breathes. Use this before placing a single compo
 
 ### Layout recipes
 
-Every install ships these as classes in `tokens/layout.css` (zero specificity, so your CSS wins): `.lt-container`, `.lt-narrow`, `.lt-prose`, `.lt-band` (+ `data-tone="well"`), `.lt-stack`, `.lt-cluster`, `.lt-page-head`, `.lt-grid` (`--min` sets the card width), `.lt-split` (`data-ratio="half"`), `.lt-shell`, `.lt-settings`, `.lt-dash` (`.wide` spans both columns) and `.lt-skip`. Section blocks (heroes, features, FAQ, CTA bands…) are complete bands: each centres its content in the 1180px container, pads itself by half of `--section-y` (so two neighbours are exactly `--section-y` apart) and accepts `data-tone="well"` for a tinted background. Put them straight inside `<main>`, never inside another `.lt-band` or `.lt-container`, and alternate plain and tinted bands. `.lt-shell` keeps its rail sticky and full height; `.lt-stack` and every grid here use `minmax(0, 1fr)` so wide tables shrink instead of widening the page.
+Every install ships these as classes in `tokens/layout.css` (zero specificity, so your CSS wins): `.lt-container`, `.lt-narrow`, `.lt-prose`, `.lt-band` (+ `data-tone="well"`), `.lt-stack`, `.lt-cluster`, `.lt-page-head`, `.lt-grid` (`--min` sets the card width), `.lt-split` (`data-ratio="half"`), `.lt-shell`, `.lt-settings`, `.lt-dash` (`.wide` spans both columns) and `.lt-skip`. Section blocks (heroes, features, FAQ, CTA bands…) are complete bands: each centres its content in the 1180px container, pads itself by half of `--section-y` (so two neighbours are exactly `--section-y` apart) and accepts `data-tone="well"` for a tinted background. Put them straight inside `<main>`, never inside another `.lt-band` or `.lt-container`, and follow the rhythm in section 0b: no two neighbours on the same ground. `.lt-shell` keeps its rail sticky and full height; `.lt-stack` and every grid here use `minmax(0, 1fr)` so wide tables shrink instead of widening the page.
 
 The same recipes as plain CSS, if you prefer to write your own. All use `--space-*` / `--gap-*` and work at 390px.
 
@@ -51,6 +51,30 @@ Rules that keep these simple:
 - One container width per page. Bands can be full-bleed; text never is.
 - Space between sections is larger than space inside them. If a page feels busy, add space before removing things; if it still feels busy, remove things.
 - Do not nest cards inside cards. Use a divider or a heading instead.
+
+## 0b. Plan the rhythm before any code
+
+A page that is right section by section can still read as one section repeated. `compose.mjs` plans the order of the bands as a rhythm first and prints it as one line:
+
+```
+hero ▇ XL · statement ▁ L well · tiles ▇ · steps ▇ well · people ▁ · visit ▇ dark · questions ▁ · close ▁ XL brand
+```
+
+Each band has a **density** (▇ busy: a grid, a table, a form, many things; ▁ quiet: a statement, one quote, three figures, a short list), a **ground** (plain, `well` tint, the one `dark` band, the one `brand` band in the accent colour, or a `picture` band that is its own ground) and a **scale** (XL display type, L large type, or normal). The rules:
+
+1. **Never three busy bands in a row.** The planner keeps the middle one to three things with a figure each, or adds a pause (a `scroll-statement` with the bold idea, or a figures band when the brief has figures).
+2. **One dark band and one brand band at most**, matching the critic's accent budget. The dark band sits from the middle of the page on; a page with a dark picture band (`media-band`) takes no second dark band.
+3. **The first screen and the close are the loudest.** Only they are set at display size. The close says the one action again: a closing band (`cta-band`, `booking-bar`, tickets, a contact form) that sat earlier is moved to the end.
+4. **No two neighbours on the same ground**, unless one is a picture. Light bands alternate plain and tinted.
+5. **No two neighbours with the same layout.** Layouts are assigned after the order is fixed; two parts that can only be laid out one way, and the same way, never stand side by side.
+
+An app screen (dashboard, settings, inbox, sign-in) is one ground and as dense as its work needs; the rhythm names its regions and the band rules do not apply.
+
+In a `--write` draft each band carries its beat: `data-tone` for the ground (`well`, `dark`, `accent`), `data-rhythm="quiet|busy"` and `data-scale="display|large"`. (Not `data-density`: that is the profile's density axis, and on a section it would reset `--section-y`.) If you add, remove or reorder a section, keep the five rules by hand.
+
+## 0c. One bold idea per page
+
+Every page gets one idea that is louder than everything else, chosen from the subject, not from a style: "the £40,000 fixed price set huge on navy", "the 7:30 opening time as the hero", "410 food parcels a week as the headline itself". The plan names it and where it lives (the hero's picture as an art panel in the brand colour, the headline at display size, or the dark picture band), and the draft says it in a comment after `<main>`. It comes from the brief's own figures first, in the order its visitors look for them (a trade: the price; a place: the opening time; a charity: the count with its period; software: how long the job takes), then from the art direction's signature. When the brief has no figure, the plan asks for one instead of inventing it. Everything else on the page stays quieter than the idea: no second huge figure, no second colour panel, no second moving thing.
 
 ## 1. Reading patterns
 
@@ -94,7 +118,7 @@ Never combine a left sidebar and a top navbar with the same links. Pick one sour
 
 **Hero (marketing only).** Eyebrow (≤ 4 words) → headline (≤ 12 words, `text-wrap: balance`) → one-sentence lede → one primary CTA (+ optional secondary) → one line of reassurance ("No card required"). Then show the product, real or realistic, not an illustration of people high-fiving.
 
-**Body.** Each section: a heading that states a benefit or a fact, one supporting sentence, then the evidence (feature grid, chart, table, quote). Alternate density: a dense section is followed by a calm one.
+**Body.** Each section: a heading that states a benefit or a fact, one supporting sentence, then the evidence (feature grid, chart, table, quote). Alternate density: a dense section is followed by a calm one, and never three busy bands in a row (section 0b).
 
 **Dashboards.** Title row → **one global filter bar** → KPI row (2–4 cards) → chart grid (2 columns on desktop, 1 on mobile; the widest story spans both) → detail table. Cards inherit the global filters; a card may have at most one local toggle.
 
