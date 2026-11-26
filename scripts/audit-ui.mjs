@@ -12,13 +12,24 @@
 //     --product "Name"   implies --taste; also fails the page while the kit's sample brands and people are still on it
 //     --taste   page-level design checks (type scale, accent hues, radii, one primary per screen,
 //               reading measure, heading order, nested cards, section rhythm, focal point,
-//               placeholder copy, empty visual boxes, button labels) and a 0–100 taste score per run
+//               placeholder copy, empty visual boxes, button labels) and a 0–100 taste score per run;
+//               plus the designer's measures (scripts/lib/critic.mjs): a section with nothing to look at,
+//               two sections in a row with the same layout, density rhythm, the headline-to-body type jump,
+//               the scroll-moment budget, and for apps at phone width touch targets, the home-indicator
+//               gap under fixed bottom bars and the page states the page declares
+//     --perf    load speed: the largest paint (lazy or without fetchpriority), layout shift, font, JS and CSS
+//               bytes, images without width and height, images far larger than their box. --strict runs
+//               it too, with every perf finding as a warning
+//     --pending "page:rule,…"  findings of these rules on pages whose URL contains /page/ are listed as
+//               pending (known, waiting on a fix elsewhere) and do not count; one that stops firing is named
 // Requires Playwright (`npm i -D @playwright/test && npx playwright install chromium`).
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { gzipSync } from 'node:zlib';
 import { COPY_RULES } from './lib/copy-rules.mjs';
+import { MEASURE, judgeMeasures, PERF_INIT, PERF_COLLECT, judgePerf } from './lib/critic.mjs';
 
 // Playwright is looked up next to this script first, then in the project you run it from,
 // so a globally installed skill can audit a project that already has Playwright.
@@ -47,6 +58,9 @@ const shotDir = flag('screenshots', null);
 const strict = bool('strict');
 const product = flag('product', null);
 const tasteOn = bool('taste') || !!product;
+const perfFlag = bool('perf');
+const perfOn = perfFlag || strict;
+const pending = (flag('pending', '') ?? '').split(',').map((x) => x.trim()).filter(Boolean).map((x) => { const [page, rule] = x.split(':'); return { page, rule, hit: false }; });
 const quiet = bool('quiet');
 const targets = argv.filter((a) => !a.startsWith('--'));
 if (!targets.length) {
@@ -751,6 +765,13 @@ async function auditOne(browser, url, vpName, mode) {
   if (process.env.LT_AUDIT_DEBUG) await page.evaluate(() => (window.__ltDebug = true));
   const findings = (await page.evaluate(PAGE_CHECKS, COPY_RULES.map(([re, why, fix]) => [re.source, re.flags, why, fix]))).map((f) => ({ ...f, viewport: vpName, mode }));
   if (tasteOn) for (const f of await page.evaluate(TASTE_CHECKS, product ? { name: product, samples: KIT_SAMPLES.phrases, brands: KIT_SAMPLES.brands, links: KIT_SAMPLES.links } : null)) findings.push({ ...f, viewport: vpName, mode });
+  // The designer's measures: what each section gives the eye, layout, density, type jump, motion, app rules.
+  let measures = null;
+  if (tasteOn) {
+    measures = await page.evaluate(MEASURE, { states: await declaredStates(ctx, url) });
+    for (const f of judgeMeasures(measures, { wide: vp.width >= 900 })) findings.push({ ...f, viewport: vpName, mode });
+    if (vp.width < 900 && measures.bars.length) for (const f of await safeAreaGaps(ctx, page, measures)) findings.push({ ...f, viewport: vpName, mode });
+  }
   for (const e of runtimeErrors) findings.push({ rule: 'runtime-error', severity: 'error', selector: null, message: e, viewport: vpName, mode });
 
   // Dead controls: no click/key/pointer listener on the control or any ancestor, no native behaviour.
@@ -869,7 +890,94 @@ async function auditOne(browser, url, vpName, mode) {
     shots.push(`${base}-screen.png`, `${base}-full.png`);
   }
   await ctx.close();
-  return { findings, controls: meta.count, focusChecked: focusIdx.length };
+  return { findings, controls: meta.count, focusChecked: focusIdx.length, measures };
+}
+
+// ------------------------------------------------------------------ app and speed helpers
+const statesCache = new Map();
+/** The page states a blueprint declares in the meta.json beside it (loading, empty, error…), if there is one. */
+async function declaredStates(ctx, url) {
+  let metaUrl; try { metaUrl = new URL('meta.json', url).href; } catch { return []; }
+  if (statesCache.has(metaUrl)) return statesCache.get(metaUrl);
+  let states = [];
+  try {
+    if (metaUrl.startsWith('file:')) { const f = fileURLToPath(metaUrl); if (existsSync(f)) states = JSON.parse(readFileSync(f, 'utf8')).states ?? []; }
+    else if (/^https?:/.test(metaUrl)) { const r = await ctx.request.get(metaUrl, { timeout: 3000, failOnStatusCode: false }); if (r.ok()) states = (await r.json()).states ?? []; }
+  } catch { /* no meta, or not JSON */ }
+  states = Array.isArray(states) ? states.filter((x) => typeof x === 'string' && /^[a-z-]+$/.test(x)) : [];
+  statesCache.set(metaUrl, states);
+  return states;
+}
+
+/**
+ * Fixed bars at the bottom of a phone screen must clear the home indicator: env(safe-area-inset-bottom) in
+ * the bar's own padding, height or bottom, or in a child's. Computed styles resolve env() to 0 off iOS, so
+ * this reads the authored rules that match each bar through the DevTools protocol.
+ */
+async function safeAreaGaps(ctx, page, m) {
+  // Custom properties that carry the inset (--safe-bottom: env(safe-area-inset-bottom)), followed through var() chains.
+  const vars = await page.evaluate(() => {
+    const decl = new Map();
+    const walk = (rules) => { for (const r of rules) { if (r.style) for (let i = 0; i < r.style.length; i++) { const p = r.style[i]; if (p.startsWith('--')) decl.set(p, (decl.get(p) ?? '') + ' ' + r.style.getPropertyValue(p)); } if (r.cssRules) walk(r.cssRules); } };
+    for (const sh of document.styleSheets) { try { walk(sh.cssRules); } catch { /* cross-origin sheet */ } }
+    const names = new Set([...decl].filter(([, v]) => /safe-area-inset-bottom/.test(v)).map(([k]) => k));
+    for (let grew = true; grew;) { grew = false; for (const [k, v] of decl) if (!names.has(k) && [...names].some((n) => v.includes(`var(${n}`))) { names.add(k); grew = true; } }
+    return [...names];
+  });
+  const cdp = await ctx.newCDPSession(page);
+  const out = [];
+  try {
+    await cdp.send('DOM.enable'); await cdp.send('CSS.enable');
+    const { root } = await cdp.send('DOM.getDocument', { depth: 0 });
+    const { nodeIds } = await cdp.send('DOM.querySelectorAll', { nodeId: root.nodeId, selector: '[data-lt-audit-bar]' });
+    for (const id of nodeIds) {
+      const { nodeIds: kids } = await cdp.send('DOM.querySelectorAll', { nodeId: id, selector: ':scope > *, :scope > * > *' });
+      let ok = false;
+      for (const n of [id, ...kids.slice(0, 40)]) {
+        const st = await cdp.send('CSS.getMatchedStylesForNode', { nodeId: n });
+        const text = (style) => (style ? style.cssText || (style.cssProperties ?? []).map((d) => `${d.name}:${d.value}`).join(';') : '');
+        const texts = [text(st.inlineStyle), ...(st.matchedCSSRules ?? []).map((x) => text(x.rule.style))];
+        if (texts.some((t) => /safe-area-inset-bottom/.test(t) || vars.some((v) => t.includes(`var(${v}`)))) { ok = true; break; }
+      }
+      if (ok) continue;
+      const { node } = await cdp.send('DOM.describeNode', { nodeId: id });
+      const i = +(node.attributes[node.attributes.indexOf('data-lt-audit-bar') + 1] ?? 0);
+      const bar = m.bars[i] ?? { selector: null, height: 0 };
+      out.push({ rule: 'app-safe-area', severity: 'warning', selector: bar.selector, message: `A fixed bar sits on the bottom edge of the phone screen (${bar.height}px tall) with no env(safe-area-inset-bottom) in its padding, so on phones without a home button the home indicator covers its controls. Add padding-bottom: calc(<its padding> + env(safe-area-inset-bottom)) and viewport-fit=cover in the viewport meta.` });
+    }
+  } catch (err) { if (process.env.LT_AUDIT_DEBUG) console.error('safe-area check:', err.message); /* the protocol is not available: leave it to the eye */ }
+  await cdp.detach().catch(() => {});
+  return out;
+}
+
+/** One cold load per viewport for speed: the largest paint, layout shift, bytes by kind, and the images. */
+async function perfOne(browser, url, vpName) {
+  const vp = VIEWPORTS[vpName];
+  const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, isMobile: !!vp.isMobile, hasTouch: !!vp.hasTouch, reducedMotion: 'reduce' });
+  await ctx.addInitScript(PERF_INIT);
+  const page = await ctx.newPage();
+  const bodies = [];
+  page.on('response', (res) => {
+    const type = res.request().resourceType();
+    if (!['script', 'stylesheet', 'font', 'image'].includes(type)) return;
+    bodies.push((async () => {
+      let body = null; try { body = await res.body(); } catch { return null; }
+      const encoded = !!(res.headers()['content-encoding'] ?? '');
+      // What crosses the wire: the encoded size when the server compressed it, else the gzip size it would have.
+      const wire = encoded ? ((await res.request().sizes().catch(() => null))?.responseBodySize || body.length) : (type === 'script' || type === 'stylesheet' ? gzipSync(body).length : body.length);
+      return { type, raw: body.length, wire, encoded };
+    })());
+  });
+  await page.goto(url, { waitUntil: 'load' });
+  await page.waitForTimeout(1200);
+  const first = await page.evaluate(PERF_COLLECT);
+  await page.evaluate(async () => { const h = document.documentElement.scrollHeight; for (let y = 0; y < h; y += innerHeight * 0.8) { scrollTo(0, y); await new Promise((r) => setTimeout(r, 60)); } scrollTo(0, 0); await new Promise((r) => setTimeout(r, 300)); });
+  const later = await page.evaluate(PERF_COLLECT);
+  const list = (await Promise.all(bodies)).filter(Boolean);
+  await ctx.close();
+  const sum = (t, k = 'wire') => list.filter((x) => x.type === t).reduce((a, x) => a + x[k], 0);
+  const bytes = { js: sum('script'), css: sum('stylesheet'), font: sum('font'), fonts: list.filter((x) => x.type === 'font').length, image: sum('image'), jsRaw: sum('script', 'raw'), cssRaw: sum('stylesheet', 'raw') };
+  return { lcp: first.lcp, cls: first.cls, shifts: first.shifts, moved: first.moved, images: later.images, bytes };
 }
 
 /**
@@ -937,20 +1045,28 @@ for (const t of targets) {
   const url = toUrl(t);
   for (const vp of viewports) for (const mode of modes) {
     const r = await auditOne(browser, url, vp, mode);
+    // Speed is judged once per viewport, on a cold load of its own, and reported with the first mode's run.
+    let perf = null;
+    if (perfOn && mode === modes[0]) {
+      perf = await perfOne(browser, url, vp);
+      for (const f of judgePerf(perf, { soft: !perfFlag })) r.findings.push({ ...f, viewport: vp, mode });
+    }
     // De-duplicate identical findings (same rule + selector + message).
     const seen = new Set();
     const uniq = r.findings.filter((f) => { const k = `${f.rule}|${f.selector}|${f.message}`; if (seen.has(k)) return false; seen.add(k); return true; });
-    const e = uniq.filter((f) => f.severity === 'error').length, w = uniq.length - e;
-    const score = tasteScore(uniq);
-    report.push({ url, viewport: vp, mode, controls: r.controls, focusChecked: r.focusChecked, score, findings: uniq });
+    // Known findings waiting on a fix elsewhere: listed, not counted.
+    for (const f of uniq) { const p = pending.find((x) => x.rule === f.rule && (url.includes(`/${x.page}/`) || url.endsWith(`/${x.page}`))); if (p) { f.severity = 'pending'; p.hit = true; } }
+    const e = uniq.filter((f) => f.severity === 'error').length, w = uniq.filter((f) => f.severity === 'warning').length;
+    const score = tasteScore(uniq.filter((f) => f.severity !== 'pending'));
+    report.push({ url, viewport: vp, mode, controls: r.controls, focusChecked: r.focusChecked, score, findings: uniq, ...(r.measures ? { measures: r.measures } : {}), ...(perf ? { perf: { lcp: perf.lcp, cls: perf.cls, bytes: perf.bytes } } : {}) });
     errors += e; warnings += w;
-    if (!quiet || e || w) {
-      console.log(`${e ? '✗' : w ? '!' : '✓'} ${url}  [${vp} ${VIEWPORTS[vp].width}×${VIEWPORTS[vp].height}, ${mode}]  ${e} errors, ${w} warnings · ${r.controls} controls, ${r.focusChecked} focus rings checked${tasteOn ? ` · taste ${score}/100${scoreNote(uniq)}` : ''}`);
+    if (!quiet || e || w || uniq.some((f) => f.severity === 'pending')) {
+      console.log(`${e ? '✗' : w ? '!' : '✓'} ${url}  [${vp} ${VIEWPORTS[vp].width}×${VIEWPORTS[vp].height}, ${mode}]  ${e} errors, ${w} warnings · ${r.controls} controls, ${r.focusChecked} focus rings checked${tasteOn ? ` · taste ${score}/100${scoreNote(uniq.filter((f) => f.severity !== 'pending'))}` : ''}${perf ? ` · LCP ${perf.lcp ? `${perf.lcp.tag} ${perf.lcp.time}ms` : 'n/a'}, CLS ${perf.cls}, JS ${Math.round(perf.bytes.js / 1024)} KB, CSS ${Math.round(perf.bytes.css / 1024)} KB, fonts ${Math.round(perf.bytes.font / 1024)} KB (gzip)` : ''}`);
       const byRule = {};
       for (const f of uniq) (byRule[f.rule] ??= []).push(f);
       for (const [rule, list] of Object.entries(byRule)) {
         console.log(`    ${rule} (${list.length})`);
-        for (const f of list.slice(0, 6)) console.log(`      ${f.severity === 'error' ? '✗' : '!'} ${f.message}${f.selector ? `\n        at ${f.selector}` : ''}`);
+        for (const f of list.slice(0, 6)) console.log(`      ${f.severity === 'error' ? '✗' : f.severity === 'pending' ? '~ pending:' : '!'} ${f.message}${f.selector ? `\n        at ${f.selector}` : ''}`);
         if (list.length > 6) console.log(`      … ${list.length - 6} more`);
       }
     }
@@ -958,6 +1074,9 @@ for (const t of targets) {
 }
 await browser.close();
 const avg = report.length ? Math.round(report.reduce((a, r) => a + r.score, 0) / report.length) : 0;
+const pendingHits = report.flatMap((r) => r.findings.filter((f) => f.severity === 'pending'));
+if (pendingHits.length) console.log(`\n~ ${pendingHits.length} pending finding${pendingHits.length > 1 ? 's' : ''} (known, waiting on a fix): ${[...new Set(pendingHits.map((f) => f.rule))].join(', ')}`);
+for (const p of pending.filter((x) => !x.hit)) console.log(`~ pending ${p.page}:${p.rule} no longer fires: remove it from the list.`);
 if (jsonOut) writeFileSync(jsonOut, JSON.stringify({ errors, warnings, score: avg, report }, null, 2));
 if (shots.length) console.log(`\nScreenshots (${shots.length}): ${shotDir}/  (…-screen.png is the first screen, …-full.png the whole page)`);
 console.log(`\n${errors ? '✗' : '✓'} audit-ui: ${errors} errors, ${warnings} warnings across ${report.length} runs${tasteOn ? ` · taste score ${avg}/100` : ''}`);

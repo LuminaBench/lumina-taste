@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>A lazy first picture</title>
+<!-- The largest picture in the first screen is lazy-loaded, has no width or height, and is drawn far larger than its box. Used by tests/unit/critic.test.mjs. -->
+<style>
+  body { margin: 0; font: 17px/1.6 Georgia, serif; color: #1d232a; background: #f6f7f8; }
+  main { padding: 32px max(24px, calc((100% - 1100px) / 2)); }
+  h1 { font-size: 20px; margin: 0 0 16px; }
+  img { display: block; width: 640px; max-width: 100%; }
+</style></head>
+<body><main>
+  <h1>Moss Studio</h1>
+  <img id="lead" loading="lazy" alt="The studio from the yard">
+  <script>
+    // A 1800×1200 picture, drawn here so the fixture needs no image file.
+    const c = document.createElement('canvas'); c.width = 1800; c.height = 1200;
+    const x = c.getContext('2d'); x.fillStyle = '#9bb3a7'; x.fillRect(0, 0, 1800, 1200); x.fillStyle = '#41594f'; x.fillRect(200, 300, 1400, 600);
+    document.getElementById('lead').src = c.toDataURL('image/png');
+  </script>
+</main></body></html>

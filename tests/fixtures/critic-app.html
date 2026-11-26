@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en" data-app data-states="loading empty error"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Small targets</title>
+<!-- An app screen: small controls in a fixed bottom bar with no safe-area inset, and declared states it does not have. Used by tests/unit/critic.test.mjs. -->
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d232a; background: #f6f7f8; }
+  main { padding: 16px 16px 96px; }
+  h1 { font-size: 24px; margin: 0 0 12px; }
+  ul { list-style: none; margin: 0; padding: 0; } li { padding: 12px 0; }
+  .add { display: inline-block; height: 30px; padding: 0 12px; border: 0; border-radius: 6px; background: #24524a; color: #fff; font: inherit; }
+  .bar { position: fixed; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-around; padding: 6px; background: #fff; border-top: 1px solid #d5dad8; }
+  .bar button { width: 36px; height: 32px; border: 0; background: none; font: inherit; font-size: 12px; color: #1d232a; }
+  button:focus-visible { outline: 2px solid #24524a; outline-offset: 2px; }
+</style></head>
+<body><main>
+  <h1>Invoices</h1>
+  <button class="add" type="button" onclick="this.blur()">New</button>
+  <ul><li>Moss Studio · £420</li><li>Halyard · £1,180</li><li>Juniper & Co · £96</li></ul>
+  <div data-view="loading" hidden>Loading invoices</div>
+</main>
+<nav class="bar" aria-label="Sections"><button type="button" onclick="this.blur()">Home</button><button type="button" onclick="this.blur()">Bills</button><button type="button" onclick="this.blur()">You</button></nav>
+</body></html>
