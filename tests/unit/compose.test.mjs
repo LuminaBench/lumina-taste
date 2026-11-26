@@ -473,7 +473,11 @@ test('every band a draft writes has something to look at; software shows itself;
     for (const tile of builder.match(/<article[^>]*>[\s\S]*?<\/article>/g).filter((a) => !a.includes('lt-art'))) assert.match(tile, /data-part="figure"/, 'no empty tiles');
     assert.match(builder, /Also: House extensions, on a fixed-price quote\./);
     const thin = readFileSync(join(dir, 'thin', 'index.html'), 'utf8');
-    assert.match(thin, /data-motif="tooth"/, 'a thin brief still shows the subject');
+    assert.match(thin, /data-scene="tooth[ a-z]*"/, 'a thin brief still shows the subject: a scene in the first screen');
+    // One scene per page, in the first screen; single drawings elsewhere, none of the scene's again.
+    assert.equal((thin.match(/data-scene="/g) ?? []).length, 1);
+    const scene = /data-scene="([a-z ]+)"/.exec(thin)[1].split(' ');
+    for (const m of thin.matchAll(/data-motif="([a-z]+)"/g)) assert.ok(!scene.includes(m[1]), `${m[1]} is already in the scene`);
     // Never the same drawing twice when the subject has another that fits.
     const thinMotifs = [...thin.matchAll(/data-motif="([a-z]+)"/g)].map((m) => m[1]);
     assert.equal(new Set(thinMotifs).size, thinMotifs.length, thinMotifs.join(' '));

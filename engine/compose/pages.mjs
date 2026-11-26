@@ -8,7 +8,7 @@
 // Pure functions, no I/O: compose.mjs passes the facts, the model and a reader for seeded sample data.
 import { esc, figureStyle, keepHyphens } from './draft.mjs';
 import { plansFrom, basketFrom, servicesFrom, releasesFrom, optionsFrom, featuresFrom, plural } from './model.mjs';
-import { motifFor, motifParts, navBar, footer } from './bands.mjs';
+import { motifFor, motifParts, sceneFor, sceneParts, navBar, footer } from './bands.mjs';
 import { rankMotifs } from '../../scripts/lib/image-motifs.mjs';
 import { cap, icon, field, segmented, iconFor } from './ui.mjs';
 import { APP_PAGES } from './apps.mjs';
@@ -85,6 +85,7 @@ function contact(ctx) {
   if (!where.length) ctx.todo.push('the address, if people visit');
   ctx.todo.push('the questions people ask before they get in touch, with one-line answers (left out until then)');
   const big = facts.phone ?? facts.email ?? null;
+  const scene = sceneParts(sceneFor(`${facts.kind ?? ''} ${facts.offers.join(' ')}`, ctx));
   const visitBand = ctx.bands.visit;
   const ways = [facts.phone ? `<div><dt>Phone</dt><dd><a href="${tel(facts.phone)}">${esc(facts.phone)}</a></dd></div>` : '', facts.email ? `<div><dt>Email</dt><dd><a href="mailto:${esc(facts.email)}">${esc(facts.email)}</a></dd></div>` : '', where.length && !visitBand ? `<div><dt>Address</dt><dd>${where.map(esc).join('<br>')}</dd></div>` : ''].join('');
   const lede = [ctx.facts.days ? `Open ${facts.days}${facts.times.find((t) => t.what === 'hours') ? `, ${facts.times.find((t) => t.what === 'hours').value}` : ''}.` : null].filter(Boolean).join(' ') || null;
@@ -98,7 +99,7 @@ function contact(ctx) {
     ${ways ? `<dl class="ct-ways">${ways}</dl>` : ''}
   </div>
   <div data-part="visual">
-    ${big ? `<figure class="lt-art" data-variant="figure" data-tone="dark" data-frame data-ratio="5/4"${motifParts(motifFor('phone envelope', ctx)).attr} data-shot="${esc(`A photograph of ${facts.kind ? `the ${facts.kind}` : name}${facts.place ? ` in ${facts.place}` : ''}, real light, 5:4`)}">${motifParts(ctx.usedMotifs?.size ? [...ctx.usedMotifs].pop() : null, { small: true }).svg}<p data-part="figure" class="ct-figure" style="font-size: clamp(1.75rem, 7cqi, 4rem)">${esc(big)}</p><p data-part="name">${esc(facts.phone ? 'Call' : 'Write')}</p>${facts.place ? `<p data-part="fact">${esc(facts.place)}</p>` : ''}<figcaption class="lt-visually-hidden">${esc(`${name}: ${big}`)}</figcaption></figure>` : subjectPanel(ctx, { name, fact: facts.place, ratio: '5/4', tone: 'dark', shot: `A photograph of ${name}, real light, 5:4` })}
+    ${big ? `<figure class="lt-art" data-variant="figure" data-tone="dark" data-frame data-ratio="5/4"${scene.attr} data-shot="${esc(`A photograph of ${facts.kind ? `the ${facts.kind}` : name}${facts.place ? ` in ${facts.place}` : ''}, real light, 5:4`)}">${scene.svg}<p data-part="figure" class="ct-figure" style="font-size: clamp(1.75rem, 7cqi, 4rem)">${esc(big)}</p><p data-part="name">${esc(facts.phone ? 'Call' : 'Write')}</p>${facts.place ? `<p data-part="fact">${esc(facts.place)}</p>` : ''}<figcaption class="lt-visually-hidden">${esc(`${name}: ${big}`)}</figcaption></figure>` : subjectPanel(ctx, { name, fact: facts.place, ratio: '5/4', tone: 'dark', shot: `A photograph of ${name}, real light, 5:4` })}
   </div>
 </section>
 <section class="lt-section" id="message" aria-labelledby="h-message" data-tone="well" data-rhythm="quiet">
@@ -145,7 +146,8 @@ function store(ctx) {
   const motif = rankMotifs(title.split(/\s+/).pop().replace(/s$/, ''))[0] ?? rankMotifs(title.replace(/\b(\w{4,})s\b/g, '$1'))[0] ?? motifFor(`${title} ${facts.kind ?? ''}`, ctx);
   const shots = [title, ...options[0]?.values.slice(0, 2) ?? []].slice(0, 3);
   const mp = motifParts(motif);
-  const stage = shots.map((s, k) => `<div data-shot="s${k}"${k ? ' hidden' : ''}><figure class="lt-art"${tones[k] ? ` data-tone="${tones[k]}"` : ''}${mp.attr} data-ratio="1/1" data-shot="${esc(`A photograph of the ${k ? `${s} ` : ''}${title.toLowerCase()} on a plain ground, soft side light, 1:1`)}">${mp.svg}<p data-part="name">${esc(k ? s : maker ?? title)}</p><p data-part="fact">${esc(k ? title : maker ? title : details[0] ?? '')}</p><figcaption class="lt-visually-hidden">${esc(k ? `${title}, ${s}` : title)}</figcaption></figure></div>`).join('');
+  const sc = sceneParts(sceneFor(title, ctx) && [motif, ...ctx.scene.filter((n) => n !== motif)].slice(0, 3));
+  const stage = shots.map((s, k) => `<div data-shot="s${k}"${k ? ' hidden' : ''}><figure class="lt-art"${tones[k] ? ` data-tone="${tones[k]}"` : ''}${k === 0 && sc.attr ? sc.attr : mp.attr} data-ratio="1/1" data-shot="${esc(`A photograph of the ${k ? `${s} ` : ''}${title.toLowerCase()} on a plain ground, soft side light, 1:1`)}">${k === 0 && sc.svg ? sc.svg : mp.svg}<p data-part="name">${esc(k ? s : maker ?? title)}</p><p data-part="fact">${esc(k ? title : maker ? title : details[0] ?? '')}</p><figcaption class="lt-visually-hidden">${esc(k ? `${title}, ${s}` : title)}</figcaption></figure></div>`).join('');
   const thumbs = shots.length > 1 ? `<div class="sp-thumbs" role="group" aria-label="Choose a view" data-thumbs data-count="${shots.length}">${shots.map((s, k) => `<button type="button" aria-pressed="${k === 0}" data-shot="s${k}"><span class="sp-t lt-art"${tones[k] ? ` data-tone="${tones[k]}"` : ''}${mp.attr} data-ratio="1/1" aria-hidden="true">${mp.svg}</span><span class="lt-visually-hidden">${esc(k ? s : title)}</span></button>`).join('')}</div>` : '';
   const opt = options.map((o, k) => `<fieldset class="sp-field"><legend>${esc(o.label)}</legend><div class="sp-chips">${o.values.map((v, j) => `<label><input type="radio" name="opt${k}" value="${esc(v)}"${j === 0 ? ' checked' : ''}><span>${esc(v)}</span></label>`).join('')}</div></fieldset>`).join('\n          ');
   const acc = [details.length ? ['Details', details.join('. ') + '.'] : null, delivery.length ? ['Delivery and returns', delivery.join('. ') + '.'] : null].filter(Boolean);
@@ -448,7 +450,8 @@ function article(ctx) {
   ctx.todo.push('the article itself: the drafted page has its headline, byline line and the shape of a long read, but no paragraphs (none are invented)');
   const author = facts.people[0]?.name ?? null;
   if (!author) ctx.todo.push('who wrote it');
-  const m = motifParts(motifFor(`${about ?? ''} ${facts.kind ?? ''}`, ctx));
+  const sc = sceneFor(`${about ?? ''} ${facts.kind ?? ''}`, ctx);
+  const m = sc ? sceneParts(sc) : motifParts(motifFor(`${about ?? ''} ${facts.kind ?? ''}`, ctx));
   const body = `${navBar({ product: name, links: [], action: { label: 'Subscribe', href: '/subscribe' }, facts })}
 <main id="main" data-scroll>
   <article class="lt-article" aria-labelledby="ar-h">

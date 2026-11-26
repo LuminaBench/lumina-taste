@@ -17,7 +17,7 @@ import { planRhythm, orderSections, rhythmStrip, checkRhythm, STRIP_KEY, PROOF, 
 import { extractFacts, figuresFrom, heroCopy, askFor, openingHours } from '../engine/compose/words.mjs';
 import { boldIdea, colourName } from '../engine/compose/idea.mjs';
 import { brandFrom } from '../engine/compose/brand.mjs';
-import { renderBand, navBar, footer as footerBar, heroPicture, pictureBand, pinnedSteps, sideScroll, motifFor, motifParts, isSoftware, itemsFrom } from '../engine/compose/bands.mjs';
+import { renderBand, navBar, footer as footerBar, heroPicture, pictureBand, pinnedSteps, sideScroll, motifFor, motifParts, sceneFor, sceneParts, isSoftware, itemsFrom } from '../engine/compose/bands.mjs';
 import { splitMain, joinMain, idOfBlock, applyBeat, applyHeroCopy, heroIdeaPanel, setHeroVisual, setFacts, applyMediaIdea, applyClose, applyHours, ideaComment, esc } from '../engine/compose/draft.mjs';
 import { pageModel, appFlow } from '../engine/compose/model.mjs';
 import { PAGES } from '../engine/compose/pages.mjs';
@@ -405,10 +405,15 @@ function writeComposed(dir, run) {
   if (!(idea.place === 'hero-visual' && idea.figure) && /<div data-part="(?:frame|visual)"/.test(heroHtml)) heroHtml = setHeroVisual(heroHtml, heroPicture(ctx));
   else if (idea.place === 'hero-visual' && idea.figure) {
     // The idea's panel carries the subject's drawing too, behind the figure.
-    const m = motifParts(motifFor(`${facts.kind ?? ''} ${facts.offers.join(' ')}`, ctx), { small: true });
-    heroHtml = heroHtml.replace(/<figure class="lt-art"([^>]*)>/, (x, a) => `<figure class="lt-art"${a}${m.attr}>${m.svg}`);
+    // The idea's panel carries the page's one scene behind the figure (a figure panel gives it less height);
+    // software keeps a single small drawing.
+    const subject = `${facts.kind ?? ''} ${facts.offers.join(' ')}`;
+    const sc = isSoftware(ctx) ? null : sceneFor(subject, ctx);
+    const m = sc ? sceneParts(sc) : motifParts(motifFor(subject, ctx), { small: true });
+    // Above a figure set this large the scene keeps to the top third, clear of the number.
+    heroHtml = heroHtml.replace(/<figure class="lt-art"([^>]*)>/, (x, a) => `<figure class="lt-art"${a}${m.attr}${sc ? ' style="--scene-h: 24%"' : ''}>${m.svg}`);
   }
-  ctx.heroMotif = /data-motif="([a-z]+)"/.exec(heroHtml)?.[1] ?? null;
+  ctx.heroMotif = /data-motif="([a-z]+)"/.exec(heroHtml)?.[1] ?? /data-scene="([a-z]+)/.exec(heroHtml)?.[1] ?? null;
   bands.push({ id: heroSec.id, html: heroHtml, slug: 'top', label: 'Top' });
   // The close repeats the hero's action. Software with no word on price says "Sign up", not "Start free".
   ctx.action = hero.action ?? (!isSoftware(ctx) ? 'Get in touch' : /^start free$/i.test(sampleAction ?? '') && !/\b(free|trial)\b/i.test(brief) ? 'Sign up' : sampleAction);

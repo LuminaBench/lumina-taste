@@ -8,7 +8,7 @@
 // Pure functions, no I/O: compose.mjs passes in the facts and a reader for the kit's snippets.
 import { esc, figureHtml, figureStyle, keepHyphens, setFacts, applyMediaIdea } from './draft.mjs';
 import { imperative } from './words.mjs';
-import { rankMotifs, motifSvg } from '../../scripts/lib/image-motifs.mjs';
+import { rankMotifs, motifSvg, pickScene, sceneSvg } from '../../scripts/lib/image-motifs.mjs';
 
 const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 /** The last two words of a short heading stay together, so it never ends on one word alone. */
@@ -44,6 +44,22 @@ export function motifFor(text, ctx, avoid = null, { item = false } = {}) {
   if (pick) used.add(pick);
   return pick;
 }
+/**
+ * The page's one scene: two or three of the subject's own drawings on one ground, for the first screen's art
+ * panel of a page that is not about software. Its drawings count as used, so the motifs further down the page
+ * are others. One per page (ctx.scene remembers it); null when the subject has no drawing.
+ */
+export function sceneFor(text, ctx) {
+  if (ctx.scene) return null;
+  const plain = String(text ?? '').replace(/\b(home ?page|web ?site|landing page|phone|tel|tool|tools)\b/gi, ' ').replace(/\d[\d\s]{5,}/g, ' ').replace(/\b(\w+?)ves\b/g, '$1f').replace(/\b(\w{4,})s\b/g, '$1');
+  const names = pickScene(plain) ?? pickScene(`${plain} ${ctx.domainWords ?? ''}`);
+  if (!names?.length) return null;
+  ctx.scene = names;
+  for (const n of names) (ctx.usedMotifs ??= new Set()).add(n);
+  return names;
+}
+/** The attributes and first child that put a scene in an art panel. */
+export const sceneParts = (names) => (names?.length ? { attr: ` data-scene="${names.join(' ')}"`, svg: sceneSvg(names) } : { attr: '', svg: '' });
 /** The attributes and first child that put a motif in an art panel. */
 export const motifParts = (name, { small = false } = {}) => (name ? { attr: ` data-motif="${name}"`, svg: small ? motifSvg(name).replace('<svg data-part="motif"', '<svg data-part="motif" style="height: 40%; top: 8%"') : motifSvg(name) } : { attr: '', svg: '' });
 
@@ -124,7 +140,9 @@ export function deviceFigure(ctx, opts = {}) {
 /** The first screen's picture when the bold idea is not there: the product for software, else the subject's motif. */
 export function heroPicture(ctx) {
   if (isSoftware(ctx)) return deviceFigure(ctx);
-  const m = motifParts(motifFor(`${ctx.facts.kind ?? ''} ${ctx.facts.offers.join(' ')}`, ctx));
+  const subject = `${ctx.facts.kind ?? ''} ${ctx.facts.offers.join(' ')}`;
+  const sc = sceneFor(subject, ctx);
+  const m = sc ? sceneParts(sc) : motifParts(motifFor(subject, ctx));
   const name = ctx.product ?? cap(ctx.facts.kind ?? '');
   const fact = [ctx.facts.kind && ctx.product ? cap(ctx.facts.kind) : null, ctx.facts.place].filter(Boolean).join(' · ');
   return `<figure class="lt-art"${m.attr} data-tone="dark" data-frame data-ratio="5/4" data-shot="${esc(`A photograph of ${ctx.facts.kind ? `the ${ctx.facts.kind}` : 'the place'}${ctx.facts.place ? ` in ${ctx.facts.place}` : ''}, real light, 5:4`)}">

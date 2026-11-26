@@ -132,8 +132,10 @@ test('the brief\'s own facts fill each page: plans, address, product, basket, se
     // Contact: the address, phone, email and hours as written.
     const contact = page('contact').html;
     for (const x of ['4 King Street', 'M2 4LQ', 'tel:01614960322', 'mailto:hello@harrowfinch.co.uk', '9:00 to 17:30']) assert.ok(contact.includes(x), x);
+    assert.equal((contact.match(/data-scene="/g) ?? []).length, 1, 'one scene, in the first screen');
     // A product in a shop: its maker, name, price on the button, options and plain facts.
     const store = page('store').html;
+    assert.match(store, /<div data-shot="s0"><figure class="lt-art"[^>]*data-scene="cup /, 'the first picture is a scene led by the thing itself');
     for (const x of ['Large stoneware mug', 'Tidewater Pottery', 'Add to bag · £32', 'Sea green', 'Slate', 'Dishwasher safe', 'Free UK delivery over £50', 'data-view="sold-out"']) assert.ok(store.includes(x), x);
     // Checkout: the basket's lines, the total worked out from them, the delivery choices.
     const co = page('checkout').html;
