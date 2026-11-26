@@ -8,11 +8,135 @@
 // Pure functions, no I/O: compose.mjs passes in the facts and a reader for the kit's snippets.
 import { esc, figureHtml, figureStyle, keepHyphens, setFacts, applyMediaIdea } from './draft.mjs';
 import { imperative } from './words.mjs';
+import { rankMotifs, motifSvg } from '../../scripts/lib/image-motifs.mjs';
 
 const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
+/** The last two words of a short heading stay together, so it never ends on one word alone. */
+const tie = (html) => String(html).replace(/ ([^ <>]+)$/, '&nbsp;$1');
 const plainPrice = (v) => String(v).replace(/\s+(a|per)\s+.*/, '');
 const ARROW = '<svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 const DAYS = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+/**
+ * The subject's own drawing for a panel, from the art panel's motif table: the best match for the thing's
+ * name (and the business's kind), never the same as the panel before it. Null when nothing fits.
+ */
+export function motifFor(text, ctx, avoid = null) {
+  // The page's own words, not the request's: "home page", "website", phone numbers and "tool" in "invoicing
+  // tool" would otherwise draw a house, a phone and a spanner. Plurals are read as their singular (loaves → loaf).
+  const plain = (t) => String(t ?? '').replace(/\b(home ?page|web ?site|landing page|page|site|phone|tel|tool|tools)\b/gi, ' ').replace(/\d[\d\s]{5,}/g, ' ').replace(/\b(\w+?)ves\b/g, '$1f').replace(/\b(\w{4,})s\b/g, '$1');
+  const subject = `${ctx.facts.kind ?? ''} ${ctx.facts.offers.join(' ')} ${ctx.facts.claims.join(' ')} ${ctx.facts.prices.map((p) => p.what ?? '').join(' ')}`;
+  // Only drawings of the subject's own world: a step's words pick among them ("quote" → the document), but
+  // never bring in another ("start date" is not a startup's phone).
+  const world = rankMotifs(plain(subject));
+  const own = rankMotifs(plain(text));
+  const ranked = world.length ? [...own.filter((m) => world.includes(m)), ...world] : own;
+  return ranked.find((m) => m !== avoid) ?? null;
+}
+/** The attributes and first child that put a motif in an art panel. */
+export const motifParts = (name, { small = false } = {}) => (name ? { attr: ` data-motif="${name}"`, svg: small ? motifSvg(name).replace('<svg data-part="motif"', '<svg data-part="motif" style="height: 40%; top: 8%"') : motifSvg(name) } : { attr: '', svg: '' });
+
+/** Is the brief about software (so its picture is the product working on a screen)? */
+export const isSoftware = (ctx) => ['landing', 'dev-landing'].includes(ctx.typeId);
+const wantsPhone = (ctx) => /\b(app|mobile|phone|iphone|android)\b/i.test(ctx.facts.brief ?? '');
+
+/** The product's sections, named from the brief's own nouns: "add a client, send the invoice" → Clients, Invoices. */
+function screenNav(ctx) {
+  const nouns = [];
+  for (const s of [...ctx.facts.steps, ...ctx.facts.claims]) {
+    const w = s.replace(/\b(on|in|within|for|by|with)\b.*$/, '').trim().split(/\s+/).pop()?.toLowerCase();
+    if (!w || /^(paid|done|it|them|up|out|in)$/.test(w) || w.length < 4) continue;
+    const plural = /s$/.test(w) ? w : /(ch|sh|x)$/.test(w) ? `${w}es` : `${w}s`;
+    const label = cap(plural);
+    if (!nouns.includes(label)) nouns.push(label);
+  }
+  return nouns.slice(0, 4);
+}
+const BADGE = ['positive', 'accent', ''];
+/**
+ * A live kit screen of the product, from the brief's own words and figures: its name, the sections its steps
+ * name, the figures it states, the steps as the work in progress and the one action. Nothing invented: no
+ * customers, no amounts. Drawn as `data-app="desktop"` (or "phone") inside a device frame, inert.
+ */
+export function productScreen(ctx, { kind = null, current = 0, stepsOnly = false } = {}) {
+  const { facts, product } = ctx;
+  const phone = kind ? kind === 'phone' : wantsPhone(ctx);
+  const nav = screenNav(ctx);
+  const page = nav[Math.min(current, nav.length - 1)] ?? cap(facts.kind ?? 'Overview');
+  const steps = facts.steps.length ? facts.steps : facts.claims.map((c) => imperative(c));
+  const action = steps[current] ? cap(steps[current]) : ctx.action ?? 'Start';
+  const figs = ctx.figures.slice(0, 3);
+  const rows = steps.slice(0, 4).map((st, k) => ({ name: cap(st), state: k < current ? 'Done' : k === current ? 'Now' : 'Next', tone: k < current ? 'positive' : k === current ? 'accent' : '' }));
+  const badge = (r) => `<span class="lt-badge"${r.tone ? ` data-tone="${r.tone}"` : ''}>${esc(r.state)}</span>`;
+  const label = `${product ?? 'The product'}${page ? `, ${page.toLowerCase()}` : ''}: ${rows.map((r) => `${r.name} (${r.state.toLowerCase()})`).join(', ') || action}`;
+  if (phone) {
+    const big = figs[0];
+    return { kind: 'phone', label, html: `<div data-app="phone" inert>
+          <p data-a="status"><span>9:41</span></p>
+          <div data-a="head"><p data-a="title">${esc(page)}</p></div>
+          <div data-a="body">
+            ${big && !stepsOnly ? `<div data-a="hero"><p data-a="label">${esc(cap(big.label))}</p><p data-a="big">${figureHtml(big.value)}</p></div>` : ''}
+            ${rows.length ? `<ul data-a="list">${rows.map((r, k) => `<li${k === current ? ' data-mark' : ''}><span><b>${esc(r.name)}</b><small>Step ${k + 1}</small></span><span>${badge(r)}</span></li>`).join('')}</ul>` : ''}
+          </div>
+          <div data-a="cta"><span class="lt-btn" data-variant="primary"><span data-part="label">${esc(action)}</span></span></div>
+          ${nav.length >= 2 ? `<nav class="lt-bottom-nav" aria-label="Sections">${nav.slice(0, 4).map((n, k) => `<a${k === Math.min(current, nav.length - 1) ? ' aria-current="page"' : ''}><span>${esc(n)}</span></a>`).join('')}</nav>` : ''}
+        </div>` };
+  }
+  return { kind: 'laptop', label, html: `<div data-app="desktop" inert>
+          <aside data-a="side">
+            <p data-a="brand">${esc(product ?? 'Overview')}</p>
+            ${(nav.length ? nav : ['Overview']).map((n, k) => `<p data-a="nav"${k === Math.min(current, nav.length - 1) ? ' aria-current="page"' : ''}>${esc(n)}</p>`).join('\n            ')}
+          </aside>
+          <div data-a="main">
+            <div data-a="top">
+              <div><p data-a="h">${esc(page)}</p><p data-a="sub">${esc(cap(facts.kind ?? product ?? ''))}</p></div>
+              <span class="lt-btn" data-variant="primary"><span data-part="label">${esc(action)}</span></span>
+            </div>
+            ${figs.length ? `<div data-a="kpis">${figs.map((f) => `<p data-a="kpi"><span>${esc(cap(f.label))}</span><b>${esc(f.value)}</b></p>`).join('')}</div>` : ''}
+            ${rows.length ? `<table data-a="table"><thead><tr><th>Step</th><th>What</th><th>Status</th></tr></thead><tbody>${rows.map((r, k) => `<tr${k === current ? ' data-mark' : ''}><td>${k + 1}</td><td>${esc(r.name)}</td><td>${badge(r)}</td></tr>`).join('')}</tbody></table>` : ''}
+            ${!stepsOnly && facts.claims.length ? `<table data-a="table"><thead><tr><th>${esc(product ?? 'It')} does</th><th>Status</th></tr></thead><tbody>${facts.claims.slice(0, 4).map((c) => `<tr><td>${esc(cap(c))}</td><td><span class="lt-badge" data-tone="positive">On</span></td></tr>`).join('')}</tbody></table>` : ''}
+          </div>
+        </div>` };
+}
+/** The product screen inside a device frame. */
+export function deviceFigure(ctx, opts = {}) {
+  const sc = productScreen(ctx, opts);
+  return `<figure class="lt-device" data-kind="${sc.kind}">
+      <div data-part="screen">
+        ${sc.html}
+      </div>
+      <figcaption class="lt-visually-hidden">${esc(sc.label)}</figcaption>
+    </figure>`;
+}
+
+/** The first screen's picture when the bold idea is not there: the product for software, else the subject's motif. */
+export function heroPicture(ctx) {
+  if (isSoftware(ctx)) return deviceFigure(ctx);
+  const m = motifParts(motifFor(`${ctx.facts.kind ?? ''} ${ctx.facts.offers.join(' ')}`, ctx));
+  const name = ctx.product ?? cap(ctx.facts.kind ?? '');
+  const fact = [ctx.facts.kind && ctx.product ? cap(ctx.facts.kind) : null, ctx.facts.place].filter(Boolean).join(' · ');
+  return `<figure class="lt-art"${m.attr} data-tone="dark" data-frame data-ratio="5/4" data-shot="${esc(`A photograph of ${ctx.facts.kind ? `the ${ctx.facts.kind}` : 'the place'}${ctx.facts.place ? ` in ${ctx.facts.place}` : ''}, real light, 5:4`)}">
+          ${m.svg}<p data-part="name">${keepHyphens(esc(name))}</p>${fact ? `<p data-part="fact">${esc(fact)}</p>` : ''}
+          <figcaption class="lt-visually-hidden">${esc(name)}</figcaption>
+        </figure>`;
+}
+
+/** A thin brief still gets one picture: the subject's drawing large, with its name and where it is. */
+export function pictureBand(ctx) {
+  // The head noun of the brief's main count names the thing ("food parcels" → a parcel), else its kind.
+  const head = (ctx.facts.counts[0]?.what ?? '').split(' ').pop();
+  // A different drawing from the first screen's where the subject has one; else the same one on another ground.
+  const m = motifParts(motifFor(`${head} ${ctx.facts.kind ?? ''}`, ctx, ctx.heroMotif) ?? ctx.heroMotif, { small: true });
+  if (!m.attr) return null;
+  const name = ctx.facts.kind ? cap(ctx.facts.kind) : ctx.product;
+  return { id: 'media-band', slug: 'picture', label: name ?? 'Picture', html: `<section class="lt-section" aria-labelledby="h-picture">
+  <header><h2 id="h-picture">${keepHyphens(esc(`${name ?? ''}${ctx.facts.place ? ` in ${ctx.facts.place}` : ''}`))}</h2></header>
+  <figure class="lt-art"${m.attr} data-pattern="floor" data-ratio="16/9" data-zoom data-shot="${esc(`A wide photograph of ${ctx.product ?? 'the place'} at work${ctx.facts.place ? ` in ${ctx.facts.place}` : ''}, 16:9`)}">
+    ${m.svg}<p data-part="name">${esc(ctx.product ?? name ?? '')}</p>${ctx.facts.place ? `<p data-part="fact">${esc(ctx.facts.place)}</p>` : ''}
+    <figcaption class="lt-visually-hidden">${esc(`${ctx.product ?? name}${ctx.facts.place ? `, ${ctx.facts.place}` : ''}`)}</figcaption>
+  </figure>
+</section>` };
+}
 
 /** What the brief sells or does, each with its price (or "Free", or a fixed-price quote) and how long it takes. */
 export function itemsFrom(facts) {
@@ -98,13 +222,31 @@ const RENDER = {
   'media-band': (ctx) => media(ctx),
 };
 
+/** An art panel for one thing: its drawing, its price set large (or its name), one fact. */
+function thingPanel(it, ctx, tone, motif, ratio = null) {
+  // Beside a price set large the drawing is smaller and stays in its corner, clear of the figure.
+  const m = motifParts(motif, { small: !!it.price });
+  return `<figure class="lt-art"${tone}${m.attr}${it.price ? ' data-variant="figure"' : ''}${ratio ? ` data-ratio="${ratio}"` : ''} data-shot="${esc(`A photograph of the ${it.name}${ctx.facts.place ? ` in ${ctx.facts.place}` : ''}, same light and ratio as the others, 4:5`)}">${m.svg}${it.price ? `${it.from ? '<p data-part="index">From</p>' : ''}<p data-part="figure"${figureStyle(it.price)}>${esc(it.price)}</p>` : `<p data-part="name">${keepHyphens(esc(cap(it.name)))}</p>`}${it.meta ? `<p data-part="fact">${esc(it.meta)}</p>` : ''}<figcaption class="lt-visually-hidden">${esc(`${cap(it.name)}${it.price ? `, ${it.from ? 'from ' : ''}${it.price}` : ''}`)}</figcaption></figure>`;
+}
+/** Each thing's drawing, never the same as its neighbour's. */
+function motifsFor(items, ctx) {
+  const out = [];
+  for (const it of items) {
+    const prev = out[out.length - 1] ?? null;
+    // A drawing that fits the thing, different from its neighbour's; none rather than one that does not fit.
+    const m = motifFor(it.name, ctx, prev);
+    out.push(m);
+  }
+  return out;
+}
 function offers(ctx) {
   const items = itemsFrom(ctx.facts);
   if (items.length < 2) return null;
-  const tones = ['', ' data-tone="accent"', ' data-tone="ink"', ''];
+  const tones = ['', ' data-tone="accent"', ' data-tone="dark"', ''];
+  const motifs = motifsFor(items.slice(0, 4), ctx);
   const li = items.slice(0, 4).map((it, k) => `    <li><article>
-      <figure class="lt-art"${tones[k]}${it.price ? ' data-variant="figure"' : ''} data-shot="${esc(`A photograph of the ${it.name}${ctx.facts.place ? ` in ${ctx.facts.place}` : ''}, same light and ratio as the others, 4:5`)}">${it.price ? `${it.from ? '<p data-part="index">From</p>' : ''}<p data-part="figure"${figureStyle(it.price)}>${esc(it.price)}</p>` : `<p data-part="name">${keepHyphens(esc(cap(it.name)))}</p>`}${it.meta ? `<p data-part="fact">${esc(it.meta)}</p>` : ''}<figcaption class="lt-visually-hidden">${esc(`${cap(it.name)}${it.price ? `, ${it.from ? 'from ' : ''}${it.price}` : ''}`)}</figcaption></figure>
-      <h3>${keepHyphens(esc(cap(it.name)))}</h3>${it.per ? `\n      <p>${esc(cap(it.per))}</p>` : ''}
+      ${thingPanel(it, ctx, tones[k], motifs[k])}
+      <h3>${tie(keepHyphens(esc(cap(it.name))))}</h3>${it.per ? `\n      <p>${esc(cap(it.per))}</p>` : ''}
     </article></li>`).join('\n');
   return { slug: 'range', label: 'Prices', html: `<section class="lt-offers" aria-labelledby="h-range">
   <header><h2 id="h-range">${keepHyphens(esc(listName(items.slice(0, 4)) ?? 'What it costs'))}</h2></header>
@@ -114,9 +256,29 @@ ${li}
 </section>` };
 }
 
-function tiles(ctx) {
+/** Five or more things people browse: a sideways rail of panels (a moment: it pins on wide screens). */
+export function sideScroll(ctx) {
   const items = itemsFrom(ctx.facts);
-  if (items.length < 2) return null;
+  if (items.length < 5) return null;
+  const tones = ['', ' data-tone="accent"', ' data-tone="dark"'];
+  const motifs = motifsFor(items, ctx);
+  return { id: 'side-scroll', slug: 'range', label: 'Prices', html: `<section class="lt-side-scroll" data-lt="side-scroll" aria-labelledby="h-range">
+  <div data-part="pin">
+    <header><h2 id="h-range">${keepHyphens(esc(listName(items) ?? 'What it costs'))}</h2></header>
+    <ul data-part="track" tabindex="0" aria-label="${esc(`${items.length} things, scroll sideways`)}">
+${items.map((it, k) => `      <li>${thingPanel(it, ctx, tones[k % 3], motifs[k], '4/5')}<p data-part="caption"><b>${esc(cap(it.name))}</b>${it.meta ? `<span>${esc(it.meta)}</span>` : ''}</p></li>`).join('\n')}
+    </ul>
+    <div data-part="progress" aria-hidden="true"><span></span></div>
+  </div>
+</section>` };
+}
+
+function tiles(ctx) {
+  // Tiles carry a price each; things without one are named in a line under them, not left as empty tiles.
+  const all = itemsFrom(ctx.facts);
+  const items = all.filter((i) => i.price);
+  const loose = all.filter((i) => !i.price);
+  if (items.length < 2) return all.length >= 2 ? offers(ctx) : null;
   const n = items.length;
   const art = items.map((it, k) => {
     // Spans that fill whole rows of three: 4 → wide, one, one, wide; 5 → wide then four; 2, 3 and 6 sit evenly.
@@ -130,13 +292,56 @@ function tiles(ctx) {
   <header><h2 id="h-prices">${keepHyphens(esc(listName(items) ?? 'What it costs'))}</h2></header>
   <div class="lt-bento" aria-label="What it costs">
 ${art}
-  </div>
+  </div>${loose.length ? `\n  <p class="lt-prose">${esc(`Also: ${loose.map((i, k) => (k ? i.name : cap(i.name))).join(' and ')}${loose[0].meta ? `, on a ${loose[0].meta.toLowerCase()}` : ''}.`)}</p>` : ''}
+</section>` };
+}
+
+/** Steps for a product: the same device as the first screen, its screen moving on with each step (a moment: it pins). */
+export function pinnedSteps(ctx) {
+  const st = ctx.facts.steps;
+  if (st.length < 3 || !isSoftware(ctx)) return null;
+  const li = st.slice(0, 4).map((step, k) => `    <li${k === 0 ? ' data-active' : ''}>
+      <div data-part="text"><h3>${keepHyphens(esc(cap(step)))}</h3></div>
+      <figure data-part="visual">
+        ${deviceFigure(ctx, { current: k, stepsOnly: true }).replace(/^<figure class="lt-device"([^>]*)>/, '<div class="lt-device"$1>').replace(/<figcaption[\s\S]*?<\/figcaption>\s*<\/figure>$/, '</div>')}
+        <figcaption class="lt-visually-hidden">${esc(`${ctx.product ?? 'The product'}, step ${k + 1}: ${step}`)}</figcaption>
+      </figure>
+    </li>`).join('\n');
+  return { id: 'sticky-story', slug: 'how', label: 'How it works', html: `<section class="lt-story" data-lt="sticky-story" aria-labelledby="h-how" style="--steps: ${Math.min(st.length, 4)}">
+  <header><h2 id="h-how">${esc(`${['', '', 'Two', 'Three', 'Four'][Math.min(st.length, 4)]} steps`)}${ctx.product ? ` with ${esc(ctx.product)}` : ''}</h2></header>
+  <ol data-part="steps">
+${li}
+  </ol>
+</section>` };
+}
+
+/** Steps for a service: one panel each, with the step's own drawing and the fact it carries ("Free", "5 days"). */
+function stepPanels(ctx) {
+  const st = ctx.facts.steps.slice(0, 4);
+  const tones = ['', ' data-tone="accent"', ' data-tone="dark"', ''];
+  const out = [];
+  const li = st.map((step, k) => {
+    const m = motifFor(step, ctx, out[k - 1] ?? null); out.push(m);
+    const mp = motifParts(m);
+    const fact = /\bfree\b/i.test(step) ? 'Free' : /\b(?:within|in)\s+(\d+\s+\w+)/i.exec(step)?.[1] ?? null;
+    return `    <li><article>
+      <figure class="lt-art"${tones[k]}${mp.attr}${fact ? ' data-variant="figure"' : ''} data-shot="${esc(`A photograph of ${step}, same light and ratio as the others, 4:5`)}">${mp.svg}${fact ? `<p data-part="figure"${figureStyle(fact)}>${figureHtml(cap(fact))}</p>` : ''}<figcaption class="lt-visually-hidden">${esc(`Step ${k + 1}: ${step}`)}</figcaption></figure>
+      <h3>${tie(keepHyphens(esc(cap(step.replace(/^(a|an|the)\s+/i, '')))))}</h3>
+    </article></li>`;
+  }).join('\n');
+  return { id: 'offer-cards', slug: 'how', label: 'How it works', html: `<section class="lt-offers" aria-labelledby="h-how">
+  <header><h2 id="h-how">${esc(`${['', '', 'Two', 'Three', 'Four'][st.length]} steps`)}${ctx.product ? ` with ${esc(ctx.product)}` : ''}</h2></header>
+  <ul>
+${li}
+  </ul>
 </section>` };
 }
 
 function steps(ctx) {
   const st = ctx.facts.steps;
   if (st.length < 3) return null;
+  // A service's steps are pictures too: a panel each. (Software gets its screen, as a pinned scene or rows.)
+  if (!isSoftware(ctx)) return stepPanels(ctx);
   const items = st.slice(0, 5).map((s, k) => {
     const m = /\b(\d+)\s+(minutes?|hours?|days?|weeks?)\b/.exec(s);
     return `<li><span data-part="n">${k + 1}</span><h3>${keepHyphens(esc(cap(s)))}</h3></li>`;
@@ -209,7 +414,7 @@ function close(ctx) {
   // A service or a place closes on its action ("Book a first call with Harrow & Finch"); a product on its price.
   const service = ['service-landing', 'venue', 'event', 'about', 'portfolio'].includes(ctx.typeId);
   const other = facts.prices.find((p) => plainPrice(p.value) !== ctx.idea.figure && !String(hero.headline ?? '').includes(plainPrice(p.value)));
-  const heading = said ? cap(said) : service && ctx.action && product ? `${ctx.action} ${/^(give|donate)/i.test(ctx.action) ? 'to' : /^get/i.test(ctx.action) ? 'from' : 'with'} ${product}` : (other ?? price) ? ((p) => `${p.what ? `${cap(p.what.replace(/^fixed[-\s](?:fee|price)\s+/i, ''))}, ` : product ? `${product}, ` : ''}${p.from ? 'from ' : ''}${p.value}`)(other ?? price) : price ? `${price.what ? `${cap(price.what.replace(/^fixed[-\s](?:fee|price)\s+/i, ''))}, ` : product ? `${product}, ` : ''}${price.from ? 'from ' : ''}${price.value}` : ctx.action && product ? `${ctx.action} ${/^(give|donate)/i.test(ctx.action) ? 'to' : /^get/i.test(ctx.action) ? 'from' : 'with'} ${product}` : null;
+  const heading = said ? cap(said) : service && ctx.action && product ? `${ctx.action} ${/^(give|donate)/i.test(ctx.action) ? 'to' : /^get/i.test(ctx.action) ? 'from' : 'with'} ${product}` : (other ?? price) ? ((p) => `${p.what ? `${cap(p.what.replace(/^fixed[-\s](?:fee|price)\s+/i, ''))}, ` : product ? `${product}, ` : ''}${p.from ? 'from ' : ''}${p.value}`)(other ?? price) : price ? `${price.what ? `${cap(price.what.replace(/^fixed[-\s](?:fee|price)\s+/i, ''))}, ` : product ? `${product}, ` : ''}${price.from ? 'from ' : ''}${price.value}` : ctx.action && product ? `${ctx.action} ${/^(give|donate)/i.test(ctx.action) ? 'to' : /^get/i.test(ctx.action) ? 'from' : 'with'} ${product}` : ctx.action ?? null;
   if (!heading) return null;
   // The lede says what happens next when the brief gives the steps; otherwise one true line not yet on screen.
   const lede = facts.steps.length >= 2 ? `${cap(facts.steps.join(', then '))}.` : facts.claims.length ? `${product ?? 'It'} ${facts.claims[0]}.` : hero.lede && !hero.lede.includes(heading) ? hero.lede : null;
@@ -241,6 +446,9 @@ function media(ctx) {
   let html = ctx.snippet('media-band');
   const second = ctx.facts.claims[1];
   html = applyMediaIdea(html, ctx.idea, second ? `${cap(second)}.` : null);
+  // The figure's panel carries the subject's drawing, so the band is a picture, not a number on a slab.
+  const m = motifParts(motifFor(`${ctx.facts.claims.join(' ')} ${ctx.facts.kind ?? ''}`, ctx), { small: true });
+  html = html.replace(/<div class="lt-art"([^>]*)>/, (x, a) => `<div class="lt-art"${a}${m.attr}>${m.svg}`);
   ctx.used.add(ctx.idea.figure);
   html = setFacts(html, ctx.figures.filter((f) => !ctx.used.has(f.value) && !String(ctx.hero.headline ?? '').includes(f.value)), { min: 2 });
   return { slug: 'product', label: 'The product', html: html.replace(/\sid="[^"]*"(?=[^>]*>)/, '').replace(/^<section\b/, '<section').replace(/aria-labelledby="[^"]*"/, 'aria-labelledby="lt-mb-title"') };

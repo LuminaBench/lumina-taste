@@ -214,6 +214,8 @@ export function heroCopy(facts, { typeId, product }) {
   }
   else if (claim) headline = imperative(claim);
   else if (price?.what) headline = `${cap(price.what)} ${price.from ? 'from' : 'for'} ${price.value}`;
+  // Nothing more specific: what it is and where, which is still true ("A dentist in Leeds").
+  if (!headline && kind) headline = `${/^(an?|the)\s/i.test(facts.kind) ? kind : `${/^[aeiou]/i.test(facts.kind) ? 'An' : 'A'} ${facts.kind}`}${facts.place ? ` in ${facts.place}` : ''}`;
   if (headline && headline.split(/\s+/).length > 12) headline = headline.split(/,\s*/)[0];
   const ledeParts = [];
   if (typeId === 'venue' || typeId === 'service-landing' || typeId === 'cause') {
