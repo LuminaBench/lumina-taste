@@ -301,3 +301,8 @@ test('judge: the kit skeleton on a wide first screen is flagged; a chosen compos
   assert.ok(!rulesOf(page([section()], { width: 1440, skeleton: null })).has('taste-kit-skeleton'), 'data-composition-reason');
   assert.ok(!rulesOf(page([section()], { width: 1024, skeleton: { marks: all, kitDefault: true } })).has('taste-kit-skeleton'), 'wide only');
 });
+
+test('judge: a collapsed picture is an error', () => {
+  assert.ok(rulesOf(page([section()], { collapsed: ['figure.lt-device (21×46)'] })).has('taste-collapsed-visual'));
+  assert.ok(!rulesOf(page([section()], { collapsed: [] })).has('taste-collapsed-visual'));
+});

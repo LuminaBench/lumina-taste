@@ -108,6 +108,8 @@ export function direct({ type, domain, profile, sections, uiIds, facts = null, i
     heroWhy = composition.why;
     chrome = chooseChrome({ type, domain, facts: facts ?? {}, hero: composition });
   }
+  // A marketing page with no hero (pricing, a status page) still gets a bar that contrasts with its ground.
+  if (marketing && !chrome) chrome = chooseChrome({ type, domain, facts: facts ?? {}, hero: { id: 'none' } });
 
   // Layouts: walk the sections in order, taking each block's most distinctive layout whose shape differs
   // from the section before it; then repair any pair of neighbours that still share a shape by changing

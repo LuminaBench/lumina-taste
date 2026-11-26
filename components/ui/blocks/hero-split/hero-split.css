@@ -64,7 +64,7 @@
   :scope[data-variant] > [data-part="visual"] > picture > img { width: 100%; height: 100%; object-fit: cover; }
   :scope[data-variant] > [data-part="visual"] > .lt-art { --art-ratio: auto; position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 0; }
   :scope[data-variant] > [data-part="visual"] > .lt-device { width: min(86%, 760px); margin: clamp(24px, 5cqi, 56px); }
-  :scope[data-variant] > [data-part="visual"] > .lt-device[data-kind="phone"] { --device-w: clamp(200px, 24cqi, 300px); width: auto; }
+  :scope[data-variant] > [data-part="visual"] > .lt-device[data-kind="phone"] { --device-w: clamp(200px, 24cqi, 300px); width: min(100%, var(--device-w)); }
   :scope[data-variant] [data-part="cta"] { margin-top: clamp(20px, 3svh, 32px); }
   :scope[data-variant] [data-part="lede"] { max-width: 40ch; }
 

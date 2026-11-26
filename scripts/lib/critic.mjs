@@ -326,8 +326,16 @@ export const MEASURE = (opts = {}) => {
     return { marks, kitDefault };
   })();
 
+  // ---- pictures that collapsed: a device frame, an art panel or a photo drawn a few pixels wide (a width: auto in a centred grid).
+  const collapsed = [...document.querySelectorAll('.lt-device, .lt-art, main img, [data-part="visual"] > figure')].filter((e) => {
+    const r = rectOf(e); if (!(r.width || r.height)) return false;
+    const cs = getComputedStyle(e); if (cs.display === 'none' || cs.visibility === 'hidden') return false;
+    if (e.closest('[hidden], [inert]:not([data-app]), dialog:not([open]), .lt-avatar, [data-part="thumb"], [data-part="icon"]')) return false;
+    return (r.width < 64 && r.height > r.width * 1.2) || (r.width >= 64 && r.height > 0 && r.height < 24 && e.matches('.lt-device, .lt-art'));
+  }).map((e) => `${sel(e)} (${Math.round(rectOf(e).width)}×${Math.round(rectOf(e).height)})`).slice(0, 3);
+
   return {
-    url: location.href, width: vw, height: vh, pageHeight: html.scrollHeight, colour, firstWords, skeleton,
+    url: location.href, width: vw, height: vh, pageHeight: html.scrollHeight, colour, firstWords, skeleton, collapsed,
     hero: !!hero, app, appMarked, sections, looseMoments, motion,
     type: { headline: Math.round(headline), h1: h1 ? Math.round(parseFloat(getComputedStyle(h1).fontSize)) : 0, body: bodySize, ratio: bodySize ? Math.round((headline / bodySize) * 100) / 100 : 0 },
     bars: fixedBottom.map((b) => ({ selector: sel(b), height: Math.round(rectOf(b).height) })),
@@ -419,6 +427,9 @@ export function judgeMeasures(m, { wide = m.width >= 900, limits = LIMITS } = {}
   const screens = Math.max(1, m.pageHeight / m.height);
   const pageWords = m.sections.reduce((n, x) => n + (x.use ? 0 : x.words), 0);
   if (marketing && wide && pageWords / screens > limits.pageWords) add('taste-word-budget', null, `About ${Math.round(pageWords / screens)} words per screen (${pageWords} over ${Math.round(screens * 10) / 10} screens, forms and questions not counted). Pictures carry a page further than paragraphs: aim under ${limits.pageWords}, words as captions.`);
+
+  // 5a. A picture that collapsed to a sliver: the page shows a stray shape where its product should be.
+  if (m.collapsed?.length) add('taste-collapsed-visual', m.collapsed[0].split(' (')[0], `A picture is drawn a few pixels wide (${m.collapsed.join(', ')}): a device frame, art panel or photo with width: auto inside a centred grid or flex box shrinks to nothing. Give it a width (width: min(100%, var(--device-w)) for a phone frame).`, 'error');
 
   // 5b'. The kit's own default first screen, used by habit.
   if (marketing && m.width >= 1200 && m.skeleton && (m.skeleton.kitDefault || m.skeleton.marks.length >= limits.skeletonMarks)) add('taste-kit-skeleton', null, `The first screen is the default skeleton every generated page uses (${m.skeleton.kitDefault ? 'hero-split with a note and two buttons' : m.skeleton.marks.join(', ')}). Choose a composition from the subject: hero-split data-variant product, overlap, edge or bleed; hero-board; hero-cover; hero-mosaic; hero-statement tucked or poster; hero-centered wide (composition.md §5). If this really is the right shape, say why in data-composition-reason on the hero.`);

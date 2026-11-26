@@ -336,7 +336,8 @@ export function heroCopy(facts, { typeId, product }) {
   return {
     action,
     secondary,
-    eyebrow,
+    // A line above that only repeats the headline is a label over a heading: drop it (keep the town if the headline lacks it).
+    eyebrow: headline && facts.kind && headline.toLowerCase().includes(facts.kind.toLowerCase().replace(/^(?:a|an|the)\s+/, '')) ? (facts.place && !headline.includes(facts.place) ? facts.place : null) : eyebrow,
     headline: headline ?? null,
     lede: ledeParts.length ? ledeParts.join(' ') : null,
     note,

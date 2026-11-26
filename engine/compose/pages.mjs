@@ -13,6 +13,9 @@ import { rankMotifs } from '../../scripts/lib/image-motifs.mjs';
 import { cap, icon, field, segmented, iconFor } from './ui.mjs';
 import { APP_PAGES } from './apps.mjs';
 
+// Every page's top bar is ink (paper on a dark page): the top never shares its ground's hue.
+const INK_BAR = { id: 'ink', variant: null, tone: 'dark' };
+
 const brand = (ctx) => ctx.product ?? (ctx.facts.kind ? cap(ctx.facts.kind) : 'Home');
 const tel = (p) => `tel:${String(p).replace(/[^\d+]/g, '')}`;
 const year = () => new Date().getFullYear();
@@ -59,7 +62,7 @@ function pricing(ctx) {
   const lede = [plans.length > 1 ? `${['', 'One', 'Two', 'Three', 'Four', 'Five'][plans.length] ?? plans.length} plans${plans.some((p) => p.free) ? ', one of them free' : ''}.` : one ? `${one.price} a ${one.per ?? 'month'}${one.unit ? ` per ${one.unit}` : ''}${one.annual ? `, or ${one.annual} a year` : ''}.` : null, trial ? `${cap(trial)}.` : null].filter(Boolean).join(' ') || null;
   const navAction = plans.length ? action(plans[featured], featured) : ctx.hero.action ?? 'Sign up';
   const contact = facts.email ? `<a class="bp-link" href="mailto:${esc(facts.email)}">${esc(facts.email)}</a>` : facts.phone ? `<a class="bp-link" href="${tel(facts.phone)}">${esc(facts.phone)}</a>` : null;
-  const body = `${navBar({ product: name, links: [], action: { label: navAction, href: '#start' }, facts })}
+  const body = `${navBar({ product: name, links: [], action: { label: navAction, href: '#start' }, facts, style: INK_BAR })}
   <main id="main">
     <section class="pr-hero bp-container" id="top">
       <h1 class="lt-h1">${keepHyphens(esc(h1))}</h1>
@@ -90,7 +93,7 @@ function contact(ctx) {
   const ways = [facts.phone ? `<div><dt>Phone</dt><dd><a href="${tel(facts.phone)}">${esc(facts.phone)}</a></dd></div>` : '', facts.email ? `<div><dt>Email</dt><dd><a href="mailto:${esc(facts.email)}">${esc(facts.email)}</a></dd></div>` : '', where.length && !visitBand ? `<div><dt>Address</dt><dd>${where.map(esc).join('<br>')}</dd></div>` : ''].join('');
   const lede = [ctx.facts.days ? `Open ${facts.days}${facts.times.find((t) => t.what === 'hours') ? `, ${facts.times.find((t) => t.what === 'hours').value}` : ''}.` : null].filter(Boolean).join(' ') || null;
   const visit = ctx.bands.visit;
-  const body = `${navBar({ product: name, links: visit ? [{ slug: 'visit', label: 'Find us' }] : [], action: { label: 'Send a message', href: '#message' }, facts })}
+  const body = `${navBar({ product: name, links: visit ? [{ slug: 'visit', label: 'Find us' }] : [], action: { label: 'Send a message', href: '#message' }, facts, style: INK_BAR })}
 <main id="main" data-scroll>
 <section class="lt-hero-split" id="top" data-entrance data-rhythm="busy" data-scale="display">
   <div data-part="copy">
@@ -317,7 +320,7 @@ function changelog(ctx) {
   const tags = [...new Set(rel.map((r) => r.tag))];
   const label = { new: 'New', improved: 'Improved', fixed: 'Fixed' };
   const tone = { new: ' data-tone="accent"', improved: ' data-tone="positive"', fixed: '' };
-  const body = `${navBar({ product: name, links: [], action: { label: ctx.hero.action ?? 'Sign up', href: '#main' }, facts })}
+  const body = `${navBar({ product: name, links: [], action: { label: ctx.hero.action ?? 'Sign up', href: '#main' }, facts, style: INK_BAR })}
   <main id="main" class="bp-narrow cl">
     <header class="cl-head">
       <h1 class="lt-h1">${keepHyphens(esc(`What changed in ${name}`))}</h1>
@@ -426,7 +429,7 @@ function notFound(ctx) {
   const name = brand(ctx);
   const m = motifParts(motifFor(`${facts.kind ?? ''} document`, ctx), { small: true });
   const links = ctx.m.records.filter((r) => r.fromBrief).slice(0, 3).map((r) => cap(r.many));
-  const body = `${navBar({ product: name, links: [], action: { label: `Go to ${name}`, href: '/' }, facts })}
+  const body = `${navBar({ product: name, links: [], action: { label: `Go to ${name}`, href: '/' }, facts, style: INK_BAR })}
 <main id="main" class="nf">
   <section class="nf-card" aria-labelledby="nf-h">
     <figure class="lt-art" data-variant="figure" data-tone="dark" data-ratio="16/9"${m.attr} data-shot="none">${m.svg}<p data-part="figure">404</p><figcaption class="lt-visually-hidden">Page not found</figcaption></figure>
@@ -452,7 +455,7 @@ function article(ctx) {
   if (!author) ctx.todo.push('who wrote it');
   const sc = sceneFor(`${about ?? ''} ${facts.kind ?? ''}`, ctx);
   const m = sc ? sceneParts(sc) : motifParts(motifFor(`${about ?? ''} ${facts.kind ?? ''}`, ctx));
-  const body = `${navBar({ product: name, links: [], action: { label: 'Subscribe', href: '/subscribe' }, facts })}
+  const body = `${navBar({ product: name, links: [], action: { label: 'Subscribe', href: '/subscribe' }, facts, style: INK_BAR })}
 <main id="main" data-scroll>
   <article class="lt-article" aria-labelledby="ar-h">
     <header class="ar-head">

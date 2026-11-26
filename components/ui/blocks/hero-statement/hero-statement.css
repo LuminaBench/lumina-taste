@@ -47,7 +47,7 @@
   :scope[data-variant] > [data-part="visual"] > .lt-art > :is([data-part="name"], [data-part="fact"], [data-part="index"]) { display: none; }
   :scope[data-variant] > [data-part="visual"]:has(> .lt-device) { display: grid; place-items: center; }
   :scope[data-variant] > [data-part="visual"] > .lt-device { width: 86%; }
-  :scope[data-variant] > [data-part="visual"] > .lt-device[data-kind="phone"] { --device-w: 72%; width: auto; }
+  :scope[data-variant] > [data-part="visual"] > .lt-device[data-kind="phone"] { --device-w: 72%; width: min(100%, var(--device-w)); }
 
   :scope[data-variant="tucked"] > [data-part="visual"] { float: inline-end; width: clamp(112px, 25cqi, 320px); aspect-ratio: 4 / 5; margin-block: 0.4em 20px; margin-inline-start: clamp(20px, 4.5cqi, 64px); }
   :scope[data-variant="tucked"] > [data-part="visual"]:has(> .lt-device:not([data-kind="phone"])) { aspect-ratio: 4 / 3; width: clamp(160px, 34cqi, 420px); }
