@@ -104,6 +104,8 @@ if (type.id === 'landing' && !forceType) {
     : software ? null
     : occasion || domain?.id === 'events' ? 'event'
     : cause ? 'cause'
+    // A ferry, a bus company or a railway is a place people go from, with times and prices: never a software page.
+    : domain?.id === 'transport' ? 'venue'
     : ['professional', 'trades', 'construction'].includes(domain?.id) || practice ? 'service-landing'
     : domain?.id === 'hospitality' || place ? 'venue'
     : ['commerce', 'beauty'].includes(domain?.id) ? 'brand-landing'

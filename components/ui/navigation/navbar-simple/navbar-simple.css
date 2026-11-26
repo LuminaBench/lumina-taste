@@ -51,7 +51,7 @@
 /* An ink bar on a page that is already dark turns to paper: the bar takes the page's ink as its ground and its
    parts take the page's ground as their ink, so the top of the page keeps its contrast in both modes. */
 [data-mode="dark"] .lt-nav-simple[data-tone="dark"] { --paper: var(--text-primary); --paper-ink: var(--bg-canvas); background: var(--paper); }
-[data-mode="dark"] .lt-nav-simple[data-tone="dark"] > * { --bg-canvas: var(--paper); --bg-surface-1: var(--paper); --bg-surface-2: color-mix(in oklab, var(--paper-ink) 8%, var(--paper)); --text-primary: var(--paper-ink); --text-secondary: color-mix(in oklab, var(--paper-ink) 76%, var(--paper)); --border-hairline: color-mix(in oklab, var(--paper-ink) 14%, var(--paper)); --focus-ring: var(--paper-ink); }
+[data-mode="dark"] .lt-nav-simple[data-tone="dark"] > * { --bg-canvas: var(--paper); --bg-surface-1: var(--paper); --bg-surface-2: color-mix(in oklab, var(--paper-ink) 8%, var(--paper)); --bg-surface-3: color-mix(in oklab, var(--paper-ink) 14%, var(--paper)); --text-primary: var(--paper-ink); --text-secondary: color-mix(in oklab, var(--paper-ink) 76%, var(--paper)); --text-muted: color-mix(in oklab, var(--paper-ink) 72%, var(--paper)); --border-strong: color-mix(in oklab, var(--paper-ink) 42%, var(--paper)); --border-hairline: color-mix(in oklab, var(--paper-ink) 14%, var(--paper)); --focus-ring: var(--paper-ink); }
 
 /* The first section under a floating pill gets the bar's height back as top padding. */
 .lt-nav-simple[data-variant="pill"] + main > :first-child, .lt-nav-simple[data-variant="pill"] + section { padding-top: calc(var(--block-y, calc(var(--section-y) * 0.75)) + 66px); }
