@@ -1,0 +1,183 @@
+// The designer's critic: measured rules (scripts/lib/critic.mjs) on fixtures, speed checks, the review pack
+// and the blind comparison. Run: node --test tests/unit/critic.test.mjs
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { judgeMeasures, judgePerf, LIMITS } from '../../scripts/lib/critic.mjs';
+
+const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
+const node = (args) => spawnSync(process.execPath, args, { cwd: root, encoding: 'utf8' });
+const audit = (fixture, extra = []) => {
+  const out = join(mkdtempSync(join(tmpdir(), 'lt-critic-')), 'r.json');
+  node([join(root, 'scripts/audit-ui.mjs'), join(root, 'tests/fixtures', `${fixture}.html`), '--modes', 'light', '--quiet', '--json', out, ...extra]);
+  const j = JSON.parse(readFileSync(out, 'utf8'));
+  rmSync(dirname(out), { recursive: true, force: true });
+  return { j, rules: new Set(j.report.flatMap((r) => r.findings.map((f) => f.rule))), findings: j.report.flatMap((r) => r.findings) };
+};
+
+// ---------------------------------------------------------------- the judge alone, on made-up measurements
+const section = (o = {}) => ({ selector: 'section', hero: false, words: 40, looks: ['picture'], use: null, block: 'section', tracks: '1', heading: 'top', ground: '#ffffff', tone: null, density: 0.05, moment: null, ...o });
+const page = (sections, o = {}) => ({ width: 1440, height: 900, hero: true, app: false, sections: [section({ hero: true }), ...sections], looseMoments: 0, type: { headline: 72, body: 16, ratio: 4.5 }, bars: [], controls: [], states: { declared: [], missing: [] }, ...o });
+const rulesOf = (m, opts) => new Set(judgeMeasures(m, opts).map((f) => f.rule));
+
+test('judge: a page with a picture in every section and a clear jump passes', () => {
+  assert.deepEqual([...rulesOf(page([section(), section({ block: 'lt-quote', tracks: '0.5|0.5' }), section({ ground: '#101010' })]))], []);
+});
+
+test('judge: words with nothing to look at are flagged; forms, questions and closing lines are not', () => {
+  assert.ok(rulesOf(page([section({ looks: [], words: 60 })])).has('taste-no-visual'));
+  for (const use of ['form', 'questions', 'action', 'strip']) assert.ok(!rulesOf(page([section({ looks: [], use })])).has('taste-no-visual'), use);
+  assert.ok(!rulesOf(page([section({ looks: [], words: LIMITS.noVisualWords - 1 })])).has('taste-no-visual'));
+  // Not on an app, and not judged at phone width.
+  assert.ok(!rulesOf(page([section({ looks: [] })], { app: true })).has('taste-no-visual'));
+  assert.ok(!rulesOf(page([section({ looks: [] })], { width: 390 })).has('taste-no-visual'));
+});
+
+test('judge: the same layout twice on one ground, but not across a change of ground', () => {
+  const twin = section({ block: 'lt-feature-split', tracks: '0.5|0.5' });
+  assert.ok(rulesOf(page([twin, { ...twin }])).has('taste-same-layout'));
+  assert.ok(!rulesOf(page([twin, { ...twin, ground: '#202020' }])).has('taste-same-layout'));
+  // Same columns from different blocks still count when the heading sits in the same place.
+  assert.ok(rulesOf(page([section({ tracks: '0.3|0.3|0.3' }), section({ block: 'other', tracks: '0.3|0.3|0.3' })])).has('taste-same-layout'));
+  // Single-column sections of different blocks do not.
+  assert.ok(!rulesOf(page([section({ block: 'a' }), section({ block: 'b' })])).has('taste-same-layout'));
+});
+
+test('judge: density runs and a page of one density', () => {
+  const dense = section({ density: LIMITS.denseCover + 0.03 });
+  assert.ok(rulesOf(page([dense, dense, dense])).has('taste-density'));
+  assert.ok(!rulesOf(page([dense, dense, section({ density: 0.01 }), dense])).has('taste-density'));
+  const flat = section({ density: 0.04 });
+  assert.ok(rulesOf(page([flat, flat, flat, flat, flat])).has('taste-density'));
+});
+
+test('judge: a timid type jump on a marketing page only', () => {
+  assert.ok(rulesOf(page([section()], { type: { headline: 32, body: 16, ratio: 2 } })).has('taste-type-jump'));
+  assert.ok(!rulesOf(page([section()], { type: { headline: 32, body: 16, ratio: 2 }, hero: false })).has('taste-type-jump'));
+});
+
+test('judge: two scroll moments are a budget, three are too many, two back to back are too close', () => {
+  assert.ok(!rulesOf(page([section({ moment: 'data-zoom' }), section(), section({ moment: 'stack-cards' })])).has('taste-motion-budget'));
+  assert.ok(rulesOf(page([section({ moment: 'data-zoom' }), section(), section({ moment: 'stack-cards' }), section({ moment: 'pinned-scene' })])).has('taste-motion-budget'));
+  assert.ok(rulesOf(page([section({ moment: 'data-zoom' }), section({ moment: 'stack-cards' })])).has('taste-motion-budget'));
+});
+
+test('judge: app touch targets at phone width, and missing states', () => {
+  const app = { width: 390, height: 844, app: true, hero: false, controls: [{ selector: 'button', label: 'Send', w: 32, h: 32, bar: false }] };
+  assert.ok(rulesOf(page([], app)).has('app-touch-target'));
+  assert.ok(!rulesOf(page([], { ...app, controls: [{ selector: 'button', label: 'Send', w: 44, h: 44 }] })).has('app-touch-target'));
+  assert.ok(!rulesOf(page([], { ...app, width: 1440 })).has('app-touch-target'));
+  assert.ok(rulesOf(page([], { ...app, states: { declared: ['loading', 'empty'], missing: ['empty'] } })).has('app-states'));
+});
+
+test('perf judge: lazy LCP is an error (a warning under --strict alone); fonts, scripts, shifts and images', () => {
+  const base = { lcp: { image: true, tag: 'img', loading: 'lazy', fetchpriority: null, selector: 'img', url: 'a.jpg' }, cls: 0, shifts: 0, images: [], bytes: { js: 0, css: 0, font: 0, fonts: 0 } };
+  assert.equal(judgePerf(base).find((f) => f.rule === 'perf-lcp-lazy').severity, 'error');
+  assert.equal(judgePerf(base, { soft: true }).find((f) => f.rule === 'perf-lcp-lazy').severity, 'warning');
+  assert.ok(judgePerf({ ...base, lcp: { ...base.lcp, loading: null } }).some((f) => f.rule === 'perf-lcp-priority'));
+  assert.deepEqual(judgePerf({ ...base, lcp: { ...base.lcp, loading: null, fetchpriority: 'high' } }), []);
+  const heavy = judgePerf({ ...base, lcp: null, cls: 0.2, bytes: { js: 900 * 1024, css: 300 * 1024, font: 400 * 1024, fonts: 8 }, images: [{ selector: 'img', vector: false, sized: false, ratio: null, w: 300, h: 200, nw: 1200, nh: 800, dpr: 1 }] });
+  for (const rule of ['perf-cls', 'perf-js-bytes', 'perf-css-bytes', 'perf-font-bytes', 'perf-img-dimensions', 'perf-img-oversized']) assert.ok(heavy.some((f) => f.rule === rule), rule);
+  // Twice the box is a retina picture, not an oversized one.
+  assert.ok(!judgePerf({ ...base, lcp: null, images: [{ selector: 'img', sized: true, w: 600, h: 400, nw: 1200, nh: 800, dpr: 1 }] }).some((f) => f.rule === 'perf-img-oversized'));
+});
+
+// ---------------------------------------------------------------- the auditor, on fixtures
+test('audit-ui --taste: a section of words with nothing to look at', () => {
+  const { rules } = audit('critic-text-only', ['--taste', '--viewports', 'desktop']);
+  assert.ok(rules.has('taste-no-visual'));
+});
+
+test('audit-ui --taste: the same layout twice', () => {
+  assert.ok(audit('critic-same-layout', ['--taste', '--viewports', 'desktop']).rules.has('taste-same-layout'));
+});
+
+test('audit-ui --taste: a timid type jump', () => {
+  const { rules, findings } = audit('critic-timid-type', ['--taste', '--viewports', 'desktop']);
+  assert.ok(rules.has('taste-type-jump'));
+  assert.match(findings.find((f) => f.rule === 'taste-type-jump').message, /32px over 18px/);
+});
+
+test('audit-ui --taste: too many scroll moments', () => {
+  const { findings } = audit('critic-motion', ['--taste', '--viewports', 'desktop']);
+  const f = findings.find((x) => x.rule === 'taste-motion-budget');
+  assert.ok(f);
+  assert.match(f.message, /4 big scroll moments/);
+});
+
+test('audit-ui --taste on an app at phone width: small targets, a bar without the safe area, missing states', () => {
+  const { rules, findings } = audit('critic-app', ['--taste', '--viewports', 'mobile']);
+  for (const rule of ['app-touch-target', 'app-safe-area', 'app-states']) assert.ok(rules.has(rule), rule);
+  assert.match(findings.find((f) => f.rule === 'app-states').message, /no view for empty, error/);
+});
+
+test('audit-ui --perf: a lazy, unsized, oversized first picture', () => {
+  const { j, findings } = audit('critic-perf', ['--perf', '--viewports', 'desktop']);
+  const lazy = findings.find((f) => f.rule === 'perf-lcp-lazy');
+  assert.ok(lazy && lazy.severity === 'error');
+  for (const rule of ['perf-img-dimensions', 'perf-img-oversized']) assert.ok(findings.some((f) => f.rule === rule), rule);
+  assert.ok(j.report[0].perf.lcp.tag === 'img');
+  // --strict alone runs the same checks as warnings.
+  const strict = audit('critic-perf', ['--strict', '--viewports', 'desktop']);
+  assert.equal(strict.findings.find((f) => f.rule === 'perf-lcp-lazy').severity, 'warning');
+});
+
+test('the default-look fixtures are caught by the new measures too', () => {
+  for (const [f, rule] of [['ai-default-saas', 'taste-no-visual'], ['ai-default-cream', 'taste-no-visual'], ['broadsheet', 'taste-density']]) assert.ok(audit(f, ['--taste', '--viewports', 'desktop']).rules.has(rule), `${f}: ${rule}`);
+});
+
+test('--pending lists a known finding without counting it, and names one that stopped firing', () => {
+  const r = node([join(root, 'scripts/audit-ui.mjs'), join(root, 'tests/fixtures/critic-timid-type.html'), '--taste', '--strict', '--viewports', 'desktop', '--modes', 'light', '--pending', 'fixtures:taste-type-jump,fixtures:taste-no-visual']);
+  assert.match(r.stdout, /~ pending: The largest headline/);
+  assert.match(r.stdout, /pending fixtures:taste-no-visual no longer fires/);
+  assert.doesNotMatch(r.stdout, /taste-type-jump[\s\S]*! The largest/);
+});
+
+// ---------------------------------------------------------------- the review pack and the blind comparison
+test('review-page writes the pictures, the measurements and the checklist', () => {
+  const out = mkdtempSync(join(tmpdir(), 'lt-review-test-'));
+  try {
+    const r = node([join(root, 'scripts/review-page.mjs'), join(root, 'tests/fixtures/critic-text-only.html'), '--out', out, '--slices', '3']);
+    assert.equal(r.status, 0, r.stderr);
+    for (const f of ['first-desktop-light.png', 'first-desktop-dark.png', 'first-mobile-light.png', 'first-mobile-dark.png', 'squint-desktop.png', 'squint-mobile.png', 'slice-desktop-01.png', 'slice-mobile-01.png', 'review.json', 'review.md']) assert.ok(existsSync(join(out, f)), f);
+    const j = JSON.parse(readFileSync(join(out, 'review.json'), 'utf8'));
+    assert.ok(j.sections.length >= 3 && j.type.ratio > 2.5);
+    assert.ok(j.measured.some((f) => f.rule === 'taste-no-visual'));
+    assert.equal(j.squint.desktop.length, 3);
+    assert.ok(j.critic && typeof j.critic.score === 'number');
+    const md = readFileSync(join(out, 'review.md'), 'utf8');
+    for (const q of ['clear in 3 seconds', 'when you squint', 'one bold idea', 'look like a template', 'something to look at', 'type scale jump', 'demanding designer ship']) assert.ok(md.includes(q), q);
+    assert.equal((md.match(/- Answer:/g) ?? []).length, 7);
+  } finally { rmSync(out, { recursive: true, force: true }); }
+});
+
+test('compare-pages letters pages blindly, blocks outside requests, records verdicts into a tally', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lt-compare-test-'));
+  const out = join(dir, 'round-1');
+  try {
+    const r = node([join(root, 'scripts/compare-pages.mjs'), `mine=${join(root, 'tests/fixtures/critic-text-only.html')}`, `theirs=${join(root, 'tests/fixtures/ai-default-saas.html')}`, '--out', out, '--seed', '7']);
+    assert.equal(r.status, 0, r.stderr);
+    for (const f of ['A-first.png', 'A-full.png', 'A-phone.png', 'B-first.png', 'sheet.png', 'sheet.html', 'judge.md', 'round.json', '.key.json']) assert.ok(existsSync(join(out, f)), f);
+    const key = JSON.parse(readFileSync(join(out, '.key.json'), 'utf8'));
+    assert.deepEqual(new Set(Object.values(key).map((k) => k.source)), new Set(['mine', 'theirs']));
+    // The sheet and the rubric never name the sources.
+    for (const f of ['sheet.html', 'judge.md', 'round.json']) assert.doesNotMatch(readFileSync(join(out, f), 'utf8'), /mine|theirs|critic-text-only|ai-default/, f);
+    // The generated page reaches for a stock face: that request is blocked and counted.
+    const round = JSON.parse(readFileSync(join(out, 'round.json'), 'utf8'));
+    const genLetter = Object.keys(key).find((l) => key[l].source === 'theirs');
+    assert.ok(round.blocked[genLetter] >= 1);
+    const oursLetter = Object.keys(key).find((l) => key[l].source === 'mine');
+    assert.equal(node([join(root, 'scripts/compare-pages.mjs'), '--out', out, '--record', `${oursLetter}>${genLetter}`, '--reason', 'x']).status, 2, 'a reason is required');
+    const rec = node([join(root, 'scripts/compare-pages.mjs'), '--out', out, '--record', `${oursLetter}>${genLetter}`, '--reason', 'one picture against three icon cards']);
+    assert.equal(rec.status, 0, rec.stderr);
+    assert.match(rec.stdout, /mine>theirs/);
+    const tally = JSON.parse(readFileSync(join(dir, 'compare-tally.json'), 'utf8'));
+    assert.deepEqual(tally.sources.mine, { wins: 1, losses: 0, ties: 0 });
+    assert.deepEqual(tally.sources.theirs, { wins: 0, losses: 1, ties: 0 });
+    assert.equal(node([join(root, 'scripts/compare-pages.mjs'), '--out', out, '--record', 'A>Z', '--reason', 'a letter that is not there']).status, 2);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});

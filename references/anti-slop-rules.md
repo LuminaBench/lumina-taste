@@ -32,6 +32,7 @@ Treat every rule as a ban unless the user explicitly asks for the banned thing. 
 | --- | --- |
 | ★ Proportional figures in tables, KPIs, timers, prices and axes | `font-variant-numeric: tabular-nums` (`.lt-num`, or automatic inside `table`, `time`, `data`, `output`). |
 | Headline tracking left at 0 at display sizes | Use `--tracking-display` (negative) from the active pairing. |
+| ★ A timid scale: a headline less than 2.5 times the body on a marketing page | `--step-5` or more for the headline; keep the body where it is. The jump is what tells the eye where to start. |
 | More than two type families on a page (plus mono for code) | One pairing from `tokens/typography`. |
 | Body text wider than ~75 characters | `max-width: var(--measure)` (68ch). |
 | ALL CAPS for anything longer than a 3-word eyebrow | Sentence case. Eyebrows use `.lt-eyebrow` with +0.08em tracking. |
@@ -62,6 +63,9 @@ Treat every rule as a ban unless the user explicitly asks for the banned thing. 
 | Footers with 8 link columns of uneven length | 3 to 5 balanced columns, a single legal line, nothing else. |
 | ★ A small uppercase label over every section heading, "01 / SECTION" numbering | Headings that stand alone; a label only where it says something the heading cannot (a date, a place) |
 | ★ Thin rules in every direction: between sections, under every row, around every box | Space, scale and a change of ground; rules only for tables and rows people compare |
+| ★ A section that is only words | Something to look at in every section: the product, a picture, a document, a chart, rows that scan like a table, a figure set at 40px or more. Words are its captions |
+| ★ Two neighbouring sections with the same layout on the same ground (zig-zag feature rows, two card grids) | Change the shape or the ground: a full-bleed picture, a figure, a `data-tone="well"` or `"dark"` band |
+| ★ Dense section after dense section, or one density from top to bottom | Alternate: after a dense section, one picture or one large line with space round it |
 
 ## 6. Motion
 
@@ -72,6 +76,7 @@ Treat every rule as a ban unless the user explicitly asks for the banned thing. 
 | Bouncy overshoot on everything | Spring overshoot only on small indicators (switch thumbs, segmented pills, checkmarks). |
 | Animation that ignores `prefers-reduced-motion` | Every duration token collapses to 1ms under reduced motion. Never hard-code durations. |
 | Scroll-jacking and parallax on content | Native scrolling. A one-time reveal (`scroll-reveal`) at most. |
+| ★ More than two big scroll moments, or two back to back (`data-zoom`, `data-parallax`, pinned scenes, sideways tracks, product reveals, hero video, stack-cards, scroll-statement) | Two at most, where they carry the subject, with a still section between them. The quiet `data-scroll` reveal does not count. |
 | ★ Buttons that change width while loading | Keep the label in the flow (`visibility: hidden`) and overlay the spinner. |
 
 ## 7. Interaction and accessibility
@@ -82,8 +87,24 @@ Treat every rule as a ban unless the user explicitly asks for the banned thing. 
 | ★ Dead controls (buttons that do nothing, `href="#"`) | Every control does something or is visibly disabled with `aria-disabled`. |
 | Hover-only affordances | Everything reachable by keyboard and touch. Tooltips also open on focus. |
 | Click targets smaller than 24×24px | `--control-h-sm` is the floor. Icon buttons get a square hit area. |
+| ★ On a phone, primary controls (the main button, a submit, anything in a bottom or tab bar) under 44×44px | `min-height: 44px` at phone width, or an inset `::before` that grows the hit area to 44px. |
+| ★ A fixed bottom bar that ignores the home indicator | `padding-bottom: calc(<padding> + env(safe-area-inset-bottom))` and `viewport-fit=cover` in the viewport meta. |
+| ★ An app screen that only has its full state | A loading skeleton, an empty state with one action and an error with a way out, each a `data-view` block; declare them in `meta.json` `states` or `<html data-states>`. |
 | Custom controls without roles | Follow the WAI-ARIA pattern named in each component's `catalog.json` entry. |
 | Toasts that steal focus or vanish while hovered | `role="status"`, pause on hover and focus, swipe or Esc to dismiss. |
+
+## 7b. Speed
+
+`node scripts/audit-ui.mjs <page> --perf` checks these (★ all of them); `--strict` runs them as warnings.
+
+| Ban | Do instead |
+| --- | --- |
+| `loading="lazy"` on the largest picture in the first screen | No `loading` attribute and `fetchpriority="high"` on that one picture; lazy for the rest. |
+| Layout shift while loading (over 0.1) | Width and height on every image, space reserved for late content (charts, embeds), stylesheets in the head. |
+| More than 300 KB of fonts, or more than six font files | One pairing, two weights each, a variable font or a subset. Or faces already on the device. |
+| More than 400 KB of JS or 200 KB of CSS (gzipped) | Only the enhancers and parts the page uses. |
+| Images without `width` and `height` | Both attributes at the picture's own size (or a CSS `aspect-ratio`). |
+| A picture more than twice the size of its box | `srcset` with widths and `sizes`, so the phone gets a phone-sized file. |
 
 ## 8. Charts
 
