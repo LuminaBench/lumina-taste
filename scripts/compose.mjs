@@ -17,7 +17,7 @@ import { planRhythm, orderSections, rhythmStrip, checkRhythm, STRIP_KEY, PROOF, 
 import { extractFacts, figuresFrom, heroCopy, askFor, openingHours } from '../engine/compose/words.mjs';
 import { boldIdea, colourName } from '../engine/compose/idea.mjs';
 import { brandFrom } from '../engine/compose/brand.mjs';
-import { renderBand, navBar, footer as footerBar } from '../engine/compose/bands.mjs';
+import { renderBand, navBar, footer as footerBar, heroPicture, pictureBand, pinnedSteps, sideScroll, motifFor, motifParts, isSoftware, itemsFrom } from '../engine/compose/bands.mjs';
 import { splitMain, joinMain, idOfBlock, applyBeat, applyHeroCopy, heroIdeaPanel, setHeroVisual, setFacts, applyMediaIdea, applyClose, applyHours, ideaComment, esc } from '../engine/compose/draft.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -26,6 +26,9 @@ const opt = (name, def) => { const i = args.indexOf(`--${name}`); if (i < 0) ret
 const flag = (name) => { const i = args.indexOf(`--${name}`); if (i < 0) return false; args.splice(i, 1); return true; };
 const asJson = flag('json');
 const writeDraft = flag('write');
+// --images: after --write, search openly licensed photographs for the draft's picture panels (find-images
+// --fill). It downloads, so it is off unless asked for.
+const withImages = flag('images');
 // --type is the page type. A typeface is --typeface (or --font); --palette, --mode and --style set the look.
 const forceTypeRaw = opt('type', null);
 const lookFlags = { palette: opt('palette', null), typography: opt('typeface', null) ?? opt('font', null), mode: opt('mode', null), style: opt('style', null) };
@@ -328,7 +331,7 @@ function retitle(page) {
     out = out.replace(/(<\/head>)/, `${css}\n$1`);
   }
   // The sample's action label, wherever it appears (the bar, the hero, the close), becomes this page's action.
-  const actionLabel = hero.action ?? (/^start free$/i.test(sampleAction ?? '') && !/\b(free|trial)\b/i.test(brief) ? 'Sign up' : null);
+  const actionLabel = hero.action ?? (type.kind === 'marketing' && !['landing', 'dev-landing'].includes(type.id) ? 'Get in touch' : /^start free$/i.test(sampleAction ?? '') && !/\b(free|trial)\b/i.test(brief) ? 'Sign up' : null);
   if (sampleAction && actionLabel) out = out.split(`>${sampleAction}<`).join(`>${esc(actionLabel)}<`);
   if (title) out = out.replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`);
   if (desc) out = out.replace(/<meta name="description" content="[^"]*">/, `<meta name="description" content="${esc(desc.endsWith('.') ? desc : `${desc}.`)}">`);
@@ -344,6 +347,37 @@ function partHtml(id) {
   const f = c?.files.find((x) => x.endsWith('.html'));
   return f ? readFileSync(join(root, f), 'utf8').replace(/<!--[\s\S]*?-->\n?/g, '').trim() : '';
 }
+/** A figure people count (a price, a quantity), not a time of day, a range, a year or a phone number. */
+const COUNTABLE = /^\s*(?:<small>from<\/small>\s*)?[£$€]?\d[\d,]*(?:\.\d+)?(?:%|k)?(?:<small>[^<]*<\/small>)?\s*$/;
+/** Numbers that settle: data-count on every true quantity in a band, started by the number-settle enhancer. */
+function settleFigures(html) {
+  let out = html.replace(/<(dd|p data-part="figure"[^>]*|b data-a="big"|p data-a="big")>([\s\S]*?)<\/(dd|p|b)>/g, (m, open, inner, close) => (COUNTABLE.test(inner) && !/^(19|20)\d\d$/.test(inner.trim()) ? `<${open} data-count>${inner}</${close}>` : m));
+  return out;
+}
+/**
+ * The page's moments (references/motion.md): a pinned scene for a product's three or more steps, a sideways
+ * rail for five or more things, the picture band's zoom, the statement, figures that settle. At most two,
+ * never side by side, never the first screen; the first that fit, in that order.
+ */
+function chooseMoments(ordered, ctx) {
+  const cand = [];
+  ordered.forEach((b, k) => {
+    if (k === 0) return;
+    if (['how-it-works', 'stack-cards', 'sticky-story'].includes(b.id) && isSoftware(ctx) && ctx.facts.steps.length >= 3) cand.push({ at: k, name: 'pinned scene', rank: 0, why: `${ctx.facts.steps.length} steps and a product screen that moves on with each` });
+    if (['offer-cards', 'bento-grid'].includes(b.id) && itemsFrom(ctx.facts).length >= 5) cand.push({ at: k, name: 'side-scroll', rank: 1, why: `${itemsFrom(ctx.facts).length} things to browse` });
+    if (b.id === 'media-band') cand.push({ at: k, name: 'zoom', rank: 2, why: 'the picture band settles to full size' });
+    if (b.id === 'scroll-statement') cand.push({ at: k, name: 'statement', rank: 3, why: 'the one claim lights word by word' });
+    const counts = [...b.html.matchAll(/<(?:dd|p data-part="figure"[^>]*)>([\s\S]*?)<\/(?:dd|p)>/g)].filter((m) => COUNTABLE.test(m[1])).length;
+    if (counts >= 2) cand.push({ at: k, name: 'number-settle', rank: 4, why: `${counts} true figures count up once` });
+  });
+  const chosen = [];
+  for (const c of cand.sort((a, b) => a.rank - b.rank)) {
+    if (chosen.length >= 2) break;
+    if (chosen.some((x) => Math.abs(x.at - c.at) < 2)) continue;
+    chosen.push(c);
+  }
+  return chosen;
+}
 function writeComposed(dir, run) {
   const todo = [...hero.todo];
   const ctx = { facts, figures, product, hero, idea, action: hero.action, hours, used, typeId: type.id, snippet: partHtml };
@@ -353,9 +387,18 @@ function writeComposed(dir, run) {
   let heroHtml = subjectHero(partHtml(heroSec.id), heroSec.id)
     .replace(/\s*<a data-part="pill"[\s\S]*?<\/a>/, '')
     .replace(/\s*<div data-part="shot"[\s\S]*?<\/div>\s*(?=<\/section>)/, idea.figure && heroSec.id === 'hero-centered' ? `\n  <div data-part="visual">${heroIdeaPanel(idea, facts)}</div>\n` : '\n');
+  // The first screen always shows something: the bold idea's figure, else the product working (software),
+  // else the subject's own drawing. Never the kit's sample frame.
+  if (!(idea.place === 'hero-visual' && idea.figure) && /<div data-part="(?:frame|visual)"/.test(heroHtml)) heroHtml = setHeroVisual(heroHtml, heroPicture(ctx));
+  else if (idea.place === 'hero-visual' && idea.figure) {
+    // The idea's panel carries the subject's drawing too, behind the figure.
+    const m = motifParts(motifFor(`${facts.kind ?? ''} ${facts.offers.join(' ')}`, ctx), { small: true });
+    heroHtml = heroHtml.replace(/<figure class="lt-art"([^>]*)>/, (x, a) => `<figure class="lt-art"${a}${m.attr}>${m.svg}`);
+  }
+  ctx.heroMotif = /data-motif="([a-z]+)"/.exec(heroHtml)?.[1] ?? null;
   bands.push({ id: heroSec.id, html: heroHtml, slug: 'top', label: 'Top' });
   // The close repeats the hero's action. Software with no word on price says "Sign up", not "Start free".
-  ctx.action = hero.action ?? (/^start free$/i.test(sampleAction ?? '') && !/\b(free|trial)\b/i.test(brief) ? 'Sign up' : sampleAction);
+  ctx.action = hero.action ?? (!isSoftware(ctx) ? 'Get in touch' : /^start free$/i.test(sampleAction ?? '') && !/\b(free|trial)\b/i.test(brief) ? 'Sign up' : sampleAction);
   // Every other band from the facts, or left out with what it needs.
   for (const x of sections.filter((y) => !/^hero-/.test(y.id ?? '') && !CHROME.test(y.id ?? '') && !(y.optional && PROOF.has(y.id ?? '')) && y.id !== 'billing-toggle')) {
     const r = renderBand(x, ctx);
@@ -363,6 +406,9 @@ function writeComposed(dir, run) {
     if (bands.some((b) => b.slug === r.slug || (b.id === 'cta-band' && r.id === 'cta-band'))) continue;
     bands.push(r);
   }
+  // A thin brief still gets one picture between the first screen and the close.
+  // So does a page whose bands are all words and tables (a statement hero, an address, a close).
+  if (!bands.some((b) => b.id !== 'cta-band' && !/^hero-/.test(b.id)) || !bands.some((b) => /class="lt-(art|device)"/.test(b.html))) { const pb = pictureBand(ctx); if (pb) bands.splice(1, 0, pb); }
   // The close says the action again: add one when the plan had none the brief could fill.
   if (!bands.some((b) => b.id === 'cta-band')) { const c = renderBand({ id: 'cta-band', role: 'Closing action' }, ctx); if (!c.todo) bands.push(c); }
   if (idea.ask) todo.push(`the bold idea: ${idea.ask}`);
@@ -370,14 +416,27 @@ function writeComposed(dir, run) {
   // closes the page instead. On a long page the panel keeps the brand colour and the close goes dark.
   const onBrand = /data-tone="swatch"/.test(bands[0].html) && bands.length >= 5;
   if (/data-tone="swatch"/.test(bands[0].html) && !onBrand) {
-    bands[0].html = bands[0].html.replace('data-tone="swatch"', 'data-tone="ink"');
-    idea.text = idea.text.replace(/ on [a-z]+$/, ' on ink');
-    idea.where = idea.where.replace('an art panel in the brand colour (data-variant="figure", data-tone="swatch")', 'an ink panel (data-variant="figure", data-tone="ink"), because on a page this short a brand-colour panel would be a wall of it');
+    // A dark panel (the palette's own dark tokens, scoped to the panel) stays a dark object in both modes;
+    // the ink tone would turn near-white on a dark page.
+    bands[0].html = bands[0].html.replace('data-tone="swatch"', 'data-tone="dark"');
+    idea.text = idea.text.replace(/ on [a-z]+$/, ' on a dark panel');
+    idea.where = idea.where.replace('an art panel in the brand colour (data-variant="figure", data-tone="swatch")', 'a dark panel (data-variant="figure", data-tone="dark"), because on a page this short a brand-colour panel would be a wall of it');
   }
   // Rhythm over the bands that exist, then a layout for each.
   const asSections = bands.map((b, i) => ({ n: i + 1, id: b.id, role: b.label }));
   const r = planRhythm({ type, sections: asSections, canInsert: false, brandClose: !onBrand });
   const ordered = r.beats.map((b) => ({ ...bands[b.n - 1], beat: b }));
+  // Moments: at most two, never neighbours, never the first screen; chosen here and named in the strip.
+  const moments = chooseMoments(ordered, ctx);
+  for (const mo of moments) {
+    const b = ordered[mo.at];
+    if (mo.name === 'pinned scene') { const pr = pinnedSteps(ctx); if (pr) Object.assign(b, { html: pr.html, id: pr.id }); }
+    if (mo.name === 'side-scroll') { const sr = sideScroll(ctx); if (sr) Object.assign(b, { html: sr.html, id: sr.id }); }
+    if (mo.name === 'number-settle') b.html = settleFigures(b.html);
+    b.beat.moment = mo.name;
+  }
+  // A band that would move on its own but was not chosen stays still.
+  for (const [k, b] of ordered.entries()) if (!moments.some((m) => m.at === k)) b.html = b.html.replace(/\sdata-zoom(="[^"]*")?/g, '').replace(/\sdata-lt="scroll-statement"/, '');
   const lay = direct({ type, domain, profile, sections: ordered.map((b, i) => ({ n: i + 1, id: b.id })), uiIds });
   const body = ordered.map((b, i) => {
     const l = lay.sectionLayouts.find((x) => x.n === i + 1);
@@ -390,7 +449,7 @@ function writeComposed(dir, run) {
   const links = ordered.slice(1).filter((b) => b !== closeBand).slice(0, 4).map((b) => ({ slug: b.slug, label: b.label }));
   const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''}`;
   const list = todo.length ? `<!-- TODO before this page ships. The brief did not say, so the draft leaves these out rather than inventing them:\n${todo.map((t) => `  - ${t.replace(/--/g, '–')}`).join('\n')}\n-->\n` : '';
-  let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${esc(product ?? 'TODO: page title')}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. Every word on it comes from the brief; check each one, then add what the TODO list asks for. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${list}${navBar({ product, links, action, facts })}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}>${ideaComment(idea)}\n${body.join('\n\n')}\n</main>\n${footerBar({ product, facts, year: new Date().getFullYear() })}\n</body>\n</html>\n`;
+  let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${esc(product ?? 'TODO: page title')}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. Every word on it comes from the brief; check each one, then add what the TODO list asks for. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${list}${navBar({ product, links, action, facts })}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}${moments.some((m) => m.name === 'number-settle') ? ' data-lt="number-settle"' : ''}>${ideaComment(idea)}\n${body.join('\n\n')}\n</main>\n${footerBar({ product, facts, year: new Date().getFullYear() })}\n</body>\n</html>\n`;
   // Buttons: the primary goes to the close; a secondary goes to the prices if they are on the page; any other is dropped.
   const have = new Set([...page.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
   const pricesSlug = ['range', 'prices'].find((x) => have.has(x));
@@ -409,7 +468,7 @@ function writeComposed(dir, run) {
   const MARK = '<!-- lumina-taste draft for:';
   const target = existsSync(join(dir, 'index.html')) && !readFileSync(join(dir, 'index.html'), 'utf8').includes(MARK) ? join(dir, 'index.draft.html') : join(dir, 'index.html');
   writeFileSync(target, page);
-  return { path: target, kind: 'composed', sections: ordered.map((b) => b.id), left: todo.length, todo, rhythm: { strip: rhythmStrip(r), moved: r.moved, broken: checkRhythm(r, ordered.map((b, i) => (i === 0 ? null : lay.sectionLayouts.find((x) => x.n === i + 1)?.shape ?? null))) } };
+  return { path: target, kind: 'composed', sections: ordered.map((b) => b.id), left: todo.length, todo, moments: moments.map((m) => ({ name: m.name, band: ordered[m.at].slug, why: m.why })), rhythm: { strip: rhythmStrip(r), moved: r.moved, broken: checkRhythm(r, ordered.map((b, i) => (i === 0 ? null : lay.sectionLayouts.find((x) => x.n === i + 1)?.shape ?? null))) } };
 }
 
 // ---------------------------------------------------------------- --write: a composed first draft
@@ -509,7 +568,7 @@ if (writeDraft) {
     const top = picked.filter((y) => /^(navbar|floating-pill-nav|hide-on-scroll)/.test(y.id ?? '')).map((y) => chrome(y.id)).join('\n');
     const foot = picked.filter((y) => /footer/.test(y.id ?? '')).map((y) => chrome(y.id)).join('\n');
     const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''}`;
-    let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${product ?? 'TODO: page title'}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. The first screen is written from the brief; every other sentence, name, number and link target is sample content: rewrite all of it. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${top}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}>${ideaComment(idea)}\n${body.join('\n\n')}\n</main>\n${foot}\n</body>\n</html>\n`;
+    let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${product ?? 'TODO: page title'}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. The first screen is written from the brief; every other sentence, name, number and link target is sample content: rewrite all of it. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${top}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}${moments.some((m) => m.name === 'number-settle') ? ' data-lt="number-settle"' : ''}>${ideaComment(idea)}\n${body.join('\n\n')}\n</main>\n${foot}\n</body>\n</html>\n`;
     // A button that led to one of the sample's pages: the primary one takes this page's action, the others go.
     { const have = new Set([...page.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
       page = page.replace(/<a class="lt-btn"([^>]*)href="#([^"]+)"([^>]*)>([\s\S]*?)<\/a>/g, (m, pre, target, post, inner) => have.has(target) ? m : /data-variant="primary"/.test(pre + post) ? `<a class="lt-btn"${pre}href="${action}"${post}>${inner}</a>` : ''); }
@@ -521,6 +580,11 @@ if (writeDraft) {
   }
   plan.draft = { ...draft, path: relative(process.cwd(), draft.path) || draft.path };
   if (draft.todo) plan.words.missing = [...new Set([...plan.words.missing, ...draft.todo])];
+  if (withImages && draft.kind === 'composed') {
+    const r = spawnSync(process.execPath, [join(root, 'scripts/find-images.mjs'), '--fill', draft.path, '--subject', [facts.kind, facts.place].filter(Boolean).join(' ') || brief, '--out', join(dirname(draft.path), 'images')], { encoding: 'utf8', env: process.env });
+    const set = (readFileSync(draft.path, 'utf8').match(/<img src="images\//g) ?? []).length;
+    plan.draft.images = { ran: true, status: r.status, set, note: r.status === 0 ? `${set} photograph${set === 1 ? '' : 's'} set from openly licensed sources (credits in images/credits.json); look at each one` : `find-images could not run: ${(r.stderr || r.stdout).trim().split('\n').pop()}` };
+  } else if (draft.kind === 'composed') plan.draft.images = { ran: false, note: 'no photographs fetched: the panels show the subject\'s drawings. Add --images to search public-domain and CC0 photographs for them (find-images --fill; it downloads)' };
 }
 
 // No process.exit() here: exiting straight after a large write can cut piped output short.
@@ -536,6 +600,7 @@ L.push(`# Page plan: ${type.name}`, '', `> ${brief || `--type ${type.id}`}`, '')
 if (!confident) L.push(`Page type guessed from the catalog. If this is wrong, rerun with \`--type <id>\` (${kb.pageTypes.map((p) => p.id).join(', ')}).`, '');
 else if (runnerUp) L.push(`Also close: \`${runnerUp.id}\`. Rerun with \`--type ${runnerUp.id}\` if that fits better.`, '');
 if (draft?.kind === 'composed') L.push(`**A first draft is written: \`${draft.path}\`.** It is composed band by band from the brief's own facts (no sample business's words, names or prices), in the rhythm below. ${draft.todo.length ? `The brief left ${draft.todo.length} thing${draft.todo.length > 1 ? 's' : ''} open; they are listed once, at the top of the draft, and under "Still needed" below. Bands with nothing to show were left out rather than invented.` : 'Nothing was left open.'}`, '');
+if (draft?.kind === 'composed' && plan.draft?.images) L.push(`Photographs: ${plan.draft.images.note}.`, '');
 else if (draft) L.push(draft.kind === 'blueprint'
   ? `**A first draft is written: \`${draft.path}\`** (the \`${blueprint}\` blueprint, themed with this profile). Everything in it is sample content. Rewrite it section by section with the plan below, then do the detail pass and audit.`
   : `**A first draft is written: \`${draft.path}\`.** It has the sections below in order, with their layouts, bands, ids and navigation already applied, and the art direction on \`<main>\`. Every sentence, name and number in it is sample copy: rewrite each section with its copy formula below.${draft.left.length ? ` Not drafted, because they need real material from the user: ${draft.left.map((x) => `\`${x}\``).join(', ')}.` : ''}`, '');
@@ -580,6 +645,7 @@ if (art.mainAttrs.length) L.push(`- **Page:** \`<main ${art.mainAttrs.join(' ')}
   L.push(`  ${rhythm.banded ? STRIP_KEY : 'One screen: regions on one ground, as dense as the work needs.'}${r.moved?.length ? ` Moved: ${r.moved.join(', ')} (the close says the action again; parts with one layout never touch).` : ''}${rhythm0.inserted.length ? ` Added: ${rhythm0.inserted.join(', ')} (a pause between busy bands).` : ''}${figuresBandSkipped ? ' Left out: the figures band, because the brief has fewer than three figures.' : ''}`);
   L.push(`  ${art.rhythm}`);
   for (const b of rhythm.beats.filter((x) => x.note)) L.push(`  - ${b.label}: ${b.note}`);
+  if (draft?.moments) L.push(`  Moments (two at most, never side by side): ${draft.moments.length ? draft.moments.map((m) => `${m.name} in #${m.band} (${m.why})`).join('; ') : 'none: nothing in the brief carries one, and a page that does not move is better than one that moves for nothing'}.`);
 }
 L.push(`- **Look:** before you install, name three nouns from the subject's world and check that the palette and typeface come from them. If the result is a default look (indigo and Inter; cream, a book serif and terracotta; black and one acid colour), choose again or state why on the root: \`<html data-look-reason="…">\`. See references/ai-defaults.md.`);
 L.push(`- **Words:** ${art.words}`);

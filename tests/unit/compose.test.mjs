@@ -2,7 +2,7 @@
 // install command it prints actually runs.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
@@ -237,7 +237,7 @@ test('plans put pictures where paragraphs were, and say how the page moves', () 
   try {
     node([join(root, 'scripts/compose.mjs'), 'Website for Harrow & Finch, a three-partner employment law firm at 4 King Street, Manchester M2 4LQ, settlement agreement review from £450, unfair dismissal advice from £300, a free 20-minute first call, partners Ruth Harrow, Sam Finch and Priya Shah, open Monday to Friday 9 to 5.30, phone 0161 496 0322', '--project', dir, '--write']);
     const html = readFileSync(join(dir, 'index.html'), 'utf8');
-    assert.match(html, /<main id="main" data-scroll>/);
+    assert.match(html, /<main id="main" data-scroll( data-lt="number-settle")?>/);
     assert.ok((html.match(/data-tone="dark"/g) ?? []).length <= 1);
     // Grounds alternate: no two neighbouring bands on the same ground (plain, well, dark, brand).
     const tones = [...html.matchAll(/<section class="lt-[^"]+"([^>]*)>/g)].map((m) => /data-tone="(\w+)"/.exec(m[1])?.[1] ?? 'plain');
@@ -333,7 +333,7 @@ test('compose --write puts the subject in the draft: headline, bold idea, rhythm
     const html = readFileSync(join(dir, 'index.html'), 'utf8');
     assert.match(html, /<h1[^>]*><span style="white-space: nowrap">Single-storey<\/span> extensions in 12 weeks<\/h1>/, 'hyphens never break in the headline');
     assert.match(html, /<!-- Bold idea: the £40,000 fixed price/);
-    assert.match(html, /data-tone="(swatch|ink)"[\s\S]*?<p data-part="figure"[^>]*>£40,000<\/p>/);
+    assert.match(html, /data-tone="(swatch|dark)"[\s\S]*?<p data-part="figure"[^>]*>£40,000<\/p>/);
     assert.match(html, /<p data-part="eyebrow">Construction firm · Bristol<\/p>/);
     assert.ok(!html.includes('Book a check-up'), 'the sample\'s action label is replaced');
     assert.match(html, />Get a quote</);
@@ -423,4 +423,69 @@ test('each kind of subject gets its own lettering, with the reason in the plan; 
   const own = compose('Website for Brickwell Build, a construction firm in Bristol', '--typeface', 'swiss');
   assert.deepEqual([own.profile.typography, own.typeWhy], ['swiss', 'you chose it']);
   assert.match(node([join(root, 'scripts/compose.mjs'), 'Website for an emergency plumber in Hull']).stdout, /type `stamped` \(stamped letters/);
+});
+
+test('every band a draft writes has something to look at; software shows itself; moments are chosen, at most two, never side by side', () => {
+  const BRIEFS = {
+    bakery: 'Home page for Crumb & Co, a sourdough bakery at 12 Mill Lane, Frome BA11 1AB, open Tuesday to Sunday 7:30 to 3, loaves from £4.20, cinnamon buns £3 and a Saturday bread class for £65, run by Nell and Owen Hart, phone 01373 496 210',
+    builder: 'Website for Brickwell Build, a construction firm in Bristol building house extensions and loft conversions, fixed-price quotes, a £40,000 single-storey extension in 12 weeks, a loft conversion from £48,000, how it works: free site visit, then a fixed-price quote within 5 days, then a start date, phone 0117 496 0418',
+    saas: 'Landing page for Tally, an invoicing tool for freelancers that sends an invoice in 30 seconds, chases late payers on day 7, 14 and 30 and matches bank payments, £9 a month, how it works: add a client, send the invoice, get paid',
+    charity: "Home page for Canal Street Food Bank, a volunteer-run charity at St Mark's Hall, 41 Canal Street, Birmingham B5 6EJ, that gave out 410 food parcels a week last winter with 60 volunteers, open Monday and Thursday 10 to 2, £10 feeds a household for a week",
+    thin: 'Website for a dentist in Leeds',
+  };
+  // Something to look at: a picture (art panel, device), a figure set large, the hours as a table, the first
+  // screen's headline, or the people as rows people scan. The close is the brand band.
+  const LOOK = /class="lt-(art|device)|data-part="figure"|<table|<h1|lt-team-grid|lt-cta-band/;
+  const dir = mkdtempSync(join(tmpdir(), 'lt-visual-'));
+  try {
+    for (const [slug, brief] of Object.entries(BRIEFS)) {
+      const r = node([join(root, 'scripts/compose.mjs'), brief, '--project', join(dir, slug), '--write']);
+      assert.equal(r.status, 0, r.stderr);
+      const html = readFileSync(join(dir, slug, 'index.html'), 'utf8');
+      const main = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
+      const bands = main.split(/(?=<section class=")/).slice(1);
+      assert.ok(bands.length >= 3, `${slug}: at least a first screen, a picture and a close`);
+      for (const b of bands) assert.match(b, LOOK, `${slug}: a band with nothing to look at: ${b.slice(0, 80)}`);
+      assert.ok((main.match(/class="lt-(art|device)"/g) ?? []).length >= 1, `${slug}: a picture at least`);
+      // Moments: named in the strip and the plan, two at most, never in neighbouring bands, never the first screen.
+      const marked = bands.map((b) => /data-lt="(sticky-story|side-scroll)"|data-zoom|data-count/.test(b));
+      assert.ok(marked.filter(Boolean).length <= 2, slug);
+      for (let i = 1; i < marked.length; i++) assert.ok(!(marked[i] && marked[i - 1]), `${slug}: two moments side by side`);
+      assert.ok(!marked[0], `${slug}: no moment in the first screen`);
+      assert.match(r.stdout, /Moments \(two at most, never side by side\): /);
+      // Neighbouring panels never repeat a drawing.
+      const motifs = [...main.matchAll(/<li><article>\s*<figure class="lt-art"[^>]*?(?:data-motif="([a-z]+)")?[^>]*>/g)].map((m) => m[1] ?? null);
+      for (let i = 1; i < motifs.length; i++) if (motifs[i]) assert.notEqual(motifs[i], motifs[i - 1], `${slug}: neighbouring drawings`);
+    }
+    const saas = readFileSync(join(dir, 'saas', 'index.html'), 'utf8');
+    assert.match(saas, /<figure class="lt-device" data-kind="laptop">[\s\S]*?<div data-app="desktop" inert>[\s\S]*?<p data-a="brand">Tally<\/p>/, 'the product itself in the first screen');
+    assert.ok(!/Larkspur|Kestrel|Halyard|Invoice 0042/.test(saas), 'never the sample invoice');
+    assert.match(saas, /data-lt="sticky-story"/, 'three steps and a product: the pinned scene');
+    const builder = readFileSync(join(dir, 'builder', 'index.html'), 'utf8');
+    for (const tile of builder.match(/<article[^>]*>[\s\S]*?<\/article>/g).filter((a) => !a.includes('lt-art'))) assert.match(tile, /data-part="figure"/, 'no empty tiles');
+    assert.match(builder, /Also: House extensions, on a fixed-price quote\./);
+    const thin = readFileSync(join(dir, 'thin', 'index.html'), 'utf8');
+    assert.match(thin, /data-motif="tooth"/, 'a thin brief still shows the subject');
+    // The bold idea's panel stays a dark object in both modes on a short page (the palette's own dark tokens).
+    assert.match(readFileSync(join(dir, 'bakery', 'index.html'), 'utf8'), /<figure class="lt-art" data-variant="figure" data-tone="dark"/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('--images runs find-images over the draft (off by default; no network here: a local empty source)', async () => {
+  const { createServer } = await import('node:http');
+  const server = createServer((req, res) => { res.setHeader('content-type', 'application/json'); res.end(JSON.stringify({ results: [] })); });
+  await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  const dir = mkdtempSync(join(tmpdir(), 'lt-imgdraft-'));
+  try {
+    const brief = 'Website for Brickwell Build, a construction firm in Bristol, a £40,000 single-storey extension in 12 weeks';
+    const off = node([join(root, 'scripts/compose.mjs'), brief, '--project', join(dir, 'a'), '--write']);
+    assert.match(off.stdout, /Photographs: no photographs fetched[\s\S]*Add --images/);
+    const env = { ...process.env, LT_OPENVERSE: `http://127.0.0.1:${server.address().port}/ov/`, LT_COMMONS: `http://127.0.0.1:${server.address().port}/cm` };
+    const r = await new Promise((res) => { const c = spawn(process.execPath, [join(root, 'scripts/compose.mjs'), brief, '--project', join(dir, 'b'), '--write', '--images', '--json'], { env }); let out = ''; c.stdout.on('data', (d) => { out += d; }); c.on('close', (code) => res({ code, out })); });
+    assert.equal(r.code, 0);
+    const plan = JSON.parse(r.out);
+    assert.equal(plan.draft.images.ran, true);
+    assert.equal(plan.draft.images.set, 0);
+    assert.match(readFileSync(join(dir, 'b', 'index.html'), 'utf8'), /data-motif="crane"/, 'nothing matched: the drawings stay');
+  } finally { server.close(); rmSync(dir, { recursive: true, force: true }); }
 });

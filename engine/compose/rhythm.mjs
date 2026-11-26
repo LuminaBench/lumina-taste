@@ -41,7 +41,7 @@ const BREATHERS = [
   { id: 'scroll-statement', role: 'The one claim', copy: 'The bold idea as one sentence of 12 to 25 words, its second half in data-part="quiet".' },
   { id: 'stats-band', role: 'Figures', copy: 'Two to four figures from the brief, each with its unit and period. No figures, no band.' },
 ];
-const SHORT = { 'hero-split': 'hero', 'hero-centered': 'hero', 'hero-statement': 'hero', 'scroll-statement': 'statement', 'stats-band': 'figures', 'quote-feature': 'quote', 'media-band': 'picture', 'gallery-rail': 'gallery', 'cta-band': 'close', 'faq-section': 'questions', 'visit-info': 'visit', 'booking-bar': 'booking', 'bento-grid': 'tiles', 'stack-cards': 'steps', 'how-it-works': 'steps', 'offer-cards': 'offers', 'team-grid': 'people', 'pricing-tiers': 'pricing', 'feature-split': 'features', 'feature-grid': 'features', 'service-list': 'list', 'contact-section': 'contact', 'project-grid': 'work', 'newsletter-signup': 'newsletter', 'terminal-window': 'terminal', 'code-block': 'code', 'api-endpoint': 'api', 'comparison-table': 'compare', 'description-list': 'details', 'logo-cloud': 'logos', 'testimonial-grid': 'quotes', 'integrations-grid': 'integrations', 'blog-grid': 'posts', 'review-summary': 'reviews', 'radio-cards': 'options', 'carousel': 'more', 'data-table': 'table', 'filter-bar': 'filters', 'stat-strip': 'figures' };
+const SHORT = { 'sticky-story': 'steps', 'side-scroll': 'range', 'hero-split': 'hero', 'hero-centered': 'hero', 'hero-statement': 'hero', 'scroll-statement': 'statement', 'stats-band': 'figures', 'quote-feature': 'quote', 'media-band': 'picture', 'gallery-rail': 'gallery', 'cta-band': 'close', 'faq-section': 'questions', 'visit-info': 'visit', 'booking-bar': 'booking', 'bento-grid': 'tiles', 'stack-cards': 'steps', 'how-it-works': 'steps', 'offer-cards': 'offers', 'team-grid': 'people', 'pricing-tiers': 'pricing', 'feature-split': 'features', 'feature-grid': 'features', 'service-list': 'list', 'contact-section': 'contact', 'project-grid': 'work', 'newsletter-signup': 'newsletter', 'terminal-window': 'terminal', 'code-block': 'code', 'api-endpoint': 'api', 'comparison-table': 'compare', 'description-list': 'details', 'logo-cloud': 'logos', 'testimonial-grid': 'quotes', 'integrations-grid': 'integrations', 'blog-grid': 'posts', 'review-summary': 'reviews', 'radio-cards': 'options', 'carousel': 'more', 'data-table': 'table', 'filter-bar': 'filters', 'stat-strip': 'figures' };
 const labelOf = (s) => SHORT[s.id] ?? String(s.role ?? s.id ?? 'section').toLowerCase().replace(/^the\s+/, '');
 
 /** Is this page a run of bands (a marketing page) or one screen (an app, a flow, a reading view)? */
@@ -161,9 +161,9 @@ const GLYPH = { busy: '▇', quiet: '▁' };
 const SIZE = { display: ' XL', large: ' L', normal: '' };
 /** The rhythm as one compact line: `hero ▇ XL · statement ▁ L well · fees ▇ · visit ▇ dark · close ▁ XL brand`. */
 export function rhythmStrip(rhythm) {
-  return rhythm.beats.map((b) => `${b.label} ${GLYPH[b.density] ?? '▇'}${SIZE[b.scale] ?? ''}${b.ground && !['plain', 'screen'].includes(b.ground) ? ` ${b.ground}` : ''}`).join(' · ');
+  return rhythm.beats.map((b) => `${b.label} ${GLYPH[b.density] ?? '▇'}${SIZE[b.scale] ?? ''}${b.ground && !['plain', 'screen'].includes(b.ground) ? ` ${b.ground}` : ''}${b.moment ? ` ✦ ${b.moment}` : ''}`).join(' · ');
 }
-export const STRIP_KEY = '▇ busy, ▁ quiet; XL display type (first screen and close only), L large type; the ground is named when it is not plain.';
+export const STRIP_KEY = '▇ busy, ▁ quiet; XL display type (first screen and close only), L large type; the ground is named when it is not plain; ✦ marks a moment.';
 
 /** The attributes a band carries in a draft: its tone for the ground, and the rhythm as data. */
 export function beatAttrs(b) {
