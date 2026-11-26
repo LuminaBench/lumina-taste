@@ -160,6 +160,24 @@
       "width": 1920,
       "height": 1280,
       "original": {"width":4608,"height":3072}
+    },
+    {
+      "id": "living-room-sofas-window-sea",
+      "shows": "A lived-in living room: two sofas, a low table and a wide window with evening light",
+      "shot": ["living","room","lounge","flat","apartment","interior","sofa","home","rent","let"],
+      "orientation": "wide",
+      "tone": "cool",
+      "focus": {"x":0.5,"y":0.6},
+      "title": "Living room in apartment of Condomínio do Edifício Zaher, Le Blond, Rio de Janeiro, Brazil",
+      "creator": "Wilfredor",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Living_room_in_apartment_of_Condom%C3%ADnio_do_Edif%C3%ADcio_Zaher,_Le_Blond,_Rio_de_Janeiro,_Brazil.jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Living_room_in_apartment_of_Condom%C3%ADnio_do_Edif%C3%ADcio_Zaher%2C_Le_Blond%2C_Rio_de_Janeiro%2C_Brazil.jpg/1920px-Living_room_in_apartment_of_Condom%C3%ADnio_do_Edif%C3%ADcio_Zaher%2C_Le_Blond%2C_Rio_de_Janeiro%2C_Brazil.jpg",
+      "width": 1920,
+      "height": 1045,
+      "original": {"width":8256,"height":4492}
     }
   ]
 }

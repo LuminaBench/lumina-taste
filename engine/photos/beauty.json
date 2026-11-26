@@ -130,6 +130,42 @@
       "width": 1920,
       "height": 1280,
       "original": {"width":5472,"height":3648}
+    },
+    {
+      "id": "salon-tan-chairs-wood-floor",
+      "shows": "A hair salon before opening: tan leather chairs on a wooden floor, mirrors and shelves",
+      "shot": ["salon","hair","hairdresser","chairs","interior","stylist","cut","colour","beauty"],
+      "orientation": "wide",
+      "tone": "warm",
+      "focus": {"x":0.45,"y":0.6},
+      "title": "Hair salon - Arlington, MA",
+      "creator": "Daderot",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Hair_salon_-_Arlington,_MA.jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Hair_salon_-_Arlington%2C_MA.jpg/1920px-Hair_salon_-_Arlington%2C_MA.jpg",
+      "width": 1920,
+      "height": 1080,
+      "original": {"width":4032,"height":2268}
+    },
+    {
+      "id": "barber-shop-chair-mirrors-mono",
+      "shows": "An empty barber shop in black and white: one chair, a chequered floor and a wall of mirrors",
+      "shot": ["barber","barbers","shop","chair","mirrors","haircut","shave","interior"],
+      "orientation": "wide",
+      "tone": "cool",
+      "focus": {"x":0.5,"y":0.6},
+      "title": "Barber shop, Quebec city, Canada",
+      "creator": "Wilfredor",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:Barber_shop,_Quebec_city,_Canada.jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Barber_shop%2C_Quebec_city%2C_Canada.jpg/1920px-Barber_shop%2C_Quebec_city%2C_Canada.jpg",
+      "width": 1920,
+      "height": 1280,
+      "original": {"width":7364,"height":4909}
     }
   ]
 }

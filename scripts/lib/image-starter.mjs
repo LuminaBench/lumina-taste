@@ -73,7 +73,9 @@ const describes = (w) => DESCRIBE.test(w) || /-(storey|story|bed|bedroom|seat|se
 
 /** The head phrases of a brief: [{ head, mods }], from its first clause. */
 export function briefHeads(brief) {
-  const clause = fold(brief).replace(/^\s*\w+:\s*/, '').replace(/\b\d+(:\d+)?\b/g, ' ').split(/[,;.()]/)[0];
+  const clause = fold(brief).replace(/^\s*\w+:\s*/, '').replace(/\b\d+(:\d+)?\b/g, ' ').split(/[,;.()]/)[0]
+    // "A photograph of the climbing gym" is of the climbing gym.
+    .replace(/^\s*(an?|the)?\s*(photograph|photo|picture|image|shot|close-up|view)s?\s+of\s+/, ' ');
   const tokens = clause.split(/[^a-z'-]+/).filter(Boolean).map((w) => w.replace(/^'+|'+$/g, '')).filter(Boolean);
   // Read up to the first cut (a verb form only counts once a noun has been read: "Stacked bags" keeps "bags").
   const phrase = [];
@@ -143,7 +145,7 @@ const stateOf = (text) => { const f = FINISHED.test(text), u = UNDERWAY.test(tex
  * little. state: the state a brief's siblings ask for, used when the brief names none. level is "fit", or "stand-in" when the match is thin (the head noun only names the business, or little
  * else agrees). loose: relax the head phrase (for completing a set), never the sense or the state.
  */
-export function fitDetail(photo, brief, { subjectWords = [], ratio, loose = false, state = null } = {}) {
+export function fitDetail(photo, brief, { subjectWords = [], kind = '', ratio, loose = false, state = null } = {}) {
   const clean = fold(brief).replace(/\b\d+(:\d+)?\b/g, ' ');
   const text = ` ${clean} `;
   const words = briefWords(brief);
@@ -163,14 +165,20 @@ export function fitDetail(photo, brief, { subjectWords = [], ratio, loose = fals
   const generic = (k) => subjectWords.some((w) => stem(fold(w)) === stem(fold(k)));
   // Head phrase.
   const heads = briefHeads(brief);
+  // A brief that names only the business by its kind ("A photograph of the family dentist", kind "dentist") asks for
+  // the place itself: its noun is what the picture must show, not a word every picture of the set shares. ("Some
+  // coffee" on a coffee shop's page names its stock, not the place, and stays thin.)
+  const onlyBusiness = !!kind && heads.length > 0 && heads.every(({ head, mods }) => stem(fold(head)) === stem(fold(kind)) && mods.every(generic));
+  const weak = (k) => !onlyBusiness && generic(k);
   let headOk = !heads.length, headGeneric = false;
   for (const { head, mods } of heads) {
     const phraseHit = (photo.shot ?? []).some((k) => k.includes(' ') && holds(text, k) && holds(` ${fold(k)} `, head));
     if (!has(head) && !phraseHit) continue;
-    const realMods = mods.filter((m) => !generic(m));
+    // The business's own words beside its noun ("family" dentist) are not things a picture shows: the noun is enough.
+    const realMods = onlyBusiness ? [] : mods.filter((m) => !generic(m));
     if (realMods.length && !phraseHit && !realMods.some(has)) continue;
     headOk = true;
-    headGeneric = generic(head) && !realMods.some(has) && !phraseHit;
+    headGeneric = weak(head) && !realMods.some(has) && !phraseHit;
     if (!headGeneric) break;
   }
   if (!headOk && !loose) return { score: 0, level: null, why: `does not show ${heads.map((h) => [...h.mods, h.head].join(' ')).join(' or ')}` };
@@ -184,9 +192,11 @@ export function fitDetail(photo, brief, { subjectWords = [], ratio, loose = fals
     if (seen.has(key)) continue;
     seen.add(key);
     const i = at(k);
-    s += (generic(k) ? 0.3 : 1) * (k.includes(' ') ? 1.3 : 1) * (i < firstClause ? 1 : 0.6) / (1 + i * 0.15);
+    s += (weak(k) ? 0.3 : 1) * (k.includes(' ') ? 1.3 : 1) * (i < firstClause ? 1 : 0.6) / (1 + i * 0.15);
   }
-  for (const w of briefWords(photo.shows ?? '')) if (!seen.has(stem(w)) && words.some((x) => stem(x) === stem(w))) { seen.add(stem(w)); s += 0.2 * (generic(w) ? 0.3 : 1); }
+  for (const w of briefWords(photo.shows ?? '')) if (!seen.has(stem(w)) && words.some((x) => stem(x) === stem(w))) { seen.add(stem(w)); s += 0.2 * (weak(w) ? 0.3 : 1); }
+  // The place itself, shown: a fit, however few other words the brief has.
+  if (onlyBusiness && headOk) s += 1.2;
   // A tall panel prefers a tall or square picture; a wide one a wide picture. A small nudge: the crop and focal
   // point handle the rest.
   if (ratio && photo.orientation) s -= (ratio < 0.95 && photo.orientation === 'wide') || (ratio > 1.15 && photo.orientation === 'tall') ? 0.1 : 0;
@@ -208,9 +218,10 @@ export function assignStarters(set, briefs, { ratio, min = 0.9, subject = '' } =
   // Only the words that name this business count as generic ("coffee" for a coffee shop); the set's own words
   // ("extension" for a builder) are what its pictures show.
   const subjectWords = fold(subject).split(/[^a-z]+/).filter((w) => w.length > 2);
+  const kind = subjectWords.at(-1) ?? '';
   const pairs = [];
   for (const b of briefs) for (const p of set.photos ?? []) {
-    const { score: s, level } = fitDetail(p, b.shot, { subjectWords, ratio });
+    const { score: s, level } = fitDetail(p, b.shot, { subjectWords, kind, ratio });
     if (s >= min) pairs.push({ b, p, s, level });
   }
   const out = new Map(), used = new Set(), tones = {};
@@ -240,6 +251,7 @@ export function completeSet(set, briefs, chosen, { ratio, subject = '', siblings
   const f = states.filter((x) => x === 'finished').length, u = states.filter((x) => x === 'underway').length;
   const state = f > u ? 'finished' : u > f ? 'underway' : null;
   const subjectWords = fold(subject).split(/[^a-z]+/).filter((w) => w.length > 2);
+  const kind = subjectWords.at(-1) ?? '';
   const used = new Set(chosen.map((p) => p.id));
   const tones = {};
   for (const p of chosen) tones[p.tone] = (tones[p.tone] ?? 0) + 1;

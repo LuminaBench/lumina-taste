@@ -15,14 +15,14 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const sets = loadStarters(join(root, 'engine/photos'));
 const domains = JSON.parse(readFileSync(join(root, 'engine/compose/page-types.json'), 'utf8')).domains.map((d) => d.id);
 
-test('every page-types domain has a starter set of 6 to 12 hand-checked, openly licensed photographs', () => {
+test('every page-types domain has a starter set of 6 to 16 hand-checked, openly licensed photographs', () => {
   for (const d of domains) assert.ok(sets[d], `engine/photos/${d}.json`);
   const PEOPLE = /\b(face|faces|portrait|woman|man|girl|boy|people|person|customer|smiling)\b/i;
   for (const [id, s] of Object.entries(sets)) {
     assert.equal(s.id, id);
     assert.ok(s.about && s.about.length > 20, `${id}: about`);
     assert.ok(Array.isArray(s.domains) && s.domains.every((d) => domains.includes(d)), `${id}: domains ${s.domains}`);
-    assert.ok(s.photos.length >= 6 && s.photos.length <= 12, `${id}: ${s.photos.length} photographs`);
+    assert.ok(s.photos.length >= 6 && s.photos.length <= 16, `${id}: ${s.photos.length} photographs`);
     const ids = new Set();
     for (const p of s.photos) {
       const where = `${id}/${p.id}`;

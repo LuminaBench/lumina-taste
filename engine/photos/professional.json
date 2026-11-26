@@ -201,6 +201,24 @@
       "width": 1920,
       "height": 1280,
       "original": {"width":5616,"height":3744}
+    },
+    {
+      "id": "office-desk-laptop-certificates",
+      "shows": "A front desk with a laptop and certificates framed on the wall behind",
+      "shot": ["reception","desk","office","front","practice","admin","laptop","surgery"],
+      "orientation": "wide",
+      "tone": "light",
+      "focus": {"x":0.55,"y":0.6},
+      "title": "20180101-123256-dental-clinic-ramat-gan-israel-2018",
+      "creator": "Rakoon",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "provider": "wikimedia",
+      "page": "https://commons.wikimedia.org/wiki/File:20180101-123256-dental-clinic-ramat-gan-israel-2018.jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/20180101-123256-dental-clinic-ramat-gan-israel-2018.jpg/1920px-20180101-123256-dental-clinic-ramat-gan-israel-2018.jpg",
+      "width": 1920,
+      "height": 1080,
+      "original": {"width":4608,"height":2592}
     }
   ]
 }
