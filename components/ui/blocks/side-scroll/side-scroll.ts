@@ -41,10 +41,12 @@ export function enhance(root: HTMLElement): Cleanup {
     const top = root.getBoundingClientRect().top + scrollY + range * (0.06 + p * 0.88);
     scrollTo({ top, behavior: 'instant' as ScrollBehavior });
   };
-  const ro = new ResizeObserver(measure);
+  // Measured on the next frame: --travel changes the section's height, which WebKit reports as a ResizeObserver loop.
+  let raf = 0;
+  const ro = new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(measure); });
   ro.observe(root); ro.observe(track);
   motion.addEventListener('change', measure);
   track.addEventListener('focusin', onFocus);
   measure();
-  return () => { ro.disconnect(); motion.removeEventListener('change', measure); track.removeEventListener('focusin', onFocus); root.removeAttribute('data-pin'); root.style.removeProperty('--travel'); track.setAttribute('tabindex', '0'); };
+  return () => { cancelAnimationFrame(raf); ro.disconnect(); motion.removeEventListener('change', measure); track.removeEventListener('focusin', onFocus); root.removeAttribute('data-pin'); root.style.removeProperty('--travel'); track.setAttribute('tabindex', '0'); };
 }

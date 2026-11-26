@@ -50,3 +50,38 @@ export function familyParam({ family, axes, weights }) {
 }
 
 export const css2Url = (base, specs, display = 'swap') => `${base}?${specs.map(familyParam).join('&')}&display=${display}`;
+
+/** The @font-face blocks of a CSS2 response, each with the subset named in the comment before it. */
+export function parseCss(css) {
+  const faces = [];
+  for (const m of css.matchAll(/(?:\/\*\s*([\w-]+)\s*\*\/\s*)?@font-face\s*{([^}]*)}/g)) {
+    const body = m[2];
+    const prop = (k) => body.match(new RegExp(`${k}\\s*:\\s*([^;]+);`))?.[1].trim();
+    const src = body.match(/url\(\s*['"]?([^'")]+)['"]?\s*\)\s*format\(\s*['"]?([\w-]+)['"]?\s*\)/);
+    if (!src) continue;
+    faces.push({
+      subset: m[1] ?? 'all', family: prop('font-family')?.replace(/['"]/g, ''), style: prop('font-style') ?? 'normal',
+      weight: prop('font-weight') ?? '400', stretch: prop('font-stretch') ?? null, unicodeRange: prop('unicode-range') ?? null,
+      url: src[1], format: src[2],
+    });
+  }
+  return faces;
+}
+
+/**
+ * One face per file. Asked for separate weights of a variable family (IBM+Plex+Sans:wght@400;500;600), the
+ * real API answers with one @font-face per weight, all pointing at the same variable file: keep one face with
+ * the weight range those blocks cover, so the file is downloaded and declared once. Static families (Barlow)
+ * get a file per weight and keep a face per weight.
+ */
+export function mergeFaces(list) {
+  const byUrl = new Map();
+  for (const f of list) {
+    const prev = byUrl.get(f.url);
+    if (!prev) { byUrl.set(f.url, { ...f }); continue; }
+    const nums = `${prev.weight} ${f.weight}`.split(/\s+/).map(Number).filter(Number.isFinite);
+    const lo = Math.min(...nums), hi = Math.max(...nums);
+    prev.weight = lo === hi ? String(lo) : `${lo} ${hi}`;
+  }
+  return [...byUrl.values()];
+}

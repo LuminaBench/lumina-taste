@@ -92,7 +92,7 @@
   --font-mono: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, Menlo, Consolas, monospace;
   --weight-display: 600;
   --weight-body: 400;
-  --tracking-display: -0.035em;
+  --tracking-display: -0.025em;
   --leading-display: 1.02;
   --step-n2: clamp(0.5579rem, 0.6539rem + -0.1066vw, 0.6299rem);
   --step-n1: clamp(0.7684rem, 0.7679rem + 0.0022vw, 0.7699rem);
@@ -200,6 +200,7 @@
   --axis-display-wght-max: 600;
   --axis-body-wght-min: 400;
   --axis-body-wght-max: 600;
+  font-feature-settings: "lnum" 1;
 }
 [data-type="slab"] {
   --font-display: "Zilla Slab", "Zilla Slab Fallback", "Roboto Slab", "Rockwell", "Museo Slab", Georgia, serif;
@@ -310,7 +311,7 @@
   --font-mono: "Courier Prime", "Courier Prime Fallback", "Courier New", ui-monospace, Menlo, monospace;
   --weight-display: 800;
   --weight-body: 400;
-  --tracking-display: -0.02em;
+  --tracking-display: -0.01em;
   --leading-display: 1.04;
   --step-n2: clamp(0.598rem, 0.6687rem + -0.0786vw, 0.651rem);
   --step-n1: clamp(0.7813rem, 0.776rem + 0.0234vw, 0.7971rem);

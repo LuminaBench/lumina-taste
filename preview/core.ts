@@ -55,18 +55,34 @@ export const paletteName = (id: string) => PALETTES.find((p) => p.id === id)?.na
  * outside its own box) fits the preview, and centre that drawing. Uses a transform, so hit-testing,
  * focus rings and anchored overlays stay correct.
  */
+// Every preview due in a frame is fitted together: all resets, then all measurements, then all writes. Fitting
+// them one by one alternated writes and reads, a full layout per preview; with 211 on the index Safari spent
+// ten seconds doing that before it answered a click.
+type FitJob = { reset: () => void; measure: () => Partial<CSSStyleDeclaration>; apply: (v: Partial<CSSStyleDeclaration>) => void };
+const fitQueue = new Set<FitJob>();
+let fitFrame = 0;
+function scheduleFit(job: FitJob) {
+  fitQueue.add(job);
+  fitFrame ||= requestAnimationFrame(() => {
+    fitFrame = 0;
+    const jobs = [...fitQueue]; fitQueue.clear();
+    jobs.forEach((j) => j.reset());
+    const values = jobs.map((j) => j.measure());
+    jobs.forEach((j, i) => j.apply(values[i]));
+  });
+}
+
 export function fit(box: HTMLElement, inner: HTMLElement, pad = 24) {
   const base = inner.getAttribute('style') ?? '';
-  const run = () => {
-    inner.setAttribute('style', base);
-    inner.style.transform = 'none';
+  const reset = () => { inner.setAttribute('style', base); inner.style.transform = 'none'; };
+  // Reads only: what to write once every preview due this frame has been measured.
+  const measure = (): Partial<CSSStyleDeclaration> => {
     // An open dialog lays itself out against the box. Turn the inner wrapper into a virtual screen
     // (at least 600px wide) scaled to the box, so the dialog has real room in small cards too.
     if (inner.querySelector('[data-contained-open]')) {
       const b = box.getBoundingClientRect();
       const s = Math.min(1, b.width / Math.max(600, parseFloat(inner.style.width) || 0), b.height / 380);
-      Object.assign(inner.style, { position: 'absolute', left: '0', top: '0', width: `${b.width / s}px`, height: `${b.height / s}px`, maxWidth: 'none', transformOrigin: '0 0', transform: `scale(${s.toFixed(3)})` });
-      return;
+      return { position: 'absolute', left: '0', top: '0', width: `${b.width / s}px`, height: `${b.height / s}px`, maxWidth: 'none', transformOrigin: '0 0', transform: `scale(${s.toFixed(3)})` };
     }
     const b = box.getBoundingClientRect();
     const r = inner.getBoundingClientRect();
@@ -96,14 +112,16 @@ export function fit(box: HTMLElement, inner: HTMLElement, pad = 24) {
     // Move the drawing's centre to the box centre, scaling around the drawing's centre.
     const cx = (L + R) / 2, cy = (T + B) / 2;
     const tx = b.left + b.width / 2 - cx, ty = b.top + b.height / 2 - cy;
-    inner.style.transformOrigin = `${cx - r.left}px ${cy - r.top}px`;
-    inner.style.transform = `translate(${Math.round(tx)}px, ${Math.round(ty)}px) scale(${s.toFixed(3)})`;
+    return { transformOrigin: `${cx - r.left}px ${cy - r.top}px`, transform: `translate(${Math.round(tx)}px, ${Math.round(ty)}px) scale(${s.toFixed(3)})` };
   };
-  requestAnimationFrame(run);
-  const timers = [150, 700].map((ms) => setTimeout(run, ms));
-  const ro = new ResizeObserver(() => requestAnimationFrame(run));
+  const job: FitJob = { reset, measure, apply: (v) => Object.assign(inner.style, v) };
+  const run = () => { reset(); job.apply(measure()); };
+  const later = () => scheduleFit(job);
+  later();
+  const timers = [150, 700].map((ms) => setTimeout(later, ms));
+  const ro = new ResizeObserver(later);
   ro.observe(box);
-  return Object.assign(() => { ro.disconnect(); timers.forEach(clearTimeout); }, { refit: run });
+  return Object.assign(() => { ro.disconnect(); timers.forEach(clearTimeout); fitQueue.delete(job); }, { refit: run });
 }
 
 // ------------------------------------------------------------------ copy to clipboard (no downloads anywhere in the gallery)

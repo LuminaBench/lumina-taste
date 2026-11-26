@@ -210,6 +210,18 @@ const visit = (f) => {
   }
 };
 for (const e of entries) visit(e);
+// Next: the blueprint's own script (its charts, states and page behaviour) comes too, with what it imports. Its CSS
+// imports and the gallery boot are left out: app/globals.css carries the styles, and writeNext() writes a boot.
+const nextPage = framework === 'next' && want.blueprints.length ? catalog.blueprints.find((x) => x.id === want.blueprints[0]) : null;
+const nextPageSrc = nextPage && existsSync(join(root, nextPage.path, 'main.ts')) ? readFileSync(join(root, nextPage.path, 'main.ts'), 'utf8') : '';
+for (const m of nextPageSrc.matchAll(IMPORT)) {
+  const spec = m[1] ?? m[2];
+  if (/_shared\/boot$/.test(spec)) continue;
+  const r = resolveImport(`${nextPage.path}/main.ts`, spec);
+  // Component styles the script needs (a toast stack it creates has no markup on the page) go into globals.css.
+  if (/\.css$/.test(spec)) { if (r?.startsWith('components/')) files.add(r); continue; }
+  if (r) visit(r);
+}
 // Blueprint boot imports tokens itself; everything else gets tokens explicitly below.
 const tokenFiles = ['tokens/base.css', 'tokens/layout.css', 'tokens/backdrops.css', 'tokens/composition.css', 'tokens/scroll.css', 'tokens/typography/typography.css', ...(opts['all-palettes'] ? ['tokens/palettes/all.css'] : [`tokens/palettes/${profile.palette}.css`]), ...(profile.style !== 'none' ? ['tokens/styles/styles.css'] : [])];
 for (const f of [...files]) if (f.startsWith('tokens/palettes/') && f !== `tokens/palettes/${profile.palette}.css`) files.delete(f);
@@ -322,7 +334,14 @@ function tailwindCss() {
     `/* lumina-taste for Tailwind v4: palette ${profile.palette}, type ${profile.typography}, radius ${profile.radius}.`,
     '   Use this file as the entry stylesheet. Colours, fonts, radii and spacing come from the kit\'s tokens, so',
     '   utilities follow <html data-mode="light|dark"> and the kit\'s dark and brand bands. Every pair is contrast-checked. */',
-    '@import "tailwindcss";',
+    '',
+    '/* Tailwind\'s theme and utilities, without its Preflight reset: the kit\'s base styles are the reset, and Preflight',
+    '   would take the underline off its links, the weight off its <strong> and <th>, the bullets off its lists and',
+    '   the padding off its native controls. Want Preflight for markup of your own? Add, before lumina.css:',
+    '   @import "tailwindcss/preflight.css" layer(base);  (the kit\'s parts then lose those defaults). */',
+    '@layer theme, base, components, utilities;',
+    '@import "tailwindcss/theme.css" layer(theme);',
+    '@import "tailwindcss/utilities.css" layer(utilities);',
     '@import "./lumina.css";',
     '',
     '/* dark: follows the kit\'s mode attribute, not the OS setting alone. */',
@@ -397,7 +416,22 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   // Behaviour for kit markup on the page: the vanilla enhancers, started once on the client.
   const enhancers = want.components.map((id) => catalog.ui.find((c) => c.id === id)).filter((c) => c && c.files.some((f) => f.endsWith(`${c.id}.ts`)) && /export function enhance\b/.test(readFileSync(join(root, c.files.find((f) => f.endsWith(`${c.id}.ts`))), 'utf8')))
     .map((c) => ({ id: c.id, name: readFileSync(join(root, c.files.find((f) => f.endsWith('.html')) ?? c.files[0]), 'utf8').match(/data-lt="([^"]+)"/)?.[1] ?? c.id, file: c.files.find((f) => f.endsWith(`${c.id}.ts`)).replace(/\.ts$/, '') }));
-  const enhance = `'use client';
+  // A blueprint page brings its own script: it enhances the kit's elements with the options it needs and runs the
+  // page's behaviour (charts drawn from data, ?state= views, the booking answer). Without it a dashboard has no charts.
+  if (nextPage) {
+    write(`${nextPage.path}/main.ts`, `// ${nextPage.path}/main.ts from lumina-taste, for Next.js: the styles are in app/globals.css.\n${nextPageSrc.replace(/^import\s+['"][^'"]+\.css['"];[^\n]*\n/gm, '')}`, true);
+    write('blueprints/_shared/boot.ts', `// Next.js boot for a blueprint page: enhance every [data-lt] element. (The gallery's version also loads the\n// tokens and follows the gallery's theme; here app/layout.tsx sets the theme and app/globals.css loads the styles.)\nimport { autoEnhance, type Enhancer } from '../../components/ui/_shared/dom';\n\nexport function boot(registry: Record<string, Enhancer>) {\n  return autoEnhance(document, registry);\n}\n`, true);
+  }
+  const enhance = nextPage ? `'use client';
+// Starts the page once it is in the document: the ${nextPage.id} blueprint's script enhances every kit element
+// ([data-lt]) and runs the page's own behaviour. It loads in the browser only, after the first paint.
+import { useEffect } from 'react';
+
+export function Enhance() {
+  useEffect(() => { void import('${rel(join(dest, nextPage.path, 'main'))}'); }, []);
+  return null;
+}
+` : `'use client';
 // Starts the behaviour of every kit element on the page ([data-lt]) once it is in the document.
 import { useEffect } from 'react';
 import { autoEnhance } from '${rel(join(dest, 'components/ui/_shared/dom'))}';

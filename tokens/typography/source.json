@@ -22,21 +22,45 @@
           "roles": ["display"],
           "axes": {"opsz":[9,144],"wght":[100,900]},
           "fallback": "serif",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 2000,
+            "ascent": 0.978,
+            "descent": 0.255,
+            "lineGap": 0,
+            "regular": {"wght":500,"opsz":57,"avgWidth":0.4489},
+            "bold": {"wght":600,"opsz":57,"avgWidth":0.45643}
+          }
         },
         {
           "family": "Inter Tight",
           "roles": ["body"],
           "axes": {"wght":[100,900]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 2048,
+            "ascent": 0.9688,
+            "descent": 0.2412,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":18,"avgWidth":0.43159},
+            "bold": {"wght":600,"opsz":18,"avgWidth":0.45064}
+          }
         },
         {
           "family": "JetBrains Mono",
           "roles": ["mono"],
           "axes": {"wght":[100,800]},
           "fallback": "mono",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.02,
+            "descent": 0.3,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":18,"avgWidth":0.6},
+            "bold": {"wght":600,"opsz":18,"avgWidth":0.6}
+          }
         }
       ]
     },
@@ -62,14 +86,30 @@
           "roles": ["display","body"],
           "axes": {"wght":[100,900]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.005,
+            "descent": 0.295,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":15,"avgWidth":0.468},
+            "bold": {"wght":600,"opsz":37,"avgWidth":0.4885}
+          }
         },
         {
           "family": "Geist Mono",
           "roles": ["mono"],
           "axes": {"wght":[100,900]},
           "fallback": "mono",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.005,
+            "descent": 0.295,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":15,"avgWidth":0.6},
+            "bold": {"wght":600,"opsz":15,"avgWidth":0.6}
+          }
         }
       ]
     },
@@ -94,21 +134,45 @@
           "roles": ["display"],
           "weights": [100,200,300,400,500,600,700,800,900],
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1,
+            "descent": 0.2,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":43,"avgWidth":0.34905},
+            "bold": {"wght":600,"opsz":43,"avgWidth":0.35583}
+          }
         },
         {
           "family": "IBM Plex Sans",
           "roles": ["body"],
           "axes": {"wdth":[85,100],"wght":[100,700]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.025,
+            "descent": 0.275,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":15,"avgWidth":0.44898},
+            "bold": {"wght":600,"opsz":15,"avgWidth":0.46494}
+          }
         },
         {
           "family": "IBM Plex Mono",
           "roles": ["mono"],
           "weights": [100,200,300,400,500,600,700],
           "fallback": "mono",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.025,
+            "descent": 0.275,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":15,"avgWidth":0.6},
+            "bold": {"wght":600,"opsz":15,"avgWidth":0.6}
+          }
         }
       ]
     },
@@ -133,14 +197,30 @@
           "roles": ["display","body"],
           "axes": {"wght":[200,900]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.024,
+            "descent": 0.4,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":17,"avgWidth":0.41746},
+            "bold": {"wght":600,"opsz":46,"avgWidth":0.43026}
+          }
         },
         {
           "family": "Source Code Pro",
           "roles": ["mono"],
           "axes": {"wght":[200,900]},
           "fallback": "mono",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 0.984,
+            "descent": 0.273,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":17,"avgWidth":0.6},
+            "bold": {"wght":600,"opsz":17,"avgWidth":0.6}
+          }
         }
       ]
     },
@@ -154,7 +234,7 @@
       "mono": "\"JetBrains Mono\", ui-monospace, Menlo, Consolas, monospace",
       "displayWeight": 600,
       "bodyWeight": 400,
-      "displayTracking": -0.035,
+      "displayTracking": -0.025,
       "displayLeading": 1.02,
       "base": [15,17],
       "ratio": [1.22,1.38],
@@ -165,14 +245,30 @@
           "roles": ["display","body"],
           "axes": {"opsz":[14,32],"wght":[100,900]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 2048,
+            "ascent": 0.9688,
+            "descent": 0.2412,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":17,"avgWidth":0.4727},
+            "bold": {"wght":600,"opsz":62,"avgWidth":0.45314}
+          }
         },
         {
           "family": "JetBrains Mono",
           "roles": ["mono"],
           "axes": {"wght":[100,800]},
           "fallback": "mono",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.02,
+            "descent": 0.3,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":17,"avgWidth":0.6},
+            "bold": {"wght":600,"opsz":17,"avgWidth":0.6}
+          }
         }
       ]
     },
@@ -197,21 +293,45 @@
           "roles": ["display"],
           "axes": {"opsz":[6,72],"wght":[200,800]},
           "fallback": "serif",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 2000,
+            "ascent": 0.735,
+            "descent": 0.265,
+            "lineGap": 0,
+            "regular": {"wght":500,"opsz":51,"avgWidth":0.44742},
+            "bold": {"wght":600,"opsz":51,"avgWidth":0.4591}
+          }
         },
         {
           "family": "Source Serif 4",
           "roles": ["body"],
           "axes": {"opsz":[8,60],"wght":[200,900]},
           "fallback": "serif",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.036,
+            "descent": 0.335,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":19,"avgWidth":0.45482},
+            "bold": {"wght":600,"opsz":19,"avgWidth":0.46139}
+          }
         },
         {
           "family": "IBM Plex Mono",
           "roles": ["mono"],
           "weights": [100,200,300,400,500,600,700],
           "fallback": "mono",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.025,
+            "descent": 0.275,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":19,"avgWidth":0.6},
+            "bold": {"wght":600,"opsz":19,"avgWidth":0.6}
+          }
         }
       ]
     },
@@ -236,9 +356,31 @@
           "roles": ["display","body"],
           "axes": {"wght":[200,800]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 2000,
+            "ascent": 1.066,
+            "descent": 0.3,
+            "lineGap": 0,
+            "regular": {"wght":450,"opsz":16,"avgWidth":0.46101},
+            "bold": {"wght":650,"opsz":49,"avgWidth":0.47699}
+          }
         },
-        {"family":"DM Mono","roles":["mono"],"weights":[300,400,500],"fallback":"mono","licence":"OFL-1.1"}
+        {
+          "family": "DM Mono",
+          "roles": ["mono"],
+          "weights": [300,400,500],
+          "fallback": "mono",
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 0.992,
+            "descent": 0.31,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":16,"avgWidth":0.6},
+            "bold": {"wght":600,"opsz":16,"avgWidth":0.6}
+          }
+        }
       ]
     },
     {
@@ -262,14 +404,30 @@
           "roles": ["display","mono"],
           "axes": {"wght":[100,800]},
           "fallback": "mono",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.02,
+            "descent": 0.3,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":37,"avgWidth":0.6},
+            "bold": {"wght":600,"opsz":37,"avgWidth":0.6}
+          }
         },
         {
           "family": "IBM Plex Sans",
           "roles": ["body"],
           "axes": {"wdth":[85,100],"wght":[100,700]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.025,
+            "descent": 0.275,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":15,"avgWidth":0.44898},
+            "bold": {"wght":600,"opsz":15,"avgWidth":0.465}
+          }
         }
       ]
     },
@@ -288,15 +446,38 @@
       "base": [15,17],
       "ratio": [1.25,1.414],
       "webfont": "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..600&family=Jost:wght@400..600&display=swap",
+      "features": "\"lnum\" 1",
       "fonts": [
         {
           "family": "Playfair Display",
           "roles": ["display"],
           "axes": {"wght":[400,900]},
           "fallback": "serif",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.082,
+            "descent": 0.251,
+            "lineGap": 0,
+            "regular": {"wght":500,"opsz":68,"avgWidth":0.45485},
+            "bold": {"wght":600,"opsz":68,"avgWidth":0.45864}
+          }
         },
-        {"family":"Jost","roles":["body"],"axes":{"wght":[100,900]},"fallback":"sans","licence":"OFL-1.1"}
+        {
+          "family": "Jost",
+          "roles": ["body"],
+          "axes": {"wght":[100,900]},
+          "fallback": "sans",
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.07,
+            "descent": 0.375,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":17,"avgWidth":0.43233},
+            "bold": {"wght":600,"opsz":17,"avgWidth":0.46297}
+          }
+        }
       ]
     },
     {
@@ -320,21 +501,45 @@
           "roles": ["display"],
           "weights": [300,400,500,600,700],
           "fallback": "serif",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 0.944,
+            "descent": 0.256,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":52,"avgWidth":0.43501},
+            "bold": {"wght":600,"opsz":52,"avgWidth":0.43724}
+          }
         },
         {
           "family": "Inter",
           "roles": ["body"],
           "axes": {"opsz":[14,32],"wght":[100,900]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 2048,
+            "ascent": 0.9688,
+            "descent": 0.2412,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":17,"avgWidth":0.47986},
+            "bold": {"wght":600,"opsz":17,"avgWidth":0.48841}
+          }
         },
         {
           "family": "Roboto Mono",
           "roles": ["mono"],
           "axes": {"wght":[100,700]},
           "fallback": "mono",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 2048,
+            "ascent": 1.0479,
+            "descent": 0.271,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":17,"avgWidth":0.6001},
+            "bold": {"wght":600,"opsz":17,"avgWidth":0.6001}
+          }
         }
       ]
     },
@@ -359,21 +564,45 @@
           "roles": ["display"],
           "weights": [100,200,300,400,500,600,700],
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.025,
+            "descent": 0.275,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":29,"avgWidth":0.41478},
+            "bold": {"wght":600,"opsz":29,"avgWidth":0.42074}
+          }
         },
         {
           "family": "IBM Plex Sans",
           "roles": ["body"],
           "axes": {"wdth":[85,100],"wght":[100,700]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.025,
+            "descent": 0.275,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":14,"avgWidth":0.44898},
+            "bold": {"wght":600,"opsz":14,"avgWidth":0.46494}
+          }
         },
         {
           "family": "IBM Plex Mono",
           "roles": ["mono"],
           "weights": [100,200,300,400,500,600,700],
           "fallback": "mono",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.025,
+            "descent": 0.275,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":14,"avgWidth":0.6},
+            "bold": {"wght":600,"opsz":14,"avgWidth":0.6}
+          }
         }
       ]
     },
@@ -398,7 +627,15 @@
           "roles": ["display","body"],
           "axes": {"wght":[200,1000]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.011,
+            "descent": 0.353,
+            "lineGap": 0,
+            "regular": {"wght":500,"opsz":17,"avgWidth":0.45575},
+            "bold": {"wght":750,"opsz":49,"avgWidth":0.47485}
+          }
         }
       ]
     },
@@ -423,14 +660,30 @@
           "roles": ["display","body"],
           "axes": {"wght":[100,900]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 2000,
+            "ascent": 0.883,
+            "descent": 0.383,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":17,"avgWidth":0.44772},
+            "bold": {"wght":800,"opsz":54,"avgWidth":0.47721}
+          }
         },
         {
           "family": "Overpass Mono",
           "roles": ["mono"],
           "axes": {"wght":[300,700]},
           "fallback": "mono",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 2000,
+            "ascent": 0.883,
+            "descent": 0.383,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":17,"avgWidth":0.616},
+            "bold": {"wght":600,"opsz":17,"avgWidth":0.616}
+          }
         }
       ]
     },
@@ -455,14 +708,30 @@
           "roles": ["display","body"],
           "axes": {"wght":[200,800]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 0.984,
+            "descent": 0.316,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":18,"avgWidth":0.4429},
+            "bold": {"wght":700,"opsz":48,"avgWidth":0.47801}
+          }
         },
         {
           "family": "Atkinson Hyperlegible Mono",
           "roles": ["mono"],
           "axes": {"wght":[200,800]},
           "fallback": "mono",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 0.984,
+            "descent": 0.316,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":18,"avgWidth":0.632},
+            "bold": {"wght":600,"opsz":18,"avgWidth":0.632}
+          }
         }
       ]
     },
@@ -476,7 +745,7 @@
       "mono": "\"Courier Prime\", \"Courier New\", ui-monospace, Menlo, monospace",
       "displayWeight": 800,
       "bodyWeight": 400,
-      "displayTracking": -0.02,
+      "displayTracking": -0.01,
       "displayLeading": 1.04,
       "base": [15,17],
       "ratio": [1.2,1.333],
@@ -487,16 +756,46 @@
           "roles": ["display"],
           "axes": {"wght":[100,900]},
           "fallback": "serif",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 0.935,
+            "descent": 0.265,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":54,"avgWidth":0.4615},
+            "bold": {"wght":800,"opsz":54,"avgWidth":0.47357}
+          }
         },
         {
           "family": "Work Sans",
           "roles": ["body"],
           "axes": {"wght":[100,900]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 0.93,
+            "descent": 0.243,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":17,"avgWidth":0.50049},
+            "bold": {"wght":600,"opsz":17,"avgWidth":0.50088}
+          }
         },
-        {"family":"Courier Prime","roles":["mono"],"weights":[400,700],"fallback":"mono","licence":"OFL-1.1"}
+        {
+          "family": "Courier Prime",
+          "roles": ["mono"],
+          "weights": [400,700],
+          "fallback": "mono",
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 2048,
+            "ascent": 0.7813,
+            "descent": 0.3418,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":17,"avgWidth":0.59961},
+            "bold": {"wght":600,"opsz":17,"avgWidth":0.59961}
+          }
+        }
       ]
     },
     {
@@ -521,14 +820,30 @@
           "roles": ["display"],
           "axes": {"wdth":[62,125],"wght":[100,900]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 0.878,
+            "descent": 0.21,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":62,"avgWidth":0.55968},
+            "bold": {"wght":800,"opsz":62,"avgWidth":0.6146}
+          }
         },
         {
           "family": "Barlow",
           "roles": ["body"],
           "weights": [100,200,300,400,500,600,700,800,900],
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1,
+            "descent": 0.2,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":17,"avgWidth":0.42809},
+            "bold": {"wght":600,"opsz":17,"avgWidth":0.43711}
+          }
         }
       ]
     },
@@ -553,7 +868,15 @@
           "roles": ["display","body"],
           "axes": {"opsz":[7,72],"wght":[200,900]},
           "fallback": "serif",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1.177,
+            "descent": 0.308,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":18,"avgWidth":0.47787},
+            "bold": {"wght":650,"opsz":51,"avgWidth":0.49853}
+          }
         }
       ]
     },
@@ -578,14 +901,30 @@
           "roles": ["display","body"],
           "axes": {"wght":[300,700]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 2000,
+            "ascent": 0.9635,
+            "descent": 0.2365,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":16,"avgWidth":0.44761},
+            "bold": {"wght":700,"opsz":46,"avgWidth":0.4632}
+          }
         },
         {
           "family": "Spline Sans Mono",
           "roles": ["mono"],
           "axes": {"wght":[300,700]},
           "fallback": "mono",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 2000,
+            "ascent": 0.9635,
+            "descent": 0.2365,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":16,"avgWidth":0.6},
+            "bold": {"wght":600,"opsz":16,"avgWidth":0.6}
+          }
         }
       ]
     },
@@ -610,9 +949,31 @@
           "roles": ["display"],
           "axes": {"wdth":[75,125],"wght":[300,700]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 0.974,
+            "descent": 0.236,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":51,"avgWidth":0.45274},
+            "bold": {"wght":600,"opsz":51,"avgWidth":0.45399}
+          }
         },
-        {"family":"Lexend","roles":["body"],"axes":{"wght":[100,900]},"fallback":"sans","licence":"OFL-1.1"}
+        {
+          "family": "Lexend",
+          "roles": ["body"],
+          "axes": {"wght":[100,900]},
+          "fallback": "sans",
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 1,
+            "descent": 0.25,
+            "lineGap": 0,
+            "regular": {"wght":350,"opsz":18,"avgWidth":0.48248},
+            "bold": {"wght":600,"opsz":18,"avgWidth":0.51093}
+          }
+        }
       ]
     },
     {
@@ -636,14 +997,30 @@
           "roles": ["display"],
           "axes": {"opsz":[10,72],"wght":[100,900]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 2000,
+            "ascent": 0.9855,
+            "descent": 0.2145,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":68,"avgWidth":0.30952},
+            "bold": {"wght":800,"opsz":68,"avgWidth":0.38611}
+          }
         },
         {
           "family": "Sofia Sans",
           "roles": ["body"],
           "axes": {"wght":[1,1000]},
           "fallback": "sans",
-          "licence": "OFL-1.1"
+          "licence": "OFL-1.1",
+          "metrics": {
+            "unitsPerEm": 1000,
+            "ascent": 0.9,
+            "descent": 0.3,
+            "lineGap": 0,
+            "regular": {"wght":400,"opsz":17,"avgWidth":0.42774},
+            "bold": {"wght":600,"opsz":17,"avgWidth":0.43074}
+          }
         }
       ]
     }

@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { clampChroma, contrast, oklchToRgb8, rgb8ToHex, round, toCss } from './lib/color.mjs';
 import { CHART_SERIES, RULES, STATUS_NAMES } from './lib/contrast-rules.mjs';
 import { parseWebfont } from './lib/webfont.mjs';
+import { fallbackStylesheet } from './lib/font-metrics.mjs';
 import { pickAccent } from '../engine/compose/accent.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -172,9 +173,15 @@ for (const t of pairings) {
   // width axis in such a pairing (checkPairings enforces it), so setting it once leaves body text alone.
   if (t.displayStretch) tcss += `  --stretch-display: ${t.displayStretch}%;\n  font-stretch: var(--stretch-display);\n`;
   if (loaded.some((x) => x.axes?.opsz)) tcss += `  font-optical-sizing: auto;\n`;
+  // OpenType features the real face needs by default (Playfair Display draws old-style figures unless asked).
+  if (t.features) tcss += `  font-feature-settings: ${t.features};\n`;
   tcss += `}\n`;
 }
 writeFileSync(join(root, 'tokens/typography/typography.css'), tcss);
+// Metric-matched "<Family> Fallback" faces from the metrics measured on the real files (source.json), for pages
+// that use the Google Fonts link: opt-in, because defining the name would hide the installed faces the stacks
+// name after it on pages that load no web font at all.
+writeFileSync(join(root, 'tokens/typography/fallbacks.css'), fallbackStylesheet(pairings));
 
 // Keep the profile schema's typography enum in step with the pairings.
 {
