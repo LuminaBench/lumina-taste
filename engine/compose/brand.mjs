@@ -116,6 +116,22 @@ export function checkOverrides(tokens, overrides) {
 }
 
 // ---------------------------------------------------------------- palette, type and tone
+/** Palettes that are one of the looks models fall back on (references/ai-defaults.md), named by the critic's
+ *  own tests, plus the three the kit names outright. A brand colour is never handed one of these. */
+const NAMED_DEFAULTS = { 'terminal-phosphor': 'black with one acid colour', 'mono-lime': 'black with one acid colour', 'black-signal': 'black with one acid colour' };
+export function defaultLook(p) {
+  if (NAMED_DEFAULTS[p.id]) return NAMED_DEFAULTS[p.id];
+  const lch = (m, k) => parseOklch(p.modes[m].tokens[k].oklch);
+  const inHue = (h, a, b) => h >= a && h <= b;
+  for (const m of ['light', 'dark']) {
+    const [gL, gC, gH] = lch(m, 'bg-canvas'), [, aC, aH] = lch(m, 'accent-solid');
+    if (inHue(aH, 262, 305) && aC >= 0.12) return 'the indigo or violet SaaS default';
+    if (m === 'light' && gL >= 0.93 && gC >= 0.006 && gC <= 0.045 && inHue(gH, 55, 100) && ((inHue(aH, 12, 58) && aC >= 0.06) || (inHue(aH, 125, 178) && aC >= 0.04))) return 'cream with a terracotta or forest accent';
+    if (m === 'dark' && gL <= 0.24 && aC >= 0.15 && (inHue(aH, 105, 150) || inHue(aH, 18, 52))) return 'black with one acid colour';
+  }
+  return null;
+}
+
 /**
  * The closest shipped palette to a brand colour (accent weighted most, the ground when known), and the
  * accent override that keeps the brand's own colour when no palette is close enough.
@@ -130,10 +146,12 @@ export function fitPalette(brand, palettes, { mode = null } = {}) {
     const d = dist(a, lchToLab(parseOklch(t['accent-solid'].oklch))) * 2.5 + (brand.canvas ? dist(lchToLab(brand.canvas), lchToLab(parseOklch(t['bg-canvas'].oklch))) : 0);
     return { p, d, gap: dist(a, lchToLab(parseOklch(t['accent-solid'].oklch))) };
   }).sort((x, y) => x.d - y.d);
-  const best = ranked[0];
+  // The nearest palette may be a default look; then the brand colour is set on the nearest palette that is not.
+  const best = ranked.find((r) => !defaultLook(r.p)) ?? ranked[0];
+  const avoided = best !== ranked[0] ? { id: ranked[0].p.id, name: ranked[0].p.name, look: defaultLook(ranked[0].p) } : null;
   // Close enough: the shipped palette as it is. Otherwise the brand colour, solved for the page.
   let overrides = null, perMode = null, fails = [];
-  if (best.gap > 0.06) {
+  if (best.gap > 0.06 || avoided) {
     // One override serves both modes (the installer checks it in each), so it is solved against both grounds.
     const own = solveAccent(brand.accent, best.p.modes.light.tokens, best.p.modes.dark.tokens);
     if (own) {
@@ -146,7 +164,7 @@ export function fitPalette(brand, palettes, { mode = null } = {}) {
     if (!perMode.light && !perMode.dark) perMode = null;
     else for (const m2 of ['light', 'dark']) if (perMode[m2]) fails.push(...checkOverrides(best.p.modes[m2].tokens, perMode[m2]).map((f) => `${m2} (own): ${f}`));
   }
-  return { palette: best.p.id, name: best.p.name, mode: m, perMode, gap: +best.gap.toFixed(3), overrides, contrastFailures: fails, alternatives: ranked.slice(1, 3).map((r) => r.p.id) };
+  return { palette: best.p.id, name: best.p.name, avoided, mode: m, perMode, gap: +best.gap.toFixed(3), overrides, contrastFailures: fails, alternatives: ranked.filter((r) => r !== best && !defaultLook(r.p)).slice(0, 2).map((r) => r.p.id) };
 }
 
 /** A typeface pairing for a brand colour (or the fonts a site already uses), with the reason. */
@@ -247,9 +265,10 @@ export async function brandFrom(src, { palettes, sniff = null, current = null })
   const fit = fitPalette({ accent, canvas }, palettes);
   const type = suggestType({ accent, fonts, current });
   const flags = [`--palette ${fit.palette}`, `--mode ${fit.mode}`, `--type ${type.typography}`, ...Object.entries(fit.overrides ?? {}).map(([k, v]) => `--override ${k}="${v}"`)];
-  const note = fit.overrides ? `The brand colour is its own, so the ${fit.name} palette carries it as a solved accent (contrast-checked in light and dark).`
+  const why = fit.avoided ? `The nearest shipped palette, ${fit.avoided.name}, is ${fit.avoided.look}, one of the looks every model falls back on, so the brand colour is set on ${fit.name}'s ground instead. ` : '';
+  const note = why + (fit.overrides ? `The brand colour is its own, so the ${fit.name} palette carries it as a solved accent (contrast-checked in light and dark).`
     : fit.perMode ? `The brand colour is its own and no single shade of it passes contrast in both light and dark, so each mode gets its own shade (solved like a shipped palette's accent) and a draft carries them in a <style> block. The install command keeps the ${fit.name} accent, because a profile override is one value for both modes.`
     : fit.gap > 0.06 ? `The brand colour cannot be a button colour in both light and dark and still pass contrast, so the ${fit.name} palette keeps its own accent. Use the brand colour where text does not sit on it at small sizes: the bold idea's panel (style="--art: ${toCss(accent)}") or one large figure.`
-    : `The ${fit.name} palette is within a step of the brand colour, so it is used as it is.`;
+    : `The ${fit.name} palette is within a step of the brand colour, so it is used as it is.`);
   return { kind, src, colours: colours.map((c) => ({ ...c, css: toCss(c.lch) })), accent: toCss(accent), ...fit, type, tone: toneNote(accent), note, flags };
 }
