@@ -194,10 +194,24 @@ const PAGE_CHECKS = (copyRules = []) => {
   // 3. Overlapping text (text vs text; identical stacked layers are allowed)
   const floatCache = new Map();
   const floating = (el) => { if (floatCache.has(el)) return floatCache.get(el); let f = null; for (let e = el; e && e.nodeType === 1; e = e.parentElement) { const p = getComputedStyle(e).position; if (p === 'fixed' || p === 'sticky') { f = e; break; } } floatCache.set(el, f); return f; };
-  // One box per rendered line, clipped like the text is, so wrapped inline runs never look like overlaps.
+  // One box per rendered line, clipped like the text is, so wrapped inline runs never look like overlaps. A line's box
+  // is the font's whole ascent and descent, which in tall faces (Literata, Nunito, Playfair Display) reaches far past
+  // the letters: narrow it to the ink, measured on a canvas in the same font (baseline from the font's own ascent).
+  const inkCx = document.createElement('canvas').getContext('2d');
+  const inkMemo = new Map();
+  const inkOf = (el, text) => {
+    const cs = getComputedStyle(el);
+    const font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+    const k = `${font}|${text}`;
+    if (!inkMemo.has(k)) { inkCx.font = font; const m = inkCx.measureText(text); inkMemo.set(k, m.fontBoundingBoxAscent > 0 ? { fa: m.fontBoundingBoxAscent, fd: m.fontBoundingBoxDescent, ia: m.actualBoundingBoxAscent, id: m.actualBoundingBoxDescent } : null); }
+    return inkMemo.get(k);
+  };
   const boxes = [];
   for (const l of leaves) for (const lr of l.rects) {
-    const r = { left: Math.max(lr.left, l.seen.left), right: Math.min(lr.right, l.seen.right), top: Math.max(lr.top, l.seen.top), bottom: Math.min(lr.bottom, l.seen.bottom) };
+    let top = lr.top, bottom = lr.bottom;
+    const ink = inkOf(l.el, l.text);
+    if (ink && lr.height > 2) { const base = lr.top + lr.height * (ink.fa / (ink.fa + ink.fd)); top = Math.max(top, base - ink.ia - 1); bottom = Math.min(bottom, base + ink.id + 1); }
+    const r = { left: Math.max(lr.left, l.seen.left), right: Math.min(lr.right, l.seen.right), top: Math.max(top, l.seen.top), bottom: Math.min(bottom, l.seen.bottom) };
     r.width = r.right - r.left; r.height = r.bottom - r.top;
     if (r.width > 2 && r.height > 2) boxes.push({ ...l, r });
   }
