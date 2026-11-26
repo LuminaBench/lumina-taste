@@ -1612,7 +1612,7 @@
         "flat illustration"
       ],
       "react": "ArtPanel",
-      "api": "data-motif=\"cup|loaf|crane|document|scales|leaf|phone|chart|key|ticket|tool|house|tooth|bowl|scissors|book|vase|bag\" · data-pattern=\"sun|arch|floor|none\" · data-tone=\"accent|ink|swatch\" · data-variant=\"figure\" · data-frame · data-ratio · data-shot",
+      "api": "data-motif=\"cup | loaf | crane | document | scales | leaf | phone | chart | key | ticket | tool | house | tooth | bowl | scissors | book | vase | bag\" · data-pattern=\"sun | arch | floor | none\" · data-tone=\"accent | ink | swatch\" · data-variant=\"figure\" · data-frame · data-ratio · data-shot",
       "w": 900,
       "called": [
         "what do I put where the photo goes",
