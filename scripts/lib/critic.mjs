@@ -258,6 +258,8 @@ export const MEASURE = (opts = {}) => {
   // The primary action in the first screen: where is it for the thumb?
   const reach = [...document.querySelectorAll('button, a, input[type="submit"], [role="button"]')].filter((el) => {
     if (!shown(el) || el.closest('dialog, [role="dialog"], [popover], [aria-hidden="true"], [data-audit-ignore], [data-mock] [data-mock]')) return false;
+    // An empty state's one action sits with its message in the middle of the screen, as a native empty view's does.
+    if (el.closest('.lt-empty, [data-view~="empty"]')) return false;
     // A form's own submit rides with the on-screen keyboard, which is open while it is used: not a reach question.
     if (el.form && el.form.querySelector('textarea, input:not([type="hidden"], [type="checkbox"], [type="radio"], [type="submit"], [type="button"])')) return false;
     const r = rectOf(el); if (r.bottom <= 0 || r.top >= vh) return false;
@@ -480,6 +482,8 @@ export const LONG_WORDS = (word) => {
   let n = 0;
   for (const e of document.querySelectorAll('h1, h2, h3, h4, p, li, dd, td, figcaption, blockquote')) {
     if (e.closest('svg, pre, code, [inert], [aria-hidden="true"], [data-audit-ignore], nav, button, a, label, [role="tab"], [role="option"]')) continue;
+    // A figure set large is a number, not running text: it keeps itself whole (tokens/base.css).
+    if (e.matches('[data-part="figure"], [data-num], .lt-num')) continue;
     // Text kept on one line on purpose (a reference, a time, a type name) is not running text: it keeps its own rules.
     if (/nowrap|pre/.test(getComputedStyle(e).whiteSpace)) continue;
     const t = [...e.childNodes].find((c) => c.nodeType === 3 && c.textContent.trim().length >= 3);

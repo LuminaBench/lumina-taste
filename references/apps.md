@@ -78,7 +78,7 @@ node scripts/export-tokens.mjs --format figma   --palette petrol-peach > lumina.
 | `app-gesture-conflict` | Swipe rows sit inside a sideways scroller, so one horizontal drag means two things |
 | `app-gesture-edge` | Swipe rows reach the outer 20px of the screen, where the system's back gesture starts, and the part does not leave that strip alone (`data-edge-guard`; `swipe-row` and `swipe-actions` do) |
 | `app-dynamic-type` | At 200% text (the root font size doubled), text is set in px and does not grow, is cut off, runs past the screen edge or sits on other text, or a control keeps a fixed height while its label grows |
-| `app-reach` | Every filled primary action in the first screen is in its top half, out of a thumb's reach (a form's own submit, which rides with the keyboard, does not count) |
+| `app-reach` | Every filled primary action in the first screen is in its top half, out of a thumb's reach (a form's own submit, which rides with the keyboard, and an empty state's one action do not count) |
 
 ## Accessibility beyond the basics
 
