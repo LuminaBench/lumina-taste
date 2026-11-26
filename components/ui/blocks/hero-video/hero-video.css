@@ -42,8 +42,7 @@
   [data-part="toggle"] [data-icon="play"] { display: none; }
   :scope:not([data-state="playing"]) [data-part="toggle"] [data-icon="pause"] { display: none; }
   :scope:not([data-state="playing"]) [data-part="toggle"] [data-icon="play"] { display: grid; }
-}
-@media print { .lt-hero-video [data-part="video"], .lt-hero-video [data-part="toggle"] { display: none !important; } 
+
   /* ---------------------------------------------------------------- data-variant="full"
      The film (or its still) is the whole first screen, edge to edge; the headline, the lede and the one action
      sit at its foot over a scrim in the section's own ground. Put data-tone="dark" on the section for light words.
@@ -60,3 +59,4 @@
   :scope[data-variant="full"] [data-part="toggle"] { top: clamp(12px, 2cqi, 24px); bottom: auto; }
   :scope[data-variant="full"] h1 { font-size: max(var(--step-5), clamp(2.75rem, 1rem + 4.8cqi, 5.5rem)); }
 }
+@media print { .lt-hero-video [data-part="video"], .lt-hero-video [data-part="toggle"] { display: none !important; } }

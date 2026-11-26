@@ -2,7 +2,7 @@
   "name": "lumina-taste",
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
-  "counts": {"ui":211,"charts":48,"blueprints":27,"palettes":24,"themes":48,"typography":20,"styles":39},
+  "counts": {"ui":214,"charts":48,"blueprints":27,"palettes":24,"themes":48,"typography":20,"styles":39},
   "families": [
     {
       "id": "controls",
@@ -51,7 +51,7 @@
       "title": "Sections for pages",
       "summary": "Whole page sections (heroes, pricing, FAQs, sign-in) built from the same tokens, so a page can be assembled in minutes and still look designed.",
       "order": 7,
-      "count": 35
+      "count": 38
     },
     {
       "id": "backdrops",
@@ -257,10 +257,21 @@
       "kind": "ui",
       "family": "blocks",
       "name": "Hero, split",
-      "summary": "Headline, one line of explanation and one primary action on the left; the product on the right.",
-      "aliases": ["landing hero","above the fold","header section with screenshot","split hero","marketing hero"],
+      "summary": "Headline, one sentence and one action beside one picture. data-variant composes the first screen four more ways: overlap, edge, product and bleed.",
+      "aliases": [
+        "landing hero",
+        "above the fold",
+        "header section with screenshot",
+        "split hero",
+        "marketing hero",
+        "full bleed photo hero",
+        "hero with text over photo",
+        "asymmetric hero",
+        "product first hero",
+        "image to the edge hero"
+      ],
       "pattern": "<section> with labelled heading",
-      "states": ["desktop two columns","stacked on narrow screens"],
+      "states": ["desktop two columns","stacked on narrow screens","overlap","edge","product","bleed"],
       "react": "HeroSplit",
       "deps": [],
       "files": [
@@ -275,10 +286,17 @@
       "kind": "ui",
       "family": "blocks",
       "name": "Hero, centred",
-      "summary": "A centred headline with an announcement pill, two actions and a framed product shot below.",
-      "aliases": ["centered hero","announcement pill hero","product launch hero","big headline section"],
+      "summary": "A centred headline with an announcement pill, two actions and a framed product shot below. data-variant=\"wide\" sets a larger statement over a picture that runs from edge to edge.",
+      "aliases": [
+        "centered hero",
+        "announcement pill hero",
+        "product launch hero",
+        "big headline section",
+        "centred statement over a wide photo",
+        "headline above full width image"
+      ],
       "pattern": "<section> with labelled heading",
-      "states": ["default","narrow"],
+      "states": ["default","narrow","wide"],
       "react": "HeroCentered",
       "deps": [],
       "files": [
@@ -804,7 +822,7 @@
       "kind": "ui",
       "family": "blocks",
       "name": "Hero, statement",
-      "summary": "A type-led hero: one very large headline across the page, then a ruled row with the pitch, the action and three facts.",
+      "summary": "A type-led hero: one very large headline across the page, then a ruled row with the pitch, the action and three facts. data-variant=\"tucked\" tucks a small picture into the headline; \"poster\" sets a date enormous as the composition.",
       "aliases": [
         "type hero",
         "big headline hero",
@@ -812,10 +830,13 @@
         "typographic hero",
         "no image hero",
         "statement headline",
-        "oversized title"
+        "oversized title",
+        "huge type with small photo",
+        "event poster hero",
+        "date as the hero"
       ],
       "pattern": "<h1> + <dl>",
-      "states": ["wide","stacked"],
+      "states": ["wide","stacked","tucked","poster"],
       "react": "HeroStatement",
       "deps": [],
       "files": [
@@ -840,7 +861,13 @@
         "cinematic hero"
       ],
       "pattern": "<video muted loop playsinline> over a poster",
-      "states": ["still only (no film)","playing","paused by the visitor","not started (reduced motion or Save-Data)"],
+      "states": [
+        "still only (no film)",
+        "playing",
+        "paused by the visitor",
+        "not started (reduced motion or Save-Data)",
+        "full screen"
+      ],
       "react": "HeroVideo",
       "deps": [],
       "files": [
@@ -850,6 +877,83 @@
         "components/ui/blocks/hero-video/hero-video.ts"
       ],
       "path": "components/ui/blocks/hero-video"
+    },
+    {
+      "id": "hero-board",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Hero, board",
+      "summary": "A first screen whose picture is the subject's own board: a café's menu with prices, or departures with times, set large on a dark board beside the headline and one action.",
+      "aliases": [
+        "menu board hero",
+        "departures board",
+        "timetable hero",
+        "price board",
+        "specials board",
+        "next departures",
+        "times board"
+      ],
+      "pattern": "<section> + <figure> holding an <ol> of rows",
+      "states": ["menu","departures","with a picture behind the board","stacked"],
+      "react": "HeroBoard",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/hero-board/hero-board.css",
+        "components/ui/blocks/hero-board/hero-board.html",
+        "components/ui/blocks/hero-board/hero-board.react.tsx"
+      ],
+      "path": "components/ui/blocks/hero-board"
+    },
+    {
+      "id": "hero-cover",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Hero, cover",
+      "summary": "The first screen set like a magazine cover: the name as a masthead across the column, a date line between two rules, one large picture and the cover line with one action.",
+      "aliases": [
+        "magazine cover hero",
+        "masthead hero",
+        "editorial cover",
+        "big name header",
+        "portfolio cover",
+        "publication front page",
+        "name across the page"
+      ],
+      "pattern": "<h1> masthead + <p> date line + one picture",
+      "states": ["with a picture","without a picture","stacked"],
+      "react": "HeroCover",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/hero-cover/hero-cover.css",
+        "components/ui/blocks/hero-cover/hero-cover.html",
+        "components/ui/blocks/hero-cover/hero-cover.react.tsx"
+      ],
+      "path": "components/ui/blocks/hero-cover"
+    },
+    {
+      "id": "hero-mosaic",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Hero, mosaic",
+      "summary": "Three to five pictures set as one interlocking composition, with the headline in the corner they leave free.",
+      "aliases": [
+        "collage hero",
+        "photo mosaic",
+        "image grid hero",
+        "gallery hero",
+        "bento hero with photos",
+        "several photos at the top"
+      ],
+      "pattern": "<section> + <ul> of pictures on a shared grid",
+      "states": ["three pictures","four","five","stacked"],
+      "react": "HeroMosaic",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/hero-mosaic/hero-mosaic.css",
+        "components/ui/blocks/hero-mosaic/hero-mosaic.html",
+        "components/ui/blocks/hero-mosaic/hero-mosaic.react.tsx"
+      ],
+      "path": "components/ui/blocks/hero-mosaic"
     },
     {
       "id": "service-list",
@@ -6367,10 +6471,10 @@
         "espresso"
       ],
       "swatches": {
-        "light": {"canvas":"#fbf6f1","accent":"#af5234","text":"#1b150f"},
+        "light": {"canvas":"#f9f6f4","accent":"#af5234","text":"#181613"},
         "dark": {"canvas":"#190f0a","accent":"#e58361","text":"#fff0e8"}
       },
-      "minTextContrast": {"light":14.51,"dark":13.47},
+      "minTextContrast": {"light":14.43,"dark":13.47},
       "files": ["tokens/palettes/espresso-terracotta.css"]
     },
     {
@@ -6429,10 +6533,10 @@
       "summary": "Calm health and fintech. Deep teal on porcelain.",
       "aliases": ["porcelain & deep teal","porcelain","deep teal","consumer palette","health","fintech","porcelain"],
       "swatches": {
-        "light": {"canvas":"#f4fafa","accent":"#017272","text":"#111718"},
+        "light": {"canvas":"#faf8f6","accent":"#017272","text":"#171614"},
         "dark": {"canvas":"#081214","accent":"#5cc9c2","text":"#e1f9fd"}
       },
-      "minTextContrast": {"light":14.85,"dark":13.68},
+      "minTextContrast": {"light":14.76,"dark":13.68},
       "files": ["tokens/palettes/porcelain-teal.css"]
     },
     {
@@ -6457,10 +6561,10 @@
       "summary": "Trading floor. Amber readouts on carbon black.",
       "aliases": ["carbon & amber","carbon","amber","data palette","trading","floor","amber","readouts","carbon","black"],
       "swatches": {
-        "light": {"canvas":"#fbf9f5","accent":"#985602","text":"#181612"},
+        "light": {"canvas":"#faf9f6","accent":"#985602","text":"#171613"},
         "dark": {"canvas":"#0c0a08","accent":"#fcb02b","text":"#f8f2ec"}
       },
-      "minTextContrast": {"light":14.76,"dark":14.8},
+      "minTextContrast": {"light":14.8,"dark":14.8},
       "files": ["tokens/palettes/carbon-amber.css"]
     },
     {
@@ -6547,10 +6651,10 @@
         "dashboards"
       ],
       "swatches": {
-        "light": {"canvas":"#f4f9fd","accent":"#0074a4","text":"#12171b"},
+        "light": {"canvas":"#f9f8f6","accent":"#0074a4","text":"#171614"},
         "dark": {"canvas":"#0a0f12","accent":"#55bef0","text":"#eaf5fd"}
       },
-      "minTextContrast": {"light":14.73,"dark":14.01},
+      "minTextContrast": {"light":14.66,"dark":14.01},
       "files": ["tokens/palettes/charcoal-sky.css"]
     },
     {
@@ -6611,10 +6715,10 @@
         "night"
       ],
       "swatches": {
-        "light": {"canvas":"#f2f9f3","accent":"#124830","text":"#111812"},
+        "light": {"canvas":"#f9f6f2","accent":"#124830","text":"#181610"},
         "dark": {"canvas":"#09150e","accent":"#e2bb6a","text":"#e3faed"}
       },
-      "minTextContrast": {"light":14.55,"dark":13.34},
+      "minTextContrast": {"light":14.52,"dark":13.34},
       "files": ["tokens/palettes/forest-brass.css"]
     },
     {
@@ -6636,10 +6740,10 @@
         "gradient"
       ],
       "swatches": {
-        "light": {"canvas":"#f9f9fc","accent":"#6949ba","text":"#16161a"},
+        "light": {"canvas":"#f9f9fc","accent":"#6949ba","text":"#161619"},
         "dark": {"canvas":"#0d0d12","accent":"#ad99fb","text":"#f2f2fe"}
       },
-      "minTextContrast": {"light":14.77,"dark":14.23},
+      "minTextContrast": {"light":14.78,"dark":14.23},
       "files": ["tokens/palettes/graphite-violet.css"]
     },
     {
@@ -6662,10 +6766,10 @@
         "night"
       ],
       "swatches": {
-        "light": {"canvas":"#f1f9fb","accent":"#015668","text":"#0f181a"},
+        "light": {"canvas":"#faf6f3","accent":"#015668","text":"#191511"},
         "dark": {"canvas":"#01151a","accent":"#fab688","text":"#e2f8ff"}
       },
-      "minTextContrast": {"light":14.51,"dark":13.32},
+      "minTextContrast": {"light":14.62,"dark":13.32},
       "files": ["tokens/palettes/petrol-peach.css"]
     },
     {

@@ -1,0 +1,66 @@
+/* Hero, board: the subject's own board is the first screen's picture. A café's menu with its prices, a ferry's
+   departures with their times: the figures people came for, set large on a dark board, with the headline and one
+   action beside it. The board is a <figure> (a list people scan, not a paragraph), so its rows are read as a
+   picture of the offer, not as hero copy. data-variant="menu" (prices, notes under each name) or "departures"
+   (times in the mono face, a place, a stop and a status). An optional <div data-part="visual"> (a photograph,
+   an art panel, a device) sits behind the board's top edge. */
+@scope (.lt-hero-board) {
+  :scope { container-type: inline-size; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(12px, 2cqi, 24px); align-items: center; width: 100%; padding: var(--block-y, calc(var(--section-y) * 0.6)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  :scope[data-tone="well"] { background: var(--bg-surface-2); }
+  @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 2)) var(--block-x-sm, 16px); } }
+  [data-part="copy"] { grid-column: 1 / span 5; grid-row: 1; min-width: 0; }
+  [data-part="eyebrow"] { margin: 0 0 14px; color: var(--text-secondary); font-size: max(var(--text-ui), 0.95rem); font-weight: 550; }
+  h1 { margin: 0; max-width: 12ch; font-family: var(--font-display); font-size: max(var(--step-5), clamp(2.5rem, 1rem + 3.8cqi, 4.5rem)); font-weight: var(--weight-display); letter-spacing: calc(var(--tracking-display) * 1.15); line-height: 1.02; text-wrap: balance; }
+  [data-part="lede"] { margin: 18px 0 0; max-width: 34ch; color: var(--text-secondary); font-size: max(var(--step-1), 1.0625rem); line-height: 1.5; text-wrap: pretty; }
+  [data-part="cta"] { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  @media (max-width: 479.98px) {
+    [data-part="cta"] { flex-direction: column; align-items: flex-start; }
+    [data-part="cta"] > .lt-btn[data-variant="ghost"][data-size="lg"] { margin-inline-start: calc(-1 * (var(--control-px) + 6px)); }
+  }
+
+  /* The board: the palette's own dark ground (data-tone="dark" on it), the rows on one grid so every price or
+     time lines up, the first row (the next sailing, today's coffee) a size larger. */
+  [data-part="board"] { position: relative; z-index: 1; grid-column: 6 / -1; grid-row: 1; margin: 0; padding: clamp(22px, 3.2cqi, 44px) clamp(22px, 3.4cqi, 48px); border-radius: var(--radius-xl); background: var(--bg-canvas); color: var(--text-primary); box-shadow: var(--shadow-md); }
+  [data-part="board"] > figcaption { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin: 0 0 clamp(14px, 2cqi, 22px); padding-bottom: 14px; border-bottom: var(--bw-strong) var(--border-style) var(--border-strong); color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 600; }
+  [data-part="board"] > figcaption > b { color: var(--text-primary); font-family: var(--font-display); font-size: var(--step-1); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); }
+  [data-part="rows"] { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 20px; margin: 0; padding: 0; list-style: none; }
+  [data-part="rows"] > li { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; align-items: baseline; padding-block: clamp(10px, 1.4cqi, 16px); border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
+  [data-part="rows"] > li:last-child { border-bottom: 0; padding-bottom: 0; }
+  [data-part="rows"] b { font-family: var(--font-display); font-size: var(--step-2); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.15; }
+  [data-part="rows"] small { display: block; grid-column: 1; margin-top: 4px; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  [data-part="rows"] data, [data-part="rows"] time { font-family: var(--font-display); font-size: var(--step-2); font-weight: var(--weight-display); font-variant-numeric: lining-nums tabular-nums; letter-spacing: -0.02em; text-align: end; }
+  [data-part="rows"] > li:first-child :is(b, data, time) { font-size: clamp(1.75rem, 1rem + 2.6cqi, 2.75rem); }
+  [data-part="rows"] > li > :is(data, [data-part="price"]) { grid-column: 2; grid-row: 1; color: var(--highlight-text, var(--accent-text)); }
+  [data-part="board"] > [data-part="foot"] { margin: clamp(16px, 2cqi, 24px) 0 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+
+  /* Departures: the time first in the mono face, then the place, then the stop and the status. */
+  :scope[data-variant="departures"] [data-part="rows"] { grid-template-columns: auto minmax(0, 1fr) auto auto; column-gap: clamp(14px, 2.4cqi, 28px); }
+  :scope[data-variant="departures"] [data-part="rows"] time { font-family: var(--font-mono); font-weight: 600; letter-spacing: 0; text-align: start; color: var(--highlight-text, var(--accent-text)); }
+  :scope[data-variant="departures"] [data-part="rows"] > li > span { color: var(--text-secondary); font-size: var(--text-ui-sm); white-space: nowrap; }
+  :scope[data-variant="departures"] [data-part="rows"] > li > [data-part="status"] { color: var(--text-primary); font-weight: 600; }
+
+  /* With a picture: it fills the end columns above the board, and the board rises over its foot. */
+  [data-part="visual"] { position: relative; grid-column: 7 / -1; grid-row: 1; align-self: start; overflow: hidden; aspect-ratio: 16 / 10; border-radius: var(--radius-xl); background: var(--bg-surface-2); }
+  :scope:has(> [data-part="visual"]) { align-items: end; }
+  :scope:has(> [data-part="visual"]) > [data-part="board"] { grid-row: 2; grid-column: 5 / span 7; margin-top: calc(-1 * clamp(80px, 12cqi, 160px)); }
+  :scope:has(> [data-part="visual"]) > [data-part="copy"] { align-self: center; }
+  [data-part="visual"] > :is(img, picture, video) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  [data-part="visual"] > .lt-art { --art-ratio: auto; position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 0; }
+  [data-part="visual"] > .lt-art > :is([data-part="name"], [data-part="fact"], [data-part="index"]) { display: none; }
+  [data-part="visual"]:has(> .lt-device) { display: grid; justify-items: center; align-items: start; padding-top: 6%; }
+  [data-part="visual"] > .lt-device { width: 74%; }
+
+  @container (max-width: 900px) {
+    [data-part="copy"], [data-part="board"], [data-part="visual"], :scope:has(> [data-part="visual"]) > [data-part="board"] { grid-column: 1 / -1; }
+    [data-part="board"] { grid-row: 2; margin-top: clamp(28px, 5cqi, 40px); }
+    [data-part="visual"] { grid-row: 2; margin-top: 32px; aspect-ratio: 16 / 9; }
+    :scope:has(> [data-part="visual"]) > [data-part="board"] { grid-row: 3; margin-top: -48px; margin-inline: 4%; }
+    h1 { max-width: 16ch; }
+  }
+  @container (max-width: 520px) {
+    :scope[data-variant="departures"] [data-part="rows"] { grid-template-columns: auto minmax(0, 1fr) auto; }
+    :scope[data-variant="departures"] [data-part="rows"] > li > span:not([data-part="status"]) { display: none; }
+    :scope:has(> [data-part="visual"]) > [data-part="board"] { margin-inline: 0; }
+  }
+}

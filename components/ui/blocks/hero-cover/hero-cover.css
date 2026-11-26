@@ -1,0 +1,37 @@
+/* Hero, cover: the first screen set like the cover of a magazine. The name as a masthead across the whole column
+   (the <h1>), a date line under it between two rules, one large picture, and the cover line with one action
+   beside its foot. For a publication, a studio, a portfolio, a person, a festival with a name worth setting big.
+   The masthead's size comes from its length: put style="--cover-len: <characters>" on the h1 (the composer does)
+   and it fills the column without running out of it; without it the name may wrap to two lines. */
+@scope (.lt-hero-cover) {
+  :scope { container-type: inline-size; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(12px, 2cqi, 24px); width: 100%; padding: var(--block-y, calc(var(--section-y) * 0.45)) max(var(--block-x, 24px), calc((100% - var(--container, 1180px)) / 2)) var(--block-y, calc(var(--section-y) / 2)); background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); }
+  :scope[data-tone="well"] { background: var(--bg-surface-2); }
+  @container (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 3)) var(--block-x-sm, 16px) var(--block-y-sm, calc(var(--section-y) / 2)); } }
+  @media (max-width: 640px) { :scope { padding: var(--block-y-sm, calc(var(--section-y) / 3)) var(--block-x-sm, 16px) var(--block-y-sm, calc(var(--section-y) / 2)); } }
+  :scope > * { grid-column: 1 / -1; min-width: 0; }
+  /* 0.62em a character is wide enough for the widest pairings, so the name never leaves the column. */
+  [data-part="masthead"] { margin: 0; font-family: var(--font-display); font-size: min(15rem, calc(100cqi / (var(--cover-len, 14) * 0.62))); font-weight: var(--weight-display); font-stretch: var(--stretch-display, normal); letter-spacing: -0.045em; line-height: 0.88; text-wrap: balance; overflow-wrap: anywhere; }
+  [data-part="dateline"] { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; margin: clamp(14px, 2cqi, 24px) 0 0; padding-block: 10px; border-block: var(--bw-strong) var(--border-style) var(--text-primary); color: var(--text-primary); font-size: var(--text-ui-sm); font-weight: 600; font-variant-numeric: tabular-nums; }
+  [data-part="dateline"] > :not(:first-child) { color: var(--text-secondary); font-weight: 500; }
+  [data-part="visual"] { position: relative; grid-column: 1 / span 8; margin-top: clamp(20px, 3cqi, 36px); overflow: hidden; aspect-ratio: 3 / 2; border-radius: var(--radius-md); background: var(--bg-surface-2); }
+  [data-part="visual"] > :is(img, picture, video) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  [data-part="visual"] > .lt-art { --art-ratio: auto; position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 0; }
+  [data-part="visual"] > .lt-art > :is([data-part="name"], [data-part="fact"], [data-part="index"]) { display: none; }
+  [data-part="visual"]:has(> .lt-device) { display: grid; place-items: center; }
+  [data-part="visual"] > .lt-device { width: 82%; }
+  [data-part="visual"] > .lt-device[data-kind="phone"] { --device-w: 38%; width: auto; }
+  [data-part="copy"] { grid-column: 9 / -1; align-self: end; margin-top: 24px; }
+  /* The cover line: the claim, set as display type, not as a paragraph. */
+  [data-part="lede"] { margin: 0; font-family: var(--font-display); font-size: clamp(1.5rem, 0.9rem + 1.6cqi, 2.375rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.12; text-wrap: balance; }
+  [data-part="cta"] { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  @media (max-width: 479.98px) {
+    [data-part="cta"] { flex-direction: column; align-items: flex-start; }
+    [data-part="cta"] > .lt-btn[data-variant="ghost"][data-size="lg"] { margin-inline-start: calc(-1 * (var(--control-px) + 6px)); }
+  }
+  /* Without a picture the cover line runs under the date line, large, on the start side. */
+  :scope:not(:has(> [data-part="visual"])) > [data-part="copy"] { grid-column: 1 / span 8; margin-top: clamp(28px, 4cqi, 56px); }
+  @container (max-width: 760px) {
+    [data-part="visual"], [data-part="copy"], :scope:not(:has(> [data-part="visual"])) > [data-part="copy"] { grid-column: 1 / -1; }
+    [data-part="visual"] { aspect-ratio: 4 / 3; }
+  }
+}

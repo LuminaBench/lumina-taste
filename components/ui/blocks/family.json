@@ -6,12 +6,23 @@
     {
       "id": "hero-split",
       "name": "Hero, split",
-      "summary": "Headline, one line of explanation and one primary action on the left; the product on the right.",
+      "summary": "Headline, one sentence and one action beside one picture. data-variant composes the first screen four more ways: overlap, edge, product and bleed.",
       "pattern": "<section> with labelled heading",
-      "states": ["desktop two columns","stacked on narrow screens"],
-      "aliases": ["landing hero","above the fold","header section with screenshot","split hero","marketing hero"],
+      "states": ["desktop two columns","stacked on narrow screens","overlap","edge","product","bleed"],
+      "aliases": [
+        "landing hero",
+        "above the fold",
+        "header section with screenshot",
+        "split hero",
+        "marketing hero",
+        "full bleed photo hero",
+        "hero with text over photo",
+        "asymmetric hero",
+        "product first hero",
+        "image to the edge hero"
+      ],
       "react": "HeroSplit",
-      "api": "grid 1fr 1.05fr",
+      "api": "grid 1fr 1.05fr · data-variant=\"overlap|edge|product|bleed\" · data-calm",
       "w": 1040,
       "called": [
         "top section of a landing page with a screenshot",
@@ -27,29 +38,30 @@
           "api": "",
           "text": "One filled button; the second is ghost."
         },
-        {
-          "sel": "[data-part=\"note\"]",
-          "name": "Reassurance",
-          "api": "",
-          "text": "Removes the main worry in one line."
-        },
         {"sel":"[data-part=\"frame\"]","name":"Product","api":"","text":"The real product, not stock art."}
       ],
-      "prompt": "Build a split hero: left column with a short eyebrow, a headline under 12 words, a one-sentence lede, one primary button plus a ghost secondary, and a reassurance line with two checks; right column shows the product in a framed card. Stack on narrow containers. Tokens only.",
+      "prompt": "Build a split hero: left column with a short eyebrow, a headline under 12 words, a one-sentence lede, one primary button and at most one quiet link; right column shows the product in a framed card. Stack on narrow containers. Tokens only.",
       "debug": "Debug my hero. Rule out: two primary buttons; a headline over two lines on desktop; illustration instead of product; text over a busy image with low contrast. The symptom:",
       "code": [["HTML","<section> + grid",""],["lumina-taste","<HeroSplit title lede primary>","React"]],
       "added": 4,
-      "note": "The right-hand side is a slot. Keep data-part=\"frame\" for a software product (put a real screenshot or a small live mock in it). For anything else replace the whole frame with <div data-part=\"visual\">…</div> holding one thing: an art-panel (a physical product or a place with no photograph yet), a device-frame, a code-block, a chart, or an <img>."
+      "note": "The plain split is the kit's habit: give the first screen a composition that fits the subject. data-variant=\"overlap\" (the picture runs off the end edge, the words on a block of the page ground over its edge), \"edge\" (a quiet split, the picture full height to the screen's edge), \"product\" (the device or object first and large, the words beneath), \"bleed\" (a photograph across the screen, the words on its calm side: data-calm=\"start|end|bottom\" and data-tone=\"dark\" for light words, with a scrim only under them). The visual slot holds a photograph, an art panel (or scene) or a device frame. Keep data-part=\"frame\" for the plain split with a live product mock. The reassurance note under the buttons is opt-in."
     },
     {
       "id": "hero-centered",
       "name": "Hero, centred",
-      "summary": "A centred headline with an announcement pill, two actions and a framed product shot below.",
+      "summary": "A centred headline with an announcement pill, two actions and a framed product shot below. data-variant=\"wide\" sets a larger statement over a picture that runs from edge to edge.",
       "pattern": "<section> with labelled heading",
-      "states": ["default","narrow"],
-      "aliases": ["centered hero","announcement pill hero","product launch hero","big headline section"],
+      "states": ["default","narrow","wide"],
+      "aliases": [
+        "centered hero",
+        "announcement pill hero",
+        "product launch hero",
+        "big headline section",
+        "centred statement over a wide photo",
+        "headline above full width image"
+      ],
       "react": "HeroCentered",
-      "api": "justify-items: center",
+      "api": "justify-items: center · data-variant=\"wide\"",
       "w": 1040,
       "called": [
         "big centred headline with a little new badge above",
@@ -70,7 +82,8 @@
       "prompt": "Build a centred hero: an announcement pill (\"New\" chip + text + arrow) linking to the changelog, a headline capped at 16ch, a lede, a primary and a secondary button, then a framed product shot. Keep text centred only because every line is short.",
       "debug": "Debug my centred hero. Rule out: centred paragraphs longer than three lines; a pill nobody can click; the product shot cropped on mobile; gradient headline text. The symptom:",
       "code": [["HTML","<section>",""],["lumina-taste","<HeroCentered>","React"]],
-      "added": 4
+      "added": 4,
+      "note": "data-variant=\"wide\": no pill, a headline up to 92px, one sentence, one action and one quiet link, then <div data-part=\"visual\"> with a photograph, an art panel or a device running edge to edge (21:9, 16:9 on tablets, 4:3 on phones), closing the section."
     },
     {
       "id": "feature-grid",
@@ -1046,9 +1059,9 @@
     {
       "id": "hero-statement",
       "name": "Hero, statement",
-      "summary": "A type-led hero: one very large headline across the page, then a ruled row with the pitch, the action and three facts.",
+      "summary": "A type-led hero: one very large headline across the page, then a ruled row with the pitch, the action and three facts. data-variant=\"tucked\" tucks a small picture into the headline; \"poster\" sets a date enormous as the composition.",
       "pattern": "<h1> + <dl>",
-      "states": ["wide","stacked"],
+      "states": ["wide","stacked","tucked","poster"],
       "aliases": [
         "type hero",
         "big headline hero",
@@ -1056,10 +1069,13 @@
         "typographic hero",
         "no image hero",
         "statement headline",
-        "oversized title"
+        "oversized title",
+        "huge type with small photo",
+        "event poster hero",
+        "date as the hero"
       ],
       "react": "HeroStatement",
-      "api": "<h1> · <dl>",
+      "api": "<h1> · <dl> · data-variant=\"tucked|poster\"",
       "w": 1000,
       "called": [
         "hero with just a huge headline",
@@ -1086,7 +1102,7 @@
           "text": "True figures with their unit and what they count."
         }
       ],
-      "note": "Use this hero when there is no picture worth showing, or when the words are the product (a studio, a publication, a venue, a brand, a manifesto). The headline must be a real claim of six to ten words; it carries the whole first screen.",
+      "note": "Use this hero when there is no picture worth showing, or when the words are the product (a studio, a publication, a venue, a brand, a manifesto). The headline must be a real claim of six to ten words; it carries the whole first screen. data-variant=\"tucked\": put <div data-part=\"visual\"> (a photograph, art panel or phone) before the <h1>; it floats on the end side and the lines run round it. data-variant=\"poster\": add <p data-part=\"date\"><time datetime>14–15</time><span>May 2027</span></p> before the h1; the date is set huge, an optional picture sits on the end side; put it on the brand band (data-tone=\"accent\").",
       "prompt": "Build a statement hero: a small eyebrow, then an <h1> set very large (clamp from 44px to 100px with the container width), tight line height (0.98), tight tracking, 15 characters a line, text-wrap: balance. Under it a row that starts with a strong hairline: on the left the lede at 20px in secondary ink (44 characters a line) and the actions (one primary, one ghost); on the right a <dl> of three facts, each a large tabular figure over a plain label, divided by hairlines. Under 820px the row stacks; under 480px the facts become rows. No image, no background effect behind the headline: the type is the picture.",
       "debug": "Debug my type-led hero. Rule out: a headline that is a slogan with no claim; more than ten words at this size; lines broken mid-phrase (balance, or break by hand); a gradient or image behind the type; facts with no unit or period; three buttons. The symptom:",
       "code": [
@@ -1100,7 +1116,13 @@
       "name": "Hero with video",
       "summary": "A headline and one action above a wide picture that is a still first and becomes a muted, looping film when motion is allowed, with a pause button always on it.",
       "pattern": "<video muted loop playsinline> over a poster",
-      "states": ["still only (no film)","playing","paused by the visitor","not started (reduced motion or Save-Data)"],
+      "states": [
+        "still only (no film)",
+        "playing",
+        "paused by the visitor",
+        "not started (reduced motion or Save-Data)",
+        "full screen"
+      ],
       "aliases": [
         "video hero",
         "background video header",
@@ -1110,7 +1132,7 @@
         "cinematic hero"
       ],
       "react": "HeroVideo",
-      "api": "[data-part=\"media|poster|video|toggle\"] · data-src · data-state",
+      "api": "[data-part=\"media|poster|video|toggle\"] · data-src · data-state · data-variant=\"full\"",
       "w": 1040,
       "preview": [],
       "called": [
@@ -1155,7 +1177,156 @@
         ["lumina-taste","<HeroVideo poster src>","React"]
       ],
       "added": 17,
-      "note": "Only with a real film of the subject (a place, a product in use), 8 to 20 seconds, muted, under 4 MB. Put its path in data-src and a still from it in the poster. Without one, keep the still: it is the same hero."
+      "note": "Only with a real film of the subject (a place, a product in use), 8 to 20 seconds, muted, under 4 MB. Put its path in data-src and a still from it in the poster. Without one, keep the still: it is the same hero. data-variant=\"full\" (with data-tone=\"dark\"): the film or its still is the whole first screen and the words sit at its foot over a scrim; the pause button moves to the top corner."
+    },
+    {
+      "id": "hero-board",
+      "name": "Hero, board",
+      "summary": "A first screen whose picture is the subject's own board: a café's menu with prices, or departures with times, set large on a dark board beside the headline and one action.",
+      "pattern": "<section> + <figure> holding an <ol> of rows",
+      "states": ["menu","departures","with a picture behind the board","stacked"],
+      "aliases": [
+        "menu board hero",
+        "departures board",
+        "timetable hero",
+        "price board",
+        "specials board",
+        "next departures",
+        "times board"
+      ],
+      "react": "HeroBoard",
+      "api": "data-variant=\"menu|departures\" · [data-part=\"board|rows|visual\"]",
+      "w": 1040,
+      "called": [
+        "hero with the menu and prices as the main picture",
+        "a departures board at the top of a transport site",
+        "first screen that shows today's times",
+        "café home page with the prices up front"
+      ],
+      "anatomy": [
+        {"sel":"h1","name":"Headline","api":"<h1>","text":"What it is and where, under ten words."},
+        {
+          "sel": "[data-part=\"board\"]",
+          "name": "Board",
+          "api": "<figure data-tone=\"dark\">",
+          "text": "The subject's own board on the palette's dark ground: it is the picture."
+        },
+        {
+          "sel": "[data-part=\"rows\"] > li:first-child",
+          "name": "First row",
+          "api": "subgrid",
+          "text": "The next sailing or today's coffee, a size larger; every figure in one column."
+        }
+      ],
+      "prompt": "Build a board hero: on the start side an h1 (under ten words), one sentence and one primary button; on the end side, as the picture, a <figure> on a dark ground holding the subject's board: a caption row (the board's name and one note) over a strong rule, then an <ol> whose rows share one grid (subgrid) so every price or time lines up: a menu has the name with a one-line note under it and the price on the end side in tabular figures; departures have the time in the mono face, the place, the stop and a status. The first row is a size larger. Under 900px the board goes under the words. With an optional picture, the picture sits on the end side and the board rises over its foot.",
+      "debug": "Debug my board hero. Rule out: prices or times that do not line up (use one grid for every row); a chalk texture or a handwriting face; more than six rows; the board's rows counted as the hero's paragraph (keep them in the <figure>); a status shown by colour alone. The symptom:",
+      "code": [
+        ["HTML","<figure data-part=\"board\"><ol data-part=\"rows\">",""],
+        ["lumina-taste","<HeroBoard board variant>","React"]
+      ],
+      "added": 19,
+      "note": "For a café, bar, bakery or restaurant with four to six priced things (menu), or a ferry, bus, train or shuttle with times (departures). The rows are real prices and times from the brief; never invent them."
+    },
+    {
+      "id": "hero-cover",
+      "name": "Hero, cover",
+      "summary": "The first screen set like a magazine cover: the name as a masthead across the column, a date line between two rules, one large picture and the cover line with one action.",
+      "pattern": "<h1> masthead + <p> date line + one picture",
+      "states": ["with a picture","without a picture","stacked"],
+      "aliases": [
+        "magazine cover hero",
+        "masthead hero",
+        "editorial cover",
+        "big name header",
+        "portfolio cover",
+        "publication front page",
+        "name across the page"
+      ],
+      "react": "HeroCover",
+      "api": "--cover-len · [data-part=\"masthead|dateline|visual|copy\"]",
+      "w": 1040,
+      "called": [
+        "the name huge across the top like a magazine",
+        "portfolio hero with my name big",
+        "editorial front page hero",
+        "journal or newsletter home page header"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"masthead\"]",
+          "name": "Masthead",
+          "api": "<h1> · --cover-len",
+          "text": "The name, sized from its length to fill the column."
+        },
+        {
+          "sel": "[data-part=\"dateline\"]",
+          "name": "Date line",
+          "api": "<time>",
+          "text": "Two or three facts between two rules: what, where, when."
+        },
+        {
+          "sel": "[data-part=\"lede\"]",
+          "name": "Cover line",
+          "api": "display face",
+          "text": "The claim in one sentence, set as display type beside the picture's foot."
+        }
+      ],
+      "prompt": "Build a cover hero: an h1 masthead with the name set as large as the column allows (font-size from its length: 100cqi divided by characters × 0.62, capped at 15rem; line-height 0.88; tight tracking), then a date line of two or three short facts spread across the column between two strong rules, then a 12-column grid: one large picture (3:2) over eight columns and, on the last four, the cover line (one sentence in the display face, about 32px) with one primary action at the picture's foot. Stack under 760px.",
+      "debug": "Debug my cover hero. Rule out: a masthead that runs out of the column (set --cover-len); a second headline competing with it; rules on every section below (the cover's two rules are its own); more than one picture. The symptom:",
+      "code": [
+        ["HTML","<h1 data-part=\"masthead\" style=\"--cover-len: 10\">",""],
+        ["lumina-taste","<HeroCover name dateline line>","React"]
+      ],
+      "added": 19,
+      "note": "For a publication, a studio, a portfolio, a person or a named festival: something whose name is worth setting big. The date line is real: a place, a year, an issue."
+    },
+    {
+      "id": "hero-mosaic",
+      "name": "Hero, mosaic",
+      "summary": "Three to five pictures set as one interlocking composition, with the headline in the corner they leave free.",
+      "pattern": "<section> + <ul> of pictures on a shared grid",
+      "states": ["three pictures","four","five","stacked"],
+      "aliases": [
+        "collage hero",
+        "photo mosaic",
+        "image grid hero",
+        "gallery hero",
+        "bento hero with photos",
+        "several photos at the top"
+      ],
+      "react": "HeroMosaic",
+      "api": "subgrid · [data-part=\"copy|tiles\"]",
+      "w": 1040,
+      "called": [
+        "hero with a collage of photos",
+        "top of a shop page with several product shots",
+        "first screen with three or four pictures and the headline in a corner"
+      ],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"tiles\"] > li:first-child",
+          "name": "Large picture",
+          "api": "6 columns × 3 rows",
+          "text": "The strongest picture."
+        },
+        {
+          "sel": "[data-part=\"tiles\"] > li:nth-child(2)",
+          "name": "Tall picture",
+          "api": "",
+          "text": "The one that reads as a portrait."
+        },
+        {
+          "sel": "[data-part=\"copy\"]",
+          "name": "Words",
+          "api": "rows 4–6",
+          "text": "The headline, one sentence and one action in the corner the pictures leave."
+        }
+      ],
+      "prompt": "Build a mosaic hero: a 12-column, six-row grid (rows about a tenth of the screen's height). A list of three to five pictures shares the grid through subgrid: the first over six columns and three rows, the second three columns and five rows tall, the third three columns stepping down a row, a fourth under the second, a fifth in the top corner. The headline, one sentence and one action sit in the six columns and three rows left free at the bottom start. Pictures share one radius and one tone. Under 860px the words go first and the pictures run two across, the first one wide.",
+      "debug": "Debug my mosaic hero. Rule out: pictures of different tones or subjects; more than five; the headline over a picture; tiles of the same size (that is a grid, not a mosaic); a stock photograph among them. The symptom:",
+      "code": [["HTML","<ul data-part=\"tiles\"><li><img>",""],["lumina-taste","<HeroMosaic tiles>","React"]],
+      "added": 19,
+      "note": "Only with three or more real pictures of the subject (or one drawing each until they exist). With one strong photograph, use hero-split data-variant=\"bleed\" instead."
     },
     {
       "id": "service-list",

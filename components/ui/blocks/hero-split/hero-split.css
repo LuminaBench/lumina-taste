@@ -140,7 +140,7 @@
     :scope[data-variant="product"] > [data-part="visual"] { aspect-ratio: 16 / 10; max-height: none; min-height: 0; }
     :scope[data-variant="bleed"] > [data-part="copy"], :scope[data-variant="bleed"][data-calm] > [data-part="copy"] { grid-column: 1 / -1; }
     :scope[data-variant="bleed"] > [data-part="visual"]::after, :scope[data-variant="bleed"][data-calm] > [data-part="visual"]::after { --hs-scrim-dir: 0deg; background: linear-gradient(var(--hs-scrim-dir), color-mix(in oklab, var(--bg-canvas) var(--s), transparent) 0%, color-mix(in oklab, var(--bg-canvas) calc(var(--s) * 0.9), transparent) 46%, transparent 74%); }
-    :scope[data-variant="bleed"] > [data-part="visual"] > .lt-art > [data-part="scene"], :scope[data-variant="bleed"][data-calm] > [data-part="visual"] > .lt-art > [data-part="scene"] { inset: 4% 0 auto; width: 100%; height: 54%; }
+    :scope[data-variant="bleed"] > [data-part="visual"] > .lt-art > [data-part="scene"], :scope[data-variant="bleed"][data-calm] > [data-part="visual"] > .lt-art > [data-part="scene"] { inset: 3% 0 auto; width: 100%; height: 42%; }
     /* A device cannot sit under words: on a narrow screen it stands above them on the ground. */
     :scope[data-variant="bleed"] > [data-part="visual"]:has(> .lt-device) { position: relative; inset: auto; z-index: 0; grid-column: 1 / -1; grid-row: 1; place-items: center; margin-inline: calc(-1 * var(--hs-bleed)); padding: 32px var(--hs-bleed); }
     :scope[data-variant="bleed"] > [data-part="visual"] > .lt-device { width: min(100%, 560px); }
