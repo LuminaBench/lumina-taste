@@ -143,17 +143,36 @@ export const MEASURE = (opts = {}) => {
   };
 
   // ---- the scroll moments: things that move with the scroll in a big way
-  const NAMES = ['pinned-scene', 'sideways-scroll', 'scroll-track', 'product-reveal', 'hero-video', 'stack-cards', 'scroll-statement', 'sticky-story'];
-  const MOMENT = ['[data-zoom]', '[data-parallax]', ...NAMES.flatMap((n) => [`[class*="${n}"]`, `[data-lt*="${n}"]`])].join(', ');
-  const momentOf = (band) => {
-    const hit = band.matches(MOMENT) ? band : band.querySelector(MOMENT);
-    if (!hit) return null;
-    if (hit.hasAttribute('data-zoom')) return 'data-zoom';
-    if (hit.hasAttribute('data-parallax')) return 'data-parallax';
-    const name = `${hit.className} ${hit.getAttribute('data-lt') ?? ''}`;
-    return NAMES.find((n) => name.includes(n)) ?? 'moment';
+  // One moment each: a pinned scene (.lt-story), a sideways track (.lt-side-scroll), stack-cards, a scroll
+  // statement, and every [data-zoom] and [data-parallax] (a product reveal's figure and a media band zoom through
+  // data-zoom, so their blocks are not counted again). Not moments: the data-entrance and data-scroll reveals,
+  // number counters, before-after sliders, the hero video, the gallery rail (the reader moves those).
+  const PINNED = '.lt-story, .lt-side-scroll, .lt-stack-cards';
+  const MOMENT = `${PINNED}, .lt-statement, [data-zoom], [data-parallax]`;
+  const live = (e) => !e.closest('[inert], [data-audit-ignore]');
+  const kindOf = (e) => (e.hasAttribute('data-zoom') ? 'data-zoom' : e.hasAttribute('data-parallax') ? 'data-parallax' : e.matches('.lt-story') ? 'pinned scene (lt-story)' : e.matches('.lt-side-scroll') ? 'side scroll' : e.matches('.lt-stack-cards') ? 'stack-cards' : 'scroll statement');
+  const allMoments = [...document.querySelectorAll(MOMENT)].filter(live);
+  const momentsIn = (band) => allMoments.filter((e) => band.contains(e) || e === band);
+  const looseMoments = allMoments.filter((e) => !bands.some((b) => b.contains(e) || e.contains(b))).length;
+  // A pinned scene stops pinning inside anything that clips or scrolls (sticky sticks to that box, not the page).
+  const pinBroken = [...document.querySelectorAll('.lt-story, .lt-side-scroll')].filter(live).filter((e) => {
+    for (let a = e.parentElement; a && a !== document.body && a !== html; a = a.parentElement) { const cs = getComputedStyle(a); if (/hidden|auto|scroll/.test(`${cs.overflow} ${cs.overflowY}`)) return true; }
+    return false;
+  }).map(sel);
+  const counters = [...document.querySelectorAll('[data-count=""]')].filter(live);
+  const videos = [];
+  for (const v of document.querySelectorAll('video[autoplay]')) if (live(v) && !v.muted && !v.hasAttribute('muted')) videos.push(`${sel(v)} plays on its own with sound (autoplay without muted)`);
+  for (const h of [...document.querySelectorAll('.lt-hero-video')].filter(live)) {
+    if (h.querySelector('[autoplay]')) videos.push(`${sel(h)} starts its film on its own (autoplay); the hero video starts only when the reader allows motion, from its script`);
+    if (h.querySelector('video source, video[src]') && !h.querySelector('[data-part="toggle"]')) videos.push(`${sel(h)} has a film and no pause button (data-part="toggle")`);
+  }
+  const motion = {
+    moments: allMoments.map((e) => ({ kind: kindOf(e), selector: sel(e) })),
+    pinned: [...document.querySelectorAll(PINNED)].filter(live).length,
+    entrances: [...document.querySelectorAll('[data-entrance]')].filter(live).length,
+    counters: counters.length, countersNoDigit: counters.filter((e) => !/\d/.test(e.textContent ?? '')).map(sel),
+    videos, pinBroken,
   };
-  const looseMoments = [...document.querySelectorAll(MOMENT)].filter((e) => !bands.some((b) => b.contains(e) || e.contains(b))).length;
 
   const sections = bands.map((band, i) => {
     const r = rectOf(band);
@@ -166,7 +185,7 @@ export const MEASURE = (opts = {}) => {
       block: blockOf(band), tracks: tracksOf(band), heading: headingAt(band), ground: groundOf(band),
       tone: band.getAttribute('data-tone') ?? null,
       density: r.width * r.height ? Math.round((textArea(band) / (r.width * r.height)) * 1000) / 1000 : 0,
-      moment: momentOf(band),
+      moment: momentsIn(band)[0] ? kindOf(momentsIn(band)[0]) : null, moments: momentsIn(band).length,
     };
   });
 
@@ -216,7 +235,7 @@ export const MEASURE = (opts = {}) => {
 
   return {
     url: location.href, width: vw, height: vh, pageHeight: html.scrollHeight,
-    hero: !!hero, app, appMarked, sections, looseMoments,
+    hero: !!hero, app, appMarked, sections, looseMoments, motion,
     type: { headline: Math.round(headline), h1: h1 ? Math.round(parseFloat(getComputedStyle(h1).fontSize)) : 0, body: bodySize, ratio: bodySize ? Math.round((headline / bodySize) * 100) / 100 : 0 },
     bars: fixedBottom.map((b) => ({ selector: sel(b), height: Math.round(rectOf(b).height) })),
     controls: primary,
@@ -232,7 +251,8 @@ export const LIMITS = {
   monotoneBands: 5,      // with at least this many bands, density that never changes is monotone…
   monotoneSpread: 0.035, // …when the densest and the airiest differ by less than this
   typeJump: 2.5,         // largest headline ÷ body text on a marketing page
-  moments: 2,            // big scroll moments per page
+  moments: 2,            // big scroll moments per page (a warning above, an error above one more)
+  counters: 6,           // numbers that count up on one page
   target: 44,            // primary touch targets at phone width, in CSS px
 };
 
@@ -282,11 +302,17 @@ export function judgeMeasures(m, { wide = m.width >= 900, limits = LIMITS } = {}
   // 4. The type scale jumps enough.
   if (marketing && wide && m.type.body && m.type.ratio < limits.typeJump) add('taste-type-jump', null, `The largest headline is ${m.type.headline}px over ${m.type.body}px body text, a ratio of ${m.type.ratio}. Below ${limits.typeJump} the page has no clear top; set the headline larger (--step-5 or more) and keep the body where it is.`);
 
-  // 5. The motion budget.
-  const moments = m.sections.filter((s) => s.moment);
-  const total = moments.length + (m.looseMoments ?? 0);
-  if (total > limits.moments) add('taste-motion-budget', moments[limits.moments]?.selector ?? null, `${total} big scroll moments (${moments.map((s) => s.moment).join(', ')}). Keep two at most, where they carry the subject; the rest stay still (the quiet data-scroll reveal does not count).`);
+  // 5. The motion budget: two big scroll moments at most, never back to back, one pinned scene, one entrance.
+  const mo = m.motion ?? { moments: m.sections.filter((x) => x.moment).map((x) => ({ kind: x.moment, selector: x.selector })), pinned: 0, entrances: 0, counters: 0, countersNoDigit: [], videos: [], pinBroken: [] };
+  const total = mo.moments.length;
+  if (total > limits.moments) add('taste-motion-budget', mo.moments[limits.moments]?.selector ?? null, `${total} big scroll moments (${mo.moments.map((x) => x.kind).join(', ')}). Keep two at most, where they carry the subject; the rest stay still (the quiet data-scroll reveal does not count).`, total > limits.moments + 1 ? 'error' : 'warning');
   else for (let i = 1; i < m.sections.length; i++) if (m.sections[i].moment && m.sections[i - 1].moment) { add('taste-motion-budget', m.sections[i].selector, `Two scroll moments back to back (${m.sections[i - 1].moment}, then ${m.sections[i].moment}). Put a still section between them.`); break; }
+  if (mo.pinned > 1) add('taste-motion-budget', null, `${mo.pinned} pinned scenes (sticky-story, side-scroll, stack-cards). One per page: two pinned scenes make the reader scroll without moving forward twice.`);
+  if (mo.entrances > 1) add('taste-motion-entrance', null, `${mo.entrances} elements with data-entrance. The entrance is for the hero only; sections arrive with the quiet data-scroll reveal on <main>.`);
+  if (mo.counters > limits.counters) add('taste-motion-counter', null, `${mo.counters} numbers count up (data-count). Keep it to the few figures that are the point (${limits.counters} at most); the rest are set still.`);
+  if (mo.countersNoDigit.length) add('taste-motion-counter', mo.countersNoDigit[0], `A data-count element has no number in it (${mo.countersNoDigit.length}): it has nothing to count. Put the figure in the element, or remove data-count.`, 'error');
+  for (const v of mo.videos) add('taste-motion-video', null, `${v}. Film never plays sound on its own, and a moving hero always has a visible pause.`, 'error');
+  if (mo.pinBroken.length) add('taste-motion-pin', mo.pinBroken[0], `A pinned scene sits inside a box with overflow hidden, auto or scroll, so it will not pin (${mo.pinBroken.join(', ')}). Use overflow: clip on that ancestor, or move the scene out of it.`, 'error');
 
   // 6. Apps, at phone width: touch targets, the home-indicator gap, declared states.
   if (!wide && (m.app || m.bars.length)) {

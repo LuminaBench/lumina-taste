@@ -97,7 +97,7 @@ function audit(url, product = null) {
   const perfErrors = j.report.flatMap((r) => r.findings).filter((f) => f.rule.startsWith('perf-') && f.severity === 'error').length;
   // What the page gives the eye, from the designer's measures (desktop run): for the report, not the score.
   const m = j.report.find((r) => r.viewport === 'desktop' && r.measures)?.measures;
-  const look = m ? { sections: m.sections.length, bare: m.sections.filter((s) => !s.looks.length && !s.use).length, typeJump: m.type.ratio, moments: m.sections.filter((s) => s.moment).length } : null;
+  const look = m ? { sections: m.sections.length, bare: m.sections.filter((s) => !s.looks.length && !s.use).length, typeJump: m.type.ratio, moments: m.motion?.moments.length ?? 0 } : null;
   return { errors: j.errors - perfErrors, warnings: j.warnings, taste: j.score, rules, perf: perfRules.length, look };
 }
 

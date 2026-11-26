@@ -137,7 +137,7 @@ const summary = {
   url, generated: new Date().toISOString(), folder: out, images, squint,
   page: { marketing: d.hero && !d.app, app: d.app || m.app, height: d.pageHeight, screens: Math.round((d.pageHeight / 900) * 10) / 10 },
   sections: d.sections.map((s) => ({ selector: s.selector, hero: s.hero, words: s.words, looks: s.looks, use: s.use, block: s.block, tracks: s.tracks, heading: s.heading, ground: s.ground, tone: s.tone, density: s.density, moment: s.moment })),
-  type: d.type, moments: d.sections.filter((s) => s.moment).map((s) => s.moment),
+  type: d.type, moments: d.motion.moments.map((x) => x.kind), motion: d.motion,
   app: { bars: m.bars, smallControls: m.controls.filter((c) => c.w < 44 || c.h < 44), states: m.states },
   measured: [...findings.desktop.map((f) => ({ ...f, viewport: 'desktop' })), ...findings.mobile.map((f) => ({ ...f, viewport: 'mobile' }))],
   critic,

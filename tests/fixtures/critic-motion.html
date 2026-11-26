@@ -1,18 +1,18 @@
 <!doctype html>
 <html lang="en" data-look-reason="a test page: only the motion rule is under test"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Too much motion</title>
-<!-- Four big scroll moments on one page. Used by tests/unit/critic.test.mjs. -->
+<!-- Four big scroll moments, two of them pinned, back to back. Used by tests/unit/critic.test.mjs. -->
 <style>
   body { margin: 0; font: 17px/1.6 Georgia, serif; color: #1d232a; background: #f6f7f8; }
   section { padding: 96px max(24px, calc((100% - 1100px) / 2)); }
   .well { background: #e6ebe8; }
-  h1 { font-size: 72px; line-height: 1; margin: 0 0 24px; }
+  h1 { font-size: 72px; line-height: 1; margin: 0 0 24px; text-wrap: balance; }
   h2 { font-size: 36px; margin: 0 0 16px; }
   .art { height: 360px; border-radius: 8px; background: #c9d6cf; }
 </style></head>
 <body><main>
   <section class="hero"><h1>Larkspur builds boats by hand</h1><p>Clinker dinghies, one at a time.</p></section>
-  <section class="lt-pinned-scene"><h2>The hull, plank by plank</h2><div class="art" role="img" aria-label="A hull on the stocks"></div></section>
+  <section class="lt-story"><h2>The hull, plank by plank</h2><div class="art" role="img" aria-label="A hull on the stocks"></div></section>
   <section class="well"><h2>Larch and copper</h2><div class="art" data-zoom role="img" aria-label="Copper rivets in larch"></div></section>
-  <section class="lt-sideways-scroll"><h2>Five boats this year</h2><div class="art" role="img" aria-label="Five dinghies on a slipway"></div></section>
+  <section class="lt-side-scroll"><h2>Five boats this year</h2><div class="art" role="img" aria-label="Five dinghies on a slipway"></div></section>
   <section class="well"><h2>On the water</h2><div class="art" data-parallax role="img" aria-label="A dinghy under sail"></div></section>
 </main></body></html>

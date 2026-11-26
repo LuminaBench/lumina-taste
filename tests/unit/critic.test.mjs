@@ -66,6 +66,24 @@ test('judge: two scroll moments are a budget, three are too many, two back to ba
   assert.ok(rulesOf(page([section({ moment: 'data-zoom' }), section({ moment: 'stack-cards' })])).has('taste-motion-budget'));
 });
 
+test('judge: pinned scenes, entrances, counters, film and pinning', () => {
+  const motion = (o) => page([section()], { motion: { moments: [], pinned: 0, entrances: 1, counters: 0, countersNoDigit: [], videos: [], pinBroken: [], ...o } });
+  assert.deepEqual([...rulesOf(motion({}))], []);
+  assert.ok(rulesOf(motion({ pinned: 2 })).has('taste-motion-budget'));
+  assert.ok(rulesOf(motion({ entrances: 2 })).has('taste-motion-entrance'));
+  assert.ok(rulesOf(motion({ counters: LIMITS.counters + 1 })).has('taste-motion-counter'));
+  assert.ok(!rulesOf(motion({ counters: LIMITS.counters })).has('taste-motion-counter'));
+  const err = (o, rule) => judgeMeasures(motion(o)).find((f) => f.rule === rule)?.severity;
+  assert.equal(err({ countersNoDigit: ['b'] }, 'taste-motion-counter'), 'error');
+  assert.equal(err({ videos: ['section.lt-hero-video has a film and no pause button'] }, 'taste-motion-video'), 'error');
+  assert.equal(err({ pinBroken: ['section.lt-story'] }, 'taste-motion-pin'), 'error');
+  // Three moments warn; four are an error.
+  const k = (n) => Array.from({ length: n }, () => ({ kind: 'data-zoom', selector: 'figure' }));
+  assert.equal(err({ moments: k(3) }, 'taste-motion-budget'), 'warning');
+  assert.equal(err({ moments: k(4) }, 'taste-motion-budget'), 'error');
+  assert.equal(err({ moments: k(2) }, 'taste-motion-budget'), undefined);
+});
+
 test('judge: app touch targets at phone width, and missing states', () => {
   const app = { width: 390, height: 844, app: true, hero: false, controls: [{ selector: 'button', label: 'Send', w: 32, h: 32, bar: false }] };
   assert.ok(rulesOf(page([], app)).has('app-touch-target'));
@@ -107,6 +125,17 @@ test('audit-ui --taste: too many scroll moments', () => {
   const f = findings.find((x) => x.rule === 'taste-motion-budget');
   assert.ok(f);
   assert.match(f.message, /4 big scroll moments/);
+  assert.equal(f.severity, 'error');
+  assert.ok(findings.some((x) => /2 pinned scenes/.test(x.message)));
+});
+
+test('audit-ui --taste: film with sound, a counter with nothing to count, two entrances, a pinned scene that cannot pin', () => {
+  const { findings } = audit('critic-motion-broken', ['--taste', '--viewports', 'desktop']);
+  const sev = (rule) => findings.filter((f) => f.rule === rule).map((f) => f.severity);
+  assert.deepEqual(sev('taste-motion-video'), ['error']);
+  assert.deepEqual(sev('taste-motion-counter'), ['error']);
+  assert.deepEqual(sev('taste-motion-pin'), ['error']);
+  assert.deepEqual(sev('taste-motion-entrance'), ['warning']);
 });
 
 test('audit-ui --taste on an app at phone width: small targets, a bar without the safe area, missing states', () => {

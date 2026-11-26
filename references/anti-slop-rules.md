@@ -76,7 +76,10 @@ Treat every rule as a ban unless the user explicitly asks for the banned thing. 
 | Bouncy overshoot on everything | Spring overshoot only on small indicators (switch thumbs, segmented pills, checkmarks). |
 | Animation that ignores `prefers-reduced-motion` | Every duration token collapses to 1ms under reduced motion. Never hard-code durations. |
 | Scroll-jacking and parallax on content | Native scrolling. A one-time reveal (`scroll-reveal`) at most. |
-| ★ More than two big scroll moments, or two back to back (`data-zoom`, `data-parallax`, pinned scenes, sideways tracks, product reveals, hero video, stack-cards, scroll-statement) | Two at most, where they carry the subject, with a still section between them. The quiet `data-scroll` reveal does not count. |
+| ★ More than two big scroll moments, or two back to back (sticky-story, side-scroll, stack-cards, scroll-statement, each `data-zoom`, each `data-parallax`) | Two at most, where they carry the subject, with a still section between them; one pinned scene per page. The quiet `data-scroll` reveal does not count. |
+| ★ An entrance on every section, numbers counting up everywhere | `data-entrance` on the hero only; `data-count` on the few figures that are the point (six at most), each with a number in it. |
+| ★ Film that plays with sound, or a moving hero with no pause | `muted` on any autoplaying video; the hero video starts from its script under the reader's motion setting and always has its `data-part="toggle"`. |
+| ★ A pinned scene inside a box with `overflow: hidden`, `auto` or `scroll` | `overflow: clip` on that ancestor (it clips without making a scroll box), or move the scene out. |
 | ★ Buttons that change width while loading | Keep the label in the flow (`visibility: hidden`) and overlay the spinner. |
 
 ## 7. Interaction and accessibility
