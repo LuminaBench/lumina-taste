@@ -5,7 +5,8 @@
 //   node scripts/sniff.mjs ./dist/index.html --json
 //
 // Measures the canvas, text and accent colours, heading and body fonts, corner radii and control
-// heights, then picks the nearest palette (OKLab distance, accent weighted most), type pairing,
+// heights, and the colours it declares as custom properties (a --brand or --color-primary is taken as the
+// accent before any measured one), then picks the nearest palette (OKLab distance, accent weighted most), type pairing,
 // radius and density, and prints the install command. When the site's accent is far from the
 // nearest palette's, it adds a contrast-checked --override so the brand colour survives.
 import { existsSync, readFileSync } from 'node:fs';
@@ -59,7 +60,24 @@ const seen = await page.evaluate(() => {
   const radii = [...document.querySelectorAll('button, a.btn, [class*="btn"], [class*="button"], input, select, textarea, [class*="card"]')].filter(vis).map((e) => parseFloat(getComputedStyle(e).borderTopLeftRadius)).filter((r) => r >= 0 && r < 40);
   const heights = [...document.querySelectorAll('button, input:not([type="checkbox"]):not([type="radio"]), select, [role="button"]')].filter(vis).map((e) => e.getBoundingClientRect().height).filter((h) => h >= 20 && h <= 72);
   const med = (a) => { if (!a.length) return null; const s = [...a].sort((x, y) => x - y); return s[Math.floor(s.length / 2)]; };
-  return { canvas, text, accent: accent ? rgb(accent) : null, heading: fam('h1') || fam('h2'), body: fam('p') || fam('body'), radius: med(radii), control: med(heights) };
+  // The site's own colour variables: custom properties on :root / html / body whose values are colours.
+  // Names that say "brand", "primary" or "accent" are the brand's colour, said by the site itself.
+  const vars = [];
+  const rootStyle = getComputedStyle(document.documentElement);
+  const names = new Set();
+  const walk = (rules) => { for (const r of rules) { try { if (r.cssRules) walk(r.cssRules); if (r.style && /(^|,)\s*(:root|html|body)\b/.test(r.selectorText ?? '')) for (const n of r.style) if (n.startsWith('--')) names.add(n); } catch { /* cross-origin */ } } };
+  for (const sh of document.styleSheets) { try { walk(sh.cssRules); } catch { /* cross-origin sheet */ } }
+  for (const n of names) {
+    const v = rootStyle.getPropertyValue(n).trim();
+    if (!v || v.length > 60) continue;
+    const probe = rgb(v); if (probe[3] === 0 && !/transparent/.test(v)) continue;
+    // A value the canvas did not accept leaves the fill black: only keep real colours.
+    if (!/^(#|rgb|hsl|oklch|oklab|lab|lch|color\(|[a-z]+$)/i.test(v)) continue;
+    vars.push({ name: n, value: v, rgb: probe });
+  }
+  const brandish = vars.filter((x) => /brand|primary|accent|main|key|highlight/i.test(x.name) && !/(foreground|fg|text|ink|contrast|on-)/i.test(x.name) && sat(x.rgb) > 0.2);
+  const fonts = [...new Set([...document.querySelectorAll('h1, h2, h3, p, a, button, li')].filter(vis).map((e) => getComputedStyle(e).fontFamily.split(',')[0].replace(/["']/g, '').trim()))].slice(0, 6);
+  return { canvas, text, accent: accent ? rgb(accent) : null, heading: fam('h1') || fam('h2'), body: fam('p') || fam('body'), radius: med(radii), control: med(heights), vars: vars.map(({ name, value }) => ({ name, value })), brand: brandish.map((x) => ({ name: x.name, value: `rgb(${x.rgb.slice(0, 3).join(', ')})` })), fonts };
 });
 await browser.close();
 
@@ -74,7 +92,9 @@ const okl = (str) => { const [L, C, h] = str.match(/[\d.]+/g).map(Number); retur
 const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 const toOklchStr = ([L, a, b]) => { const C = Math.hypot(a, b); const h = ((Math.atan2(b, a) * 180) / Math.PI + 360) % 360; return `oklch(${L.toFixed(3)} ${C.toFixed(3)} ${h.toFixed(1)})`; };
 
-const site = { canvas: toLab(seen.canvas), text: toLab(seen.text), accent: seen.accent ? toLab(seen.accent) : null };
+// A colour the site names as its brand (--brand, --color-primary…) is the accent, before any measured one.
+const brandRgb = seen.brand[0] ? seen.brand[0].value.match(/[\d.]+/g).map(Number) : null;
+const site = { canvas: toLab(seen.canvas), text: toLab(seen.text), accent: brandRgb ? toLab(brandRgb) : seen.accent ? toLab(seen.accent) : null };
 const mode = site.canvas[0] < 0.5 ? 'dark' : 'light';
 const palettes = JSON.parse(readFileSync(join(root, 'tokens/palettes/palettes.json'), 'utf8')).palettes;
 const ranked = palettes.map((p) => {
@@ -100,12 +120,15 @@ const radius = seen.radius == null ? 'balanced' : seen.radius <= 4 ? 'sharp' : s
 const density = seen.control == null ? 'balanced' : seen.control < 34 ? 'dense' : seen.control > 42 ? 'spacious' : 'balanced';
 const install = `node scripts/install-taste.mjs --project /abs/app --attach --palette ${best.id} --mode ${mode} --type ${typography} --radius ${radius} --density ${density}${override ? ` --override accent-solid="${override}"` : ''} --lock palette`;
 
-const result = { url, measured: { canvas: toOklchStr(site.canvas), text: toOklchStr(site.text), accent: site.accent ? toOklchStr(site.accent) : null, heading: seen.heading, body: seen.body, radiusPx: seen.radius, controlPx: seen.control ? Math.round(seen.control) : null }, profile: { palette: best.id, mode, typography, radius, density, overrides: override ? { 'accent-solid': override } : {} }, alternatives: ranked.slice(1, 3).map((r) => r.id), install };
+const result = { url, brandColours: seen.brand, variables: seen.vars.slice(0, 40), fonts: seen.fonts, measured: { canvas: toOklchStr(site.canvas), text: toOklchStr(site.text), accent: site.accent ? toOklchStr(site.accent) : null, heading: seen.heading, body: seen.body, radiusPx: seen.radius, controlPx: seen.control ? Math.round(seen.control) : null }, profile: { palette: best.id, mode, typography, radius, density, overrides: override ? { 'accent-solid': override } : {} }, alternatives: ranked.slice(1, 3).map((r) => r.id), install };
 if (asJson) { console.log(JSON.stringify(result, null, 2)); process.exit(0); }
 console.log(`Measured ${url}`);
 console.log(`  canvas ${result.measured.canvas}, text ${result.measured.text}, accent ${result.measured.accent ?? 'none found'}`);
 console.log(`  headings: ${seen.heading || '?'}\n  body: ${seen.body || '?'}`);
-console.log(`  corner radius ~${seen.radius ?? '?'}px, controls ~${result.measured.controlPx ?? '?'}px tall\n`);
+console.log(`  corner radius ~${seen.radius ?? '?'}px, controls ~${result.measured.controlPx ?? '?'}px tall`);
+if (seen.brand.length) console.log(`  brand colours it declares: ${seen.brand.map((b) => `${b.name} ${b.value}`).join(', ')}`);
+if (seen.fonts.length) console.log(`  faces in use: ${seen.fonts.join(', ')}`);
+console.log('');
 console.log(`Nearest look: ${best.id} (${best.name}), ${mode}; type ${typography}; radius ${radius}; density ${density}.`);
 console.log(`Also close: ${result.alternatives.join(', ')}.`);
 if (override) console.log(`The site's accent is its own, so it is kept as an override (contrast-checked on install).`);

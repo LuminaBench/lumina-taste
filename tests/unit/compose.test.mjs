@@ -197,10 +197,11 @@ test('compose --write drafts a plain section where no part fits, and the critic 
     const r = node([join(root, 'scripts/compose.mjs'), 'About page for Meridian, an architecture studio', '--project', dir, '--write']);
     assert.equal(r.status, 0, r.stderr);
     const html = readFileSync(join(dir, 'index.html'), 'utf8');
-    assert.match(html, /<section class="lt-section" id="the-story" data-layout="rail"/);
+    assert.match(html, /<section class="lt-section" id="the-story" data-layout="rail"[^>]*data-rhythm="busy"/);
     assert.match(html, /<p>TODO: Two or three short paragraphs/);
-    // Figures are shown once: the statement hero drops its facts when the page has a figures section.
-    assert.ok(html.includes('lt-hero-statement') && html.includes('lt-stats-band') && !html.includes('data-part="facts"'));
+    // No figures in the brief: no figures band and no made-up facts under the headline; the plan asks for them.
+    assert.ok(html.includes('lt-hero-statement') && !html.includes('lt-stats-band') && !html.includes('data-part="facts"'));
+    assert.match(r.stdout, /Left out: the figures band/);
     const a = node([join(root, 'scripts/audit-ui.mjs'), join(dir, 'index.html'), '--product', 'Meridian', '--viewports', 'desktop', '--modes', 'light']);
     assert.match(a.stdout, /taste-sample-content/);
     assert.match(a.stdout, /TODO: Two or three short paragraphs/);
@@ -240,8 +241,10 @@ test('plans put pictures where paragraphs were, and say how the page moves', () 
     const html = readFileSync(join(dir, 'index.html'), 'utf8');
     assert.match(html, /<main id="main" data-scroll>/);
     assert.equal((html.match(/data-tone="dark"/g) ?? []).length, 1);
-    const tones = [...html.matchAll(/<section class="lt-[^"]+"([^>]*)>/g)].map((m) => /data-tone="(\w+)"/.exec(m[1])?.[1] ?? null);
-    for (let i = 1; i < tones.length; i++) assert.ok(!(tones[i] && tones[i - 1]), `tinted bands ${i - 1} and ${i} touch`);
+    // Grounds alternate: no two neighbouring bands on the same ground (plain, well, dark, brand).
+    const tones = [...html.matchAll(/<section class="lt-[^"]+"([^>]*)>/g)].map((m) => /data-tone="(\w+)"/.exec(m[1])?.[1] ?? 'plain');
+    for (let i = 1; i < tones.length; i++) assert.ok(tones[i] !== tones[i - 1], `bands ${i - 1} and ${i} share the ${tones[i]} ground`);
+    assert.ok([...html.matchAll(/<section class="lt-[^"]+"[^>]*>/g)].every((m) => /data-rhythm="(quiet|busy)"/.test(m[0])), 'every band carries its beat');
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
@@ -269,3 +272,79 @@ test('look flags carry into the plan; --type that names a typeface is read as on
   assert.equal(q.profile.typography, 'editorial');
 });
 
+
+test('words from the subject: facts come from the brief, never from filler', async () => {
+  const { extractFacts, heroCopy, figuresFrom } = await import(join(root, 'engine/compose/words.mjs'));
+  const bakery = extractFacts('Home page for Crumb & Co, a sourdough bakery on Mill Lane in Frome, open from 7:30 Tuesday to Sunday, loaves from £4.20 and a Saturday bread class for £65', { product: 'Crumb & Co' });
+  assert.deepEqual([bakery.kind, bakery.street, bakery.place, bakery.days], ['sourdough bakery', 'Mill Lane', 'Frome', 'Tuesday to Sunday']);
+  assert.deepEqual(bakery.prices.map((p) => [p.value, p.what, p.from]), [['£4.20', 'loaves', true], ['£65', 'Saturday bread class', false]]);
+  assert.deepEqual(bakery.times.map((t) => t.value), ['7:30'], 'a price is never read as a time');
+  const charity = extractFacts('Home page for Canal Street Food Bank, a volunteer-run charity in Birmingham that gave out 410 food parcels a week last winter, open Monday and Thursday 10 to 2');
+  assert.deepEqual([charity.counts[0].value, charity.counts[0].what, charity.counts[0].per, charity.counts[0].when], ['410', 'food parcels', 'a week', 'last winter']);
+  assert.equal(charity.times[0].value, '10 to 2');
+  const { openingHours } = await import(join(root, 'engine/compose/words.mjs'));
+  assert.deepEqual(openingHours(charity), { 1: '10:00 to 14:00', 2: null, 3: null, 4: '10:00 to 14:00', 5: null, 6: null, 7: null });
+  assert.equal(openingHours(extractFacts('a cafe open Tuesday to Sunday 8am to 4pm'))[1], null);
+  assert.equal(openingHours(extractFacts('a cafe open Tuesday to Sunday 8am to 4pm'))[7], '08:00 to 16:00');
+  assert.equal(openingHours(extractFacts('a bakery open from 7:30 Tuesday to Sunday')), null, 'no closing time, no table: hours are never guessed');
+  const saas = extractFacts('Landing page for Tally, an invoicing tool for freelancers that sends an invoice in 30 seconds and chases late payers, £9 a month');
+  assert.deepEqual(saas.claims, ['sends an invoice in 30 seconds', 'chases late payers']);
+  assert.equal(saas.prices[0].what, null, 'a price after a comma belongs to the product, not to "late payers"');
+  assert.equal(heroCopy(saas, { typeId: 'landing', product: 'Tally' }).headline, 'Send an invoice in 30 seconds');
+  assert.equal(figuresFrom(saas).find((f) => f.value === '30 seconds').label, 'to send an invoice');
+  const build = extractFacts('Website for Brickwell Build, a construction firm in Bristol building house extensions and loft conversions, a £40,000 single-storey extension in 12 weeks');
+  assert.equal(heroCopy(build, { typeId: 'service-landing', product: 'Brickwell Build' }).headline, 'Single-storey extensions in 12 weeks');
+  assert.deepEqual(build.offers, ['house extensions', 'loft conversions']);
+  // A brief with nothing specific gets a TODO asking for facts, not invented ones.
+  const thin = heroCopy(extractFacts('website for a dentist'), { typeId: 'service-landing', product: null });
+  assert.equal(thin.headline, null);
+  assert.ok(thin.todo.includes('one real price'));
+  // Every value found is a substring of the brief.
+  for (const brief of ['Home page for Crumb & Co, a sourdough bakery on Mill Lane in Frome, open from 7:30, loaves from £4.20', 'Website for Harrow & Finch, an employment law firm in Manchester, settlement agreement review from £450, free 20-minute first call']) {
+    for (const f of figuresFrom(extractFacts(brief))) assert.ok(brief.includes(f.value.split(' ')[0]), `${f.value} is in the brief`);
+  }
+});
+
+test('one bold idea per page, from the brief\'s own figure, and a request when there is none', async () => {
+  const { extractFacts } = await import(join(root, 'engine/compose/words.mjs'));
+  const { boldIdea, colourName } = await import(join(root, 'engine/compose/idea.mjs'));
+  const sig = { name: 'Plain terms', how: 'The first fee set large in the hero. Nothing decorative.' };
+  const type = (id) => ({ id, kind: 'marketing' });
+  const build = boldIdea({ facts: extractFacts('a construction firm, a £40,000 single-storey extension in 12 weeks'), type: type('service-landing'), hero: 'hero-split', signature: sig, accent: 'red', sections: [] });
+  assert.match(build.text, /£40,000 fixed price .* set huge on red/);
+  assert.equal(build.place, 'hero-visual');
+  const bakery = boldIdea({ facts: extractFacts('a bakery, open from 7:30, loaves from £4.20'), type: type('venue'), hero: 'hero-split', signature: sig, accent: 'green', sections: [] });
+  assert.match(bakery.text, /^the 7:30 opening time as the hero/);
+  const none = boldIdea({ facts: extractFacts('website for a dentist'), type: type('service-landing'), hero: 'hero-split', signature: sig, accent: 'red', sections: [] });
+  assert.equal(none.fromBrief, false);
+  assert.match(none.ask, /one true figure/);
+  assert.equal(colourName([0.35, 0.12, 262]), 'navy');
+  assert.equal(colourName([0.58, 0.2, 30]), 'red');
+  const plan = compose('Website for Brickwell Build, a construction firm in Bristol building house extensions, a £40,000 single-storey extension in 12 weeks');
+  assert.equal(plan.pageType.id, 'service-landing', 'a construction firm is a trade, not software, even with "extension" in the brief');
+  assert.match(plan.artDirection.boldIdea.text, /£40,000/);
+  assert.ok(plan.rhythm.strip.startsWith('hero '));
+  assert.deepEqual(plan.rhythm.broken, []);
+});
+
+test('compose --write puts the subject in the draft: headline, bold idea, rhythm, and no sample figures', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lt-subject-'));
+  try {
+    const r = node([join(root, 'scripts/compose.mjs'), 'Website for Brickwell Build, a construction firm in Bristol building house extensions and loft conversions, fixed-price quotes, a £40,000 single-storey extension in 12 weeks', '--project', dir, '--write']);
+    assert.equal(r.status, 0, r.stderr);
+    const html = readFileSync(join(dir, 'index.html'), 'utf8');
+    assert.match(html, /<h1[^>]*>Single‑storey extensions in 12 weeks<\/h1>/, 'hyphens never break in the headline');
+    assert.match(html, /<!-- Bold idea: the £40,000 fixed price/);
+    assert.match(html, /data-tone="swatch"[\s\S]*?<p data-part="figure"[^>]*>£40,000<\/p>/);
+    assert.match(html, /<p data-part="eyebrow">Construction firm · Bristol<\/p>/);
+    assert.ok(!html.includes('Book a check-up'), 'the sample\'s action label is replaced');
+    assert.match(html, />Get a quote</);
+    assert.match(html, /<title>Brickwell Build · Construction firm in Bristol<\/title>/);
+    const bands = [...html.matchAll(/<section class="lt-[^"]+"[^>]*>/g)].map((m) => m[0]);
+    assert.ok(bands.every((b) => /data-rhythm="(quiet|busy)"/.test(b)), 'every band carries its beat');
+    assert.equal(bands.filter((b) => /data-scale="display"/.test(b)).length, 2, 'the first screen and the close');
+    assert.ok(bands.filter((b) => /data-tone="dark"/.test(b)).length <= 1 && bands.filter((b) => /data-tone="accent"/.test(b)).length <= 1);
+    assert.match(r.stdout, /\*\*Rhythm \(as drafted from the blueprint\):\*\* `hero ▇ XL/);
+    assert.match(r.stdout, /Found in the brief: kind: construction firm; place: Bristol/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});

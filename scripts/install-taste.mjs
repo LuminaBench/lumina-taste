@@ -6,6 +6,8 @@
 //   node scripts/install-taste.mjs --palette slate-forest --type precision --components data-table,command-palette
 //   node scripts/install-taste.mjs --framework react --charts line-chart,kpi-card --dest ./src/ui
 //   node scripts/install-taste.mjs --framework static --components accordion --dest ./ui   (no build step: lumina.css + lumina.js + snippets/)
+//   node scripts/install-taste.mjs --framework tailwind --components hero-split,faq-section   (static kit + tailwind.css: Tailwind v4 @theme on the kit's tokens)
+//   node scripts/install-taste.mjs --framework next --blueprints practice   (Next.js App Router: app/layout.tsx, app/globals.css, app/page.tsx; React components)
 //   node scripts/install-taste.mjs --attach --root "#app" --components toast-stack      (existing app)
 //   node scripts/install-taste.mjs --density dense                (change one axis; locked axes are kept)
 //   node scripts/install-taste.mjs --style swiss                  (a style brings its palette, mode, type and radius)
@@ -17,7 +19,8 @@ import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const { mergeProfile, normalizeProfile, serializeProfile, validateProfile, CHOICES, AXES } = await import(pathToFileURL(join(root, 'engine/profiles/profile.mjs')).href);
+const { mergeProfile, normalizeProfile, serializeProfile, validateProfile, bootstrapSnippet, CHOICES, AXES } = await import(pathToFileURL(join(root, 'engine/profiles/profile.mjs')).href);
+const { htmlToJsx } = await import(pathToFileURL(join(root, 'engine/compose/jsx.mjs')).href);
 const { STYLES } = await import(pathToFileURL(join(root, 'engine/profiles/options.mjs')).href);
 const { contrast, parseOklch } = await import(pathToFileURL(join(root, 'scripts/lib/color.mjs')).href);
 const { RULES } = await import(pathToFileURL(join(root, 'scripts/lib/contrast-rules.mjs')).href);
@@ -55,7 +58,10 @@ if (opts.list) {
 }
 
 const framework = opts.framework ?? 'vanilla';
-if (!['vanilla', 'react', 'static'].includes(framework)) fail(`--framework must be vanilla, react or static`);
+if (!['vanilla', 'react', 'static', 'tailwind', 'next'].includes(framework)) fail(`--framework must be vanilla, react, static, tailwind or next`);
+// Tailwind gets the static kit (one lumina.css, one lumina.js, snippets) plus a Tailwind v4 entry stylesheet;
+// Next gets the React components plus an App Router layout, global stylesheet and a first page.
+const staticLike = framework === 'static' || framework === 'tailwind';
 const projectDir = resolve(opts.project ?? '.');
 let dest = resolve(projectDir, opts.dest ?? 'lumina-taste');
 const profilePath = resolve(projectDir, opts.profile ?? 'taste-profile.json');
@@ -118,14 +124,14 @@ const want = { components: list(opts.components), charts: list(opts.charts), blu
 // A static install bundles everything into one lumina.css and lumina.js. Running it again with fewer parts must
 // not drop the ones already there: keep every part that already has a snippet in this folder (--fresh starts over).
 const kept = [];
-if (framework === 'static' && !opts.fresh && existsSync(join(dest, 'snippets'))) {
+if (staticLike && !opts.fresh && existsSync(join(dest, 'snippets'))) {
   for (const f of readdirSync(join(dest, 'snippets'))) {
     const id = f.replace(/\.html$/, '');
     if (f.endsWith('.html') && catalog.ui.some((c) => c.id === id) && !want.components.includes(id)) { want.components.push(id); kept.push(id); }
   }
 }
 // Asking only for blueprints means "give me that page": write the page and nothing else.
-const blueprintOnly = framework === 'static' && want.blueprints.length > 0 && !want.components.length && !want.charts.length;
+const blueprintOnly = staticLike && want.blueprints.length > 0 && !want.components.length && !want.charts.length;
 // One blueprint and nothing else is "give me that page": it is written where the page lives (the project
 // folder unless --dest says otherwise), not in a sub-folder that then has to be moved. A page that is
 // already there is never written over: the blueprint goes into <id>/ beside it instead.
@@ -176,11 +182,11 @@ const entries = new Set();
 const addDir = (path, exts) => { for (const f of catalog.ui.concat(catalog.charts, catalog.blueprints).find((x) => x.path === path)?.files ?? []) if (exts.some((e) => f.endsWith(e))) entries.add(f); };
 for (const id of want.components) {
   const c = catalog.ui.find((x) => x.id === id);
-  addDir(c.path, framework === 'react' ? ['.react.tsx', '.css'] : ['.html', '.css', '.ts']);
+  addDir(c.path, framework === 'react' ? ['.react.tsx', '.css'] : framework === 'next' ? ['.react.tsx', '.css', `${id}.ts`] : ['.html', '.css', '.ts']);
   for (const d of cssDeps(id)) { if (d === id) continue; const dep = catalog.ui.find((x) => x.id === d); if (dep) addDir(dep.path, ['.css']); }
 }
-for (const id of want.charts) addDir(catalog.charts.find((x) => x.id === id).path, framework === 'react' ? ['.react.tsx'] : [`${id}.ts`]);
-for (const id of want.blueprints) addDir(catalog.blueprints.find((x) => x.id === id).path, ['.html', '.css', '.ts']);
+for (const id of want.charts) addDir(catalog.charts.find((x) => x.id === id).path, ['react', 'next'].includes(framework) ? ['.react.tsx'] : [`${id}.ts`]);
+for (const id of framework === 'next' ? [] : want.blueprints) addDir(catalog.blueprints.find((x) => x.id === id).path, ['.html', '.css', '.ts']);
 if (entries.size) { entries.add('components/ui/_shared/shared.css'); }
 
 // Follow every relative import (ts, tsx, css) so the copy compiles on its own: nothing more, nothing less.
@@ -223,7 +229,7 @@ const write = (rel, content, generated = false) => {
   mkdirSync(dirname(target), { recursive: true });
   writeFileSync(target, content);
 };
-if (framework === 'static') await writeStatic();
+if (staticLike) await writeStatic();
 else for (const f of [...tokenFiles, ...profileEngine, ...[...files].sort()]) write(f, readFileSync(join(root, f)));
 
 // Static: no build step in the project. One lumina.css (tokens + component CSS) and one lumina.js that
@@ -301,8 +307,152 @@ async function writeStatic() {
     write(`${pageDir(id)}index.html`, themed, solo && !soloTaken);
   }
 }
+// ------------------------------------------------------------------ tailwind and next
+/** Kit tokens as Tailwind v4 theme variables. `@theme inline` keeps them as references, so every utility
+ *  follows the kit's data-mode (and data-tone bands) instead of baking one mode's colours in. */
+const TW_COLOURS = {
+  canvas: 'bg-canvas', surface: 'bg-surface-1', 'surface-2': 'bg-surface-2', 'surface-3': 'bg-surface-3',
+  ink: 'text-primary', 'ink-2': 'text-secondary', 'ink-muted': 'text-muted', line: 'border-hairline', 'line-strong': 'border-strong',
+  accent: 'accent-solid', 'accent-hover': 'accent-hover', 'accent-ink': 'accent-ink', 'accent-soft': 'accent-soft', 'accent-text': 'accent-text',
+  positive: 'status-positive', negative: 'status-negative', warning: 'status-warning', info: 'status-info',
+  ...Object.fromEntries(Array.from({ length: 8 }, (_, i) => [`chart-${i + 1}`, `chart-${i + 1}`])),
+};
+function tailwindCss() {
+  const lines = [
+    `/* lumina-taste for Tailwind v4: palette ${profile.palette}, type ${profile.typography}, radius ${profile.radius}.`,
+    '   Use this file as the entry stylesheet. Colours, fonts, radii and spacing come from the kit\'s tokens, so',
+    '   utilities follow <html data-mode="light|dark"> and the kit\'s dark and brand bands. Every pair is contrast-checked. */',
+    '@import "tailwindcss";',
+    '@import "./lumina.css";',
+    '',
+    '/* dark: follows the kit\'s mode attribute, not the OS setting alone. */',
+    '@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *, [data-tone="dark"], [data-tone="dark"] *));',
+    '',
+    '@theme inline {',
+    ...Object.entries(TW_COLOURS).map(([k, t]) => `  --color-${k}: var(--${t});`),
+    '  --font-sans: var(--font-body);',
+    '  --font-display: var(--font-display);',
+    '  --font-mono: var(--font-mono);',
+    ...['xs', 'sm', 'md', 'lg', 'xl'].map((r) => `  --radius-${r}: var(--radius-${r});`),
+    '  --shadow-sm: var(--shadow-sm);',
+    '  --shadow-md: var(--shadow-md);',
+    '  --text-ui: var(--text-ui);',
+    '  --text-ui-sm: var(--text-ui-sm);',
+    '}',
+    '',
+  ];
+  return lines.join('\n');
+}
+function writeTailwind() { write('tailwind.css', tailwindCss(), true); }
+
+function writeNext() {
+  const appDir = join(projectDir, 'app');
+  const rel = (to) => { const r = relative(appDir, to).split('\\').join('/'); return r.startsWith('.') ? r : `./${r}`; };
+  const writeApp = (name, content) => {
+    const target = join(appDir, name);
+    if (existsSync(target) && !opts.overwrite && readFileSync(target, 'utf8') !== content) { skipped++; console.log(`  ! kept your ${relative(projectDir, target)} (use --overwrite to replace)`); return; }
+    if (existsSync(target) && readFileSync(target, 'utf8') === content) { unchanged++; return; }
+    copied++;
+    if (dry) { console.log(`  + ${relative(projectDir, target)}`); return; }
+    mkdirSync(dirname(target), { recursive: true }); writeFileSync(target, content);
+  };
+  // The page's own styles from a blueprint: its page.css and the shared blueprint layer.
+  const bpCss = [];
+  for (const id of want.blueprints) {
+    const bp = catalog.blueprints.find((x) => x.id === id);
+    for (const f of [join('blueprints/_shared/blueprint.css'), join(bp.path, 'page.css')]) if (existsSync(join(root, f))) { const out = `pages/${f === 'blueprints/_shared/blueprint.css' ? 'blueprint' : id}.css`; write(out, readFileSync(join(root, f)), true); if (!bpCss.includes(out)) bpCss.push(out); }
+  }
+  const cssFiles = [...files].filter((f) => f.endsWith('.css') && !f.startsWith('tokens/'));
+  const globals = [
+    `/* lumina-taste for Next.js: palette ${profile.palette}, type ${profile.typography}. Tokens first, then component styles. */`,
+    `@import "${rel(join(dest, 'tokens/index.css'))}";`,
+    ...cssFiles.sort().map((f) => `@import "${rel(join(dest, f))}";`),
+    ...bpCss.map((f) => `@import "${rel(join(dest, f))}";`),
+    '',
+  ].join('\n');
+  const attrs = { 'data-palette': profile.palette, 'data-mode': profile.mode, 'data-type': profile.typography, 'data-density': profile.density, 'data-radius': profile.radius, 'data-motion': profile.motion, ...(profile.style !== 'none' ? { 'data-style': profile.style } : {}) };
+  const boot = bootstrapSnippet(profile).replace(/^<script>|<\/script>$/g, '');
+  const layout = `import type { ReactNode } from 'react';
+import './globals.css';
+
+export const metadata = {
+  title: 'TODO: page title',
+  description: 'TODO: one sentence that says what this page is, for search results and link previews.',
+};
+
+// Sets the theme attributes (and a saved light or dark choice) before first paint, so the page never flashes the wrong mode.
+const themeBootstrap = ${JSON.stringify(boot)};
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en"${Object.entries(attrs).map(([k, v]) => ` ${k}="${v}"`).join('')} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}
+`;
+  // Behaviour for kit markup on the page: the vanilla enhancers, started once on the client.
+  const enhancers = want.components.map((id) => catalog.ui.find((c) => c.id === id)).filter((c) => c && c.files.some((f) => f.endsWith(`${c.id}.ts`)) && /export function enhance\b/.test(readFileSync(join(root, c.files.find((f) => f.endsWith(`${c.id}.ts`))), 'utf8')))
+    .map((c) => ({ id: c.id, name: readFileSync(join(root, c.files.find((f) => f.endsWith('.html')) ?? c.files[0]), 'utf8').match(/data-lt="([^"]+)"/)?.[1] ?? c.id, file: c.files.find((f) => f.endsWith(`${c.id}.ts`)).replace(/\.ts$/, '') }));
+  const enhance = `'use client';
+// Starts the behaviour of every kit element on the page ([data-lt]) once it is in the document.
+import { useEffect } from 'react';
+import { autoEnhance } from '${rel(join(dest, 'components/ui/_shared/dom'))}';
+${enhancers.map((e, i) => `import { enhance as e${i} } from '${rel(join(dest, e.file))}';`).join('\n')}
+
+const registry = {
+${enhancers.map((e, i) => `  ${JSON.stringify(e.name)}: e${i},`).join('\n')}
+};
+
+export function Enhance() {
+  useEffect(() => autoEnhance(document, registry), []);
+  return null;
+}
+`;
+  // The first page: the blueprint's body, or the chosen blocks in order, as JSX.
+  let markup = '';
+  if (want.blueprints.length) {
+    const bp = catalog.blueprints.find((x) => x.id === want.blueprints[0]);
+    const html = readFileSync(join(root, bp.path, 'index.html'), 'utf8');
+    markup = (/<body[^>]*>([\s\S]*)<\/body>/.exec(html)?.[1] ?? '').trim();
+    // --name "Your Business": the sample's name gives way to yours, as it does for a static blueprint.
+    if (typeof opts.name === 'string' && opts.name.trim()) {
+      let names = []; try { names = JSON.parse(readFileSync(join(root, bp.path, 'meta.json'), 'utf8')).brand ?? []; } catch { /* no meta */ }
+      for (const b of [...names].sort((x, y) => y.length - x.length)) markup = markup.replaceAll(b.replace(/&/g, '&amp;'), opts.name.trim().replace(/&/g, '&amp;')).replaceAll(b, opts.name.trim().replace(/&/g, '&amp;'));
+    }
+  } else {
+    const blocks = want.components.map((id) => catalog.ui.find((c) => c.id === id)).filter((c) => c && (c.family === 'blocks' || /^(navbar|footer|site-footer)/.test(c.id)));
+    const order = (c) => (/^navbar/.test(c.id) ? 0 : /footer/.test(c.id) ? 2 : 1);
+    const main = blocks.filter((c) => order(c) === 1).map((c) => readFileSync(join(root, c.files.find((f) => f.endsWith('.html'))), 'utf8').trim());
+    markup = [...blocks.filter((c) => order(c) === 0).map((c) => readFileSync(join(root, c.files.find((f) => f.endsWith('.html'))), 'utf8').trim()), `<main id="main" data-scroll>\n${main.join('\n')}\n</main>`, ...blocks.filter((c) => order(c) === 2).map((c) => readFileSync(join(root, c.files.find((f) => f.endsWith('.html'))), 'utf8').trim())].join('\n');
+  }
+  const jsx = htmlToJsx(markup).split('\n').map((l) => (l.trim() ? `      ${l}` : '')).join('\n');
+  const page = `import { Enhance } from './lumina-enhance';
+
+// A first page from lumina-taste (${want.blueprints.length ? `the ${want.blueprints[0]} blueprint` : 'the blocks you chose'}). Every name, sentence, number and link is sample
+// content: rewrite all of it. Swap any block for its React component when you need props.
+export default function Page() {
+  return (
+    <>
+${jsx}
+      <Enhance />
+    </>
+  );
+}
+`;
+  writeApp('layout.tsx', layout);
+  writeApp('globals.css', globals);
+  writeApp('lumina-enhance.tsx', enhance);
+  writeApp('page.tsx', page);
+}
+
 const tokenIndex = `/* lumina-taste tokens: import this once, before any component CSS. */\n${tokenFiles.map((f) => `@import "./${relative('tokens', f)}";`).join('\n')}\n`;
-if (framework !== 'static') write('tokens/index.css', tokenIndex);
+if (!staticLike) write('tokens/index.css', tokenIndex);
+if (framework === 'tailwind') writeTailwind();
+if (framework === 'next') writeNext();
 
 if (!opts['no-profile']) {
   if (dry) console.log(`  ~ ${relative(projectDir, profilePath)}`);
@@ -348,12 +498,14 @@ if (blueprintOnly) {
   3. Need a part or a chart it lacks? Run this command again with --components <ids> and/or --charts <ids> added: that also writes
      lumina.css and lumina.js. Link both after main.css; charts are then at lumina.charts['<id>'](el, data, options).`);
 }
+else if (framework === 'tailwind') console.log(`  1. Use ${relative(projectDir, join(dest, 'tailwind.css'))} as your Tailwind v4 entry stylesheet (it imports tailwindcss and the kit), and load ${relative(projectDir, join(dest, 'lumina.js'))} for behaviour.\n     Utilities follow the kit's tokens in both modes: bg-canvas, bg-surface, text-ink, text-ink-muted, bg-accent, text-accent-ink, border-line, rounded-md, font-display.\n     Paste markup from ${relative(projectDir, join(dest, 'snippets'))}/ and add utilities around it; dark: follows data-mode.`);
+else if (framework === 'next') console.log(`  1. app/layout.tsx sets the theme before first paint; app/globals.css imports the tokens and component styles;\n     app/page.tsx is a first page from ${want.blueprints.length ? `the ${want.blueprints.join(', ')} blueprint` : 'the blocks you chose'}. Every word in it is sample copy. Swap a block's markup for its React component\n     (${relative(projectDir, join(dest, 'components'))}/…/<id>.react.tsx) when you need props; app/lumina-enhance.tsx wires the behaviour of the rest.`);
 else if (framework === 'static') console.log(`  1. In each page: <link rel="stylesheet" href="${relative(projectDir, join(dest, 'lumina.css'))}"> and <script defer src="${relative(projectDir, join(dest, 'lumina.js'))}"></script>.\n     Paste markup from ${relative(projectDir, join(dest, 'snippets'))}/; it is enhanced on load. ${want.charts.length ? `Charts in this bundle: ${want.charts.map((c) => `lumina.charts['${c}']`).join(', ')}; call them as (el, data, options) after DOMContentLoaded. ` : ''}Works from file:// too.`);
 else console.log(`  1. Import ${relative(projectDir, join(dest, 'tokens/index.css'))} once, before component CSS.`);
 if (profile.installMode === 'attach') console.log(`  2. Put the attributes on your wrapper only (host styles stay untouched):\n     <div class="lt-root" ${attrs}>…</div>   (attachRoot: "${profile.attachRoot}")`);
-else if (!blueprintOnly) console.log(`  2. Put the attributes on <html>:\n     <html ${attrs}>\n     or call applyProfile(profile) from engine/profiles/profile.mjs (bootstrapSnippet() avoids a flash).`);
+else if (!blueprintOnly && framework !== 'next') console.log(`  2. Put the attributes on <html>:\n     <html ${attrs}>\n     or call applyProfile(profile) from engine/profiles/profile.mjs (bootstrapSnippet() avoids a flash).`);
 const webfont = JSON.parse(readFileSync(join(root, 'tokens/typography/source.json'), 'utf8')).pairings?.find?.((x) => x.id === profile.typography)?.webfont;
-if (framework === 'static' && want.blueprints.length && !blueprintOnly) console.log(`  Blueprints: ${want.blueprints.map((b) => relative(projectDir, join(dest, b, 'index.html'))).join(', ')} ${want.blueprints.length > 1 ? 'are' : 'is'} a complete page:\n     main.css and main.js already hold the tokens and every component it uses, so it does not need lumina.css.\n     Move it where the page should live (or copy its markup into your page), then replace the sample words and data.`);
+if (staticLike && want.blueprints.length && !blueprintOnly) console.log(`  Blueprints: ${want.blueprints.map((b) => relative(projectDir, join(dest, b, 'index.html'))).join(', ')} ${want.blueprints.length > 1 ? 'are' : 'is'} a complete page:\n     main.css and main.js already hold the tokens and every component it uses, so it does not need lumina.css.\n     Move it where the page should live (or copy its markup into your page), then replace the sample words and data.`);
 if (webfont) console.log(`  Fonts: nothing to do. The page uses faces already on the device, chosen to match, and works offline.\n     Optional, needs network: for the exact faces add <link rel="stylesheet" href="${webfont}">, or self-host them with @font-face.`);
-if (want.components.length && framework !== 'static') console.log(`  3. ${framework === 'react' ? 'Import the components from their .react.tsx files.' : 'Paste each .html snippet and call enhance(el) from its .ts file (or autoEnhance(document, { id: enhance }) from _shared/dom.ts).'}`);
+if (want.components.length && !staticLike && framework !== 'next') console.log(`  3. ${framework === 'react' ? 'Import the components from their .react.tsx files.' : 'Paste each .html snippet and call enhance(el) from its .ts file (or autoEnhance(document, { id: enhance }) from _shared/dom.ts).'}`);
 if (blocked.length && !opts.force) process.exit(3);
