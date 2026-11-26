@@ -41,6 +41,10 @@
   .bp-main { grid-template-columns: 1fr; }
   .bp-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+/* A tablet held upright: the sidebar leaves room for two figures a row, each with its change beside it. */
+@media (max-width: 900px) {
+  .bp-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 @media (max-width: 760px) {
   .bp-dash { padding: var(--space-5) var(--space-4) var(--space-7); }
   .bp-topbar { padding: 0 var(--space-4); }

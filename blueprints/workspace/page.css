@@ -120,6 +120,9 @@ body { overflow: hidden; background: var(--bg-canvas); }
   .ws-table [data-col="foot"] { display: none; }
   .ws-find { flex: 1 1 0; min-width: 0; max-width: 260px; }
   .ws-find input { width: 100%; }
+  /* The day is in the filters (Today, Tomorrow): the bar keeps the title whole. */
+  .ws-title p { display: none; }
+  .ws-cmd { width: min(300px, 30vw); }
 }
 @media (min-width: 768px) and (max-width: 959px) {
   /* A resized inspector keeps its width on a wide window; here the table needs the room. */
@@ -129,7 +132,6 @@ body { overflow: hidden; background: var(--bg-canvas); }
   .ws-keys { display: none; }
   .ws-cmd { width: auto; }
   .ws-cmd span { display: none; }
-  .ws-title p { display: none; }
   .ws-cars { grid-template-columns: 36px 4ch; gap: 8px; }
   .ws-bar, .ws-filters, .ws-table-area, .ws-foot { padding-inline: 16px; }
   .ws-i { padding-inline: 18px; }
