@@ -72,7 +72,9 @@ function player(card: HTMLElement, m: Moment) {
   const play = async () => {
     stop();
     const me = run;
-    if (m.kind === 'load') { if (loaded()) frame.contentWindow?.location.reload(); else load(); return; }
+    // An entrance plays on load: reload a stage page that is up; one still loading plays it anyway (reloading it
+    // now would reload about:blank and cancel it).
+    if (m.kind === 'load') { if (!loaded()) load(); else if (frame.contentDocument?.documentElement?.hasAttribute('data-stage-ready')) frame.contentWindow?.location.reload(); return; }
     load();
     if (!(await ready(me)) || me !== run) return;
     const win = frame.contentWindow!, d = frame.contentDocument!;

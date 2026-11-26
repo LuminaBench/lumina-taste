@@ -1596,7 +1596,7 @@
       "name": "Art panel",
       "summary": "What stands in for a photograph until there is one: the thing's name set large on a tinted panel, with a flat spot illustration of the subject's own thing (a cup, a loaf, a crane, a document) on a disc, an arch or a floor. Variants: one large figure, the product's own colour, a keyline frame.",
       "pattern": "<figure> + <figcaption>",
-      "states": ["accent","figure","framed","ink","plain","swatch","with a motif","with a photograph"],
+      "states": ["accent","figure","framed","ink","plain","swatch","with a motif","with a photograph","with a scene"],
       "aliases": [
         "image stand-in",
         "no photo",
@@ -1609,10 +1609,13 @@
         "spot illustration",
         "illustration instead of a photo",
         "subject illustration",
-        "flat illustration"
+        "flat illustration",
+        "illustrated scene",
+        "little scene of the shop",
+        "drawing of a counter with a cup"
       ],
       "react": "ArtPanel",
-      "api": "data-motif=\"cup | loaf | crane | document | …\" (47 drawings) · data-pattern=\"sun | arch | floor | none\" · data-tone=\"accent | ink | swatch\" · data-variant=\"figure\" · data-frame · data-ratio · data-shot",
+      "api": "data-motif=\"cup | loaf | crane | document | …\" (47 drawings) · data-scene=\"cup bag\" (two or three on one ground) · data-pattern=\"sun | arch | floor | none\" · data-tone=\"accent | ink | swatch\" · data-variant=\"figure\" · data-frame · data-ratio · data-shot",
       "w": 900,
       "called": [
         "what do I put where the photo goes",
@@ -1627,6 +1630,12 @@
           "name": "Motif",
           "api": "data-motif",
           "text": "A flat drawing of the subject's own thing: one stroke weight, ink, the accent and one pale tint, on a disc (or data-pattern=\"arch\" / \"floor\"). Decoration: aria-hidden."
+        },
+        {
+          "sel": ".lt-art[data-scene] [data-part=\"scene\"]",
+          "name": "Scene",
+          "api": "data-scene=\"bag cup\"",
+          "text": "Two or three motifs on one ground for a hero-sized panel: the biggest behind, the next in front overlapping it, the first name (the subject) alone in the accent, one line weight at every size. data-scene=\"auto\" picks them from data-shot."
         },
         {
           "sel": ".lt-art:first-child [data-part=\"name\"]",
@@ -1647,14 +1656,14 @@
           "text": "Vary the tone across a set so three panels do not read as three grey boxes."
         }
       ],
-      "prompt": "When a page needs a picture and there is no photograph, use an art panel, never a grey box, a stock photo or a detailed drawing of the product. It is a <figure> with a fixed aspect ratio (4:5 by default), a surface tinted 7% with the accent, the name of the thing set large in display type at the bottom left and one true fact under it. Above the name, set a spot illustration of the subject's own thing (a cup for a café, a crane for a builder, a document for a solicitor): an inline <svg data-part=\"motif\" viewBox=\"0 0 160 160\" aria-hidden=\"true\"> drawn flat and geometric, one round-capped stroke weight, in three token colours (ink, the accent, a pale tint), about 58% of the panel's height, in the upper right, on a soft disc in the panel's own tone. Vary the tone across a set (plain, accent, ink) and keep one ratio. Write the photo brief in data-shot (\"bottle on pale stone, soft side light, 4:5\") so the owner knows what to shoot, and a visually hidden figcaption that says what it shows. When a photo exists, put the <img> first inside the figure: it covers the panel and the drawing.",
+      "prompt": "When a page needs a picture and there is no photograph, use an art panel, never a grey box, a stock photo or a detailed drawing of the product. It is a <figure> with a fixed aspect ratio (4:5 by default), a surface tinted 7% with the accent, the name of the thing set large in display type at the bottom left and one true fact under it. Above the name, set a spot illustration of the subject's own thing (a cup for a café, a crane for a builder, a document for a solicitor): an inline <svg data-part=\"motif\" viewBox=\"0 0 160 160\" aria-hidden=\"true\"> drawn flat and geometric, one round-capped stroke weight, in three token colours (ink, the accent, a pale tint), about 58% of the panel's height, in the upper right, on a soft disc in the panel's own tone. For a hero-sized panel, compose a scene instead: two or three of the subject's things on one ground (data-scene=\"cup bag\": a counter with a bag and a cup in front of it), the biggest behind, the next in front overlapping it, only the first in the accent, the line weight the same at every size. The drawing's line weight follows the page's type pairing (--motif-stroke): heavier with a slab or stencil face, finer with a didone or legal one. Vary the tone across a set (plain, accent, ink) and keep one ratio. Write the photo brief in data-shot (\"bottle on pale stone, soft side light, 4:5\") so the owner knows what to shoot, and a visually hidden figcaption that says what it shows. When a photo exists, put the <img> first inside the figure: it covers the panel and the drawing.",
       "debug": "Debug my image area. Rule out: an empty grey rectangle; clip art or an emoji instead of a flat motif; a motif in colours that are not the theme's tokens; strokes of different weights; a drawing that covers the name; type that does not scale with the panel (use container units); three identical panels in a row; no text alternative; a made-up fact. The symptom:",
       "code": [
         ["HTML","<figure class=\"lt-art\" data-motif=\"cup\" data-shot=\"…\"><svg data-part=\"motif\">",""],
         ["lumina-taste","<ArtPanel name fact label shot motif pattern>","React"]
       ],
       "added": 13,
-      "note": "Make the panel say one true thing, large, and show the subject's own thing above it: data-motif names one of 47 drawings (art-panel.ts lists them with their keywords; find-images --fill picks one from the brief when no photograph fits), and the inline <svg data-part=\"motif\"> carries it, so it works without JavaScript (data-lt=\"art-panel\" draws a missing one). data-pattern=\"arch\" sets it in a niche, \"floor\" on a ground band, \"none\" on the bare panel. For a hero, data-frame with the name, or data-variant=\"figure\" with the one number that matters. data-tone=\"swatch\" with style=\"--art: <colour>\" shows the thing's own colour. Across a set vary the tone (plain, accent, ink) and keep one ratio. When the photograph arrives, put the <img> first inside the figure."
+      "note": "Make the panel say one true thing, large, and show the subject's own thing above it: data-motif names one of 47 drawings (art-panel.ts lists them with their keywords; find-images --fill picks one from the brief when no photograph fits), and the inline <svg data-part=\"motif\"> carries it, so it works without JavaScript (data-lt=\"art-panel\" draws a missing one). data-pattern=\"arch\" sets it in a niche, \"floor\" on a ground band, \"none\" on the bare panel. For a hero, data-scene=\"bag cup\" composes two or three drawings on one ground (pickScene() reads them from the brief), or data-frame with the name, or data-variant=\"figure\" with the one number that matters. data-tone=\"swatch\" with style=\"--art: <colour>\" shows the thing's own colour. Across a set vary the tone (plain, accent, ink) and keep one ratio. When the photograph arrives, put the <img> first inside the figure."
     },
     {
       "id": "task-list",
