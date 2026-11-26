@@ -1,6 +1,9 @@
 import { combine, emit, on, type Cleanup } from '../../_shared/dom';
 
-/** Collapsible app sidebar. Remembers its state (data-persist key) and collapses itself below 560px of container. */
+/**
+ * Collapsible app sidebar. Remembers its state (data-persist key) and collapses itself below 560px of container,
+ * or below data-collapse-below (in px: 1100 keeps a tablet's two panes roomy while the sidebar is a rail of icons).
+ */
 export function enhance(root: HTMLElement): Cleanup {
   const btn = root.querySelector<HTMLButtonElement>('[data-part="collapse"]')!;
   const key = root.dataset.persist;
@@ -15,7 +18,8 @@ export function enhance(root: HTMLElement): Cleanup {
   let stored: string | null = null;
   if (key) try { stored = localStorage.getItem(key); } catch { /* ignore */ }
   const host = root.parentElement!;
-  const auto = () => { if (stored === null) set(host.clientWidth < 560); };
+  const below = Number(root.dataset.collapseBelow) || 560;
+  const auto = () => { if (stored === null) set(host.clientWidth < below); };
   if (stored !== null) set(stored === '1'); else auto();
   const ro = new ResizeObserver(auto);
   ro.observe(host);

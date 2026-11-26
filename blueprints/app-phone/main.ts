@@ -32,13 +32,17 @@ const frames = $$('.ap-frame');
 const order = frames.map((f) => f.dataset.screen!);
 const toast = $('#ap-toast')!;
 const phone = matchMedia('(max-width: 599px)');
+// A tablet, or a foldable open across two screens: the page is the app, with a sidebar and two panes (page.css).
+const tablet = matchMedia('(min-width: 768px) and (max-width: 1180px), (horizontal-viewport-segments: 2)');
+const board = () => !phone.matches && !tablet.matches;
+const side = $('#ap-side')!;
 
 // On a desktop each screen is a phone of its own, so overlays (the tickets sheet) open inside that phone.
-// On a phone the page is the app: one screen at a time, overlays over the whole screen.
+// On a phone or a tablet the page is the app: overlays over the whole screen (a popover on a tablet).
 const syncMode = () => {
-  for (const d of $$('.ap-device')) d.toggleAttribute('data-contained', !phone.matches);
+  for (const d of $$('.ap-device')) d.toggleAttribute('data-contained', board());
   // The rail scrolls (and takes focus) only on a desktop, where it holds every screen.
-  if (phone.matches) rail.removeAttribute('tabindex'); else rail.tabIndex = 0;
+  if (board()) rail.tabIndex = 0; else rail.removeAttribute('tabindex');
 };
 syncMode();
 
@@ -56,7 +60,13 @@ let current = (() => {
   if (order.includes(q)) return q;
   return params.get('state') && params.get('state') !== 'ready' ? 'home' : 'start';
 })();
-const mark = (id: string) => { for (const f of frames) f.toggleAttribute('data-current', f.dataset.screen === id); };
+// The sidebar's tab for each screen: a pushed screen (a sailing, pay) belongs to Today.
+const TAB: Record<string, string> = { home: 'home', sailing: 'home', pay: 'home', tickets: 'tickets', settings: 'settings' };
+const mark = (id: string) => {
+  for (const f of frames) f.toggleAttribute('data-current', f.dataset.screen === id);
+  rail.dataset.current = id;
+  for (const a of $$('a[data-tab]', side)) { if (a.dataset.tab === TAB[id]) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }
+};
 mark(current);
 
 function show(id: string, dir: 'forward' | 'back' | 'tab' = 'forward') {
@@ -64,7 +74,11 @@ function show(id: string, dir: 'forward' | 'back' | 'tab' = 'forward') {
   if (!frame) return;
   const heading = $<HTMLElement>('h2[tabindex="-1"]', frame);
   current = id;
-  if (phone.matches) {
+  if (tablet.matches) {
+    // Two panes: the list stays, the detail pane changes. No slide: the eye stays where it was.
+    mark(id);
+    heading?.focus({ preventScroll: true });
+  } else if (phone.matches) {
     const swap = () => { mark(id); frame.querySelector('.ap-scroll')?.scrollTo(0, 0); heading?.focus({ preventScroll: true }); };
     const vt = (document as Document & { startViewTransition?: (cb: () => void) => unknown }).startViewTransition;
     if (vt && !reducedMotion()) { html.dataset.nav = dir; vt.call(document, swap); } else swap();
@@ -78,7 +92,7 @@ function show(id: string, dir: 'forward' | 'back' | 'tab' = 'forward') {
 document.addEventListener('click', (e) => {
   const t = e.target as Element;
   // Tab bars: every screen has its own, already marked, so the bar never needs to move its pill.
-  const tab = t.closest<HTMLAnchorElement>('.ap-tabs a');
+  const tab = t.closest<HTMLAnchorElement>('.ap-tabs a, .ap-side a');
   if (tab) {
     e.preventDefault(); e.stopPropagation();
     const id = tab.getAttribute('href')!.replace('#screen-', '');
@@ -98,8 +112,8 @@ document.addEventListener('click', (e) => {
 const step = (by: number) => { const i = order.indexOf(current); show(order[Math.max(0, Math.min(order.length - 1, i + by))], by < 0 ? 'back' : 'forward'); };
 $('#ap-prev')!.addEventListener('click', () => step(-1));
 $('#ap-next')!.addEventListener('click', () => step(1));
-phone.addEventListener('change', () => { syncMode(); mark(current); });
-if (current !== 'start' && !phone.matches) requestAnimationFrame(() => frameOf(current)?.scrollIntoView({ inline: 'start', block: 'nearest' }));
+for (const mq of [phone, tablet]) mq.addEventListener('change', () => { syncMode(); mark(current); });
+if (current !== 'start' && board()) requestAnimationFrame(() => frameOf(current)?.scrollIntoView({ inline: 'start', block: 'nearest' }));
 
 // ------------------------------------------------------------------ harbour, destination, refresh
 const harbours: Record<string, string[]> = { Ardmore: ['Kestrel Isle', 'Larkspur Bay'], 'Kestrel Isle': ['Ardmore'], 'Larkspur Bay': ['Ardmore'] };
@@ -107,6 +121,7 @@ function setHarbour(name: string) {
   $('#ap-harbour')!.textContent = name;
   $('#ap-harbour')!.setAttribute('aria-label', `Change harbour, now ${name}`);
   $('#ap-home-value')!.textContent = name;
+  $('#ap-side-harbour')!.textContent = name;
   const dests = harbours[name] ?? [];
   const seg = $('#ap-dest')!;
   const buttons = $$('[role="radio"]', seg);
@@ -170,7 +185,12 @@ dialog.closest('[data-lt="bottom-sheet"]')!.addEventListener('lt-change', (e) =>
   if (d.detent) $('[data-hint]', dialog)!.hidden = d.detent === 'large';
 });
 const opener = $('#ap-choose')!;
-opener.addEventListener('click', () => { openDialog(dialog); $<HTMLElement>('[data-part="grab"]', dialog)?.focus(); });
+// Focus goes to the grabber (a phone's sheet) or, on a tablet where the sheet is a popover without one, its first field.
+opener.addEventListener('click', () => {
+  openDialog(dialog);
+  const grab = $<HTMLElement>('[data-part="grab"]', dialog);
+  (grab && grab.offsetParent ? grab : $<HTMLElement>('input', dialog))?.focus();
+});
 dialog.addEventListener('close', () => opener.focus({ preventScroll: true }));
 $('#ap-to-pay')!.addEventListener('click', () => { dialog.close(); show('pay'); });
 $('#ap-pay')!.addEventListener('click', () => {

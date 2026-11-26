@@ -4,7 +4,7 @@
     border-radius: calc(var(--radius-md) + 3px); background: var(--bg-surface-3); font-size: var(--text-ui-sm);
   }
   button {
-    position: relative; z-index: 1; min-width: 44px; height: calc(var(--control-h) - 8px); padding: 0 var(--gap-md);
+    position: relative; z-index: 1; min-width: 44px; min-height: calc(var(--control-h) - 8px); padding: 0 var(--gap-md);
     border: 0; border-radius: var(--radius-md); background: transparent; color: var(--text-secondary);
     font-weight: 550; font-variant-numeric: tabular-nums; cursor: pointer; white-space: nowrap;
     transition: color var(--dur-2) var(--ease-out), scale var(--dur-1) var(--ease-out);
@@ -20,6 +20,12 @@
     transform: translateX(var(--x, 0)); transition: transform var(--dur-4) var(--ease-spring), width var(--dur-3) var(--ease-out);
   }
   :scope:not([data-ready]) [data-part="indicator"] { transition: none; }
+}
+/* Forced colours (Windows contrast themes) drop the pill's fill and shadow: show the selection in the system's colours. */
+@media (forced-colors: active) {
+  .lt-segmented { border: 1px solid CanvasText; }
+  .lt-segmented [data-part="indicator"] { forced-color-adjust: none; background: Highlight; box-shadow: none; }
+  .lt-segmented button[aria-checked="true"] { forced-color-adjust: none; color: HighlightText; }
 }
 /* Touch: each segment's hit area reaches 44px tall without making the control itself taller. */
 @media (pointer: coarse) {

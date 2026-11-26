@@ -23,3 +23,8 @@
 /* The people: ruled rows of name, role and what each is good at (team-grid list), not initials on tiles. */
 .lt-footer-min { padding-block: var(--space-6); }
 @media (max-width: 900px) { .pr-tel { display: none; } }
+/* Forced colours (Windows contrast themes) repaint fills: each tooth keeps an edge, the ones to watch the highlight. */
+@media (forced-colors: active) {
+  .pr-arch i { border: 1px solid CanvasText; }
+  .pr-arch i[data-watch], .pr-chart-legend i { forced-color-adjust: none; background: Highlight; border-color: Highlight; }
+}

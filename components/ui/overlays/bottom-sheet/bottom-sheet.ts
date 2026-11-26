@@ -3,6 +3,7 @@ import { combine, emit, on, openDialog, type Cleanup } from '../../_shared/dom';
 /**
  * Mobile bottom sheet on <dialog>: drag the grabber down (or flick) to dismiss; scrim, Esc and Cancel close.
  *
+ * A grabber that is a <button> is the keyboard path: it steps through the detents, or closes a sheet without any.
  * Detents: add data-detents="medium large" to the <dialog> and make the grabber a <button>. The sheet opens at
  * the first detent; drag it up (or press the grabber, or ArrowUp on it) for the next one, down for the one
  * before, and down from the smallest to close. The current one is on data-detent and in the lt-change event.
@@ -65,7 +66,9 @@ export function enhance(root: HTMLElement): Cleanup {
     on(grab, 'pointercancel', end),
     // The grabber as a button: a press moves to the next detent (or back to the first); arrows step.
     on(grab, 'click', () => {
-      if (moved || !detents.length) { moved = false; return; }
+      if (moved) { moved = false; return; }
+      // Without detents, the grabber's one job is the drag down: as a button, a press closes the sheet.
+      if (!detents.length) { if (grab.matches('button')) sheet.close(); return; }
       const i = detents.indexOf(sheet.dataset.detent ?? first);
       setDetent(i === detents.length - 1 ? first : detents[i + 1]);
     }),

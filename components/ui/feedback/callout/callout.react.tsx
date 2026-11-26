@@ -7,7 +7,7 @@ const ICONS = { info: 'info', positive: 'check-circle', warning: 'alert', negati
 
 export function Callout({ tone = 'info', title, children, className }: { tone?: keyof typeof ICONS; title?: string; children: ReactNode; className?: string }) {
   return (
-    <aside className={cx('lt-callout', className)} data-tone={tone}>
+    <aside className={cx('lt-callout', className)} data-tone={tone} role="note">
       <span data-part="icon"><Icon name={ICONS[tone]} size={18} /></span>
       <div>{title && <strong>{title}</strong>}<p>{children}</p></div>
     </aside>

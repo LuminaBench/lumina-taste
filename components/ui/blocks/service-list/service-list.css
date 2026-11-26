@@ -15,15 +15,18 @@
   li > :is(a, div) { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; align-items: baseline; padding: 20px 0; color: inherit; text-decoration: none; }
   /* A row written straight into the <li>, with no link or wrapper, lays out the same. */
   li:not(:has(> a, > div)) { align-items: baseline; padding: 20px 0; }
-  [data-part="when"] { grid-column: when; padding-right: 28px; color: var(--text-secondary); font-family: var(--font-mono); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }
-  h3 { grid-column: name; margin: 0; padding-right: 28px; font-family: var(--font-display); font-size: var(--step-1); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.2; text-wrap: balance; }
-  li p { grid-column: text; margin: 0; padding-right: 28px; max-width: 58ch; color: var(--text-secondary); line-height: 1.55; text-wrap: pretty; }
-  [data-part="meta"] { grid-column: meta; padding-right: 28px; color: var(--text-muted); font-size: var(--text-ui-sm); white-space: nowrap; }
+  [data-part="when"] { grid-column: when; padding-inline-end: 28px; color: var(--text-secondary); font-family: var(--font-mono); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  h3 { grid-column: name; margin: 0; padding-inline-end: 28px; font-family: var(--font-display); font-size: var(--step-1); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.2; text-wrap: balance; }
+  li p { grid-column: text; margin: 0; padding-inline-end: 28px; max-width: 58ch; color: var(--text-secondary); line-height: 1.55; text-wrap: pretty; }
+  [data-part="meta"] { grid-column: meta; padding-inline-end: 28px; color: var(--text-muted); font-size: var(--text-ui-sm); white-space: nowrap; }
   [data-part="price"] { grid-column: price; justify-self: end; font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
   /* The arrow sits on the first line, level with the name and the price. */
-  li svg { grid-column: go; align-self: start; margin-top: 0.3em; margin-left: 20px; color: var(--text-muted); transition: transform var(--dur-2) var(--ease-out), color var(--dur-2); }
+  li svg { grid-column: go; align-self: start; margin-top: 0.3em; margin-inline-start: 20px; color: var(--text-muted); transition: transform var(--dur-2) var(--ease-out), color var(--dur-2); }
   li > a:hover h3, li > a:focus-visible h3 { color: var(--accent-text); }
   li > a:hover svg, li > a:focus-visible svg { color: var(--accent-text); transform: translateX(3px); }
+  /* Right to left: the arrow points the way the line reads, and nudges that way. */
+  li svg:dir(rtl) { scale: -1 1; }
+  li > a:is(:hover, :focus-visible) svg:dir(rtl) { transform: translateX(-3px); }
   li > a:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; border-radius: var(--radius-sm); }
   /* A label above a list when there are several: a day in a programme, a course on a menu. */
   [data-part="group"] { margin: 36px 0 12px; color: var(--text-secondary); font-family: var(--font-mono); font-size: var(--text-ui-xs); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
@@ -36,11 +39,11 @@
     li > :is(a, div), li:not(:has(> a, > div)) { row-gap: 6px; padding: 16px 0; }
     [data-part="when"] { grid-row: 1; padding: 0; }
     [data-part="when"] ~ h3 { grid-row: 2; }
-    h3 { grid-column: name; padding-right: 16px; }
+    h3 { grid-column: name; padding-inline-end: 16px; }
     [data-part="price"] { grid-row: 1; }
     [data-part="when"] ~ [data-part="price"] { grid-row: 2; }
     li p, [data-part="meta"] { grid-column: 1 / -1; padding: 0; }
-    li svg { grid-row: 1; margin-left: 12px; }
+    li svg { grid-row: 1; margin-inline-start: 12px; }
     [data-part="when"] ~ svg { grid-row: 2; }
   }
   @media (prefers-reduced-motion: reduce) { li svg { transition: none; } }

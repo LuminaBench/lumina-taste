@@ -235,6 +235,37 @@ export const MEASURE = (opts = {}) => {
   const declared = [...new Set([...(html.getAttribute('data-states') ?? '').split(/[\s,]+/), ...(opts.states ?? [])].filter(Boolean))];
   const present = (s) => !!document.querySelector(`[data-view~="${s}"], [data-state="${s}"], [data-state-view="${s}"]`) || html.dataset.pageState === s;
 
+  // ---- native feel at phone width: sheets, swipes and where the thumb reaches
+  // Bottom sheets: a grabber that is a real button (press it, or ArrowUp, for the next detent) is the keyboard and
+  // switch path to what a drag does. Dialogs that rise from the bottom count, whether open now or not.
+  const sheetEls = [...new Set([...document.querySelectorAll('.lt-sheet, dialog[data-detents], [class*="bottom-sheet"] dialog, dialog[class*="sheet"], [role="dialog"][class*="sheet"]')])].filter((d) => !d.closest('[inert], [data-audit-ignore]') && !d.closest('[data-mock] [data-mock]'));
+  const sheets = sheetEls.map((d) => {
+    const h = d.querySelector('[data-part="grab"], [data-part="handle"], [class*="grabber"], [class*="handle"]');
+    return { selector: sel(d), id: d.id || null, handle: !h ? 'none' : h.matches('button, [role="button"]') ? 'button' : 'static', handleSelector: h ? sel(h) : null };
+  });
+  // Swipe surfaces: rows that move sideways under a finger. Inside a sideways scroller the two gestures fight; within
+  // 20px of the screen edge they fight the system's back gesture unless the part leaves that strip alone (data-edge-guard).
+  const SWIPE = '[data-lt="swipe-row"], [data-lt="swipe-actions"], .lt-swiperow, .lt-swipe, [data-swipe]';
+  const swipes = [];
+  for (const root of [...document.querySelectorAll(SWIPE)].filter((r) => !r.parentElement?.closest(SWIPE) && !r.closest('[inert], [data-audit-ignore]'))) {
+    const rows = [...root.querySelectorAll('[data-part="row"]')].filter(shown);
+    const box = (rows.length ? rows : [root]).filter(shown).map(rectOf);
+    if (!box.length) continue;
+    let scroller = null;
+    for (let a = root.parentElement; a && a !== body && a !== html; a = a.parentElement) { const cs = getComputedStyle(a); if (/auto|scroll/.test(cs.overflowX) && a.scrollWidth > a.clientWidth + 4) { scroller = sel(a); break; } }
+    swipes.push({ selector: sel(root), left: Math.round(Math.min(...box.map((r) => r.left))), right: Math.round(Math.max(...box.map((r) => r.right))), guard: root.hasAttribute('data-edge-guard') || !!root.closest('[data-edge-guard]'), scroller });
+  }
+  // The primary action in the first screen: where is it for the thumb?
+  const reach = [...document.querySelectorAll('button, a, input[type="submit"], [role="button"]')].filter((el) => {
+    if (!shown(el) || el.closest('dialog, [role="dialog"], [popover], [aria-hidden="true"], [data-audit-ignore], [data-mock] [data-mock]')) return false;
+    // An empty state's one action sits with its message in the middle of the screen, as a native empty view's does.
+    if (el.closest('.lt-empty, [data-view~="empty"]')) return false;
+    // A form's own submit rides with the on-screen keyboard, which is open while it is used: not a reach question.
+    if (el.form && el.form.querySelector('textarea, input:not([type="hidden"], [type="checkbox"], [type="radio"], [type="submit"], [type="button"])')) return false;
+    const r = rectOf(el); if (r.bottom <= 0 || r.top >= vh) return false;
+    return el.matches('[type="submit"], [data-variant="primary"]') || (filled(el) && r.width >= 64 && r.height >= 32 && !el.closest('nav, [role="tablist"], [role="radiogroup"]') && (() => { const c = rgba(getComputedStyle(el).backgroundColor); const mx = Math.max(c[0], c[1], c[2]), mn = Math.min(c[0], c[1], c[2]); return mx - mn > 40; })());
+  }).map((el) => ({ selector: sel(el), label: (el.getAttribute('aria-label') || el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 30), cy: Math.round(rectOf(el).top + rectOf(el).height / 2) }));
+
   return {
     url: location.href, width: vw, height: vh, pageHeight: html.scrollHeight,
     hero: !!hero, app, appMarked, sections, looseMoments, motion,
@@ -242,6 +273,7 @@ export const MEASURE = (opts = {}) => {
     bars: fixedBottom.map((b) => ({ selector: sel(b), height: Math.round(rectOf(b).height) })),
     controls: primary,
     states: { declared, missing: declared.filter((s) => !present(s)) },
+    sheets, swipes, reach,
   };
 };
 
@@ -256,6 +288,8 @@ export const LIMITS = {
   moments: 2,            // big scroll moments per page (a warning above, an error above one more)
   counters: 6,           // numbers that count up on one page
   target: 44,            // primary touch targets at phone width, in CSS px
+  edge: 20,              // the strip at each side of a phone screen that belongs to the system's back gesture
+  reach: 0.5,            // the primary action sits below this share of a phone screen's height, where the thumb is
 };
 
 const plural = (n, one, many = one + 's') => `${n} ${n === 1 ? one : many}`;
@@ -321,6 +355,17 @@ export function judgeMeasures(m, { wide = m.width >= 900, limits = LIMITS } = {}
     const small = m.controls.filter((c) => c.w < limits.target - 0.5 || c.h < limits.target - 0.5);
     if (small.length) add('app-touch-target', small[0].selector, `${plural(small.length, 'primary control is', 'primary controls are')} smaller than ${limits.target}×${limits.target}px at phone width: ${small.slice(0, 4).map((c) => `“${c.label || c.selector}” ${c.w}×${c.h}`).join(', ')}${small.length > 4 ? ` and ${small.length - 4} more` : ''}. Give each a ${limits.target}px hit area (min-height, padding, or an inset ::before).`);
   }
+  // 7. Native feel at phone width: sheets with a grabber that is a button, swipes that do not fight other gestures,
+  //    and the primary action where the thumb is.
+  if (!wide && m.app) {
+    for (const sh of (m.sheets ?? []).filter((x) => x.handle !== 'button').slice(0, 1)) add('app-sheet-handle', sh.selector, sh.handle === 'none' ? 'A bottom sheet has no grabber. Give it one, as a <button data-part="grab"> with a label ("Make the sheet bigger"): pressing it (or ArrowUp) does what dragging does, for keyboards, switches and voice.' : `The sheet's grabber (${sh.handleSelector}) is not a button, so only a finger can use it. Make it a <button> with a label; pressing it (or ArrowUp) moves to the next detent.`);
+    const nested = (m.swipes ?? []).find((x) => x.scroller);
+    if (nested) add('app-gesture-conflict', nested.selector, `Swipe rows sit inside a sideways scroller (${nested.scroller}): a horizontal drag can mean either, so one of them will misfire. Let the scroller snap one card at a time and move the actions to a button, or take the rows out of the scroller.`);
+    const edgy = (m.swipes ?? []).find((x) => !x.guard && (x.left < limits.edge || x.right > m.width - limits.edge));
+    if (edgy) add('app-gesture-edge', edgy.selector, `Swipe rows reach the screen edge (${edgy.left}px to ${edgy.right}px of ${m.width}px), where a swipe from the edge is the system's back gesture. Ignore drags that start in the outer ${limits.edge}px and mark the part data-edge-guard, or inset the rows.`);
+    const primaries = m.reach ?? [];
+    if (primaries.length && primaries.every((p) => p.cy < m.height * limits.reach)) add('app-reach', primaries[0].selector, `The main action (“${primaries[0].label}”) is in the top half of the phone screen (${primaries[0].cy}px of ${m.height}px), out of reach of a thumb. Put it in a bar above the home indicator, or at the end of the form, low on the screen.`);
+  }
   if (m.states?.missing?.length) add('app-states', null, `The page declares ${m.states.declared.join(', ')} states but has no view for ${m.states.missing.join(', ')}. Add a block marked data-view="${m.states.missing[0]}" (a skeleton for loading, an empty-state with one action, an error with a way out).`);
   return out;
 }
@@ -383,5 +428,188 @@ export function judgePerf(p, { soft = false, limits = PERF_LIMITS } = {}) {
   if (unsized.length) add('perf-img-dimensions', unsized[0].selector, `${plural(unsized.length, 'image has', 'images have')} no width and height (or CSS aspect-ratio), so the page jumps as ${unsized.length === 1 ? 'it loads' : 'they load'}. Set both attributes to the picture's own size.`);
   const big = p.images.filter((i) => !i.vector && i.nw && i.nh && i.nw > i.w * i.dpr * limits.oversize && i.nh > i.h * i.dpr * limits.oversize && i.nw * i.nh > 400 * 300);
   if (big.length) add('perf-img-oversized', big[0].selector, `${plural(big.length, 'image is', 'images are')} far larger than ${big.length === 1 ? 'its' : 'their'} box: ${big.slice(0, 3).map((i) => `${i.nw}×${i.nh} shown at ${i.w}×${i.h}`).join(', ')}. Serve a size near the box (srcset with widths, sizes) instead.`);
+  return out;
+}
+
+// ------------------------------------------------------------------ accessibility beyond the basics
+// Each probe runs in the page (serialised: nothing from outside its body); each judge runs in Node, so the
+// thresholds are testable without a browser. audit-ui.mjs loads the page once more per check (--taste).
+
+/** In-page: mark and measure the parts whose position must mirror in right-to-left: headings (their text),
+ *  links and buttons, side panels and bars. Call once with dir="ltr", once with dir="rtl", same marks. */
+export const RTL_PROBE = () => {
+  const W = document.documentElement.clientWidth;
+  const shown = (e) => { const r = e.getBoundingClientRect(); if (r.width < 2 || r.height < 2) return false; for (let a = e; a && a.nodeType === 1; a = a.parentElement) { const cs = getComputedStyle(a); if (cs.display === 'none' || cs.visibility === 'hidden' || +cs.opacity === 0) return false; } return true; };
+  const sel = (el) => { const p = []; for (let e = el; e && e.nodeType === 1 && p.length < 3; e = e.parentElement) { let s = e.tagName.toLowerCase(); if (e.id) { p.unshift(s + '#' + e.id); break; } const c = [...e.classList].slice(0, 2); if (c.length) s += '.' + c.join('.'); p.unshift(s); } return p.join(' > '); };
+  // Things that do not mirror on purpose (code, numbers set ltr, pictures, charts) or move with a scroller.
+  const skip = (e) => e.closest('svg, pre, code, kbd, [dir], [inert], [aria-hidden="true"], dialog, [popover], .lt-visually-hidden, [class*="chart"], [data-audit-ignore], [data-mock]')
+    || (() => { for (let a = e.parentElement; a && a !== document.body; a = a.parentElement) { const cs = getComputedStyle(a); if (/auto|scroll/.test(cs.overflowX) && a.scrollWidth > a.clientWidth + 4) return true; if (cs.position === 'fixed' && a !== e) return false; } return false; })();
+  if (!document.querySelector('[data-lt-rtl]')) {
+    let n = 0;
+    for (const e of document.querySelectorAll('h1, h2, h3, nav a, button, aside, header, [role="toolbar"], label')) { if (n >= 500) break; if (!shown(e) || skip(e)) continue; const r = e.getBoundingClientRect(); if (r.top > innerHeight * 3) continue; e.setAttribute('data-lt-rtl', String(n++)); }
+  }
+  const out = [];
+  for (const e of document.querySelectorAll('[data-lt-rtl]')) {
+    let r = e.getBoundingClientRect();
+    // A heading's box spans its column; its text is what sits on one side or the other.
+    if (/^H[1-3]$/.test(e.tagName)) { const range = document.createRange(); range.selectNodeContents(e); const rr = range.getBoundingClientRect(); if (rr.width > 2) r = rr; }
+    out.push({ i: +e.getAttribute('data-lt-rtl'), selector: sel(e), left: Math.round(r.left), right: Math.round(r.right), shown: shown(e) });
+  }
+  return { width: W, scrollWidth: document.documentElement.scrollWidth, boxes: out };
+};
+
+/** Judge one page in both directions: anything that did not mirror, and a page that scrolls sideways only in rtl. */
+export function judgeRtl(ltr, rtl, { tolerance = 24, limit = 3 } = {}) {
+  const out = [];
+  const W = ltr.width;
+  if (rtl.scrollWidth > W + 1 && ltr.scrollWidth <= W + 1) out.push({ rule: 'a11y-rtl-overflow', severity: 'warning', selector: null, message: `In right-to-left (dir="rtl") the page scrolls sideways: ${rtl.scrollWidth}px wide in ${W}px. Something is placed with left or right (a margin, an inset, a translate): use the logical properties (margin-inline-start, inset-inline-end) so it follows the direction.` });
+  const byI = new Map(rtl.boxes.map((b) => [b.i, b]));
+  const off = [];
+  for (const a of ltr.boxes) {
+    const b = byI.get(a.i);
+    if (!b || !a.shown || !b.shown) continue;
+    if (Math.abs(a.left - (W - a.right)) < 8) continue; // centred: the same either way
+    const want = W - a.right;
+    if (Math.abs(b.left - want) > tolerance) off.push({ ...a, got: b.left, want });
+  }
+  if (off.length) out.push({ rule: 'a11y-rtl-mirror', severity: 'warning', selector: off[0].selector, message: `${off.length} part${off.length > 1 ? 's do' : ' does'} not mirror in right-to-left: ${off.slice(0, limit).map((o) => `${o.selector} sits at x=${o.got}, the mirror of its place is x=${o.want}`).join('; ')}. Use logical properties (margin-inline, padding-inline, inset-inline, text-align: start, border-inline) instead of left and right.` });
+  return out;
+}
+
+/** In-page: append a very long German compound to the page's running text (headings, paragraphs, list items, cells,
+ *  captions). Text set on one line on purpose (white-space: nowrap) is left alone. */
+export const LONG_WORDS = (word) => {
+  let n = 0;
+  for (const e of document.querySelectorAll('h1, h2, h3, h4, p, li, dd, td, figcaption, blockquote')) {
+    if (e.closest('svg, pre, code, [inert], [aria-hidden="true"], [data-audit-ignore], nav, button, a, label, [role="tab"], [role="option"]')) continue;
+    // A figure set large is a number, not running text: it keeps itself whole (tokens/base.css).
+    if (e.matches('[data-part="figure"], [data-num], .lt-num')) continue;
+    // Text kept on one line on purpose (a reference, a time, a type name) is not running text: it keeps its own rules.
+    if (/nowrap|pre/.test(getComputedStyle(e).whiteSpace)) continue;
+    const t = [...e.childNodes].find((c) => c.nodeType === 3 && c.textContent.trim().length >= 3);
+    if (!t) continue;
+    t.textContent = `${t.textContent.trimEnd()} ${word} `;
+    if (++n >= 400) break;
+  }
+  return n;
+};
+
+/** In-page: chart marks and control parts drawn only with a background: the things forced colours paint over.
+ *  Called once before forced colours (marks the visible ones) and once after (which of them are gone). */
+export const FORCED_MARKS = (phase) => {
+  const sel = (el) => { const p = []; for (let e = el; e && e.nodeType === 1 && p.length < 3; e = e.parentElement) { let s = e.tagName.toLowerCase(); if (e.id) { p.unshift(s + '#' + e.id); break; } const c = [...e.classList].slice(0, 2); if (c.length) s += '.' + c.join('.'); const part = e.getAttribute('data-part'); if (part) s += `[data-part="${part}"]`; p.unshift(s); } return p.join(' > '); };
+  const cv = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+  const rgba = (c) => { cv.clearRect(0, 0, 1, 1); cv.fillStyle = '#000'; cv.fillStyle = c; cv.fillRect(0, 0, 1, 1); const d = cv.getImageData(0, 0, 1, 1).data; return [d[0], d[1], d[2], d[3] / 255]; };
+  const same = (a, b) => Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]) < 24;
+  const under = (e) => { for (let a = e.parentElement; a; a = a.parentElement) { const c = rgba(getComputedStyle(a).backgroundColor); if (c[3] > 0.5) return c; } return [255, 255, 255, 1]; };
+  const edge = (cs, ground) => ['Top', 'Right', 'Bottom', 'Left'].some((s) => parseFloat(cs[`border${s}Width`]) > 0 && cs[`border${s}Style`] !== 'none' && !same(rgba(cs[`border${s}Color`]), ground) && rgba(cs[`border${s}Color`])[3] > 0.3)
+    || (cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) > 0) || cs.boxShadow !== 'none';
+  const painted = (e) => { const cs = getComputedStyle(e); const c = rgba(cs.backgroundColor); const g = under(e); return (c[3] > 0.3 && !same(c, g)) || edge(cs, g) || /url\(|gradient/.test(cs.backgroundImage); };
+  // What carries state or data: a control's moving parts (the selected segment, a switch's track and thumb, a
+  // slider's fill) and the marks of a chart or meter. Window chrome drawn in a picture (a terminal's dots) is not.
+  const CONTEXT = '[role="switch"], [role="checkbox"], [role="radio"], [role="slider"], [role="radiogroup"], [role="progressbar"], [role="meter"], meter, progress, .lt-switch, .lt-segmented, [class*="chart"], [class*="meter"], [class*="spark"], [class*="progress"], [class*="gauge"], [class*="uptime"], [data-part="track"], [data-part="thumb"], [data-part="indicator"], [data-part="fill"]';
+  if (phase === 'mark') {
+    let n = 0;
+    for (const e of document.querySelectorAll('div, span, i, b, em, s, li, td')) {
+      if (n >= 600) break;
+      if ((e.textContent ?? '').trim() || e.querySelector('img, svg, canvas, video, input') || !e.closest(CONTEXT) || e.closest('[inert], [data-audit-ignore], [aria-busy="true"], .lt-skeleton, dialog:not([open]), [hidden], .lt-terminal, .lt-device, [data-mock], [data-part="status"]')) continue;
+      const r = e.getBoundingClientRect(); if (r.width < 3 || r.height < 3 || r.width * r.height > 120000) continue;
+      let vis = true; for (let a = e; a && a.nodeType === 1; a = a.parentElement) { const cs = getComputedStyle(a); if (cs.display === 'none' || cs.visibility === 'hidden' || +cs.opacity === 0) { vis = false; break; } }
+      if (!vis || !painted(e)) continue;
+      e.setAttribute('data-lt-fc', String(n++));
+    }
+    return n;
+  }
+  const gone = [...document.querySelectorAll('[data-lt-fc]')].filter((e) => !painted(e)).map(sel);
+  // Text fields keep a visible box: in forced colours a field drawn only by its fill is a line of text in nowhere.
+  const fields = [...document.querySelectorAll('input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea')].filter((e) => { const r = e.getBoundingClientRect(); if (r.width < 24 || r.height < 16 || e.closest('[inert], [hidden], dialog:not([open])') || +getComputedStyle(e).opacity === 0) return false; let box = false; for (let a = e, d = 0; a && d < 3; a = a.parentElement, d++) { const cs = getComputedStyle(a); if (edge(cs, under(a))) { box = true; break; } } return !box; }).map(sel);
+  return { gone, fields };
+};
+
+/** In-page, after the root text size is doubled: controls whose label no longer fits inside them (they did not grow). */
+export const CONTROL_FIT = () => {
+  const sel = (el) => { const p = []; for (let e = el; e && e.nodeType === 1 && p.length < 3; e = e.parentElement) { let s = e.tagName.toLowerCase(); if (e.id) { p.unshift(s + '#' + e.id); break; } const c = [...e.classList].slice(0, 2); if (c.length) s += '.' + c.join('.'); p.unshift(s); } return p.join(' > '); };
+  const out = [];
+  for (const el of document.querySelectorAll('button, a[role="button"], .lt-btn, [role="tab"], [role="option"], [role="menuitem"], input[type="submit"], select')) {
+    if (el.closest('[inert], [hidden], dialog:not([open]), [aria-hidden="true"], [data-audit-ignore]')) continue;
+    const cs = getComputedStyle(el);
+    if (cs.display === 'none' || cs.visibility === 'hidden' || +cs.opacity === 0) continue;
+    const box = el.getBoundingClientRect(); if (box.width < 8 || box.height < 8) continue;
+    // The text people see: visually hidden labels (clipped to 1px) are for screen readers and take no room.
+    const t = [];
+    const tw = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    for (let n = tw.nextNode(); n; n = tw.nextNode()) {
+      if (!n.textContent.trim()) continue;
+      let hidden = false;
+      for (let a = n.parentElement; a && a !== el.parentElement; a = a.parentElement) { const r = a.getBoundingClientRect(); const c = getComputedStyle(a); if ((r.width <= 2 || r.height <= 2) && c.overflow !== 'visible' || c.display === 'none' || c.visibility === 'hidden') { hidden = true; break; } }
+      if (hidden) continue;
+      const range = document.createRange(); range.selectNodeContents(n);
+      t.push(...[...range.getClientRects()].filter((r) => r.width > 1 && r.height > 1));
+    }
+    if (!t.length) continue;
+    const top = Math.min(...t.map((r) => r.top)), bottom = Math.max(...t.map((r) => r.bottom));
+    // Text that spills above or below its control, where nothing clips it: the control kept a fixed height.
+    if (cs.overflow === 'visible' && (top < box.top - 2 || bottom > box.bottom + 2)) out.push(`${sel(el)} “${(el.textContent ?? '').trim().slice(0, 24)}” (${Math.round(bottom - top)}px of text in a ${Math.round(box.height)}px control)`);
+  }
+  return out;
+};
+
+/** In-page, after the root text size is doubled: lines of text that sit on other lines. Each line is taken at its
+ *  line height (not its glyphs), so tight display type is not an overlap. Fixed and sticky bars float over the
+ *  content by design and are left out. */
+export const TEXT_OVERLAP = () => {
+  const sel = (el) => { const p = []; for (let e = el; e && e.nodeType === 1 && p.length < 3; e = e.parentElement) { let s = e.tagName.toLowerCase(); if (e.id) { p.unshift(s + '#' + e.id); break; } const c = [...e.classList].slice(0, 2); if (c.length) s += '.' + c.join('.'); p.unshift(s); } return p.join(' > '); };
+  const lines = [];
+  const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  for (let n = tw.nextNode(); n && lines.length < 3000; n = tw.nextNode()) {
+    const el = n.parentElement; if (!el || !n.textContent.trim() || el.closest('svg, [aria-hidden="true"], [inert], [hidden], dialog:not([open]), [data-audit-ignore], .lt-visually-hidden')) continue;
+    let ok = true, fixed = false;
+    for (let a = el; a && a.nodeType === 1; a = a.parentElement) { const c = getComputedStyle(a); if (c.display === 'none' || c.visibility === 'hidden' || +c.opacity === 0) { ok = false; break; } if (c.position === 'fixed' || c.position === 'sticky') fixed = true; const r = a.getBoundingClientRect(); if ((r.width <= 2 || r.height <= 2) && c.overflow !== 'visible') { ok = false; break; } }
+    if (!ok || fixed) continue;
+    const cs = getComputedStyle(el); const fs = parseFloat(cs.fontSize); const lh = parseFloat(cs.lineHeight) || fs * 1.2;
+    // What a scroller or a clipping box hides is not on top of anything: clip each line by them.
+    let clip = { l: -1e9, r: 1e9, t: -1e9, b: 1e9 };
+    for (let a = el; a && a !== document.body; a = a.parentElement) { const c = getComputedStyle(a); if (c.overflowX !== 'visible' || c.overflowY !== 'visible') { const b = a.getBoundingClientRect(); clip = { l: Math.max(clip.l, b.left), r: Math.min(clip.r, b.right), t: Math.max(clip.t, b.top), b: Math.min(clip.b, b.bottom) }; } }
+    const range = document.createRange(); range.selectNodeContents(n);
+    for (const r of range.getClientRects()) {
+      if (r.width < 2 || r.top > innerHeight * 2) continue;
+      const mid = (r.top + r.bottom) / 2, h = Math.min(r.height, lh);
+      const line = { el, t: n.textContent.trim(), l: Math.max(r.left, clip.l), r: Math.min(r.right, clip.r), top: Math.max(mid - h / 2, clip.t), bottom: Math.min(mid + h / 2, clip.b) };
+      if (line.r - line.l > 2 && line.bottom - line.top > 2) lines.push(line);
+    }
+  }
+  const out = [];
+  for (let i = 0; i < lines.length && out.length < 3; i++) for (let j = i + 1; j < lines.length; j++) {
+    const a = lines[i], b = lines[j];
+    if (a.el === b.el || a.el.contains(b.el) || b.el.contains(a.el)) continue;
+    const ix = Math.min(a.r, b.r) - Math.max(a.l, b.l), iy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+    if (ix <= 2 || iy <= 2) continue;
+    const small = Math.min((a.r - a.l) * (a.bottom - a.top), (b.r - b.l) * (b.bottom - b.top));
+    if (ix * iy < small * 0.25) continue;
+    out.push(`“${a.t.slice(0, 20)}” and “${b.t.slice(0, 20)}” (${sel(b.el)})`); break;
+  }
+  return out;
+};
+
+/** In-page, before any page script: pretend the reader asked for less data (Save-Data and prefers-reduced-data). */
+export const SAVE_DATA_INIT = () => {
+  try { Object.defineProperty(navigator, 'connection', { configurable: true, value: { saveData: true, effectiveType: '3g', addEventListener() {}, removeEventListener() {} } }); } catch { /* read-only here */ }
+  const mm = window.matchMedia.bind(window);
+  window.matchMedia = (q) => (/prefers-reduced-data\s*:\s*reduce/.test(q) ? Object.assign(Object.create(MediaQueryList.prototype), { matches: true, media: q, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent() { return false; } }) : mm(q));
+};
+
+/** In-page, after load under Save-Data: films that play or load, pictures far below the first screen fetched at once. */
+export const SAVE_DATA_COLLECT = () => {
+  const sel = (el) => { const p = []; for (let e = el; e && e.nodeType === 1 && p.length < 3; e = e.parentElement) { let s = e.tagName.toLowerCase(); if (e.id) { p.unshift(s + '#' + e.id); break; } const c = [...e.classList].slice(0, 2); if (c.length) s += '.' + c.join('.'); p.unshift(s); } return p.join(' > '); };
+  const playing = [...document.querySelectorAll('video')].filter((v) => !v.paused || v.autoplay || v.preload === 'auto').map(sel);
+  const eager = [...document.images].filter((im) => { const r = im.getBoundingClientRect(); return r.top + scrollY > innerHeight * 1.5 && im.loading !== 'lazy' && !/^data:|\.svg(\?|$)/i.test(im.currentSrc || im.src); }).map(sel);
+  return { playing, eager };
+};
+
+/** Judge the Save-Data run: `media` is how many audio or video requests went out. */
+export function judgeSaveData({ media = 0, playing = [], eager = [] }) {
+  const out = [];
+  if (media || playing.length) out.push({ rule: 'a11y-reduced-data', severity: 'warning', selector: playing[0] ?? null, message: `With Save-Data on, the page still ${media ? `fetches ${media} film or sound file${media > 1 ? 's' : ''}` : 'sets a film to play'}${playing.length ? ` (${playing.slice(0, 2).join(', ')})` : ''}. Read navigator.connection.saveData and prefers-reduced-data, show the still and keep the film behind its play button.` });
+  if (eager.length) out.push({ rule: 'a11y-reduced-data', severity: 'warning', selector: eager[0], message: `${eager.length} picture${eager.length > 1 ? 's' : ''} far below the first screen load at once (${eager.slice(0, 2).join(', ')}). Give them loading="lazy" so a reader on a metered connection only pays for what they scroll to.` });
   return out;
 }

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" data-app><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Kestrel tasks</title>
+<!-- A phone app screen that looks fine and feels wrong: the main action at the top, a sheet whose grabber is a
+     picture of one and that ignores Escape, swipe rows inside a sideways scroller and against the screen edge, and
+     text set in px in controls of a fixed height. Used by tests/unit/critic.test.mjs (app-* rules). -->
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1d232a; background: #f6f7f8; }
+  main { padding: 16px 0 120px; }
+  h1 { font-size: 26px; margin: 0 16px 12px; }
+  .add { display: block; margin: 0 16px 16px; height: 44px; width: calc(100% - 32px); border: 0; border-radius: 10px; background: #24524a; color: #fff; font: 600 16px system-ui; }
+  .tabs { display: flex; gap: 8px; margin: 0 16px 16px; }
+  .tabs button { height: 44px; padding: 0 14px; border: 1px solid #9aa5a1; border-radius: 10px; background: #fff; font: 15px system-ui; color: #1d232a; }
+  .lanes { display: flex; gap: 12px; overflow-x: auto; padding: 0 16px; }
+  .lane { flex: none; width: 300px; }
+  .rows { list-style: none; margin: 0; padding: 0; }
+  .rows li { display: flex; align-items: center; min-height: 56px; padding: 0 16px; background: #fff; border-bottom: 1px solid #d5dad8; }
+  .edge li { padding: 0 16px; }
+  button:focus-visible, [tabindex]:focus-visible { outline: 2px solid #24524a; outline-offset: 2px; }
+  dialog.sheet { position: fixed; inset: auto 0 0 0; width: 100%; max-width: none; margin: 0; padding: 0 16px 24px; border: 0; border-radius: 16px 16px 0 0; background: #fff; }
+  dialog.sheet .grabber { display: block; width: 36px; height: 4px; margin: 10px auto; border-radius: 2px; background: #9aa5a1; }
+  dialog.sheet h2 { font-size: 18px; }
+  .sheet-close { height: 44px; padding: 0 16px; border: 1px solid #9aa5a1; border-radius: 10px; background: #fff; font: 15px system-ui; color: #1d232a; }
+</style></head>
+<body><main>
+  <h1>Tasks</h1>
+  <button class="add" type="button" id="new" aria-haspopup="dialog">New task</button>
+  <div class="tabs"><button type="button" onclick="this.blur()">Today</button><button type="button" onclick="this.blur()">Later</button></div>
+  <div class="lanes" aria-label="Lanes">
+    <section class="lane"><h2>To do</h2><ul class="rows" data-lt="swipe-row"><li data-part="row">Order rope</li><li data-part="row">Paint the hull</li></ul></section>
+    <section class="lane"><h2>Doing</h2><ul class="rows" data-lt="swipe-row"><li data-part="row">Mend the sail</li><li data-part="row">Check the bilge</li></ul></section>
+  </div>
+  <h2 style="margin: 16px">Done</h2>
+  <ul class="rows edge" data-lt="swipe-row" data-swipe><li data-part="row">Fit new cleats</li><li data-part="row">Varnish the tiller</li></ul>
+</main>
+<dialog class="sheet" id="sheet" aria-labelledby="sheet-h"><span class="grabber"></span><h2 id="sheet-h">New task</h2><button type="button" class="sheet-close" onclick="document.getElementById('sheet').close()">Close</button></dialog>
+<script>
+  const sheet = document.getElementById('sheet');
+  // A non-modal show(): Escape does nothing, and closing never returns focus.
+  document.getElementById('new').addEventListener('click', () => { sheet.show(); sheet.querySelector('button').focus(); });
+</script>
+</body></html>

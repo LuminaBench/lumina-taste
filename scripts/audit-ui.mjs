@@ -20,6 +20,13 @@
 //     --perf    load speed: the largest paint (lazy or without fetchpriority), layout shift, font, JS and CSS
 //               bytes, images without width and height, images far larger than their box. --strict runs
 //               it too, with every perf finding as a warning
+//               With --taste, each page is also loaded again for what a native app and assistive tech need:
+//               at phone width on an app, a bottom sheet opened from its button closes on Escape and hands focus
+//               back, and the page at 200% text (a root font-size bump) neither clips nor overlaps and its controls
+//               grow; on every page, right-to-left (dir="rtl") mirrors and does not scroll sideways, a very long
+//               German word does not overflow, forced colours (Windows contrast themes) keep control parts, chart
+//               marks and focus rings visible, and Save-Data keeps films and far pictures from loading.
+//               Pages opened with ?state= skip these (they are the same page with one block swapped)
 //     --pending "page:rule,…"  findings of these rules on pages whose URL contains /page/ are listed as
 //               pending (known, waiting on a fix elsewhere) and do not count; one that stops firing is named
 // Requires Playwright (`npm i -D @playwright/test && npx playwright install chromium`).
@@ -29,7 +36,7 @@ import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { COPY_RULES } from './lib/copy-rules.mjs';
-import { MEASURE, judgeMeasures, PERF_INIT, PERF_COLLECT, judgePerf } from './lib/critic.mjs';
+import { MEASURE, judgeMeasures, PERF_INIT, PERF_COLLECT, judgePerf, RTL_PROBE, judgeRtl, LONG_WORDS, FORCED_MARKS, CONTROL_FIT, TEXT_OVERLAP, SAVE_DATA_INIT, SAVE_DATA_COLLECT, judgeSaveData } from './lib/critic.mjs';
 
 // Playwright is looked up next to this script first, then in the project you run it from,
 // so a globally installed skill can audit a project that already has Playwright.
@@ -957,6 +964,172 @@ async function safeAreaGaps(ctx, page, m) {
   return out;
 }
 
+// ------------------------------------------------------------------ native feel and accessibility (--taste)
+const LONG_WORD = 'Donaudampfschifffahrtsgesellschaftskapitänsmützenabzeichen';
+const SETTLE = '*,*::before,*::after{transition-duration:0s!important;animation-duration:0s!important;animation-delay:0s!important;scroll-behavior:auto!important}';
+async function freshPage(browser, url, vpName, opts = {}) {
+  const vp = VIEWPORTS[vpName];
+  const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, isMobile: !!vp.isMobile, hasTouch: !!vp.hasTouch, reducedMotion: 'reduce', ...opts });
+  if (opts.init) await ctx.addInitScript(opts.init);
+  const page = await ctx.newPage();
+  await page.goto(url, { waitUntil: 'load' });
+  await page.addStyleTag({ content: SETTLE });
+  await page.waitForTimeout(150);
+  return { ctx, page };
+}
+const PICK = (rules) => (f) => rules.includes(f.rule);
+
+async function nativeAndA11y(browser, url, vpName, m) {
+  const out = [];
+  const phone = VIEWPORTS[vpName].width < 900;
+  const tryRun = async (name, fn) => { try { out.push(...await fn()); } catch (err) { if (process.env.LT_AUDIT_DEBUG) console.error(`${name}:`, err.message); } };
+  if (phone && m?.app && m.sheets?.length) await tryRun('sheets', () => sheetBehaviour(browser, url, vpName));
+  if (phone && m?.app) await tryRun('dynamic type', () => dynamicType(browser, url, vpName));
+  await tryRun('rtl', () => rtlCheck(browser, url, vpName));
+  if (phone) await tryRun('long words', () => longWords(browser, url, vpName));
+  if (!phone) await tryRun('forced colours', () => forcedColours(browser, url, vpName));
+  if (phone) await tryRun('save data', () => saveDataCheck(browser, url, vpName));
+  return out;
+}
+
+/** A bottom sheet opened from its own button (by keyboard) closes on Escape and gives focus back to that button. */
+async function sheetBehaviour(browser, url, vpName) {
+  const out = [];
+  const { ctx, page } = await freshPage(browser, url, vpName);
+  const OPEN = '[open], :popover-open, [data-contained-open]';
+  const ids = await page.evaluate(() => [...document.querySelectorAll('.lt-sheet, dialog[data-detents], [class*="bottom-sheet"] dialog, dialog[class*="sheet"]')].filter((d) => !d.closest('[inert], [data-audit-ignore]')).slice(0, 3).map((d, i) => { d.setAttribute('data-lt-sheet', String(i)); return i; }));
+  for (const i of ids) {
+    const triggers = await page.evaluate((i) => {
+      const d = document.querySelector(`[data-lt-sheet="${i}"]`);
+      const vis = (e) => { const r = e.getBoundingClientRect(); if (r.width < 2 || r.height < 2 || e.closest('[hidden], [inert]')) return false; for (let a = e; a && a.nodeType === 1; a = a.parentElement) { const cs = getComputedStyle(a); if (cs.display === 'none' || cs.visibility === 'hidden') return false; } return true; };
+      const root = d.closest('[data-lt="bottom-sheet"]');
+      const list = [...new Set([...(d.id ? document.querySelectorAll(`[aria-controls="${d.id}"], [popovertarget="${d.id}"], [commandfor="${d.id}"]`) : []), ...(root ? root.querySelectorAll('[data-part="open"]') : []), ...document.querySelectorAll('[aria-haspopup="dialog"]')])].filter((e) => !d.contains(e) && vis(e)).slice(0, 4);
+      list.forEach((e, k) => e.setAttribute('data-lt-trigger', `${i}-${k}`));
+      return list.map((_, k) => `${i}-${k}`);
+    }, i);
+    let used = null;
+    for (const t of triggers) {
+      await page.focus(`[data-lt-trigger="${t}"]`);
+      await page.keyboard.press('Enter');
+      await page.waitForTimeout(250);
+      if (await page.evaluate(([i, OPEN]) => document.querySelector(`[data-lt-sheet="${i}"]`).matches(OPEN), [i, OPEN])) { used = t; break; }
+      await page.keyboard.press('Escape');
+    }
+    if (!used) continue;
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(400);
+    const after = await page.evaluate(([i, t, OPEN]) => { const d = document.querySelector(`[data-lt-sheet="${i}"]`); const b = document.querySelector(`[data-lt-trigger="${t}"]`); return { open: d.matches(OPEN), back: document.activeElement === b, at: document.activeElement?.tagName.toLowerCase() ?? 'nothing', label: (b.getAttribute('aria-label') || b.textContent || '').trim().slice(0, 30) }; }, [i, used, OPEN]);
+    if (after.open) out.push({ rule: 'app-sheet-escape', severity: 'warning', selector: `[data-lt-sheet="${i}"]`, message: `The sheet opened from “${after.label}” stays open on Escape. Escape (and the scrim) must close it, as they do a native sheet.` });
+    else if (!after.back) out.push({ rule: 'app-sheet-focus', severity: 'warning', selector: `“${after.label}”`, message: `When the sheet opened from “${after.label}” closes, focus goes to ${after.at === 'body' ? 'the page itself' : `a ${after.at}`} instead of back to “${after.label}”, so a keyboard or screen reader user loses their place. Focus the opener on close.` });
+  }
+  await ctx.close();
+  return out;
+}
+
+/** The app at its largest text: the root font size doubled, as Dynamic Type and browser zoom of text do. */
+async function dynamicType(browser, url, vpName) {
+  const out = [];
+  const { ctx, page } = await freshPage(browser, url, vpName);
+  const before = await page.evaluate(() => [...document.querySelectorAll('body *')].filter((e) => [...e.childNodes].some((c) => c.nodeType === 3 && c.textContent.trim())).slice(0, 1500).map((e, i) => { e.setAttribute('data-lt-dt', String(i)); return parseFloat(getComputedStyle(e).fontSize); }));
+  await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+  await page.waitForTimeout(250);
+  const fixed = await page.evaluate((before) => { let same = 0, n = 0; for (const e of document.querySelectorAll('[data-lt-dt]')) { const cs = getComputedStyle(e); if (cs.display === 'none' || e.closest('[hidden], [aria-hidden="true"], svg')) continue; n++; if (parseFloat(cs.fontSize) <= before[+e.getAttribute('data-lt-dt')] * 1.05) same++; } return { same, n }; }, before);
+  const page2 = (await page.evaluate(PAGE_CHECKS, [])).filter(PICK(['clipped-text']));
+  for (const o of await page.evaluate(TEXT_OVERLAP)) page2.push({ rule: 'overlap', selector: null, message: `text sits on other text: ${o}` });
+  // Text pushed past the side of the screen. A pane that scrolls up and down clips sideways without scrolling, so only
+  // a real sideways scroller (a rail, a table frame) excuses it.
+  const past = await page.evaluate(() => {
+    const W = document.documentElement.clientWidth, out = [];
+    const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let n = tw.nextNode(); n && out.length < 3; n = tw.nextNode()) {
+      const el = n.parentElement; if (!el || !n.textContent.trim() || el.closest('svg, [aria-hidden="true"], [inert], [hidden], dialog:not([open]), .lt-visually-hidden, [data-audit-ignore]')) continue;
+      const cs = getComputedStyle(el); if (cs.display === 'none' || cs.visibility === 'hidden' || cs.textOverflow === 'ellipsis') continue;
+      // Visually hidden text (clipped to a pixel) is for screen readers: it takes no room.
+      let tiny = false; for (let a = el; a && a !== document.body; a = a.parentElement) { const b = a.getBoundingClientRect(); if ((b.width <= 2 || b.height <= 2) && getComputedStyle(a).overflow !== 'visible') { tiny = true; break; } }
+      if (tiny) continue;
+      const range = document.createRange(); range.selectNodeContents(n);
+      const r = range.getBoundingClientRect(); if (r.width < 2 || r.right <= W + 2 || r.left >= W) continue;
+      let sideways = false;
+      // A sideways scroller: it scrolls across and not down (a rail of tabs, a strip), or it is a table's frame.
+      for (let a = el; a && a !== document.body; a = a.parentElement) { const c = getComputedStyle(a); if (/auto|scroll/.test(c.overflowX) && (a.scrollHeight <= a.clientHeight + 1 || a.querySelector('table') || a.matches('[role="region"][tabindex]'))) { sideways = true; break; } if (c.position === 'fixed') break; }
+      if (!sideways) out.push(`“${n.textContent.trim().slice(0, 24)}” runs to x=${Math.round(r.right)}`);
+    }
+    return out;
+  });
+  if (past.length) page2.push({ rule: 'clipped-text', selector: null, message: `text runs past the screen edge: ${past.join(', ')}` });
+  const spill = await page.evaluate(CONTROL_FIT);
+  await ctx.close();
+  if (fixed.n && fixed.same / fixed.n > 0.25) out.push({ rule: 'app-dynamic-type', severity: 'warning', selector: null, message: `At 200% text, ${fixed.same} of ${fixed.n} pieces of text stay the same size: they are set in px. Size text in rem (the kit's --step-* and --text-ui* already are) so it follows the reader's text size.` });
+  if (page2.length) out.push({ rule: 'app-dynamic-type', severity: 'warning', selector: page2[0].selector, message: `At 200% text, ${page2.length} piece${page2.length > 1 ? 's of text are' : ' of text is'} cut off or overlap${page2.length > 1 ? '' : 's'}: ${page2.slice(0, 2).map((f) => f.message.replace(/\.$/, '')).join('; ')}. Let rows and bars grow with their text (min-height, not height) and let labels wrap.` });
+  if (spill.length) out.push({ rule: 'app-dynamic-type', severity: 'warning', selector: null, message: `At 200% text, ${spill.length} control${spill.length > 1 ? 's do' : ' does'} not grow with ${spill.length > 1 ? 'their' : 'its'} label: ${spill.slice(0, 3).join(', ')}. Use min-height and padding instead of a fixed height.` });
+  return out;
+}
+
+/** Right-to-left: the same page with dir="rtl" must mirror and must not scroll sideways. */
+async function rtlCheck(browser, url, vpName) {
+  const { ctx, page } = await freshPage(browser, url, vpName);
+  const ltr = await page.evaluate(RTL_PROBE);
+  await page.evaluate(() => document.documentElement.setAttribute('dir', 'rtl'));
+  await page.waitForTimeout(200);
+  const rtl = await page.evaluate(RTL_PROBE);
+  await ctx.close();
+  return judgeRtl(ltr, rtl);
+}
+
+/** A very long German compound in the page's text: it must wrap (hyphens, overflow-wrap), not push the page wider. */
+async function longWords(browser, url, vpName) {
+  const { ctx, page } = await freshPage(browser, url, vpName);
+  const n = await page.evaluate(LONG_WORDS, LONG_WORD);
+  await page.waitForTimeout(150);
+  const found = n ? (await page.evaluate(PAGE_CHECKS, [])).filter(PICK(['overflow', 'clipped-text'])) : [];
+  await ctx.close();
+  return found.length ? [{ rule: 'a11y-long-words', severity: 'warning', selector: found[0].selector, message: `A long word (“${LONG_WORD.slice(0, 22)}…”, as German, Finnish or Dutch have) ${found[0].rule === 'overflow' ? 'pushes the page wider than the screen' : 'is cut off'}: ${found[0].message} Let text break inside a word when it must: overflow-wrap: anywhere (or break-word) and hyphens: auto with the page's lang.` }] : [];
+}
+
+/** Forced colours (Windows contrast themes): control parts, chart marks, field boxes and focus rings stay visible. */
+async function forcedColours(browser, url, vpName) {
+  const out = [];
+  const { ctx, page } = await freshPage(browser, url, vpName);
+  await page.evaluate(FORCED_MARKS, 'mark');
+  await page.emulateMedia({ forcedColors: 'active' });
+  await page.waitForTimeout(150);
+  const { gone, fields } = await page.evaluate(FORCED_MARKS, 'check');
+  if (gone.length) out.push({ rule: 'a11y-forced-colors', severity: 'warning', selector: gone[0], message: `In forced colours (a Windows contrast theme), ${gone.length} part${gone.length > 1 ? 's' : ''} drawn only with a background disappear${gone.length > 1 ? '' : 's'}: ${[...new Set(gone)].slice(0, 3).join(', ')}. Chart marks, meter fills, switch tracks and thumbs need a border (a transparent one shows), or forced-color-adjust: none with system colours (CanvasText, Highlight) in @media (forced-colors: active).` });
+  if (fields.length) out.push({ rule: 'a11y-forced-colors', severity: 'warning', selector: fields[0], message: `In forced colours, ${fields.length} text field${fields.length > 1 ? 's have' : ' has'} no visible box: ${fields.slice(0, 3).join(', ')}. Give the field a border (transparent is enough: forced colours paint it).` });
+  // Focus rings drawn with box-shadow vanish here: pixel-check the first controls.
+  const idx = await page.evaluate(() => { const els = [...document.querySelectorAll('a[href], button, input:not([type="hidden"]), select, textarea, summary, [role="tab"], [role="switch"], [role="checkbox"], [role="radio"], [role="option"], [role="slider"], [tabindex="0"]')].filter((e) => { const r = e.getBoundingClientRect(); return r.width > 1 && r.height > 1 && !e.disabled && !e.closest('[inert], [hidden], dialog:not([open]), [aria-hidden="true"]') && getComputedStyle(e).visibility !== 'hidden' && +getComputedStyle(e).opacity > 0; }); els.forEach((e, i) => e.setAttribute('data-lt-ff', String(i))); return els.length; });
+  await page.keyboard.press('Shift');
+  const blind = [];
+  for (let i = 0; i < Math.min(idx, 40); i++) {
+    const box = await page.evaluate((k) => { const el = document.querySelector(`[data-lt-ff="${k}"]`); document.activeElement?.blur?.(); el.scrollIntoView({ block: 'center', inline: 'nearest' }); const r = el.getBoundingClientRect(); if (r.top < 0 || r.left < 0 || r.bottom > innerHeight || r.right > innerWidth) return null; return { x: Math.max(0, r.left - 8), y: Math.max(0, r.top - 8), width: Math.min(innerWidth, r.right + 8) - Math.max(0, r.left - 8), height: Math.min(innerHeight, r.bottom + 8) - Math.max(0, r.top - 8) }; }, i);
+    if (!box || box.width < 4 || box.height < 4) continue;
+    let a, b;
+    try { a = await page.screenshot({ clip: box }); } catch { continue; }
+    const ok = await page.evaluate((k) => { const el = document.querySelector(`[data-lt-ff="${k}"]`); el.focus({ focusVisible: true, preventScroll: true }); return document.activeElement === el; }, i);
+    if (!ok) continue;
+    try { b = await page.screenshot({ clip: box }); } catch { continue; }
+    if (a.equals(b)) blind.push(await page.evaluate((k) => { const el = document.querySelector(`[data-lt-ff="${k}"]`); return `${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''} “${(el.getAttribute('aria-label') || el.textContent || el.getAttribute('placeholder') || '').trim().slice(0, 24)}”`; }, i));
+  }
+  if (blind.length) out.push({ rule: 'a11y-forced-colors', severity: 'warning', selector: blind[0], message: `In forced colours, ${blind.length} control${blind.length > 1 ? 's show' : ' shows'} no focus: ${blind.slice(0, 3).join(', ')}. A box-shadow ring is removed in forced colours; draw focus with outline (outline: var(--focus-width) solid var(--focus-ring)), or add one in @media (forced-colors: active).` });
+  await ctx.close();
+  return out;
+}
+
+/** Save-Data and prefers-reduced-data: no film loads or plays, and far pictures wait until they are near. */
+async function saveDataCheck(browser, url, vpName) {
+  let media = 0;
+  const vp = VIEWPORTS[vpName];
+  const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, isMobile: !!vp.isMobile, hasTouch: !!vp.hasTouch, extraHTTPHeaders: { 'Save-Data': 'on' } });
+  await ctx.addInitScript(SAVE_DATA_INIT);
+  const page = await ctx.newPage();
+  page.on('request', (r) => { if (r.resourceType() === 'media') media++; });
+  await page.goto(url, { waitUntil: 'load' });
+  await page.waitForTimeout(800);
+  const seen = await page.evaluate(SAVE_DATA_COLLECT);
+  await ctx.close();
+  return judgeSaveData({ media, ...seen });
+}
+
 /** One cold load per viewport for speed: the largest paint, layout shift, bytes by kind, and the images. */
 async function perfOne(browser, url, vpName) {
   const vp = VIEWPORTS[vpName];
@@ -1058,6 +1231,8 @@ for (const t of targets) {
       perf = await perfOne(browser, url, vp);
       for (const f of judgePerf(perf, { soft: !perfFlag })) r.findings.push({ ...f, viewport: vp, mode });
     }
+    // What a native app and assistive tech need, judged once per viewport on a fresh load (see the header).
+    if (tasteOn && mode === modes[0] && !/[?&]state=/.test(url)) for (const f of await nativeAndA11y(browser, url, vp, r.measures)) r.findings.push({ ...f, viewport: vp, mode });
     // De-duplicate identical findings (same rule + selector + message).
     const seen = new Set();
     const uniq = r.findings.filter((f) => { const k = `${f.rule}|${f.selector}|${f.message}`; if (seen.has(k)) return false; seen.add(k); return true; });

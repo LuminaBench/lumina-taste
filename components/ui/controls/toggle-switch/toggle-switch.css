@@ -1,13 +1,13 @@
 .lt-switch-list { display: grid; gap: var(--gap-md); }
 @scope (.lt-switch) {
-  :scope { --w: 36px; --h: 20px; display: inline-flex; align-items: center; gap: var(--gap-sm); font-size: var(--text-ui); color: var(--text-primary); cursor: pointer; }
+  :scope { --w: 36px; --h: 20px; --dir: 1; display: inline-flex; align-items: center; gap: var(--gap-sm); font-size: var(--text-ui); color: var(--text-primary); cursor: pointer; }
   input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
   [data-part="track"] {
     position: relative; flex: none; width: var(--w); height: var(--h); border-radius: var(--radius-pill);
     background: var(--border-strong); transition: background-color var(--dur-2) var(--ease-out);
   }
   [data-part="thumb"] {
-    position: absolute; top: 2px; left: 2px; width: calc(var(--h) - 4px); height: calc(var(--h) - 4px);
+    position: absolute; top: 2px; inset-inline-start: 2px; width: calc(var(--h) - 4px); height: calc(var(--h) - 4px);
     border-radius: var(--radius-pill); background: var(--bg-surface-1); box-shadow: var(--shadow-sm);
     /* It crosses with a little overshoot and settles (--dur-toggle, --ease-overshoot in tokens/scroll.css). */
     transform-origin: left center;
@@ -16,8 +16,18 @@
   /* Held down, the thumb stretches toward where it will go (scale, so nothing reflows). */
   :scope:is(:active, [data-pressing]) [data-part="thumb"] { scale: var(--press-stretch, 1.22) 1; }
   input:checked + [data-part="track"] { background: var(--accent-solid); }
-  input:checked + [data-part="track"] [data-part="thumb"] { transform: translateX(calc(var(--w) - var(--h))); transform-origin: right center; background: var(--accent-ink); }
+  input:checked + [data-part="track"] [data-part="thumb"] { transform: translateX(calc((var(--w) - var(--h)) * var(--dir))); transform-origin: right center; background: var(--accent-ink); }
+  input:checked + [data-part="track"] [data-part="thumb"]:dir(rtl) { transform-origin: left center; }
   input:focus-visible + [data-part="track"] { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
   :scope:has(input:disabled) { cursor: not-allowed; color: var(--text-muted); }
   input:disabled + [data-part="track"] { opacity: 0.45; }
+  :scope:dir(rtl) { --dir: -1; }
+}
+/* Forced colours (Windows contrast themes) repaint fills: the track keeps an edge, the thumb and the on state a system colour. */
+@media (forced-colors: active) {
+  .lt-switch [data-part="track"] { border: 1px solid CanvasText; }
+  .lt-switch [data-part="thumb"] { forced-color-adjust: none; background: CanvasText; box-shadow: none; }
+  .lt-switch input:checked + [data-part="track"] { forced-color-adjust: none; background: Highlight; border-color: Highlight; }
+  .lt-switch input:checked + [data-part="track"] [data-part="thumb"] { background: HighlightText; }
+  .lt-switch input:focus-visible + [data-part="track"] { outline-color: Highlight; }
 }

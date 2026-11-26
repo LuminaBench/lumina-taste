@@ -2,20 +2,20 @@
 @scope (.lt-field) {
   :scope { position: relative; display: grid; }
   input {
-    height: calc(var(--control-h) + 16px); padding: 18px 36px 0 12px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-md);
+    height: calc(var(--control-h) + 16px); padding: 18px 0 0; padding-inline: 12px 36px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-md);
     background: var(--bg-surface-1); color: var(--text-primary); font-size: var(--text-ui); outline: none;
     transition: border-color var(--dur-1), box-shadow var(--dur-1);
   }
   input:hover { border-color: var(--text-secondary); }
   input:focus-visible, input:focus { border-color: var(--focus-ring); box-shadow: var(--field-ring); outline: none; }
   label {
-    position: absolute; left: 13px; top: calc((var(--control-h) + 16px) / 2); translate: 0 -50%; transform-origin: left center;
+    position: absolute; inset-inline-start: 13px; top: calc((var(--control-h) + 16px) / 2); translate: 0 -50%; transform-origin: left center;
     color: var(--text-muted); font-size: var(--text-ui); pointer-events: none;
     transition: translate var(--dur-2) var(--ease-out), scale var(--dur-2) var(--ease-out), color var(--dur-1);
   }
   input:focus + label, input:not(:placeholder-shown) + label { translate: 0 -112%; scale: 0.8; color: var(--text-secondary); }
   input:focus + label { color: var(--accent-text); }
-  [data-part="valid"] { position: absolute; right: 12px; top: calc((var(--control-h) + 16px) / 2); translate: 0 -50%; color: var(--status-positive); opacity: 0; scale: 0.6; transition: opacity var(--dur-2), scale var(--dur-3) var(--ease-spring); }
+  [data-part="valid"] { position: absolute; inset-inline-end: 12px; top: calc((var(--control-h) + 16px) / 2); translate: 0 -50%; color: var(--status-positive); opacity: 0; scale: 0.6; transition: opacity var(--dur-2), scale var(--dur-3) var(--ease-spring); }
   [data-part="message"] { margin: 6px 2px 0; min-height: 1.35em; font-size: var(--text-ui-xs); color: var(--text-muted); }
   :scope[data-state="valid"] [data-part="valid"] { opacity: 1; scale: 1; }
   :scope[data-state="invalid"] input { border-color: var(--status-negative); }
@@ -28,4 +28,5 @@
     :scope[data-shake] { animation: lt-shake var(--dur-shake, 420ms) var(--ease-out); }
     :scope[data-state="invalid"] [data-part="message"] { animation: lt-arrive var(--dur-confirm, 260ms) var(--ease-out) both; }
   }
+  label:dir(rtl) { transform-origin: right center; }
 }

@@ -9,7 +9,7 @@ body { background: var(--bg-surface-2); }
 .mb-app main > [hidden] { display: none; }
 .mb-balance { display: grid; gap: 6px; padding: 18px; border-radius: var(--radius-xl); background: var(--bg-surface-2); }
 .mb-balance h2 { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 500; }
-.mb-fig { margin: 0; font-family: var(--font-display); font-size: 2.5rem; font-weight: var(--weight-display); letter-spacing: -0.03em; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.mb-fig { margin: 0; font-family: var(--font-display); font-size: min(2.5rem, 15vw); overflow-wrap: normal; font-weight: var(--weight-display); letter-spacing: -0.03em; line-height: 1.05; font-variant-numeric: tabular-nums; }
 .mb-delta { display: flex; align-items: center; gap: 6px; margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
 /* Seven bars, one per day. Today is the accent; the rest stay quiet. Zero days keep a stub so the week reads as seven. */
 .mb-week { display: grid; grid-template-columns: repeat(7, 1fr); align-items: end; gap: 8px; height: 96px; margin: 14px 0 0; padding: 0; list-style: none; }
@@ -18,10 +18,10 @@ body { background: var(--bg-surface-2); }
 .mb-week [data-today] i { background: var(--accent-solid); }
 .mb-week [data-today] { color: var(--text-primary); }
 .mb-list { display: grid; gap: 8px; }
-.mb-list header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-inline: 2px; }
+.mb-list header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; padding-inline: 2px; }
 .mb-list h2 { margin: 0; font-size: var(--step-1); font-weight: 650; letter-spacing: -0.01em; }
 .mb-list header a { font-size: var(--text-ui-sm); white-space: nowrap; }
-.mb-list header p { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; }
+.mb-list header p { margin: 0; white-space: nowrap; color: var(--text-secondary); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; }
 .mb-list ul, .mb-skels { margin: 0; padding: 0; list-style: none; }
 .mb-list li + li, .mb-skels li + li { border-top: 1px solid var(--border-hairline); }
 /* Rows are whole-row links, 64px tall: name and amount on the first line, detail and status on the second. */
@@ -33,6 +33,13 @@ body { background: var(--bg-surface-2); }
 .mb-list b { grid-column: 3; grid-row: 1; justify-self: end; font-weight: 600; font-variant-numeric: tabular-nums; }
 .mb-list .lt-badge { grid-column: 3; grid-row: 2; justify-self: end; }
 .mb-list li a:not(:has(.lt-badge)) b { grid-row: 1 / span 2; }
+/* At the largest text sizes a row has no room for three columns: the amount and its status go under the name. */
+.mb-list li { container-type: inline-size; }
+@container (max-width: 22em) {
+  .mb-list li a { grid-template-columns: 40px minmax(0, 1fr); }
+  .mb-list li a :is(b, .lt-badge) { grid-column: 2; grid-row: auto; justify-self: start; }
+  .mb-list li a:not(:has(.lt-badge)) b { grid-row: auto; }
+}
 .mb-skel { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; align-items: center; gap: 12px; min-height: 64px; }
 .mb-skel .lt-skeleton[data-shape="circle"] { width: 40px; height: 40px; }
 .mb-skel .lt-skeleton:last-child { justify-self: end; width: 64px !important; }
@@ -50,6 +57,6 @@ body { background: var(--bg-surface-2); }
 .mb-select { height: calc(var(--control-h) + 12px); padding: 0 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-1); color: var(--text-primary); font: 400 var(--text-ui) var(--font-body); }
 .mb-form .lt-segmented { width: 100%; }
 .mb-form .lt-segmented button { flex: 1; }
-.lt-sheet h2 { text-align: left; color: var(--text-primary); font-size: var(--step-1); }
+.lt-sheet h2 { text-align: start; color: var(--text-primary); font-size: var(--step-1); }
 .mb-toast { position: fixed; left: 50%; bottom: 84px; z-index: 70; translate: -50% 0; margin: 0; padding: 10px 16px; border-radius: 999px; background: var(--text-primary); color: var(--bg-canvas); font-size: var(--text-ui-sm); font-weight: 600; white-space: nowrap; }
 .mb-toast:empty { display: none; }

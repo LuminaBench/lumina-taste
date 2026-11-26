@@ -20,7 +20,9 @@
 .lt-bulk.ad-table [data-part="bar"] { position: sticky; left: auto; bottom: var(--space-4); justify-self: center; translate: none; z-index: 2; }
 .ad-table .lt-table { width: 100%; }
 .ad-table th:first-child, .ad-table td:first-child { width: 44px; }
-.ad-person { display: flex; align-items: center; gap: 10px; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.ad-person { display: flex; align-items: center; gap: 10px; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: start; cursor: pointer; }
+/* The bulk bar's own buttons have a fixed height; a person in the table grows with their name and email (200% text). */
+.lt-bulk .ad-person { height: auto; }
 .ad-person strong { display: block; color: var(--text-primary); font-weight: 600; }
 .ad-person span span { display: block; color: var(--text-muted); font-size: var(--text-ui-sm); }
 .ad-person:hover strong { text-decoration: underline; text-underline-offset: 3px; }
@@ -44,3 +46,13 @@
 }
 /* Touch: side-nav rows are 44px targets. */
 @media (pointer: coarse) { .ad-side a:not(.ad-brand) { height: var(--hit, 44px); } }
+/* On a phone the one action rides low, where the thumb is: a floating button above the home indicator. It steps
+   aside while the bulk bar is up, so the two never stack. */
+@media (max-width: 640px) {
+  /* Four statuses in one row at any text size: tighter segments on a phone. */
+  #ad-status { max-width: 100%; }
+  #ad-status button { min-width: 0; padding-inline: 8px; }
+  .ad-main { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+  .ad-head > .lt-btn[data-variant="primary"] { position: fixed; inset-inline-end: 16px; bottom: calc(20px + env(safe-area-inset-bottom)); z-index: 30; height: 52px; padding-inline: 20px; border-radius: var(--radius-pill); box-shadow: var(--shadow-md); }
+  .ad-main:has([data-part="bar"]:not([hidden])) .ad-head > .lt-btn[data-variant="primary"] { visibility: hidden; }
+}

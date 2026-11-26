@@ -22,3 +22,5 @@
 .sp-msg { flex-basis: 100%; margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
 .sp-msg:empty { display: none; }
 .lt-footer-min { padding-block: var(--space-6); }
+/* Forced colours (Windows contrast themes): the legend keys keep their status colours and an edge. */
+@media (forced-colors: active) { .sp-legend span { forced-color-adjust: none; border: 1px solid CanvasText; } }

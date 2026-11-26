@@ -7,7 +7,7 @@ import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { judgeMeasures, judgePerf, LIMITS } from '../../scripts/lib/critic.mjs';
+import { judgeMeasures, judgePerf, judgeRtl, judgeSaveData, LIMITS } from '../../scripts/lib/critic.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const node = (args) => spawnSync(process.execPath, args, { cwd: root, encoding: 'utf8' });
@@ -92,6 +92,45 @@ test('judge: app touch targets at phone width, and missing states', () => {
   assert.ok(rulesOf(page([], { ...app, states: { declared: ['loading', 'empty'], missing: ['empty'] } })).has('app-states'));
 });
 
+test('judge: sheets, swipes and the reach of the thumb on a phone app', () => {
+  const app = { width: 390, height: 844, app: true, hero: false, controls: [] };
+  const sheet = (handle) => ({ selector: 'dialog.sheet', id: 's', handle, handleSelector: handle === 'none' ? null : 'span.grab' });
+  assert.ok(rulesOf(page([], { ...app, sheets: [sheet('static')] })).has('app-sheet-handle'));
+  assert.ok(rulesOf(page([], { ...app, sheets: [sheet('none')] })).has('app-sheet-handle'));
+  assert.ok(!rulesOf(page([], { ...app, sheets: [sheet('button')] })).has('app-sheet-handle'));
+  const swipe = (o) => ({ selector: 'ul', left: 24, right: 366, guard: false, scroller: null, ...o });
+  assert.ok(rulesOf(page([], { ...app, swipes: [swipe({ scroller: 'div.lanes' })] })).has('app-gesture-conflict'));
+  assert.ok(rulesOf(page([], { ...app, swipes: [swipe({ left: 0, right: 390 })] })).has('app-gesture-edge'));
+  assert.ok(!rulesOf(page([], { ...app, swipes: [swipe({ left: 0, right: 390, guard: true })] })).has('app-gesture-edge'));
+  assert.ok(!rulesOf(page([], { ...app, swipes: [swipe()] })).has('app-gesture-edge'));
+  // The main action: a warning when every primary in view is in the top half.
+  assert.ok(rulesOf(page([], { ...app, reach: [{ selector: 'button', label: 'Add', cy: 120 }] })).has('app-reach'));
+  assert.ok(!rulesOf(page([], { ...app, reach: [{ selector: 'button', label: 'Add', cy: 120 }, { selector: 'button', label: 'Pay', cy: 790 }] })).has('app-reach'));
+  assert.equal(judgeMeasures(page([], { ...app, reach: [{ selector: 'b', label: 'Add', cy: 100 }] })).find((f) => f.rule === 'app-reach').severity, 'warning');
+  // Wide screens and marketing pages are not judged as phones.
+  assert.ok(!rulesOf(page([], { ...app, width: 1440, reach: [{ selector: 'b', label: 'Add', cy: 100 }] })).has('app-reach'));
+  assert.ok(!rulesOf(page([], { width: 390, app: false, reach: [{ selector: 'b', label: 'Add', cy: 100 }] })).has('app-reach'));
+});
+
+test('judge: right-to-left mirrors, or names what does not', () => {
+  const ltr = { width: 400, scrollWidth: 400, boxes: [{ i: 0, selector: 'h1', left: 16, right: 200, shown: true }, { i: 1, selector: 'p.centre', left: 100, right: 300, shown: true }] };
+  const mirrored = { width: 400, scrollWidth: 400, boxes: [{ i: 0, selector: 'h1', left: 200, right: 384, shown: true }, { i: 1, selector: 'p.centre', left: 100, right: 300, shown: true }] };
+  assert.deepEqual(judgeRtl(ltr, mirrored), []);
+  const stuck = { ...mirrored, boxes: [{ ...mirrored.boxes[0], left: 16, right: 200 }, mirrored.boxes[1]] };
+  const f = judgeRtl(ltr, stuck);
+  assert.equal(f[0].rule, 'a11y-rtl-mirror');
+  assert.match(f[0].message, /h1 sits at x=16, the mirror of its place is x=200/);
+  assert.ok(judgeRtl(ltr, { ...mirrored, scrollWidth: 900 }).some((x) => x.rule === 'a11y-rtl-overflow'));
+  // A page that already scrolled sideways in ltr is the overflow rule's business, not this one's.
+  assert.ok(!judgeRtl({ ...ltr, scrollWidth: 900 }, { ...mirrored, scrollWidth: 900 }).some((x) => x.rule === 'a11y-rtl-overflow'));
+});
+
+test('judge: Save-Data keeps films and far pictures from loading', () => {
+  assert.deepEqual(judgeSaveData({ media: 0, playing: [], eager: [] }), []);
+  assert.equal(judgeSaveData({ media: 1, playing: ['video'], eager: [] })[0].rule, 'a11y-reduced-data');
+  assert.equal(judgeSaveData({ media: 0, playing: [], eager: ['img.far'] }).length, 1);
+});
+
 test('perf judge: lazy LCP is an error (a warning under --strict alone); fonts, scripts, shifts and images', () => {
   const base = { lcp: { image: true, tag: 'img', loading: 'lazy', fetchpriority: null, selector: 'img', url: 'a.jpg' }, cls: 0, shifts: 0, images: [], bytes: { js: 0, css: 0, font: 0, fonts: 0 } };
   assert.equal(judgePerf(base).find((f) => f.rule === 'perf-lcp-lazy').severity, 'error');
@@ -144,6 +183,24 @@ test('audit-ui --taste on an app at phone width: small targets, a bar without th
   assert.match(findings.find((f) => f.rule === 'app-states').message, /no view for empty, error/);
 });
 
+test('audit-ui --taste on a phone app that feels wrong: grabber, Escape, gestures, reach and 200% text', () => {
+  const { rules, findings } = audit('critic-native', ['--taste', '--viewports', 'mobile']);
+  for (const rule of ['app-sheet-handle', 'app-sheet-escape', 'app-gesture-conflict', 'app-gesture-edge', 'app-reach', 'app-dynamic-type']) assert.ok(rules.has(rule), rule);
+  assert.match(findings.find((f) => f.rule === 'app-sheet-handle').message, /not a button/);
+  assert.ok(findings.filter((f) => f.rule === 'app-dynamic-type').some((f) => /set in px|do(es)? not grow/.test(f.message)));
+});
+
+test('audit-ui --taste beyond the basics: right-to-left, long words, forced colours and Save-Data', () => {
+  const desk = audit('critic-a11y', ['--taste', '--viewports', 'desktop']);
+  assert.ok(desk.rules.has('a11y-rtl-mirror'));
+  const fc = desk.findings.filter((f) => f.rule === 'a11y-forced-colors').map((f) => f.message).join(' ');
+  assert.match(fc, /disappear/);       // the meter's fill
+  assert.match(fc, /no visible box/);  // the borderless field
+  assert.match(fc, /show(s)? no focus/); // box-shadow focus rings
+  const phone = audit('critic-a11y', ['--taste', '--viewports', 'mobile']);
+  for (const rule of ['a11y-rtl-overflow', 'a11y-long-words', 'a11y-reduced-data']) assert.ok(phone.rules.has(rule), rule);
+});
+
 test('audit-ui --perf: a lazy, unsized, oversized first picture', () => {
   const { j, findings } = audit('critic-perf', ['--perf', '--viewports', 'desktop']);
   const lazy = findings.find((f) => f.rule === 'perf-lcp-lazy');
@@ -179,8 +236,8 @@ test('review-page writes the pictures, the measurements and the checklist', () =
     assert.equal(j.squint.desktop.length, 3);
     assert.ok(j.critic && typeof j.critic.score === 'number');
     const md = readFileSync(join(out, 'review.md'), 'utf8');
-    for (const q of ['clear in 3 seconds', 'when you squint', 'one bold idea', 'look like a template', 'something to look at', 'type scale jump', 'demanding designer ship']) assert.ok(md.includes(q), q);
-    assert.equal((md.match(/- Answer:/g) ?? []).length, 7);
+    for (const q of ['clear in 3 seconds', 'when you squint', 'one bold idea', 'look like a template', 'something to look at', 'type scale jump', 'demanding designer ship', 'hold for everyone']) assert.ok(md.includes(q), q);
+    assert.equal((md.match(/- Answer:/g) ?? []).length, 8);
   } finally { rmSync(out, { recursive: true, force: true }); }
 });
 

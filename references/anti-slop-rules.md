@@ -93,6 +93,13 @@ Treat every rule as a ban unless the user explicitly asks for the banned thing. 
 | ★ On a phone, primary controls (the main button, a submit, anything in a bottom or tab bar) under 44×44px | `min-height: 44px` at phone width, or an inset `::before` that grows the hit area to 44px. |
 | ★ A fixed bottom bar that ignores the home indicator | `padding-bottom: calc(<padding> + env(safe-area-inset-bottom))` and `viewport-fit=cover` in the viewport meta. |
 | ★ An app screen that only has its full state | A loading skeleton, an empty state with one action and an error with a way out, each a `data-view` block; declare them in `meta.json` `states` or `<html data-states>`. |
+| ★ A bottom sheet whose grabber is a picture of one, that ignores Escape or loses the reader's place on close | `bottom-sheet` with `<button data-part="grab">`; Escape and the scrim close; focus goes back to the button that opened it. On a wide screen, a popover by its button |
+| ★ Swipe rows inside a sideways scroller, or reaching the screen edge | One gesture per direction: rows outside rails, drags from the outer 20px left to the system (`data-edge-guard`) |
+| ★ Controls of a fixed height and text in px, so 200% text clips | `min-height` and padding; type in rem (`--step-*`, `--text-ui*`); rows that stack their columns when the text is large |
+| ★ The main action at the top of a phone screen | A bar above the home indicator, or a floating button low on the screen |
+| ★ `left`, `right`, `margin-left: auto`, `text-align: left` | Logical properties (`inset-inline-start`, `margin-inline-start: auto`, `text-align: start`), so right-to-left mirrors |
+| ★ State, meters and focus drawn only with backgrounds and box-shadows | In `@media (forced-colors: active)`: an edge in `CanvasText`, the selection in `Highlight`, focus as an outline |
+| ★ Long words that push the page wider | `overflow-wrap: anywhere` on running text (the kit's base does it); numbers and codes stay whole |
 | Custom controls without roles | Follow the WAI-ARIA pattern named in each component's `catalog.json` entry. |
 | Toasts that steal focus or vanish while hovered | `role="status"`, pause on hover and focus, swipe or Esc to dismiss. |
 

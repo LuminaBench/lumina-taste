@@ -23,7 +23,7 @@
 .bp-card-head p { margin: 0; font-size: var(--text-ui-sm); }
 .bp-table.lt-table-wrap { --cell-py: 6px; max-height: 560px; margin-inline: calc(var(--space-5) * -1); width: auto; border: 0; border-top: var(--bw) var(--border-style) var(--border-hairline); border-radius: 0 0 var(--radius-lg) var(--radius-lg); background: none; }
 .bp-table .lt-table td:first-child { width: auto; padding-right: var(--cell-px); font-weight: 550; }
-.bp-table .lt-table :is(th, td):first-child { padding-left: var(--space-5); }
+.bp-table .lt-table :is(th, td):first-child { padding-inline-start: var(--space-5); }
 .bp-table .lt-table :is(th, td):last-child { padding-right: var(--space-5); }
 .bp-table [data-spark] .lt-spark { display: block; }
 
@@ -41,18 +41,22 @@
   .bp-main { grid-template-columns: 1fr; }
   .bp-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+/* A tablet held upright: the sidebar leaves room for two figures a row, each with its change beside it. */
+@media (max-width: 900px) {
+  .bp-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 @media (max-width: 760px) {
   .bp-dash { padding: var(--space-5) var(--space-4) var(--space-7); }
   .bp-topbar { padding: 0 var(--space-4); }
   .bp-topbar .lt-search { width: auto; flex: 1; }
-  .bp-topbar [data-part="who"] { display: none; }
+  .bp-topbar [data-part="who"] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .bp-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5) var(--space-4); padding: var(--space-4); }
   .bp-table [data-col="seats"], .bp-table [data-col="trend"] { display: none; }
 }
 @media (max-width: 480px) {
   .bp-card { padding: var(--space-4); }
   .bp-table.lt-table-wrap { margin-inline: calc(var(--space-4) * -1); }
-  .bp-table .lt-table :is(th, td):first-child { padding-left: var(--space-4); }
+  .bp-table .lt-table :is(th, td):first-child { padding-inline-start: var(--space-4); }
   .bp-topbar .lt-search kbd { display: none; }
 }
 /* On a phone each figure stacks its change under it, and the comparison line goes: the sparkline says it. */
