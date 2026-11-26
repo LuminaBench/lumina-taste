@@ -79,6 +79,7 @@ const TW = {
   ink: 'text-primary', 'ink-2': 'text-secondary', 'ink-muted': 'text-muted',
   line: 'border-hairline', 'line-strong': 'border-strong',
   accent: 'accent-solid', 'accent-hover': 'accent-hover', 'accent-ink': 'accent-ink', 'accent-soft': 'accent-soft', 'accent-text': 'accent-text',
+  highlight: 'highlight', 'highlight-text': 'highlight-text', 'highlight-soft': 'highlight-soft',
   positive: 'status-positive', 'positive-soft': 'status-positive-soft', negative: 'status-negative', 'negative-soft': 'status-negative-soft',
   warning: 'status-warning', 'warning-soft': 'status-warning-soft', info: 'status-info', 'info-soft': 'status-info-soft',
   ...Object.fromEntries(Array.from({ length: 8 }, (_, i) => [`chart-${i + 1}`, `chart-${i + 1}`])),

@@ -1,5 +1,5 @@
 {
-  "$comment": "Curated palette seeds. Colours are OKLCH [L, C, H]. scripts/build-tokens.mjs derives every semantic token from these seeds, nudges lightness only as far as needed to pass the contrast rules in scripts/lib/contrast-rules.mjs, and writes tokens/palettes/<id>.css. Edit seeds here, never the generated CSS.",
+  "$comment": "Curated palette seeds. Colours are OKLCH [L, C, H]. scripts/build-tokens.mjs derives every semantic token from these seeds, nudges lightness only as far as needed to pass the contrast rules in scripts/lib/contrast-rules.mjs, and writes tokens/palettes/<id>.css. `highlight` [H, C] is the palette's second colour (the other half of its name), solved per mode for contrast. A light or dark ground may not be tinted in the accent's own hue. Edit seeds here, never the generated CSS.",
   "palettes": [
     {
       "id": "cream-charcoal",
@@ -7,7 +7,8 @@
       "category": "consumer",
       "mood": "Quiet, warm, crafted. Charcoal actions on a soft cream page.",
       "light": {"neutral":[85,0.006],"canvasL":0.975,"accent":[0.29,0.012,60]},
-      "dark": {"neutral":[70,0.008],"canvasL":0.18,"accent":[0.91,0.035,85]}
+      "dark": {"neutral":[70,0.008],"canvasL":0.18,"accent":[0.91,0.035,85]},
+      "highlight": [62,0.1]
     },
     {
       "id": "navy-sand",
@@ -15,7 +16,8 @@
       "category": "consumer",
       "mood": "Confident hospitality and premium SaaS. Navy ink on sand by day, sand on navy by night.",
       "light": {"neutral":[80,0.009],"canvasL":0.975,"accent":[0.33,0.085,262]},
-      "dark": {"neutral":[262,0.035],"canvasL":0.19,"accent":[0.86,0.065,78]}
+      "dark": {"neutral":[262,0.035],"canvasL":0.19,"accent":[0.86,0.065,78]},
+      "highlight": [78,0.09]
     },
     {
       "id": "olive-stone",
@@ -23,7 +25,8 @@
       "category": "consumer",
       "mood": "Natural, grounded, outdoorsy. Olive on warm limestone.",
       "light": {"neutral":[78,0.007],"canvasL":0.975,"accent":[0.47,0.085,122]},
-      "dark": {"neutral":[105,0.012],"canvasL":0.185,"accent":[0.78,0.1,120]}
+      "dark": {"neutral":[105,0.012],"canvasL":0.185,"accent":[0.78,0.1,120]},
+      "highlight": [45,0.09]
     },
     {
       "id": "black-signal",
@@ -31,7 +34,8 @@
       "category": "dev-tool",
       "mood": "Industrial and decisive. One loud orange on matte black or bright white.",
       "light": {"neutral":[60,0.003],"canvasL":0.986,"accent":[0.64,0.19,42]},
-      "dark": {"neutral":[60,0.004],"canvasL":0.155,"accent":[0.7,0.19,45]}
+      "dark": {"neutral":[60,0.004],"canvasL":0.155,"accent":[0.7,0.19,45]},
+      "highlight": [250,0.11]
     },
     {
       "id": "paper-ink",
@@ -39,7 +43,8 @@
       "category": "editorial",
       "mood": "Long-form reading. Blue-black ink on uncoated paper.",
       "light": {"neutral":[90,0.007],"canvasL":0.975,"accent":[0.37,0.11,262]},
-      "dark": {"neutral":[262,0.018],"canvasL":0.175,"accent":[0.8,0.085,255]}
+      "dark": {"neutral":[262,0.018],"canvasL":0.175,"accent":[0.8,0.085,255]},
+      "highlight": [30,0.15]
     },
     {
       "id": "slate-forest",
@@ -47,7 +52,8 @@
       "category": "data",
       "mood": "Trustworthy finance. Cool slate surfaces, forest-green actions.",
       "light": {"neutral":[250,0.008],"canvasL":0.977,"accent":[0.43,0.09,155]},
-      "dark": {"neutral":[250,0.016],"canvasL":0.172,"accent":[0.74,0.12,155]}
+      "dark": {"neutral":[250,0.016],"canvasL":0.172,"accent":[0.74,0.12,155]},
+      "highlight": [75,0.12]
     },
     {
       "id": "ice-cobalt",
@@ -55,15 +61,17 @@
       "category": "consumer",
       "mood": "Crisp and clean. Cobalt on pale ice.",
       "light": {"neutral":[225,0.012],"canvasL":0.976,"accent":[0.49,0.19,262]},
-      "dark": {"neutral":[240,0.026],"canvasL":0.17,"accent":[0.71,0.15,260]}
+      "dark": {"neutral":[240,0.026],"canvasL":0.17,"accent":[0.71,0.15,260]},
+      "highlight": [55,0.14]
     },
     {
       "id": "espresso-terracotta",
       "name": "Warm Espresso & Terracotta",
       "category": "consumer",
       "mood": "Cafe warmth. Fired-clay actions on latte or espresso.",
-      "light": {"neutral":[65,0.009],"canvasL":0.975,"accent":[0.55,0.13,38]},
-      "dark": {"neutral":[50,0.02],"canvasL":0.18,"accent":[0.71,0.13,40]}
+      "light": {"neutral":[65,0.004],"canvasL":0.975,"accent":[0.55,0.13,38]},
+      "dark": {"neutral":[50,0.02],"canvasL":0.18,"accent":[0.71,0.13,40]},
+      "highlight": [80,0.1]
     },
     {
       "id": "mono-lime",
@@ -71,7 +79,8 @@
       "category": "dev-tool",
       "mood": "Lab instrument. Strict greys with one acid-lime signal.",
       "light": {"neutral":[0,0],"canvasL":0.982,"accent":[0.2,0.005,125],"ink":[0.91,0.2,125]},
-      "dark": {"neutral":[0,0],"canvasL":0.16,"accent":[0.9,0.21,125]}
+      "dark": {"neutral":[0,0],"canvasL":0.16,"accent":[0.9,0.21,125]},
+      "highlight": [125,0.19]
     },
     {
       "id": "terminal-phosphor",
@@ -79,15 +88,17 @@
       "category": "dev-tool",
       "mood": "Developer console. Phosphor green on cool graphite.",
       "light": {"neutral":[255,0.006],"canvasL":0.979,"accent":[0.5,0.13,152]},
-      "dark": {"neutral":[255,0.014],"canvasL":0.155,"accent":[0.8,0.17,150]}
+      "dark": {"neutral":[255,0.014],"canvasL":0.155,"accent":[0.8,0.17,150]},
+      "highlight": [80,0.14]
     },
     {
       "id": "porcelain-teal",
       "name": "Porcelain & Deep Teal",
       "category": "consumer",
       "mood": "Calm health and fintech. Deep teal on porcelain.",
-      "light": {"neutral":[200,0.006],"canvasL":0.981,"accent":[0.5,0.09,195]},
-      "dark": {"neutral":[210,0.016],"canvasL":0.175,"accent":[0.77,0.1,190]}
+      "light": {"neutral":[80,0.003],"canvasL":0.981,"accent":[0.5,0.09,195]},
+      "dark": {"neutral":[210,0.016],"canvasL":0.175,"accent":[0.77,0.1,190]},
+      "highlight": [30,0.13]
     },
     {
       "id": "sage-clay",
@@ -95,15 +106,17 @@
       "category": "consumer",
       "mood": "Wellness and lifestyle. Clay accents on sage-tinted linen.",
       "light": {"neutral":[135,0.008],"canvasL":0.975,"accent":[0.54,0.1,45]},
-      "dark": {"neutral":[140,0.014],"canvasL":0.18,"accent":[0.74,0.09,50]}
+      "dark": {"neutral":[140,0.014],"canvasL":0.18,"accent":[0.74,0.09,50]},
+      "highlight": [135,0.07]
     },
     {
       "id": "carbon-amber",
       "name": "Carbon & Amber",
       "category": "data",
       "mood": "Trading floor. Amber readouts on carbon black.",
-      "light": {"neutral":[85,0.005],"canvasL":0.982,"accent":[0.52,0.12,62]},
-      "dark": {"neutral":[70,0.006],"canvasL":0.145,"accent":[0.81,0.16,75]}
+      "light": {"neutral":[85,0.004],"canvasL":0.982,"accent":[0.52,0.12,62]},
+      "dark": {"neutral":[70,0.006],"canvasL":0.145,"accent":[0.81,0.16,75]},
+      "highlight": [250,0.08]
     },
     {
       "id": "linen-oxblood",
@@ -111,7 +124,8 @@
       "category": "editorial",
       "mood": "Luxury editorial. Oxblood details on natural linen.",
       "light": {"neutral":[75,0.008],"canvasL":0.975,"accent":[0.41,0.12,20]},
-      "dark": {"neutral":[30,0.014],"canvasL":0.175,"accent":[0.74,0.1,18]}
+      "dark": {"neutral":[30,0.014],"canvasL":0.175,"accent":[0.74,0.1,18]},
+      "highlight": [80,0.1]
     },
     {
       "id": "arctic-red",
@@ -119,7 +133,8 @@
       "category": "editorial",
       "mood": "Newsroom clarity. Signal red on bright arctic white.",
       "light": {"neutral":[250,0.003],"canvasL":0.99,"accent":[0.55,0.2,27]},
-      "dark": {"neutral":[250,0.008],"canvasL":0.16,"accent":[0.7,0.18,25]}
+      "dark": {"neutral":[250,0.008],"canvasL":0.16,"accent":[0.7,0.18,25]},
+      "highlight": [235,0.1]
     },
     {
       "id": "mint-ocean",
@@ -127,15 +142,17 @@
       "category": "data",
       "mood": "Fresh fintech. Deep ocean blue on a whisper of mint.",
       "light": {"neutral":[170,0.009],"canvasL":0.975,"accent":[0.4,0.1,232]},
-      "dark": {"neutral":[225,0.03],"canvasL":0.18,"accent":[0.83,0.1,170]}
+      "dark": {"neutral":[225,0.03],"canvasL":0.18,"accent":[0.83,0.1,170]},
+      "highlight": [170,0.09]
     },
     {
       "id": "charcoal-sky",
       "name": "Charcoal & Sky",
       "category": "data",
       "mood": "Analytics workhorse. Sky blue on neutral charcoal, built for dense dashboards.",
-      "light": {"neutral":[240,0.007],"canvasL":0.98,"accent":[0.53,0.13,236]},
-      "dark": {"neutral":[240,0.01],"canvasL":0.165,"accent":[0.76,0.12,232]}
+      "light": {"neutral":[80,0.003],"canvasL":0.98,"accent":[0.53,0.13,236]},
+      "dark": {"neutral":[240,0.01],"canvasL":0.165,"accent":[0.76,0.12,232]},
+      "highlight": [85,0.13]
     },
     {
       "id": "ochre-indigo",
@@ -143,7 +160,8 @@
       "category": "editorial",
       "mood": "Culture and archives. Indigo print on ochre-tinted paper.",
       "light": {"neutral":[85,0.013],"canvasL":0.975,"accent":[0.38,0.12,272]},
-      "dark": {"neutral":[272,0.022],"canvasL":0.18,"accent":[0.84,0.09,85]}
+      "dark": {"neutral":[272,0.022],"canvasL":0.18,"accent":[0.84,0.09,85]},
+      "highlight": [85,0.11]
     },
     {
       "id": "bone-plum",
@@ -151,31 +169,35 @@
       "category": "consumer",
       "mood": "Soft, grown-up, a little luxurious. Deep plum actions on warm bone.",
       "light": {"neutral":[60,0.006],"canvasL":0.976,"accent":[0.36,0.11,345]},
-      "dark": {"neutral":[340,0.014],"canvasL":0.172,"accent":[0.79,0.1,345]}
+      "dark": {"neutral":[340,0.014],"canvasL":0.172,"accent":[0.79,0.1,345]},
+      "highlight": [85,0.1]
     },
     {
       "id": "forest-brass",
       "name": "Deep Forest & Brass",
       "category": "editorial",
       "mood": "Established and calm. Bottle green by day, brass on deep green by night.",
-      "light": {"neutral":[150,0.01],"canvasL":0.975,"accent":[0.36,0.07,160]},
-      "dark": {"neutral":[160,0.022],"canvasL":0.18,"accent":[0.81,0.11,85]}
+      "light": {"neutral":[85,0.007],"canvasL":0.975,"accent":[0.36,0.07,160]},
+      "dark": {"neutral":[160,0.022],"canvasL":0.18,"accent":[0.81,0.11,85]},
+      "highlight": [85,0.11]
     },
     {
       "id": "graphite-violet",
       "name": "Graphite & Violet",
       "category": "dev-tool",
       "mood": "Precise with one vivid note. Flat violet on cool graphite, never a gradient.",
-      "light": {"neutral":[285,0.005],"canvasL":0.982,"accent":[0.5,0.17,292]},
-      "dark": {"neutral":[285,0.012],"canvasL":0.16,"accent":[0.74,0.14,292]}
+      "light": {"neutral":[285,0.004],"canvasL":0.982,"accent":[0.5,0.17,292]},
+      "dark": {"neutral":[285,0.012],"canvasL":0.16,"accent":[0.74,0.14,292]},
+      "highlight": [125,0.14]
     },
     {
       "id": "petrol-peach",
       "name": "Petrol & Peach",
       "category": "consumer",
       "mood": "Reassuring and calm. Petrol blue on a cool, faintly blue ground by day, peach on deep petrol by night.",
-      "light": {"neutral":[218,0.008],"canvasL":0.976,"accent":[0.42,0.08,218]},
-      "dark": {"neutral":[218,0.03],"canvasL":0.18,"accent":[0.83,0.1,55]}
+      "light": {"neutral":[70,0.006],"canvasL":0.976,"accent":[0.42,0.08,218]},
+      "dark": {"neutral":[218,0.03],"canvasL":0.18,"accent":[0.83,0.1,55]},
+      "highlight": [55,0.11]
     },
     {
       "id": "fog-fuchsia",
@@ -183,7 +205,8 @@
       "category": "consumer",
       "mood": "Loud on purpose. One hot fuchsia on quiet cool grey.",
       "light": {"neutral":[260,0.004],"canvasL":0.984,"accent":[0.55,0.21,355]},
-      "dark": {"neutral":[260,0.008],"canvasL":0.16,"accent":[0.72,0.19,355]}
+      "dark": {"neutral":[260,0.008],"canvasL":0.16,"accent":[0.72,0.19,355]},
+      "highlight": [190,0.1]
     },
     {
       "id": "seaglass-coral",
@@ -191,7 +214,8 @@
       "category": "consumer",
       "mood": "Fresh and sunny. Coral actions on pale sea-glass neutrals.",
       "light": {"neutral":[178,0.009],"canvasL":0.977,"accent":[0.6,0.16,28]},
-      "dark": {"neutral":[195,0.02],"canvasL":0.175,"accent":[0.76,0.13,30]}
+      "dark": {"neutral":[195,0.02],"canvasL":0.175,"accent":[0.76,0.13,30]},
+      "highlight": [178,0.08]
     }
   ]
 }
