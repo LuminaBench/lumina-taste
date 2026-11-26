@@ -562,7 +562,7 @@
       "name": "Workbench Sans + Mono",
       "use": "Developer tools on a light ground: APIs, SDK docs, command-line tools, open-source projects and changelogs.",
       "reason": "A sans and a mono drawn as one family, so prose, commands and keys share one rhythm; the mono carries the accent (commands, versions, keys) instead of a neon colour on black.",
-      "display": "\"Spline Sans\", \"Helvetica Neue\", \"Segoe UI\", system-ui, sans-serif",
+      "display": "\"Spline Sans\", \"Avenir Next\", \"Segoe UI Variable Display\", \"Segoe UI\", system-ui, sans-serif",
       "body": "\"Spline Sans\", \"Helvetica Neue\", \"Segoe UI\", system-ui, sans-serif",
       "mono": "\"Spline Sans Mono\", ui-monospace, \"SF Mono\", Menlo, Consolas, monospace",
       "displayWeight": 700,

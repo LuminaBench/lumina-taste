@@ -373,7 +373,7 @@
   font-optical-sizing: auto;
 }
 [data-type="workbench"] {
-  --font-display: "Spline Sans", "Spline Sans Fallback", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Spline Sans", "Spline Sans Fallback", "Avenir Next", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
   --font-body: "Spline Sans", "Spline Sans Fallback", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
   --font-mono: "Spline Sans Mono", "Spline Sans Mono Fallback", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --weight-display: 700;
