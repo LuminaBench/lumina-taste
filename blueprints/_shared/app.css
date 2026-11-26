@@ -110,7 +110,9 @@ button.as-row, a.as-row { cursor: pointer; transition: background-color var(--du
 /* Sheets: from the bottom on a phone (the kit's bottom-sheet), a centred panel on a wide screen. */
 .as .lt-sheet { padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
 .as-sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.as-sheet-head h2 { margin: 0; font-size: var(--step-1); font-weight: 650; }
+.as-sheet-head h2 { margin: 0; color: var(--text-primary); font-size: var(--step-1); font-weight: 650; text-align: start; }
+/* The kit's sheet sets a full-width Cancel at its foot; in the head it is a small text button at the end. */
+.as-sheet-head [data-part="cancel"] { flex: none; width: auto; height: auto; min-height: 44px; }
 
 .as-toast { position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom)); z-index: 80; translate: -50% 0; max-width: calc(100vw - 32px); margin: 0; padding: 12px 18px; border-radius: var(--radius-pill); background: var(--text-primary); color: var(--bg-canvas); font-size: var(--text-ui-sm); font-weight: 600; box-shadow: var(--shadow-overlay); }
 .as-toast:empty { display: none; }

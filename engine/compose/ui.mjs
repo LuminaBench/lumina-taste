@@ -66,7 +66,15 @@ const STAFF = /\b(groomer|cleaner|staff|assignee|agent|stylist|therapist|tutor|t
  * dates come from the kit's seeded sample data (scripts/sample-data.mjs); nothing is a real customer.
  * @returns {Array<{ cells: Array<{ text: string, kind: string, v: number|string }>, status: string|null, search: string, title: string }>}
  */
-export function sampleRows(rec, n, ctx) {
+// Made-up names for a work app's sample rows, so a list reads like a day's work: animals by a pet's name, people
+// by a person's. None is a real customer, none is any blueprint's; the rows are still marked data-sample.
+const PETS = ['Juno', 'Mabel', 'Otis', 'Pickle', 'Rolo', 'Sully', 'Tilly', 'Waffle', 'Clover', 'Dexter', 'Fudge', 'Ginger', 'Hazel', 'Nutmeg', 'Gus', 'Esme'];
+const FOLK = ['Hattie Moran', 'Idris Penn', 'Joan Ashby', 'Lena Voss', 'Marek Novak', 'Ottilie Shaw', 'Ravi Bassi', 'Sian Lloyd', 'Theo Grant', 'Una Bell', 'Viv Carter', 'Will Dacre', 'Esme Fenwick', 'Gus Halloran', 'Ada Penrose', 'Cal Whitby'];
+const PET = /\b(dog|dogs|cat|cats|pet|pets|puppy|puppies|horse|horses|animal|animals)\b/i;
+const FOLKS = /\b(owner|owners|client|clients|customer|customers|patient|patients|member|members|guest|guests|tenant|tenants|student|students|parent|parents|contact|contacts)\b/i;
+
+/** opts.named: animals and people get made-up names instead of "Dog 01" (a work app, read like a real day). */
+export function sampleRows(rec, n, ctx, { named = false } = {}) {
   const inv = ctx.sample('invoices', { rows: n }) ?? [];
   const ord = ctx.sample('orders', { rows: n }) ?? [];
   const statuses = ctx.m.status.list;
@@ -88,6 +96,8 @@ export function sampleRows(rec, n, ctx) {
       if (f.kind === 'email' || f.kind === 'phone') return { text: '—', kind: f.kind, v: '' };
       // A name field: the brief's own people for a staff role, else the field's noun and a number.
       if (STAFF.test(nm) && people.length) { const p = people[i % people.length]; return { text: p, kind: 'name', v: p }; }
+      if (named && PET.test(nm)) { const p = PETS[(i * 5 + k) % PETS.length]; return { text: p, kind: 'name', v: p }; }
+      if (named && FOLKS.test(nm)) { const p = FOLK[(i * 7 + k) % FOLK.length]; return { text: p, kind: 'name', v: p }; }
       return { text: `${cap(singular(nm))} ${pad(i + 1)}`, kind: 'name', v: i };
     });
     const title = cells[0].text;

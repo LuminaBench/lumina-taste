@@ -30,7 +30,7 @@ bars($('#bk-chart'), days.map((label, i) => ({ label, value: spent[i] })), { tit
 
 // One payment: the row that was tapped fills the detail.
 const PAY: Record<string, [string, string, string, string]> = {
-  coffee: ['Juniper Coffee', '−£4.20', 'Today at 08:14 · Contactless', 'Eating out'], tfl: ['Halyard Buses', '−£1.75', 'Today at 07:52 · Contactless', 'Transport'],
+  coffee: ['Wren Coffee', '−£4.20', 'Today at 08:14 · Contactless', 'Eating out'], tfl: ['Halyard Buses', '−£1.75', 'Today at 07:52 · Contactless', 'Transport'],
   rent: ['Priya Shah', '+£450.00', 'Yesterday at 09:00 · Bank transfer', 'Rent share'], shop: ['Moss Market', '−£38.40', 'Yesterday at 18:40 · Chip and PIN', 'Groceries'],
   books: ['Larkspur Books', '−£12.99', 'Yesterday at 12:05 · Online', 'Shopping'], gym: ['Kestrel Climbing', '−£44.50', 'Monday at 06:00 · Direct debit', 'Health'],
 };

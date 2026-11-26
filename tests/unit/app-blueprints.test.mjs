@@ -16,7 +16,7 @@ const plan = (brief) => { const r = run([brief, '--json']); assert.equal(r.statu
 const BRIEFS = [
   ['Juniper bank app on the phone: balance, spending by category this month, pots for saving, send money to a contact, card freeze, settings', 'app-banking', 'Juniper', ['pots for saving']],
   ["Kestrel running app on the phone: today's run, weekly distance chart, a training plan for a 10k, routes near you, settings", 'app-fitness', 'Kestrel', ['a training plan for a 10k', 'routes near you']],
-  ["Moss dog grooming bookings app: bookings with dog, owner, date and status, today's appointments, a calendar, add a booking, settings", 'app-booking', 'Moss', []],
+  ['Moss dog grooming bookings app on the phone for dog owners: book a groom, my bookings, my dogs, settings', 'app-booking', 'Moss', []],
   ['Moss chat app on the phone: conversations list, a thread with photos and voice notes, new message, contacts, settings', 'app-messaging', 'Moss', []],
   ['Settings app for Larkspur Notes: account, sync, notifications, privacy, delete account', 'app-settings', null, null],
 ];
@@ -31,6 +31,8 @@ test('app briefs plan their own blueprint, its look and its screens in order', (
   }
   assert.equal(plan(BRIEFS[0][0]).profile.palette, 'navy-sand');
   assert.equal(plan(BRIEFS[1][0]).profile.palette, 'seaglass-coral');
+  // The groomer's own bookings, with owners and statuses, are a work app with real columns, not the customer's app.
+  assert.equal(plan("Moss dog grooming bookings app: bookings with dog, owner, date and status, today's appointments, a calendar, add a booking, settings").pageType.id, 'workspace');
   // A bank's marketing page (it sells, with a price) is still a landing page.
   assert.equal(plan('Juniper bank app for freelancers, £4 a month, free trial, sign up in five minutes').pageType.id, 'landing');
 });

@@ -89,7 +89,11 @@ function pickType() {
       : / (chat|chats|messaging|messages|messenger|texting) /.test(head) ? 'app-messaging'
       : / (booking|bookings|appointment|appointments|reservation|reservations|classes) /.test(head) ? 'app-booking'
       : / (settings|preferences) /.test(head) ? 'app-settings' : null;
-    if (own && byId(own)) return { type: byId(own), confident: true };
+    // Bookings kept by the business (each with its owner, status, staff) are a work app with real columns, not
+    // the customer's booking app.
+    if (own === 'app-booking' && / with [a-z' ,]*\b(owner|owners|status|statuses|client|clients|customer|customers|staff|groomer|groomers)\b/.test(text)) return { type: byId('workspace'), confident: true };
+    // An app that sells itself (a price, a trial, sign up) is still its landing page.
+    if (own && byId(own) && !sells) return { type: byId(own), confident: true };
     if (/ (phone|mobile|ios|android|iphone) apps? /.test(head)) return { type: byId('app-phone'), confident: true };
     if (/ (api|sdk|sdks|cli) /.test(text) && sells) return { type: byId('dev-landing'), confident: true };
     if (sells) return { type: byId('landing'), confident: true };

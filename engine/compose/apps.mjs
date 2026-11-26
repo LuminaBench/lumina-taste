@@ -392,8 +392,8 @@ function directory(ctx) {
 function workspace(ctx) {
   const { m, flow } = ctx;
   const rec = m.main, name = brand(ctx), Many = cap(rec.many);
-  const rows = sampleRows(rec, 14, ctx);
-  ctx.todo.push(`connect the real ${rec.many}: the rows are seeded sample data labelled with your nouns`);
+  const rows = sampleRows(rec, 14, ctx, { named: true });
+  ctx.todo.push(`connect the real ${rec.many}: the rows are made-up samples in your nouns, marked data-sample`);
   const th = rec.fields.map((f) => `<th scope="col"${['money', 'count'].includes(f.kind) ? ' data-num' : ''} aria-sort="none"><button type="button" data-sort="${esc(f.name)}"${['money', 'count'].includes(f.kind) ? ' data-type="number"' : ''}>${esc(cap(f.name))}<span data-part="sort" aria-hidden="true"></span></button></th>`).join('');
   const first = rows[0];
   const body = `<div class="ws" id="ws" data-filter-scope>
@@ -418,7 +418,7 @@ function workspace(ctx) {
           <table class="lt-table">
             <caption class="lt-visually-hidden">${esc(`${Many}: sample rows until ${name} is connected. Select a row to see it in the inspector.`)}</caption>
             <thead><tr>${th}</tr></thead>
-            <tbody>${rows.map((r, k) => `<tr data-row data-status="${esc((r.status ?? '').toLowerCase())}" data-search="${esc(r.search)}"${k === 0 ? ' aria-selected="true"' : ''}><td><button type="button" class="ws-rowbtn" data-open-detail="${detailJson(rec, r)}">${esc(r.cells[0].text)}</button></td>${r.cells.slice(1).map(cellHtml).join('')}</tr>`).join('')}</tbody>
+            <tbody data-sample>${rows.map((r, k) => `<tr data-row data-status="${esc((r.status ?? '').toLowerCase())}" data-search="${esc(r.search)}"${k === 0 ? ' aria-selected="true"' : ''}><td><button type="button" class="ws-rowbtn" data-open-detail="${detailJson(rec, r)}">${esc(r.cells[0].text)}</button></td>${r.cells.slice(1).map(cellHtml).join('')}</tr>`).join('')}</tbody>
           </table>
           <div class="ws-none" data-nomatch hidden><p><b>${esc(`No ${rec.many} in this view.`)}</b></p><button type="button" class="lt-btn" data-variant="secondary" data-filter-reset><span data-part="label">${esc(`Show all ${rec.many}`)}</span></button></div>
         </div>

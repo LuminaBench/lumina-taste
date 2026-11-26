@@ -48,7 +48,7 @@ export const BRIEFS = {
   event: ['Website for Signal & Noise, a one-day data journalism conference in Glasgow, tickets £120', 'event'],
   bank: ['Juniper bank app on the phone: balance, spending by category this month, pots for saving, send money to a contact, card freeze, settings', 'app-banking'],
   running: ['Kestrel running app on the phone: today\'s run, weekly distance chart, a training plan for a 10k, routes near you, settings', 'app-fitness'],
-  grooming: ['Moss dog grooming bookings app: bookings with dog, owner, date and status, today\'s appointments, a calendar, add a booking, settings', 'app-booking'],
+  grooming: ['Moss dog grooming bookings app on the phone for dog owners: book a groom, my bookings, my dogs, settings', 'app-booking'],
   messaging: ['Moss chat app on the phone: conversations list, a thread with photos and voice notes, new message, contacts, settings', 'app-messaging'],
   settingsApp: ['Settings-heavy app for Tern, an invoicing tool: invoices, payment terms, reminders, team, notifications, close account', 'app-settings'],
 };
