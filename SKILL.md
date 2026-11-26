@@ -465,7 +465,9 @@ components/ui/<family>/      211 patterns (html, css, ts, react.tsx)
 components/charts/           core/ + 48 chart engines (+ React wrappers)
 blueprints/                  27 page blueprints (states via ?state=loading|empty|error|incident|sold-out|streaming|running)
 references/                  anti-slop-rules, ai-defaults, review, images, motion, typography, apps, page-flow, composition, copy-patterns, reading-a-reference, chart-selection, which-one, palettes, harvest-log
-scripts/                     compose, directions, search, install-taste, sniff, export-tokens, sample-data, find-images, treat-images, fonts, audit-ui, audit-all, review-page, compare-pages, lint-copy, eval-score, eval-run, eval-history, pack-skill, build-tokens, test-contrast, build, serve
+scripts/                     compose, directions, search, install-taste, sniff, export-tokens, sample-data, find-images, treat-images, fonts, brand-kit, audit-ui, audit-all, review-page, compare-pages, lint-copy, eval-score, eval-run, eval-history, pack-skill, build-tokens, test-contrast, build, serve
 ```
+
+**The brand around the page.** `node scripts/brand-kit.mjs --name "<Business>" --subject "<what it is>" --line "<one line>" --palette <id> --type <id> --out ./brand` (or `--profile taste-profile.json`) writes, in the site's own palette and lettering: a wordmark (and one for an ink ground), a lockup with the subject's drawing, a favicon drawn from the subject (no font, so it reads at 16px; PNGs at 32, 180 and 512), a 1200×630 share image, a table-based email with inline styles, a one-page brand sheet (`brand.png`) and `brand.json` with the `<head>` lines. Nothing is downloaded.
 
 Measure agents over time: `node scripts/eval-run.mjs --agent '<command with {prompt}>' --label <agent>` scores each brief and records it in `evals/history.json`; `node scripts/eval-history.mjs` prints the trend per agent and per brief. Install the skill lean into an agent's skills folder with `node scripts/pack-skill.mjs --out <skills-folder>/lumina-taste [--zip]` (no tests, gallery or dev files).
