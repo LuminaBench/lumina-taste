@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { clampChroma, contrast, oklchToRgb8, rgb8ToHex, round, toCss } from './lib/color.mjs';
 import { CHART_SERIES, RULES, STATUS_NAMES } from './lib/contrast-rules.mjs';
 import { parseWebfont } from './lib/webfont.mjs';
+import { pickAccent } from './lib/accent.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const MARGIN = 0.05; // solve slightly past each threshold so rounding never tips a pair under
@@ -57,25 +58,9 @@ function derive(seed, mode) {
   t['text-secondary'] = solve([light ? 0.42 : 0.8, inkC, nH], dir, surfaces, 4.5);
   t['text-muted'] = solve([light ? 0.53 : 0.7, inkC * 0.9, nH], dir, surfaces, 4.5);
 
-  // Accent: find the lightness nearest the seed where ink-on-accent and accent-on-page both pass.
-  const [aL, aC, aH] = seed.accent;
-  const inks = seed.ink ? [fix(seed.ink)] : [fix([0.985, 0.008, aH]), fix([0.17, 0.02, aH])];
-  let best = null;
-  for (const ink of inks) {
-    for (let L = 0.1; L <= 0.97; L += 0.005) {
-      const solid = fix([L, aC, aH]);
-      const away = ink[0] > solid[0] ? -1 : 1;
-      const hover = fix([L + away * 0.045, aC, aH]);
-      const ok =
-        contrast(ink, solid) >= 4.5 + MARGIN &&
-        contrast(ink, hover) >= 4.5 + MARGIN &&
-        contrast(solid, t['bg-canvas']) >= 3 + MARGIN &&
-        contrast(solid, t['bg-surface-1']) >= 3 + MARGIN;
-      if (!ok) continue;
-      const score = Math.abs(L - aL) - contrast(ink, solid) * 0.0005;
-      if (!best || score < best.score) best = { score, ink, solid, hover };
-    }
-  }
+  // Accent: find the lightness nearest the seed where ink-on-accent and accent-on-page both pass (scripts/lib/accent.mjs).
+  const [, aC, aH] = seed.accent;
+  const best = pickAccent(seed.accent, { inks: seed.ink ? [fix(seed.ink)] : null, grounds: [t['bg-canvas'], t['bg-surface-1']] });
   if (!best) throw new Error(`No accent solution for ${JSON.stringify(seed.accent)} (${mode})`);
   t['accent-solid'] = best.solid;
   t['accent-hover'] = best.hover;

@@ -47,12 +47,17 @@ test('sniff recovers the profile a blueprint was built with, and reads the brand
 });
 
 test('brand from a colour: the nearest palette, or the brand accent solved for contrast in each mode', async () => {
-  const { fitPalette, solveAccent, checkOverrides, toLch, suggestType, toneNote, dominantColours, brandSourceKind } = await import(join(root, 'engine/compose/brand.mjs'));
+  const { fitPalette, solveAccent, checkOverrides, toLch, suggestType, toneNote, dominantColours, brandSourceKind, defaultLook } = await import(join(root, 'engine/compose/brand.mjs'));
   const palettes = JSON.parse(readFileSync(join(root, 'tokens/palettes/palettes.json'), 'utf8')).palettes;
+  for (const id of ['terminal-phosphor', 'mono-lime', 'black-signal']) assert.ok(defaultLook(palettes.find((p) => p.id === id)), id);
+  assert.equal(fitPalette({ accent: toLch('#0f8a6c') }, palettes).avoided?.id, 'terminal-phosphor');
   assert.deepEqual(['#e63312', 'logo.svg', './old/index.html', 'https://example.org', 'oklch(0.5 0.1 30)', 'nope'].map(brandSourceKind), ['colour', 'logo', 'site', 'site', 'colour', null]);
   for (const hex of ['#e63312', '#1d3a6e', '#0b7a5a', '#f5c400', '#7a3fb5', '#0f8a6c']) {
     const fit = fitPalette({ accent: toLch(hex) }, palettes);
     assert.ok(palettes.some((p) => p.id === fit.palette), hex);
+    // A brand colour is never handed one of the looks models fall back on: it is set on another ground instead.
+    assert.equal(defaultLook(palettes.find((p) => p.id === fit.palette)), null, `${hex} → ${fit.palette}`);
+    if (fit.avoided) assert.ok(fit.perMode || fit.overrides, `${hex}: the brand colour is carried`);
     // Whatever is offered passes every contrast rule it takes part in.
     const pal = palettes.find((p) => p.id === fit.palette);
     if (fit.overrides) for (const m of ['light', 'dark']) assert.deepEqual(checkOverrides(pal.modes[m].tokens, fit.overrides), [], `${hex} ${m}`);
@@ -90,6 +95,7 @@ test('compose --brand-from reads a logo in headless Chromium and a saved site wi
     assert.equal(r.status, 0, r.stderr);
     const html = readFileSync(join(dir, 'p', 'index.html'), 'utf8');
     assert.match(html, /<style>\/\* The brand's accent from --brand-from/);
+    assert.match(r.stdout, /is black with one acid colour, one of the looks every model falls back on/);
     const a = node([join(root, 'scripts/audit-ui.mjs'), join(dir, 'p', 'index.html'), '--viewports', 'desktop']);
     assert.match(a.stdout, / 0 errors/, a.stdout);
     assert.equal(node([join(root, 'scripts/compose.mjs'), 'x', '--brand-from', 'nonsense']).status, 2);
