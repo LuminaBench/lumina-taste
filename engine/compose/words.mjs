@@ -170,7 +170,17 @@ export function extractFacts(brief, { product = null } = {}) {
   // Claims: what the thing does, as the brief says it ("that sends an invoice in 30 seconds and chases late payers").
   const claimM = /\b(?:that|which|who)\s+(.+?)(?=,\s+(?:open|from|with|for|how it works|phone|[£$€])|[.;]|\s+for\s+[£$€]|$)/i.exec(b);
   if (claimM) {
-    for (const part of claimM[1].split(/,\s*(?=[a-z]+s\b)|\s+and\s+(?=[a-z]+s\b)/)) {
+    // Split between verbs ("sends an invoice and chases late payers"), never inside a list of things
+    // ("reads your PDFs and spreadsheets"): the word after the comma or "and" has to be a verb.
+    const parts = [];
+    const bits = claimM[1].split(/(,\s*(?:and\s+)?|\s+and\s+)/);
+    for (let k = 0; k < bits.length; k += 2) {
+      const piece = bits[k], sep = bits[k - 1] ?? '';
+      if (!parts.length || VERBS.test(words(clean(piece))[0] ?? '')) { parts.push(piece); continue; }
+      // "PDFs and spreadsheets" belongs to the claim before; after a comma, a thing that is no verb ends the claims.
+      if (/^\s+and\s+$/.test(sep)) parts[parts.length - 1] += ` and ${piece}`; else break;
+    }
+    for (const part of parts) {
       const c = clean(part);
       if (c && words(c).length >= 2 && VERBS.test(words(c)[0])) facts.claims.push(c);
     }

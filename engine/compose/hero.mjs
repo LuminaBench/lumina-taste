@@ -101,8 +101,8 @@ export function composeHero(comp, html, ctx) {
       const own = rankMotifs(it.name.toLowerCase().replace(/(\w{3,})s\b/g, '$1')).find((m) => m !== prev && !used.has(m));
       if (own) used.add(own);
       // Else the subject's own kind of thing (a pottery's vase), never a drawing from another world.
-      // Never an empty tile: the subject's world, then the domain's, then anything not beside it.
-      motifs.push(own ?? [ctx.facts.kind ?? '', ctx.domainWords ?? '', it.name].map((q) => rankMotifs(q.toLowerCase().replace(/\bstudios?\b/g, '')).find((m) => m !== prev && !motifs.includes(m))).find(Boolean) ?? rankMotifs('').find((m) => m !== prev && !motifs.includes(m)) ?? null);
+      // Never an empty tile: the subject's own world (never the domain's: a coffee shop is not a clothes shop).
+      motifs.push(own ?? [ctx.facts.kind ?? '', it.name].map((q) => rankMotifs(q.toLowerCase().replace(/\bstudios?\b/g, '')).find((m) => m !== prev && !motifs.includes(m))).find(Boolean) ?? rankMotifs('').find((m) => m !== prev && !motifs.includes(m)) ?? null);
     }
     const tiles = items.map((it, k) => `<li>${thingPanel({ ...it, price: null, meta: null }, ctx, tones[k], motifs[k])}</li>`);
     // The headline's length, so the mosaic can size it to stay in its corner.
