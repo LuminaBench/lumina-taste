@@ -1612,7 +1612,7 @@
         "flat illustration"
       ],
       "react": "ArtPanel",
-      "api": "data-motif=\"cup | loaf | crane | document | …\" (18 drawings) · data-pattern=\"sun | arch | floor | none\" · data-tone=\"accent | ink | swatch\" · data-variant=\"figure\" · data-frame · data-ratio · data-shot",
+      "api": "data-motif=\"cup | loaf | crane | document | …\" (47 drawings) · data-pattern=\"sun | arch | floor | none\" · data-tone=\"accent | ink | swatch\" · data-variant=\"figure\" · data-frame · data-ratio · data-shot",
       "w": 900,
       "called": [
         "what do I put where the photo goes",
@@ -1654,7 +1654,7 @@
         ["lumina-taste","<ArtPanel name fact label shot motif pattern>","React"]
       ],
       "added": 13,
-      "note": "Make the panel say one true thing, large, and show the subject's own thing above it: data-motif names one of 18 drawings (art-panel.ts lists them with their keywords; find-images --fill picks one from the brief when no photograph fits), and the inline <svg data-part=\"motif\"> carries it, so it works without JavaScript (data-lt=\"art-panel\" draws a missing one). data-pattern=\"arch\" sets it in a niche, \"floor\" on a ground band, \"none\" on the bare panel. For a hero, data-frame with the name, or data-variant=\"figure\" with the one number that matters. data-tone=\"swatch\" with style=\"--art: <colour>\" shows the thing's own colour. Across a set vary the tone (plain, accent, ink) and keep one ratio. When the photograph arrives, put the <img> first inside the figure."
+      "note": "Make the panel say one true thing, large, and show the subject's own thing above it: data-motif names one of 47 drawings (art-panel.ts lists them with their keywords; find-images --fill picks one from the brief when no photograph fits), and the inline <svg data-part=\"motif\"> carries it, so it works without JavaScript (data-lt=\"art-panel\" draws a missing one). data-pattern=\"arch\" sets it in a niche, \"floor\" on a ground band, \"none\" on the bare panel. For a hero, data-frame with the name, or data-variant=\"figure\" with the one number that matters. data-tone=\"swatch\" with style=\"--art: <colour>\" shows the thing's own colour. Across a set vary the tone (plain, accent, ink) and keep one ratio. When the photograph arrives, put the <img> first inside the figure."
     },
     {
       "id": "task-list",
