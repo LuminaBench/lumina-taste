@@ -6,7 +6,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, readdirSync, rmSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -236,4 +236,27 @@ test('kit fixes from the demo sites: the gallery rail mirrors, the bar keeps its
   const dev = readdirSync(join(root, 'components/ui')).map((f) => join('components/ui', f, 'device-frame/device-frame.css')).find((p) => existsSync(join(root, p)));
   assert.match(css(dev), /\[data-part="screen"\] table \{ table-layout: fixed; max-width: 100%; \}/);
   assert.match(css(dev), /\[data-part="screen"\] :is\(th, td\) \{ overflow-wrap: anywhere; \}/);
+});
+
+// Found in a blind round: these drafts dropped facts the brief gave. Each must now carry them.
+test('status, pricing, settings, dashboard and episode drafts carry every fact the brief names', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lt-facts-'));
+  const draft = (slug, brief) => { const d = join(dir, slug); mkdirSync(d); const r = spawnSync(process.execPath, [join(root, 'scripts/compose.mjs'), brief, '--project', d, '--write'], { encoding: 'utf8' }); assert.equal(r.status, 0, r.stderr); return readFileSync(join(d, 'index.html'), 'utf8'); };
+  try {
+    const status = draft('status', 'Halyard status page: API, dashboard, webhooks and email services, 99.98% uptime last 90 days, one incident on 3 March, subscribe to updates');
+    for (const s of ['API', 'Dashboard', 'Webhooks', 'Email']) assert.match(status, new RegExp(`<strong>${s}</strong>`), s);
+    assert.match(status, /99\.98% uptime/); assert.match(status, /<time>3 March<\/time>/);
+    const pricing = draft('pricing', 'Juniper notes app pricing: free plan, Plus £6 a month or £60 a year, Team £10 per person a month, compare plans, questions');
+    for (const p of ['Free', 'Plus', 'Team']) assert.match(pricing, new RegExp(`<h2>${p}</h2>`), p);
+    assert.match(pricing, /data-annual="£60"/); assert.match(pricing, /per person/);
+    const settings = draft('settings', 'Kestrel workspace settings: profile, members with roles, billing on the Team plan, notifications, danger zone to delete the workspace');
+    for (const s of ['Notifications', 'Members', 'Billing']) assert.match(settings, new RegExp(`id="s-[a-z]+">${s}<`), s);
+    assert.match(settings, /Delete the Kestrel workspace/); assert.match(settings, /data-sample/);
+    const dash = draft('dash', 'Halyard analytics dashboard for a subscription business: monthly revenue, churn, net retention, accounts table with plan, region and status, filter by region');
+    for (const k of ['Monthly revenue', 'Churn', 'Net retention']) assert.ok(dash.includes(k), k);
+    assert.match(dash, /data-sort="plan"/); assert.match(dash, /data-sort="region"/); assert.ok(!/Analytic #/.test(dash), 'no rows named after the word analytics');
+    assert.match(dash, /<tbody data-sample>/);
+    const ep = draft('ep', 'Moss Radio, a weekly podcast about how cities work, episode 142 with a transport planner, 48 minutes, transcript and chapters');
+    assert.match(ep, /Episode 142 · 48 minutes/); assert.match(ep, /with a transport planner/); assert.match(ep, /data-lt="media-player"/); assert.match(ep, /48:00/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });

@@ -4,12 +4,13 @@
 //
 // Pure functions, no I/O.
 import { esc } from './draft.mjs';
-import { statusTone, singular } from './model.mjs';
+import { statusTone, singular, plansFrom } from './model.mjs';
 
 export const cap = (s) => (s ? String(s)[0].toUpperCase() + String(s).slice(1) : s);
 export { esc };
 
 const P = {
+  play: '<path d="M8 5.5v13l10.5-6.5Z"/>',
   check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
   arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
@@ -94,6 +95,14 @@ export function sampleRows(rec, n, ctx, { named = false } = {}) {
       if (f.kind === 'date') { const iso = /time|slot|start|ends?/i.test(nm) && !/date/i.test(nm) ? null : (r.issued ?? '2026-11-24'); if (!iso) { const h = 8 + ((i * 5) % 10), mm = (i * 15) % 60; return { text: `${pad(h)}:${pad(mm)}`, kind: 'time', v: h * 60 + mm }; } return { text: shortDate(iso), kind: f.kind, v: iso }; }
       if (f.kind === 'count') { const v = o.items ?? ((i % 4) + 1); return { text: String(v), kind: f.kind, v }; }
       if (f.kind === 'email' || f.kind === 'phone') return { text: '—', kind: f.kind, v: '' };
+      // Common columns with a handful of believable values: a plan, a region, a country, a city, a channel, a size.
+      const pool = /^plans?$|\btier\b/i.test(nm) ? (() => { const ps = plansFrom(ctx.facts, { product: ctx.product }).map((p) => p.name).filter((x) => x && x !== ctx.product); return ps.length >= 2 ? ps : ['Starter', 'Team', 'Scale']; })()
+        : /\bregions?\b/i.test(nm) ? ['UK', 'Europe', 'North America', 'Asia Pacific']
+        : /\bcountr(y|ies)\b/i.test(nm) ? ['United Kingdom', 'Ireland', 'Germany', 'Netherlands', 'France']
+        : /\bcit(y|ies)\b/i.test(nm) ? ['Leeds', 'Bristol', 'Glasgow', 'Cardiff', 'York']
+        : /\b(channel|source)\b/i.test(nm) ? ['Search', 'Referral', 'Direct', 'Email']
+        : /\bsize\b/i.test(nm) ? ['Small', 'Medium', 'Large'] : null;
+      if (pool) { const v = pool[[0, 1, 0, 2, 1, 0, 3, 1, 0, 2][i % 10] % pool.length]; return { text: v, kind: 'name', v }; }
       // A name field: the brief's own people for a staff role, else the field's noun and a number.
       if (STAFF.test(nm) && people.length) { const p = people[i % people.length]; return { text: p, kind: 'name', v: p }; }
       if (named && PET.test(nm)) { const p = PETS[(i * 5 + k) % PETS.length]; return { text: p, kind: 'name', v: p }; }

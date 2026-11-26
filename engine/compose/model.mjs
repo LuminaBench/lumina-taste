@@ -44,7 +44,7 @@ export function fieldKind(name) {
 // Plural nouns the product keeps lists of, read from the kind of product when the brief lists none.
 const KIND_NOUN = [[/\bbooking/, 'bookings'], [/\bappointment/, 'appointments'], [/\binvoic/, 'invoices'], [/\bnote-taking|\bnotes?\b/, 'notes'], [/\bhabit/, 'habits'], [/\border/, 'orders'], [/\bschedul/, 'jobs'], [/\bhelpdesk|\bsupport/, 'conversations'], [/\bcrm\b/, 'contacts'], [/\bpayroll/, 'payslips'], [/\bbookkeeping|\baccounting/, 'transactions'], [/\brecruit|\bhiring/, 'candidates'], [/\binventory|\bstock/, 'products'], [/\bproject/, 'projects'], [/\btask/, 'tasks'], [/\bexpense/, 'expenses'], [/\bwebhook/, 'events'], [/\bshop|\bstore|\bfurniture|\bshop/, 'orders'], [/\bclinic|\bdentist|\bphysio/, 'appointments'], [/\bdelivery|\blogistics|\bcourier/, 'deliveries'], [/\bcoding agent|\bagent/, 'sessions']];
 const PEOPLE = /\b(clients|customers|members|users|patients|people|contacts|candidates|students|guests|volunteers|staff)$/;
-const NOT_RECORDS = /^(?:page|pages|screen|screens|settings|members?|teams?|people|users?|days?|weeks?|months?|years?|details|options|plans?|prices?|features?|questions?|results?|things|ways|views|tabs|services|steps|notifications?|alerts?|status|statuses|states|stages|columns|fields)$/i;
+const NOT_RECORDS = /^(?:analytics|metrics|statistics|stats|insights|reports|reporting|page|pages|screen|screens|settings|members?|teams?|people|users?|days?|weeks?|months?|years?|details|options|plans?|prices?|features?|questions?|results?|things|ways|views|tabs|services|steps|notifications?|alerts?|status|statuses|states|stages|columns|fields)$/i;
 
 /**
  * The records the product keeps: [{ one, many, fields: [{ name, kind }], fromBrief }]. The first is the page's
@@ -65,7 +65,12 @@ export function recordsFrom(facts, { typeId = null } = {}) {
   for (const l of facts.lists ?? []) if (/^(tracks|manages|lists|list of|keeps|stores|records|organises|organizes|handles|schedules|entities|objects|tabs|sections|about)$/.test(l.label)) for (const it of l.items) add(it);
   const b = ` ${String(facts.brief ?? '').toLowerCase()} `;
   for (const m of b.matchAll(/\b(?:list|table|admin|inbox|directory|board|log)\s+(?:of|for)\s+([a-z]+s)\b/g)) add(m[1]);
-  for (const m of b.matchAll(/\b([a-z]+s)\s+(?:list|table|admin|board|log|inbox|dashboard)\b/g)) add(m[1]);
+  // "accounts table with plan, region and status": the columns follow "with".
+  for (const m of b.matchAll(/\b([a-z]+s)\s+(?:list|table|admin|board|log|inbox|dashboard)\b/g)) {
+    const w = /^\s+with\s+(.+?)(?=,\s*(?:filter|sort|search|export|a|an|the)\b|[.;:]|\s*$)/.exec(b.slice(m.index + m[0].length));
+    const cols = w ? readList(w[1], { max: 6 }).filter((c) => c.split(' ').length <= 3) : [];
+    add(m[1], cols.length >= 2 ? cols : null);
+  }
   // "add a client", "send the invoice": the object of each step is something the product keeps.
   for (const st of facts.steps ?? []) { const m = /^(?:add|create|send|book|log|track|pick|choose|invite|upload|record|enter|import)\s+(?:a|an|the|your|three|two)?\s*([a-z-]+)/i.exec(st); if (m && m[1].length > 3) add(plural(m[1].toLowerCase()), null, true); }
   if (!out.length) {
@@ -118,6 +123,12 @@ export function plansFrom(facts, { product = null } = {}) {
     if (!isFree && !m[3]) continue;
     named.push({ name: /^free$/i.test(name) ? 'Free' : name, price: isFree ? null : m[3], free: isFree, per: m[4] ?? (isFree ? null : null), unit: m[5] ?? null, at: m.index, end: m.index + m[0].length });
   }
+  // "per person a month": the person is the unit, the month the period.
+  for (const p of named) if (/^(person|seat|user)$/.test(p.per ?? '')) { const u = p.per; p.per = p.unit === 'month' || !p.unit ? 'month' : p.unit; p.unit = u; }
+  // "Plus £6 a month or £60 a year": the yearly price belongs to the plan before it.
+  for (const p of named) { const y = new RegExp(`^\\s*(?:,\\s*)?or\\s+(${MONEY})\\s+(?:a|per)\\s+year`).exec(b.slice(p.end)); if (y && !p.free) { p.annual = y[1]; p.end += y[0].length; } }
+  // "free plan" in lower case, as people write it.
+  if (!named.some((p) => p.free)) { const f = /\b(?:a\s+)?free\s+(?:plan|tier)\b/i.exec(b); if (f) named.push({ name: 'Free', price: null, free: true, per: null, unit: null, at: f.index, end: f.index + f[0].length }); }
   // A plan named "Free" alone, with what it includes: "Free for 10,000 events a month".
   if (!named.some((p) => p.free)) { const f = /\b(?:a\s+)?(Free)(?:\s+(?:plan|tier))?\s+(?:for|with|includes?)\s/.exec(b); if (f) named.push({ name: 'Free', price: null, free: true, per: null, unit: null, at: f.index, end: f.index + f[0].indexOf('Free') + 4 }); }
   named.sort((x, y) => x.at - y.at);
@@ -169,6 +180,12 @@ const singularPhrase = (s) => { const ws = words(s); return [...ws.slice(0, -1),
 export function servicesFrom(facts, { product = null } = {}) {
   const given = listOf(facts, /^(services|systems|components|parts|regions|apis|products)$/);
   if (given.length) return { list: given.map(cap), fromBrief: true };
+  // "status page: API, dashboard, webhooks and email services": the list before the word "services".
+  const before = /(?::|\bfor)\s*([^:;]+?)\s+(?:services|systems|components)\b/i.exec(String(facts.brief ?? ''));
+  if (before) {
+    const items = before[1].split(/,\s*|\s+and\s+/).map((x) => x.trim()).filter((x) => x && x.split(' ').length <= 3);
+    if (items.length >= 2) return { list: items.map((x) => (/^[a-z]+$/.test(x) && x.length <= 4 ? x.toUpperCase() : cap(x))), fromBrief: true };
+  }
   return { list: [product ?? 'The service'], fromBrief: false };
 }
 

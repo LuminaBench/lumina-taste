@@ -24,3 +24,7 @@
 .lt-footer-min { padding-block: var(--space-6); }
 /* Forced colours (Windows contrast themes): the legend keys keep their status colours and an edge. */
 @media (forced-colors: active) { .sp-legend span { forced-color-adjust: none; border: 1px solid CanvasText; } }
+/* Past incidents: the date in the mono face, one line each. */
+.sp-incidents { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--border-subtle); }
+.sp-incidents li { display: grid; grid-template-columns: minmax(7em, auto) 1fr; gap: var(--space-4); padding-block: var(--space-3); border-bottom: 1px solid var(--border-subtle); color: var(--text-secondary); }
+.sp-incidents time { color: var(--text-primary); font-family: var(--font-mono); font-variant-numeric: tabular-nums; }

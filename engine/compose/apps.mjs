@@ -32,12 +32,24 @@ function dashboard(ctx) {
   const moneyField = rec.fields.find((f) => f.kind === 'money');
   const statusField = rec.fields.find((f) => f.kind === 'status');
   const last = w.values.at(-1) ?? 0, prev = w.values.at(-2) ?? 0;
+  // The figures the brief names ("monthly revenue, churn, net retention") lead the row, with seeded sample values.
+  const METRIC = /\b(revenue|mrr|arr|churn|retention|conversion|sign-?ups|visitors|sessions|orders|sales|refunds|active users|margin|growth|bookings|tickets|signups)\b/i;
+  const named = String(facts.brief ?? '').split(/:|,|\band\b/).map((x) => x.trim()).filter((x) => METRIC.test(x) && x.split(/\s+/).length <= 4 && !/\btable\b/i.test(x)).slice(0, 4);
+  const metricKpi = (label, k) => {
+    const pct = /churn|retention|conversion|margin|growth/i.test(label);
+    const base = /net retention/i.test(label) ? 1.08 : /retention/i.test(label) ? 0.91 : /churn/i.test(label) ? 0.021 : /conversion/i.test(label) ? 0.034 : /margin/i.test(label) ? 0.42 : /growth/i.test(label) ? 0.061 : /revenue|mrr|arr|sales/i.test(label) ? 48210 : 1240;
+    const drift = (i) => base * (1 + (((i * 7 + k * 3) % 5) - 2) / (pct ? 40 : 18));
+    const spark = Array.from({ length: 12 }, (_, i) => +(drift(i) * (pct ? 1 : (0.82 + i * 0.016))).toFixed(pct ? 4 : 0));
+    return { label: cap(label), value: spark.at(-1), previous: spark.at(-2), spark, fmt: pct ? { percent: true, decimals: 1 } : /revenue|mrr|arr|sales/i.test(label) ? { prefix: m.sym, compact: true } : undefined, upIsGood: !/churn|refunds/i.test(label) };
+  };
+  const briefKpis = named.map(metricKpi);
   const kpis = [
+    ...briefKpis,
     { label: `${Many} this week`, value: last, previous: prev, spark: w.values },
     ...(moneyField ? [{ label: `${cap(moneyField.name)} total, this week`, value: Math.round(rows.slice(0, 8).reduce((a, r) => a + Number(r.cells[rec.fields.indexOf(moneyField)].v), 0)), previous: Math.round(rows.slice(8, 16).reduce((a, r) => a + Number(r.cells[rec.fields.indexOf(moneyField)].v), 0)), spark: w.values.map((v) => v * 37), fmt: { prefix: m.sym, compact: true } }] : []),
     ...(statusField ? m.status.list.slice(0, 2).map((s, k) => ({ label: `${s}`, value: rows.filter((r) => r.status === s).length, previous: rows.filter((r) => r.status === s).length + (k ? 1 : -1), spark: w.values.map((v, i) => Math.max(0, Math.round(v / (k ? 9 : 2)) + ((i * (k + 3)) % 4))) })) : []),
     ...m.records.slice(1, 3).map((r, k) => ({ label: `${cap(r.many)} this week`, value: Math.round(last * (k ? 0.4 : 0.7)), previous: Math.round(prev * (k ? 0.42 : 0.66)), spark: w.values.map((v) => Math.round(v * (k ? 0.4 : 0.7))) })),
-  ].slice(0, 5);
+  ].slice(0, briefKpis.length ? Math.max(4, briefKpis.length) : 5);
   const breakdownBy = statusField ?? rec.fields.find((f) => f.kind === 'name' && f !== rec.fields[0]) ?? null;
   const idx = breakdownBy ? rec.fields.indexOf(breakdownBy) : -1;
   const counts = new Map();
@@ -56,7 +68,7 @@ function dashboard(ctx) {
           <button type="button" data-part="clear" aria-label="Clear search" hidden>${icon('x', 14)}</button>
           <kbd data-part="shortcut" aria-hidden="true"><span data-part="mod">⌘</span>K</kbd>
         </div>
-        <a class="lt-btn" data-variant="primary" href="#main">${icon('plus')}<span data-part="label">${esc(flow.newOne)}</span></a>
+        <a class="lt-btn" data-variant="secondary" href="#main">${icon('plus')}<span data-part="label">${esc(flow.newOne)}</span></a>
       </header>
       <main id="main" class="bp-dash">
         <div class="bp-dash-head">
@@ -65,7 +77,7 @@ function dashboard(ctx) {
         </div>
         <section class="bp-kpis" aria-labelledby="bp-kpi-h" data-view="ready" data-count="${kpis.length}">
           <h2 id="bp-kpi-h" class="lt-visually-hidden">Key figures</h2>
-          ${kpis.map((k) => chart('kpi-card', { label: k.label, value: k.value, previous: k.previous, spark: k.spark }, { size: 'compact', ...(k.fmt ? { format: k.fmt } : {}) }, ' data-chart-slot="kpi"')).join('\n          ')}
+          ${kpis.map((k) => chart('kpi-card', { label: k.label, value: k.value, previous: k.previous, spark: k.spark }, { size: 'compact', ...(k.fmt ? { format: k.fmt } : {}), ...(k.upIsGood === false ? { upIsGood: false } : {}) }, ' data-chart-slot="kpi"')).join('\n          ')}
         </section>
         <section class="bp-main" aria-label="Charts" data-view="ready"${bars.length ? '' : ' data-one'}>
           <div class="bp-card" data-chart-slot>${chart('multi-line-chart', { x: w.x, series: [{ name: Many, values: w.values }] }, { title: `${Many} per week`, subtitle: 'Sample data until it is connected', height: 300 })}</div>
@@ -77,7 +89,7 @@ function dashboard(ctx) {
             <table class="lt-table">
               <caption class="lt-visually-hidden">${esc(`${Many}: sample rows until ${name} is connected. Column headers sort the table.`)}</caption>
               <thead><tr>${th}</tr></thead>
-              <tbody>${rows.map((r) => `<tr data-row>${r.cells.map(cellHtml).join('')}</tr>`).join('')}</tbody>
+              <tbody data-sample>${rows.map((r) => `<tr data-row>${r.cells.map(cellHtml).join('')}</tr>`).join('')}</tbody>
             </table>
           </div>
         </section>
@@ -162,24 +174,36 @@ function settings(ctx) {
   const recs = m.records.filter((r) => r.fromBrief).slice(0, 3);
   const given = (facts.lists ?? []).find((l) => /^(notifications?|alerts?|emails?)$/.test(l.label))?.items ?? [];
   const notes = given.length ? given.map((g) => [cap(g), null]) : recs.length ? recs.map((r) => [`New ${r.many}`, `When a ${r.one} is added`]) : [];
-  if (!notes.length) ctx.todo.push('what people want to be told about (each becomes a switch under Notifications)');
+  if (!notes.length && !/\bnotifications?\b/i.test(facts.brief ?? '')) ctx.todo.push('what people want to be told about (each becomes a switch under Notifications)');
   const plan = plansFrom(facts, { product: ctx.product })[0] ?? null;
   const people = facts.people;
-  if (!people.length) ctx.todo.push('the people on the team, with their roles, if the settings manage a team');
+  const b = ` ${String(facts.brief ?? '').toLowerCase()} `;
+  // Sections the brief names without their contents still get a section, with sample rows marked data-sample.
+  const wantsMembers = /\b(members?|team|users|people|seats)\b/.test(b) && !people.length;
+  const wantsBilling = /\b(billing|invoices?|payment method|subscription)\b/.test(b);
+  const namedPlan = /\bon\s+the\s+([A-Z][a-zA-Z]+)\s+plan\b/.exec(facts.brief ?? '')?.[1] ?? null;
+  const wantsNotes = /\bnotifications?\b/.test(b);
+  const thing = /\bdelete\s+(?:the|your)\s+(workspace|team|organisation|organization|project|account)\b/.exec(b)?.[1] ?? 'account';
+  if (!people.length) ctx.todo.push(wantsMembers ? 'the real members and their roles (the draft shows three sample rows, marked data-sample)' : 'the people on the team, with their roles, if the settings manage a team');
+  if (wantsNotes && !given.length && !recs.length) ctx.todo.push('what each notification is about (the draft shows two sample switches, marked data-sample)');
+  if (wantsBilling) ctx.todo.push('the payment method and the billing contact, from your billing provider');
   const sections = [
     ['profile', 'Profile', 'user', `How you appear in ${name}.`, `<div class="st-fields lt-form-demo" data-lt="text-field">
               ${field({ id: 'st-name', label: 'Full name', auto: 'name', extra: ' minlength="2"' })}
               ${field({ id: 'st-email', label: 'Email', type: 'email', auto: 'email', help: `${name} writes to this address.` })}
             </div>`],
-    notes.length ? ['notifications', 'Notifications', 'bell', 'Choose what reaches you.', `<div class="st-switches">${notes.map(([l, s], k) => switchRow(`n${k}`, l, s, k < 2)).join('')}</div>`] : null,
+    notes.length ? ['notifications', 'Notifications', 'bell', 'Choose what reaches you.', `<div class="st-switches">${notes.map(([l, s], k) => switchRow(`n${k}`, l, s, k < 2)).join('')}</div>`]
+      : wantsNotes ? ['notifications', 'Notifications', 'bell', 'Choose what reaches you.', `<div class="st-switches" data-sample>${[['Someone joins the workspace', 'An email when a member accepts an invite'], ['Weekly summary', 'Monday morning']].map(([l, sub], k) => switchRow(`n${k}`, l, sub, k === 0)).join('')}</div>`] : null,
+    wantsMembers ? ['members', 'Members', 'users', `Everyone who can sign in to ${name}, and what they can do.`, `<ul class="st-team" data-sample>${[['Rowan Hale', 'Owner'], ['Priya Shah', 'Admin'], ['Tom Brennan', 'Member']].map(([n, r]) => `<li><span class="ad-avatar" aria-hidden="true">${esc(initials(n))}</span><span><strong>${esc(n)}</strong><span>${esc(r)}</span></span></li>`).join('')}</ul><p><button type="button" class="lt-btn" data-variant="secondary">${icon('plus')}<span data-part="label">Invite a member</span></button></p>`] : null,
+    wantsBilling && !(plan && plan.price) ? ['billing', 'Billing', 'card', 'Your plan and how you pay.', `<dl class="lt-dl"><div><dt>Plan</dt><dd${namedPlan ? '' : ' data-sample'}>${esc(namedPlan ?? 'Team')}</dd></div><div data-sample><dt>Payment method</dt><dd>Card ending 4821</dd></div></dl><p><a class="bp-link" href="#billing">Change plan</a></p>`] : null,
     people.length ? ['team', 'Team', 'users', `Everyone who can sign in to ${name}.`, `<ul class="st-team">${people.map((p) => `<li><span class="ad-avatar" aria-hidden="true">${esc(initials(p.name))}</span><span><strong>${esc(p.name)}</strong><span>${esc(p.role ?? '')}</span></span></li>`).join('')}</ul>`] : null,
     plan && plan.price ? ['plan', 'Plan', 'card', 'What you pay.', `<dl class="lt-dl"><div><dt>Plan</dt><dd>${esc(`${plan.name === ctx.product ? '' : `${plan.name} · `}${plan.price}${plan.per ? ` a ${plan.per}` : ''}`)}</dd></div></dl>`] : null,
-    ['danger', 'Leave', 'trash', 'This cannot be undone.', `<div class="st-danger-row lt-dialog-demo" data-lt="modal-dialog"><div><strong>${esc(`Delete your ${name} account`)}</strong><p>${esc(`Removes your account${recs[0] ? ` and its ${recs[0].many}` : ''}.`)}</p></div><button type="button" class="lt-btn" data-variant="destructive" data-part="open">${icon('trash')}<span data-part="label">Delete account</span></button>
-              <dialog class="lt-modal" aria-labelledby="del-h" aria-describedby="del-d"><form method="dialog"><div data-part="body"><span data-part="icon" aria-hidden="true">${icon('alert', 20)}</span><div><h2 id="del-h">${esc(`Delete your ${name} account?`)}</h2><p id="del-d">${esc(`You lose access at once${recs[0] ? `, with your ${recs[0].many}` : ''}.`)}</p></div></div><div data-part="foot"><button type="submit" class="lt-btn" data-variant="ghost" value="cancel"><span data-part="label">Keep my account</span></button><button type="submit" class="lt-btn" data-variant="destructive" value="confirm"><span data-part="label">Delete account</span></button></div></form></dialog>
+    ['danger', thing === 'account' ? 'Leave' : `Delete the ${thing}`, 'trash', 'This cannot be undone.', `<div class="st-danger-row lt-dialog-demo" data-lt="modal-dialog"><div><strong>${esc(thing === 'account' ? `Delete your ${name} account` : `Delete the ${name} ${thing}`)}</strong><p>${esc(`Removes your account${recs[0] ? ` and its ${recs[0].many}` : ''}.`)}</p></div><button type="button" class="lt-btn" data-variant="destructive" data-part="open">${icon('trash')}<span data-part="label">${esc(`Delete ${thing}`)}</span></button>
+              <dialog class="lt-modal" aria-labelledby="del-h" aria-describedby="del-d"><form method="dialog"><div data-part="body"><span data-part="icon" aria-hidden="true">${icon('alert', 20)}</span><div><h2 id="del-h">${esc(thing === 'account' ? `Delete your ${name} account?` : `Delete the ${name} ${thing}?`)}</h2><p id="del-d">${esc(`You lose access at once${recs[0] ? `, with your ${recs[0].many}` : ''}.`)}</p></div></div><div data-part="foot"><button type="submit" class="lt-btn" data-variant="ghost" value="cancel"><span data-part="label">${esc(thing === 'account' ? 'Keep my account' : `Keep the ${thing}`)}</span></button><button type="submit" class="lt-btn" data-variant="destructive" value="confirm"><span data-part="label">${esc(`Delete ${thing}`)}</span></button></div></form></dialog>
             </div>`],
   ].filter(Boolean);
   const body = `<div class="st-wrap bp-container">
-    <header class="st-head"><h1 class="lt-h2">Settings</h1><p class="lt-secondary">${esc(`Your profile${notes.length ? ', what you hear about' : ''}${people.length ? ' and the team' : ''} in ${name}.`)}</p></header>
+    <header class="st-head"><h1 class="lt-h2">Settings</h1><p class="lt-secondary">${esc(`Your profile${notes.length || wantsNotes ? ', what you hear about' : ''}${people.length || wantsMembers ? ', the team' : ''}${wantsBilling ? ' and billing' : ''} in ${name}.`)}</p></header>
     <div class="st-layout">
       <nav class="st-nav" aria-label="Settings sections">
         ${sections.map(([id, label, ic], k) => `<a href="#${id}"${k === 0 ? ' aria-current="true"' : ''}>${icon(ic)}${esc(label)}</a>`).join('\n        ')}

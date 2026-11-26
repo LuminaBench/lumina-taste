@@ -346,14 +346,17 @@ function status(ctx) {
   const svc = servicesFrom(facts, { product });
   if (!svc.fromBrief) ctx.todo.push('the services people depend on, by the names they know them by (for example "services: API, dashboard, email")');
   ctx.todo.push('real uptime for each service, from your monitoring (the bars show 90 working days until it is connected)');
-  ctx.todo.push('past incidents, with what happened and what changed after (the history is left out until then)');
+  // The brief's own figures: "99.98% uptime last 90 days", "one incident on 3 March".
+  const uptime = /(\d{2,3}(?:\.\d+)?%)\s+uptime(?:\s+(?:over\s+)?(?:the\s+)?(last\s+\d+\s+days|this\s+year|last\s+year))?/i.exec(facts.brief ?? '');
+  const incidentDates = [...String(facts.brief ?? '').matchAll(/\bincidents?\s+on\s+(\d{1,2}\s+[A-Z][a-z]+(?:\s+\d{4})?)/g)].map((m) => m[1]);
+  ctx.todo.push(incidentDates.length ? `what happened in the incident${incidentDates.length > 1 ? 's' : ''} on ${incidentDates.join(' and ')}, how long it lasted and what changed after` : 'past incidents, with what happened and what changed after (the history is left out until then)');
   const body = `<header class="sp-top bp-narrow">
     <a class="sp-brand" href="#main">${esc(name)} <span>Status</span></a>
     <a class="lt-btn" data-variant="ghost" data-size="sm" href="#subscribe">${icon('bell')}<span data-part="label">Get updates</span></a>
   </header>
   <main id="main" class="bp-narrow sp">
     <h1 class="lt-h2">${esc(`${name} status`)}</h1>
-    <div class="sp-now" data-view="ready" role="status"><span class="sp-icon" aria-hidden="true">${icon('ok', 28)}</span><div><strong>All systems working</strong><p>${esc(`${svc.list.length} service${svc.list.length === 1 ? '' : 's'} checked.`)}</p></div></div>
+    <div class="sp-now" data-view="ready" role="status"><span class="sp-icon" aria-hidden="true">${icon('ok', 28)}</span><div><strong>All systems working</strong><p>${esc(uptime ? `${uptime[1]} uptime over the ${(uptime[2] ?? 'last 90 days').replace(/^last/, 'last')}, across ${svc.list.length} service${svc.list.length === 1 ? '' : 's'}.` : `${svc.list.length} service${svc.list.length === 1 ? '' : 's'} checked.`)}</p></div></div>
     <aside class="lt-callout sp-incident" data-tone="warning" data-view="incident" role="status" hidden>
       <span data-part="icon">${icon('alert')}</span>
       <div><strong>${esc(`${svc.list[0]} is slower than usual`)}</strong><p>${esc(`We are looking into it. ${svc.list.length > 1 ? `${svc.list.slice(1).join(', ')} ${svc.list.length > 2 ? 'are' : 'is'} not affected. ` : ''}Updates appear here as they happen.`)}</p></div>
@@ -363,6 +366,7 @@ function status(ctx) {
 ${svc.list.map((s) => `        <div data-part="svc"><p><strong>${esc(s)}</strong></p><ol aria-label="${esc(s)}, last 90 days" data-days=""></ol></div>`).join('\n')}
       <footer><span>90 days ago</span><span>Today</span></footer>
     </section>
+    ${incidentDates.length ? `<section class="sp-section sp-history" aria-labelledby="sp-hist-h"><h2 id="sp-hist-h" class="lt-h3">Past incidents</h2><ol class="sp-incidents">${incidentDates.map((d) => `<li><time>${esc(d)}</time><span>An incident, resolved.</span></li>`).join('')}</ol></section>` : ''}
     <section class="sp-section sp-subscribe" id="subscribe" aria-labelledby="sp-sub-h">
       <div><h2 id="sp-sub-h" class="lt-h3">Get incident updates</h2><p class="lt-secondary">One email when something breaks and one when it is fixed.</p></div>
       <form class="sp-form" data-subscribe data-bad="Enter a full email address." data-good="Subscribed. Confirm from the email sent to {email}." novalidate>
@@ -444,8 +448,56 @@ ${footer({ product: name, facts, year: year() })}`;
 }
 
 // ---------------------------------------------------------------- an article
+function episode(ctx) {
+  const { facts } = ctx;
+  const name = brand(ctx);
+  const b = String(facts.brief ?? '');
+  const n = /\bepisode\s+(\d+)/i.exec(b)?.[1] ?? null;
+  const mins = Number(/\b(\d{1,3})\s*(?:minutes?|mins?)\b/i.exec(b)?.[1] ?? 0);
+  const guest = /\bwith\s+((?:a|an|the)\s+[a-z][a-z\s-]+?|[A-Z][\w'’-]+(?:\s+[A-Z][\w'’-]+)+)(?=,|\.|$)/.exec(b)?.[1]?.trim() ?? null;
+  const about = /\babout\s+(.+?)(?=,|\.|$)/i.exec(b)?.[1] ?? null;
+  const weekly = /\bweekly\b/i.test(b) ? 'every week' : /\bfortnightly|every other week\b/i.test(b) ? 'every other week' : null;
+  const title = guest ? cap(guest.replace(/^(a|an)\s+/i, (x) => x)) : about ? cap(about) : `Episode ${n ?? ''}`.trim();
+  const h1 = guest ? `${cap(about ?? name)}, with ${guest}` : title;
+  const total = mins ? `${mins}:00` : '0:00';
+  const eyebrow = [n ? `Episode ${n}` : null, mins ? `${mins} minutes` : null].filter(Boolean).join(' · ');
+  if (!n) ctx.todo.push('the episode number and date');
+  ctx.todo.push('the chapters with their times, and the transcript (the draft shows sample rows, marked data-sample)');
+  ctx.todo.push('the audio file for the player, and the guest\'s name');
+  const label = `${h1}${n ? `, episode ${n}` : ''}`;
+  const body = `${navBar({ product: name, links: [], action: { label: 'Subscribe', href: '#subscribe' }, facts, style: INK_BAR })}
+  <div class="lt-reading" data-lt="reading-progress" data-target="#ep-transcript" aria-hidden="true"><span data-part="bar"></span></div>
+  <main id="main">
+    <article class="ep">
+      <header class="ep-head">
+        ${eyebrow ? `<p class="ep-eyebrow">${esc(eyebrow)}</p>` : ''}
+        <h1>${keepHyphens(esc(h1))}</h1>
+        ${about ? `<p class="ep-lede">${esc(`${name}, a podcast about ${about}${weekly ? `, ${weekly}` : ''}.`)}</p>` : ''}
+      </header>
+      <div class="ep-player"><div class="lt-player" id="ep-player" data-lt="media-player" data-duration="${mins * 60}" role="group" aria-label="${esc(`Audio: ${label}`)}">
+  <button type="button" data-part="play" aria-label="Play">${icon('play', 18)}</button>
+  <div data-part="meta"><b>${esc(h1)}</b><span>${esc([n ? `Episode ${n}` : null, name].filter(Boolean).join(' · '))}</span></div>
+  <button type="button" data-part="back" aria-label="Back 15 seconds">−15</button>
+  <input type="range" data-part="seek" min="0" max="${mins * 60}" step="1" value="0" aria-label="Position" aria-valuetext="${esc(`0:00 of ${total}`)}" style="--p: 0%">
+  <span data-part="time"><span data-part="now">0:00</span><span aria-hidden="true"> / </span><span data-part="total">${esc(total)}</span></span>
+  <button type="button" data-part="speed" aria-label="Speed 1×">1×</button>
+</div></div>
+      <section class="ep-chapters" aria-labelledby="ep-ch-h" data-sample><h2 id="ep-ch-h">Chapters</h2><ol id="ep-chapters">${[[0, `${name}${n ? `, episode ${n}` : ''}`], [150, guest ? `Meet ${guest}` : 'The guest'], [Math.max(300, mins * 60 - 180), 'Next time']].map(([t, c], k) => `<li><button type="button" data-seek="${t}"${k === 0 ? ' aria-current="true"' : ''}><time>${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}</time><span>${esc(c)}</span></button></li>`).join('')}</ol></section>
+      <section class="ep-transcript" id="ep-transcript" aria-labelledby="ep-tr-h" data-sample><h2 id="ep-tr-h">Transcript</h2><p><time>0:00</time>${esc(`The transcript of ${label} goes here, line by line with its times.`)}</p></section>
+    </article>
+    <section class="lt-newsletter-signup" data-tone="well" aria-labelledby="lt-ns-title" data-lt="newsletter-signup" id="subscribe">
+      <div data-part="copy"><h2 id="lt-ns-title">New episodes by email</h2><p data-part="lede">${esc(`One message ${weekly ?? 'with each episode'}, with the episode and its transcript.`)}</p></div>
+      <form data-part="form" novalidate><label for="ns-email" class="lt-visually-hidden">Email address</label><div data-part="row"><input id="ns-email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required aria-describedby="ns-msg"><button type="submit" class="lt-btn" data-variant="primary">Subscribe</button></div><p id="ns-msg" data-part="msg" aria-live="polite">One click to leave.</p></form>
+    </section>
+  </main>
+${footer({ product: name, facts, year: year() })}`;
+  return { body, title: `${label} · ${name}`, desc: [eyebrow, h1].filter(Boolean).join(': '), css: 'episode' };
+}
+
 function article(ctx) {
   const { facts } = ctx;
+  // A podcast or a video episode is an episode page: number, length, player, chapters, transcript.
+  if (/\b(podcast|episode)\b/i.test(facts.brief ?? '')) return episode(ctx);
   const name = brand(ctx);
   const about = /\babout\s+(.+?)(?=,|\.|$)/i.exec(facts.brief ?? '')?.[1] ?? null;
   const title = about ? cap(about) : null;
