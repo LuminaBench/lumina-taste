@@ -97,17 +97,169 @@ export function motifSvg(name: string): string {
   return m ? `<svg data-part="motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false">${m[1]}</svg>` : '';
 }
 
-/** data-lt="art-panel": draws the panel's data-motif (or, with data-motif="auto", the one its data-shot names) when the markup does not carry it yet. */
+/**
+ * Scenes: two or three motifs composed on one ground for a hero-sized panel ("cup bag" is a counter with a bag
+ * and a cup in front of it, "crane house" a building site). The larger thing stands behind, the smaller one in
+ * front overlapping it, things that do not stand (a chat bubble, a tooth, a leaf) hang above, and only the first
+ * name, the subject, carries the accent. One line per motif (scripts/lib/image-motifs.mjs reads this table too):
+ *   name, the drawing's box on the 160 grid (x0 y0 x1 y1), size (1 small, 2 medium, 3 large), pose (stand on
+ *   the ground or float above it), ground (counter, line, water, road), companion (shown with it when a brief
+ *   names only one thing)
+ */
+export const SCENE_KIT = `
+cup 24 22 140 138 1 stand counter bag
+loaf 14 50 146 132 1 stand counter jar
+crane 8 14 152 140 3 stand line house
+document 42 20 132 140 1 stand line pencil
+scales 16 20 144 138 2 stand line book
+leaf 41 24 144 150 1 float line pot
+phone 46 14 114 146 1 stand line chat
+chart 20 20 146 132 2 stand line lens
+key 20 52 138 108 1 float line lock
+ticket 20 39 139 115 1 float line mic
+tool 15 18 148 139 1 float line box
+house 12 28 148 136 3 stand line pencil
+tooth 34 20 148 140 1 float line calendar
+bowl 22 18 138 140 1 stand counter bottle
+scissors 36 20 124 134 1 float line bottle
+book 14 36 146 138 1 stand counter glasses
+vase 36 22 124 146 2 stand counter pot
+bag 24 22 136 142 2 stand counter box
+boat 14 22 148 147 3 stand water mountain
+bus 18 30 142 138 3 stand road pin
+train 34 24 126 148 3 stand line suitcase
+bike 14 46 146 132 2 stand road mountain
+van 8 50 152 140 3 stand road box
+paw 28 38 132 136 1 float line bowl
+mountain 6 25 154 126 3 stand line bike
+suitcase 34 30 126 147 2 stand line pin
+pin 18 24 142 150 1 float line suitcase
+pencil 14 30 146 142 1 stand counter book
+stethoscope 45 15 134 131 1 float line bottle
+glasses 18 58 142 119 1 float line book
+mic 44 18 116 142 2 stand line ticket
+camera 20 36 140 132 1 stand counter mountain
+pot 40 34 120 142 1 stand counter vase
+hanger 20 18 140 146 1 float line bag
+envelope 20 40 140 126 1 float line box
+calendar 26 24 134 138 1 stand line ticket
+coins 30 56 132 134 1 stand counter chart
+terminal 18 30 142 130 2 stand line server
+server 30 26 130 144 2 stand line terminal
+lens 26 26 140 142 1 float line document
+lock 34 20 126 142 1 stand line key
+box 24 28 136 140 2 stand counter van
+gift 24 37 136 138 1 stand counter box
+jar 36 11 124 142 1 stand counter loaf
+chat 22 30 138 138 1 float line phone
+bottle 46 22 144 142 1 stand counter glass
+glass 52 22 108 142 1 stand counter bottle
+`;
+
+interface Kit { box: number[]; size: number; float: boolean; ground: string; with: string }
+let kit: Record<string, Kit> | null = null;
+const sceneKit = (): Record<string, Kit> => (kit ??= Object.fromEntries(SCENE_KIT.trim().split('\n').map((l) => {
+  const [n, x0, y0, x1, y1, size, pose, ground, w] = l.trim().split(/\s+/);
+  return [n, { box: [+x0, +y0, +x1, +y1], size: +size, float: pose === 'float', ground, with: w }];
+})));
+
+/** The motifs for a scene from a brief, the subject first ("bag of beans on a counter" → ['bag', 'cup']), or null. */
+export function pickScene(text: string): string[] | null {
+  const k = sceneKit();
+  const out = rankMotifs(text).filter((n) => k[n]).slice(0, 3);
+  if (!out.length) return null;
+  if (out.length === 1) out.push(k[out[0]].with);
+  // Something must stand on the ground: a scene of floating things is a sticker sheet.
+  if (out.every((n) => k[n].float)) {
+    const w = [k[out[0]].with, ...out.map((n) => k[n].with)].find((n) => !k[n].float && !out.includes(n));
+    if (w) out.splice(Math.min(out.length - 1, 2), out.length === 3 ? 1 : 0, w);
+  }
+  return out;
+}
+
+const r1 = (v: number) => String(Math.round(v * 10) / 10);
+const r3 = (v: number) => String(Math.round(v * 1000) / 1000);
+const GROUND = 176;
+const WAVE = 'q10 -6 20 0t20 0'.repeat(110);
+const FLOORS: Record<string, string> = {
+  counter: `<rect data-m="floor" x="-2000" y="${GROUND}" width="4320" height="2000"/><path data-m="ink" d="M-2000 ${GROUND}H2320"/>`,
+  line: `<path data-m="ink" d="M-2000 ${GROUND}H2320"/>`,
+  road: `<rect data-m="floor" x="-2000" y="${GROUND}" width="4320" height="2000"/><path data-m="ink" d="M-2000 ${GROUND}H2320"/><path data-m="ink" data-g="dash" d="M-1996 ${GROUND + 14}H2320"/>`,
+  water: `<path data-m="ink" d="M-2000 ${GROUND}${WAVE}"/><path data-m="ink" data-g="thin" d="M-1990 ${GROUND + 12}${WAVE}"/>`,
+};
+
+/**
+ * A scene's inline SVG (320 × 200, things standing on a ground at y 176) from motif names, "cup bag" or
+ * ['crane', 'house']. Unknown names are skipped; three at most. The first name is the subject and the only one
+ * in the accent; the rest are drawn in a quieter tone. Every thing keeps the panel's one stroke weight whatever
+ * its scale (--k on each group divides --motif-stroke).
+ */
+export function sceneSvg(list: string | string[]): string {
+  const k = sceneKit();
+  const names = (typeof list === 'string' ? list.trim().split(/[\s,]+/) : list).filter((n, i, a) => k[n] && MOTIFS[n] && a.indexOf(n) === i).slice(0, 3);
+  if (!names.length) return '';
+  const all = names.map((n, i) => ({ n, i, ...k[n], s: 1, cx: 0, cy: 0 }));
+  type T = typeof all[number];
+  const w = (t: T) => (t.box[2] - t.box[0]) * t.s;
+  const h = (t: T) => (t.box[3] - t.box[1]) * t.s;
+  const stand = all.filter((t) => !t.float).sort((a, b) => b.size - a.size || a.i - b.i);
+  const float = all.filter((t) => t.float);
+  // Scale by real size: the biggest at full size, the same size a little smaller, a step smaller at two thirds.
+  const top = stand.length ? stand[0].size : 0;
+  stand.forEach((t, j) => { t.s = j === 0 ? 1 : (top === t.size ? 0.8 : top - t.size === 1 ? 0.64 : 0.48) * (j === 2 ? 0.86 : 1); });
+  // The biggest stands behind; the second in front of it on the right, the third on the left, each overlapping it.
+  let L = 0, R = 0;
+  stand.forEach((t, j) => {
+    if (j === 0) { L = -w(t) / 2; R = w(t) / 2; return; }
+    const ov = 0.3 * w(t);
+    if (j === 1) { t.cx = R - ov + w(t) / 2; R = Math.max(R, t.cx + w(t) / 2); } else { t.cx = L + ov - w(t) / 2; L = Math.min(L, t.cx - w(t) / 2); }
+  });
+  // Fit the group across the middle, leaving room beside it for anything that floats.
+  const room = float.length ? 230 : 288;
+  const f = R - L > room ? room / (R - L) : 1;
+  const mid = float.length ? 142 : 160;
+  stand.forEach((t) => { t.s *= f; t.cx = mid + (t.cx - (L + R) / 2) * f; t.cy = GROUND - h(t) / 2; });
+  [L, R] = [mid - ((R - L) / 2) * f, mid + ((R - L) / 2) * f];
+  const tall = stand.length ? Math.max(...stand.map(h)) : 0;
+  // Floating things hang in the sky: beside the group where there is room, else over its shoulder.
+  float.forEach((t, j) => {
+    if (!stand.length) { t.s = j === 0 ? 1 : 0.5; t.cx = j === 0 ? 150 : 246; t.cy = j === 0 ? 104 : 50; return; }
+    // The subject is drawn larger than anything else that floats.
+    t.s = t.i === 0 ? Math.min(0.74, 100 / Math.max(t.box[2] - t.box[0], t.box[3] - t.box[1])) : Math.min(0.56, 76 / Math.max(t.box[2] - t.box[0], t.box[3] - t.box[1]));
+    const right = (j === 0) === (320 - R >= L);
+    t.cx = right ? Math.min(316 - w(t) / 2, R + w(t) * 0.2) : Math.max(4 + w(t) / 2, L - w(t) * 0.2);
+    t.cy = Math.max(6 + h(t) / 2, GROUND - tall * 0.92 - h(t) * 0.2);
+  });
+  const back = stand[0];
+  const sky = back ? `<circle data-m="sky" cx="${r1(back.cx + w(back) * 0.18)}" cy="${r1(GROUND - h(back) * 0.62)}" r="${r1(h(back) * 0.5)}"/>` : '';
+  const floor = back ? FLOORS[(all[0].float ? back : all[0]).ground] ?? FLOORS.line : '';
+  const g = (t: T) => `<g data-role="${t.i === 0 ? 'lead' : 'rest'}" transform="translate(${r1(t.cx - t.s * (t.box[0] + t.box[2]) / 2)} ${r1(t.cy - t.s * (t.box[1] + t.box[3]) / 2)}) scale(${r3(t.s)})" style="--k:${r3(t.s)}">${MOTIFS[t.n][1]}</g>`;
+  // Crop the frame to the things (the ground and the sky run past it), so a tall panel shows them large.
+  const xs = all.flatMap((t) => [t.cx - w(t) / 2, t.cx + w(t) / 2]);
+  const vw = Math.max(232, Math.max(...xs) - Math.min(...xs) + 40);
+  const vx = (Math.max(...xs) + Math.min(...xs)) / 2 - vw / 2;
+  return `<svg data-part="scene" viewBox="${r1(vx)} 0 ${r1(vw)} 200" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false">${sky}${floor}${stand.map(g).join('')}${float.map(g).join('')}</svg>`;
+}
+
+/** data-lt="art-panel": draws the panel's data-motif (or, with data-motif="auto", the one its data-shot names) when the markup does not carry it yet.
+ *  data-scene="cup bag" (or a data-motif with two or three names) draws a scene instead; data-scene="auto" picks one from data-shot. */
 export function enhance(root: HTMLElement): Cleanup {
   const panels = root.matches('.lt-art') ? [root] : [...root.querySelectorAll<HTMLElement>('.lt-art')];
   const added: Element[] = [];
   for (const el of panels) {
     let name = el.dataset.motif;
-    if (!name || el.querySelector(':scope > [data-part="motif"], :scope > :is(img, picture, video)')) continue;
-    // data-motif="auto": the drawing that matches the photo brief.
-    if (name === 'auto') { name = pickMotif(el.dataset.shot ?? el.textContent ?? '') ?? ''; if (!name) continue; el.dataset.motif = name; }
-    el.insertAdjacentHTML('afterbegin', motifSvg(name));
-    if (el.firstElementChild?.matches('[data-part="motif"]')) added.push(el.firstElementChild);
+    let scene = el.dataset.scene ?? (name && /\s/.test(name.trim()) ? name : undefined);
+    if ((!name && !scene) || el.querySelector(':scope > :is([data-part="motif"], [data-part="scene"], img, picture, video)')) continue;
+    if (scene) {
+      // data-scene="auto": the scene the photo brief describes.
+      if (scene === 'auto') { scene = pickScene(el.dataset.shot ?? el.textContent ?? '')?.join(' ') ?? ''; if (!scene) continue; el.dataset.scene = scene; }
+      el.insertAdjacentHTML('afterbegin', sceneSvg(scene));
+    } else if (name) {
+      // data-motif="auto": the drawing that matches the photo brief.
+      if (name === 'auto') { name = pickMotif(el.dataset.shot ?? el.textContent ?? '') ?? ''; if (!name) continue; el.dataset.motif = name; }
+      el.insertAdjacentHTML('afterbegin', motifSvg(name));
+    }
+    if (el.firstElementChild?.matches('[data-part="motif"], [data-part="scene"]')) added.push(el.firstElementChild);
   }
   return () => added.forEach((n) => n.remove());
 }
