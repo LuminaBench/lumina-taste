@@ -6,7 +6,7 @@
   <title>Moss Grooming · booking app</title>
   <meta name="description" content="Blueprint: a booking app on a phone that widens to a sidebar and two panes: who and what, a calm strip of days and a grid of free times, a sheet to check and book, and your bookings with the next one set large, built with lumina-taste.">
 </head>
-<body class="as" data-pane="onboard" data-screen="welcome">
+<body class="as" data-pane="onboard" data-screen="welcome" data-home="bookings">
   <a class="bp-skip" href="#main">Skip to content</a>
   <nav class="as-side" aria-label="Sections">
     <p class="as-side-name"><i aria-hidden="true"></i><span>Moss Grooming</span></p>
@@ -174,6 +174,8 @@
     </dialog>
   </div>
   <p class="as-toast" role="status"></p>
+  <!-- A deep link (?screen=, ?state=) is laid out before the first paint, so nothing moves when the app's script arrives. -->
+  <script>(() => { const p = new URLSearchParams(location.search), b = document.body, all = [...document.querySelectorAll('.as-screen')], q = p.get('screen'), st = p.get('state'); const id = all.some((x) => x.dataset.screen === q) ? q : st && st !== 'ready' ? b.dataset.home : null; if (st && /^[a-z-]+$/.test(st)) for (const el of document.querySelectorAll('[data-view]')) el.hidden = !el.dataset.view.split(' ').includes(st); if (!id) return; const s = all.find((x) => x.dataset.screen === id); for (const x of all) x.toggleAttribute('data-current', x === s); b.dataset.pane = s.dataset.pane; b.dataset.screen = id; const k = s.dataset.pane === 'detail' ? s.dataset.parent : s.dataset.pane === 'list' ? s.dataset.detail : null; if (k && innerWidth >= 768) all.find((x) => x.dataset.screen === k)?.setAttribute('data-shown', ''); })();</script>
   <script type="module" src="./main.ts"></script>
 </body>
 </html>
