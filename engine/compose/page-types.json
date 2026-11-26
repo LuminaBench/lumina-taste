@@ -568,6 +568,8 @@
     "article",
     "journal",
     "newsletter site",
+    "podcast",
+    "episode",
     "magazine",
     "essay",
     "editorial",
@@ -629,6 +631,7 @@
     "case studies",
     "photography site",
     "architect",
+    "architects",
     "studio website",
     "design studio",
     "architecture studio",
@@ -786,7 +789,7 @@
     "basket",
     "order form",
     "billing details",
-    "pay"
+    "pay page"
    ],
    "primary": "One \"Pay £X\" button whose label includes the total.",
    "sections": [
@@ -1214,7 +1217,7 @@
    "pattern": "Z",
    "layout": "Split: form left, ways to reach you right",
    "aliases": [
-    "contact",
+    "contact page",
     "contact us",
     "get in touch",
     "support page",
@@ -1261,7 +1264,7 @@
    "pattern": "Z",
    "layout": "Centred page column with full-width bands",
    "aliases": [
-    "about",
+    "about page",
     "about us",
     "team page",
     "company page",
@@ -2756,6 +2759,7 @@
     "photographer",
     "architecture",
     "architect",
+    "architects",
     "illustrator",
     "film",
     "art",

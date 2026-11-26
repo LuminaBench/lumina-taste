@@ -509,3 +509,21 @@ test('--images runs find-images over the draft (off by default; no network here:
     assert.match(readFileSync(join(dir, 'b', 'index.html'), 'utf8'), /data-motif="crane"/, 'nothing matched: the drawings stay');
   } finally { server.close(); rmSync(dir, { recursive: true, force: true }); }
 });
+
+// One-line business descriptions, the way people actually write a brief (no "website", no "page").
+test('one-line business briefs land on the right page type', () => {
+  const cases = [
+    ['venue', 'Sourdough bakery on Mill Lane in Frome, open Tuesday to Sunday 7:30 to 15:00, loaves from £4.20, cinnamon buns £3'],
+    ['venue', 'Halyard Ferries: car and foot ferry from Ardmore to Kestrel Isle, sailings every 90 minutes from 06:40, foot passengers £6.50'],
+    ['portfolio', 'Larkspur Studio, architects in Bristol, house extensions and small public buildings, 14 finished projects'],
+    ['landing', 'Tally invoicing app for sole traders: send an invoice from your phone in 30 seconds, £9 a month, how it works'],
+    ['app-phone', 'Juniper bank app on the phone: balance, spending by category this month, send money to a contact, card freeze, settings'],
+    ['app-phone', 'Kestrel running app on the phone: today\'s run, weekly distance chart, routes near you, settings'],
+    ['workspace', 'Moss dog grooming bookings app: bookings with dog, owner, date and status, today\'s appointments, a calendar, settings'],
+    ['blog', 'Moss Radio, a weekly podcast about how cities work, episode 142 with a transport planner, 48 minutes, transcript and chapters'],
+    ['dev-landing', 'Kestrel Events API for product analytics: send an event with one line of code, SDKs for JavaScript, Python and Go'],
+    ['pricing', 'Juniper notes app pricing: free plan, Plus £6 a month or £60 a year, compare plans, questions'],
+    ['settings', 'Kestrel workspace settings: profile, members with roles, billing on the Team plan, danger zone'],
+  ];
+  for (const [want, brief] of cases) assert.equal(compose(brief).pageType.id, want, brief);
+});
