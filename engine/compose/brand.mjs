@@ -4,8 +4,9 @@
 // properties, computed colours and fonts). The accent is then solved the way build-tokens.mjs solves every
 // shipped palette's accent: the lightness nearest the brand colour at which text on it and it on the page
 // both pass. Every result is contrast-checked against the kit's rules before it is offered.
-import { contrast, clampChroma, round, toCss, parseOklch } from '../../scripts/lib/color.mjs';
+import { contrast, round, toCss, parseOklch } from '../../scripts/lib/color.mjs';
 import { RULES } from '../../scripts/lib/contrast-rules.mjs';
+import { pickAccent, fix, MARGIN } from '../../scripts/lib/accent.mjs';
 
 // ---------------------------------------------------------------- colour maths
 const lin = (v) => { v /= 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
@@ -66,7 +67,6 @@ export function dominantColours(pixels, k = 4) {
 }
 
 // ---------------------------------------------------------------- accent from a brand colour
-const MARGIN = 0.05;
 /**
  * The accent tokens for one mode of a palette, solved from a brand colour the way build-tokens.mjs solves
  * a palette's accent: the lightness nearest the brand's at which ink on the accent passes 4.5:1 and the
@@ -74,21 +74,10 @@ const MARGIN = 0.05;
  * @returns {Record<string, string> | null} oklch() strings, or null if no lightness works
  */
 export function solveAccent(brand, ...modeTokens) {
-  const [bL, bC, bH] = brand;
+  const [, bC, bH] = brand;
   const sets = modeTokens.map((tokens) => Object.fromEntries(Object.entries(tokens).map(([k, v]) => [k, parseOklch(v.oklch ?? v)])));
-  const fix = (lch) => round(clampChroma(lch));
-  let best = null;
-  for (const ink of [fix([0.985, 0.008, bH]), fix([0.17, 0.02, bH])]) {
-    for (let L = 0.1; L <= 0.97; L += 0.005) {
-      const solid = fix([L, bC, bH]);
-      const away = ink[0] > solid[0] ? -1 : 1;
-      const hover = fix([L + away * 0.045, bC, bH]);
-      if (contrast(ink, solid) < 4.5 + MARGIN || contrast(ink, hover) < 4.5 + MARGIN) continue;
-      if (!sets.every((t) => contrast(solid, t['bg-canvas']) >= 3 + MARGIN && contrast(solid, t['bg-surface-1']) >= 3 + MARGIN)) continue;
-      const score = Math.abs(L - bL) - contrast(ink, solid) * 0.0005;
-      if (!best || score < best.score) best = { score, ink, solid, hover };
-    }
-  }
+  // The same solver the shipped palettes are built with, held to every ground it will sit on.
+  const best = pickAccent(brand, { grounds: sets.flatMap((t) => [t['bg-canvas'], t['bg-surface-1']]) });
   if (!best) return null;
   // Accent text (links, focus rings) must read on every surface of every mode it is used in.
   const ok = (c) => sets.every((t) => ['bg-canvas', 'bg-surface-1', 'bg-surface-2', 'bg-surface-3', 'accent-soft'].every((k) => !t[k] || contrast(c, t[k]) >= 4.5 + MARGIN));
