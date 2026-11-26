@@ -1,1 +1,32 @@
-{ "id": "dashboard", "order": 2, "name": "Financial & analytics dashboard", "summary": "Collapsible sidebar, one global filter bar, a KPI row, a chart grid and a sortable table.", "anatomy": "Sidebar + top bar → title + global filters → KPI row → 2×2 chart grid → table", "aliases": ["admin dashboard", "analytics dashboard", "finance dashboard", "saas dashboard", "metrics page"], "uses": ["app-sidebar", "search-input", "account-menu", "filter-bar", "kpi-card", "multi-line-chart", "stacked-bar-chart", "donut-chart", "horizontal-bar-chart", "data-table"] }
+{
+  "id": "dashboard",
+  "order": 2,
+  "name": "Financial & analytics dashboard",
+  "summary": "A dashboard that holds a lot without looking cramped: ten figures with sparklines on one surface, one main chart with its breakdown beside it, filters in one row and a sortable table of 24 accounts with a sticky header. Loading and error states.",
+  "anatomy": "Sidebar + top bar → title + one filter row → 10 KPIs with sparklines → main chart (2/3) + breakdown (1/3) → 24-row table with sticky header, sparklines and health",
+  "aliases": [
+    "admin dashboard",
+    "analytics dashboard",
+    "finance dashboard",
+    "saas dashboard",
+    "metrics page",
+    "dense dashboard",
+    "kpi wall",
+    "metrics dashboard with table"
+  ],
+  "uses": [
+    "app-sidebar",
+    "search-input",
+    "account-menu",
+    "filter-bar",
+    "kpi-card",
+    "sparkline",
+    "multi-line-chart",
+    "horizontal-bar-chart",
+    "data-table",
+    "badge",
+    "skeleton",
+    "empty-state"
+  ],
+  "states": ["loading","error"]
+}
