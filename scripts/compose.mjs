@@ -17,8 +17,12 @@ import { planRhythm, orderSections, rhythmStrip, checkRhythm, STRIP_KEY, PROOF, 
 import { extractFacts, figuresFrom, heroCopy, askFor, openingHours } from '../engine/compose/words.mjs';
 import { boldIdea, colourName } from '../engine/compose/idea.mjs';
 import { brandFrom } from '../engine/compose/brand.mjs';
-import { renderBand, navBar, footer as footerBar, heroPicture, pictureBand, pinnedSteps, sideScroll, motifFor, motifParts, isSoftware, itemsFrom } from '../engine/compose/bands.mjs';
+import { renderBand, navBar, footer as footerBar, heroPicture, pictureBand, pinnedSteps, sideScroll, motifFor, motifParts, sceneFor, sceneParts, isSoftware, itemsFrom } from '../engine/compose/bands.mjs';
 import { splitMain, joinMain, idOfBlock, applyBeat, applyHeroCopy, heroIdeaPanel, setHeroVisual, setFacts, applyMediaIdea, applyClose, applyHours, ideaComment, esc } from '../engine/compose/draft.mjs';
+import { pageModel, appFlow } from '../engine/compose/model.mjs';
+import { PAGES } from '../engine/compose/pages.mjs';
+import { PAGE_SCRIPT } from '../engine/compose/page-script.mjs';
+import { DRAFT_CSS } from '../engine/compose/page-css.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -114,6 +118,8 @@ const namedStyle = cat.styles.find((st) => has(st.id) || (st.aliases ?? []).some
 const explicitStyle = Object.prototype.hasOwnProperty.call(mood, 'style') ? mood.style : namedStyle ?? search(cat, brief, { kind: 'style', limit: 1 }).find((x) => x.s > 24)?.d.id ?? null;
 // A marketing page with no recognisable subject still gets a headline face distinct from the stock sans.
 const defaults = { marketing: ['slate-forest', 'geometric'], app: ['slate-forest', 'precision'], reading: ['paper-ink', 'editorial'], flow: ['slate-forest', 'precision'] }[type.kind];
+// A consumer phone app reads friendlier than a developer console: humanist type, not the stock app sans.
+if (['app-phone', 'mobile-app'].includes(type.id)) defaults[1] = 'humanist';
 const profile = {
   palette: domain?.palette ?? defaults[0],
   mode: mood.mode ?? domain?.mode ?? 'light',
@@ -161,6 +167,11 @@ const restyle = (kb.restyle?.words ?? []).some((w) => text.includes(` ${w} `) ||
 // The brief's own nouns, prices, times, places and figures: drafts are written from these, never from filler.
 const facts = extractFacts(brief, { product });
 const figures = figuresFrom(facts);
+// Pages that are not a marketing story (an app, a checkout, a status page) are drawn from a model of the
+// product: its records and their fields, statuses, plans, basket, services; apps are planned as a flow.
+const APP_TYPES = new Set(['dashboard', 'admin-table', 'settings', 'inbox', 'ai-chat', 'agent-app', 'mobile-app', 'app-phone', 'workspace', 'directory']);
+const model = pageModel(facts, { product, typeId: type.id });
+const flow = APP_TYPES.has(type.id) ? appFlow(model, facts, { typeId: type.id, product }) : null;
 
 // ---------------------------------------------------------------- plan
 let sections = type.sections.map((s, i) => ({ n: i + 1, ...s, exists: !s.id || uiIds.has(s.id) }));
@@ -260,7 +271,9 @@ const plan = {
   blueprint: blueprint ?? (type.blueprint ? `${type.blueprint} (not in this version; start from the sections below)` : null),
   artDirection: { signature: art.signature, boldIdea: idea, mainAttributes: art.mainAttrs, sections: art.sectionLayouts.map((l) => ({ n: l.n, id: l.id, layout: l.layout, space: l.space, attributes: sectionAttrs(l) })), accent: art.accent, type: art.type, rhythm: art.rhythm, words: art.words, motion: art.motion },
   rhythm: { banded: rhythm.banded, strip: rhythmStrip(rhythm), key: STRIP_KEY, beats: rhythm.beats, moved: rhythm0.moved, inserted: rhythm0.inserted, broken: checkRhythm(rhythm, rhythm.beats.map((b, i) => (i === 0 && /^hero-/.test(b.id ?? '') ? null : layoutOf(b.n)?.shape ?? null))) },
-  words: { facts, figures, firstScreen: hero, missing: [...hero.todo, ...(figuresBandSkipped ? ['two to four real figures with their periods (the figures band was left out rather than filled with invented ones)'] : []), ...(idea.ask ? [idea.ask] : [])] },
+  words: { facts, figures, firstScreen: hero, missing: [...(type.kind === 'marketing' || !PAGES[type.id] ? hero.todo : []), ...(figuresBandSkipped ? ['two to four real figures with their periods (the figures band was left out rather than filled with invented ones)'] : []), ...(idea.ask && type.kind === 'marketing' ? [idea.ask] : []), ...model.todo] },
+  model: { records: model.records.map((r) => ({ one: r.one, many: r.many, fields: r.fields, fromBrief: r.fromBrief })), statuses: model.status },
+  flow: flow ? { screens: flow.screens, states: flow.states, build: flow.screens.filter((s) => s.build).map((s) => s.id) } : null,
   sections,
   charts,
   restyle: restyle ? kb.restyle.notes : null,
@@ -392,10 +405,15 @@ function writeComposed(dir, run) {
   if (!(idea.place === 'hero-visual' && idea.figure) && /<div data-part="(?:frame|visual)"/.test(heroHtml)) heroHtml = setHeroVisual(heroHtml, heroPicture(ctx));
   else if (idea.place === 'hero-visual' && idea.figure) {
     // The idea's panel carries the subject's drawing too, behind the figure.
-    const m = motifParts(motifFor(`${facts.kind ?? ''} ${facts.offers.join(' ')}`, ctx), { small: true });
-    heroHtml = heroHtml.replace(/<figure class="lt-art"([^>]*)>/, (x, a) => `<figure class="lt-art"${a}${m.attr}>${m.svg}`);
+    // The idea's panel carries the page's one scene behind the figure (a figure panel gives it less height);
+    // software keeps a single small drawing.
+    const subject = `${facts.kind ?? ''} ${facts.offers.join(' ')}`;
+    const sc = isSoftware(ctx) ? null : sceneFor(subject, ctx);
+    const m = sc ? sceneParts(sc) : motifParts(motifFor(subject, ctx), { small: true });
+    // Above a figure set this large the scene keeps to the top third, clear of the number.
+    heroHtml = heroHtml.replace(/<figure class="lt-art"([^>]*)>/, (x, a) => `<figure class="lt-art"${a}${m.attr}${sc ? ' style="--scene-h: 24%"' : ''}>${m.svg}`);
   }
-  ctx.heroMotif = /data-motif="([a-z]+)"/.exec(heroHtml)?.[1] ?? null;
+  ctx.heroMotif = /data-motif="([a-z]+)"/.exec(heroHtml)?.[1] ?? /data-scene="([a-z]+)/.exec(heroHtml)?.[1] ?? null;
   bands.push({ id: heroSec.id, html: heroHtml, slug: 'top', label: 'Top' });
   // The close repeats the hero's action. Software with no word on price says "Sign up", not "Start free".
   ctx.action = hero.action ?? (!isSoftware(ctx) ? 'Get in touch' : /^start free$/i.test(sampleAction ?? '') && !/\b(free|trial)\b/i.test(brief) ? 'Sign up' : sampleAction);
@@ -471,6 +489,49 @@ function writeComposed(dir, run) {
   return { path: target, kind: 'composed', sections: ordered.map((b) => b.id), left: todo.length, todo, moments: moments.map((m) => ({ name: m.name, band: ordered[m.at].slug, why: m.why })), rhythm: { strip: rhythmStrip(r), moved: r.moved, broken: checkRhythm(r, ordered.map((b, i) => (i === 0 ? null : lay.sectionLayouts.find((x) => x.n === i + 1)?.shape ?? null))) } };
 }
 
+// ---------------------------------------------------------------- pages that are not a marketing story
+/** Seeded sample data from scripts/sample-data.mjs (rows, series), read once per kind and size. */
+const sampleCache = new Map();
+function sample(kind, { rows = 12, points, period, base, growth } = {}) {
+  const args = [join(root, 'scripts/sample-data.mjs'), kind, '--rows', String(rows), '--currency', model.sym, ...(points ? ['--points', String(points)] : []), ...(period ? ['--period', period] : []), ...(base ? ['--base', String(base)] : []), ...(growth != null ? ['--growth', String(growth)] : [])];
+  const key = args.join(' ');
+  if (!sampleCache.has(key)) { const r = spawnSync(process.execPath, args, { encoding: 'utf8' }); sampleCache.set(key, r.status === 0 ? JSON.parse(r.stdout) : []); }
+  return sampleCache.get(key);
+}
+/**
+ * Pricing, contact, a shop's product, checkout, docs, a changelog, a status page, sign-in, a 404, an article
+ * and every app screen: the page type's own anatomy (its blueprint's classes, parts and states) filled with the
+ * brief's words, the blueprint's page styles beside it, and a small script that joins the parts up.
+ */
+function writePage(dir, run) {
+  const ctx = { facts, figures, product, typeId: type.id, m: model, flow, hero, action: hero.action, sample, charts: new Set(), todo: [...model.todo], domainWords: (domain?.words ?? []).join(' '), usedMotifs: new Set(), used: new Set(), idea, hours, snippet: partHtml, bands: {} };
+  if (type.id === 'contact') { const v = renderBand({ id: 'visit-info', role: 'Find us' }, ctx); if (!v.todo) ctx.bands.visit = v.html; }
+  const r = PAGES[type.id](ctx);
+  // A link to the top of the page needs something there with that id.
+  if (!/\sid="top"/.test(r.body)) r.body = r.body.replaceAll('href="#top"', 'href="#main"');
+  if (!product) ctx.todo.unshift('the product\'s name');
+  const kit = join(dir, 'lumina-taste');
+  // Install exactly the parts the page uses, and the charts it draws.
+  const rc = rootClasses();
+  const ids = new Set(['button']);
+  for (const m of r.body.matchAll(/class="([^"]+)"/g)) for (const c of m[1].split(/\s+/)) if (rc.has(c)) ids.add(rc.get(c));
+  for (const m of r.body.matchAll(/data-lt="([a-z-]+)"/g)) if (uiIds.has(m[1])) ids.add(m[1]);
+  for (const u of r.uses ?? []) ids.add(u);
+  run(`${base} --components ${[...ids].filter((x) => uiIds.has(x)).join(',')}${ctx.charts.size ? ` --charts ${[...ctx.charts].join(',')}` : ''}`);
+  // The blueprint's own page styles (its layout classes), then the draft's few additions, tokens only.
+  const bpCss = (id) => { const f = join(root, 'blueprints', id, 'page.css'); return existsSync(f) ? `\n/* blueprints/${id}/page.css */\n${readFileSync(f, 'utf8')}` : ''; };
+  writeFileSync(join(kit, 'page.css'), `/* Page styles for this draft: the kit's blueprint layer${r.css ? ` and the ${r.css} blueprint's page styles` : ''}, then the draft's additions. Edit freely. */\n${readFileSync(join(root, 'blueprints/_shared/blueprint.css'), 'utf8')}${r.css ? bpCss(r.css) : ''}\n/* the draft's additions */\n${DRAFT_CSS}`);
+  writeFileSync(join(kit, 'page.js'), PAGE_SCRIPT);
+  const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''}${r.htmlData ?? ''}`;
+  const todo = [...new Set(ctx.todo)];
+  const list = todo.length ? `<!-- TODO before this page ships. The brief did not say, so the draft leaves these out (or shows seeded sample rows labelled with your nouns) rather than inventing them:\n${todo.map((t) => `  - ${t.replace(/--/g, '–')}`).join('\n')}\n-->\n` : '';
+  const page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1${r.htmlData?.includes('data-app') ? ', viewport-fit=cover' : ''}">\n  <title>${esc(r.title)}</title>\n  <meta name="description" content="${esc(r.desc.endsWith('.') ? r.desc : `${r.desc}.`)}">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. A ${type.name.toLowerCase()} in the ${blueprint ?? type.id} anatomy, written from the brief: check every word, then work through the TODO list. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <link rel="stylesheet" href="lumina-taste/page.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n  <script defer src="lumina-taste/page.js"></script>\n</head>\n<body>\n${list}  <a class="bp-skip" href="#main">Skip to content</a>\n  ${r.body}\n</body>\n</html>\n`;
+  const MARK = '<!-- lumina-taste draft for:';
+  const target = existsSync(join(dir, 'index.html')) && !readFileSync(join(dir, 'index.html'), 'utf8').includes(MARK) ? join(dir, 'index.draft.html') : join(dir, 'index.html');
+  writeFileSync(target, page);
+  return { path: target, kind: 'page', todo, flow: flow ? flow.screens.filter((s) => s.build).map((s) => s.id) : null, charts: [...ctx.charts] };
+}
+
 // ---------------------------------------------------------------- --write: a composed first draft
 // Installs what the plan needs and writes the page itself: sections in order with their layouts, tones and
 // ids applied, the navigation pointing at them, and the art direction on <main>. Every sentence in it is
@@ -486,6 +547,7 @@ if (writeDraft) {
   // would start from by hand: no sample business's words, names or prices can survive into it.
   const composed = type.kind === 'marketing' && sections.some((x) => /^hero-/.test(x.id ?? ''));
   if (composed) draft = writeComposed(dir, run);
+  else if (PAGES[type.id]) draft = writePage(dir, run);
   else if (startWith === 'blueprint') {
     const out = run(installBlueprint, product ? ['--name', product] : []);
     const path = join(dir, /written to (\S+)\/ instead/.exec(out)?.[1] ?? '', 'index.html');
@@ -600,8 +662,9 @@ L.push(`# Page plan: ${type.name}`, '', `> ${brief || `--type ${type.id}`}`, '')
 if (!confident) L.push(`Page type guessed from the catalog. If this is wrong, rerun with \`--type <id>\` (${kb.pageTypes.map((p) => p.id).join(', ')}).`, '');
 else if (runnerUp) L.push(`Also close: \`${runnerUp.id}\`. Rerun with \`--type ${runnerUp.id}\` if that fits better.`, '');
 if (draft?.kind === 'composed') L.push(`**A first draft is written: \`${draft.path}\`.** It is composed band by band from the brief's own facts (no sample business's words, names or prices), in the rhythm below. ${draft.todo.length ? `The brief left ${draft.todo.length} thing${draft.todo.length > 1 ? 's' : ''} open; they are listed once, at the top of the draft, and under "Still needed" below. Bands with nothing to show were left out rather than invented.` : 'Nothing was left open.'}`, '');
+if (draft?.kind === 'page') L.push(`**A first draft is written: \`${draft.path}\`.** It is a ${type.name.toLowerCase()} in its blueprint's working anatomy (the same parts and states), written from the brief: its own names, ${type.kind === 'app' ? 'records, fields and states' : 'prices, places and lists'}, nothing from a sample business.${draft.todo.length ? ` The brief left ${draft.todo.length} thing${draft.todo.length > 1 ? 's' : ''} open; they are listed once, at the top of the draft, and under "Still needed" below.` : ''} Page styles are in \`lumina-taste/page.css\` and the page's behaviour in \`lumina-taste/page.js\`.`, '');
 if (draft?.kind === 'composed' && plan.draft?.images) L.push(`Photographs: ${plan.draft.images.note}.`, '');
-else if (draft) L.push(draft.kind === 'blueprint'
+else if (draft && draft.kind !== 'page') L.push(draft.kind === 'blueprint'
   ? `**A first draft is written: \`${draft.path}\`** (the \`${blueprint}\` blueprint, themed with this profile). Everything in it is sample content. Rewrite it section by section with the plan below, then do the detail pass and audit.`
   : `**A first draft is written: \`${draft.path}\`.** It has the sections below in order, with their layouts, bands, ids and navigation already applied, and the art direction on \`<main>\`. Every sentence, name and number in it is sample copy: rewrite each section with its copy formula below.${draft.left.length ? ` Not drafted, because they need real material from the user: ${draft.left.map((x) => `\`${x}\``).join(', ')}.` : ''}`, '');
 L.push(H('Design brief (confirm before writing code)'), '');
@@ -676,6 +739,11 @@ for (const s of sections) {
 L.push('');
 if (type.kind === 'marketing') L.push('Section blocks go straight inside `<main>`, one after another. Each centres its content in a 1180px container and pads itself by half of `--section-y`, so the gap between two sections is always `--section-y`; never wrap them in another band or container.' + (art.printlike ? ' This page uses hairlines between sections, so leave every band plain.' : ' Never tint two bands in a row.'), '');
 if (charts.length) L.push(H('Charts'), '', `Start with ${charts.map((c) => `\`${c}\``).join(', ')}. Write each title as the takeaway first; check the pick in references/chart-selection.md.`, '');
+if (flow) {
+  L.push(H('The app as a flow'), '', `Plan the screens before any one of them: an app is used in this order, and each screen has its empty, loading and error states in ${product ?? 'the product'}'s own words.`, '');
+  flow.screens.forEach((s, i) => L.push(`${i + 1}. **${s.name}**${s.build ? (draft ? ' _(drafted)_' : ' _(build this)_') : ''}: ${s.what}`));
+  L.push('', `- **Empty:** "${flow.states.empty.title}". ${flow.states.empty.body} Button: "${flow.states.empty.action}".`, `- **Loading:** ${flow.states.loading.how} (aria-label "${flow.states.loading.label}").`, `- **Error:** "${flow.states.error.title}". ${flow.states.error.body} Button: "${flow.states.error.action}".`, '', `Open the draft with \`?state=loading\`, \`?state=empty\` or \`?state=error\` to see each.${['mobile-app', 'app-phone'].includes(type.id) ? ' `?screen=home` (or start, detail, settings) opens one screen.' : ''}`, '');
+}
 if (type.states.length) { L.push(H('States to build'), ''); for (const s of type.states) L.push(`- ${s}`); L.push(''); }
 L.push(H('Avoid'), ''); for (const a of type.avoid) L.push(`- ${a}`); L.push('');
 L.push(H('Finish'), ''); for (const f of plan.finish) L.push(`- ${f.startsWith('node') ? '`' + f.replace(/\s{2,}\(.*$/, '') + '`' + (f.match(/\s{2,}(\(.*)$/)?.[1] ? ' ' + f.match(/\s{2,}(\(.*)$/)[1] : '') : f}`);

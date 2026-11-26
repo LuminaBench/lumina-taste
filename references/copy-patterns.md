@@ -15,6 +15,10 @@ A draft is written from the brief's own words before any formula: the kind of bu
 - **Hyphenated words never break in a headline**: the draft writes "single‑storey" with a non-breaking hyphen.
 - **No fact, no line.** When the brief has no figure, the draft does not invent one: a line it has nothing for is removed rather than left describing the sample business, a figures band with fewer than three real figures is left out, and the plan's "Still needed" list (and a `<!-- TODO: ask for … -->` in the hero) asks for the missing facts: the address, the opening hours, one real price, one true figure with its period. The critic fails a visible TODO, so a draft with gaps cannot ship by accident.
 
+### Pages that are not a story
+
+The same rule holds on a pricing page, a checkout or an app screen: the brief's nouns, as written. A plan is called what the brief calls it ("Pro £29 a month"); an app's columns are its fields ("Dog", "Owner", "Groomer"); its buttons are the first step ("Add a client") or "New" and the record ("New booking"); its states name the record ("No bookings yet", "Loading bookings", "Bookings could not load"). Sample rows say they are samples by their names ("Customer 03", "Order #1038"), never a made-up person.
+
 ## Headlines
 
 | Where | Formula | Before | After |
