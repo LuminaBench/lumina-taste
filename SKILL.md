@@ -169,9 +169,9 @@ Starting fresh on one of these stacks: `install-taste.mjs --framework tailwind` 
 
 | Blueprint | id | Starts you with |
 | --- | --- | --- |
-| Product / SaaS landing | `landing` | Mega-menu navbar, one-CTA hero, live product frame, bento, quote, CTA band, contrast footer |
+| Product / SaaS landing | `landing` | Mega-menu navbar, one-CTA hero, live product frame, a pinned three-step scene, bento, quote, CTA band, contrast footer |
 | Financial & analytics dashboard | `dashboard` | Collapsible sidebar, one filter row, ten compact KPIs with sparklines on one surface, one main chart with its breakdown beside it, a sortable 24-row table with a sticky header; loading and error states |
-| Editorial portfolio | `editorial` | Serif/sans, generous measure, case-study cards, essay with pull quote |
+| Editorial portfolio | `editorial` | Serif/sans, generous measure, selected work as results on a sideways rail, essay with pull quote |
 | Documentation & changelog | `docs` | Tree nav, scrollspy rail, tabbed copyable code, callouts, timeline |
 | Pricing & comparison | `pricing` | Monthly/annual pill toggle, 3 tiers, feature matrix, FAQ accordion |
 | Settings & workspace | `settings` | Sectioned forms, switches, danger zone with confirm, sticky unsaved-changes bar |
@@ -191,7 +191,7 @@ Starting fresh on one of these stacks: `install-taste.mjs --framework tailwind` 
 | Episode page | `episode` | Title and guest, a player that stays in reach, chapters that seek, a readable transcript with a progress bar, earlier episodes |
 | Local or professional service | `practice` | Who it is for and where, services and fees as ruled rows with prices in one column, the first visit in three steps, people with their qualifications, address and opening hours, questions, a booking band with the phone number |
 | Charity or community group | `cause` | The claim as a fact with three true figures, how to get help with session times, where each pound goes as one bar that adds up, ways to help as rows, one giving action |
-| Maker or product brand | `shop` | The object and its price in the first screen, the range as three art panels at one ratio, how it is made, materials and care as plain facts, delivery and returns, a buying band |
+| Maker or product brand | `shop` | The object and its price in the first screen, the range as three art panels at one ratio, how it is made as a pinned scene, a before-and-after glaze slider, materials and care as plain facts, delivery and returns, a buying band |
 | Event or conference | `event` | The date and place above a statement headline with three figures, the programme as timed rows, speakers as ruled rows with their talks, three tickets, venue and door times, questions |
 | Phone app screen | `mobile` | Collapsing large title, one headline figure with a week of bars, whole-row lists, primary action above bottom tabs, a bottom-sheet form; loading and empty states |
 | Phone app, whole flow | `app-phone` | Six working screens (choose, today, detail, pay, tickets, settings) side by side on desktop and one at a time on a phone: tab bar, large title, swipe rows, pull to refresh, a sheet with detents; `?screen=` opens one; loading, empty and error states |
