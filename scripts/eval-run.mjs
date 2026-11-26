@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 // Run an agent on every brief in evals/evals.json, one fresh folder per brief, then score the run.
 //
-//   node scripts/eval-run.mjs --agent 'claude -p {prompt} --permission-mode acceptEdits' --only saas-landing-invoicing,pricing-dev-api
-//   node scripts/eval-run.mjs --agent '<your agent command>' --out evals/runs/my-run --limit 5
+//   node scripts/eval-run.mjs --agent 'my-agent run {prompt}' --label agent-a --only saas-landing-invoicing,pricing-dev-api
+//   node scripts/eval-run.mjs --agent '<your agent command>' --label agent-b --out evals/runs/my-run --limit 5
 //
+// --label names the agent (any short name). With it, the run's scores are appended to evals/history.json
+// (scripts/eval-history.mjs), so runs of different agents and skill versions can be compared over time.
 // {prompt} is replaced with the brief (shell-quoted) and {dir} with the output folder; the command runs
 // inside that folder. The skill's own path is appended to the prompt so the agent can find it.
 // Nothing runs without --agent: this script never picks an agent or spends credits on its own.
@@ -20,10 +22,12 @@ const only = opt('only', null)?.split(',');
 const limit = +opt('limit', '999');
 const out = opt('out', join(root, 'evals/runs', new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-')));
 const timeout = +opt('timeout', '1200') * 1000;
+const label = opt('label', null);
 if (!agent) {
-  console.error("Usage: node scripts/eval-run.mjs --agent '<command with {prompt}>' [--only slug,slug] [--limit n] [--out dir] [--timeout seconds]");
+  console.error("Usage: node scripts/eval-run.mjs --agent '<command with {prompt}>' [--label <agent>] [--only slug,slug] [--limit n] [--out dir] [--timeout seconds]");
   process.exit(2);
 }
+if (label && !/^[\w.-]{1,40}$/.test(label)) { console.error('--label is a short name for the agent: letters, digits, . _ - (e.g. agent-a).'); process.exit(2); }
 const q = (s) => `'${s.replace(/'/g, `'\\''`)}'`;
 const evals = JSON.parse(readFileSync(join(root, 'evals/evals.json'), 'utf8')).evals.filter((e) => !only || only.includes(e.slug)).slice(0, limit);
 for (const e of evals) {
@@ -37,3 +41,5 @@ for (const e of evals) {
   if (r.status !== 0) console.log(`  agent exited with ${r.status ?? r.signal}`);
 }
 spawnSync(process.execPath, [join(root, 'scripts/eval-score.mjs'), '--run', out], { stdio: 'inherit' });
+if (label) spawnSync(process.execPath, [join(root, 'scripts/eval-history.mjs'), '--add', out, '--label', label], { stdio: 'inherit' });
+else console.log('\nAdd --label <agent> next time to record this run in evals/history.json (or: node scripts/eval-history.mjs --add <run dir> --label <agent>).');

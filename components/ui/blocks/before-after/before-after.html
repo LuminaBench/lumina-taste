@@ -1,7 +1,38 @@
-<section class="lt-before-after" aria-labelledby="lt-ba-title">
-  <header><h2 id="lt-ba-title">What changes in week one</h2></header>
-  <div data-part="cols">
-    <div data-part="old"><h3>Before</h3><ul><li><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Three dashboards, three revenue numbers</li><li><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Exports pasted into slides every Monday</li><li><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Alerts from whoever notices first</li></ul></div>
-    <div data-part="new"><h3>With Halyard</h3><ul><li><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>One definition, used by every chart</li><li><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Board pack is a link that stays current</li><li><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Alerts when a metric actually moves</li></ul></div>
+<section class="lt-before-after" data-lt="before-after" aria-labelledby="lt-ba-title">
+  <header><h2 id="lt-ba-title">November’s receipts, before and after</h2><p data-part="lede">Drag across the picture, or use the arrow keys.</p></header>
+  <div data-part="compare">
+    <div data-part="before" role="img" aria-label="Before: a spreadsheet of 212 receipts with blank categories and question marks">
+      <div data-mock="sheet">
+        <p data-m="file">receipts-nov-final-2.xlsx</p>
+        <div data-m="grid"><span></span><span>A</span><span>B</span><span>C</span><span>D</span>
+          <span>1</span><span>Date</span><span>Paid to</span><span>Amount</span><span>What for</span>
+          <span>2</span><span>02/11</span><span>Larkspur Timber</span><span>412.80</span><span data-q>?</span>
+          <span>3</span><span>03/11</span><span>Rail</span><span>38.40</span><span>travel</span>
+          <span>4</span><span>03/11</span><span>Card 4471</span><span>19.99</span><span data-q>??</span>
+          <span>5</span><span>07/11</span><span>Moss Paper Co</span><span>126.00</span><span></span>
+          <span>6</span><span>09/11</span><span>Kestrel Hire</span><span>240.00</span><span>van?</span>
+          <span>7</span><span>12/11</span><span>Juniper Print</span><span>88.15</span><span data-q>?</span>
+          <span>8</span><span>14/11</span><span>Cash</span><span>12.00</span><span></span>
+          <span>9</span><span>…</span><span>…</span><span>…</span><span>…</span>
+        </div>
+      </div>
+      <span data-part="tag">Before</span>
+    </div>
+    <div data-part="after" role="img" aria-label="After: the same month sorted into four categories, with the VAT worked out">
+      <div data-mock="sorted">
+        <p data-m="title">November, sorted<span>212 receipts</span></p>
+        <ul data-m="cats">
+          <li style="--share: 52%"><span>Materials</span><b>£2,140.60</b></li>
+          <li style="--share: 35%"><span>Studio rent</span><b>£1,450.00</b></li>
+          <li style="--share: 10%"><span>Travel</span><b>£386.20</b></li>
+          <li style="--share: 5%"><span>Software</span><b>£212.00</b></li>
+        </ul>
+        <p data-m="vat"><span>VAT you can reclaim</span><b>£838.13</b></p>
+      </div>
+      <span data-part="tag">After</span>
+    </div>
+    <span data-part="handle" aria-hidden="true"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span>
+    <input type="range" data-part="range" min="0" max="100" value="50" step="1" aria-label="Divider between before and after" aria-valuetext="50% before, 50% after">
   </div>
+  <p data-part="captions"><span><b>Before</b> 212 receipts in one spreadsheet</span><span><b>After</b> Four categories, VAT worked out</span></p>
 </section>

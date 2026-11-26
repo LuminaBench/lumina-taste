@@ -245,12 +245,12 @@
     {
       "id": "stats-band",
       "name": "Stats band",
-      "summary": "Four large figures with plain labels, divided by hairlines instead of boxes.",
+      "summary": "Four large figures with plain labels, divided by hairlines instead of boxes. Each figure counts up to itself once when the band reaches the screen; the true number is in the HTML.",
       "pattern": "<dl> (label, value)",
-      "states": ["four across","two by two"],
+      "states": ["four across","two by two","counting","still (reduced motion, print)"],
       "aliases": ["numbers section","metrics strip","by the numbers","social proof numbers","big stats row"],
       "react": "StatsBand",
-      "api": "<dl>",
+      "api": "<dl> · data-count · data-count-from",
       "w": 1000,
       "called": [
         "row of big numbers on a landing page",
@@ -262,8 +262,8 @@
         {
           "sel": "dl > div:first-child dd",
           "name": "Figure",
-          "api": "tabular-nums",
-          "text": "Large display type; units written out."
+          "api": "data-count",
+          "text": "Large display type, tabular figures, units written out. Counts once; the HTML holds the real value."
         },
         {
           "sel": "dl > div:first-child dt",
@@ -278,9 +278,9 @@
           "text": "Hairlines group the figures; no cards."
         }
       ],
-      "prompt": "Build a stats band: a small eyebrow heading, then a <dl> of four figures in a row (two by two when narrow), each a large display-type value above a plain label that says what was counted and over what period, divided by hairlines, no boxes or icons.",
+      "prompt": "Build a stats band: a small eyebrow heading, then a <dl> of four figures in a row (two by two when narrow), each a large display-type value in tabular figures above a plain label that says what was counted and over what period, divided by hairlines, no boxes or icons. Mark each value data-count: it counts up to the number written in it once, when half on screen (1.4s, ease-out), keeping its width; data-count-from starts it higher (99 for 99.98%). Without script, under reduced motion and in print the real number simply shows.",
       "debug": "Debug my stats band. Rule out: rounded vanity numbers with no period (\"10k+ users\"); icons on every figure; numbers that jump width when counting up; boxes around each stat. The symptom:",
-      "code": [["HTML","<dl><dt><dd>",""],["lumina-taste","<StatsBand stats>","React"]],
+      "code": [["HTML","<dl><dt><dd data-count>",""],["lumina-taste","<StatsBand stats>","React"]],
       "added": 4
     },
     {
@@ -678,43 +678,63 @@
     {
       "id": "before-after",
       "name": "Before and after",
-      "summary": "The old way, muted, beside the new way, outlined in the accent: three concrete lines each.",
-      "pattern": "Two lists side by side",
-      "states": ["side by side","stacked"],
+      "summary": "One picture in two states with a divider you drag across it. A native range input under the hood: arrow keys, pointer, a tap anywhere and touch all work.",
+      "pattern": "input type=range over two clipped layers",
+      "states": ["half and half","dragging","keyboard focus","all before","all after","two lists (older layout)"],
       "aliases": [
+        "before after slider",
+        "comparison slider",
+        "image compare",
         "old way new way",
-        "problem solution section",
-        "vs section",
+        "drag to compare",
+        "reveal slider",
         "without with comparison",
-        "pain points vs benefits"
+        "problem solution section"
       ],
       "react": "BeforeAfter",
-      "api": "two <ul>",
-      "w": 900,
+      "api": "--pos · [data-part=\"before|after|range|handle\"]",
+      "w": 1000,
       "called": [
-        "old way vs new way boxes",
-        "problem and solution section",
-        "without us vs with us",
-        "before and after comparison"
+        "the slider you drag to see before and after",
+        "old way vs new way",
+        "photo before and after retouch",
+        "compare two versions of the same picture"
       ],
       "anatomy": [
         {
-          "sel": "[data-part=\"old\"]",
+          "sel": "[data-part=\"before\"]",
           "name": "Before",
-          "api": "",
-          "text": "Muted surface and crosses; specific pains."
+          "api": "role=\"img\"",
+          "text": "The whole picture in its old state; shows left of the divider."
         },
         {
-          "sel": "[data-part=\"new\"]",
+          "sel": "[data-part=\"after\"]",
           "name": "After",
+          "api": "clip-path",
+          "text": "The same picture, new; shows right of the divider."
+        },
+        {
+          "sel": "[data-part=\"handle\"]",
+          "name": "Divider",
+          "api": "left: var(--pos)",
+          "text": "A line the full height with a 44px knob. Rings when the slider has keyboard focus."
+        },
+        {
+          "sel": "[data-part=\"captions\"]",
+          "name": "Captions",
           "api": "",
-          "text": "Accent outline and ticks; each line answers the one opposite."
+          "text": "What each side shows, in a few words, under the picture."
         }
       ],
-      "prompt": "Add a before/after section: a centred heading, then two columns; \"Before\" on a muted surface with three specific pains marked with crosses, \"With <product>\" outlined in the accent with three matching outcomes marked with green ticks. Each line on the right answers the line on the left.",
-      "debug": "Debug my before/after. Rule out: vague pains (\"inefficient workflows\"); lines that do not pair up; red and green as the only difference; competitors named in a way you cannot back up. The symptom:",
-      "code": [["HTML","two <ul>",""],["lumina-taste","<BeforeAfter before after>","React"]],
-      "added": 7
+      "prompt": "Build a before-and-after section: a centred heading and one line, then a 16:9 frame (4:5 on phones, radius xl) holding two full-size layers, before and after, each role=\"img\" with an aria-label. The after layer is clipped with clip-path: inset(0 0 0 var(--pos)). A native <input type=\"range\"> covers the frame with opacity 0, so arrow keys, Page Up and Down, Home and End, pointer drag, a tap anywhere and touch all move it; it sets --pos and an aria-valuetext like \"60% before, 40% after\". A divider line with a 44px round knob sits at --pos and shows the focus ring while the input has keyboard focus; labels in the top corners fade when the divider reaches them. touch-action: pan-y so the page still scrolls on phones. Captions for both sides under the frame.",
+      "debug": "Debug my before-and-after slider. Rule out: a custom div with pointer events only (no keyboard, no screen reader); two pictures of different sizes or crops; the page unable to scroll on a phone over the slider (touch-action); the focus ring missing because the input is invisible; labels covering the divider. The symptom:",
+      "code": [
+        ["HTML","<input type=\"range\" data-part=\"range\"> over [data-part=before|after]",""],
+        ["lumina-taste","<BeforeAfter before after captions>","React"]
+      ],
+      "added": 17,
+      "preview": [],
+      "note": "Two pictures of the same thing at the same size: a room before and after, a document before and after, a photograph before and after retouching. Passing two lists of strings to the React component still gives the older two-column layout."
     },
     {
       "id": "project-grid",
@@ -843,48 +863,69 @@
     },
     {
       "id": "sticky-story",
-      "name": "Sticky story",
-      "summary": "Steps scroll on the left while the visual for the step being read stays pinned on the right.",
-      "pattern": "<ol> + position: sticky",
-      "states": ["step 1","step 2","step 3","stacked (narrow)"],
+      "name": "Sticky story (pinned scene)",
+      "summary": "The picture stays pinned while three or four steps scroll past beside it, and it changes with each step: it cross-fades to that step's state, settles in, and the part the step is about is ringed.",
+      "pattern": "<ol> + position: sticky + view-timeline",
+      "states": [
+        "pinned, scrubbed by scroll",
+        "pinned, observer fallback",
+        "playing (preview box)",
+        "rows (reduced motion, no script)",
+        "stacked (phones)"
+      ],
       "aliases": [
         "scrollytelling",
         "pinned scroll section",
+        "pinned scene",
         "sticky scroll features",
         "scroll-linked steps",
         "feature walkthrough",
-        "scroll story"
+        "scroll story",
+        "apple style pinned product",
+        "picture that changes as you scroll"
       ],
       "react": "StickyStory",
-      "api": "--steps · --story-step · --story-top",
+      "api": "--steps · --pin-h · [data-part=\"text|visual\"] · data-mark",
       "w": 1000,
       "preview": [],
       "called": [
         "the section where the picture stays and the text scrolls",
         "steps that change the screenshot as you scroll",
-        "pinned feature tour"
+        "pinned feature tour",
+        "the product stays still while the steps go by"
       ],
       "anatomy": [
         {
-          "sel": "li[data-active] [data-part=\"text\"]",
+          "sel": "li:first-child [data-part=\"text\"]",
           "name": "Step text",
           "api": "<ol><li>",
-          "text": "A number, a short heading and two lines. The one being read gets full ink and an accent rule."
+          "text": "A short heading and one line. The step at the middle of the screen is in full ink; the others step back."
         },
         {
-          "sel": "li[data-active] figure",
-          "name": "Pinned visual",
+          "sel": "li:first-child [data-part=\"visual\"]",
+          "name": "Pinned picture",
           "api": "position: sticky",
-          "text": "One per step, in the same place. Only the current one shows."
+          "text": "One per step, all in one pinned cell: the same frame in that step's state. They cross-fade as the steps pass."
+        },
+        {
+          "sel": "li:nth-child(2) [data-mark]",
+          "name": "Marked part",
+          "api": "data-mark",
+          "text": "The part a step is about gets a ring that draws in as the step arrives."
         }
       ],
-      "prompt": "Build a sticky story section: a heading, then an ordered list of three or four steps laid out as a two-column grid. Each step holds its text (mono step number, heading, two lines) and its own visual. The text blocks stack in the left column, each about 340px tall, with a 2px left rule that turns to the accent colour for the current step. All visuals share one right-hand cell spanning every row and are position: sticky, so they stay pinned while the text scrolls; only the visual of the current step is opaque, with a 320ms fade. A small script marks the step nearest the middle of the viewport as current. Under 760px every visual sits under its own text and nothing is pinned. Use it once per page, for a process that really has an order.",
-      "debug": "Debug my sticky story. Rule out: scroll hijacking (never change scroll speed or snap); visuals missing on mobile; a sticky element inside an ancestor with overflow hidden or auto; step text too short for the visual to pin; inactive text dimmed with opacity until it fails contrast; more than four steps. The symptom:",
+      "prompt": "Build a pinned scroll scene: a large heading, then an ordered list of three or four steps in a two-column grid. Each <li> is display: contents and holds its text (a heading and one line) and its own picture (data-part=\"visual\"): the same product frame in that step's state. Texts stack in the left column, each 60svh tall; every picture sits in one right-hand cell spanning all rows, position: sticky, vertically centred, on a tinted panel. Each step's text is a named view-timeline shared with its picture through timeline-scope on the <li>; the picture fades and settles from scale 0.965 while the text is within half a step of the screen's middle, and any element with data-mark inside it gets an accent ring that draws in a moment later. Without scroll-driven animation support an IntersectionObserver on a line at the middle of the screen marks the step data-active instead. Under reduced motion or without script each step is a still row, text beside its picture; under 760px each picture sits under its own text and nothing is pinned. Inside a preview box with nothing to scroll the steps take turns on a timer. Transform and opacity only.",
+      "debug": "Debug my pinned scene. Rule out: an ancestor with overflow hidden or auto (sticky stops working); the text steps shorter than 60svh (the fade timing assumes it); pictures that are different frames rather than one frame in different states; more than four steps; a second pinned moment on the same page; inactive text dimmed under reduced motion. The symptom:",
       "code": [
-        ["CSS","li { display: contents } figure { position: sticky; grid-row: 1 / span var(--steps) }",""],
+        [
+          "CSS",
+          "li { display: contents; timeline-scope: --step } [data-part=text] { view-timeline: --step block }",
+          ""
+        ],
         ["lumina-taste","<StickyStory title steps>","React"]
       ],
-      "added": 12
+      "added": 12,
+      "note": "One per page, and it counts as one of the page's two scroll moments. Three or four steps with one frame (a phone, a browser, a photograph) in each step's state: the screen changes, the frame does not. Put data-mark on what the step is about."
     },
     {
       "id": "offer-cards",
@@ -1053,6 +1094,68 @@
         ["lumina-taste","<HeroStatement title lede facts>","React"]
       ],
       "added": 14
+    },
+    {
+      "id": "hero-video",
+      "name": "Hero with video",
+      "summary": "A headline and one action above a wide picture that is a still first and becomes a muted, looping film when motion is allowed, with a pause button always on it.",
+      "pattern": "<video muted loop playsinline> over a poster",
+      "states": ["still only (no film)","playing","paused by the visitor","not started (reduced motion or Save-Data)"],
+      "aliases": [
+        "video hero",
+        "background video header",
+        "hero with looping video",
+        "autoplay video banner",
+        "film hero",
+        "cinematic hero"
+      ],
+      "react": "HeroVideo",
+      "api": "[data-part=\"media|poster|video|toggle\"] · data-src · data-state",
+      "w": 1040,
+      "preview": [],
+      "called": [
+        "the top section with a video playing",
+        "hero with a muted background film",
+        "header with a looping clip"
+      ],
+      "anatomy": [
+        {
+          "sel": "h1",
+          "name": "Headline",
+          "api": "<h1>",
+          "text": "What and where, under ten words, on the left edge."
+        },
+        {
+          "sel": "[data-part=\"cta\"] [data-variant=\"primary\"]",
+          "name": "Action",
+          "api": "",
+          "text": "One primary action beside the lede."
+        },
+        {
+          "sel": "[data-part=\"poster\"]",
+          "name": "Still",
+          "api": "data-part=\"poster\"",
+          "text": "Shown first and whenever the film is not playing: an <img>, or an art panel until there is one."
+        },
+        {
+          "sel": "[data-part=\"video\"]",
+          "name": "Film",
+          "api": "muted loop playsinline",
+          "text": "Fetched and played only when motion is allowed and Save-Data is off; fades in once it plays, so nothing shifts."
+        }
+      ],
+      "prompt": "Build a hero with video: a large headline on the left with the lede and one primary button in a column to its right, then a wide media box (16:9; 2:1 on wide screens; 4:5 on phones) with a radius. Inside it a still (an <img> or a placeholder panel) fills the box; over it a <video muted loop playsinline preload=\"none\" aria-hidden=\"true\"> whose source is in data-src. A script fetches and plays it only when prefers-reduced-motion is not reduce, Save-Data is off and the hero is on screen, fades it in on the playing event, pauses it when the hero leaves the screen and resumes unless the visitor paused it. A 44px round pause/play button sits in the bottom-right corner whenever a film exists, labelled \"Pause the film\" or \"Play the film\". No film: the still alone, no button.",
+      "debug": "Debug my video hero. Rule out: autoplay under reduced motion or Save-Data; no pause button (WCAG 2.2.2); sound on; the box resizing when the film loads (give it an aspect-ratio); the file downloading for people who never see it (preload=\"none\" plus data-src); the headline set over the moving film. The symptom:",
+      "code": [
+        [
+          "HTML",
+          "<video data-part=\"video\" muted loop playsinline preload=\"none\"><source data-src=\"film.mp4\">",
+          ""
+        ],
+        ["lumina-taste","<HeroVideo poster src>","React"]
+      ],
+      "added": 17,
+      "note": "Only with a real film of the subject (a place, a product in use), 8 to 20 seconds, muted, under 4 MB. Put its path in data-src and a still from it in the poster. Without one, keep the still: it is the same hero."
     },
     {
       "id": "service-list",
@@ -1285,6 +1388,58 @@
       "note": "At most one dark band per page, from the middle on, for the strongest picture you have. Any block takes data-tone=\"dark\" the same way."
     },
     {
+      "id": "product-reveal",
+      "name": "Product reveal",
+      "summary": "The product rises from lying back, like a lid opening, and settles flat and full size as it reaches the screen. One scroll moment, then three facts.",
+      "pattern": "figure[data-zoom=\"open\"] + view()",
+      "states": ["tilted back (entering)","open","still (reduced motion)","plays once (preview box)"],
+      "aliases": [
+        "product shot that opens on scroll",
+        "laptop lid reveal",
+        "apple style product reveal",
+        "device rotates in on scroll",
+        "zoom in product section",
+        "screenshot that tilts up"
+      ],
+      "react": "ProductReveal",
+      "api": "data-zoom=\"open\" · [data-part=\"product|facts\"]",
+      "w": 1000,
+      "preview": [],
+      "called": [
+        "the screenshot that tilts up as you scroll to it",
+        "product image opening like a laptop",
+        "big product shot that animates in"
+      ],
+      "anatomy": [
+        {
+          "sel": "h2",
+          "name": "Claim",
+          "api": "<h2>",
+          "text": "What the product is for, large and centred, with one line under it."
+        },
+        {
+          "sel": "[data-part=\"product\"]",
+          "name": "Product",
+          "api": "data-zoom=\"open\"",
+          "text": "The real screen in a device frame, or a photograph. Opens from 24° back and 82% size."
+        },
+        {
+          "sel": "[data-part=\"facts\"]",
+          "name": "Facts",
+          "api": "<dl>",
+          "text": "Three true figures about the product itself."
+        }
+      ],
+      "prompt": "Build a product reveal: a centred claim (large) with one line under it, then the product (a browser frame holding the real screen, up to 1040px wide) with a soft ground shadow, then three facts as large figures with labels. The product carries a scroll-driven animation on view(): from perspective(1800px) translateY(8%) rotateX(24deg) scale(0.82) at 40% opacity to flat and full size, transform-origin at the bottom edge, over entry 10% to cover 45%, so it is open by the time it is a third of the way up the screen. Still under reduced motion and in print; in a preview box it plays once on a timer.",
+      "debug": "Debug my product reveal. Rule out: the reveal still running when the product is in the middle of the screen (range too long); text inside the tilted frame you are meant to read while it moves; an ancestor with overflow hidden cutting the tilt; a second reveal or zoom on the page. The symptom:",
+      "code": [
+        ["HTML","<figure data-part=\"product\" data-zoom=\"open\">",""],
+        ["lumina-taste","<ProductReveal product facts>","React"]
+      ],
+      "added": 17,
+      "note": "For the strongest picture of the product, once per page. data-zoom=\"open\" works on any picture; plain data-zoom only settles its size (media-band uses it)."
+    },
+    {
       "id": "gallery-rail",
       "name": "Gallery rail",
       "summary": "A row of pictures at one ratio that runs off the right edge and snaps as it scrolls sideways, with previous and next buttons. Many pictures without a wall of cards.",
@@ -1333,6 +1488,68 @@
       "code": [["HTML","<ul data-part=\"track\" tabindex=\"0\">",""],["lumina-taste","<GalleryRail items>","React"]],
       "added": 16,
       "note": "Five to twelve pictures at one ratio: a range, rooms, projects, colours. Never autoplay. For two to four things use offer-cards instead."
+    },
+    {
+      "id": "side-scroll",
+      "name": "Side scroll",
+      "summary": "A row of work that slides sideways while you scroll down through a tall section, pinned until the last piece arrives. On phones it is a row you swipe, with snap.",
+      "pattern": "position: sticky + view-timeline translateX",
+      "states": ["pinned, sliding","native swipe (phones, reduced motion, no script)","end of row"],
+      "aliases": [
+        "horizontal scroll section",
+        "scroll sideways on scroll down",
+        "pinned horizontal gallery",
+        "horizontal scroll portfolio",
+        "apple style sideways row",
+        "scroll jacked carousel (done right)"
+      ],
+      "react": "SideScroll",
+      "api": "--travel · [data-part=\"pin|track|progress|caption\"]",
+      "w": 1000,
+      "preview": [],
+      "called": [
+        "the section where the projects move sideways as you scroll down",
+        "horizontal scrolling gallery that pins",
+        "portfolio row that slides across"
+      ],
+      "anatomy": [
+        {
+          "sel": "header h2",
+          "name": "Heading",
+          "api": "<h2>",
+          "text": "What the row is, with one line of context beside it."
+        },
+        {
+          "sel": "[data-part=\"track\"]",
+          "name": "Row",
+          "api": "translateX",
+          "text": "Five to eight pictures at one ratio. Pinned, it slides by exactly its overflow; on phones it scrolls and snaps."
+        },
+        {
+          "sel": "li:first-child [data-part=\"caption\"]",
+          "name": "Caption",
+          "api": "",
+          "text": "The name and one fact under each picture."
+        },
+        {
+          "sel": "[data-part=\"progress\"]",
+          "name": "Progress",
+          "api": "scaleX",
+          "text": "A short line that fills as the row travels."
+        }
+      ],
+      "prompt": "Build a side-scroll section: a heading and one line, then a row of five to eight pictures at one ratio (4:5) with a caption each, and a short progress line. On a wide screen with motion allowed, the section is 100svh plus the row's overflow tall (a script measures the overflow into --travel with a ResizeObserver); an inner wrapper is position: sticky at the top, one screen tall, and the row is translated from 0 to -var(--travel) by the section's own view-timeline over its contain range, so it slides while the page scrolls. Tabbing to a link in a row that has slid away scrolls the page to where it is visible. On phones, under reduced motion, without script or without scroll-driven animations it is a native horizontal scroller with scroll-snap, starting on the page's left edge and running off the right. Transform only; nothing reads layout on scroll.",
+      "debug": "Debug my side scroll. Rule out: an ancestor with overflow hidden (breaks sticky); the section height not matching the row's overflow (it ends early or dwells); a scroll listener moving the row; pinning on phones; a second pinned moment on the same page. The symptom:",
+      "code": [
+        [
+          "CSS",
+          "section { view-timeline: --rail block } ul { animation: slide linear both; animation-timeline: --rail; animation-range: contain }",
+          ""
+        ],
+        ["lumina-taste","<SideScroll title items>","React"]
+      ],
+      "added": 17,
+      "note": "For work people browse: projects, a range, rooms. Five to eight pictures at one ratio. It is one of the page's two scroll moments. For a row that never pins, use gallery-rail."
     }
   ]
 }

@@ -70,7 +70,15 @@
         "didone",
         "slab",
         "dense",
-        "rounded"
+        "rounded",
+        "signage",
+        "hyperlegible",
+        "stamped",
+        "stadium",
+        "legal",
+        "workbench",
+        "schoolbook",
+        "stencil"
       ]
     },
     "density": {

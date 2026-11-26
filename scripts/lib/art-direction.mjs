@@ -10,13 +10,13 @@ const LAYOUTS = {
   // id: [preferred layouts, most distinctive first]. `default` is the block as it ships.
   'feature-grid': ['rail', 'split', 'default'],
   'offer-cards': ['split', 'default', 'rail'],
-  'how-it-works': ['default', 'rail'],
-  'stats-band': ['default'],
+  'how-it-works': ['default', 'rail', 'centre'],
+  'stats-band': ['default', 'centre'],
   'service-list': ['default'],
   'testimonial-grid': ['centre', 'rail', 'default'],
   'pricing-tiers': ['centre'],
   'integrations-grid': ['rail', 'default'],
-  'team-grid': ['default', 'rail'],
+  'team-grid': ['default', 'rail', 'centre'],
   'blog-grid': ['split', 'default'],
   'project-grid': ['split', 'default'],
   'logo-cloud': ['default'],
@@ -32,6 +32,13 @@ const FIXED_SHAPE = {
   'faq-section': 'rail', 'feature-split': 'alternating', 'quote-feature': 'split', 'cta-band': 'panel', 'logo-cloud': 'centre', 'pricing-tiers': 'centre',
   'hero-split': 'split', 'hero-centered': 'centre', 'hero-statement': 'left', 'visit-info': 'split', 'booking-bar': 'panel', 'sticky-story': 'rail',
   'terminal-window': 'split', 'code-block': 'left', 'api-endpoint': 'left', 'contact-section': 'split', 'newsletter-signup': 'panel', 'comparison-table': 'left', 'showcase-tabs': 'centre',
+};
+
+/** The one shape a part always has, or null when it can take more than one layout. */
+export const fixedShape = (id) => {
+  if (!id) return null;
+  if (LAYOUTS[id]) return LAYOUTS[id].length > 1 ? null : (FIXED_SHAPE[id] ?? 'left');
+  return FIXED_SHAPE[id] ?? null;
 };
 
 /** Styles and domains whose pages read as print: untinted bands, set apart by space and scale. */
@@ -52,7 +59,7 @@ const SIGNATURES = {
   public: { name: 'The task, first', how: 'A statement hero that names the task in plain words, then numbered steps. Underlined links, strong focus rings, nothing ornamental.' },
   commerce: { name: 'The objects as a set', how: 'Art panels or photographs at one ratio, toned plain, accent and ink across the set, with prices in full. The range is the layout.' },
   beauty: { name: 'The objects as a set', how: 'A quiet statement or split hero, then three art panels or photographs at one ratio with a didone headline. Wide margins and large pictures; no boxes.' },
-  hospitality: { name: 'A place you can find', how: 'A type-led hero with one large art panel or photograph, "open now" said in words, and the booking bar in a tinted band halfway down.' },
+  hospitality: { name: 'A place you can find', how: 'A type-led hero with one large art panel or photograph, "open now" said in words on the one dark band, and the booking bar closing the page.' },
   editorial: { name: 'Set like print', how: 'A statement hero and one reading column; pull one figure or quote out large per screen, and let space, not rules, divide the sections.' },
   creative: { name: 'The work, large', how: 'A statement hero and a project grid where the first project spans two columns. Captions small and mono; almost no chrome.' },
   playful: { name: 'One friendly object', how: 'Big rounded shapes, one bright accent, a chunky primary button and a device-frame or illustration-free art panel. Motion only on press.' },
@@ -95,29 +102,39 @@ export function direct({ type, domain, profile, sections, uiIds }) {
   }
 
   // Layouts: walk the sections in order, taking each block's most distinctive layout whose shape differs
-  // from the section before it. Rails are capped at two a page; centred sections never touch.
-  const layouts = [];
-  let prev = hero ? (FIXED_SHAPE[hero] ?? 'left') : null, prev2 = null, rails = 0;
-  const step = (shape) => { prev2 = prev; prev = shape; };
+  // from the section before it; then repair any pair of neighbours that still share a shape by changing
+  // whichever of the two has another layout to give. Rails are capped at two a page and never touch.
+  const shapeOf = (id, l) => (l === 'default' ? (FIXED_SHAPE[id] ?? 'left') : SHAPE[l]);
+  const slots = [];
   for (const s of sections) {
     // A section with no ready-made part is a plain section; the page type may say how it is laid out.
-    if (!s.id && marketing && s.layout) { const shape = SHAPE[s.layout] ?? 'left'; if (s.layout === 'rail') rails++; layouts.push({ n: s.n, id: null, role: s.role, layout: s.layout, shape }); step(shape); continue; }
-    if (!s.id || /^(navbar|hero|footer|site-footer|floating|breadcrumbs|sticky-action)/.test(s.id)) { layouts.push(null); continue; }
-    const options = LAYOUTS[s.id];
-    if (!options) {
-      // A part that is not a section block sits in a plain section (heading on top). Two of those may
-      // follow each other; a third takes the rail so the page does not become one shape repeated.
-      let shape = FIXED_SHAPE[s.id] ?? 'left', layout = null;
-      if (marketing && !FIXED_SHAPE[s.id] && prev === 'left' && prev2 === 'left' && rails < 2) { layout = 'rail'; shape = 'rail'; rails++; }
-      layouts.push({ n: s.n, id: s.id, layout, shape }); step(shape); continue;
-    }
-    let pick = options.find((l) => { const shape = l === 'default' ? (FIXED_SHAPE[s.id] ?? 'left') : SHAPE[l]; return shape !== prev && !(l === 'rail' && rails >= 2); }) ?? options[options.length - 1];
-    if (!marketing) pick = 'default';
-    const shape = pick === 'default' ? (FIXED_SHAPE[s.id] ?? 'left') : SHAPE[pick];
-    if (pick === 'rail') rails++;
-    layouts.push({ n: s.n, id: s.id, layout: pick === 'default' ? null : pick, shape });
-    step(shape);
+    if (!s.id && marketing && s.layout) { slots.push({ n: s.n, id: null, role: s.role, options: [s.layout === 'default' ? 'default' : s.layout, ...(s.layout === 'rail' ? ['default'] : ['rail'])], plain: true }); continue; }
+    if (!s.id || /^(navbar|hero|footer|site-footer|floating|breadcrumbs|sticky-action)/.test(s.id)) { slots.push(null); continue; }
+    if (!marketing) { slots.push({ n: s.n, id: s.id, options: ['default'] }); continue; }
+    // A part that is not a section block sits in a plain section (heading on top) and can take the rail.
+    const options = LAYOUTS[s.id] ?? (FIXED_SHAPE[s.id] ? ['default'] : ['default', 'rail']);
+    slots.push({ n: s.n, id: s.id, options });
   }
+  const live = slots.filter(Boolean);
+  const heroShape = hero ? (FIXED_SHAPE[hero] ?? 'left') : null;
+  // A small search over each section's layouts in order of preference: the first assignment in which no
+  // two neighbours share a shape and at most two rails are used. Pages are short, so this is instant.
+  const solve = (i, before, rails) => {
+    if (i === live.length) return [];
+    const x = live[i];
+    for (const l of x.options) {
+      const sh = shapeOf(x.id, l);
+      if (marketing && sh === before) continue;
+      const r = rails + (l === 'rail' ? 1 : 0);
+      if (r > 2) continue;
+      const rest = solve(i + 1, sh, r);
+      if (rest) return [l, ...rest];
+    }
+    return null;
+  };
+  const picks = solve(0, heroShape, 0) ?? solve(0, null, 0) ?? live.map((x) => x.options[0]);
+  live.forEach((x, i) => { x.pick = picks[i]; x.shape = shapeOf(x.id, picks[i]); });
+  const layouts = slots.map((x) => (x ? { n: x.n, id: x.id, ...(x.role ? { role: x.role } : {}), layout: x.pick === 'default' ? null : x.pick, shape: x.shape } : null));
 
   // Space: the hero and a lone quote breathe; proof strips sit tight against what they support.
   const space = (id) => (id === 'logo-cloud' ? 'tight' : id === 'quote-feature' ? 'open' : null);
@@ -139,7 +156,7 @@ export function direct({ type, domain, profile, sections, uiIds }) {
     ? 'Three sizes carry the page: the headline, section headings (one size, every section) and body. Labels are the fourth, small and uppercase. If a fifth size appears, remove it.'
     : 'Two sizes carry the screen: 14–15px for everything people read and scan, one larger size for the page title and key figures.';
   const rhythm = marketing
-    ? `${printlike ? 'Bands stay untinted; space and one dark band set the sections apart.' : 'Alternate plain and tinted bands; never two tinted in a row.'} No small label over every heading and no rules between sections. Shapes in order: ${sectionLayouts.map((l) => l.shape).join(' → ')}. No two neighbours share a shape.`
+    ? `Grounds alternate (plain, tinted, the one dark band, the brand band at the close) so no two neighbours share one; density alternates so three busy bands never meet; the first screen and the close are set largest. No small label over every heading and no rules between sections. Shapes in order: ${sectionLayouts.map((l) => l.shape).join(' → ')}. No two neighbours share a shape.`
     : 'One primary view fills the screen; chrome stays quiet. Group with space and hairlines before reaching for cards.';
   return { signature, hero, heroWhy, mainAttrs, printlike, sectionLayouts, accent, type: type_, rhythm, motion, words };
 }

@@ -183,4 +183,4 @@ One screen to show: a device frame. Several products or themes to compare: showc
 | --- | --- | --- |
 | Device frame | `device-frame` | A screenshot or live screen in a hero or a feature row. |
 | Showcase tabs | `showcase-tabs` | Three or four examples the reader flips between. |
-| Sticky story | `sticky-story` | Steps where the picture changes as the text scrolls. |
+| Sticky story (pinned scene) | `sticky-story` | Steps where the picture changes as the text scrolls. |

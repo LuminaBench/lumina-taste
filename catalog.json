@@ -2,7 +2,7 @@
   "name": "lumina-taste",
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
-  "counts": {"ui":204,"charts":46,"blueprints":25,"palettes":24,"themes":48,"typography":12,"styles":39},
+  "counts": {"ui":208,"charts":46,"blueprints":25,"palettes":24,"themes":48,"typography":20,"styles":39},
   "families": [
     {
       "id": "controls",
@@ -44,14 +44,14 @@
       "title": "Motion & CSS craft",
       "summary": "Curves, transitions and small details that make an interface feel made, all collapsing under reduced motion.",
       "order": 6,
-      "count": 11
+      "count": 12
     },
     {
       "id": "blocks",
       "title": "Sections for pages",
       "summary": "Whole page sections (heroes, pricing, FAQs, sign-in) built from the same tokens, so a page can be assembled in minutes and still look designed.",
       "order": 7,
-      "count": 32
+      "count": 35
     },
     {
       "id": "backdrops",
@@ -383,16 +383,17 @@
       "kind": "ui",
       "family": "blocks",
       "name": "Stats band",
-      "summary": "Four large figures with plain labels, divided by hairlines instead of boxes.",
+      "summary": "Four large figures with plain labels, divided by hairlines instead of boxes. Each figure counts up to itself once when the band reaches the screen; the true number is in the HTML.",
       "aliases": ["numbers section","metrics strip","by the numbers","social proof numbers","big stats row"],
       "pattern": "<dl> (label, value)",
-      "states": ["four across","two by two"],
+      "states": ["four across","two by two","counting","still (reduced motion, print)"],
       "react": "StatsBand",
       "deps": [],
       "files": [
         "components/ui/blocks/stats-band/stats-band.css",
         "components/ui/blocks/stats-band/stats-band.html",
-        "components/ui/blocks/stats-band/stats-band.react.tsx"
+        "components/ui/blocks/stats-band/stats-band.react.tsx",
+        "components/ui/blocks/stats-band/stats-band.ts"
       ],
       "path": "components/ui/blocks/stats-band"
     },
@@ -614,22 +615,26 @@
       "kind": "ui",
       "family": "blocks",
       "name": "Before and after",
-      "summary": "The old way, muted, beside the new way, outlined in the accent: three concrete lines each.",
+      "summary": "One picture in two states with a divider you drag across it. A native range input under the hood: arrow keys, pointer, a tap anywhere and touch all work.",
       "aliases": [
+        "before after slider",
+        "comparison slider",
+        "image compare",
         "old way new way",
-        "problem solution section",
-        "vs section",
+        "drag to compare",
+        "reveal slider",
         "without with comparison",
-        "pain points vs benefits"
+        "problem solution section"
       ],
-      "pattern": "Two lists side by side",
-      "states": ["side by side","stacked"],
+      "pattern": "input type=range over two clipped layers",
+      "states": ["half and half","dragging","keyboard focus","all before","all after","two lists (older layout)"],
       "react": "BeforeAfter",
       "deps": [],
       "files": [
         "components/ui/blocks/before-after/before-after.css",
         "components/ui/blocks/before-after/before-after.html",
-        "components/ui/blocks/before-after/before-after.react.tsx"
+        "components/ui/blocks/before-after/before-after.react.tsx",
+        "components/ui/blocks/before-after/before-after.ts"
       ],
       "path": "components/ui/blocks/before-after"
     },
@@ -706,18 +711,27 @@
       "id": "sticky-story",
       "kind": "ui",
       "family": "blocks",
-      "name": "Sticky story",
-      "summary": "Steps scroll on the left while the visual for the step being read stays pinned on the right.",
+      "name": "Sticky story (pinned scene)",
+      "summary": "The picture stays pinned while three or four steps scroll past beside it, and it changes with each step: it cross-fades to that step's state, settles in, and the part the step is about is ringed.",
       "aliases": [
         "scrollytelling",
         "pinned scroll section",
+        "pinned scene",
         "sticky scroll features",
         "scroll-linked steps",
         "feature walkthrough",
-        "scroll story"
+        "scroll story",
+        "apple style pinned product",
+        "picture that changes as you scroll"
       ],
-      "pattern": "<ol> + position: sticky",
-      "states": ["step 1","step 2","step 3","stacked (narrow)"],
+      "pattern": "<ol> + position: sticky + view-timeline",
+      "states": [
+        "pinned, scrubbed by scroll",
+        "pinned, observer fallback",
+        "playing (preview box)",
+        "rows (reduced motion, no script)",
+        "stacked (phones)"
+      ],
       "react": "StickyStory",
       "deps": [],
       "files": [
@@ -810,6 +824,32 @@
         "components/ui/blocks/hero-statement/hero-statement.react.tsx"
       ],
       "path": "components/ui/blocks/hero-statement"
+    },
+    {
+      "id": "hero-video",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Hero with video",
+      "summary": "A headline and one action above a wide picture that is a still first and becomes a muted, looping film when motion is allowed, with a pause button always on it.",
+      "aliases": [
+        "video hero",
+        "background video header",
+        "hero with looping video",
+        "autoplay video banner",
+        "film hero",
+        "cinematic hero"
+      ],
+      "pattern": "<video muted loop playsinline> over a poster",
+      "states": ["still only (no film)","playing","paused by the visitor","not started (reduced motion or Save-Data)"],
+      "react": "HeroVideo",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/hero-video/hero-video.css",
+        "components/ui/blocks/hero-video/hero-video.html",
+        "components/ui/blocks/hero-video/hero-video.react.tsx",
+        "components/ui/blocks/hero-video/hero-video.ts"
+      ],
+      "path": "components/ui/blocks/hero-video"
     },
     {
       "id": "service-list",
@@ -924,6 +964,31 @@
       "path": "components/ui/blocks/media-band"
     },
     {
+      "id": "product-reveal",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Product reveal",
+      "summary": "The product rises from lying back, like a lid opening, and settles flat and full size as it reaches the screen. One scroll moment, then three facts.",
+      "aliases": [
+        "product shot that opens on scroll",
+        "laptop lid reveal",
+        "apple style product reveal",
+        "device rotates in on scroll",
+        "zoom in product section",
+        "screenshot that tilts up"
+      ],
+      "pattern": "figure[data-zoom=\"open\"] + view()",
+      "states": ["tilted back (entering)","open","still (reduced motion)","plays once (preview box)"],
+      "react": "ProductReveal",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/product-reveal/product-reveal.css",
+        "components/ui/blocks/product-reveal/product-reveal.html",
+        "components/ui/blocks/product-reveal/product-reveal.react.tsx"
+      ],
+      "path": "components/ui/blocks/product-reveal"
+    },
+    {
       "id": "gallery-rail",
       "kind": "ui",
       "family": "blocks",
@@ -949,6 +1014,32 @@
         "components/ui/blocks/gallery-rail/gallery-rail.ts"
       ],
       "path": "components/ui/blocks/gallery-rail"
+    },
+    {
+      "id": "side-scroll",
+      "kind": "ui",
+      "family": "blocks",
+      "name": "Side scroll",
+      "summary": "A row of work that slides sideways while you scroll down through a tall section, pinned until the last piece arrives. On phones it is a row you swipe, with snap.",
+      "aliases": [
+        "horizontal scroll section",
+        "scroll sideways on scroll down",
+        "pinned horizontal gallery",
+        "horizontal scroll portfolio",
+        "apple style sideways row",
+        "scroll jacked carousel (done right)"
+      ],
+      "pattern": "position: sticky + view-timeline translateX",
+      "states": ["pinned, sliding","native swipe (phones, reduced motion, no script)","end of row"],
+      "react": "SideScroll",
+      "deps": [],
+      "files": [
+        "components/ui/blocks/side-scroll/side-scroll.css",
+        "components/ui/blocks/side-scroll/side-scroll.html",
+        "components/ui/blocks/side-scroll/side-scroll.react.tsx",
+        "components/ui/blocks/side-scroll/side-scroll.ts"
+      ],
+      "path": "components/ui/blocks/side-scroll"
     },
     {
       "id": "disclosure-chevron",
@@ -2992,13 +3083,21 @@
       "id": "view-transition",
       "kind": "ui",
       "family": "motion",
-      "name": "View Transition helper",
-      "summary": "Morph elements between layouts with the View Transitions API and a no-op fallback.",
-      "aliases": ["page transition","shared element transition","layout morph","magic move"],
+      "name": "View transitions",
+      "summary": "Smooth changes inside a page and between pages: a picture in a list morphs into the detail view. Opt a whole site in with <html data-vt>; off under reduced motion.",
+      "aliases": [
+        "page transition",
+        "shared element transition",
+        "layout morph",
+        "smooth page changes",
+        "cross document view transition",
+        "hero image morphs into detail page",
+        "morph between pages"
+      ],
       "pattern": "View Transitions API",
-      "states": ["grid","list","transitioning"],
+      "states": ["list","detail","transitioning","between pages (cross-document)","off (reduced motion)"],
       "react": "useViewTransition",
-      "deps": ["segmented-control"],
+      "deps": [],
       "files": [
         "components/ui/motion/view-transition/view-transition.css",
         "components/ui/motion/view-transition/view-transition.html",
@@ -3180,6 +3279,33 @@
         "components/ui/motion/text-reveal/text-reveal.ts"
       ],
       "path": "components/ui/motion/text-reveal"
+    },
+    {
+      "id": "number-settle",
+      "kind": "ui",
+      "family": "motion",
+      "name": "Numbers that settle",
+      "summary": "Large figures count up to their value once when they reach the screen. One attribute on any element; the real number is in the HTML, so no-script, reduced motion and print all show it.",
+      "aliases": [
+        "count up on scroll",
+        "animated numbers",
+        "number ticker",
+        "stats counter",
+        "odometer on scroll",
+        "numbers that count up",
+        "kpi count up"
+      ],
+      "pattern": "data-count + IntersectionObserver",
+      "states": ["before view","counting","settled","still (reduced motion, print, no script)"],
+      "react": "CountFigure",
+      "deps": [],
+      "files": [
+        "components/ui/motion/number-settle/number-settle.css",
+        "components/ui/motion/number-settle/number-settle.html",
+        "components/ui/motion/number-settle/number-settle.react.tsx",
+        "components/ui/motion/number-settle/number-settle.ts"
+      ],
+      "path": "components/ui/motion/number-settle"
     },
     {
       "id": "navbar-mega",
@@ -6418,6 +6544,78 @@
       "summary": "Kids, games, casual consumer, playful onboarding without going childish.",
       "aliases": ["friendly rounded"],
       "webfont": "https://fonts.googleapis.com/css2?family=Nunito:wght@400..800&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "signage",
+      "kind": "typography",
+      "name": "Signage Grotesk",
+      "summary": "Transport, timetables, stations, routes, maps, parking, logistics and wayfinding.",
+      "aliases": ["signage grotesk"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Overpass:wght@400..800&family=Overpass+Mono:wght@400..600&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "hyperlegible",
+      "kind": "typography",
+      "name": "Hyperlegible Care",
+      "summary": "Health, clinics, pharmacies, care homes, public health notices and accessibility-first services.",
+      "aliases": ["hyperlegible care"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400..700&family=Atkinson+Hyperlegible+Mono:wght@400..600&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "stamped",
+      "kind": "typography",
+      "name": "Stamped Slab",
+      "summary": "Trades, workshops, coffee roasters, breweries, bakeries, hardware and workwear: goods sold in a stamped bag or crate.",
+      "aliases": ["stamped slab"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Bitter:wght@700..800&family=Work+Sans:wght@400..600&family=Courier+Prime&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "stadium",
+      "kind": "typography",
+      "name": "Wide Sport Display",
+      "summary": "Sport, races, fixtures, leagues, festivals, events and tickets.",
+      "aliases": ["wide sport display"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,700..800&family=Barlow:wght@400;500;600&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "legal",
+      "kind": "typography",
+      "name": "Document Serif",
+      "summary": "Law firms, contracts, policy, compliance, courts, public records and long formal documents.",
+      "aliases": ["document serif"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400..700&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "workbench",
+      "kind": "typography",
+      "name": "Workbench Sans + Mono",
+      "summary": "Developer tools on a light ground: APIs, SDK docs, command-line tools, open-source projects and changelogs.",
+      "aliases": ["workbench sans + mono"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400..700&family=Spline+Sans+Mono:wght@400..600&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "schoolbook",
+      "kind": "typography",
+      "name": "Schoolbook Rounded",
+      "summary": "Children's learning, schools, reading apps, after-school clubs, libraries and family services.",
+      "aliases": ["schoolbook rounded"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Fredoka:wght@500..600&family=Lexend:wght@300..600&display=swap",
+      "files": ["tokens/typography/typography.css"]
+    },
+    {
+      "id": "stencil",
+      "kind": "typography",
+      "name": "Site Condensed",
+      "summary": "Construction, civil works, plant hire, site safety, builders' merchants and engineering firms.",
+      "aliases": ["site condensed"],
+      "webfont": "https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,700..800&family=Sofia+Sans:wght@400..600&display=swap",
       "files": ["tokens/typography/typography.css"]
     }
   ],

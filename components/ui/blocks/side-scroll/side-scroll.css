@@ -1,0 +1,49 @@
+/* Side scroll: a row of work that slides sideways while the page scrolls down through a tall section. The row
+   is pinned to the screen for as long as it takes to travel its own overflow, then the page carries on.
+
+   - pinned (data-pin, set by the script on wide screens with motion allowed and CSS scroll-driven animations
+     supported): the section is one screen tall plus the row's overflow (--travel), the row is pinned and
+     translated by the section's own view timeline. Transform only; nothing reads layout on scroll.
+   - native (everything else: phones, reduced motion, no script, preview boxes): the row is a horizontal
+     scroller with scroll-snap that you swipe or scroll by keyboard, running off the right edge. */
+@scope (.lt-side-scroll) {
+  :scope { --gutter: max(var(--block-x, 24px), calc((100cqi - var(--container, 1180px)) / 2)); --item: clamp(240px, 28cqi, 360px); container-type: inline-size; display: block; width: 100%; padding: var(--block-y, calc(var(--section-y) / 2)) 0; background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); overflow-x: clip; }
+  :scope[data-tone="well"] { background: var(--bg-surface-2); }
+  @container (max-width: 640px) { :scope { --gutter: var(--block-x-sm, 16px); --item: 74cqi; padding: var(--block-y-sm, calc(var(--section-y) / 2)) 0; } }
+  @media (max-width: 640px) { :scope { --gutter: var(--block-x-sm, 16px); --item: 74cqi; padding: var(--block-y-sm, calc(var(--section-y) / 2)) 0; } }
+  [data-part="pin"] { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(24px, 4cqi, 44px); }
+  header { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr); align-items: end; gap: 16px 48px; padding-inline: var(--gutter); }
+  h2 { margin: 0; max-width: 16ch; font-family: var(--font-display); font-size: max(var(--step-4), 1.875rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.04; text-wrap: balance; }
+  [data-part="lede"] { justify-self: end; margin: 0; max-width: 36ch; color: var(--text-secondary); font-size: max(var(--step-0), 1rem); line-height: 1.55; text-wrap: pretty; }
+  @container (max-width: 760px) { header { grid-template-columns: minmax(0, 1fr); } [data-part="lede"] { justify-self: start; } }
+
+  /* native: a row that scrolls sideways and snaps */
+  [data-part="track"] { display: flex; gap: clamp(14px, 2cqi, 24px); margin: 0; padding: 4px var(--gutter) 8px; list-style: none; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); scrollbar-width: none; scroll-timeline: --lt-ss-x inline; }
+  [data-part="track"]::-webkit-scrollbar { display: none; }
+  [data-part="track"]:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -2px; }
+  [data-part="track"] > li { flex: 0 0 var(--item); display: grid; gap: 12px; min-width: 0; scroll-snap-align: start; }
+  [data-part="track"] > li > figure { margin: 0; }
+  [data-part="caption"] { display: flex; justify-content: space-between; gap: 12px; margin: 0; font-size: var(--text-ui-sm); }
+  [data-part="caption"] b { font-weight: 600; }
+  [data-part="caption"] span { color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+
+  /* the progress line: how far along the row you are */
+  [data-part="progress"] { width: min(160px, 30cqi); height: 2px; margin-inline: var(--gutter); border-radius: 2px; background: var(--border-hairline); overflow: hidden; }
+  [data-part="progress"] span { display: block; height: 100%; background: var(--text-primary); transform-origin: 0 50%; transform: scaleX(0.16); }
+
+  /* pinned */
+  :scope[data-pin] { height: calc(100svh + var(--travel, 0px)); padding: 0; view-timeline: --lt-ss block; }
+  :scope[data-pin] [data-part="pin"] { position: sticky; top: 0; height: 100svh; align-content: center; overflow: hidden; }
+  :scope[data-pin] [data-part="track"] { --item: calc(min(54svh, 500px) * 0.8); overflow: visible; scroll-snap-type: none; }
+}
+@keyframes lt-ss-move { to { transform: translateX(calc(-1 * var(--travel, 0px))); } }
+@keyframes lt-ss-progress { from { transform: scaleX(0.16); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .lt-side-scroll[data-pin] [data-part="track"] { animation: lt-ss-move linear both; animation-timeline: --lt-ss; animation-range: contain 6% contain 94%; will-change: transform; }
+    .lt-side-scroll[data-pin] [data-part="progress"] span { animation: lt-ss-progress linear both; animation-timeline: --lt-ss; animation-range: contain 6% contain 94%; }
+    .lt-side-scroll:not([data-pin]) [data-part="pin"] { timeline-scope: --lt-ss-x; }
+    .lt-side-scroll:not([data-pin]) [data-part="progress"] span { animation: lt-ss-progress linear both; animation-timeline: --lt-ss-x; }
+  }
+}
+@media print { .lt-side-scroll [data-part="track"] { flex-wrap: wrap; overflow: visible; animation: none !important; transform: none !important; } .lt-side-scroll[data-pin] { height: auto; } .lt-side-scroll [data-part="pin"] { position: static; height: auto; } }
