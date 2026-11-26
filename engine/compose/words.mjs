@@ -58,7 +58,19 @@ export function extractFacts(brief, { product = null } = {}) {
   // The kind of business: "…, a sourdough bakery on Mill Lane" / "an invoicing tool for freelancers".
   const kindM = /,\s+(?:an?|the)\s+([a-z][\w'’-]*(?:\s+(?:[a-z][\w'’-]*|[A-Z]{2,4}s?)){0,4}?)(?=\s+(?:on|in|at|for|that|which|who|with|near|building|making|selling|run|based|offering|open)\b|[,.;]|\s*$)/.exec(b)
     ?? /\b(?:for|page for|site for|website for)\s+(?:an?|the)\s+([a-z][\w'’-]*(?:\s+[a-z][\w'’-]*){0,4}?)(?=\s+(?:on|in|at|for|that|which|who|with|near|building|making|selling|run|based|offering|open)\b|[,.;]|\s*$)/.exec(b);
-  if (kindM) facts.kind = clean(kindM[1]);
+  // Anchored on the name: "Kestrel Dental, family dentist on…", "Halyard Ferries: car and foot ferry from…",
+  // "Moss Yard climbing and strength gym in…", or a brief that opens with the kind: "Sourdough bakery on…".
+  const KSTOP = '(?:on|in|at|for|from|that|which|who|with|near|run|based|open|opening|every)';
+  const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const anchored = (product && new RegExp(`^\\s*${esc(product)}(?:\\s+(?:API|SDK|App))?\\s*[,:]?\\s+([a-z][\\w'’-]*(?:\\s+[a-z][\\w'’-]*){0,4}?)(?=\\s+${KSTOP}\\b|\\s*[,.;:]|\\s*$)`).exec(b))
+    || (!product && new RegExp(`^\\s*([A-Z][a-z][\\w'’-]*(?:\\s+[a-z][\\w'’-]*){0,3}?)(?=\\s+${KSTOP}\\b|\\s*[,;:])`).exec(b));
+  // Not a kind of business: a verb phrase, a time, or the page itself ("bank app", "status page", "workspace settings").
+  const plausible = (k) => k && !/\b(is|are|was|has|have|can|will)\b/.test(k) && !/^(first|week|month|year|day|calendar|thread|plan|training|today|this)\b/i.test(k) && !/\b(app|apps|page|settings|pricing|dashboard|website|site|homepage)$/i.test(k.trim());
+  if (anchored && plausible(anchored[1].toLowerCase()) && !new RegExp(`^${KSTOP}\\b`).test(anchored[1])) facts.kind = clean(anchored[1].replace(/^./, (c) => c.toLowerCase()).replace(/^(?:a|an|the)\s+/, ''));
+  else if (kindM && plausible(kindM[1])) facts.kind = clean(kindM[1]);
+  // A route: "from Ardmore to Kestrel Isle".
+  const routeM = /\bfrom\s+([A-Z][\w'’-]*(?:\s+[A-Z][\w'’-]*)*)\s+to\s+([A-Z][\w'’-]*(?:\s+[A-Z][\w'’-]*)*)/.exec(b);
+  if (routeM) facts.route = { from: routeM[1], to: routeM[2] };
 
   const streetM = new RegExp(`\\b(?:on|at)\\s+((?:\\d+\\s+)?[A-Z][\\w'’-]*(?:\\s+[A-Z][\\w'’-]*)*\\s+${STREET})\\b`).exec(b)
     ?? new RegExp(`\\b(\\d+\\s+[A-Z][\\w'’-]*(?:\\s+[A-Z][\\w'’-]*)*\\s+${STREET})\\b`).exec(b);
@@ -163,6 +175,18 @@ export function extractFacts(brief, { product = null } = {}) {
       if (c && words(c).length >= 2 && VERBS.test(words(c)[0])) facts.claims.push(c);
     }
   }
+  // "Tally invoicing app: send an invoice from your phone in 30 seconds, chase late payers automatically": what
+  // follows a colon, clause by clause, when a clause opens with a plain verb. Stored as "sends…", like the above.
+  if (!facts.claims.length && b.includes(':')) {
+    const BASE = /^(send|chase|get|track|book|find|plan|pay|see|keep|share|write|add|build|run|ship|query|store|sync|manage|check|watch|read|record|log|learn|compare|save|move|sign|scan|turn|answer|catch|cut|deploy|test|search|ask|schedule|invoice|split|draw|edit|publish|collect|post)$/i;
+    for (const part of b.slice(b.indexOf(':') + 1).split(/,\s*|;\s*/)) {
+      const ws = words(clean(part));
+      if (ws.length < 3 || !BASE.test(ws[0]) || /[£$€]/.test(part)) continue;
+      const v = ws[0].toLowerCase();
+      facts.claims.push(clean(part).replace(/^\w+/, /(ch|sh|s|x|z)$/.test(v) ? `${v}es` : `${v}s`));
+      if (facts.claims.length >= 2) break;
+    }
+  }
   // Offers: the things made or sold, after building/making/selling/offering.
   const offM = /\b(?:building|builds|making|makes|selling|sells|offering|offers|baking|bakes|serving|serves|repairing|installing|designing|teaching|running|runs)\s+(.+?)(?=,|[.;]|\s+(?:for|in|on|from|with|that)\s|$)/.exec(b);
   if (offM) for (const part of offM[1].split(/\s+and\s+|,\s*/)) { const o = clean(part); if (o && words(o).length <= 4) facts.offers.push(o); }
@@ -253,7 +277,13 @@ export function heroCopy(facts, { typeId, product }) {
   const claim = facts.claims[0] ?? null;
   const eyebrow = kind && facts.place ? `${kind} · ${facts.place}` : kind ?? facts.place ?? null;
   let headline = null;
-  if (typeId === 'venue' && kind && (facts.street || facts.place)) headline = `${/^an?\s/i.test(kind) ? kind : `A ${facts.kind}`} on ${facts.street ? facts.street.replace(/^\d+\s+/, '') : `the high street in ${facts.place}`}${facts.street && facts.place ? ` in ${facts.place}` : ''}`;
+  // A place, a practice, a studio or a maker: say what it is and where, plainly ("Family dentist on Harrogate
+  // Road", "Car and foot ferry from Ardmore to Kestrel Isle"). The price goes to the picture, not the headline.
+  const where2 = facts.route ? ` from ${facts.route.from} to ${facts.route.to}` : facts.street ? ` on ${facts.street.replace(/^\d+\s+/, '')}${facts.place ? `, ${facts.place}` : ''}` : facts.place && !facts.kind?.includes(facts.place) ? ` in ${facts.place}` : '';
+  // A service with a price and how long it takes keeps that ("Single-storey extensions in 12 weeks"): it is the better line.
+  const timed = typeId === 'service-landing' && price?.what && facts.durations.some((d) => d.what === price.what);
+  if (!timed && where2 && ['venue', 'service-landing', 'portfolio', 'brand-landing'].includes(typeId) && facts.kind && !/\b(app|page|settings|pricing|dashboard|tool)\b/.test(facts.kind) && facts.kind.split(' ').length <= 6) headline = cap(`${facts.kind.replace(/^(?:a|an|the)\s+/i, '')}${where2}`);
+  else if (typeId === 'venue' && kind && (facts.street || facts.place)) headline = `${/^an?\s/i.test(kind) ? kind : `A ${facts.kind}`} on ${facts.street ? facts.street.replace(/^\d+\s+/, '') : `the high street in ${facts.place}`}${facts.street && facts.place ? ` in ${facts.place}` : ''}`;
   else if (typeId === 'event' && kind) headline = `${/^(an?|the)\s/i.test(facts.kind) ? kind : `A ${facts.kind}`}${facts.place ? ` in ${facts.place}` : ''}`;
   else if (typeId === 'cause' && count) headline = `${count.value} ${count.what}${count.per ? ` ${count.per}` : ''}${count.when ? ` ${count.when}` : ''}${facts.place ? `, in ${facts.place}` : ''}`;
   else if (typeId === 'service-landing' && price?.what) {
@@ -288,11 +318,16 @@ export function heroCopy(facts, { typeId, product }) {
   const note = noteParts.join(' · ') || null;
   // The one action, in the subject's words: what the brief offers to do next.
   const b = ` ${(facts.brief ?? '').toLowerCase()} `;
-  const action = /\bquotes?\b/.test(b) ? 'Get a quote'
+  const action = /\bcheck-?ups?\b/.test(b) ? 'Book a check-up'
+    : /\b(ferry|ferries|sailings?|crossings?)\b/.test(b) ? 'Book a crossing'
+    : /\binduction\b/.test(b) ? 'Book your first visit'
+    : /\bfirst (meeting|visit|consultation)\b[^.]*\bfree\b|\bfree first (meeting|visit|consultation)\b/.test(b) ? `Book a first ${/meeting/.test(b) ? 'meeting' : /visit/.test(b) ? 'visit' : 'consultation'}`
+    : /\b(episode|podcast)\b/.test(b) ? 'Listen'
+    : /\bquotes?\b/.test(b) ? 'Get a quote'
     : /\b(first|free)\b[^.]*\bcall\b/.test(b) ? 'Book a first call'
     : /\bclass(es)?\b/.test(b) && typeId === 'venue' ? 'Book a class'
     : /\b(donate|donation|give)\b/.test(b) || typeId === 'cause' ? (/\bfood bank|foodbank|parcels?\b/.test(b) ? 'Give food or money' : 'Donate')
-    : /\b(table|tables)\b/.test(b) ? 'Book a table'
+    : /\b(table|tables)\b/.test(b) && typeId === 'venue' ? 'Book a table'
     : /\bticket/.test(b) ? 'Get a ticket'
     : null;
   // The second, quieter link names what it shows: "See the loaves", not the sample's own range.
@@ -301,7 +336,8 @@ export function heroCopy(facts, { typeId, product }) {
   return {
     action,
     secondary,
-    eyebrow,
+    // A line above that only repeats the headline is a label over a heading: drop it (keep the town if the headline lacks it).
+    eyebrow: headline && facts.kind && headline.toLowerCase().includes(facts.kind.toLowerCase().replace(/^(?:a|an|the)\s+/, '')) ? (facts.place && !headline.includes(facts.place) ? facts.place : null) : eyebrow,
     headline: headline ?? null,
     lede: ledeParts.length ? ledeParts.join(' ') : null,
     note,

@@ -56,7 +56,7 @@
   /* A device stands on the band's ground, its foot cut by the section's end: the screen is what matters. */
   :scope[data-variant="wide"] > [data-part="visual"]:has(> .lt-device) { display: grid; justify-items: center; align-items: start; padding-top: clamp(32px, 5cqi, 64px); background: linear-gradient(transparent 0 18%, var(--bg-surface-2) 18%); }
   :scope[data-variant="wide"] > [data-part="visual"] > .lt-device { width: min(100% - 2 * var(--block-x, 24px), 1040px); }
-  :scope[data-variant="wide"] > [data-part="visual"] > .lt-device[data-kind="phone"] { --device-w: 300px; width: auto; }
+  :scope[data-variant="wide"] > [data-part="visual"] > .lt-device[data-kind="phone"] { --device-w: 300px; width: min(100%, var(--device-w)); }
   @container (max-width: 1100px) { :scope[data-variant="wide"] > [data-part="visual"] { aspect-ratio: 16 / 9; } }
   @container (max-width: 640px) { :scope[data-variant="wide"] > [data-part="visual"] { aspect-ratio: 4 / 3; } :scope[data-variant="wide"] > [data-part="visual"]:has(> .lt-device) { aspect-ratio: 5 / 4; } }
 }

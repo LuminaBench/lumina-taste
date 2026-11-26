@@ -3,12 +3,12 @@
 @scope (.lt-table) {
   :scope { width: 100%; border-collapse: separate; border-spacing: 0; font-size: var(--text-ui); font-variant-numeric: tabular-nums; }
   thead th { position: sticky; top: 0; z-index: 1; padding: 0 var(--cell-px); height: 38px; background: var(--bg-surface-2); border-bottom: var(--bw) var(--border-style) var(--border-hairline); text-align: start; font-weight: 600; font-size: var(--text-ui-xs); color: var(--text-secondary); white-space: nowrap; }
-  th button { display: inline-flex; align-items: center; gap: 4px; height: 26px; margin: 0 -6px; padding: 0 6px; border: 0; border-radius: var(--radius-xs); background: none; color: inherit; font: inherit; cursor: pointer; }
+  th button { display: inline-flex; align-items: center; gap: 4px; min-height: 26px; margin-inline: -6px; padding: 2px 6px; border: 0; border-radius: var(--radius-xs); background: none; color: inherit; font: inherit; cursor: pointer; }
   th button:hover { background: var(--bg-surface-3); color: var(--text-primary); }
   [data-num] { text-align: end; }
   [data-num] button { flex-direction: row-reverse; }
   [data-part="sort"] { position: relative; width: 8px; height: 12px; opacity: 0.35; }
-  [data-part="sort"]::before, [data-part="sort"]::after { content: ""; position: absolute; left: 0; border-inline: 4px solid transparent; transition: opacity var(--dur-1); }
+  [data-part="sort"]::before, [data-part="sort"]::after { content: ""; position: absolute; inset-inline-start: 0; border-inline: 4px solid transparent; transition: opacity var(--dur-1); }
   [data-part="sort"]::before { top: 0; border-bottom: 4px solid currentColor; }
   [data-part="sort"]::after { bottom: 0; border-top: 4px solid currentColor; }
   [aria-sort="ascending"] [data-part="sort"], [aria-sort="descending"] [data-part="sort"] { opacity: 1; color: var(--accent-text); }

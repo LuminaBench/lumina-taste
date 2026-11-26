@@ -211,7 +211,7 @@ test('briefs from the demo sites: the town in the address, a numbered street wit
   assert.deepEqual([cafe.street, cafe.place], ['21 Gillygate', 'York']);
   const build = extractFacts('Website for Granite Row, a construction firm at 88 Kelvin Street, Glasgow G3 8EH, work from £40,000');
   assert.equal(build.place, 'Glasgow');
-  assert.equal(heroCopy(build, { typeId: 'service-landing', product: 'Granite Row' }).headline, 'Work from £40,000');
+  assert.equal(heroCopy(build, { typeId: 'service-landing', product: 'Granite Row' }).headline, 'Construction firm on Kelvin Street, Glasgow', 'what it is and where; the price goes to the picture');
   const plan = JSON.parse(compose('Home page for Copper Hare, a coffee shop in York, flat white £3.40').stdout);
   assert.equal(plan.profile.style, null, 'a flat white does not choose the flat style');
 });

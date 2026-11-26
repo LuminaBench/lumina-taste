@@ -71,8 +71,10 @@ const wantsPhone = (ctx) => /\b(app|mobile|phone|iphone|android)\b/i.test(ctx.fa
 function screenNav(ctx) {
   const nouns = [];
   for (const s of [...ctx.facts.steps, ...ctx.facts.claims]) {
-    const w = s.replace(/\b(on|in|within|for|by|with)\b.*$/, '').trim().split(/\s+/).pop()?.toLowerCase();
-    if (!w || /^(paid|done|it|them|up|out|in)$/.test(w) || w.length < 4) continue;
+    // The object of each step or claim ("add a client", "sends an invoice from your phone", "chases late payers"):
+    // a section is a thing the product keeps, never a verb, an adverb or the phone it runs on.
+    const w = /^[a-z]+\s+(?:(?:a|an|the|your|their|each|every|new|late|all)\s+)?([a-z-]+)/i.exec(s.trim())?.[1]?.toLowerCase();
+    if (!w || /^(paid|done|it|them|up|out|in|phone|phones|time|money|minutes?|seconds?|hours?)$/.test(w) || /ly$/.test(w) || w.length < 4) continue;
     const plural = /s$/.test(w) ? w : /(ch|sh|x)$/.test(w) ? `${w}es` : `${w}s`;
     const label = cap(plural);
     if (!nouns.includes(label)) nouns.push(label);

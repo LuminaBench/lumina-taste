@@ -69,13 +69,34 @@ function pickType() {
     if (!t) { console.error(`Unknown --type ${forceType}. One of: ${kb.pageTypes.map((p) => p.id).join(', ')}`); process.exit(2); }
     return { type: t, confident: true };
   }
+  const byId = (id) => kb.pageTypes.find((t) => t.id === id);
+  // "Juniper bank app on the phone: balance, pots, settings": what the thing IS comes before the first colon
+  // or comma; what follows is a list of features, and a feature called "settings" is not a settings page.
+  const head = ` ${brief.toLowerCase().split(/[:,;—–]|\s-\s/)[0].replace(/[^a-z0-9'’-]+/g, ' ')} `;
+  // A page the head names outright ("notes app pricing", "workspace settings") is that page.
+  const headNames = kb.pageTypes.some((t) => t.id !== 'landing' && t.aliases.some((a) => !/\bapp\b/.test(a) && head.includes(` ${a} `)));
+  if (/ apps? /.test(head) && !headNames && !/ (website|site|landing page|home page|homepage) /.test(head)) {
+    const sells = / (a|per) (month|year|seat|user) | how it works | free trial | pricing | sign up | download | for (sole traders|teams|small businesses|freelancers) /.test(text);
+    if (/ (phone|mobile|ios|android|iphone) apps? /.test(head)) return { type: byId('app-phone'), confident: true };
+    if (/ (api|sdk|sdks|cli) /.test(text) && sells) return { type: byId('dev-landing'), confident: true };
+    if (sells) return { type: byId('landing'), confident: true };
+    if (/ (on the phone|phone|mobile|ios|android|iphone) /.test(text)) return { type: byId('app-phone'), confident: true };
+    if (/ (desktop|calendar|appointments|records|table|dispatch|rota|schedule|staff) /.test(text)) return { type: byId('workspace'), confident: true };
+    return { type: byId('app-phone'), confident: true };
+  }
+  // "Kestrel Events API for product analytics": a developer product, whatever else its name says.
+  if (/ (api|sdk|sdks) /.test(head) && !headNames) return { type: byId('dev-landing'), confident: true };
   const scored = kb.pageTypes.map((t) => {
     let s = 0;
-    for (const a of [t.id.replace(/-/g, ' '), ...t.aliases]) if (has(a)) s += 2 + a.split(' ').length * 2 + 3 * (1 - text.indexOf(` ${a.toLowerCase()} `) / text.length);
+    // "about" and "contact" are everyday words ("a podcast about cities", "send money to a contact"): only their aliases count.
+    for (const a of [...(['about', 'contact'].includes(t.id) ? [] : [t.id.replace(/-/g, ' ')]), ...t.aliases]) if (has(a)) s += 2 + a.split(' ').length * 2 + 3 * (1 - text.indexOf(` ${a.toLowerCase()} `) / text.length);
     return { t, s };
   }).sort((a, b) => b.s - a.s);
   if (scored[0].s > 0) return { type: scored[0].t, confident: true, runnerUp: scored[1].s > 0 ? scored[1].t : null };
-  // Fall back to catalog search over blueprints, then to a landing page.
+  // A one-line description of a business ("Sourdough bakery on Mill Lane…") names its subject, not a page:
+  // that is a landing page, and the subject below decides which kind (a place, a practice, a maker…).
+  if (kb.domains.some((d) => d.words.some(has)) || / (open|opening|from £|phone|book|visit|shop|studio|gym|bakery|ferry|ferries|sailings?) /.test(text)) return { type: byId('landing'), confident: false };
+  // Otherwise fall back to catalog search over blueprints, then to a landing page.
   const hit = search(cat, brief, { kind: 'blueprint', limit: 1 })[0];
   const viaBp = hit && kb.pageTypes.find((t) => t.blueprint === hit.d.id);
   return { type: viaBp ?? kb.pageTypes.find((t) => t.id === 'landing'), confident: false };
@@ -166,7 +187,12 @@ const named = brief.match(new RegExp(`\\b(?:called|named)\\s+(${NAME})`))?.[1];
 const GENERIC = new Set(['A', 'An', 'The', 'Our', 'My', 'Your', 'Their', 'This', 'That', 'Every', 'Each', 'Teams', 'People', 'Developers', 'Freelancers']);
 const afterFor = [...brief.matchAll(new RegExp(`\\bfor\\s+(${NAME})(?=[\\s,.;:)]|$)`, 'g'))].map((m) => m[1]).find((w) => !GENERIC.has(w.split(' ')[0]));
 const leading = brief.match(new RegExp(`^(${NAME}),\\s+(?:an?|the)\\s`))?.[1];
-const product = quoted ?? named ?? afterFor ?? leading ?? null;
+// "Kestrel Dental, family dentist…", "Halyard Ferries: car and foot ferry…", "Moss Yard climbing gym…":
+// two or more capitalised words opening the brief are its name (a trailing API, App or SDK is what it is).
+const opening = brief.match(/^((?:[A-Z][\w.'’-]*)(?:\s+(?:&\s+)?[A-Z][\w.'’-]*){1,3})(?=[\s,:;]|$)/)?.[1]?.replace(/\s+(API|SDK|App|CLI)$/, '');
+// "Tally invoicing app…", "Juniper notes app pricing…": one capitalised word before what the thing is.
+const single = brief.match(/^([A-Z][\w'’-]+)(?=(?:\s+[a-z][\w-]*){0,3}\s+(?:app|apps|api|dashboard|status page|settings|pricing|workspace|platform|tool)\b)/)?.[1];
+const product = quoted ?? named ?? leading ?? (opening && !GENERIC.has(opening.split(' ')[0]) ? opening : null) ?? afterFor ?? (single && !GENERIC.has(single) ? single : null) ?? null;
 const restyle = (kb.restyle?.words ?? []).some((w) => text.includes(` ${w} `) || text.includes(` ${w}`));
 
 // ---------------------------------------------------------------- words from the subject

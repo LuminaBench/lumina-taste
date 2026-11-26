@@ -19,7 +19,7 @@
   [data-part="visual"] > .lt-art > :is([data-part="name"], [data-part="fact"], [data-part="index"]) { display: none; }
   [data-part="visual"]:has(> .lt-device) { display: grid; place-items: center; }
   [data-part="visual"] > .lt-device { width: 82%; }
-  [data-part="visual"] > .lt-device[data-kind="phone"] { --device-w: 38%; width: auto; }
+  [data-part="visual"] > .lt-device[data-kind="phone"] { --device-w: 38%; width: min(100%, var(--device-w)); }
   [data-part="copy"] { grid-column: 9 / -1; align-self: end; margin-top: 24px; }
   /* The cover line: the claim, set as display type, not as a paragraph. */
   [data-part="lede"] { margin: 0; font-family: var(--font-display); font-size: clamp(1.5rem, 0.9rem + 1.6cqi, 2.375rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.12; text-wrap: balance; }
