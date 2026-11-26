@@ -33,7 +33,7 @@ const BEAT = {
   'integrations-grid': { d: 'busy', flex: true }, 'blog-grid': { d: 'busy', flex: true }, 'project-grid': { d: 'busy', flex: true },
 };
 /** Bands that can close a page: the one action, said again. */
-const CLOSERS = ['cta-band', 'booking-bar', 'newsletter-signup', 'contact-section', 'pricing-tiers'];
+const CLOSERS = ['cta-band', 'booking-bar', 'newsletter-signup', 'contact-section'];
 /** Where the page's one dark band suits best, most suitable first. */
 const DARK_FIT = ['visit-info', 'stats-band', 'scroll-statement', 'stack-cards', 'how-it-works', 'quote-feature', 'team-grid', 'terminal-window', 'code-block', 'sticky-story', 'showcase-tabs', 'feature-split', 'booking-bar'];
 /** The part to put between three busy bands when none of them can be made quiet. */

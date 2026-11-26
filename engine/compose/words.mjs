@@ -168,6 +168,7 @@ export function heroCopy(facts, { typeId, product }) {
   const eyebrow = kind && facts.place ? `${kind} · ${facts.place}` : kind ?? facts.place ?? null;
   let headline = null;
   if (typeId === 'venue' && kind && (facts.street || facts.place)) headline = `${/^an?\s/i.test(kind) ? kind : `A ${facts.kind}`} on ${facts.street ?? `the high street in ${facts.place}`}${facts.street && facts.place ? ` in ${facts.place}` : ''}`;
+  else if (typeId === 'event' && kind) headline = `${/^(an?|the)\s/i.test(facts.kind) ? kind : `A ${facts.kind}`}${facts.place ? ` in ${facts.place}` : ''}`;
   else if (typeId === 'cause' && count) headline = `${count.value} ${count.what}${count.per ? ` ${count.per}` : ''}${count.when ? ` ${count.when}` : ''}${facts.place ? `, in ${facts.place}` : ''}`;
   else if (typeId === 'service-landing' && price?.what) {
     const done = facts.durations.find((d) => d.what === price.what);
@@ -190,7 +191,7 @@ export function heroCopy(facts, { typeId, product }) {
     for (const d of facts.durations.filter((x) => x.phrase && !headline?.includes(x.value)).slice(0, 1)) ledeParts.push(`${cap(d.phrase)}.`);
   } else {
     for (const c of facts.claims.slice(headline === imperative(claim ?? '') ? 1 : 0, 2)) ledeParts.push(`${name ?? 'It'} ${c}.`);
-    if (price && !headline?.includes(price.value)) ledeParts.push(`${price.value.replace(/\s+a\s+/, ' a ')}${facts.audience ? ` for ${facts.audience}` : ''}.`.replace(/^./, (c) => c.toUpperCase()));
+    if (price && !headline?.includes(price.value)) ledeParts.push(price.what ? `${cap(price.what)} ${price.from ? 'from' : 'at'} ${price.value}.` : `${price.value.replace(/\s+a\s+/, ' a ')}${facts.audience ? ` for ${facts.audience}` : ''}.`.replace(/^./, (c) => c.toUpperCase()));
   }
   if (!ledeParts.length && typeId === 'cause' && (facts.days || time)) ledeParts.push(`Open ${facts.days ?? ''}${time ? `${facts.days ? ', ' : ''}${time.what === 'hours' ? time.value : `from ${time.value}`}` : ''}${facts.street ? ` on ${facts.street}` : ''}.`.replace(/\s+/g, ' '));
   const noteParts = [facts.days && time ? `Open ${facts.days}${time.what === 'hours' ? `, ${time.value}` : `, from ${time.value}`}` : facts.days ? `Open ${facts.days}` : time ? `Open from ${time.value}` : null, facts.street ? where : null].filter(Boolean);
