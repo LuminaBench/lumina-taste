@@ -1,0 +1,238 @@
+// Craft: art-panel scenes drawn in a real panel, micro-interactions with motion on and with reduced motion, and
+// the gallery's Moments and Before / after views playing their stages.
+import { expect, test, type Page } from '@playwright/test';
+import { sceneSvg } from '../scripts/lib/image-motifs.mjs';
+
+const errorsOf = (page: Page) => { const e: string[] = []; page.on('pageerror', (x) => e.push(x.message)); page.on('console', (m) => { if (m.type() === 'error') e.push(m.text()); }); return e; };
+/** An element page's live stage, with motion as asked. */
+async function stage(page: Page, id: string, motion: 'no-preference' | 'reduce' = 'no-preference') {
+  await page.emulateMedia({ reducedMotion: motion });
+  await page.goto('about:blank');
+  await page.goto(`/#/ui/${id}`);
+  await expect(page.locator(`#ui-${id}`)).toBeVisible();
+  await page.waitForTimeout(300);
+  return page.locator(`#ui-${id} [data-stage]`);
+}
+const frames = (page: Page, fn: () => unknown, n: number, every = 16) => page.evaluate(async ([src, n, every]) => {
+  const f = new Function(`return (${src})()`) as () => unknown;
+  const out: unknown[] = [];
+  for (let i = 0; i < (n as number); i++) { out.push(f()); await new Promise((r) => setTimeout(r, every as number)); }
+  return out;
+}, [fn.toString(), n, every] as const);
+
+test.describe('scenes', () => {
+  test('a scene stands on one ground above the name, the subject alone in the accent, one line weight at every scale', async ({ page }) => {
+    const errors = errorsOf(page);
+    const s = await stage(page, 'art-panel');
+    for (const [mode, type] of [['light', 'humanist'], ['dark', 'stencil']] as const) {
+      const r = await s.locator('.lt-art-demo').evaluate((demo, [svg, mode, type]) => {
+        const box = demo.closest<HTMLElement>('[data-theme-root]')!;
+        box.dataset.mode = mode; box.dataset.type = type;
+        demo.innerHTML = `<figure class="lt-art" data-frame data-scene="bag cup jar">${svg}<p data-part="name">Huila</p><p data-part="fact">Roasted Tuesday</p></figure>`;
+        const fig = demo.querySelector<HTMLElement>('.lt-art')!;
+        const sc = fig.querySelector<SVGSVGElement>('[data-part="scene"]')!;
+        const f = fig.getBoundingClientRect(), name = fig.querySelector('[data-part="name"]')!.getBoundingClientRect();
+        const groups = [...sc.querySelectorAll<SVGGElement>(':scope > g')];
+        const things = groups.map((g) => g.getBoundingClientRect());
+        const probe = document.createElement('i'); probe.style.color = 'var(--accent-solid)'; fig.append(probe);
+        const accent = getComputedStyle(probe).color; probe.remove();
+        // The line drawn on screen: the computed stroke times the group's own scale.
+        const drawn = groups.map((g) => parseFloat(getComputedStyle(g.querySelector('[data-m="ink"]')!).strokeWidth.replace('calc(', '')) * +g.style.getPropertyValue('--k'));
+        const lead = groups.find((g) => g.dataset.role === 'lead')!;
+        const restFills = groups.filter((g) => g.dataset.role === 'rest').flatMap((g) => [...g.querySelectorAll('[data-m="a"]')].map((p) => getComputedStyle(p).fill));
+        return {
+          three: groups.length === 3,
+          inside: things.every((t) => t.left >= f.left - 1 && t.right <= f.right + 1 && t.top >= f.top - 1),
+          above: things.every((t) => t.bottom <= name.top + 2),
+          leadAccent: getComputedStyle(lead.querySelector('[data-m="a"]')!).fill === accent,
+          restQuiet: restFills.length > 0 && restFills.every((c) => c !== accent),
+          oneWeight: Math.max(...drawn) - Math.min(...drawn) < drawn[0] * 0.03 || drawn.join(' '),
+          nameOnTop: getComputedStyle(fig.querySelector('[data-part="name"]')!).zIndex === '1',
+          weight: drawn[0],
+        };
+      }, [sceneSvg('bag cup jar'), mode, type] as const);
+      expect({ ...r, weight: 0 }, `${mode} ${type}`).toEqual({ three: true, inside: true, above: true, leadAccent: true, restQuiet: true, oneWeight: true, nameOnTop: true, weight: 0 });
+    }
+    expect(errors).toEqual([]);
+  });
+
+  test('the line weight follows the type pairing', async ({ page }) => {
+    const s = await stage(page, 'art-panel');
+    const weights = await s.locator('.lt-art-demo').evaluate((demo) => {
+      const box = demo.closest<HTMLElement>('[data-theme-root]')!;
+      const fig = demo.querySelector<HTMLElement>('.lt-art')!;
+      const ink = fig.querySelector('[data-m="ink"]')!;
+      return ['didone', 'legal', 'humanist', 'slab', 'stencil'].map((t) => { box.dataset.type = t; return parseFloat(getComputedStyle(ink).strokeWidth.replace('calc(', '')); });
+    });
+    expect(weights[0]).toBeLessThan(weights[2]);
+    expect(weights[1]).toBeLessThan(weights[2]);
+    expect(weights[3]).toBeGreaterThan(weights[2]);
+    expect(weights[4]).toBeGreaterThanOrEqual(weights[3]);
+  });
+});
+
+test.describe('micro-interactions', () => {
+  test('a pressed button sinks a pixel or two and springs back; hover never grows it; reduced motion keeps it still', async ({ page }) => {
+    for (const motion of ['no-preference', 'reduce'] as const) {
+      const s = await stage(page, 'button', motion);
+      const btn = s.locator('.lt-btn').first();
+      await btn.hover();
+      await page.waitForTimeout(200);
+      const hover = await btn.evaluate((el) => getComputedStyle(el).transform);
+      expect(hover, `${motion}: hover`).toBe('none');
+      await page.mouse.down();
+      await page.waitForTimeout(160);
+      const down = await btn.evaluate((el) => { const m = new DOMMatrix(getComputedStyle(el).transform); return { y: m.f, sx: m.a }; });
+      if (motion === 'no-preference') { expect(down.y).toBeGreaterThanOrEqual(1); expect(down.y).toBeLessThanOrEqual(2); } else expect(down.y).toBe(0);
+      expect(down.sx, 'never a scale').toBe(1);
+      await page.mouse.up();
+      if (motion === 'no-preference') {
+        // On release it passes its rest (a spring), then settles at zero.
+        const ys = (await frames(page, () => new DOMMatrix(getComputedStyle(document.querySelector('#ui-button [data-stage] .lt-btn')!).transform).f, 30, 12)) as number[];
+        expect(Math.min(...ys), 'overshoots upward').toBeLessThan(0);
+        await page.waitForTimeout(400);
+      }
+      expect(await btn.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).f)).toBe(0);
+    }
+  });
+
+  test('a switch thumb crosses with a small overshoot and settles; under reduced motion it jumps', async ({ page }) => {
+    for (const motion of ['no-preference', 'reduce'] as const) {
+      const s = await stage(page, 'toggle-switch', motion);
+      const sw = s.locator('.lt-switch').nth(1);
+      const thumb = sw.locator('[data-part="thumb"]');
+      const end = await thumb.evaluate((t) => { const sw = t.closest('.lt-switch')!; const s = getComputedStyle(sw); return parseFloat(s.getPropertyValue('--w')) - parseFloat(s.getPropertyValue('--h')); });
+      await sw.click();
+      const xs = (await frames(page, () => new DOMMatrix(getComputedStyle(document.querySelectorAll('#ui-toggle-switch [data-stage] .lt-switch [data-part="thumb"]')[1]).transform).e, 28, 12)) as number[];
+      if (motion === 'no-preference') {
+        expect(Math.max(...xs), 'passes the end').toBeGreaterThan(end + 0.3);
+        expect(xs.filter((x) => x > 0 && x < end - 0.5).length, 'travels').toBeGreaterThan(0);
+      } else expect(xs.every((x) => Math.abs(x - end) < 0.01 || Math.abs(x) < 0.01), `jumps, never between: ${xs.join(',')}`).toBe(true);
+      await page.waitForTimeout(400);
+      expect(await thumb.evaluate((t) => new DOMMatrix(getComputedStyle(t).transform).e)).toBeCloseTo(end, 1);
+    }
+  });
+
+  test('a tick draws itself after the box fills; under reduced motion it is simply there', async ({ page }) => {
+    for (const motion of ['no-preference', 'reduce'] as const) {
+      const s = await stage(page, 'checkbox', motion);
+      const box = s.locator('.lt-check').nth(2);
+      await box.click();
+      const offs = (await frames(page, () => parseFloat(getComputedStyle(document.querySelectorAll('#ui-checkbox [data-stage] .lt-check [data-part="tick"]')[2]).strokeDashoffset), 24, 14)) as number[];
+      if (motion === 'no-preference') expect(offs.some((o) => o > 1 && o < 15), `drawing: ${offs.join(',')}`).toBe(true);
+      else expect(offs.every((o) => o < 0.5 || o > 15.5), `at once, never half drawn: ${offs.join(',')}`).toBe(true);
+      await page.waitForTimeout(400);
+      expect(offs.at(-1)).toBeLessThan(0.5);
+    }
+  });
+
+  test('a field that fails shakes once, with its message, never while typing, and not at all under reduced motion', async ({ page }) => {
+    for (const motion of ['no-preference', 'reduce'] as const) {
+      const s = await stage(page, 'text-field', motion);
+      const field = s.locator('.lt-field').first();
+      const input = field.locator('input');
+      await input.fill('ana.lopez');
+      await input.blur();
+      await expect(field).toHaveAttribute('data-state', 'invalid');
+      const anim = await field.evaluate((el) => el.getAnimations().map((a) => (a as CSSAnimation).animationName));
+      const msg = await field.locator('[data-part="message"]').evaluate((el) => el.getAnimations().map((a) => (a as CSSAnimation).animationName));
+      if (motion === 'no-preference') { expect(anim).toContain('lt-shake'); expect(msg).toContain('lt-arrive'); } else { expect(anim).toEqual([]); expect(msg).toEqual([]); }
+      await expect(field.locator('[data-part="message"]')).toHaveText(/full address/);
+      await page.waitForTimeout(800);
+      await expect(field).not.toHaveAttribute('data-shake', '');
+      // Typing re-validates live, but never shakes.
+      await input.press('End');
+      await input.type('x');
+      expect(await field.getAttribute('data-shake')).toBeNull();
+    }
+  });
+
+  test('copy confirms in place: tick, "Copied" rolling in, the same width; still under reduced motion', async ({ page, context }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    for (const motion of ['no-preference', 'reduce'] as const) {
+      const s = await stage(page, 'copy-button', motion);
+      const btn = s.locator('.lt-copy');
+      const w = (await btn.boundingBox())!.width;
+      await btn.click();
+      await expect(btn).toHaveAttribute('data-copied', '');
+      await expect(btn.locator('[data-part="text"]')).toHaveText('Copied');
+      const anim = await btn.locator('[data-part="text"]').evaluate((el) => el.getAnimations().map((a) => (a as CSSAnimation).animationName));
+      expect(anim).toEqual(motion === 'no-preference' ? ['lt-roll-in'] : []);
+      expect(Math.abs((await btn.boundingBox())!.width - w)).toBeLessThan(0.5);
+    }
+  });
+});
+
+test.describe('gallery: Moments and Before / after', () => {
+  test('every scroll moment plays in its own stage; replay replays; reduced motion shows the still page', async ({ page }) => {
+    const errors = errorsOf(page);
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/#/moments');
+    await expect(page.locator('.g-moment')).toHaveCount(10);
+    await expect(page.locator('.g-micro')).toHaveCount(5);
+    // Every stage boots its page when it comes near the screen, and only stages near the screen are live.
+    for (const id of ['entrance', 'reveal', 'pinned', 'sideways', 'reveal-product', 'zoom', 'statement', 'stack', 'counts', 'before-after']) {
+      const f = page.locator(`#m-${id} iframe`);
+      await f.scrollIntoViewIfNeeded();
+      await expect.poll(() => f.evaluate((el: HTMLIFrameElement) => !!el.contentDocument?.documentElement?.hasAttribute('data-stage-ready')), { timeout: 10_000, message: id }).toBe(true);
+    }
+    expect(await page.$$eval('.g-moment iframe', (fs) => fs.filter((f) => (f as HTMLIFrameElement).contentDocument?.documentElement?.hasAttribute('data-stage-ready')).length)).toBeLessThan(7);
+    // The pinned scene: scrolled into view, its stage page scrolls and the scene pins.
+    const card = page.locator('#m-pinned');
+    await card.scrollIntoViewIfNeeded();
+    const frame = card.locator('iframe');
+    await expect.poll(() => frame.evaluate((f: HTMLIFrameElement) => f.contentWindow!.scrollY), { timeout: 8000 }).toBeGreaterThan(200);
+    expect(await frame.evaluate((f: HTMLIFrameElement) => f.contentDocument!.querySelector('.lt-story')!.hasAttribute('data-pin'))).toBe(true);
+    // Replay starts it from the top again.
+    await page.waitForTimeout(1200);
+    const before = await frame.evaluate((f: HTMLIFrameElement) => f.contentWindow!.scrollY);
+    await card.locator('[data-replay]').click();
+    await expect.poll(() => frame.evaluate((f: HTMLIFrameElement) => f.contentWindow!.scrollY), { timeout: 3000 }).toBeLessThan(before);
+    // Reduced motion: the stage reloads still: no pin, the profile's reduced motion on its root.
+    await card.locator('[data-reduced]').check({ force: true });
+    await expect.poll(() => frame.evaluate((f: HTMLIFrameElement) => f.contentDocument?.documentElement?.dataset.motion), { timeout: 8000 }).toBe('reduced');
+    await expect.poll(() => frame.evaluate((f: HTMLIFrameElement) => f.contentDocument?.querySelector('.lt-story')?.hasAttribute('data-pin'))).toBe(false);
+    expect(errors).toEqual([]);
+  });
+
+  test('micro stages play on their own and follow their reduced-motion switch', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/#/moments');
+    const card = page.locator('#mi-shake');
+    await card.scrollIntoViewIfNeeded();
+    await expect(card.locator('.lt-field')).toHaveAttribute('data-state', 'invalid', { timeout: 4000 });
+    await card.locator('[data-reduced]').check({ force: true });
+    await expect(card.locator('.g-micro-stage')).toHaveAttribute('data-motion', 'reduced');
+    const sw = page.locator('#mi-switch');
+    await sw.scrollIntoViewIfNeeded();
+    await expect.poll(() => sw.locator('input').first().isChecked(), { timeout: 4000 }).toBe(true);
+  });
+
+  test('before and after: four pairs, the generic side framed off from the gallery, the kit side a live page', async ({ page }) => {
+    const errors = errorsOf(page);
+    await page.goto('/#/before-after');
+    await expect(page.locator('.g-pair')).toHaveCount(4);
+    await expect(page.locator('[data-side="before"] iframe[srcdoc]')).toHaveCount(4);
+    await expect.poll(() => page.$$eval('[data-side="after"] iframe', (fs) => fs.filter((f) => (f as HTMLIFrameElement).contentDocument?.documentElement?.hasAttribute('data-stage-ready')).length), { timeout: 20_000 }).toBe(4);
+    // The kit's first screen draws a scene; its range draws a motif on each panel.
+    const after = page.locator('#ba-hero [data-side="after"] iframe');
+    expect(await after.evaluate((f: HTMLIFrameElement) => f.contentDocument!.querySelectorAll('[data-part="scene"] g[data-role]').length)).toBe(2);
+    expect(await page.locator('#ba-range [data-side="after"] iframe').evaluate((f: HTMLIFrameElement) => f.contentDocument!.querySelectorAll('.lt-art > [data-part="motif"]').length)).toBe(3);
+    // The two sides of a pair are the same height.
+    const h = await page.$$eval('#ba-hero .g-mstage', (els) => els.map((e) => Math.round(e.getBoundingClientRect().height)));
+    expect(h[0]).toBe(h[1]);
+    expect(errors).toEqual([]);
+  });
+
+  for (const hash of ['#/moments', '#/before-after']) {
+    test(`${hash} holds at phone width with no sideways scroll`, async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.goto(`/${hash}`);
+      await page.waitForTimeout(1200);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+      // All eight sections of the nav are visible without scrolling the bar.
+      const hidden = await page.$$eval('.g-nav a', (as) => as.filter((a) => { const r = a.getBoundingClientRect(); return r.right > innerWidth || r.left < 0; }).length);
+      expect(hidden).toBe(0);
+    });
+  }
+});

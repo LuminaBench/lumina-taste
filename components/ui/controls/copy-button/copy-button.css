@@ -5,10 +5,10 @@
     display: inline-flex; align-items: center; gap: 6px; flex: none; height: var(--control-h-sm); padding: 0 10px;
     border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-sm); background: var(--bg-surface-2); color: var(--text-secondary);
     font-size: var(--text-ui-xs); font-weight: 600; cursor: pointer;
-    transition: background-color var(--dur-1), color var(--dur-1), scale var(--dur-1) var(--ease-out);
+    transition: background-color var(--dur-1), color var(--dur-1), transform var(--dur-release, 360ms) var(--ease-release, var(--ease-out));
   }
   :scope:hover { background: var(--bg-surface-3); color: var(--text-primary); }
-  :scope:active { scale: 0.95; }
+  :scope:is(:active, [data-pressing]) { transform: translateY(var(--press-settle, 1.5px)); transition-duration: var(--dur-1), var(--dur-1), var(--dur-press, 70ms); }
   [data-part="icons"] { position: relative; display: grid; width: 16px; height: 16px; }
   [data-part="icons"] > span { position: absolute; inset: 0; display: grid; transition: opacity var(--dur-2), scale var(--dur-3) var(--ease-spring), rotate var(--dur-3) var(--ease-spring); }
   [data-part="done"] { opacity: 0; scale: 0.4; rotate: -45deg; color: var(--status-positive); }
@@ -16,4 +16,6 @@
   :scope[data-copied] { color: var(--status-positive); }
   :scope[data-copied] [data-part="copy"] { opacity: 0; scale: 0.4; rotate: 45deg; }
   :scope[data-copied] [data-part="done"] { opacity: 1; scale: 1; rotate: 0deg; }
+  /* "Copied" rolls up into the label's place; the label keeps its width, so nothing beside it moves. */
+  @media (prefers-reduced-motion: no-preference) { :scope[data-copied] [data-part="text"] { animation: lt-roll-in var(--dur-confirm, 260ms) var(--ease-out) both; } }
 }
