@@ -67,21 +67,41 @@ Space, scale and ground set sections apart. Not lines, and not a small label ove
 
 ## 5. The first screen
 
-| Hero | When | The picture |
-| --- | --- | --- |
-| `hero-split` | There is something to show: a product screen, a chart, an object, a place | Right side. Software: the frame, with a real screenshot or a small live mock. Anything else: `<div data-part="visual">` with a `device-frame`, a `code-block`, a chart, a photograph or an `art-panel`. |
-| `hero-centered` | A product that needs a wide picture under the words, or a hero with a backdrop | Below the buttons, full width. Good with `data-backdrop`. |
-| `hero-statement` | The words are the product, or there is nothing worth showing | None. The headline is the picture: six to ten words that make a claim. |
+The first screen is where generated pages give themselves away. Four demos for four different businesses had one skeleton: a small line above, a three-line headline on the left, a paragraph, two buttons, a note under them, a picture the same size on the right, then a dark band. Every part was fine; the sameness was the tell. So the first screen is chosen from the subject, and the kit's default split is the last resort, never the habit. `compose.mjs` picks the composition from the brief's facts and prints why (`artDirection.hero` in `--json`).
+
+| Composition | Block | Choose it when | The picture |
+| --- | --- | --- | --- |
+| Product first | `hero-split` `data-variant="product"` | Software: the screen is the proof | A device or live mock first and large; the headline under it on the start side, the action on the end side |
+| Overlap | `hero-split` `data-variant="overlap"` | One object worth showing large (a maker's mug, a school) | Runs off the end edge of the screen; the words sit on a block of the page's ground over its edge |
+| Edge | `hero-split` `data-variant="edge"` | A calm, plain service (a clinic, a firm) | Full height, square, to the top, bottom and end edge of the screen |
+| Bleed | `hero-split` `data-variant="bleed"` | A place or a job with one great photograph (a hotel, a builder) | Across the whole screen; the words on its calm side (`data-calm`) over a scrim only where they sit |
+| Wide | `hero-centered` `data-variant="wide"` | One centred claim, then the thing as wide as the page (a developer product) | Edge to edge under the words, closing the section |
+| Tucked | `hero-statement` `data-variant="tucked"` | The claim carries the page (a charity, an about page) | Small, tucked into the end of the huge headline |
+| Poster | `hero-statement` `data-variant="poster"` | A date people come for (a conference, a festival) | The date itself, enormous, on the brand colour; a picture beside it if there is one |
+| Board | `hero-board` `data-variant="menu"` or `"departures"` | Prices or times are what people look for (a café's menu, a ferry's sailings) | The board, on a dark ground, rows on one grid; an optional photograph behind its top |
+| Cover | `hero-cover` | A name worth setting big (a studio, a publication, a person) | The name as a masthead, a date line, one large picture beside the cover line |
+| Mosaic | `hero-mosaic` | Three to five real pictures of one set (a range, a place) | One large, one tall, one stepping down; the words in the corner they leave |
+| Film | `hero-video` `data-variant="full"` | A real 8–20 second film of the subject | The whole screen, the words at its foot over a scrim |
+| Statement | `hero-statement` | A public service: the task, named | None: the headline is the picture |
+| Split | `hero-split` | Only when nothing above fits | Beside the words |
+
+Fewer words, whichever the composition: the headline, one sentence, one action and at most one quiet link. No note under the buttons (it is opt-in: `notes` in React, `data-part="note"` by hand, for a worry that stops people). The first screen holds 40 words at most; the critic counts them (`taste-word-budget`).
+
+The bar and the foot change with it. Every bar contrasts with its page: an ink bar (`data-tone="dark"` on `navbar-simple`; it turns to paper on a dark page) or the brand colour (`data-tone="accent"`), with the name centred between the links (`data-variant="split"`) for a maker, or only the name and the action (`data-variant="minimal"`) over a cover. The foot is quiet (`footer-minimal`), the name set across the column (`site-footer` `data-variant="wordmark"`) for a brand, or the phone and address set large (`data-variant="contact"`) for a place people ring.
 
 Placing the picture:
 
-- One large picture beats three small ones. Never a collage.
+- One large picture beats three small ones. A mosaic only with three to five real pictures of one set, never to fill space.
 - Its top lines up with the top of the headline or its centre with the centre of the text block. Not in between.
 - It may touch the right edge of the container. It never floats with equal space on all sides inside its half.
 - A caption states what it shows in one line, in secondary ink, when that is not obvious.
 - No picture is better than a wrong one. No stock photographs, no detailed drawing of the product in place of its photograph, no decorative shapes that stand for nothing.
 - No photograph yet? The stand-in must still say something true, large. An `art-panel` with the name and a flat motif of the subject's own thing (`data-motif`: a cup for a café, a crane for a builder; a sign of the subject, not a portrait of the product); or `data-frame` and the name; or `data-variant="figure"` with the one number that matters ("20 min", "410 a week", "£26"); or, when the thing has a colour of its own, `data-tone="swatch"` in that colour. A panel that only repeats the headline is a grey box with words on it.
 - No photographs of people? Do not tile initials on grey squares: set the people as ruled rows (`team-grid` with `data-variant="list"`: name, role, one line).
+
+### Sections that break the grid
+
+Use a variant before reaching for a new block: `media-band` `data-variant="bleed"` (the picture from edge to edge), `offer-cards` `data-variant="over"` (cards rising over one wide picture), `feature-split` `data-variant="asym"` (uneven pairs, every second row stepping down), `offer-cards` `data-variant="stagger"`. Neighbours never share a composition (block, variant and layout); the plan names each one.
 
 ## 6. Colour budget
 

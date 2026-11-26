@@ -23,6 +23,7 @@ These looks are not wrong in themselves. A coffee roaster may really want cream 
 | Tell | Replace with |
 | --- | --- |
 | Hero skeleton: pill badge, centred headline, softer restatement, two buttons, stat strip | One claim set large on the page's left edge, one action, and the thing itself (`hero-split` with the real screen or object, or `hero-statement`) |
+| The kit's own skeleton, on every page: a line above, a three-line headline on the left, a paragraph, two buttons, a note, a picture the same size on the right | A first screen chosen from the subject (composition.md §5): the product first, a board of prices or times, a cover, a poster, a full-bleed photograph, a mosaic. Forty words at most, one action, no note |
 | Three identical feature cards, each an icon in a tinted rounded square, a title and two lines (`taste-icon-tiles`) | The feature itself: a screen fragment, a document, a chart (`bento-grid` tiles of different sizes, `stack-cards`, `feature-split`). No icon at all is better than a decorative one |
 | Emoji as icons (`slop-emoji`) | One outline icon set at one size, or no icon |
 | Gradient text on headings (`slop-gradient-text`) | Solid ink; emphasis by weight or a quieter second half (`data-part="quiet"`) |
