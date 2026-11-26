@@ -1,0 +1,18 @@
+/* Message composer: an add button, a field that grows to five lines and then scrolls, and a round send button
+   that only lights up when there is something to send. It sits above the home indicator and rises with the
+   on-screen keyboard (the page's viewport meta uses interactive-widget=resizes-content; the script follows the
+   visual viewport where that is not supported). */
+@scope (.lt-composer) {
+  :scope { display: flex; align-items: flex-end; gap: 8px; margin: 0; padding: 8px 12px calc(8px + max(env(safe-area-inset-bottom), var(--kb, 0px))); background: color-mix(in oklab, var(--bg-canvas) 94%, transparent); border-top: var(--bw) var(--border-style) var(--border-hairline); backdrop-filter: blur(16px); }
+  [data-part="field"] { flex: 1; min-width: 0; display: flex; }
+  textarea { flex: 1; min-height: 44px; max-height: calc(5 * 1.4em + 22px); padding: 11px 16px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: 22px; background: var(--bg-surface-1); color: var(--text-primary); font: 400 var(--text-ui, 1rem)/1.4 var(--font-body); resize: none; field-sizing: content; overflow-y: auto; }
+  textarea::placeholder { color: var(--text-muted); }
+  textarea:focus-visible { outline: none; border-color: var(--focus-ring); box-shadow: var(--field-ring); }
+  button { flex: none; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--text-secondary); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background-color var(--dur-2), color var(--dur-2), scale var(--dur-1) var(--ease-out); }
+  button:active:not(:disabled) { scale: 0.92; }
+  button:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
+  [data-part="send"] { background: var(--accent-solid); color: var(--accent-ink); }
+  [data-part="send"]:disabled { background: var(--bg-surface-3); color: var(--text-muted); cursor: default; }
+  @media (prefers-reduced-motion: reduce) { button { transition: none; } }
+}
+@media (forced-colors: active) { .lt-composer [data-part="send"] { border: 1px solid ButtonText; } }

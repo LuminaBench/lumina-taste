@@ -1164,7 +1164,7 @@
       "name": "Time-slot picker",
       "summary": "Bookable times in a grid by part of day; booked slots are struck through and skipped.",
       "pattern": "WAI-ARIA Radio Group (grid navigation)",
-      "states": ["available","selected","booked","focus-visible"],
+      "states": ["available","selected","booked","focus-visible","large (data-size=\"lg\")"],
       "aliases": ["time picker","appointment slots","booking times","meeting scheduler","calendly times"],
       "react": "TimeSlots",
       "api": "role=\"radio\" grid",
@@ -1198,7 +1198,8 @@
       "prompt": "Add a time-slot picker for booking a call: the date and time zone on top, slots grouped by Morning and Afternoon in a responsive grid of buttons with role=\"radio\", booked slots struck through with aria-disabled and skipped by arrow keys, and a live summary line (\"30-minute call at 10:30\").",
       "debug": "Debug my time-slot picker. Rule out: no time zone shown; booked slots that still take focus; each slot as its own tab stop; selected state shown by colour alone. The symptom:",
       "code": [["WAI-ARIA","Radio Group",""],["lumina-taste","<TimeSlots groups>","React"]],
-      "added": 2
+      "added": 2,
+      "note": "data-size=\"lg\": 48px slots for a phone, no outline until chosen; slots are 44px under a coarse pointer anyway."
     },
     {
       "id": "filter-chips",
@@ -1860,6 +1861,172 @@
         ["lumina-taste","<BookingBar title times onCheck>","React"]
       ],
       "added": 13
+    },
+    {
+      "id": "number-pad",
+      "name": "Number pad",
+      "summary": "An amount set very large over twelve keys a thumb can hit: for sending money or a tip on a phone, where the system keyboard would cover half the screen. Typing on a keyboard works too.",
+      "pattern": "<output> + group of buttons",
+      "states": ["empty","typing","over the limit"],
+      "aliases": [
+        "keypad",
+        "amount keypad",
+        "money keypad",
+        "pin pad",
+        "numeric keypad",
+        "send money keypad",
+        "calculator keys"
+      ],
+      "react": "NumberPad",
+      "api": "data-currency · data-max · lt-change {value, text, over} · setValue()",
+      "w": 420,
+      "called": ["big keypad for entering an amount","the number keys on a send money screen","keypad in a payment app"],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"display\"]",
+          "name": "Amount",
+          "api": "<output>",
+          "text": "Set as large as the line allows; steps down as it grows."
+        },
+        {
+          "sel": "[data-part=\"hint\"]",
+          "name": "Hint",
+          "api": "",
+          "text": "The limit or the balance; turns into a warning above data-max."
+        },
+        {
+          "sel": "[data-part=\"keys\"]",
+          "name": "Keys",
+          "api": "60px tall",
+          "text": "Twelve keys: digits, a point, delete."
+        }
+      ],
+      "prompt": "Build a number pad for amounts: an <output> with the currency symbol small and the amount very large (tabular figures, stepping down as it grows), a one-line hint under it (the limit; it turns red and says so above the maximum), then twelve keys in three columns, 60px tall with no outlines (a tint on press): 1–9, a point, 0 and delete. At most two decimals; a hardware keyboard types too. Emit the value on every change.",
+      "debug": "Debug my number pad. Rule out: keys under 44px; an amount that overflows its line; more than two decimals; the system keyboard opening as well; no way to delete. The symptom:",
+      "code": [
+        ["HTML","<div class=\"lt-numpad\" data-lt=\"number-pad\" data-max>",""],
+        ["lumina-taste","<NumberPad currency max onChange>","React"]
+      ],
+      "added": 20
+    },
+    {
+      "id": "date-strip",
+      "name": "Date strip",
+      "summary": "A calm row of days to choose one from, sideways on a phone: the weekday small, the date large, a dot where times are free, full days quiet.",
+      "pattern": "radiogroup",
+      "states": ["chosen","free","full or closed","focus"],
+      "aliases": ["day picker","horizontal calendar","week strip","date scroller","pick a day","date chips"],
+      "react": "DateStrip",
+      "api": "[role=radio][data-date] · aria-disabled · lt-change {date}",
+      "w": 420,
+      "called": [
+        "row of days to pick from in a booking app",
+        "horizontal date picker on a phone",
+        "scrolling week of dates"
+      ],
+      "anatomy": [
+        {"sel":"[aria-checked=\"true\"]","name":"Chosen day","api":"aria-checked","text":"Ink on the accent."},
+        {"sel":"[data-part=\"dot\"]","name":"Free","api":"","text":"A small dot where times are free."},
+        {
+          "sel": "[aria-disabled=\"true\"]",
+          "name": "Full",
+          "api": "aria-disabled",
+          "text": "Quiet, skipped by the arrows, says why to a screen reader."
+        }
+      ],
+      "prompt": "Build a date strip: a radiogroup of day buttons, 56px wide and 76px tall, in a row that scrolls sideways and snaps; each shows the weekday small and the date large, a 5px dot where times are free, and says the month and how many times are free to a screen reader. Full or closed days are quiet and cannot be chosen. One tab stop; arrows skip full days; the chosen day scrolls into view.",
+      "debug": "Debug my date strip. Rule out: days under 44px; full days that can be chosen; arrows landing on full days; the chosen day out of view; the strip scrolling the page sideways. The symptom:",
+      "code": [
+        ["HTML","<div class=\"lt-datestrip\" data-lt=\"date-strip\">",""],
+        ["lumina-taste","<DateStrip days onChange>","React"]
+      ],
+      "added": 20
+    },
+    {
+      "id": "settings-group",
+      "name": "Settings groups",
+      "summary": "Settings set out the way a phone sets out its own: a search that filters as you type, groups with short headings, rows that are a switch or a link with its current value, and one destructive action on its own.",
+      "pattern": "sections of lists",
+      "states": ["searching","no match","switch on","switch off"],
+      "aliases": [
+        "ios settings list",
+        "grouped list",
+        "inset grouped list",
+        "preferences list",
+        "settings rows",
+        "settings search",
+        "account settings mobile"
+      ],
+      "react": "SettingsGroups",
+      "api": "[data-part=\"group|row|label|desc|value|note|danger|search|empty\"] · lt-change {label, checked}",
+      "w": 420,
+      "called": ["settings screen like a phone","grouped settings list with switches","settings with search"],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"search\"]",
+          "name": "Search",
+          "api": "type=search",
+          "text": "Filters rows by label and description, marks the match."
+        },
+        {
+          "sel": "[data-part=\"row\"] > a",
+          "name": "Link row",
+          "api": "",
+          "text": "Label, the current value on the end, a chevron."
+        },
+        {
+          "sel": "input[role=\"switch\"]",
+          "name": "Switch",
+          "api": "role=switch",
+          "text": "Acts at once; nothing to save."
+        },
+        {
+          "sel": "[data-part=\"danger\"]",
+          "name": "Destructive",
+          "api": "",
+          "text": "One, on its own, centred, in the negative colour."
+        }
+      ],
+      "prompt": "Build settings groups: a 44px search field that filters every row by label and description as you type (marking the match, hiding empty groups, saying when nothing matches), then groups with a short heading over an inset list on a raised surface with 16px radius; rows at least 52px, either a whole-row switch (51×31) or a link with its current value and a chevron; a note under a group only where it saves a question; one destructive action alone at the end, centred, in the negative colour.",
+      "debug": "Debug my settings screen. Rule out: a Save button (switches act at once); rows where only the switch is tappable; values that run into labels; a destructive action among ordinary rows; search that only matches labels. The symptom:",
+      "code": [
+        ["HTML","<div class=\"lt-setgroups\" data-lt=\"settings-group\">",""],
+        ["lumina-taste","<SettingsGroups groups search>","React"]
+      ],
+      "added": 20
+    },
+    {
+      "id": "message-composer",
+      "name": "Message composer",
+      "summary": "An add button, a field that grows to five lines, and a round Send that lights up only when there is something to send; above the home indicator and the keyboard.",
+      "pattern": "<form> + <textarea>",
+      "states": ["empty","typing","sending"],
+      "aliases": ["chat input","message box","compose bar","reply bar","send message field","chat composer"],
+      "react": "MessageComposer",
+      "api": "lt-change {text} · --kb · interactive-widget",
+      "w": 420,
+      "called": ["the box at the bottom of a chat to type a message","message input with send button","chat footer"],
+      "anatomy": [
+        {
+          "sel": "textarea",
+          "name": "Field",
+          "api": "field-sizing: content",
+          "text": "Grows to five lines, then scrolls."
+        },
+        {
+          "sel": "[data-part=\"send\"]",
+          "name": "Send",
+          "api": "disabled until text",
+          "text": "Round, in the accent only when there is text."
+        }
+      ],
+      "prompt": "Build a message composer: a form fixed at the bottom of a chat with a 44px add button, a pill-shaped textarea that grows to five lines then scrolls (field-sizing: content, or measured), and a 44px round Send button that is disabled and grey until there is text, then in the accent. Enter sends, Shift+Enter adds a line. Bottom padding is the safe area or the keyboard height (from the visual viewport) when the page does not resize for it.",
+      "debug": "Debug my chat composer. Rule out: the keyboard covering the field; Send enabled with nothing typed; the field growing over the whole thread; Enter adding a line on a phone where it should send; the bar sitting under the home indicator. The symptom:",
+      "code": [
+        ["HTML","<form class=\"lt-composer\" data-lt=\"message-composer\">",""],
+        ["lumina-taste","<MessageComposer onSend>","React"]
+      ],
+      "added": 20
     }
   ]
 }

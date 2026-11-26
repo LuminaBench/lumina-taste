@@ -1,0 +1,180 @@
+/* The app shell shared by the app blueprints (banking, fitness, booking, messaging, settings).
+   Phone first: under 768px the page is the app, one screen at a time, with a large title that scrolls away, a
+   tab bar above the home indicator and the one action low in reach. From 768px the same screens widen into a
+   sidebar and two panes: the list stays on the left while one record opens beside it; a screen of its own takes
+   both panes at a reading width. Nothing here is decoration: space, one accent and the type do the work.
+
+   Markup (see app.ts):
+     <body class="as"> <nav class="as-side">… <main class="as-main"> <section class="as-screen" data-screen="home"
+     data-tab="home" data-pane="list|detail|full|onboard" [data-parent="home"] [data-detail="x"]> …
+     <nav class="lt-bottom-nav as-tabs"> */
+
+html[data-app] { height: 100%; }
+.as {
+  /* Phone type: 17px body, a 34px large title, controls 48px; set once so every screen reads the same. */
+  --text-ui: 1rem; --text-ui-sm: 0.875rem; --text-ui-xs: 0.8125rem;
+  --step-0: 1.0625rem; --step-1: 1.25rem; --as-title: 2.125rem; --as-figure: 3.25rem;
+  --control-h: 44px; --control-h-lg: 52px;
+  --as-pad: 20px;
+  height: 100%; margin: 0; background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui);
+  display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; overflow: hidden;
+}
+.as .bp-skip { border-radius: var(--radius-md); }
+.as-main { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); min-height: 0; }
+.as-screen { grid-area: 1 / 1; display: flex; flex-direction: column; min-width: 0; min-height: 0; background: var(--bg-canvas); }
+.as-screen:not([data-current]) { display: none; }
+.as-scroll { position: relative; flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-top: env(safe-area-inset-top); scrollbar-width: none; }
+.as-scroll::-webkit-scrollbar { display: none; }
+.as-scroll .lt-appbar { --appbar-large: calc(var(--as-title) + 20px); }
+.as-scroll .lt-appbar [data-part="large"] { font-size: var(--as-title); letter-spacing: -0.02em; }
+.as-scroll .lt-appbar [data-part="large"]:focus { outline: none; }
+.as-scroll .lt-appbar [data-part="large"] { padding-inline: var(--as-pad); }
+.as-scroll .lt-appbar [data-part="row"] { padding-inline: calc(var(--as-pad) - 12px); }
+.as-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; align-content: start; padding: 8px var(--as-pad) 40px; }
+.as-body > * { min-width: 0; }
+
+/* A section inside a screen: a heading the size of a row, and its content. No small labels, no rules. */
+.as-h { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 -14px; font-size: var(--step-1); font-weight: 650; letter-spacing: -0.015em; }
+.as-h a, .as-h button { min-height: 44px; display: inline-flex; align-items: center; padding: 0; border: 0; background: none; color: var(--accent-text); font: 550 var(--text-ui) var(--font-body); text-decoration: none; cursor: pointer; }
+.as-h a:focus-visible, .as-h button:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; border-radius: var(--radius-sm); }
+
+/* The one figure of a screen: set large, tabular, with what it counts above it. */
+.as-figure { display: grid; gap: 4px; margin: 0; }
+.as-figure dt, .as-figure > p:first-child { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 550; }
+.as-figure dd, .as-figure b { margin: 0; font-family: var(--font-display); font-size: var(--as-figure); font-weight: var(--weight-display); letter-spacing: -0.035em; line-height: 1.04; font-variant-numeric: lining-nums tabular-nums; }
+.as-figure small { font-size: 0.5em; letter-spacing: -0.01em; color: var(--text-secondary); }
+
+/* Rows: a list of things you tap, edge to edge inside the screen's margin, divided by an inset hairline. */
+.as-rows { margin: 0; padding: 0; list-style: none; }
+.as-rows > li + li > .as-row { box-shadow: inset 0 1px 0 var(--border-hairline); }
+.as-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px; width: 100%; min-height: 64px; padding: 10px 0; border: 0; background: none; color: inherit; font: inherit; text-align: start; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+button.as-row, a.as-row { cursor: pointer; transition: background-color var(--dur-1); }
+:is(button, a).as-row:active { background: var(--bg-surface-2); }
+:is(button, a).as-row:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; border-radius: var(--radius-md); }
+.as-row > :nth-child(2) { display: grid; gap: 2px; min-width: 0; }
+.as-row b { font-weight: 600; overflow-wrap: anywhere; }
+.as-row small { color: var(--text-secondary); font-size: var(--text-ui-sm); }
+.as-row > :last-child { justify-self: end; text-align: end; font-variant-numeric: tabular-nums; }
+.as-row [data-amount] { font-weight: 600; }
+.as-row [data-amount][data-in] { color: var(--status-positive); }
+/* The thing's mark: a round tile with its initial or its drawing, in a quiet tint. */
+.as-mark { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--bg-surface-2); color: var(--text-secondary); font-weight: 650; font-size: var(--text-ui-sm); }
+.as-mark svg { width: 22px; height: 22px; }
+.as-day { margin: 18px 0 2px; color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 600; }
+.as-day:first-child { margin-top: 0; }
+
+/* A card is used only for the one thing set large on a screen (the next booking, the card, the workout). */
+.as-card { display: grid; gap: 10px; padding: 20px; border-radius: 24px; background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); }
+
+/* The action bar: the one action, low, in reach of a thumb, above the home indicator. */
+.as-actionbar { flex: none; z-index: 2; display: flex; align-items: center; gap: 14px; padding: 12px var(--as-pad) calc(12px + env(safe-area-inset-bottom)); background: var(--bg-canvas); box-shadow: 0 -1px 0 var(--border-hairline); }
+.as-actionbar > .lt-btn { flex: 1; }
+.as-actionbar p { display: grid; margin: 0; }
+.as-actionbar p b { font-size: var(--step-1); font-variant-numeric: tabular-nums; }
+.as-actionbar p small { color: var(--text-secondary); font-size: var(--text-ui-sm); }
+
+/* Tab bar: four tabs at most, labels under icons, the current one in the accent. Above the home indicator. */
+.as-tabs.lt-bottom-nav { position: relative; z-index: 3; padding: 4px 8px calc(4px + env(safe-area-inset-bottom)); background: color-mix(in oklab, var(--bg-canvas) 94%, transparent); border-top: var(--bw) var(--border-style) var(--border-hairline); backdrop-filter: blur(16px); }
+.as-tabs.lt-bottom-nav a { min-height: 52px; align-content: center; gap: 3px; font-size: 0.6875rem; }
+.as-tabs.lt-bottom-nav a[aria-current="page"] { color: var(--accent-text); }
+.as-tabs.lt-bottom-nav [data-part="pill"] { display: none; }
+/* A pushed screen (one record, a form) hides the tab bar: its own action takes the bottom of the screen. */
+.as[data-pane="detail"] .as-tabs, .as[data-pane="onboard"] .as-tabs, .as[data-pane="sheet"] .as-tabs { display: none; }
+
+/* Onboarding: the drawing, one sentence, one action. */
+.as-onboard { display: grid; align-content: end; gap: 18px; min-height: 100%; padding: calc(24px + env(safe-area-inset-top)) var(--as-pad) 24px; }
+.as-onboard .lt-art { --art-ratio: 1 / 1; border-radius: 32px; }
+.as-onboard h1, .as-onboard h2 { margin: 8px 0 0; font-family: var(--font-display); font-size: var(--as-title); font-weight: var(--weight-display); letter-spacing: -0.025em; line-height: 1.08; text-wrap: balance; }
+.as-onboard p { margin: 0; color: var(--text-secondary); font-size: var(--step-0); line-height: 1.45; text-wrap: pretty; }
+.as-onboard .lt-btn { width: 100%; }
+.as-dots { display: flex; justify-content: center; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.as-dots li { width: 6px; height: 6px; border-radius: 3px; background: var(--border-strong); }
+.as-dots li[aria-current] { width: 18px; background: var(--text-primary); }
+
+/* Empty, loading and error: a drawing (or the shape of what is coming), one sentence, one action. */
+.as-state { display: grid; justify-items: center; gap: 12px; padding: 24px 12px; text-align: center; }
+.as-state .lt-art { --art-ratio: 1 / 1; width: min(200px, 60%); border-radius: 50%; }
+.as-state h3 { margin: 4px 0 0; font-size: var(--step-1); font-weight: 650; }
+.as-state p { margin: 0; max-width: 30ch; color: var(--text-secondary); text-wrap: pretty; }
+.as-state .lt-btn { margin-top: 6px; }
+.as-skel { display: grid; gap: 14px; }
+.as-skel .lt-skeleton { height: 16px; border-radius: 8px; }
+.as-skel [data-big] { height: 52px; width: 64%; border-radius: 12px; }
+.as-skel [data-row] { display: grid; grid-template-columns: 44px 1fr 64px; align-items: center; gap: 14px; min-height: 64px; }
+.as-skel [data-row] > :first-child { width: 44px; height: 44px; border-radius: 50%; }
+
+/* Sheets: from the bottom on a phone (the kit's bottom-sheet), a centred panel on a wide screen. */
+.as .lt-sheet { padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+.as-sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.as-sheet-head h2 { margin: 0; font-size: var(--step-1); font-weight: 650; }
+
+.as-toast { position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom)); z-index: 80; translate: -50% 0; max-width: calc(100vw - 32px); margin: 0; padding: 12px 18px; border-radius: var(--radius-pill); background: var(--text-primary); color: var(--bg-canvas); font-size: var(--text-ui-sm); font-weight: 600; box-shadow: var(--shadow-overlay); }
+.as-toast:empty { display: none; }
+
+/* Press: a quick dip, never a grow. */
+:where(.as-row, .as-card[role="button"], a.as-card) { transition: scale var(--dur-1) var(--ease-out), background-color var(--dur-1); }
+:where(button.as-row, a.as-row, a.as-card):active { scale: 0.985; }
+
+.as-side { display: none; }
+
+/* ------------------------------------------------------------------ from 768px: a sidebar and two panes */
+@media (min-width: 768px) {
+  .as { --as-pad: 32px; grid-template-columns: 240px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
+  .as-tabs.lt-bottom-nav { display: none; }
+  .as-side { display: flex; flex-direction: column; gap: 4px; min-height: 0; padding: 24px 14px; background: var(--bg-surface-1); box-shadow: inset -1px 0 0 var(--border-hairline); }
+  .as-side-name { display: flex; align-items: center; gap: 10px; margin: 0 10px 22px; font-family: var(--font-display); font-size: var(--step-1); font-weight: var(--weight-display); letter-spacing: -0.015em; }
+  .as-side-name i { width: 22px; height: 22px; border-radius: 7px; background: var(--accent-solid); }
+  .as-side ul { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+  .as-side a { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: var(--radius-md); color: var(--text-secondary); font-weight: 550; text-decoration: none; }
+  .as-side a:hover { background: var(--bg-surface-2); color: var(--text-primary); }
+  .as-side a[aria-current="page"] { background: var(--bg-surface-2); color: var(--text-primary); }
+  .as-side a[aria-current="page"] .lt-icon { color: var(--accent-text); }
+  .as-side a:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -2px; }
+  .as-side-foot { margin-top: auto; padding: 12px; color: var(--text-muted); font-size: var(--text-ui-xs); }
+  .as-main { grid-template-columns: minmax(320px, 400px) minmax(0, 1fr); }
+  .as-screen[data-pane="list"] { grid-area: 1 / 1; }
+  .as-screen[data-pane="detail"] { grid-area: 1 / 2; box-shadow: inset 1px 0 0 var(--border-hairline); }
+  .as-screen:is([data-pane="full"], [data-pane="onboard"]) { grid-area: 1 / 1 / 2 / 3; }
+  .as-screen[data-pane="full"] .as-scroll > * { width: min(100%, 720px); margin-inline: auto; }
+  /* The list's default record shows beside it; the list shows beside its record. */
+  .as-screen[data-shown] { display: flex; }
+  /* In a split view the record needs no way back to the list beside it. */
+  .as-screen[data-pane="detail"] [data-part="back"] { visibility: hidden; }
+  .as-screen[data-pane="detail"] .as-actionbar { justify-content: flex-end; }
+  .as-screen[data-pane="detail"] .as-actionbar > .lt-btn { flex: 0 1 280px; }
+  /* Onboarding is a moment of its own: no sidebar, the drawing beside the words. */
+  .as[data-pane="onboard"] { grid-template-columns: minmax(0, 1fr); }
+  .as[data-pane="onboard"] .as-side { display: none; }
+  .as-onboard { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto auto auto; align-content: center; column-gap: 64px; width: min(100%, 1040px); margin-inline: auto; padding: 48px; }
+  .as-onboard > .lt-art { grid-column: 2; grid-row: 1 / span 5; align-self: center; }
+  .as-onboard > :not(.lt-art) { grid-column: 1; }
+  .as-onboard .lt-btn { width: auto; justify-self: start; min-width: 220px; }
+  .as-onboard .as-dots { justify-content: flex-start; }
+  /* Sheets become a centred panel. */
+  .as .lt-sheet, .as .lt-sheet[data-detents] { inset: 0; width: min(460px, 100vw - 48px); height: fit-content; max-height: calc(100dvh - 80px); margin: auto; padding: 24px; border-radius: 24px; translate: 0 8px; opacity: 0; transition: translate var(--dur-3) var(--ease-out), opacity var(--dur-3) var(--ease-out), display var(--dur-3) allow-discrete, overlay var(--dur-3) allow-discrete; }
+  .as .lt-sheet[open] { translate: 0 0; opacity: 1; }
+  @starting-style { .as .lt-sheet[open] { translate: 0 8px; opacity: 0; } }
+  .as .lt-sheet [data-part="grab"] { display: none; }
+  .as-toast { bottom: 32px; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .as { grid-template-columns: 84px minmax(0, 1fr); }
+  .as-side { padding-inline: 8px; }
+  .as-side-name span, .as-side-foot { display: none; }
+  .as-side-name { justify-content: center; margin-inline: 0; }
+  .as-side a { flex-direction: column; justify-content: center; gap: 4px; min-height: 60px; padding: 6px 4px; font-size: var(--text-ui-xs); text-align: center; }
+  .as-main { grid-template-columns: minmax(300px, 340px) minmax(0, 1fr); }
+}
+@media (min-width: 1280px) {
+  .as { grid-template-columns: 260px minmax(0, 1fr); }
+  .as-main { grid-template-columns: minmax(360px, 420px) minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html[data-nav="forward"]::view-transition-old(root) { animation: as-out 300ms var(--ease-out) both; }
+  html[data-nav="forward"]::view-transition-new(root) { animation: as-in 300ms var(--ease-out) both; }
+  html[data-nav="back"]::view-transition-old(root) { animation: as-in 300ms var(--ease-out) reverse both; }
+  html[data-nav="back"]::view-transition-new(root) { animation: as-out 300ms var(--ease-out) reverse both; }
+}
+@keyframes as-in { from { translate: 100% 0; } }
+@keyframes as-out { to { translate: -24% 0; opacity: 0.7; } }
+@media print { .as { display: block; height: auto; overflow: visible; } .as-screen { display: flex !important; break-after: page; } .as-scroll { overflow: visible; } .as-tabs, .as-side { display: none !important; } }

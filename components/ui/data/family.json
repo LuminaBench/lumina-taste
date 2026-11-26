@@ -525,7 +525,7 @@
       "name": "Chat thread",
       "summary": "Message bubbles grouped by sender, with read status, an attachment and a typing indicator.",
       "pattern": "role=\"log\" (live region)",
-      "states": ["incoming","outgoing","attachment","typing"],
+      "states": ["incoming","outgoing","attachment","typing","phone"],
       "aliases": ["message bubbles","chat ui","conversation view","imessage style chat","dm thread"],
       "react": "ChatThread",
       "api": "role=\"log\"",
@@ -565,7 +565,8 @@
       "prompt": "Build a chat thread: an <ol role=\"log\" aria-live=\"polite\">, consecutive messages from one sender grouped with one avatar, name and <time>, incoming bubbles on a neutral surface and outgoing on the accent, small tail corners only where bubbles stack, a file attachment card, \"Read 09:45\" under the latest outgoing group, and a three-dot typing indicator with hidden text.",
       "debug": "Debug my chat thread. Rule out: every message repeating the avatar and time; long URLs breaking the bubble (overflow-wrap: anywhere); the log announcing old messages on load; accent bubbles with text below 4.5:1. The symptom:",
       "code": [["HTML","<ol role=\"log\">",""],["lumina-taste","<ChatThread groups>","React"]],
-      "added": 2
+      "added": 2,
+      "note": "data-variant=\"phone\": a one-to-one thread on a phone: no avatars or names, the day as a quiet centred line, rounder bubbles joined in a run, the time and the read state once."
     },
     {
       "id": "prompt-composer",
@@ -1781,6 +1782,39 @@
       ],
       "added": 15,
       "note": "Use it as the hero picture for anything that makes documents (invoicing, quotes, payroll, bookings): put it in hero-split's <div data-part=\"visual\">. Keep the sums true: lines add up to the subtotal, tax follows, the total is their sum. Change data-state and the status words together."
+    },
+    {
+      "id": "activity-rings",
+      "name": "Activity rings",
+      "summary": "One to three goals for today as concentric rings (the accent, the highlight, ink) with the true numbers beside the dial.",
+      "pattern": "<figure> + <dl>",
+      "states": ["in progress","goal met","wide (legend beside)"],
+      "aliases": ["progress rings","goal rings","fitness rings","daily goals","concentric progress","activity circle"],
+      "react": "ActivityRings",
+      "api": "--r1 · --r2 · --r3 · --rings-size",
+      "w": 420,
+      "called": ["three rings for today's goals","circular progress for move, exercise and stand","fitness app rings"],
+      "anatomy": [
+        {
+          "sel": "[data-part=\"dial\"]",
+          "name": "Rings",
+          "api": "stroke-dashoffset",
+          "text": "Each ring its share of the goal, full past it."
+        },
+        {
+          "sel": "[data-part=\"legend\"]",
+          "name": "Numbers",
+          "api": "<dl>",
+          "text": "The truth: done over goal, with the unit."
+        }
+      ],
+      "prompt": "Build activity rings: an SVG dial of up to three concentric rings (radius 52, 39, 26 on a 120 grid, round caps, a pale track) filled to each goal share with stroke-dashoffset on pathLength 100, the first in the accent, the second in the palette highlight, the third in ink; beside or under it a <dl> legend with each goal done over target and its unit, a coloured edge matching its ring. The figure in the middle only with one or two rings.",
+      "debug": "Debug my rings. Rule out: rings without the numbers beside them; three hues fighting the accent; rings past 100% drawing over themselves; the figure in the middle too small to read. The symptom:",
+      "code": [
+        ["HTML","<figure class=\"lt-rings\" style=\"--r1: 0.72\">",""],
+        ["lumina-taste","<ActivityRings rings>","React"]
+      ],
+      "added": 20
     }
   ]
 }

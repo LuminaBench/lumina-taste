@@ -1,0 +1,22 @@
+/* Number pad: the amount set very large, a hint under it, and twelve keys big enough for a thumb. For sending
+   money, a tip, a PIN-free amount on a phone, where the system keyboard would cover half the screen. Typing on a
+   hardware keyboard works too (digits, a point, Backspace). The amount never runs out of its line: it steps down
+   as it grows. */
+@scope (.lt-numpad) {
+  :scope { display: grid; gap: 6px; justify-items: center; width: 100%; font-variant-numeric: tabular-nums; }
+  [data-part="display"] { display: flex; align-items: baseline; justify-content: center; gap: 0.04em; min-height: 1.15em; max-width: 100%; font-family: var(--font-display); font-size: var(--np-size, clamp(3rem, 16vw, 4.5rem)); font-weight: var(--weight-display); letter-spacing: -0.04em; line-height: 1.1; color: var(--text-primary); overflow-wrap: anywhere; }
+  :scope[data-len="6"] [data-part="display"], :scope[data-len="7"] [data-part="display"] { --np-size: clamp(2.5rem, 13vw, 3.75rem); }
+  :scope[data-len="8"] [data-part="display"], :scope[data-len="9"] [data-part="display"] { --np-size: clamp(2.125rem, 11vw, 3rem); }
+  [data-part="symbol"] { font-size: 0.6em; color: var(--text-secondary); }
+  :scope[data-empty] [data-part="value"] { color: var(--text-muted); }
+  [data-part="hint"] { min-height: 1.4em; margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  :scope[data-over] [data-part="hint"] { color: var(--status-negative); }
+  [data-part="keys"] { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; width: min(100%, 360px); margin-top: 10px; }
+  button { display: grid; place-items: center; height: 60px; padding: 0; border: 0; border-radius: var(--radius-lg); background: transparent; color: var(--text-primary); font: 500 1.75rem/1 var(--font-body); font-variant-numeric: tabular-nums; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background-color var(--dur-1), scale var(--dur-1) var(--ease-out); }
+  button:hover { background: var(--bg-surface-2); }
+  button:active, button[data-pressed] { background: var(--bg-surface-3); scale: 0.96; }
+  button:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -2px; }
+  button .lt-icon { width: 24px; height: 24px; color: var(--text-secondary); }
+  @media (prefers-reduced-motion: reduce) { button { transition: none; } }
+}
+@media (forced-colors: active) { .lt-numpad button { border: 1px solid ButtonText; } }

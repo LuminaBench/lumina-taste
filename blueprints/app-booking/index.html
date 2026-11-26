@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en" data-palette="sage-clay" data-mode="light" data-type="humanist" data-density="balanced" data-radius="soft" data-motion="snappy" data-app>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <title>Moss Grooming · booking app</title>
+  <meta name="description" content="Blueprint: a booking app on a phone that widens to a sidebar and two panes: who and what, a calm strip of days and a grid of free times, a sheet to check and book, and your bookings with the next one set large, built with lumina-taste.">
+</head>
+<body class="as">
+  <a class="bp-skip" href="#main">Skip to content</a>
+  <nav class="as-side" aria-label="Sections">
+    <p class="as-side-name"><i aria-hidden="true"></i><span>Moss Grooming</span></p>
+    <ul><li><a href="#screen-book"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg><span>Book</span></a></li><li><a href="#screen-bookings"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>Bookings</span></a></li><li><a href="#screen-dogs"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg><span>Dogs</span></a></li></ul>
+    <p class="as-side-foot">Moss Grooming is made up.</p>
+  </nav>
+  <main id="main" class="as-main">
+    <h1 class="lt-visually-hidden">Moss Grooming, a booking app</h1>
+    
+  <section class="as-screen" id="screen-welcome" data-screen="welcome" data-pane="onboard" aria-labelledby="wl-h">
+    <div class="as-scroll"><div class="as-onboard">
+      <figure class="lt-art" data-scene="paw scissors" data-tone="accent" data-shot="A freshly groomed terrier on the table, looking at the camera, soft window light"><svg data-part="scene" viewBox="67 12 232 188" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><g data-role="lead" transform="translate(70 17) scale(1)" style="--k:1"><path data-m="a" d="M80 136C60 136 46 124 50 108C54 94 66 88 80 88S106 94 110 108C114 124 100 136 80 136Z"/><g data-m="b"><ellipse cx="44" cy="80" rx="11" ry="15" transform="rotate(-24 44 80)"/><ellipse cx="66" cy="54" rx="11" ry="15" transform="rotate(-8 66 54)"/><ellipse cx="94" cy="54" rx="11" ry="15" transform="rotate(8 94 54)"/><ellipse cx="116" cy="80" rx="11" ry="15" transform="rotate(24 116 80)"/></g><g data-m="ink"><path d="M80 136C60 136 46 124 50 108C54 94 66 88 80 88S106 94 110 108C114 124 100 136 80 136Z"/><ellipse cx="44" cy="80" rx="11" ry="15" transform="rotate(-24 44 80)"/><ellipse cx="66" cy="54" rx="11" ry="15" transform="rotate(-8 66 54)"/><ellipse cx="94" cy="54" rx="11" ry="15" transform="rotate(8 94 54)"/><ellipse cx="116" cy="80" rx="11" ry="15" transform="rotate(24 116 80)"/></g></g><g data-role="rest" transform="translate(206 11.5) scale(0.5)" style="--k:0.5"><path data-m="b" d="M60 100L104 20L112 24L72 104Z"/><path data-m="b" d="M100 100L56 20L48 24L88 104Z"/><circle data-m="a" cx="54" cy="116" r="18"/><circle data-m="a" cx="106" cy="116" r="18"/><circle data-m="cut" cx="54" cy="116" r="8"/><circle data-m="cut" cx="106" cy="116" r="8"/><g data-m="ink"><path d="M60 100L104 20L112 24L72 104M100 100L56 20L48 24L88 104"/><circle cx="54" cy="116" r="18"/><circle cx="106" cy="116" r="18"/><circle cx="54" cy="116" r="8"/><circle cx="106" cy="116" r="8"/></g><circle data-m="dot" cx="80" cy="70" r="4"/></g></svg><figcaption class="lt-visually-hidden">A paw print and scissors</figcaption></figure>
+      <ol class="as-dots" aria-label="Step 1 of 2"><li aria-current="step"></li><li></li></ol>
+      <h1 id="wl-h" tabindex="-1">A groom for Biscuit, booked in a minute</h1>
+      <p>Pick a day and a time that is free. We send a reminder the evening before.</p>
+      <button type="button" class="lt-btn" data-variant="primary" data-size="lg" data-go="book"><span data-part="label">Book a groom</span></button>
+    </div></div>
+  </section>
+    
+  <section class="as-screen" id="screen-book" data-screen="book" data-tab="book" data-pane="full" aria-labelledby="bk-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Book a groom</p><span></span></div>
+        <h2 data-part="large" id="bk-h" tabindex="-1">Book a groom</h2>
+      </header>
+      <div class="as-body bo-book">
+        <section aria-labelledby="bo-for"><h3 class="as-h" id="bo-for">For</h3>
+          <div class="lt-segmented bo-seg" data-lt="segmented-control" role="radiogroup" aria-label="Dog" id="bo-dog"><span data-part="indicator" aria-hidden="true"></span><button type="button" role="radio" aria-checked="true" tabindex="0" data-value="Biscuit">Biscuit</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="Pepper">Pepper</button></div>
+        </section>
+        <section aria-labelledby="bo-what"><h3 class="as-h" id="bo-what">Groom</h3>
+          <div class="bo-services" role="radiogroup" aria-labelledby="bo-what" id="bo-services">
+            <button type="button" role="radio" aria-checked="true" tabindex="0" data-value="full" data-price="£48" data-name="Full groom"><span><b>Full groom</b><small>Bath, cut and nails · 2 h</small></span><span class="bo-price">£48</span></button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="bath" data-price="£30" data-name="Bath and brush"><span><b>Bath and brush</b><small>1 h</small></span><span class="bo-price">£30</span></button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="nails" data-price="£12" data-name="Nails only"><span><b>Nails only</b><small>15 min</small></span><span class="bo-price">£12</span></button>
+          </div>
+        </section>
+        <section aria-labelledby="bo-when"><h3 class="as-h" id="bo-when">December</h3>
+          <div class="lt-datestrip bo-strip" data-lt="date-strip" id="bo-days">
+          <div data-part="track" role="radiogroup" aria-label="Day">
+            <button type="button" role="radio" aria-checked="false" tabindex="-1" data-date="2026-12-01"><span>Tue</span><b>1</b><i data-part="dot" aria-hidden="true"></i><span class="lt-visually-hidden">December, 4 times free</span></button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-date="2026-12-02"><span>Wed</span><b>2</b><i data-part="dot" aria-hidden="true"></i><span class="lt-visually-hidden">December, 2 times free</span></button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-date="2026-12-03" aria-disabled="true"><span>Thu</span><b>3</b><span class="lt-visually-hidden">December, full</span></button><button type="button" role="radio" aria-checked="true" tabindex="0" data-date="2026-12-04"><span>Fri</span><b>4</b><i data-part="dot" aria-hidden="true"></i><span class="lt-visually-hidden">December, 6 times free</span></button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-date="2026-12-05"><span>Sat</span><b>5</b><i data-part="dot" aria-hidden="true"></i><span class="lt-visually-hidden">December, 1 times free</span></button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-date="2026-12-06" aria-disabled="true"><span>Sun</span><b>6</b><span class="lt-visually-hidden">December, closed</span></button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-date="2026-12-07"><span>Mon</span><b>7</b><i data-part="dot" aria-hidden="true"></i><span class="lt-visually-hidden">December, 5 times free</span></button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-date="2026-12-08"><span>Tue</span><b>8</b><i data-part="dot" aria-hidden="true"></i><span class="lt-visually-hidden">December, 3 times free</span></button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-date="2026-12-09"><span>Wed</span><b>9</b><i data-part="dot" aria-hidden="true"></i><span class="lt-visually-hidden">December, 4 times free</span></button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-date="2026-12-10"><span>Thu</span><b>10</b><i data-part="dot" aria-hidden="true"></i><span class="lt-visually-hidden">December, 2 times free</span></button>
+          </div>
+        </div>
+        </section>
+        <div class="lt-slots bo-slots" data-lt="time-slots" data-size="lg" id="bo-slots">
+          <div role="radiogroup" aria-label="Morning" data-part="group"><p data-part="label" aria-hidden="true">Morning</p><div data-part="grid"><button type="button" role="radio" aria-checked="false" data-part="slot" aria-disabled="true">09:00</button><button type="button" role="radio" aria-checked="false" data-part="slot">09:30</button><button type="button" role="radio" aria-checked="true" data-part="slot">10:30</button><button type="button" role="radio" aria-checked="false" data-part="slot" aria-disabled="true">11:00</button><button type="button" role="radio" aria-checked="false" data-part="slot">11:30</button></div></div>
+          <div role="radiogroup" aria-label="Afternoon" data-part="group"><p data-part="label" aria-hidden="true">Afternoon</p><div data-part="grid"><button type="button" role="radio" aria-checked="false" data-part="slot">13:00</button><button type="button" role="radio" aria-checked="false" data-part="slot" aria-disabled="true">14:30</button><button type="button" role="radio" aria-checked="false" data-part="slot">15:00</button></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="as-actionbar">
+      <p><b id="bo-sum-price">£48</b><small id="bo-sum-when">Fri 4 Dec, 10:30</small></p>
+      <button type="button" class="lt-btn" data-variant="primary" data-size="lg" id="bo-review" aria-haspopup="dialog"><span data-part="label">Book</span></button>
+    </div>
+  </section>
+    
+  <section class="as-screen" id="screen-bookings" data-screen="bookings" data-tab="bookings" data-pane="list" data-detail="booking" aria-labelledby="bs-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Bookings</p><span></span></div>
+        <h2 data-part="large" id="bs-h" tabindex="-1">Bookings</h2>
+      </header>
+      <div class="as-body">
+        <a class="as-card bo-next" href="#screen-booking" data-go="booking" data-view="ready">
+          <span class="bo-next-when">Next · in 8 days</span>
+          <span class="bo-next-day">Friday 4 December</span>
+          <span class="bo-next-time">10:30</span>
+          <span class="bo-next-what"><span class="as-mark" aria-hidden="true"><svg data-part="mark-motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><path data-m="a" d="M80 136C60 136 46 124 50 108C54 94 66 88 80 88S106 94 110 108C114 124 100 136 80 136Z"/><g data-m="b"><ellipse cx="44" cy="80" rx="11" ry="15" transform="rotate(-24 44 80)"/><ellipse cx="66" cy="54" rx="11" ry="15" transform="rotate(-8 66 54)"/><ellipse cx="94" cy="54" rx="11" ry="15" transform="rotate(8 94 54)"/><ellipse cx="116" cy="80" rx="11" ry="15" transform="rotate(24 116 80)"/></g><g data-m="ink"><path d="M80 136C60 136 46 124 50 108C54 94 66 88 80 88S106 94 110 108C114 124 100 136 80 136Z"/><ellipse cx="44" cy="80" rx="11" ry="15" transform="rotate(-24 44 80)"/><ellipse cx="66" cy="54" rx="11" ry="15" transform="rotate(-8 66 54)"/><ellipse cx="94" cy="54" rx="11" ry="15" transform="rotate(8 94 54)"/><ellipse cx="116" cy="80" rx="11" ry="15" transform="rotate(24 116 80)"/></g></svg></span><span><b>Full groom for Biscuit</b><small>With Nell · 2 hours</small></span></span>
+        </a>
+        <section data-view="ready" aria-labelledby="bs-later"><h3 class="as-h" id="bs-later">Later</h3>
+          <ul class="as-rows"><li><button type="button" class="as-row" data-go="booking"><span class="bo-date" aria-hidden="true"><b>18</b><span>Dec</span></span><span><b>Nails for Pepper</b><small>With Sam · 15 min</small></span><span><small>14:30</small></span></button></li><li><button type="button" class="as-row" data-go="booking"><span class="bo-date" aria-hidden="true"><b>15</b><span>Jan</span></span><span><b>Bath and brush for Biscuit</b><small>With Nell · 1 hour</small></span><span><small>09:30</small></span></button></li></ul>
+        </section>
+        <section data-view="ready" aria-labelledby="bs-past"><h3 class="as-h" id="bs-past">Before</h3>
+          <ul class="as-rows bo-past"><li><button type="button" class="as-row" data-go="booking"><span class="bo-date" aria-hidden="true"><b>6</b><span>Nov</span></span><span><b>Full groom for Biscuit</b><small>£48 · paid</small></span><span><small>10:00</small></span></button></li><li><button type="button" class="as-row" data-go="booking"><span class="bo-date" aria-hidden="true"><b>23</b><span>Oct</span></span><span><b>Nails for Pepper</b><small>£12 · paid</small></span><span><small>11:30</small></span></button></li></ul>
+        </section>
+        
+        <div class="as-skel" data-view="loading" aria-busy="true" aria-label="Loading your bookings" hidden>
+          <span class="lt-skeleton" style="height: 168px; border-radius: 24px"></span><div data-row><span class="lt-skeleton"></span><span class="lt-skeleton"></span><span class="lt-skeleton"></span></div><div data-row><span class="lt-skeleton"></span><span class="lt-skeleton"></span><span class="lt-skeleton"></span></div>
+        </div>
+        <section class="as-state" data-view="empty" aria-labelledby="st-empty-h" hidden>
+          <figure class="lt-art" data-motif="paw" data-tone="accent" data-shot="A lead hanging by a front door"><svg data-part="motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><path data-m="a" d="M80 136C60 136 46 124 50 108C54 94 66 88 80 88S106 94 110 108C114 124 100 136 80 136Z"/><g data-m="b"><ellipse cx="44" cy="80" rx="11" ry="15" transform="rotate(-24 44 80)"/><ellipse cx="66" cy="54" rx="11" ry="15" transform="rotate(-8 66 54)"/><ellipse cx="94" cy="54" rx="11" ry="15" transform="rotate(8 94 54)"/><ellipse cx="116" cy="80" rx="11" ry="15" transform="rotate(24 116 80)"/></g><g data-m="ink"><path d="M80 136C60 136 46 124 50 108C54 94 66 88 80 88S106 94 110 108C114 124 100 136 80 136Z"/><ellipse cx="44" cy="80" rx="11" ry="15" transform="rotate(-24 44 80)"/><ellipse cx="66" cy="54" rx="11" ry="15" transform="rotate(-8 66 54)"/><ellipse cx="94" cy="54" rx="11" ry="15" transform="rotate(8 94 54)"/><ellipse cx="116" cy="80" rx="11" ry="15" transform="rotate(24 116 80)"/></g></svg><figcaption class="lt-visually-hidden">A paw print</figcaption></figure>
+          <h3 id="st-empty-h">No bookings yet</h3>
+          <p>Book Biscuit in for a groom and it shows here, with a reminder the evening before.</p>
+          <button type="button" class="lt-btn" data-variant="primary" data-size="lg" data-go="book"><span data-part="label">Book a groom</span></button>
+        </section>
+        <section class="as-state" data-view="error" role="alert" aria-labelledby="st-error-h" hidden>
+          <figure class="lt-art" data-motif="calendar" data-shot="A paper diary on a counter"><svg data-part="motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><rect data-m="b" x="26" y="34" width="108" height="104" rx="10"/><path data-m="a" d="M26 62V44A10 10 0 0 1 36 34H124A10 10 0 0 1 134 44V62Z"/><circle data-m="a" cx="102" cy="100" r="10"/><g data-m="ink"><rect x="26" y="34" width="108" height="104" rx="10"/><path d="M26 62H134M54 24V44M106 24V44"/><circle cx="102" cy="100" r="10"/></g><g data-m="dot"><circle cx="46" cy="80" r="3.5"/><circle cx="64" cy="80" r="3.5"/><circle cx="82" cy="80" r="3.5"/><circle cx="102" cy="80" r="3.5"/><circle cx="118" cy="80" r="3.5"/><circle cx="46" cy="100" r="3.5"/><circle cx="64" cy="100" r="3.5"/><circle cx="82" cy="100" r="3.5"/><circle cx="118" cy="100" r="3.5"/><circle cx="46" cy="120" r="3.5"/><circle cx="64" cy="120" r="3.5"/><circle cx="82" cy="120" r="3.5"/></g></svg><figcaption class="lt-visually-hidden">A calendar</figcaption></figure>
+          <h3 id="st-error-h">We could not load your bookings</h3>
+          <p>They are safe with Moss Grooming. Check your connection and try again.</p>
+          <button type="button" class="lt-btn" data-variant="secondary" data-set-state="ready"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6L20 8.5M20 4v4.5h-4.5"/></svg><span data-part="label">Try again</span></button>
+        </section>
+      </div>
+    </div>
+  </section>
+    
+  <section class="as-screen" id="screen-booking" data-screen="booking" data-pane="detail" data-parent="bookings" aria-labelledby="bd-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><button type="button" data-part="back" data-go="bookings" data-dir="back" aria-label="Back to Bookings"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>Bookings</span></button><p data-part="small" aria-hidden="true">Friday 4 December</p><span></span></div>
+        <h2 data-part="large" id="bd-h" tabindex="-1">Friday 4 December</h2>
+      </header>
+      <div class="as-body">
+        <dl class="as-figure"><dt>Full groom for Biscuit</dt><dd>10:30<small> to 12:30</small></dd></dl>
+        <dl class="bo-facts">
+          <div><dt>With</dt><dd>Nell</dd></div>
+          <div><dt>Where</dt><dd>4 Canal Row, Bath BA1 2QT</dd></div>
+          <div><dt>Price</dt><dd>£48, paid on the day</dd></div>
+          <div><dt>Reminder</dt><dd>Thursday at 18:00</dd></div>
+        </dl>
+        <div class="lt-setgroups" data-lt="settings-group">
+          <section data-part="group" aria-labelledby="bd-g1"><h3 id="bd-g1" class="lt-visually-hidden">Change</h3>
+            <ul><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Move to another time</span></span></a></li><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Add to my calendar</span></span></a></li></ul>
+          </section>
+          <section data-part="group" data-tone="danger" aria-labelledby="bd-g2"><h3 id="bd-g2" class="lt-visually-hidden">Cancel</h3>
+            <ul><li data-part="row"><button type="button" data-part="danger" id="bo-cancel">Cancel booking</button></li></ul>
+            <p data-part="note">Free until 10:30 on Thursday 3 December.</p>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+    
+  <section class="as-screen" id="screen-dogs" data-screen="dogs" data-tab="dogs" data-pane="full" aria-labelledby="dg-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Dogs</p><span></span></div>
+        <h2 data-part="large" id="dg-h" tabindex="-1">Dogs</h2>
+      </header>
+      <div class="as-body">
+        <ul class="bo-dogs">
+          <li><figure class="lt-art" data-motif="paw" data-tone="accent" data-shot="Biscuit, a wheaten terrier, sitting on grass"><svg data-part="motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><path data-m="a" d="M80 136C60 136 46 124 50 108C54 94 66 88 80 88S106 94 110 108C114 124 100 136 80 136Z"/><g data-m="b"><ellipse cx="44" cy="80" rx="11" ry="15" transform="rotate(-24 44 80)"/><ellipse cx="66" cy="54" rx="11" ry="15" transform="rotate(-8 66 54)"/><ellipse cx="94" cy="54" rx="11" ry="15" transform="rotate(8 94 54)"/><ellipse cx="116" cy="80" rx="11" ry="15" transform="rotate(24 116 80)"/></g><g data-m="ink"><path d="M80 136C60 136 46 124 50 108C54 94 66 88 80 88S106 94 110 108C114 124 100 136 80 136Z"/><ellipse cx="44" cy="80" rx="11" ry="15" transform="rotate(-24 44 80)"/><ellipse cx="66" cy="54" rx="11" ry="15" transform="rotate(-8 66 54)"/><ellipse cx="94" cy="54" rx="11" ry="15" transform="rotate(8 94 54)"/><ellipse cx="116" cy="80" rx="11" ry="15" transform="rotate(24 116 80)"/></g></svg><figcaption class="lt-visually-hidden">Biscuit</figcaption></figure><p><b>Biscuit</b><small>Wheaten terrier · 4 years</small></p></li>
+          <li><figure class="lt-art" data-motif="paw" data-tone="ink" data-shot="Pepper, a black whippet, on a sofa"><svg data-part="motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><path data-m="a" d="M80 136C60 136 46 124 50 108C54 94 66 88 80 88S106 94 110 108C114 124 100 136 80 136Z"/><g data-m="b"><ellipse cx="44" cy="80" rx="11" ry="15" transform="rotate(-24 44 80)"/><ellipse cx="66" cy="54" rx="11" ry="15" transform="rotate(-8 66 54)"/><ellipse cx="94" cy="54" rx="11" ry="15" transform="rotate(8 94 54)"/><ellipse cx="116" cy="80" rx="11" ry="15" transform="rotate(24 116 80)"/></g><g data-m="ink"><path d="M80 136C60 136 46 124 50 108C54 94 66 88 80 88S106 94 110 108C114 124 100 136 80 136Z"/><ellipse cx="44" cy="80" rx="11" ry="15" transform="rotate(-24 44 80)"/><ellipse cx="66" cy="54" rx="11" ry="15" transform="rotate(-8 66 54)"/><ellipse cx="94" cy="54" rx="11" ry="15" transform="rotate(8 94 54)"/><ellipse cx="116" cy="80" rx="11" ry="15" transform="rotate(24 116 80)"/></g></svg><figcaption class="lt-visually-hidden">Pepper</figcaption></figure><p><b>Pepper</b><small>Whippet · 7 years</small></p></li>
+        </ul>
+        <div class="lt-setgroups" data-lt="settings-group">
+          <section data-part="group" aria-labelledby="dg-1"><h3 id="dg-1">Reminders</h3>
+            <ul><li data-part="row"><label><span data-part="text"><span data-part="label">The evening before</span><span data-part="desc">At 18:00</span></span><input type="checkbox" role="switch" checked></label></li><li data-part="row"><label><span data-part="text"><span data-part="label">When a sooner time comes free</span></span><input type="checkbox" role="switch"></label></li></ul>
+          </section>
+          <section data-part="group" aria-labelledby="dg-2"><h3 id="dg-2">You</h3>
+            <ul><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Name</span></span><span data-part="value">Rowan Hale</span></a></li><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Phone</span></span><span data-part="value">07700 900418</span></a></li></ul>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+  </main>
+  <nav class="lt-bottom-nav as-tabs" data-lt="bottom-nav" aria-label="Tabs">
+    <span data-part="pill" aria-hidden="true"></span>
+    <a href="#screen-book"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg><span>Book</span></a>
+    <a href="#screen-bookings"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>Bookings</span></a>
+    <a href="#screen-dogs"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg><span>Dogs</span></a>
+  </nav>
+  
+  <div data-lt="bottom-sheet">
+    <dialog class="lt-sheet bo-sheet" id="bo-sheet" aria-labelledby="bo-sheet-h">
+      <button type="button" data-part="grab" aria-label="Close the sheet"><span></span></button>
+      <div class="as-sheet-head"><h2 id="bo-sheet-h">Check and book</h2><button type="button" class="lt-btn" data-variant="ghost" data-part="cancel"><span data-part="label">Back</span></button></div>
+      <p class="bo-sheet-when"><b id="bo-c-when">Friday 4 December</b><span id="bo-c-time">10:30 to 12:30</span></p>
+      <dl class="bo-facts">
+        <div><dt>Groom</dt><dd id="bo-c-what">Full groom for Biscuit</dd></div>
+        <div><dt>With</dt><dd>Nell, at Moss Grooming</dd></div>
+        <div><dt>Where</dt><dd>4 Canal Row, Bath</dd></div>
+        <div><dt>Price</dt><dd id="bo-c-price">£48, paid on the day</dd></div>
+      </dl>
+      <p class="bo-note">Free to move or cancel until 24 hours before.</p>
+      <button type="button" class="lt-btn" data-variant="primary" data-size="lg" id="bo-confirm"><span data-part="label">Confirm booking</span></button>
+    </dialog>
+  </div>
+  <p class="as-toast" role="status"></p>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+/* Settings groups: the way a phone sets out its own settings. A search field; groups with a short heading over an
+   inset list on a raised surface; whole rows that are switches, links to a page with the current value on the
+   end, or one destructive action on its own at the end. Rows are 52px at least, the text never shrinks to fit,
+   and a description sits under the label, not beside it. */
+@scope (.lt-setgroups) {
+  :scope { display: grid; gap: 28px; font-size: var(--text-ui); }
+  [data-part="search"] { position: relative; display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: 12px; background: var(--bg-surface-2); color: var(--text-secondary); }
+  [data-part="search"]:focus-within { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 1px; }
+  [data-part="search"] input { flex: 1; min-width: 0; height: 100%; padding: 0; border: 0; background: none; color: var(--text-primary); font: inherit; outline: none; }
+  [data-part="search"] input::placeholder { color: var(--text-muted); }
+  [data-part="group"] { display: grid; gap: 8px; }
+  [data-part="group"][hidden] { display: none; }
+  h3 { margin: 0; padding-inline: 16px; color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 600; }
+  ul { margin: 0; padding: 0; list-style: none; border-radius: 16px; background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); overflow: hidden; }
+  [data-part="row"][hidden] { display: none; }
+  [data-part="row"] + [data-part="row"] > * { box-shadow: inset 16px 1px 0 var(--bg-surface-1), inset 0 1px 0 var(--border-hairline); }
+  [data-part="row"] > :is(label, a, button) { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; padding: 10px 16px; border: 0; background: none; color: var(--text-primary); font: inherit; text-align: start; text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  [data-part="row"] > :is(a, button):active { background: var(--bg-surface-3); }
+  [data-part="row"] > :is(a, button):focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -3px; }
+  [data-part="text"] { display: grid; flex: 1; gap: 2px; min-width: 0; }
+  [data-part="label"] { overflow-wrap: anywhere; }
+  [data-part="desc"] { color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  [data-part="value"] { flex: none; max-width: 50%; color: var(--text-secondary); text-align: end; font-variant-numeric: tabular-nums; }
+  [data-part="row"] > a::after { content: ""; flex: none; width: 8px; height: 8px; margin-inline-start: 2px; border-top: 1.5px solid var(--text-muted); border-right: 1.5px solid var(--text-muted); rotate: 45deg; }
+  [data-part="row"] > a:dir(rtl)::after { rotate: -135deg; }
+  mark { padding: 0; border-radius: 2px; background: color-mix(in oklab, var(--highlight, var(--accent-solid)) 30%, transparent); color: inherit; }
+  /* A switch the size of a thumb, drawn from the checkbox itself. */
+  input[role="switch"] { appearance: none; flex: none; position: relative; width: 51px; height: 31px; margin: 0; border-radius: 16px; background: var(--bg-surface-3); box-shadow: inset 0 0 0 var(--bw) var(--border-strong); cursor: pointer; transition: background-color var(--dur-2) var(--ease-out); }
+  input[role="switch"]::before { content: ""; position: absolute; top: 2px; inset-inline-start: 2px; width: 27px; height: 27px; border-radius: 50%; background: var(--bg-canvas); box-shadow: 0 1px 3px oklch(0 0 0 / 0.25); transition: translate var(--dur-3) var(--ease-overshoot, var(--ease-out)); }
+  input[role="switch"]:checked { background: var(--accent-solid); box-shadow: none; }
+  input[role="switch"]:checked::before { translate: 20px 0; }
+  input[role="switch"]:dir(rtl):checked::before { translate: -20px 0; }
+  input[role="switch"]:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
+  [data-part="note"] { margin: 0; padding-inline: 16px; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+  [data-part="row"] > :is(a, button)[data-part="danger"] { justify-content: center; color: var(--status-negative); font-weight: 600; }
+  [data-part="row"] > a[data-part="danger"]::after { content: none; }
+  [data-part="empty"] { margin: 0; padding: 24px 16px; color: var(--text-secondary); text-align: center; }
+  @media (prefers-reduced-motion: reduce) { input[role="switch"], input[role="switch"]::before { transition: none; } }
+}
+@media (forced-colors: active) {
+  .lt-setgroups input[role="switch"] { forced-color-adjust: none; border: 1px solid CanvasText; background: Canvas; }
+  .lt-setgroups input[role="switch"]:checked { background: Highlight; }
+  .lt-setgroups input[role="switch"]::before { background: CanvasText; }
+}

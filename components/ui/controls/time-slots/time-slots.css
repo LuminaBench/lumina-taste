@@ -14,4 +14,10 @@
   [data-part="slot"]:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
   [data-part="summary"] { font-size: var(--text-ui-sm); color: var(--text-secondary); }
   [data-part="summary"] strong { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+  /* data-size="lg": slots a thumb can hit on a phone, calmer: no outline until chosen. */
+  :scope[data-size="lg"] [data-part="grid"] { grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
+  :scope[data-size="lg"] [data-part="slot"] { height: 48px; border-color: transparent; border-radius: 14px; background: var(--bg-surface-2); font-size: var(--text-ui); }
+  :scope[data-size="lg"] [data-part="slot"][aria-checked="true"] { background: var(--accent-solid); }
+  :scope[data-size="lg"] [data-part="slot"][aria-disabled="true"] { background: transparent; text-decoration: none; color: var(--text-muted); box-shadow: inset 0 0 0 var(--bw) var(--border-hairline); }
+  @media (pointer: coarse) { [data-part="slot"] { height: max(44px, var(--control-h-sm)); } }
 }

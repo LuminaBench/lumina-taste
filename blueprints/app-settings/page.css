@@ -1,0 +1,32 @@
+/* Juniper's settings: the screen most generated apps get wrong. One search that filters as you type, groups with
+   short headings, every row a whole tap target that is either a switch or a link with its current value, a note
+   under a group only where it saves a question, and closing the account on its own page that says what happens. */
+.se-amt { display: grid; justify-items: end; gap: 4px; }
+.se-amt b { font-weight: 650; }
+.se-me { display: flex; align-items: center; gap: 14px; }
+.se-me .as-mark { width: 56px; height: 56px; background: var(--accent-solid); color: var(--accent-ink); font-size: var(--text-ui); }
+.se-me p { display: grid; gap: 2px; margin: 0; min-width: 0; }
+.se-me b { font-size: var(--step-1); }
+.se-me small { color: var(--text-secondary); overflow-wrap: anywhere; }
+.se-version { margin: 0; color: var(--text-muted); font-size: var(--text-ui-sm); text-align: center; }
+.se-facts { display: grid; margin: 0; border-radius: 16px; background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); }
+.se-facts > div { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 52px; padding: 8px 16px; }
+.se-facts > div + div { box-shadow: inset 16px 1px 0 var(--bg-surface-1), inset 0 1px 0 var(--border-hairline); }
+.se-facts dt { flex: none; color: var(--text-secondary); }
+.se-facts dd { margin: 0; font-weight: 550; text-align: end; }
+.se-lines { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.se-lines th { padding: 10px 0; font-weight: 400; text-align: start; }
+.se-lines td { padding: 10px 0; text-align: end; }
+.se-lines tfoot :is(th, td) { padding-top: 14px; box-shadow: inset 0 1px 0 var(--border-hairline); font-weight: 650; }
+.se-close { gap: 22px; }
+.se-lede { margin: 0; font-size: var(--step-1); line-height: 1.4; text-wrap: pretty; }
+.se-what { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.se-what li { display: flex; gap: 12px; align-items: flex-start; }
+.se-what .lt-icon { flex: none; margin-top: 2px; color: var(--text-secondary); }
+.se-type { display: grid; gap: 8px; color: var(--text-secondary); }
+.se-type b { color: var(--text-primary); letter-spacing: 0.04em; }
+.se-type input { height: 52px; padding: 0 16px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: 14px; background: var(--bg-surface-1); color: var(--text-primary); font: 600 var(--step-0) var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; }
+.se-type input:focus-visible { outline: none; border-color: var(--focus-ring); box-shadow: var(--field-ring); }
+.lt-btn.se-danger { --btn-bg: var(--status-negative); --btn-hover: color-mix(in oklab, var(--status-negative) 88%, black); --btn-border: var(--status-negative); color: var(--bg-canvas); }
+.lt-btn.se-danger:disabled { --btn-bg: var(--bg-surface-3); --btn-border: transparent; color: var(--text-muted); }
+@media (min-width: 768px) { .as-screen[data-pane="detail"] .as-body { width: min(100%, 600px); margin-inline: auto; } }

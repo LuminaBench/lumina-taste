@@ -4,7 +4,7 @@ import { band, extent, linear, niceDomain } from './scale';
 import { el, r, textWidth } from './svg';
 
 export interface BarItem { label: string; value: number }
-export interface BarOptions extends ChartOptions { /** Bars: the category to emphasise. Grouped bars: the series to emphasise. */ highlight?: string; values?: boolean; sort?: 'desc' | 'asc' | 'none' }
+export interface BarOptions extends ChartOptions { /** Bars: the category to emphasise. Grouped bars: the series to emphasise. */ highlight?: string; values?: boolean; sort?: 'desc' | 'asc' | 'none'; /** Vertical bars: false drops the value axis and its grid (the values sit on the bars), for a chart on a phone. */ axis?: boolean }
 export interface GroupData { categories: string[]; series: Array<{ name: string; values: number[] }> }
 
 /** Rect with only the end away from the baseline rounded. */
@@ -34,9 +34,11 @@ export function verticalBars(host: HTMLElement, data: BarItem[], opts: BarOption
     const d = sorted(raw, o.sort);
     const m = { t: 20, b: 26 };
     const y = linear(niceDomain(...extent(d.map((i) => i.value)), 5, true), [height - m.b, m.t]);
-    const gl = gutter(y, fmt);
+    const bare = o.axis === false;
+    const gl = bare ? 0 : gutter(y, fmt);
     const x = band(d.map((i) => i.label), [gl, width]);
-    yGrid(svg, y, gl, width, fmt);
+    if (bare) svg.append(el('g', { class: 'lt-grid' }, [el('line', { x1: 0, x2: width, y1: r(y(0)), y2: r(y(0)), class: 'lt-zero' })]));
+    else yGrid(svg, y, gl, width, fmt);
     const marks: Mark[] = [];
     const g = el('g');
     const showVals = (o.values ?? true) && x.bandwidth > textWidth(fmt(Math.max(...d.map((i) => i.value)))) + 4;

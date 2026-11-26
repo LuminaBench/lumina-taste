@@ -2,14 +2,14 @@
   "name": "lumina-taste",
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
-  "counts": {"ui":214,"charts":48,"blueprints":27,"palettes":24,"themes":48,"typography":20,"styles":39},
+  "counts": {"ui":219,"charts":48,"blueprints":32,"palettes":24,"themes":48,"typography":20,"styles":39},
   "families": [
     {
       "id": "controls",
       "title": "Controls & tactile inputs",
       "summary": "Buttons, toggles, pickers and fields with real pressed states and no layout jump.",
       "order": 1,
-      "count": 42
+      "count": 46
     },
     {
       "id": "navigation",
@@ -37,7 +37,7 @@
       "title": "Data & layout primitives",
       "summary": "Tables, lists, grids and blocks for showing real data cleanly, with tabular numbers everywhere.",
       "order": 5,
-      "count": 43
+      "count": 44
     },
     {
       "id": "motion",
@@ -1664,7 +1664,7 @@
       "summary": "Bookable times in a grid by part of day; booked slots are struck through and skipped.",
       "aliases": ["time picker","appointment slots","booking times","meeting scheduler","calendly times"],
       "pattern": "WAI-ARIA Radio Group (grid navigation)",
-      "states": ["available","selected","booked","focus-visible"],
+      "states": ["available","selected","booked","focus-visible","large (data-size=\"lg\")"],
       "react": "TimeSlots",
       "deps": [],
       "files": [
@@ -1997,6 +1997,98 @@
       "path": "components/ui/controls/booking-bar"
     },
     {
+      "id": "number-pad",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Number pad",
+      "summary": "An amount set very large over twelve keys a thumb can hit: for sending money or a tip on a phone, where the system keyboard would cover half the screen. Typing on a keyboard works too.",
+      "aliases": [
+        "keypad",
+        "amount keypad",
+        "money keypad",
+        "pin pad",
+        "numeric keypad",
+        "send money keypad",
+        "calculator keys"
+      ],
+      "pattern": "<output> + group of buttons",
+      "states": ["empty","typing","over the limit"],
+      "react": "NumberPad",
+      "deps": [],
+      "files": [
+        "components/ui/controls/number-pad/number-pad.css",
+        "components/ui/controls/number-pad/number-pad.html",
+        "components/ui/controls/number-pad/number-pad.react.tsx",
+        "components/ui/controls/number-pad/number-pad.ts"
+      ],
+      "path": "components/ui/controls/number-pad"
+    },
+    {
+      "id": "date-strip",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Date strip",
+      "summary": "A calm row of days to choose one from, sideways on a phone: the weekday small, the date large, a dot where times are free, full days quiet.",
+      "aliases": ["day picker","horizontal calendar","week strip","date scroller","pick a day","date chips"],
+      "pattern": "radiogroup",
+      "states": ["chosen","free","full or closed","focus"],
+      "react": "DateStrip",
+      "deps": [],
+      "files": [
+        "components/ui/controls/date-strip/date-strip.css",
+        "components/ui/controls/date-strip/date-strip.html",
+        "components/ui/controls/date-strip/date-strip.react.tsx",
+        "components/ui/controls/date-strip/date-strip.ts"
+      ],
+      "path": "components/ui/controls/date-strip"
+    },
+    {
+      "id": "settings-group",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Settings groups",
+      "summary": "Settings set out the way a phone sets out its own: a search that filters as you type, groups with short headings, rows that are a switch or a link with its current value, and one destructive action on its own.",
+      "aliases": [
+        "ios settings list",
+        "grouped list",
+        "inset grouped list",
+        "preferences list",
+        "settings rows",
+        "settings search",
+        "account settings mobile"
+      ],
+      "pattern": "sections of lists",
+      "states": ["searching","no match","switch on","switch off"],
+      "react": "SettingsGroups",
+      "deps": [],
+      "files": [
+        "components/ui/controls/settings-group/settings-group.css",
+        "components/ui/controls/settings-group/settings-group.html",
+        "components/ui/controls/settings-group/settings-group.react.tsx",
+        "components/ui/controls/settings-group/settings-group.ts"
+      ],
+      "path": "components/ui/controls/settings-group"
+    },
+    {
+      "id": "message-composer",
+      "kind": "ui",
+      "family": "controls",
+      "name": "Message composer",
+      "summary": "An add button, a field that grows to five lines, and a round Send that lights up only when there is something to send; above the home indicator and the keyboard.",
+      "aliases": ["chat input","message box","compose bar","reply bar","send message field","chat composer"],
+      "pattern": "<form> + <textarea>",
+      "states": ["empty","typing","sending"],
+      "react": "MessageComposer",
+      "deps": [],
+      "files": [
+        "components/ui/controls/message-composer/message-composer.css",
+        "components/ui/controls/message-composer/message-composer.html",
+        "components/ui/controls/message-composer/message-composer.react.tsx",
+        "components/ui/controls/message-composer/message-composer.ts"
+      ],
+      "path": "components/ui/controls/message-composer"
+    },
+    {
       "id": "data-table",
       "kind": "ui",
       "family": "data",
@@ -2263,7 +2355,7 @@
       "summary": "Message bubbles grouped by sender, with read status, an attachment and a typing indicator.",
       "aliases": ["message bubbles","chat ui","conversation view","imessage style chat","dm thread"],
       "pattern": "role=\"log\" (live region)",
-      "states": ["incoming","outgoing","attachment","typing"],
+      "states": ["incoming","outgoing","attachment","typing","phone"],
       "react": "ChatThread",
       "deps": [],
       "files": [
@@ -2863,6 +2955,24 @@
         "components/ui/data/invoice-sheet/invoice-sheet.react.tsx"
       ],
       "path": "components/ui/data/invoice-sheet"
+    },
+    {
+      "id": "activity-rings",
+      "kind": "ui",
+      "family": "data",
+      "name": "Activity rings",
+      "summary": "One to three goals for today as concentric rings (the accent, the highlight, ink) with the true numbers beside the dial.",
+      "aliases": ["progress rings","goal rings","fitness rings","daily goals","concentric progress","activity circle"],
+      "pattern": "<figure> + <dl>",
+      "states": ["in progress","goal met","wide (legend beside)"],
+      "react": "ActivityRings",
+      "deps": [],
+      "files": [
+        "components/ui/data/activity-rings/activity-rings.css",
+        "components/ui/data/activity-rings/activity-rings.html",
+        "components/ui/data/activity-rings/activity-rings.react.tsx"
+      ],
+      "path": "components/ui/data/activity-rings"
     },
     {
       "id": "count-up",
@@ -6320,6 +6430,193 @@
         "blueprints/workspace/page.css"
       ],
       "path": "blueprints/workspace"
+    },
+    {
+      "id": "app-banking",
+      "order": 28,
+      "name": "Banking app",
+      "summary": "A current account on a phone: the balance set large, a week of spending that reads in one glance (one hue, the biggest day in the highlight), recent payments grouped by day, a send-money sheet with a number pad, and the card with a freeze switch. From 768px a sidebar and two panes: the list stays, a payment opens beside it. Onboarding, loading, empty and error states.",
+      "anatomy": "Welcome (drawing, one sentence, Open an account) → Home: large title, balance, Send and Card, the week as bars, payments by day → One payment: its mark, the amount large, the facts as rows → Send sheet: who to, number pad, Send £x to Priya → Card: the card as an object, Freeze, limits, replace → Profile: grouped settings",
+      "aliases": [
+        "banking app",
+        "bank app",
+        "fintech app",
+        "money app",
+        "wallet app",
+        "current account app",
+        "neobank",
+        "payments app",
+        "spending tracker app",
+        "budget app"
+      ],
+      "uses": [
+        "mobile-app-bar",
+        "bottom-nav",
+        "bottom-sheet",
+        "number-pad",
+        "settings-group",
+        "art-panel",
+        "skeleton",
+        "button",
+        "bar-chart"
+      ],
+      "states": ["loading","empty","error"],
+      "type": "precision: a calm grotesk with tabular figures, because the app is read for numbers",
+      "motion": "No scroll moments: an app moves only to answer the person. A pushed screen slides in from the trailing edge; the card frosts over when frozen.",
+      "kind": "blueprint",
+      "files": [
+        "blueprints/app-banking/index.html",
+        "blueprints/app-banking/main.ts",
+        "blueprints/app-banking/meta.json",
+        "blueprints/app-banking/page.css"
+      ],
+      "path": "blueprints/app-banking"
+    },
+    {
+      "id": "app-fitness",
+      "order": 29,
+      "name": "Fitness app",
+      "summary": "A fitness app on a phone: today's three goals as rings with the true numbers beside them, a week of exercise in one glance (one hue, today in the highlight), a streak, a workout in progress on a dark screen with a huge timer and one Pause button, and the history by week with a summary and splits. From 768px a sidebar and two panes. Onboarding, loading, empty and error states.",
+      "anatomy": "Welcome (drawing, one sentence, Set my goals) → Today: rings and their numbers, the week as bars, the streak, three workouts to pick up, Start a run low → Workout: phase, the timer huge, intervals as a row of bars, three figures, End and Pause → History: the month as one figure, workouts by week → Summary: distance large, three figures, splits → Goals: grouped settings",
+      "aliases": [
+        "fitness app",
+        "workout app",
+        "running app",
+        "gym app",
+        "activity tracker",
+        "exercise app",
+        "training app",
+        "health app",
+        "step counter"
+      ],
+      "uses": [
+        "mobile-app-bar",
+        "bottom-nav",
+        "activity-rings",
+        "settings-group",
+        "art-panel",
+        "skeleton",
+        "button",
+        "bar-chart"
+      ],
+      "states": ["loading","empty","error"],
+      "type": "geometric: round, open letters that read at arm's length while moving",
+      "motion": "No scroll moments. The rings fill once when today opens; the timer counts; a pushed screen slides in.",
+      "kind": "blueprint",
+      "files": [
+        "blueprints/app-fitness/index.html",
+        "blueprints/app-fitness/main.ts",
+        "blueprints/app-fitness/meta.json",
+        "blueprints/app-fitness/page.css"
+      ],
+      "path": "blueprints/app-fitness"
+    },
+    {
+      "id": "app-booking",
+      "order": 30,
+      "name": "Booking app",
+      "summary": "A booking app on a phone for a dog groomer: who and what (a segmented choice and three services with prices), a calm strip of days with the free ones dotted, a grid of free times, a sheet that repeats the choices in words beside Confirm, and your bookings with the next one set large. From 768px a sidebar and two panes. Onboarding, loading, empty and error states.",
+      "anatomy": "Welcome (drawing, one sentence, Book a groom) → Book: for (segmented), groom (three rows with prices), the days (date strip), the times (slots), the price and time with Book low → Check and book sheet → Bookings: the next one as the one card, later, before → One booking: the time large, the facts, move, add to calendar, cancel → Dogs: the dogs and grouped settings",
+      "aliases": [
+        "booking app",
+        "appointment app",
+        "reservation app",
+        "salon booking app",
+        "class booking app",
+        "dog groomer app",
+        "barber app",
+        "book a slot",
+        "scheduling app"
+      ],
+      "uses": [
+        "mobile-app-bar",
+        "bottom-nav",
+        "bottom-sheet",
+        "segmented-control",
+        "date-strip",
+        "time-slots",
+        "settings-group",
+        "art-panel",
+        "skeleton",
+        "button"
+      ],
+      "states": ["loading","empty","error"],
+      "type": "humanist: warm, open letters for a small business people know by name",
+      "motion": "No scroll moments. The chosen day slides into view; the sheet rises from the bottom.",
+      "kind": "blueprint",
+      "files": [
+        "blueprints/app-booking/index.html",
+        "blueprints/app-booking/main.ts",
+        "blueprints/app-booking/meta.json",
+        "blueprints/app-booking/page.css"
+      ],
+      "path": "blueprints/app-booking"
+    },
+    {
+      "id": "app-messaging",
+      "order": 31,
+      "name": "Messaging app",
+      "summary": "A messaging app on a phone: chats as rows with a tinted initial, the last line, the time and unread counts; a thread with grouped bubbles, day separators, a photo, a voice note and the read state; a composer above the home indicator that rides up with the keyboard. From 768px a sidebar, the list and the thread side by side. Onboarding, loading, empty and error states.",
+      "anatomy": "Welcome (drawing, one sentence, Continue with my number) → Chats: large title with New, search, rows with unread counts → Thread: back and name, day separators, grouped bubbles, photo, voice note, read state, composer → People: search and rows → Settings: grouped settings",
+      "aliases": [
+        "messaging app",
+        "chat app",
+        "messenger",
+        "texting app",
+        "dm app",
+        "conversation app",
+        "inbox app on a phone",
+        "whatsapp style app"
+      ],
+      "uses": [
+        "mobile-app-bar",
+        "bottom-nav",
+        "chat-thread",
+        "message-composer",
+        "settings-group",
+        "art-panel",
+        "skeleton",
+        "button"
+      ],
+      "states": ["loading","empty","error"],
+      "type": "humanist: friendly, open letters that read well at 17px in a bubble",
+      "motion": "No scroll moments. A thread opens at its newest message; a sent message joins your run of bubbles.",
+      "kind": "blueprint",
+      "files": [
+        "blueprints/app-messaging/index.html",
+        "blueprints/app-messaging/main.ts",
+        "blueprints/app-messaging/meta.json",
+        "blueprints/app-messaging/page.css"
+      ],
+      "path": "blueprints/app-messaging"
+    },
+    {
+      "id": "app-settings",
+      "order": 32,
+      "name": "Settings-heavy app",
+      "summary": "An invoicing app whose settings are done right, on a phone that widens to a sidebar and two panes: who you are, a search that filters every setting as you type, groups whose rows are whole tap targets (a switch, or a link with its current value), notes only where they save a question, a notifications page, and closing the account on its own page that says what happens and asks for one typed word. With the invoices list it belongs to. Onboarding, loading, empty and error states.",
+      "anatomy": "Welcome (drawing, one sentence, Get started) → Invoices: owed to you, large; overdue, due soon, paid → One invoice: the amount large, facts, lines, Send a reminder → Settings: who you are, search, Business, Invoices, Getting paid, Notifications, Team, Data, Close account → Notifications: grouped switches and quiet hours → Close account: what happens, type CLOSE, one red button",
+      "aliases": [
+        "settings screen",
+        "app settings",
+        "preferences screen",
+        "account settings on a phone",
+        "settings page mobile",
+        "invoicing app",
+        "settings heavy app"
+      ],
+      "uses": ["mobile-app-bar","bottom-nav","settings-group","badge","art-panel","skeleton","button"],
+      "states": ["loading","empty","error"],
+      "type": "precision: a calm grotesk for an app that is mostly lists and numbers",
+      "motion": "No scroll moments. A switch moves its thumb and says so once; a pushed page slides in.",
+      "kind": "blueprint",
+      "files": [
+        "blueprints/app-settings/index.html",
+        "blueprints/app-settings/main.ts",
+        "blueprints/app-settings/meta.json",
+        "blueprints/app-settings/page.css"
+      ],
+      "path": "blueprints/app-settings"
     }
   ],
   "palettes": [

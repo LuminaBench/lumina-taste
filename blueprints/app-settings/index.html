@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en" data-palette="slate-forest" data-mode="light" data-type="precision" data-density="balanced" data-radius="soft" data-motion="snappy" data-app>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <title>Juniper · settings</title>
+  <meta name="description" content="Blueprint: a settings-heavy app done right, on a phone that widens to a sidebar and two panes: search that filters as you type, grouped rows that are switches or links with their value, a detail page for notifications, and closing the account on a page of its own that says what happens, built with lumina-taste.">
+</head>
+<body class="as">
+  <a class="bp-skip" href="#main">Skip to content</a>
+  <nav class="as-side" aria-label="Sections">
+    <p class="as-side-name"><i aria-hidden="true"></i><span>Juniper</span></p>
+    <ul><li><a href="#screen-invoices"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12v17l-2.5-1.5-2 1.5-1.5-1.5-1.5 1.5-2-1.5L6 20.5Z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/></svg><span>Invoices</span></a></li><li><a href="#screen-settings"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg><span>Settings</span></a></li></ul>
+    <p class="as-side-foot">Juniper is a made-up invoicing tool.</p>
+  </nav>
+  <main id="main" class="as-main">
+    <h1 class="lt-visually-hidden">Juniper, an invoicing app</h1>
+    
+  <section class="as-screen" id="screen-welcome" data-screen="welcome" data-pane="onboard" aria-labelledby="wl-h">
+    <div class="as-scroll"><div class="as-onboard">
+      <figure class="lt-art" data-scene="document coins" data-tone="accent" data-shot="An invoice on a phone beside a cup of tea on a desk"><svg data-part="scene" viewBox="44 32 232 168" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><circle data-m="sky" cx="147.6" cy="101.6" r="60"/><path data-m="ink" d="M-2000 176H2320"/><g data-role="lead" transform="translate(44.4 36) scale(1)" style="--k:1"><path data-m="b" d="M42 20H104L126 42V140H42Z"/><circle data-m="a" cx="110" cy="118" r="22"/><g data-m="ink"><path d="M42 20H104L126 42V140H42Z"/><path d="M104 20V42H126"/><path d="M58 54H98M58 68H110M58 82H110M58 96H88"/><path d="M56 124C62 112 66 130 72 118S82 126 86 118"/><circle cx="110" cy="118" r="22"/><circle cx="110" cy="118" r="13"/></g></g><g data-role="rest" transform="translate(128 68.8) scale(0.8)" style="--k:0.8"><path data-m="a" d="M30 66V122A30 10 0 0 0 90 122V66Z"/><ellipse data-m="b" cx="60" cy="66" rx="30" ry="10"/><path data-m="a" d="M84 98V126A24 8 0 0 0 132 126V98Z"/><ellipse data-m="b" cx="108" cy="98" rx="24" ry="8"/><g data-m="ink"><ellipse cx="60" cy="66" rx="30" ry="10"/><path d="M30 66V122A30 10 0 0 0 90 122V66M30 80A30 10 0 0 0 90 80M30 94A30 10 0 0 0 90 94M30 108A30 10 0 0 0 90 108"/><ellipse cx="108" cy="98" rx="24" ry="8"/><path d="M84 98V126A24 8 0 0 0 132 126V98M84 112A24 8 0 0 0 132 112"/></g></g></svg><figcaption class="lt-visually-hidden">An invoice and coins</figcaption></figure>
+      <ol class="as-dots" aria-label="Step 1 of 3"><li aria-current="step"></li><li></li><li></li></ol>
+      <h1 id="wl-h" tabindex="-1">Send an invoice in a minute, and see when it is paid</h1>
+      <p>Juniper chases late payers for you on day 7, 14 and 30.</p>
+      <button type="button" class="lt-btn" data-variant="primary" data-size="lg" data-go="invoices"><span data-part="label">Get started</span></button>
+    </div></div>
+  </section>
+    
+  <section class="as-screen" id="screen-invoices" data-screen="invoices" data-tab="invoices" data-pane="list" data-detail="invoice" aria-labelledby="iv-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Invoices</p><span></span></div>
+        <h2 data-part="large" id="iv-h" tabindex="-1">Invoices</h2>
+      </header>
+      <div class="as-body">
+        <dl class="as-figure" data-view="ready"><dt>Owed to you</dt><dd>£4,820<small>.00</small></dd></dl>
+        <section data-view="ready" aria-labelledby="iv-1"><h3 class="as-day" id="iv-1">Overdue</h3>
+          <ul class="as-rows"><li><button type="button" class="as-row" data-go="invoice" data-inv="INV-0118"><span class="as-mark" aria-hidden="true">HF</span><span><b>Harrow and Finch</b><small>INV-0118 · due 12 Nov</small></span><span class="se-amt"><b>£1,200</b><span class="lt-badge" data-tone="negative">Overdue</span></span></button></li></ul>
+        </section>
+        <section data-view="ready" aria-labelledby="iv-2"><h3 class="as-day" id="iv-2">Due soon</h3>
+          <ul class="as-rows"><li><button type="button" class="as-row" data-go="invoice" data-inv="INV-0121"><span class="as-mark" aria-hidden="true">BB</span><span><b>Brickwell Build</b><small>INV-0121 · due 2 Dec</small></span><span class="se-amt"><b>£2,400</b><span class="lt-badge">Sent</span></span></button></li><li><button type="button" class="as-row" data-go="invoice" data-inv="INV-0122"><span class="as-mark" aria-hidden="true">CS</span><span><b>Canal Street Food Bank</b><small>INV-0122 · due 9 Dec</small></span><span class="se-amt"><b>£620</b><span class="lt-badge">Viewed</span></span></button></li><li><button type="button" class="as-row" data-go="invoice" data-inv="INV-0123"><span class="as-mark" aria-hidden="true">LB</span><span><b>Larkspur Books</b><small>INV-0123 · due 14 Dec</small></span><span class="se-amt"><b>£600</b><span class="lt-badge">Sent</span></span></button></li></ul>
+        </section>
+        <section data-view="ready" aria-labelledby="iv-3"><h3 class="as-day" id="iv-3">Paid this month</h3>
+          <ul class="as-rows"><li><button type="button" class="as-row" data-go="invoice" data-inv="INV-0117"><span class="as-mark" aria-hidden="true">MM</span><span><b>Moss Market</b><small>INV-0117 · paid 20 Nov</small></span><span class="se-amt"><b>£840</b><span class="lt-badge" data-tone="positive">Paid</span></span></button></li></ul>
+        </section>
+        
+        <div class="as-skel" data-view="loading" aria-busy="true" aria-label="Loading invoices" hidden>
+          <span class="lt-skeleton" style="width: 36%"></span><span class="lt-skeleton" data-big></span><div data-row><span class="lt-skeleton"></span><span class="lt-skeleton"></span><span class="lt-skeleton"></span></div><div data-row><span class="lt-skeleton"></span><span class="lt-skeleton"></span><span class="lt-skeleton"></span></div><div data-row><span class="lt-skeleton"></span><span class="lt-skeleton"></span><span class="lt-skeleton"></span></div><div data-row><span class="lt-skeleton"></span><span class="lt-skeleton"></span><span class="lt-skeleton"></span></div>
+        </div>
+        <section class="as-state" data-view="empty" aria-labelledby="st-empty-h" hidden>
+          <figure class="lt-art" data-motif="document" data-tone="accent" data-shot="A blank invoice on a desk"><svg data-part="motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><path data-m="b" d="M42 20H104L126 42V140H42Z"/><circle data-m="a" cx="110" cy="118" r="22"/><g data-m="ink"><path d="M42 20H104L126 42V140H42Z"/><path d="M104 20V42H126"/><path d="M58 54H98M58 68H110M58 82H110M58 96H88"/><path d="M56 124C62 112 66 130 72 118S82 126 86 118"/><circle cx="110" cy="118" r="22"/><circle cx="110" cy="118" r="13"/></g></svg><figcaption class="lt-visually-hidden">A document</figcaption></figure>
+          <h3 id="st-empty-h">No invoices yet</h3>
+          <p>Add a client and send your first invoice. It takes about a minute.</p>
+          <button type="button" class="lt-btn" data-variant="primary" data-size="lg" data-set-state="ready"><span data-part="label">New invoice</span></button>
+        </section>
+        <section class="as-state" data-view="error" role="alert" aria-labelledby="st-error-h" hidden>
+          <figure class="lt-art" data-motif="server" data-shot="A quiet office at night"><svg data-part="motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><rect data-m="b" x="30" y="26" width="100" height="30" rx="6"/><rect data-m="a" x="30" y="64" width="100" height="30" rx="6"/><rect data-m="b" x="30" y="102" width="100" height="30" rx="6"/><g data-m="ink"><rect x="30" y="26" width="100" height="30" rx="6"/><rect x="30" y="64" width="100" height="30" rx="6"/><rect x="30" y="102" width="100" height="30" rx="6"/><path d="M90 41H116M90 79H116M90 117H116M80 132V144M44 144H116"/></g><g data-m="dot"><circle cx="46" cy="41" r="4"/><circle cx="46" cy="79" r="4"/><circle cx="46" cy="117" r="4"/></g></svg><figcaption class="lt-visually-hidden">A server</figcaption></figure>
+          <h3 id="st-error-h">Invoices could not load</h3>
+          <p>Nothing is lost. Try again in a moment.</p>
+          <button type="button" class="lt-btn" data-variant="secondary" data-set-state="ready"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6L20 8.5M20 4v4.5h-4.5"/></svg><span data-part="label">Try again</span></button>
+        </section>
+      </div>
+    </div>
+  </section>
+    
+  <section class="as-screen" id="screen-invoice" data-screen="invoice" data-pane="detail" data-parent="invoices" aria-labelledby="id-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><button type="button" data-part="back" data-go="invoices" data-dir="back" aria-label="Back to Invoices"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>Invoices</span></button><p data-part="small" aria-hidden="true">INV-0118</p><span></span></div>
+        <h2 data-part="large" id="id-h" tabindex="-1">INV-0118</h2>
+      </header>
+      <div class="as-body">
+        <dl class="as-figure"><dt>Harrow and Finch · overdue 14 days</dt><dd>£1,200<small>.00</small></dd></dl>
+        <dl class="se-facts">
+          <div><dt>Sent</dt><dd>29 October</dd></div>
+          <div><dt>Due</dt><dd>12 November</dd></div>
+          <div><dt>Viewed</dt><dd>3 times, last on 18 November</dd></div>
+          <div><dt>Reminders</dt><dd>Day 7 sent · day 14 today</dd></div>
+        </dl>
+        <section aria-labelledby="id-l"><h3 class="as-day" id="id-l">Lines</h3>
+          <table class="se-lines"><caption class="lt-visually-hidden">What the invoice is for</caption><tbody><tr><th scope="row">Brand review, 3 days</th><td>£900</td></tr><tr><th scope="row">Workshop prep</th><td>£300</td></tr></tbody><tfoot><tr><th scope="row">Total</th><td>£1,200</td></tr></tfoot></table>
+        </section>
+      </div>
+    </div>
+    <div class="as-actionbar">
+      <button type="button" class="lt-btn" data-variant="primary" data-size="lg" id="se-remind"><span data-part="label">Send a reminder</span></button>
+    </div>
+  </section>
+    
+  <section class="as-screen" id="screen-settings" data-screen="settings" data-tab="settings" data-pane="list" data-detail="notifications" aria-labelledby="st-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Settings</p><span></span></div>
+        <h2 data-part="large" id="st-h" tabindex="-1">Settings</h2>
+      </header>
+      <div class="as-body">
+        <div class="se-me"><span class="as-mark" aria-hidden="true">RH</span><p><b>Rowan Hale</b><small>rowan@hale.example · Pro plan</small></p></div>
+        <div class="lt-setgroups" data-lt="settings-group" id="se-groups">
+          <label data-part="search"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input type="search" placeholder="Search settings" aria-label="Search settings" autocomplete="off"></label>
+          <section data-part="group" aria-labelledby="sg-1"><h3 id="sg-1">Business</h3><ul><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Business name</span></span><span data-part="value">Hale Studio</span></a></li><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Address on invoices</span></span><span data-part="value">Bristol BS1</span></a></li><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">VAT number</span></span><span data-part="value">Not registered</span></a></li></ul></section>
+          <section data-part="group" aria-labelledby="sg-2"><h3 id="sg-2">Invoices</h3><ul><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Payment terms</span></span><span data-part="value">30 days</span></a></li><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Numbering</span></span><span data-part="value">INV-0124 next</span></a></li><li data-part="row"><label><span data-part="text"><span data-part="label">Add a late fee</span><span data-part="desc">2% after 30 days, said on the invoice</span></span><input type="checkbox" role="switch"></label></li><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Thank-you note</span></span><span data-part="value">On</span></a></li></ul></section>
+          <section data-part="group" aria-labelledby="sg-3"><h3 id="sg-3">Getting paid</h3><ul><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Bank account</span></span><span data-part="value">Ending 0942</span></a></li><li data-part="row"><label><span data-part="text"><span data-part="label">Card payments</span><span data-part="desc">1.4% + 20p, paid by you</span></span><input type="checkbox" role="switch" checked></label></li><li data-part="row"><label><span data-part="text"><span data-part="label">Chase late payers for me</span><span data-part="desc">Day 7, 14 and 30</span></span><input type="checkbox" role="switch" checked></label></li></ul></section>
+          <section data-part="group" aria-labelledby="sg-4"><h3 id="sg-4">Notifications</h3><ul><li data-part="row"><a href="#screen-notifications" data-go="notifications"><span data-part="text"><span data-part="label">Email and push</span></span><span data-part="value">4 on</span></a></li></ul></section>
+          <section data-part="group" aria-labelledby="sg-5"><h3 id="sg-5">Team</h3><ul><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">People</span></span><span data-part="value">3</span></a></li><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Who can send invoices</span></span><span data-part="value">Owners</span></a></li></ul></section>
+          <section data-part="group" aria-labelledby="sg-6"><h3 id="sg-6">Data</h3><ul><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Export everything</span></span><span data-part="value">CSV</span></a></li><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Connected apps</span></span><span data-part="value">2</span></a></li></ul></section>
+          <section data-part="group" data-tone="danger" aria-labelledby="sg-7"><h3 id="sg-7" class="lt-visually-hidden">Account</h3><ul><li data-part="row"><a href="#screen-close" data-go="close" data-part="danger">Close account</a></li></ul><p data-part="note">Your invoices stay with your clients. You can download them first.</p></section>
+          <p data-part="empty" role="status" hidden>No settings match “<span></span>”.</p>
+        </div>
+        <p class="se-version">Juniper 4.12 · made-up invoicing</p>
+      </div>
+    </div>
+  </section>
+    
+  <section class="as-screen" id="screen-notifications" data-screen="notifications" data-pane="detail" data-parent="settings" aria-labelledby="nt-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><button type="button" data-part="back" data-go="settings" data-dir="back" aria-label="Back to Settings"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>Settings</span></button><p data-part="small" aria-hidden="true">Notifications</p><span></span></div>
+        <h2 data-part="large" id="nt-h" tabindex="-1">Notifications</h2>
+      </header>
+      <div class="as-body">
+        <div class="lt-setgroups" data-lt="settings-group">
+          <section data-part="group" aria-labelledby="nt-1"><h3 id="nt-1">Tell me when</h3><ul><li data-part="row"><label><span data-part="text"><span data-part="label">An invoice is paid</span></span><input type="checkbox" role="switch" checked></label></li><li data-part="row"><label><span data-part="text"><span data-part="label">A client opens an invoice</span></span><input type="checkbox" role="switch" checked></label></li><li data-part="row"><label><span data-part="text"><span data-part="label">An invoice is overdue</span><span data-part="desc">The morning after its due date</span></span><input type="checkbox" role="switch" checked></label></li><li data-part="row"><label><span data-part="text"><span data-part="label">A reminder goes out</span></span><input type="checkbox" role="switch"></label></li></ul></section>
+          <section data-part="group" aria-labelledby="nt-2"><h3 id="nt-2">How</h3><ul><li data-part="row"><label><span data-part="text"><span data-part="label">Push</span><span data-part="desc">On this phone</span></span><input type="checkbox" role="switch" checked></label></li><li data-part="row"><label><span data-part="text"><span data-part="label">Email</span><span data-part="desc">rowan@hale.example</span></span><input type="checkbox" role="switch"></label></li></ul></section>
+          <section data-part="group" aria-labelledby="nt-3"><h3 id="nt-3">Quiet hours</h3><ul><li data-part="row"><label><span data-part="text"><span data-part="label">Pause at night</span></span><input type="checkbox" role="switch" id="se-quiet" checked></label></li><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">From</span></span><span data-part="value">22:00</span></a></li><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Until</span></span><span data-part="value">07:00</span></a></li></ul><p data-part="note">Paid notices still arrive, without a sound.</p></section>
+        </div>
+      </div>
+    </div>
+  </section>
+    
+  <section class="as-screen" id="screen-close" data-screen="close" data-pane="detail" data-parent="settings" aria-labelledby="cl-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><button type="button" data-part="back" data-go="settings" data-dir="back" aria-label="Back to Settings"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>Settings</span></button><p data-part="small" aria-hidden="true">Close account</p><span></span></div>
+        <h2 data-part="large" id="cl-h" tabindex="-1">Close account</h2>
+      </header>
+      <div class="as-body se-close">
+        <p class="se-lede">Closing stops new invoices and reminders today. Open invoices stay payable for 90 days.</p>
+        <ul class="se-what"><li><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg><span>Download every invoice as a PDF first</span></li><li><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg><span>Your clients can still see what they owe</span></li><li><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 4.3 2.9 17.2A2 2 0 0 0 4.6 20h14.8a2 2 0 0 0 1.7-2.8L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9.5v4M12 17h.01"/></svg><span>Your plan ends now, with no refund for this month</span></li></ul>
+        <label class="se-type"><span>Type <b>CLOSE</b> to confirm</span><input id="se-confirm" autocomplete="off" autocapitalize="characters" spellcheck="false"></label>
+      </div>
+    </div>
+    <div class="as-actionbar">
+      <button type="button" class="lt-btn se-danger" data-variant="primary" data-size="lg" id="se-close" disabled><span data-part="label">Close my account</span></button>
+    </div>
+  </section>
+  </main>
+  <nav class="lt-bottom-nav as-tabs" data-lt="bottom-nav" aria-label="Tabs">
+    <span data-part="pill" aria-hidden="true"></span>
+    <a href="#screen-invoices"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12v17l-2.5-1.5-2 1.5-1.5-1.5-1.5 1.5-2-1.5L6 20.5Z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/></svg><span>Invoices</span></a>
+    <a href="#screen-settings"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg><span>Settings</span></a>
+  </nav>
+  <p class="as-toast" role="status"></p>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

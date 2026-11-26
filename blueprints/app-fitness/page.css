@@ -1,0 +1,47 @@
+/* Kestrel on a phone: coral and sea-glass. Today is three rings with the true numbers beside them, a week of
+   exercise as bars with today in the highlight, and one action low on the screen. The workout is a dark screen
+   with one huge timer and one button. */
+.ft-date { margin: -12px 0 4px; color: var(--text-secondary); font-weight: 550; }
+.ft-ready .lt-rings { --rings-size: 220px; }
+.ft-chart { --chart-1: var(--highlight); --border-strong: color-mix(in oklab, var(--accent-solid) 34%, var(--bg-canvas)); }
+.ft-streak { display: flex; align-items: baseline; gap: 10px; margin: 0; padding: 16px 18px; border-radius: 20px; background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); }
+.ft-streak b { flex: none; font-family: var(--font-display); font-size: 2.25rem; font-weight: var(--weight-display); letter-spacing: -0.03em; line-height: 1; color: var(--accent-text); font-variant-numeric: tabular-nums; }
+.ft-streak span { color: var(--text-secondary); }
+.as-row .as-mark { color: var(--accent-text); }
+.as-row > :last-child small { color: var(--text-secondary); font-size: var(--text-ui-sm); }
+
+/* The workout: dark, the timer as large as the screen allows, intervals as a row of bars. */
+.as-screen[data-screen="workout"] { background: var(--bg-canvas); color: var(--text-primary); }
+.ft-workout .as-body { gap: 20px; padding-top: 16px; }
+.ft-phase { margin: 0; color: var(--text-secondary); font-size: var(--step-1); }
+.ft-phase #ft-phase { color: var(--accent-text); font-weight: 650; }
+.ft-workout { container-type: inline-size; }
+.ft-timer { margin: 0; white-space: nowrap; font-family: var(--font-display); font-size: clamp(4rem, 26cqi, 8.5rem); font-weight: var(--weight-display); letter-spacing: -0.05em; line-height: 0.95; font-variant-numeric: tabular-nums; }
+.ft-intervals { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin: 0; padding: 0; list-style: none; }
+.ft-intervals li { height: 8px; border-radius: 4px; background: var(--bg-surface-3); overflow: hidden; }
+.ft-intervals li[data-done] { background: var(--accent-solid); }
+.ft-intervals li[data-now] { background: linear-gradient(to right, var(--accent-solid) calc(var(--p) * 100%), var(--bg-surface-3) 0); }
+.ft-intervals li[data-now]:dir(rtl) { background: linear-gradient(to left, var(--accent-solid) calc(var(--p) * 100%), var(--bg-surface-3) 0); }
+.ft-next { margin: 0; color: var(--text-secondary); }
+.ft-next b { color: var(--text-primary); font-weight: 600; }
+.ft-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0 0; }
+.ft-stats > div { display: grid; gap: 4px; }
+.ft-stats dt { color: var(--text-secondary); font-size: var(--text-ui-sm); }
+.ft-stats dd { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+.ft-stats dd b { color: var(--text-primary); font-family: var(--font-display); font-size: 1.75rem; font-weight: var(--weight-display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.ft-controls { justify-content: space-between; box-shadow: none; padding-block: 16px calc(20px + env(safe-area-inset-bottom)); }
+.ft-controls > .lt-btn.ft-pause { flex: 0 1 220px; min-height: 64px; border-radius: 32px; font-size: var(--step-1); }
+.ft-controls > .lt-btn[data-variant="ghost"] { flex: 0 0 auto; }
+.ft-pause[aria-pressed="true"] .lt-icon { display: none; }
+
+/* History */
+.ft-month { display: grid; gap: 2px; }
+.ft-month p { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 550; }
+.ft-month b { font-family: var(--font-display); font-size: var(--as-figure); font-weight: var(--weight-display); letter-spacing: -0.035em; line-height: 1.04; font-variant-numeric: tabular-nums; }
+.ft-month span { color: var(--text-secondary); }
+.as-row > :last-child b { font-weight: 650; }
+.ft-when { margin: 0; color: var(--text-secondary); }
+@media (min-width: 768px) {
+  .as-screen[data-pane="detail"] .as-body { width: min(100%, 600px); margin-inline: auto; }
+  .ft-ready .lt-rings { --rings-size: 240px; }
+}

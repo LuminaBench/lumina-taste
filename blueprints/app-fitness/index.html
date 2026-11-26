@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en" data-palette="seaglass-coral" data-mode="light" data-type="geometric" data-density="balanced" data-radius="soft" data-motion="snappy" data-app>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <title>Kestrel · fitness app</title>
+  <meta name="description" content="Blueprint: a fitness app on a phone that widens to a sidebar and two panes: today's goals as rings with the true numbers beside them, a week of exercise in one glance, a workout in progress with a big timer and one action, and the history by week, built with lumina-taste.">
+</head>
+<body class="as">
+  <a class="bp-skip" href="#main">Skip to content</a>
+  <nav class="as-side" aria-label="Sections">
+    <p class="as-side-name"><i aria-hidden="true"></i><span>Kestrel</span></p>
+    <ul><li><a href="#screen-today"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c4 0 6.5-2.6 6.5-6.2 0-3.6-2.6-5.6-3.8-8.8-.6 2.4-2 3.4-3 3.6.4-3-1.2-5.6-3.2-6.6.2 3.4-3 5.8-3 10C5.5 18.4 8 21 12 21Z"/></svg><span>Today</span></a></li><li><a href="#screen-history"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7L4 8.5M4 4v4.5h4.5"/><path d="M12 8v4l2.5 2"/></svg><span>History</span></a></li><li><a href="#screen-profile"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg><span>Goals</span></a></li></ul>
+    <p class="as-side-foot">Kestrel is a made-up fitness app.</p>
+  </nav>
+  <main id="main" class="as-main">
+    <h1 class="lt-visually-hidden">Kestrel, a fitness app</h1>
+    
+  <section class="as-screen" id="screen-welcome" data-screen="welcome" data-pane="onboard" aria-labelledby="wl-h">
+    <div class="as-scroll"><div class="as-onboard">
+      <figure class="lt-art" data-scene="bike mountain" data-tone="accent" data-shot="A runner on a towpath at sunrise, from behind, mist on the water"><svg data-part="scene" viewBox="36.4 53 247.1 147" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><circle data-m="sky" cx="157.1" cy="113.4" r="50.5"/><rect data-m="floor" x="-2000" y="176" width="4320" height="2000"/><path data-m="ink" d="M-2000 176H2320"/><path data-m="ink" data-g="dash" d="M-1996 190H2320"/><g data-role="rest" transform="translate(50.4 50) scale(1)" style="--k:1"><path data-m="b" d="M64 126L102 54L144 126Z"/><path data-m="a" d="M14 126L62 38L110 126Z"/><path data-m="b" d="M62 38L49 62L57 58L63 66L71 58L76 62Z"/><circle data-m="b" cx="124" cy="36" r="11"/><g data-m="ink"><path d="M64 126L102 54L144 126M14 126L62 38L110 126Z"/><path d="M49 62L57 58L63 66L71 58L76 62"/><circle cx="124" cy="36" r="11"/><path d="M6 126H154"/></g></g><g data-role="lead" transform="translate(170.1 91.5) scale(0.64)" style="--k:0.64"><circle data-m="b" cx="42" cy="104" r="28"/><circle data-m="b" cx="118" cy="104" r="28"/><circle data-m="a" cx="78" cy="104" r="8"/><path data-m="a" d="M56 52H80L76 60H58Z"/><g data-m="ink"><circle cx="42" cy="104" r="28"/><circle cx="118" cy="104" r="28"/><path d="M42 104L66 64H108L78 104ZM66 64L78 104M108 64L118 104M102 46H116M108 64L104 46M68 60L66 64"/><circle cx="78" cy="104" r="8"/></g><circle data-m="dot" cx="42" cy="104" r="4"/><circle data-m="dot" cx="118" cy="104" r="4"/></g></svg><figcaption class="lt-visually-hidden">A bike and a hill</figcaption></figure>
+      <ol class="as-dots" aria-label="Step 1 of 3"><li aria-current="step"></li><li></li><li></li></ol>
+      <h1 id="wl-h" tabindex="-1">Thirty minutes a day, counted for you</h1>
+      <p>Set one goal for moving, one for exercise and one for standing. Kestrel keeps the score.</p>
+      <button type="button" class="lt-btn" data-variant="primary" data-size="lg" data-go="today"><span data-part="label">Set my goals</span></button>
+    </div></div>
+  </section>
+    
+  <section class="as-screen" id="screen-today" data-screen="today" data-tab="today" data-pane="list" data-detail="workout" aria-labelledby="td-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Thursday 26 November</p><span></span></div>
+        <h2 data-part="large" id="td-h" tabindex="-1">Today</h2>
+      </header>
+      <div class="as-body">
+        <div class="ft-ready" data-view="ready">
+          <p class="ft-date">Thursday 26 November</p>
+          <figure class="lt-rings" style="--r1: 0.72; --r2: 0.6; --r3: 0.75">
+            <div data-part="dial">
+              <svg viewBox="0 0 120 120" aria-hidden="true">
+                <circle data-part="track" data-n="1" cx="60" cy="60" r="52" pathLength="100"/><circle data-part="arc" data-n="1" cx="60" cy="60" r="52" pathLength="100"/>
+                <circle data-part="track" data-n="2" cx="60" cy="60" r="39" pathLength="100"/><circle data-part="arc" data-n="2" cx="60" cy="60" r="39" pathLength="100"/>
+                <circle data-part="track" data-n="3" cx="60" cy="60" r="26" pathLength="100"/><circle data-part="arc" data-n="3" cx="60" cy="60" r="26" pathLength="100"/>
+              </svg>
+            </div>
+            <figcaption>
+              <dl data-part="legend">
+                <div data-n="1"><dt>Move, kcal</dt><dd><b>430</b> / 600</dd></div>
+                <div data-n="2"><dt>Exercise, min</dt><dd><b>18</b> / 30</dd></div>
+                <div data-n="3"><dt>Stand, hours</dt><dd><b>9</b> / 12</dd></div>
+              </dl>
+            </figcaption>
+          </figure>
+        </div>
+        <section data-view="ready" aria-labelledby="ft-wk-h">
+          <h3 class="lt-visually-hidden" id="ft-wk-h">This week</h3>
+          <div id="ft-week" class="ft-chart"></div>
+        </section>
+        <p class="ft-streak" data-view="ready"><b>12</b><span>days in a row with your move goal met</span></p>
+        <section data-view="ready" aria-labelledby="ft-sg-h">
+          <h3 class="as-h" id="ft-sg-h">Pick up where you left off</h3>
+          <ul class="as-rows">
+            <li><button type="button" class="as-row" data-go="workout" data-w="intervals"><span class="as-mark" aria-hidden="true"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></svg></span><span><b>Run intervals</b><small>6 × 3 min, walk between</small></span><span><small>32 min</small></span></button></li>
+            <li><button type="button" class="as-row" data-go="workout" data-w="strength"><span class="as-mark" aria-hidden="true"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c4 0 6.5-2.6 6.5-6.2 0-3.6-2.6-5.6-3.8-8.8-.6 2.4-2 3.4-3 3.6.4-3-1.2-5.6-3.2-6.6.2 3.4-3 5.8-3 10C5.5 18.4 8 21 12 21Z"/></svg></span><span><b>Strength, whole body</b><small>Three rounds, no kit</small></span><span><small>20 min</small></span></button></li>
+            <li><button type="button" class="as-row" data-go="workout" data-w="walk"><span class="as-mark" aria-hidden="true"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5.4-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.3"/></svg></span><span><b>Brisk walk</b><small>Out and back</small></span><span><small>25 min</small></span></button></li>
+          </ul>
+        </section>
+        
+        <div class="as-skel" data-view="loading" aria-busy="true" aria-label="Loading today" hidden>
+          <span class="lt-skeleton" style="width: 50%"></span><span class="lt-skeleton" style="width: 220px; height: 220px; border-radius: 50%; justify-self: center"></span><span class="lt-skeleton" style="width: 80%"></span><span class="lt-skeleton" style="width: 64%"></span>
+        </div>
+        <section class="as-state" data-view="empty" aria-labelledby="st-empty-h" hidden>
+          <figure class="lt-art" data-scene="bike" data-tone="accent" data-shot="Running shoes by a front door"><svg data-part="scene" viewBox="44 70 232 130" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><circle data-m="sky" cx="183.8" cy="122.7" r="43"/><rect data-m="floor" x="-2000" y="176" width="4320" height="2000"/><path data-m="ink" d="M-2000 176H2320"/><path data-m="ink" data-g="dash" d="M-1996 190H2320"/><g data-role="lead" transform="translate(80 44) scale(1)" style="--k:1"><circle data-m="b" cx="42" cy="104" r="28"/><circle data-m="b" cx="118" cy="104" r="28"/><circle data-m="a" cx="78" cy="104" r="8"/><path data-m="a" d="M56 52H80L76 60H58Z"/><g data-m="ink"><circle cx="42" cy="104" r="28"/><circle cx="118" cy="104" r="28"/><path d="M42 104L66 64H108L78 104ZM66 64L78 104M108 64L118 104M102 46H116M108 64L104 46M68 60L66 64"/><circle cx="78" cy="104" r="8"/></g><circle data-m="dot" cx="42" cy="104" r="4"/><circle data-m="dot" cx="118" cy="104" r="4"/></g></svg><figcaption class="lt-visually-hidden">A bike</figcaption></figure>
+          <h3 id="st-empty-h">Nothing counted yet today</h3>
+          <p>Start a workout, or go for a walk with your phone in your pocket.</p>
+          <button type="button" class="lt-btn" data-variant="primary" data-size="lg" data-go="workout"><span data-part="label">Start a workout</span></button>
+        </section>
+        <section class="as-state" data-view="error" role="alert" aria-labelledby="st-error-h" hidden>
+          <figure class="lt-art" data-motif="phone" data-shot="A phone on a bench"><svg data-part="motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><rect data-m="b" x="46" y="14" width="68" height="132" rx="14"/><rect data-m="a" x="58" y="46" width="44" height="30" rx="5"/><g data-m="ink"><rect x="46" y="14" width="68" height="132" rx="14"/><path d="M72 26H88M70 134H90"/><rect x="58" y="46" width="44" height="30" rx="5"/><path d="M58 92H102M58 106H92M58 120H98"/></g></svg><figcaption class="lt-visually-hidden">A phone</figcaption></figure>
+          <h3 id="st-error-h">Your watch has not synced</h3>
+          <p>Open Kestrel on your watch, or check Bluetooth is on.</p>
+          <button type="button" class="lt-btn" data-variant="secondary" data-set-state="ready"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6L20 8.5M20 4v4.5h-4.5"/></svg><span data-part="label">Try again</span></button>
+        </section>
+      </div>
+    </div>
+    <div class="as-actionbar ft-go" data-view="ready">
+      <button type="button" class="lt-btn" data-variant="primary" data-size="lg" data-go="workout"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5Z"/></svg><span data-part="label">Start a run</span></button>
+    </div>
+  </section>
+    
+  <section class="as-screen" id="screen-workout" data-screen="workout" data-tone="dark" data-pane="detail" data-parent="today" aria-labelledby="wo-h">
+    <div class="as-scroll ft-workout">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><button type="button" data-part="back" data-go="today" data-dir="back" aria-label="Back to Today"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>Today</span></button><p data-part="small" aria-hidden="true">Run intervals</p><span></span></div>
+        <h2 data-part="large" id="wo-h" tabindex="-1">Run intervals</h2>
+      </header>
+      <div class="as-body">
+        <p class="ft-phase"><span id="ft-phase">Run</span> · interval <span id="ft-int">3</span> of 6</p>
+        <p class="ft-timer" role="timer" aria-live="off" aria-label="Time in this workout"><span id="ft-time">12:48</span></p>
+        <ol class="ft-intervals" aria-label="Intervals">
+          <li data-done></li><li data-done></li><li data-now style="--p: 0.4"></li><li></li><li></li><li></li>
+        </ol>
+        <p class="ft-next">Next: <b>walk, 1 min 30</b></p>
+        <dl class="ft-stats">
+          <div><dt>Heart</dt><dd><b>142</b> bpm</dd></div>
+          <div><dt>Pace</dt><dd><b>5:40</b> /km</dd></div>
+          <div><dt>Distance</dt><dd><b>2.14</b> km</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="as-actionbar ft-controls">
+      <button type="button" class="lt-btn" data-variant="ghost" data-size="lg" id="ft-end"><span data-part="label">End</span></button>
+      <button type="button" class="lt-btn ft-pause" data-variant="primary" data-size="lg" id="ft-pause" aria-pressed="false"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5.5v13M15 5.5v13"/></svg><span data-part="label">Pause</span></button>
+    </div>
+  </section>
+    
+  <section class="as-screen" id="screen-history" data-screen="history" data-tab="history" data-pane="list" data-detail="summary" aria-labelledby="hi-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><span></span><p data-part="small" aria-hidden="true">History</p><span></span></div>
+        <h2 data-part="large" id="hi-h" tabindex="-1">History</h2>
+      </header>
+      <div class="as-body">
+        <div class="ft-month"><p>November so far</p><b>14</b><span>workouts · 9 h 20 min · 61.4 km</span></div>
+        <section aria-labelledby="hi-1"><h3 class="as-day" id="hi-1">This week</h3>
+          <ul class="as-rows">
+            <li><button type="button" class="as-row" data-go="summary"><span class="as-mark" aria-hidden="true"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></svg></span><span><b>Run intervals</b><small>Tuesday · 32 min</small></span><span><b>5.21 km</b></span></button></li>
+            <li><button type="button" class="as-row" data-go="summary"><span class="as-mark" aria-hidden="true"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c4 0 6.5-2.6 6.5-6.2 0-3.6-2.6-5.6-3.8-8.8-.6 2.4-2 3.4-3 3.6.4-3-1.2-5.6-3.2-6.6.2 3.4-3 5.8-3 10C5.5 18.4 8 21 12 21Z"/></svg></span><span><b>Strength, whole body</b><small>Monday · 20 min</small></span><span><b>212 kcal</b></span></button></li>
+          </ul>
+        </section>
+        <section aria-labelledby="hi-2"><h3 class="as-day" id="hi-2">Last week</h3>
+          <ul class="as-rows">
+            <li><button type="button" class="as-row" data-go="summary"><span class="as-mark" aria-hidden="true"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></svg></span><span><b>Long run</b><small>Sunday · 1 h 04 min</small></span><span><b>10.02 km</b></span></button></li>
+            <li><button type="button" class="as-row" data-go="summary"><span class="as-mark" aria-hidden="true"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5.4-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.3"/></svg></span><span><b>Brisk walk</b><small>Friday · 41 min</small></span><span><b>3.80 km</b></span></button></li>
+            <li><button type="button" class="as-row" data-go="summary"><span class="as-mark" aria-hidden="true"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></svg></span><span><b>Run intervals</b><small>Wednesday · 30 min</small></span><span><b>4.96 km</b></span></button></li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </section>
+    
+  <section class="as-screen" id="screen-summary" data-screen="summary" data-pane="detail" data-parent="history" aria-labelledby="su-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><button type="button" data-part="back" data-go="history" data-dir="back" aria-label="Back to History"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>History</span></button><p data-part="small" aria-hidden="true">Run intervals</p><span></span></div>
+        <h2 data-part="large" id="su-h" tabindex="-1">Run intervals</h2>
+      </header>
+      <div class="as-body">
+        <p class="ft-when">Tuesday 25 November · 07:10 · Kestrel Park</p>
+        <dl class="as-figure"><dt>Distance</dt><dd>5.21<small> km</small></dd></dl>
+        <dl class="ft-stats ft-stats-light">
+          <div><dt>Time</dt><dd><b>32:06</b></dd></div>
+          <div><dt>Pace</dt><dd><b>6:10</b> /km</dd></div>
+          <div><dt>Heart</dt><dd><b>148</b> avg</dd></div>
+        </dl>
+        <section aria-labelledby="su-sp"><h3 class="lt-visually-hidden" id="su-sp">Splits</h3><div id="ft-splits" class="ft-chart"></div></section>
+      </div>
+    </div>
+  </section>
+    
+  <section class="as-screen" id="screen-profile" data-screen="profile" data-tab="profile" data-pane="full" aria-labelledby="go-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Goals</p><span></span></div>
+        <h2 data-part="large" id="go-h" tabindex="-1">Goals</h2>
+      </header>
+      <div class="as-body">
+        <div class="lt-setgroups" data-lt="settings-group">
+          <section data-part="group" aria-labelledby="go-1"><h3 id="go-1">Every day</h3>
+            <ul><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Move</span></span><span data-part="value">600 kcal</span></a></li><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Exercise</span></span><span data-part="value">30 min</span></a></li><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Stand</span></span><span data-part="value">12 hours</span></a></li></ul>
+          </section>
+          <section data-part="group" aria-labelledby="go-2"><h3 id="go-2">Reminders</h3>
+            <ul><li data-part="row"><label><span data-part="text"><span data-part="label">Nudge me to stand</span><span data-part="desc">At ten to the hour, if I have not moved</span></span><input type="checkbox" role="switch" checked></label></li><li data-part="row"><label><span data-part="text"><span data-part="label">Evening summary</span><span data-part="desc">At 20:00</span></span><input type="checkbox" role="switch"></label></li></ul>
+          </section>
+          <section data-part="group" aria-labelledby="go-3"><h3 id="go-3">Health data</h3>
+            <ul><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Connected watch</span></span><span data-part="value">Kestrel Band 2</span></a></li><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Units</span></span><span data-part="value">Kilometres</span></a></li></ul>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+  </main>
+  <nav class="lt-bottom-nav as-tabs" data-lt="bottom-nav" aria-label="Tabs">
+    <span data-part="pill" aria-hidden="true"></span>
+    <a href="#screen-today"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c4 0 6.5-2.6 6.5-6.2 0-3.6-2.6-5.6-3.8-8.8-.6 2.4-2 3.4-3 3.6.4-3-1.2-5.6-3.2-6.6.2 3.4-3 5.8-3 10C5.5 18.4 8 21 12 21Z"/></svg><span>Today</span></a>
+    <a href="#screen-history"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7L4 8.5M4 4v4.5h4.5"/><path d="M12 8v4l2.5 2"/></svg><span>History</span></a>
+    <a href="#screen-profile"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg><span>Goals</span></a>
+  </nav>
+  <p class="as-toast" role="status"></p>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>
