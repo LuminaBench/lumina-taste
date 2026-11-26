@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-palette="forest-brass" data-mode="light" data-type="slab" data-density="spacious" data-radius="balanced" data-motion="snappy">
+<html lang="en" data-palette="forest-brass" data-mode="light" data-type="stamped" data-density="spacious" data-radius="balanced" data-motion="snappy">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,8 +15,8 @@
   <button type="button" data-part="toggle" aria-expanded="false" aria-controls="lt-ns-panel" aria-label="Menu"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   <div id="lt-ns-panel" data-part="panel" hidden><ul><li><a href="#range">Coffees</a></li><li><a href="#tastings">Tastings</a></li><li><a href="#visit">Visit</a></li><li><a href="#questions">Questions</a></li></ul></div>
 </header>
-  <main id="main">
-    <section class="lt-hero-split" id="top" aria-labelledby="vn-h">
+  <main id="main" data-scroll>
+    <section class="lt-hero-split" id="top" data-entrance aria-labelledby="vn-h">
       <div data-part="copy">
         <p data-part="eyebrow">Roastery and café · Bristol</p>
         <h1 id="vn-h">Coffee roasted forty steps from your cup</h1>
@@ -25,7 +25,7 @@
         <p data-part="note">Open Tuesday to Sunday · 14 Mill Lane, six minutes from Temple Meads</p>
       </div>
       <div data-part="visual">
-        <figure class="lt-art" data-tone="accent" data-pattern="steps" data-shot="The roasting room through the hatch behind the counter, roaster running, morning light, 5:4">
+        <figure class="lt-art" data-lt="art-panel" data-motif="cup" data-tone="accent" data-pattern="arch" data-shot="The roasting room through the hatch behind the counter, roaster running, morning light, 5:4">
           
           <p data-part="name">The roasting room</p>
           <p data-part="fact">One 15 kg drum roaster · 180 kg a week</p>
@@ -38,21 +38,21 @@
   <header><h2 id="lt-of-title">Three coffees, roasted on Tuesdays</h2><p data-part="lede">Each bag is 250 g of whole beans, posted the day after roasting.</p></header>
   <ul>
     <li><article>
-      <figure class="lt-art" data-shot="Bag of Huila beans on a wooden counter, window light, 4:5"><p data-part="name">Huila</p><p data-part="fact">Colombia · washed</p><figcaption class="lt-visually-hidden">Huila, Colombia</figcaption></figure>
+      <figure class="lt-art" data-lt="art-panel" data-motif="bag" data-shot="Bag of Huila beans on a wooden counter, window light, 4:5"><p data-part="name">Huila</p><p data-part="fact">Colombia · washed</p><figcaption class="lt-visually-hidden">Huila, Colombia</figcaption></figure>
       <h3>Huila, Colombia</h3>
       <p>Dark chocolate, red apple and panela. The one to start with.</p>
       <dl><div><dt>Roast</dt><dd>Medium</dd></div><div><dt>Best as</dt><dd>Filter, espresso</dd></div></dl>
       <p data-part="foot"><b>£11.50</b><a href="/coffees/huila">Huila in detail <svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></p>
     </article></li>
     <li><article>
-      <figure class="lt-art" data-tone="accent" data-shot="Bag of Sidamo beans, same counter and light, 4:5"><p data-part="name">Sidamo</p><p data-part="fact">Ethiopia · natural</p><figcaption class="lt-visually-hidden">Sidamo, Ethiopia</figcaption></figure>
+      <figure class="lt-art" data-lt="art-panel" data-motif="bag" data-tone="accent" data-shot="Bag of Sidamo beans, same counter and light, 4:5"><p data-part="name">Sidamo</p><p data-part="fact">Ethiopia · natural</p><figcaption class="lt-visually-hidden">Sidamo, Ethiopia</figcaption></figure>
       <h3>Sidamo, Ethiopia</h3>
       <p>Blueberry and jasmine, light in the cup. Lovely as a pour-over.</p>
       <dl><div><dt>Roast</dt><dd>Light</dd></div><div><dt>Best as</dt><dd>Filter</dd></div></dl>
       <p data-part="foot"><b>£13.00</b><a href="/coffees/sidamo">Sidamo in detail <svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></p>
     </article></li>
     <li><article>
-      <figure class="lt-art" data-tone="ink" data-shot="Bag of the house blend, same counter and light, 4:5"><p data-part="name">House espresso</p><p data-part="fact">Blend · medium dark</p><figcaption class="lt-visually-hidden">House espresso</figcaption></figure>
+      <figure class="lt-art" data-lt="art-panel" data-motif="bag" data-pattern="arch" data-tone="ink" data-shot="Bag of the house blend, same counter and light, 4:5"><p data-part="name">House espresso</p><p data-part="fact">Blend · medium dark</p><figcaption class="lt-visually-hidden">House espresso</figcaption></figure>
       <h3>House espresso</h3>
       <p>Brazil and Guatemala, built for milk. Toffee, hazelnut, no bitterness.</p>
       <dl><div><dt>Roast</dt><dd>Medium dark</dd></div><div><dt>Best as</dt><dd>Espresso, moka pot</dd></div></dl>

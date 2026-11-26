@@ -5374,9 +5374,20 @@
       "order": 1,
       "name": "Product / SaaS landing page",
       "summary": "Top dropdown nav, one focused hero, a live product frame, bento features and a high-contrast footer.",
-      "anatomy": "Navbar → hero (1 primary CTA) → product frame → proof → bento → quote → CTA band → footer",
+      "anatomy": "Navbar → hero (1 primary CTA) → product frame → proof → setting up, pinned → bento → quote → CTA band → footer",
       "aliases": ["landing page","marketing site","homepage","saas homepage","startup landing"],
-      "uses": ["navbar-mega","button","segmented-control","bento-grid","site-footer","multi-line-chart","stat-strip"],
+      "uses": [
+        "navbar-mega",
+        "button",
+        "segmented-control",
+        "bento-grid",
+        "site-footer",
+        "multi-line-chart",
+        "stat-strip",
+        "sticky-story",
+        "device-frame"
+      ],
+      "motion": "One scroll moment: setting up in three steps with one browser window pinned beside them, changing with each step (sticky-story). The hero enters; every section rises into place.",
       "kind": "blueprint",
       "files": [
         "blueprints/landing/index.html",
@@ -5431,9 +5442,11 @@
       "order": 3,
       "name": "Editorial portfolio / showcase",
       "summary": "Serif + sans typography, generous margins, case-study cards and a comfortable reading measure.",
-      "anatomy": "Quiet header → statement → selected work grid → essay excerpt with pull quote → contact → footer",
+      "anatomy": "Quiet header → statement → selected work as six results in a row that slides sideways → essay excerpt with pull quote → contact → footer",
       "aliases": ["portfolio","agency site","case studies","designer portfolio","studio website","blog"],
-      "uses": ["floating-pill-nav","media-card","scroll-reveal","button"],
+      "uses": ["floating-pill-nav","scroll-reveal","button","side-scroll","art-panel"],
+      "type": "editorial: a soft, bookish serif for someone who writes as much as she designs, with a plain sans for the facts",
+      "motion": "One scroll moment: the work slides sideways while the page scrolls down (side-scroll), each piece one measured result set large. A swipe row on phones; everything else is still.",
       "kind": "blueprint",
       "files": [
         "blueprints/editorial/index.html",
@@ -5468,6 +5481,7 @@
       "anatomy": "Header → billing toggle → 3 tiers (one featured) → comparison matrix → FAQ → contact line",
       "aliases": ["pricing page","plans page","pricing table","subscription tiers","compare plans"],
       "uses": ["segmented-control","button","comparison-table","accordion","badge"],
+      "motion": "None on purpose: people compare prices here, and figures that count or panels that move get in the way of the comparison.",
       "kind": "blueprint",
       "files": [
         "blueprints/pricing/index.html",
@@ -5618,6 +5632,7 @@
         "footer-minimal"
       ],
       "states": ["sold-out"],
+      "motion": "None on purpose: a product page is a tool for choosing and buying, and the buy box must never move. The gallery is the picture.",
       "kind": "blueprint",
       "files": [
         "blueprints/store/index.html",
@@ -5654,6 +5669,7 @@
       "aliases": ["ai chat","chatbot page","assistant app","llm chat interface","copilot chat","chat with your data"],
       "uses": ["assistant-thread","prompt-composer","button","badge"],
       "states": ["empty","streaming","error"],
+      "motion": "None on purpose: an app screen, where scroll moments never belong.",
       "kind": "blueprint",
       "files": [
         "blueprints/assistant/index.html",
@@ -5694,6 +5710,8 @@
         "footer-minimal",
         "button"
       ],
+      "type": "workbench: a light, technical grotesk with a mono beside it, for a tool people use at a desk all day rather than a heavy developer-brand look",
+      "motion": "No scroll moment: developers read code and copy commands, so nothing moves under them. Sections rise into place; the four figures in the numbers band count once to their true values (number-settle).",
       "kind": "blueprint",
       "files": [
         "blueprints/devtool/index.html",
@@ -5849,6 +5867,7 @@
         "webinar recording"
       ],
       "uses": ["navbar-simple","media-player","reading-progress","newsletter-signup","footer-minimal","button"],
+      "motion": "None on purpose: people listen and read here; the player and the transcript must stay put.",
       "kind": "blueprint",
       "files": [
         "blueprints/episode/index.html",
@@ -5891,6 +5910,8 @@
         "button"
       ],
       "brand": ["Juniper Coffee Roasters","Juniper Coffee"],
+      "type": "stamped: Juniper stamps its name on every bag, so the headlines are a sturdy slab with stamped weight",
+      "motion": "Entrance on the hero and the quiet reveal; no scroll moment. A roastery is visited for the coffee and the room, so the pictures carry it: the cup and the bags drawn on their panels until the photographs come.",
       "kind": "blueprint",
       "files": [
         "blueprints/venue/index.html",
@@ -5939,6 +5960,8 @@
         "button"
       ],
       "brand": ["Kestrel Dental"],
+      "type": "hyperlegible: a clinic is read by people who are anxious, in a hurry or without their glasses, so every letter is drawn to be told apart",
+      "motion": "Two scroll moments, never adjacent: the scroll statement (the price promise) and the first visit as stacking cards. The hero panel carries the practice's own drawing, a tooth, until there is a photograph.",
       "kind": "blueprint",
       "files": [
         "blueprints/practice/index.html",
@@ -5978,6 +6001,7 @@
         "button"
       ],
       "brand": ["Moss Lane Pantry"],
+      "motion": "No scroll moment: a food bank asks for trust, not attention. The three figures in the hero count up once to their true values (number-settle); the hero enters, sections rise into place.",
       "kind": "blueprint",
       "files": [
         "blueprints/cause/index.html",
@@ -5992,7 +6016,8 @@
       "order": 24,
       "name": "Maker or product brand",
       "summary": "A home page for a maker or a small product brand: the object and its price in the first screen, the range as a set at one ratio, how it is made in three steps, materials and care as plain facts, delivery and returns answered, and one buying action. Art panels stand in until there are photographs.",
-      "anatomy": "Top bar → hero (the object, the price, delivery facts) with a picture or art panel → the range as three cards → how it is made → materials and care → delivery and returns → buying band → footer",
+      "anatomy": "Top bar → hero (the object, the price, delivery facts) with a picture or art panel → the range as three cards → how it is made, pinned: one panel changing with each step → materials and care → the glaze before and after the kiln, a slider → delivery and returns → buying band → footer",
+      "motion": "One scroll moment, the making (sticky-story). The glaze slider moves only when the visitor moves it.",
       "aliases": [
         "online shop home page",
         "product brand landing page",
@@ -6013,13 +6038,15 @@
         "hero-split",
         "art-panel",
         "offer-cards",
-        "how-it-works",
+        "sticky-story",
+        "before-after",
         "faq-section",
         "cta-band",
         "footer-minimal",
         "button"
       ],
       "brand": ["Larkspur Ceramics"],
+      "type": "didone: a high-contrast serif with the thin and thick strokes of a brush-painted maker's mark under the glaze",
       "kind": "blueprint",
       "files": [
         "blueprints/shop/index.html",
@@ -6062,6 +6089,8 @@
         "button"
       ],
       "brand": ["Larkspur Assembly"],
+      "type": "stadium: a wide, heavy grotesk like the lettering on a venue's banners, so the date and the headline read from across a room",
+      "motion": "No pinned moment: the programme and the speakers are rows people scan, never move them. The hero's three figures count up once (number-settle); the venue is the page's one dark band.",
       "kind": "blueprint",
       "files": [
         "blueprints/event/index.html",

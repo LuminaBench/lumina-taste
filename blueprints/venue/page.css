@@ -11,3 +11,5 @@
 .lt-footer-min { padding-block: var(--space-6); }
 @media (max-width: 900px) { .vn-split { grid-template-columns: minmax(0, 1fr); gap: 32px; } }
 @media (max-width: 640px) { .vn-band { padding: calc(var(--section-y) / 2) 16px; } }
+/* On a phone the hero panel stands taller, so the drawn cup and the room's name each have their own space. */
+@media (max-width: 640px) { .lt-hero-split [data-part="visual"] > .lt-art { --art-ratio: 4 / 5; } }
