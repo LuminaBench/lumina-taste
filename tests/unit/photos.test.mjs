@@ -9,7 +9,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { deflateSync } from 'node:zlib';
-import { assignStarters, domainOf, fitScore, loadStarters, starterFor } from '../../scripts/lib/image-starter.mjs';
+import { assignStarters, briefHeads, completeSet, domainOf, fitDetail, fitScore, loadStarters, starterFor } from '../../scripts/lib/image-starter.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const sets = loadStarters(join(root, 'engine/photos'));
@@ -76,6 +76,50 @@ test('briefs get the curated photograph that shows them, each once, best pairs f
   assert.equal(new Set([...got.values()].map((v) => v.photo.id)).size, got.size);
   // Words that only name the business count for little: "coffee" alone does not pick a picture.
   assert.ok(fitScore(cafe.photos[0], 'Some coffee', { subjectWords: cafe.words }) < 0.6);
+});
+
+test('a fit must show the brief\'s head phrase, read shared words in the same sense, and not contradict its state', () => {
+  const build = sets.construction;
+  const kitchen = build.photos.find((p) => p.id === 'finished-kitchen-white-units');
+  const cranes = build.photos.find((p) => p.id === 'tower-cranes-rising-block');
+  const opts = { subjectWords: ['builders', 'glasgow'], ratio: 0.8 };
+  // From a real fill: "units" alone is not "workshop units"; a block under cranes is not a finished office building.
+  assert.deepEqual(briefHeads('Workshop units with roller doors, finished, 4:5'), [{ head: 'units', mods: ['workshop'] }]);
+  assert.deepEqual(briefHeads('A small office building, finished, 4:5'), [{ head: 'building', mods: ['office'] }]);
+  assert.equal(fitScore(kitchen, 'Workshop units with roller doors, finished, 4:5', opts), 0);
+  assert.equal(fitScore(cranes, 'A small office building, finished, 4:5', opts), 0);
+  assert.match(fitDetail(cranes, 'A finished block of flats, 4:5', opts).why, /finished.*underway/);
+  const got = assignStarters(build, [{ key: 'w', shot: 'Workshop units with roller doors, finished, 4:5' }, { key: 'o', shot: 'A small office building, finished, 4:5' }], { ratio: 0.8, subject: 'builders in Glasgow' });
+  assert.equal(got.size, 0, [...got.values()].map((v) => v.photo.id).join(' '));
+  // A stand-in completing a gallery of finished work is never a site, even when its own brief names no state.
+  const underway = new Set(build.photos.filter((p) => /\b(site|cranes?|scaffold\w*|foundations|rebar)\b/.test(p.shot.join(' '))).map((p) => p.id));
+  const filled = build.photos.filter((p) => ['timber-clad-house-dusk', 'newly-built-red-brick', 'finished-kitchen-white-units'].includes(p.id));
+  const stand = completeSet(build, [{ key: 'a', shot: 'Two-storey office block with a yard, 4:5' }, { key: 'b', shot: 'Three workshop units with roller doors, 4:5' }], filled,
+    { ratio: 0.8, subject: 'builders in Glasgow', siblings: ['Finished rear extension, 4:5', 'Row of new homes, finished, 4:5', 'Gutted flat finished with a new kitchen, 4:5', 'Two-storey office block with a yard, 4:5', 'Three workshop units with roller doors, 4:5'] });
+  assert.equal(stand.size, 2);
+  for (const { photo } of stand.values()) assert.ok(!underway.has(photo.id) && photo.id !== 'finished-kitchen-white-units', photo.id);
+  // The right sense still fits.
+  assert.ok(fitScore(kitchen, 'Fitted kitchen units in oak, 4:5', opts) > 0.9);
+  assert.ok(fitScore(cranes, 'Tower cranes over the site at dusk, 16:9', opts) > 0.9);
+  // Word-sense traps, on small made-up photographs.
+  const photo = (shot, shows) => ({ id: shot[0], shot, shows, orientation: 'wide', tone: 'warm' });
+  const units = photo(['units', 'kitchen', 'fitted', 'cupboards'], 'Fitted kitchen units in white');
+  assert.equal(fitScore(units, 'Storage units on an industrial estate'), 0);
+  assert.ok(fitScore(units, 'Kitchen units fitted last week') > 0.9);
+  const cocktailBar = photo(['bar', 'cocktail', 'stools', 'drinks'], 'A cocktail bar with stools');
+  const rebar = photo(['bar', 'bars', 'steel', 'rebar', 'reinforcement'], 'Bundles of steel reinforcement bar on site');
+  assert.ok(fitScore(cocktailBar, 'The bar with its stools, evening') > 0.9);
+  assert.equal(fitScore(cocktailBar, 'Steel bars stacked on site'), 0);
+  assert.equal(fitScore(rebar, 'The bar at the back of the pub, drinks lined up'), 0);
+  const diningTable = photo(['table', 'dining', 'chairs', 'laid'], 'A dining table laid for dinner');
+  assert.ok(fitScore(diningTable, 'A table laid for dinner, glasses out') > 0.9);
+  assert.equal(fitScore(diningTable, 'A table of fees by case type'), 0);
+  assert.equal(fitScore(diningTable, 'The table of rates and figures for each service'), 0);
+  const siteCrane = photo(['crane', 'tower', 'site', 'construction'], 'A tower crane over a site');
+  const bird = photo(['crane', 'bird', 'wetland', 'reeds'], 'A crane wading through reeds');
+  assert.equal(fitScore(siteCrane, 'A crane wading in the reeds at dawn'), 0);
+  assert.equal(fitScore(bird, 'The tower crane on site, lifting steel'), 0);
+  assert.ok(fitScore(bird, 'A crane wading in the reeds at dawn') > 0.9);
 });
 
 // ---------------------------------------------------------------- find-images with a set, against a stand-in
@@ -150,6 +194,12 @@ test('find-images uses the curated set first (its focal point and words), then s
     assert.equal(mug.ratio, 0.8);
     // A 4:5 crop of a 4:3 picture centred on x = 0.8 sits against the right edge.
     assert.ok(mug.focus.x > 0.55, JSON.stringify(mug.focus));
+
+    // A single panel whose only match is thin (it shares the head noun, little else) keeps its drawing, and says so.
+    writeFileSync(join(dir, 'alone.html'), `<html><main><section><figure class="lt-art" data-ratio="4/5" data-shot="A cup, 4:5"><p data-part="name">Cup</p></figure></section></main></html>`);
+    const thin = await run(['--fill', join(dir, 'alone.html'), '--subject', 'stoneware pottery', '--out', join(dir, 'alone-images')], env);
+    assert.match(thin.out, /Only a stand-in-level match for “A cup, 4:5” \(mug-on-bench\); a single panel keeps its drawing/);
+    assert.doesNotMatch(readFileSync(join(dir, 'alone.html'), 'utf8'), /<img/);
 
     // --starter on its own lists the set; --pick all fetches and treats every one.
     const list = await run(['--starter', 'pottery'], env);
