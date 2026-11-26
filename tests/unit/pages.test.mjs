@@ -204,3 +204,14 @@ test('the page model reads plans, baskets, records and releases from the brief, 
   assert.deepEqual(releasesFrom(f(BRIEFS.changelog[0])).map((r) => [r.version, r.tag]), [['v2.4', 'new'], ['v2.3', 'new'], ['v2.2', 'fixed']]);
   assert.deepEqual([singular('deliveries'), singular('classes'), singular('glazes'), plural('delivery'), plural('class')], ['delivery', 'class', 'glaze', 'deliveries', 'classes']);
 });
+
+test('briefs from the demo sites: the town in the address, a numbered street without a street word, no article before "work", and a flat white is a coffee, not a look', async () => {
+  const { extractFacts, heroCopy } = await import(join(root, 'engine/compose/words.mjs'));
+  const cafe = extractFacts('Home page for Copper Hare, a coffee shop at 21 Gillygate, York YO31 7EA, beans roasted in Leeds');
+  assert.deepEqual([cafe.street, cafe.place], ['21 Gillygate', 'York']);
+  const build = extractFacts('Website for Granite Row, a construction firm at 88 Kelvin Street, Glasgow G3 8EH, work from £40,000');
+  assert.equal(build.place, 'Glasgow');
+  assert.equal(heroCopy(build, { typeId: 'service-landing', product: 'Granite Row' }).headline, 'Work from £40,000');
+  const plan = JSON.parse(compose('Home page for Copper Hare, a coffee shop in York, flat white £3.40').stdout);
+  assert.equal(plan.profile.style, null, 'a flat white does not choose the flat style');
+});

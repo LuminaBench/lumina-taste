@@ -63,6 +63,8 @@ export function extractFacts(brief, { product = null } = {}) {
   const streetM = new RegExp(`\\b(?:on|at)\\s+((?:\\d+\\s+)?[A-Z][\\w'’-]*(?:\\s+[A-Z][\\w'’-]*)*\\s+${STREET})\\b`).exec(b)
     ?? new RegExp(`\\b(\\d+\\s+[A-Z][\\w'’-]*(?:\\s+[A-Z][\\w'’-]*)*\\s+${STREET})\\b`).exec(b);
   if (streetM) facts.street = streetM[1];
+  // A numbered street without a street word, before a town and a postcode: "at 21 Gillygate, York YO31 7EA".
+  if (!facts.street) { const m = /\bat\s+(\d+\s+[A-Z][\w'’-]*(?:\s+[A-Z][\w'’-]*){0,2}),\s+[A-Z][a-zA-Z'’-]+\s+[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}\b/.exec(b); if (m) facts.street = m[1]; }
   // A place is a capitalised name after "in", that is not a month, a day or the product.
   for (const m of b.matchAll(/\bin\s+([A-Z][a-zA-Z'’-]+(?:\s+(?:upon|on|-on-)?\s*[A-Z][a-zA-Z'’-]+){0,2})/g)) {
     const p = m[1].trim();
@@ -77,7 +79,9 @@ export function extractFacts(brief, { product = null } = {}) {
   facts.email = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/.exec(b)?.[0] ?? null;
   facts.postcode = /\b[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}\b/.exec(b)?.[0] ?? null;
   facts.building = /\bat\s+((?:St\.?\s)?[A-Z][\w'’]*(?:\s+[A-Z][\w'’]*){0,3}),\s+\d+\s+[A-Z]/.exec(b)?.[1] ?? null;
-  if (!facts.place && facts.street) facts.place = new RegExp(`${facts.street.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')},\\s+([A-Z][a-zA-Z'’-]+)`).exec(b)?.[1] ?? null;
+  // The town in the address ("21 Gillygate, York YO31 7EA") is the place, whatever else the brief says is "in"
+  // somewhere ("beans roasted in Leeds").
+  if (facts.street) { const town = new RegExp(`${facts.street.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')},\\s+([A-Z][a-zA-Z'’-]+)`).exec(b)?.[1] ?? null; if (town) facts.place = town; }
   // People named in the brief: "run by Nell and Owen Hart", "partners Ruth Harrow, Sam Finch and Priya Shah".
   const peopleM = /\b(run by|owned by|founded by|led by|partners(?: are)?|with partners)\s+((?:[A-Z][a-z'’-]+(?:\s[A-Z][a-z'’-]+)?)(?:(?:,\s*|\s+and\s+)[A-Z][a-z'’-]+(?:\s[A-Z][a-z'’-]+)?)*)/.exec(b);
   if (peopleM) {
@@ -254,7 +258,8 @@ export function heroCopy(facts, { typeId, product }) {
   else if (typeId === 'cause' && count) headline = `${count.value} ${count.what}${count.per ? ` ${count.per}` : ''}${count.when ? ` ${count.when}` : ''}${facts.place ? `, in ${facts.place}` : ''}`;
   else if (typeId === 'service-landing' && price?.what) {
     const done = facts.durations.find((d) => d.what === price.what);
-    const a = /s$/.test(price.what.split(' ').pop()) || /^(fixed|free)/.test(price.what) ? '' : 'A ';
+    // A plural, a fixed fee or a word that takes no article ("work", "advice") reads without "A".
+    const a = /s$/.test(price.what.split(' ').pop()) || /^(fixed|free)/.test(price.what) || /^(work|advice|help|care|building|cleaning|repair|maintenance|tuition|training|support)$/i.test(price.what) ? '' : 'A ';
     const what = price.what.replace(/^fixed[-\s](?:fee|price)\s+/i, '');
     // With a time as well, the price goes to the picture and the headline carries the time.
     const plural = /s$/.test(what) ? what : what.replace(/(\w+)$/, (w) => (/(ch|sh|x|z)$/.test(w) ? `${w}es` : `${w}s`));
