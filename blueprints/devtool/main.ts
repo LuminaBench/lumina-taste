@@ -8,7 +8,6 @@ import '../../components/ui/blocks/hero-centered/hero-centered.css';
 import '../../components/ui/data/terminal-window/terminal-window.css';
 import '../../components/ui/controls/copy-button/copy-button.css';
 import '../../components/ui/data/code-block/code-block.css';
-import '../../components/ui/blocks/feature-grid/feature-grid.css';
 import '../../components/ui/data/api-endpoint/api-endpoint.css';
 import '../../components/ui/blocks/stats-band/stats-band.css';
 import '../../components/ui/blocks/quote-feature/quote-feature.css';

@@ -33,9 +33,6 @@ const PENDING = [
   'mobile:app-touch-target', // New invoice in the empty state (36px)
   'app-phone:app-touch-target', // the harbour switch on the home screen (segmented control, 38px), seen in the state views
   'workspace:app-touch-target', // a desktop work app: at phone width the views (34px) and icon buttons (28px) are small
-  // Sections that are only words on a marketing page.
-  'shop:taste-no-visual', // "Nine days from a ball of clay": three steps in sentences; stack-cards with a picture each
-  'devtool:taste-no-visual', // six features, each an icon in a tinted tile and two lines; show the feature instead
   // Charts drawn after load move the page (layout shift about 0.2): reserve their height before they render.
   'dashboard:perf-cls',
 ];

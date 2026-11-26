@@ -23,3 +23,28 @@
   .dv-band { padding: calc(var(--section-y) / 2) 16px; }
   .lt-hero-centered .lt-command { width: 100%; }
 }
+/* The parts: each one shown as the fragment it really is (code, a response, a terminal line, a figure, keys,
+   regions) in a bento of tiles, not an icon and two lines. */
+.dv-bento { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+.dv-bento > li { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 24px; border-radius: var(--radius-lg); background: var(--bg-surface-2); }
+.dv-bento > li[data-span="2"] { grid-column: span 2; }
+.dv-bento h3 { margin: 0; font-size: var(--step-1); font-weight: 650; letter-spacing: -0.01em; }
+.dv-bento h3 + p { margin: 0 0 8px; max-width: 46ch; color: var(--text-secondary); line-height: 1.5; }
+.dv-bento pre { margin: auto 0 0; padding: 16px 18px; overflow-x: auto; border-radius: var(--radius-md); background: var(--bg-canvas); color: var(--text-secondary); font: 400 var(--text-ui-sm) / 1.65 var(--font-mono); }
+.dv-bento pre :is(i, s, b, em) { font-style: normal; text-decoration: none; font-weight: 400; }
+.dv-bento pre i { color: var(--text-primary); }
+.dv-bento pre s { color: var(--accent-text); }
+.dv-bento pre b { color: var(--text-primary); font-weight: 600; }
+.dv-bento pre em { color: var(--text-muted); }
+.dv-bento pre [data-bad] { color: var(--status-negative); }
+.dv-big { margin: auto 0 0; font-family: var(--font-display); font-size: clamp(3.5rem, 2rem + 4vw, 5.5rem); font-weight: var(--weight-display); letter-spacing: -0.04em; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.dv-big small { margin-left: 0.12em; color: var(--text-secondary); font-size: 0.3em; font-weight: 500; letter-spacing: 0; }
+.dv-keys { display: grid; gap: 0; margin: auto 0 0; border-radius: var(--radius-md); background: var(--bg-canvas); }
+.dv-keys > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; padding: 12px 16px; }
+.dv-keys > div + div { border-top: var(--bw) var(--border-style) var(--border-hairline); }
+.dv-keys dt { font: 500 var(--text-ui-sm) var(--font-mono); }
+.dv-keys dd { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+.dv-regions { display: flex; flex-wrap: wrap; gap: 8px; margin: auto 0 0; }
+.dv-regions span { padding: 8px 14px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-pill); color: var(--text-secondary); font-size: var(--text-ui-sm); }
+.dv-regions [data-on] { border-color: var(--accent-solid); background: var(--accent-solid); color: var(--accent-ink); font-weight: 600; }
+@media (max-width: 900px) { .dv-bento { grid-template-columns: minmax(0, 1fr); } .dv-bento > li[data-span="2"] { grid-column: auto; } }

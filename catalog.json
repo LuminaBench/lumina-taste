@@ -5684,7 +5684,7 @@
       "order": 15,
       "name": "Developer tool landing",
       "summary": "A floating pill nav over a grid hero with circuit traces, an install command beside the one action, a typed terminal, tabbed code, six plain features, an API teaser, figures, one customer quote and a closing band.",
-      "anatomy": "Pill nav → hero (announcement, headline, action + install command) → quickstart + terminal → SDK code → features → API endpoints → figures → quote → CTA → footer",
+      "anatomy": "Pill nav → hero (announcement, headline, action + install command) → quickstart + terminal → SDK code → the parts as real fragments (code, a held response, a replay, keys, regions, one figure) → API endpoints → figures → quote → CTA → footer",
       "aliases": [
         "developer landing page",
         "api product page",
@@ -5702,7 +5702,6 @@
         "hero-centered",
         "terminal-window",
         "code-block",
-        "feature-grid",
         "api-endpoint",
         "stats-band",
         "quote-feature",
