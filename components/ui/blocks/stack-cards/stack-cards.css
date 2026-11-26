@@ -18,7 +18,7 @@
   li:nth-child(even) > article { background: var(--bg-surface-2); }
   [data-part="text"] { display: flex; flex-direction: column; justify-content: center; gap: 14px; }
   /* The step number, set large and quiet, leads the card; the title sits right under it. */
-  [data-part="n"] { margin-block-end: 0.14em; color: var(--text-muted); font-family: var(--font-display); font-size: clamp(3rem, 1.4rem + 4.4cqi, 5.25rem); font-weight: 300; letter-spacing: -0.04em; line-height: 1.15; font-variant-numeric: tabular-nums; }
+  [data-part="n"] { margin-block-end: 0.18em; color: var(--text-muted); font-family: var(--font-display); font-size: clamp(3rem, 1.4rem + 4.4cqi, 5.25rem); font-weight: 300; letter-spacing: -0.04em; line-height: 1.15; font-variant-numeric: tabular-nums; }
   [data-part="text"] h3 { margin: 0; font-family: var(--font-display); font-size: clamp(1.5rem, 0.9rem + 2.2cqi, 2.5rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.08; text-wrap: balance; }
   [data-part="text"] p { margin: 0; max-width: 40ch; color: var(--text-secondary); line-height: 1.55; text-wrap: pretty; }
   [data-part="visual"] { display: grid; place-items: center; min-height: 0; border-radius: var(--radius-lg); background: color-mix(in oklab, var(--accent-solid) 8%, var(--bg-canvas)); overflow: hidden; }
@@ -29,10 +29,10 @@
   [data-part="visual"] > .lt-invoice { padding-bottom: 44px; }
   [data-part="visual"] > .lt-invoice { margin-bottom: -28px; box-shadow: 0 -2px 0 var(--border-hairline), 0 18px 26px -18px oklch(0 0 0 / 0.26); }
   /* The stand-in visual: one figure, set large. Display figures keep a line-height of 1.15, not 1: tall-ascender
-     serifs and wide display faces draw their glyph box up to 1.45em tall, past the line and into the caption,
-     so a figure also keeps 0.14em of room under it. tests/figures.spec.ts checks every type pairing. */
+     serifs and wide display faces draw their glyph box up to 1.5em tall, past the line and into the caption,
+     so a figure also keeps 0.18em of room under it. tests/figures.spec.ts checks every type pairing. */
   .lt-sc-figure { display: grid; justify-items: start; gap: 6px; padding: 24px; }
-  .lt-sc-figure b { margin-block-end: 0.14em; font-family: var(--font-display); font-size: clamp(4rem, 2rem + 9cqi, 8rem); font-weight: var(--weight-display); letter-spacing: -0.04em; line-height: 1.15; color: var(--accent-text); font-variant-numeric: lining-nums tabular-nums; }
+  .lt-sc-figure b { margin-block-end: 0.18em; font-family: var(--font-display); font-size: clamp(4rem, 2rem + 9cqi, 8rem); font-weight: var(--weight-display); letter-spacing: -0.04em; line-height: 1.15; color: var(--accent-text); font-variant-numeric: lining-nums tabular-nums; }
   .lt-sc-figure span { color: var(--text-secondary); font-size: var(--text-ui-sm); }
   @container (max-width: 720px) {
     li { position: static; padding-bottom: 14px; }

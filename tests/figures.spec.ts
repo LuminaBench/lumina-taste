@@ -1,7 +1,7 @@
 // Display figures under every type pairing. Big numbers set at a line-height near 1 draw a glyph box taller than
 // their line in tall-ascender serifs and wide display faces (up to about 1.45em), which reaches into the caption
 // beside them. Every block that sets a figure large is rendered under each of the 20 pairings, at a wide and a
-// phone width, and no two text boxes inside a block may overlap (the same test the auditor's overlap rule makes).
+// phone width, at every density, and no two text boxes inside a block may overlap (the same test the auditor's overlap rule makes).
 import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -14,8 +14,8 @@ const PAIRINGS: string[] = JSON.parse(readFileSync(join(root, 'tokens/typography
 let files: Record<string, string> = {};
 test.beforeAll(async () => { files = await figuresFiles(); });
 
-for (const width of [1440, 768, 390]) {
-  test(`no figure touches its caption under any of the ${PAIRINGS.length} type pairings at ${width}px`, async ({ page }) => {
+for (const width of [1440, 768, 390]) for (const density of ['dense', 'balanced', 'spacious']) {
+  test(`no figure touches its caption under any of the ${PAIRINGS.length} type pairings at ${width}px, ${density} density`, async ({ page }) => {
     test.setTimeout(120_000);
     expect(PAIRINGS.length).toBeGreaterThanOrEqual(20);
     await page.setViewportSize({ width, height: 900 });
@@ -26,6 +26,7 @@ for (const width of [1440, 768, 390]) {
       return body === undefined ? route.fulfill({ status: 404, body: '' }) : route.fulfill({ status: 200, contentType: name.endsWith('.css') ? 'text/css' : 'text/html; charset=utf-8', body });
     });
     await page.goto('/_fig/figures.html');
+    await page.evaluate((d) => (document.documentElement.dataset.density = d), density);
     expect(await page.locator('[data-block]').count()).toBeGreaterThanOrEqual(13);
     const found: string[] = [];
     for (const type of PAIRINGS) {
@@ -55,7 +56,7 @@ for (const width of [1440, 768, 390]) {
         }
         return out;
       }, type);
-      found.push(...hits.map((h) => `${type} · ${h}`));
+      found.push(...hits.map((h) => `${type} · ${density} · ${h}`));
     }
     expect(found).toEqual([]);
   });

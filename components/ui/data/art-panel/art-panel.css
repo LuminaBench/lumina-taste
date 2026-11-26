@@ -20,7 +20,7 @@
   @supports (color: oklch(from red l c h)) { :scope[data-tone="swatch"] { --art-ink: oklch(from var(--art, var(--accent-solid)) clamp(0.16, (0.6 - l) * 1000, 0.98) 0.01 h); } }
   :scope[data-tone="swatch"] :is([data-part="fact"], [data-part="index"]) { color: inherit; }
   /* data-variant="figure": one number carries the panel ("20 min", "410", "£75"), with what it counts under it. */
-  [data-part="figure"] { margin: 0 0 0.14em; font-family: var(--font-display); font-size: clamp(2.5rem, var(--art-figure, 34cqi), 11rem); font-weight: var(--weight-display); letter-spacing: -0.04em; line-height: 1.1; font-variant-numeric: lining-nums tabular-nums; }
+  [data-part="figure"] { margin: 0 0 0.18em; font-family: var(--font-display); font-size: clamp(2.5rem, var(--art-figure, 34cqi), 11rem); font-weight: var(--weight-display); letter-spacing: -0.04em; line-height: 1.1; font-variant-numeric: lining-nums tabular-nums; }
   /* A wide panel is short, so its figure is smaller: it must leave room for the index above and the name below. */
   :scope:is([data-ratio="16/9"], [data-ratio="3/2"]) { --art-figure: 14cqi; }
   :scope[data-ratio="5/4"] { --art-figure: 26cqi; }

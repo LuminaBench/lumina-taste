@@ -23,11 +23,7 @@ mkdirSync(join(root, 'qa/artifacts'), { recursive: true });
 const common = ['--focus-limit', process.env.FOCUS_LIMIT ?? '400', ...process.argv.slice(2)];
 // Known findings on blueprints, waiting on a fix in the pages or the tokens (not in the critic). They are printed
 // as pending on every run and do not count; when one stops firing the audit says so, and it comes off this list.
-const PENDING = [
-  // Sections that are only words on a marketing page.
-  'shop:taste-no-visual', // "Nine days from a ball of clay": three steps in sentences; stack-cards with a picture each
-  'devtool:taste-no-visual', // six features, each an icon in a tinted tile and two lines; show the feature instead
-];
+const PENDING = [];
 // Gallery views and element pages: element-level rules.
 const res = spawnSync(process.execPath, [join(root, 'scripts/audit-ui.mjs'), ...targets, '--json', join(root, 'qa/artifacts/audit-report.json'), ...common], { stdio: 'inherit', cwd: root });
 // Blueprints are whole pages, so they also face the page-level taste critic, and its warnings fail.

@@ -15,3 +15,14 @@
 /* Each side's words sit in its own half, so the divider never cuts through a line. */
 .lt-before-after [data-part="compare"] .lt-art > p { max-width: 44%; }
 .lt-before-after [data-part="after"] .lt-art { justify-items: end; text-align: right; }
+/* The hero mug's own glaze colour: speckled oat by day; a deeper, fired-clay tone in dark mode, so the panel
+   sits in the page instead of being the brightest thing on it. */
+.sh-oat { --art: oklch(0.83 0.035 75); }
+[data-mode="dark"] .sh-oat { --art: oklch(0.46 0.04 68); }
+/* Phones: the mug comes first, so the first screen shows what is made, then the words. */
+@media (max-width: 760px) {
+  .lt-hero-split#top [data-part="visual"] { order: -1; }
+  .lt-hero-split#top [data-part="visual"] > .lt-art { --art-ratio: 4 / 3; }
+  .lt-hero-split#top .lt-art [data-part="motif"] { top: 8%; height: 44%; }
+  .lt-hero-split#top .lt-art [data-part="name"] { font-size: 1.625rem; }
+}
