@@ -282,6 +282,11 @@ test('words from the subject: facts come from the brief, never from filler', asy
   const charity = extractFacts('Home page for Canal Street Food Bank, a volunteer-run charity in Birmingham that gave out 410 food parcels a week last winter, open Monday and Thursday 10 to 2');
   assert.deepEqual([charity.counts[0].value, charity.counts[0].what, charity.counts[0].per, charity.counts[0].when], ['410', 'food parcels', 'a week', 'last winter']);
   assert.equal(charity.times[0].value, '10 to 2');
+  const { openingHours } = await import(join(root, 'engine/compose/words.mjs'));
+  assert.deepEqual(openingHours(charity), { 1: '10:00 to 14:00', 2: null, 3: null, 4: '10:00 to 14:00', 5: null, 6: null, 7: null });
+  assert.equal(openingHours(extractFacts('a cafe open Tuesday to Sunday 8am to 4pm'))[1], null);
+  assert.equal(openingHours(extractFacts('a cafe open Tuesday to Sunday 8am to 4pm'))[7], '08:00 to 16:00');
+  assert.equal(openingHours(extractFacts('a bakery open from 7:30 Tuesday to Sunday')), null, 'no closing time, no table: hours are never guessed');
   const saas = extractFacts('Landing page for Tally, an invoicing tool for freelancers that sends an invoice in 30 seconds and chases late payers, £9 a month');
   assert.deepEqual(saas.claims, ['sends an invoice in 30 seconds', 'chases late payers']);
   assert.equal(saas.prices[0].what, null, 'a price after a comma belongs to the product, not to "late payers"');

@@ -84,6 +84,7 @@ export function applyHeroCopy(html, copy) {
   if (!copy.lede) drop('lede');
   if (!copy.note) drop('note');
   if (copy.headline) out = out.replace(/(<h1\b[^>]*>)[\s\S]*?(<\/h1>)/, `$1${esc(keepHyphens(copy.headline))}$2`);
+  if (copy.secondary) out = out.replace(/(<a class="lt-btn"[^>]*data-variant="(?:ghost|secondary)"[^>]*>)[^<]*/, `$1${esc(copy.secondary)} `);
   if (copy.action) {
     // The primary action in the subject's words: every button that said the sample's action says this one.
     const label = /<a class="lt-btn"[^>]*data-variant="primary"[^>]*>([^<]+)</.exec(out)?.[1]?.trim();
@@ -143,3 +144,9 @@ export function applyClose(html, { heading, lede }) {
 
 /** The HTML comment that names the page's bold idea, placed right after <main>. */
 export const ideaComment = (idea) => `\n<!-- Bold idea: ${idea.text.replace(/--/g, '–')}. Lives in: ${idea.where.replace(/--/g, '–')}.${idea.ask ? ` TODO: ask for ${idea.ask}.` : ''} Everything else on the page stays quieter than it. -->`;
+
+/** An opening-hours table (rows with data-day) set to the brief's own days and hours. */
+export function applyHours(html, hours) {
+  if (!hours || !/<tr data-day="\d"/.test(html)) return html;
+  return html.replace(/<tr data-day="(\d)">(<th[^>]*>[^<]*<\/th>)<td[^>]*>[^<]*<\/td><\/tr>/g, (m, d, th) => `<tr data-day="${d}">${th}${hours[d] ? `<td>${hours[d]}</td>` : '<td data-closed>Closed</td>'}</tr>`);
+}

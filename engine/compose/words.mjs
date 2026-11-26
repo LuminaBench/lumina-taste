@@ -90,7 +90,7 @@ export function extractFacts(brief, { product = null } = {}) {
   const dayM = new RegExp(`\\b(${DAY}(?:\\s*(?:,|and|to|-|–)\\s*${DAY})*)(?:\\s+(\\d{1,2}(?:[:.][0-5]\\d)?\\s*(?:[ap]m)?\\s*(?:to|-|–)\\s*\\d{1,2}(?:[:.][0-5]\\d)?\\s*(?:[ap]m)?))?`).exec(b);
   if (dayM) {
     facts.days = clean(dayM[1]);
-    if (dayM[2] && !facts.times.some((t) => dayM[2].includes(t.value))) facts.times.push({ value: clean(dayM[2]).replace(/\s*(?:to|-|–)\s*/, ' to '), what: 'hours', text: clean(dayM[2]) });
+    if (dayM[2]) facts.times.push({ value: clean(dayM[2]).replace(/\s*(?:to|-|–)\s*/, ' to '), what: 'hours', text: clean(dayM[2]) });
   }
   // Durations: 30 seconds, 12 weeks, a 20-minute call.
   for (const m of b.matchAll(new RegExp(`\\b(\\d+|${Object.keys(NUM_WORDS).join('|')})[-\\s](${UNIT})\\b`, 'gi'))) {
@@ -142,7 +142,8 @@ export function figuresFrom(facts) {
     const label = facts.prices.some((p) => p.what && p.what === d.what) ? 'start to finish' : claim ? `to ${imperative(claim.replace(new RegExp(`\\s*(?:in|within|under)?\\s*${d.text}\\b`), '')).replace(/^./, (x) => x.toLowerCase())}` : d.phrase ?? d.what ?? 'time';
     out.push({ value: d.value, label });
   }
-  for (const t of facts.times) out.push({ value: t.value, label: t.what === 'hours' ? `open ${facts.days ?? ''}`.trim() : t.what ? `${t.what}${facts.days ? `, ${facts.days}` : ''}` : 'time' });
+  const hasRange = facts.times.some((t) => t.what === 'hours');
+  for (const t of facts.times.filter((x) => !(hasRange && !x.what))) out.push({ value: t.value, label: t.what === 'hours' ? `open ${facts.days ?? ''}`.trim() : t.what ? `${t.what}${facts.days ? `, ${facts.days}` : ''}` : 'time' });
   const seen = new Set();
   return out.filter((f) => { const k = f.value; if (seen.has(k)) return false; seen.add(k); return true; });
 }
@@ -204,8 +205,12 @@ export function heroCopy(facts, { typeId, product }) {
     : /\b(table|tables)\b/.test(b) ? 'Book a table'
     : /\bticket/.test(b) ? 'Get a ticket'
     : null;
+  // The second, quieter link names what it shows: "See the loaves", not the sample's own range.
+  const firstThing = facts.prices.find((p) => p.what)?.what ?? facts.offers[0] ?? null;
+  const secondary = typeId === 'venue' && firstThing ? `See the ${firstThing.replace(/^(?:a|an|the)\s+/i, '').replace(/^Saturday\s+/, '')}` : null;
   return {
     action,
+    secondary,
     eyebrow,
     headline: headline ?? null,
     lede: ledeParts.length ? ledeParts.join(' ') : null,
@@ -221,3 +226,24 @@ export function heroCopy(facts, { typeId, product }) {
 
 /** The wording for a TODO that asks for facts instead of inventing them. */
 export const askFor = (things) => `TODO: ask for ${things.join(', ')}. Do not invent figures.`;
+
+/**
+ * Opening hours from the brief, as { 1..7: "10:00 to 14:00" | null } (Monday is 1), when it gives both the
+ * days and an hour range ("Monday and Thursday 10 to 2"). Null when it does not: hours are never guessed.
+ */
+export function openingHours(facts) {
+  if (!facts.days) return null;
+  const range = facts.times.find((t) => t.what === 'hours')?.value;
+  const m = range && /^(\d{1,2})(?:[:.](\d\d))?\s*([ap]m)?\s+to\s+(\d{1,2})(?:[:.](\d\d))?\s*([ap]m)?$/i.exec(range);
+  if (!m) return null;
+  const to24 = (h, ap, other) => { let x = +h; if (/pm/i.test(ap ?? '') && x < 12) x += 12; if (!ap && other != null && x < other) x += 12; return x; };
+  const h1 = to24(m[1], m[3], null), h2 = to24(m[4], m[6], h1);
+  const fmt = (h, mm) => `${String(h).padStart(2, '0')}:${mm ?? '00'}`;
+  const idx = (d) => DAYS.findIndex((x) => d.startsWith(x)) + 1;
+  const open = new Set();
+  for (const part of facts.days.split(/\s*(?:,|and)\s*/)) {
+    const [a, b] = part.split(/\s*(?:to|-|–)\s*/).map(idx);
+    if (a && b) { for (let d = a; ; d = (d % 7) + 1) { open.add(d); if (d === b) break; } } else if (a) open.add(a);
+  }
+  return Object.fromEntries([1, 2, 3, 4, 5, 6, 7].map((d) => [d, open.has(d) ? `${fmt(h1, m[2])} to ${fmt(h2, m[5])}` : null]));
+}

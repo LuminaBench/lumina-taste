@@ -6,6 +6,7 @@
 //   node scripts/compose.mjs "landing page for an invoicing tool for freelancers"
 //   node scripts/compose.mjs "dark admin users table for a devtool" --framework react --project /abs/app
 //   node scripts/compose.mjs "pricing page" --type pricing --json
+//   node scripts/compose.mjs "home page for Kiln & Co, a pottery in Penryn" --brand-from ./logo.svg --project /abs/site --write
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
@@ -13,10 +14,10 @@ import { fileURLToPath } from 'node:url';
 import { search } from './lib/search-core.mjs';
 import { direct, sectionAttrs } from './lib/art-direction.mjs';
 import { planRhythm, orderSections, rhythmStrip, checkRhythm, STRIP_KEY, PROOF, CHROME } from '../engine/compose/rhythm.mjs';
-import { extractFacts, figuresFrom, heroCopy, askFor } from '../engine/compose/words.mjs';
+import { extractFacts, figuresFrom, heroCopy, askFor, openingHours } from '../engine/compose/words.mjs';
 import { boldIdea, colourName } from '../engine/compose/idea.mjs';
 import { brandFrom } from '../engine/compose/brand.mjs';
-import { splitMain, joinMain, idOfBlock, applyBeat, applyHeroCopy, heroIdeaPanel, setHeroVisual, setFacts, applyMediaIdea, applyClose, ideaComment, esc } from '../engine/compose/draft.mjs';
+import { splitMain, joinMain, idOfBlock, applyBeat, applyHeroCopy, heroIdeaPanel, setHeroVisual, setFacts, applyMediaIdea, applyClose, applyHours, ideaComment, esc } from '../engine/compose/draft.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -31,8 +32,8 @@ const brandSrc = opt('brand-from', null);
 const framework = opt('framework', 'static');
 const project = opt('project', '/abs/app');
 const brief = args.join(' ').trim();
-if (!brief && !forceType) {
-  console.error('Usage: node scripts/compose.mjs "<one-line brief>" [--type <page-type>] [--framework static|vanilla|react] [--project /abs/app] [--write] [--json]');
+if (!brief && !forceTypeRaw) {
+  console.error('Usage: node scripts/compose.mjs "<one-line brief>" [--type <page-type>] [--brand-from <#hex | logo.png|svg | site.html | url>] [--framework static|tailwind|next|vanilla|react] [--project /abs/app] [--write] [--json]');
   process.exit(2);
 }
 
@@ -270,7 +271,7 @@ const heroInvoice = type.kind === 'marketing' && domain?.id === 'finance' && ide
 const used = new Set();
 /** Figures from the brief not yet shown on the page (each figure is shown once). */
 const figuresLeft = (also = []) => { for (const a of also) used.add(a); const left = figures.filter((f) => !used.has(f.value) && !String(hero.headline ?? '').includes(f.value)); return left; };
-const mediaHeadline = () => (facts.claims[1] ? `${facts.claims[1][0].toUpperCase()}${facts.claims[1].slice(1)}, on its own.` : null);
+const mediaHeadline = () => (facts.claims[1] ? `${facts.claims[1][0].toUpperCase()}${facts.claims[1].slice(1)}.` : null);
 let sampleAction = null;
 function subjectHero(html, id) {
   sampleAction = /<a class="lt-btn"[^>]*data-variant="primary"[^>]*>([^<]+)</.exec(html)?.[1]?.trim() ?? null;
@@ -318,6 +319,7 @@ function retitle(page) {
   if (desc) out = out.replace(/<meta name="description" content="[^"]*">/, `<meta name="description" content="${esc(desc.endsWith('.') ? desc : `${desc}.`)}">`);
   return out;
 }
+const hours = openingHours(facts);
 const withBeat = (html, n) => { const b = rhythm.beats.find((x) => x.n === n); return b ? applyBeat(html, b) : html; };
 
 // ---------------------------------------------------------------- --write: a composed first draft
@@ -349,6 +351,7 @@ if (writeDraft) {
         if (i === 0) html = subjectHero(html, b.id);
         else if (b.id === 'stats-band') html = setFacts(html, figuresLeft(), { part: null });
         else if (b.id === 'cta-band' && i === bpRhythm.beats.length - 1) html = applyClose(html, closeCopy());
+        html = applyHours(html, hours);
         return { pre: c.pre, html };
       });
       parts.head += ideaComment(idea);
@@ -356,8 +359,8 @@ if (writeDraft) {
     }
     draft = { path, kind: 'blueprint', rhythm: bpRhythm ? { strip: rhythmStrip(bpRhythm), moved: bpRhythm.moved, broken: checkRhythm(bpRhythm) } : null };
   } else {
-    const SLUG = { 'feature-split': 'features', 'feature-grid': 'features', 'bento-grid': 'features', 'how-it-works': 'how', 'stats-band': 'figures', 'faq-section': 'questions', 'cta-band': 'start', 'pricing-tiers': 'pricing', 'offer-cards': 'range', 'visit-info': 'visit', 'booking-bar': 'book', 'contact-section': 'contact', 'team-grid': 'team', 'blog-grid': 'posts', 'project-grid': 'work', 'integrations-grid': 'integrations', 'code-block': 'code', 'terminal-window': 'quickstart', 'api-endpoint': 'api', 'description-list': 'details', 'comparison-table': 'compare', 'newsletter-signup': 'newsletter', 'sticky-story': 'story', 'showcase-tabs': 'examples' };
-    const LABEL = { features: 'Features', how: 'How it works', figures: 'In numbers', questions: 'Questions', pricing: 'Pricing', range: 'The range', visit: 'Visit', book: 'Book', contact: 'Contact', team: 'Team', posts: 'Writing', work: 'Work', integrations: 'Integrations', code: 'Code', quickstart: 'Quickstart', api: 'API', details: 'Details', compare: 'Compare', story: 'How it works', examples: 'Examples' };
+    const SLUG = { 'feature-split': 'features', 'feature-grid': 'features', 'bento-grid': 'features', 'how-it-works': 'how', 'stats-band': 'figures', 'faq-section': 'questions', 'cta-band': 'start', 'pricing-tiers': 'pricing', 'offer-cards': 'range', 'visit-info': 'visit', 'booking-bar': 'book', 'contact-section': 'contact', 'team-grid': 'team', 'blog-grid': 'posts', 'project-grid': 'work', 'integrations-grid': 'integrations', 'code-block': 'code', 'terminal-window': 'quickstart', 'api-endpoint': 'api', 'description-list': 'details', 'comparison-table': 'compare', 'newsletter-signup': 'newsletter', 'sticky-story': 'story', 'showcase-tabs': 'examples', 'media-band': 'product', 'scroll-statement': 'promise' };
+    const LABEL = { features: 'Features', how: 'How it works', figures: 'In numbers', questions: 'Questions', pricing: 'Pricing', range: 'The range', visit: 'Visit', book: 'Book', contact: 'Contact', team: 'Team', posts: 'Writing', work: 'Work', integrations: 'Integrations', code: 'Code', quickstart: 'Quickstart', api: 'API', details: 'Details', compare: 'Compare', story: 'How it works', examples: 'Examples', product: 'The product', promise: 'Our promise' };
     const isChrome = (id) => /^(navbar|footer|site-footer|floating-pill-nav|hide-on-scroll)/.test(id);
     const picked = sections.filter((x) => (x.id ? uiIds.has(x.id) : type.kind === 'marketing' && x.role && x.copy) && !(x.optional && PROOF.has(x.id))).map((x) => ({ ...x, id: x.id === 'navbar-mega' && (x.alt ?? []).includes('navbar-simple') ? 'navbar-simple' : x.id }));
     const ids = [...new Set([...picked.map((x) => x.id).filter(Boolean), 'button', ...(idea.place === 'hero-visual' || idea.place === 'media-band' ? ['art-panel'] : []), ...(heroInvoice ? ['invoice-sheet'] : [])])];
@@ -394,7 +397,8 @@ if (writeDraft) {
       if (hero) html = subjectHero(html, x.id);
       else if (x.id === 'media-band') html = idea.place === 'media-band' ? setFacts(applyMediaIdea(html, idea, mediaHeadline()), figuresLeft([idea.figure]), { min: 2 }) : setFacts(html, figuresLeft(), { min: 2 });
       else if (x.id === 'stats-band') html = setFacts(html, figuresLeft(), { part: null });
-      else if (x.id === 'cta-band' && x === picked.filter((y) => !y.id || !isChrome(y.id)).at(-1)) html = applyClose(html, closeCopy());
+      html = applyHours(html, hours);
+      if (x.id === 'cta-band' && x === picked.filter((y) => !y.id || !isChrome(y.id)).at(-1)) html = applyClose(html, closeCopy());
       if (slug && slug !== 'top' && !anchors.some((a) => a.slug === slug)) anchors.push({ slug, label: LABEL[slug] ?? x.role ?? slug });
       // The small label above the heading says what the plan calls this section, so the draft reads in the plan's order.
       if (!hero && x.role && !LABEL[slug]) html = html.replace(/(<(?:p|h2)[^>]*data-part="eyebrow"[^>]*>)[^<]*/, `$1${x.role}`);
@@ -406,7 +410,7 @@ if (writeDraft) {
     const li = links.map((a) => `<li><a href="#${a.slug}">${a.label}</a></li>`).join('');
 
     const pill = (html) => html.replace(/(<span data-part="hover"[^>]*><\/span>)[\s\S]*?(<a [^>]*data-part="cta")/, (m, hover, cta) => `${hover}\n  ${links.map((l, i) => `<a href="#${l.slug}"${i === 0 ? ' aria-current="true"' : ''}>${l.label}</a>`).join('\n  ')}\n  ${cta}`).replace(/<a href="#[^"]*"( data-part="cta")/, `<a href="${action}"$1`);
-    const footCols = (html) => html.replace(/(<nav data-part="cols"[^>]*>)[\s\S]*?(<\/nav>)/, (m, open, close) => `${open}\n      <div><h2>On this page</h2><ul>${anchors.slice(0, 5).map((a) => `<li><a href="#${a.slug}">${a.label}</a></li>`).join('')}</ul></div>\n      <div><h2>Legal</h2><ul><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>\n    ${close}`);
+    const footCols = (html) => html.replace(/(<nav data-part="cols"[^>]*>)[\s\S]*?(<\/nav>)/, (m, open, close) => `${open}\n      <div><h2>On this page</h2><ul>${anchors.filter((a) => `#${a.slug}` !== action).slice(0, 5).map((a) => `<li><a href="#${a.slug}">${a.label}</a></li>`).join('')}</ul></div>\n      <div><h2>Legal</h2><ul><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>\n    ${close}`);
     const chrome = (id) => footCols(pill(snippet(id))).replace(/<ul data-part="links">[\s\S]*?<\/ul>/, `<ul data-part="links">${li}</ul>`).replace(/(<div[^>]*data-part="panel"[^>]*>)<ul>[\s\S]*?<\/ul>/, `$1<ul>${li}</ul>`).replace(/href="#home"/g, 'href="#top"').replace(/href="#start"/g, `href="${action}"`).replace(/<a href="#signin"[^>]*>[^<]*<\/a>/g, '');
     const top = picked.filter((y) => /^(navbar|floating-pill-nav|hide-on-scroll)/.test(y.id ?? '')).map((y) => chrome(y.id)).join('\n');
     const foot = picked.filter((y) => /footer/.test(y.id ?? '')).map((y) => chrome(y.id)).join('\n');
