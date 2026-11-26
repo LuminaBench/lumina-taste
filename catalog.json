@@ -2540,7 +2540,7 @@
       "kind": "ui",
       "family": "data",
       "name": "Device frame",
-      "summary": "An outline browser window, desktop window, tablet or phone around a screenshot or live markup.",
+      "summary": "A laptop, phone, tablet, browser or desktop window around a screenshot or a live app screen built from the kit, drawn as a product shot: near-black bezel, metal band, real radii, a soft shadow.",
       "aliases": [
         "phone mockup",
         "browser mockup",
@@ -2548,10 +2548,14 @@
         "screenshot frame",
         "app window chrome",
         "laptop mockup",
-        "device mockup"
+        "device mockup",
+        "macbook mockup",
+        "product shot",
+        "app screenshot mockup",
+        "hero device"
       ],
       "pattern": "<figure> + <figcaption>",
-      "states": ["browser","window","phone","tablet"],
+      "states": ["laptop","phone","tablet","browser","window","live screen","screenshot"],
       "react": "DeviceFrame",
       "deps": [],
       "files": [
@@ -2637,7 +2641,7 @@
       "kind": "ui",
       "family": "data",
       "name": "Art panel",
-      "summary": "What stands in for a photograph until there is one: the thing's name set large on a tinted panel with one true fact. Variants: one large figure, the product's own colour, a keyline frame.",
+      "summary": "What stands in for a photograph until there is one: the thing's name set large on a tinted panel, with a flat spot illustration of the subject's own thing (a cup, a loaf, a crane, a document) on a disc, an arch or a floor. Variants: one large figure, the product's own colour, a keyline frame.",
       "aliases": [
         "image placeholder",
         "no photo",
@@ -2646,16 +2650,21 @@
         "photo slot",
         "cover panel",
         "poster card",
-        "media placeholder"
+        "media placeholder",
+        "spot illustration",
+        "illustration placeholder",
+        "subject illustration",
+        "flat illustration"
       ],
       "pattern": "<figure> + <figcaption>",
-      "states": ["accent","figure","framed","ink","plain","swatch","with a photograph"],
+      "states": ["accent","figure","framed","ink","plain","swatch","with a motif","with a photograph"],
       "react": "ArtPanel",
       "deps": [],
       "files": [
         "components/ui/data/art-panel/art-panel.css",
         "components/ui/data/art-panel/art-panel.html",
-        "components/ui/data/art-panel/art-panel.react.tsx"
+        "components/ui/data/art-panel/art-panel.react.tsx",
+        "components/ui/data/art-panel/art-panel.ts"
       ],
       "path": "components/ui/data/art-panel"
     },

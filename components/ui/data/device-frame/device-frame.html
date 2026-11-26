@@ -1,19 +1,72 @@
 <div class="lt-device-demo">
-  <figure class="lt-device" data-kind="browser">
-    <div data-part="bar" aria-hidden="true"><i></i><i></i><i></i><span data-part="url">app.halyard.io/reports</span></div>
-    <div data-part="screen" data-mock="report">
-      <p data-m="title">Revenue · this quarter</p>
-      <div data-m="kpis"><span>MRR<b>£248k</b></span><span>Net retention<b>118%</b></span><span>Churn<b>1.9%</b></span></div>
-      <svg data-m="chart" viewBox="0 0 600 150" preserveAspectRatio="none" aria-hidden="true"><path d="M0 118 C70 112 110 96 170 92 S290 70 350 62 S500 34 600 22 V150 H0Z" data-m="area"/><path d="M0 118 C70 112 110 96 170 92 S290 70 350 62 S500 34 600 22" fill="none"/></svg>
+  <figure class="lt-device" data-kind="laptop">
+    <div data-part="screen">
+      <div data-app="desktop" inert>
+        <aside data-a="side">
+          <p data-a="brand"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 15 10 3l7 12Z"/></svg>Halyard</p>
+          <p data-a="nav"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1Z"/></svg>Overview</p>
+          <p data-a="nav" aria-current="page"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg>Payouts</p>
+          <p data-a="nav"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-10Z"/><path d="M14 3.5v5h5"/></svg>Invoices</p>
+          <p data-a="nav"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.25"/><path d="M3 20a6 6 0 0 1 12 0M16 4.8a3.25 3.25 0 0 1 0 6.4M17.5 14.2A6 6 0 0 1 21 20"/></svg>Customers</p>
+          <p data-a="nav"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V4M4 20h16M8.5 16v-5M13 16V8M17.5 16v-3"/></svg>Reports</p>
+        </aside>
+        <div data-a="main">
+          <div data-a="top">
+            <div><p data-a="h">Payouts</p><p data-a="sub">1 April to 30 June</p></div>
+            <div class="lt-segmented" role="radiogroup" aria-label="Range"><button type="button" tabindex="-1" role="radio" aria-checked="false">Month</button><button type="button" tabindex="-1" role="radio" aria-checked="true">Quarter</button><button type="button" tabindex="-1" role="radio" aria-checked="false">Year</button></div>
+            <span class="lt-btn" data-variant="primary"><span data-part="label">Pay out now</span></span>
+          </div>
+          <div data-a="kpis">
+            <p data-a="kpi"><span>Paid out</span><b>£248,400</b><span class="lt-badge" data-tone="positive" data-dot>On schedule</span></p>
+            <p data-a="kpi"><span>Waiting to clear</span><b>£12,960</b><span class="lt-badge">4 invoices</span></p>
+            <p data-a="kpi"><span>Next payout</span><b>Fri 4 July</b><span class="lt-badge" data-tone="accent">Weekly</span></p>
+          </div>
+          <div data-a="card">
+            <p data-a="card-h"><b>Paid out each week</b><span>£k</span></p>
+            <svg data-a="chart" viewBox="0 0 800 200" preserveAspectRatio="none" aria-hidden="true"><path data-a="grid" d="M0 40H800M0 90H800M0 140H800"/><path data-a="area" d="M0 168 L62 160 L124 152 L186 156 L248 138 L310 130 L372 134 L434 112 L496 104 L558 92 L620 96 L682 70 L744 58 L800 48 V200 H0Z"/><path data-a="line" d="M0 168 L62 160 L124 152 L186 156 L248 138 L310 130 L372 134 L434 112 L496 104 L558 92 L620 96 L682 70 L744 58 L800 48"/></svg>
+            <p data-a="ticks"><span>Apr</span><span>May</span><span>Jun</span></p>
+          </div>
+          <table data-a="table">
+            <thead><tr><th>Customer</th><th>Invoice</th><th>Status</th><th>Amount</th></tr></thead>
+            <tbody>
+              <tr><td>Harbour &amp; Co</td><td>1042</td><td><span class="lt-badge" data-tone="positive">Paid</span></td><td>£2,400.00</td></tr>
+              <tr><td>Kestrel Labs</td><td>1041</td><td><span class="lt-badge" data-tone="positive">Paid</span></td><td>£1,640.00</td></tr>
+              <tr><td>Moss Studio</td><td>1039</td><td><span class="lt-badge" data-tone="warning">Clearing</span></td><td>£780.00</td></tr>
+              <tr><td>Juniper Press</td><td>1036</td><td><span class="lt-badge" data-tone="positive">Paid</span></td><td>£3,120.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-    <figcaption class="lt-visually-hidden">The quarterly revenue report in a browser window</figcaption>
+    <figcaption class="lt-visually-hidden">The payouts overview on a laptop: £248,400 paid out this quarter, a weekly chart and the latest invoices</figcaption>
   </figure>
   <figure class="lt-device" data-kind="phone">
-    <div data-part="screen" data-mock="phone">
-      <p data-m="status" aria-hidden="true"><span>9:41</span></p>
-      <p data-m="title">Today</p>
-      <div data-m="card"><span>Paid out this week</span><b>£4,820.00</b><em>3 invoices</em></div>
-      <ul data-m="rows"><li><span>Harbour &amp; Co</span><b>£2,400</b></li><li><span>Kestrel Labs</span><b>£1,640</b></li><li><span>Moss Studio</span><b>£780</b></li></ul>
+    <div data-part="screen">
+      <div data-app="phone" inert>
+        <p data-a="status"><span>9:41</span><svg viewBox="0 0 64 14" aria-hidden="true"><rect x="0" y="8" width="3.5" height="5" rx="1"/><rect x="5.5" y="5.5" width="3.5" height="7.5" rx="1"/><rect x="11" y="3" width="3.5" height="10" rx="1"/><rect x="16.5" y="0.5" width="3.5" height="12.5" rx="1"/><path d="M27 5.2a9 9 0 0 1 12 0M29.3 8a5.6 5.6 0 0 1 7.4 0M31.6 10.8a2.2 2.2 0 0 1 2.8 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="43.5" y="1" width="18" height="11" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".45"/><rect x="45.5" y="3" width="11" height="7" rx="2"/></svg></p>
+        <div data-a="head"><p data-a="title">Payouts</p><span data-a="round"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15ZM10 20.5a2 2 0 0 0 4 0"/></svg></span></div>
+        <div data-a="body">
+          <div class="lt-segmented" role="radiogroup" aria-label="Range"><button type="button" tabindex="-1" role="radio" aria-checked="true">Week</button><button type="button" tabindex="-1" role="radio" aria-checked="false">Month</button><button type="button" tabindex="-1" role="radio" aria-checked="false">Year</button></div>
+          <div data-a="hero">
+            <p data-a="label">Paid out this week</p>
+            <p data-a="big">£4,820<small>.00</small></p>
+            <p data-a="bars" aria-hidden="true"><i style="--h: 38"></i><i style="--h: 62"></i><i style="--h: 46"></i><i style="--h: 80"></i><i style="--h: 54"></i><i style="--h: 22"></i><i style="--h: 100" data-today></i></p>
+            <p data-a="days"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></p>
+          </div>
+          <ul data-a="list">
+            <li><span><b>Harbour &amp; Co</b><small>Invoice 1042</small></span><span><b>£2,400</b><span class="lt-badge" data-tone="positive">Paid</span></span></li>
+            <li><span><b>Kestrel Labs</b><small>Invoice 1041</small></span><span><b>£1,640</b><span class="lt-badge" data-tone="positive">Paid</span></span></li>
+            <li><span><b>Moss Studio</b><small>Invoice 1039</small></span><span><b>£780</b><span class="lt-badge" data-tone="warning">Clearing</span></span></li>
+          </ul>
+        </div>
+        <div data-a="cta"><span class="lt-btn" data-variant="primary"><span data-part="label">Pay out £4,820</span></span></div>
+        <nav class="lt-bottom-nav" aria-label="Sections">
+          <a><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1Z"/></svg><span>Home</span></a>
+          <a aria-current="page"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg><span>Payouts</span></a>
+          <a><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-10Z"/><path d="M14 3.5v5h5"/></svg><span>Invoices</span></a>
+          <a><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg><span>Settings</span></a>
+        </nav>
+      </div>
     </div>
     <figcaption class="lt-visually-hidden">The payouts screen on a phone</figcaption>
   </figure>

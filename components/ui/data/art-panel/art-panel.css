@@ -2,21 +2,21 @@
    large, one fact and an optional number. Put an <img> first inside it and the photo takes over; the type
    steps aside. data-shot holds the brief for whoever takes the picture. Never draw the product instead. */
 @scope (.lt-art) {
-  :scope { position: relative; isolation: isolate; display: grid; align-content: end; gap: 8px; margin: 0; aspect-ratio: var(--art-ratio, 4 / 5); padding: clamp(16px, 7cqi, 28px); border-radius: var(--radius-lg); background: color-mix(in oklab, var(--accent-solid) var(--art-tint, 7%), var(--bg-surface-2)); color: var(--text-primary); overflow: hidden; container-type: inline-size; }
+  :scope { --art-ground: color-mix(in oklab, var(--accent-solid) var(--art-tint, 7%), var(--bg-surface-2)); position: relative; isolation: isolate; display: grid; align-content: end; gap: 8px; margin: 0; aspect-ratio: var(--art-ratio, 4 / 5); padding: clamp(16px, 7cqi, 28px); border-radius: var(--radius-lg); background: var(--art-ground); color: var(--text-primary); overflow: hidden; container-type: inline-size; }
   :scope[data-ratio="1/1"] { --art-ratio: 1 / 1; }
   :scope[data-ratio="3/2"] { --art-ratio: 3 / 2; }
   :scope[data-ratio="16/9"] { --art-ratio: 16 / 9; }
   :scope[data-ratio="3/4"] { --art-ratio: 3 / 4; }
   :scope[data-ratio="5/4"] { --art-ratio: 5 / 4; }
   :scope[data-tone="accent"] { --art-tint: 16%; }
-  :scope[data-tone="ink"] { background: var(--text-primary); color: var(--bg-canvas); }
+  :scope[data-tone="ink"] { --art-ground: var(--text-primary); color: var(--bg-canvas); }
   :scope[data-tone="ink"] :is([data-part="fact"], [data-part="index"]) { color: color-mix(in oklab, var(--bg-canvas) 72%, var(--text-primary)); }
   [data-part="index"] { position: absolute; top: clamp(14px, 6cqi, 24px); left: clamp(16px, 7cqi, 28px); margin: 0; color: var(--text-secondary); font: 550 var(--text-ui-sm) var(--font-body); letter-spacing: 0; font-variant-numeric: tabular-nums; }
   [data-part="name"] { margin: 0; font-family: var(--font-display); font-size: clamp(1.5rem, 13cqi, 3.5rem); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); line-height: 1.04; text-wrap: balance; }
   [data-part="fact"] { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
   /* The thing has a colour of its own (a glaze, a paint, a fabric): style="--art: oklch(0.72 0.06 170)" makes the
      panel that colour. The type turns dark on a light colour and light on a dark one. */
-  :scope[data-tone="swatch"] { background: var(--art, var(--accent-solid)); color: var(--art-ink, var(--text-primary)); }
+  :scope[data-tone="swatch"] { --art-ground: var(--art, var(--accent-solid)); color: var(--art-ink, var(--text-primary)); }
   @supports (color: oklch(from red l c h)) { :scope[data-tone="swatch"] { --art-ink: oklch(from var(--art, var(--accent-solid)) clamp(0.16, (0.6 - l) * 1000, 0.98) 0.01 h); } }
   :scope[data-tone="swatch"] :is([data-part="fact"], [data-part="index"]) { color: inherit; }
   /* data-variant="figure": one number carries the panel ("20 min", "410", "£75"), with what it counts under it. */
@@ -31,8 +31,8 @@
   /* data-pattern: a bold shape behind the type, in the panel's own tones, so a stand-in is a composition, not a box.
      sun (one large disc), bands (two broad diagonal bands), steps (stacked blocks rising to the right), split
      (the panel halved in two tones). One pattern per set, or one per panel in a set of three at most. */
-  :scope[data-pattern] > :not(img, video, picture) { position: relative; z-index: 1; }
-  :scope[data-pattern] [data-part="index"] { position: absolute; }
+  :scope:is([data-pattern], :has(> [data-part="motif"])) > :not(img, video, picture, [data-part="motif"]) { position: relative; z-index: 1; }
+  :scope:is([data-pattern], :has(> [data-part="motif"])) > [data-part="index"] { position: absolute; }
   :scope[data-pattern]::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; --pa: color-mix(in oklab, currentColor 12%, transparent); --pb: color-mix(in oklab, var(--accent-solid) 34%, transparent); }
   :scope[data-tone="accent"][data-pattern]::before, :scope[data-tone="swatch"][data-pattern]::before { --pb: color-mix(in oklab, currentColor 16%, transparent); }
   :scope[data-tone="ink"][data-pattern]::before { --pa: color-mix(in oklab, currentColor 10%, transparent); --pb: color-mix(in oklab, var(--accent-solid) 70%, transparent); }
@@ -40,7 +40,28 @@
   :scope[data-pattern="bands"]::before { background: linear-gradient(118deg, transparent 0 46%, var(--pb) 46% 62%, transparent 62% 70%, var(--pa) 70% 86%, transparent 86%); }
   :scope[data-pattern="steps"]::before { background: linear-gradient(var(--pb), var(--pb)) 58% 100% / 14% 38% no-repeat, linear-gradient(var(--pb), var(--pb)) 74% 100% / 14% 56% no-repeat, linear-gradient(var(--pb), var(--pb)) 90% 100% / 14% 76% no-repeat, linear-gradient(var(--pa), var(--pa)) 42% 100% / 14% 24% no-repeat; }
   :scope[data-pattern="split"]::before { background: linear-gradient(90deg, transparent 0 58%, var(--pa) 58%); }
+  /* floor: the lower part in a second tone, for a motif that stands on something. */
+  :scope[data-pattern="floor"]::before { background: linear-gradient(transparent 0 58%, var(--pa) 58%); }
   :scope:has(> :is(img, video, picture))::before { content: none; }
+  /* data-motif: a spot illustration of the subject's own thing (a cup, a loaf, a crane, a document) from
+     art-panel.ts, set large in the upper right of the panel with the name under it. One stroke weight and the
+     panel's own tokens: ink lines, the accent and one pale tint. A photograph covers it. */
+  [data-part="motif"] { --mi: var(--text-primary); --ma: var(--accent-solid); --mb: color-mix(in oklab, var(--accent-solid) 16%, var(--bg-surface-1)); --mg: color-mix(in oklab, var(--accent-solid) 13%, var(--art-ground)); position: absolute; z-index: 0; top: 7%; right: 8%; height: 58%; max-width: 80%; aspect-ratio: 1; overflow: visible; pointer-events: none; }
+  :scope[data-tone="accent"] [data-part="motif"] { --mb: var(--bg-surface-1); --mg: color-mix(in oklab, var(--bg-surface-1) 42%, var(--art-ground)); }
+  :scope[data-tone="ink"] [data-part="motif"] { --mi: var(--bg-canvas); --ma: color-mix(in oklab, var(--accent-solid) 78%, var(--bg-canvas)); --mb: color-mix(in oklab, var(--bg-canvas) 16%, var(--text-primary)); --mg: color-mix(in oklab, var(--bg-canvas) 8%, var(--art-ground)); }
+  :scope[data-tone="swatch"] [data-part="motif"] { --mi: currentColor; --ma: color-mix(in oklab, currentColor 24%, var(--art-ground)); --mb: color-mix(in oklab, var(--art-ground) 55%, var(--art-ink, var(--bg-canvas))); --mg: color-mix(in oklab, currentColor 9%, var(--art-ground)); }
+  /* The ground behind the motif: a disc by default; data-pattern="arch" a niche that runs to the foot of the
+     panel; "floor" a lower band; "none" nothing. Drawn on the motif's own box, so it always sits behind it. */
+  :scope:not([data-pattern]) > [data-part="motif"], :scope[data-pattern="sun"] > [data-part="motif"] { background: radial-gradient(closest-side, var(--mg) 0 86%, transparent 86.5%); }
+  :scope[data-pattern="arch"] > [data-part="motif"] { background: var(--mg); border-radius: 50% 50% 0 0 / 50% 50% 0 0; box-shadow: 0 10cqi 0 var(--mg), 0 20cqi 0 var(--mg), 0 30cqi 0 var(--mg), 0 40cqi 0 var(--mg), 0 50cqi 0 var(--mg), 0 60cqi 0 var(--mg), 0 70cqi 0 var(--mg), 0 80cqi 0 var(--mg), 0 90cqi 0 var(--mg), 0 100cqi 0 var(--mg), 0 110cqi 0 var(--mg); }
+  :scope:has(> [data-part="motif"]):is([data-pattern="sun"], [data-pattern="arch"])::before { content: none; }
+  [data-part="motif"] [data-m="a"] { fill: var(--ma); }
+  [data-part="motif"] [data-m="b"] { fill: var(--mb); }
+  [data-part="motif"] [data-m="cut"] { fill: var(--art-ground); }
+  [data-part="motif"] [data-m="dot"] { fill: var(--mi); }
+  [data-part="motif"] :is([data-m="ink"], [data-m="sil"]) { fill: none; stroke: var(--mi); stroke-width: var(--motif-stroke, 3); stroke-linecap: round; stroke-linejoin: round; }
+  [data-part="motif"] [data-m="sil"] { stroke-width: calc(var(--motif-stroke, 3) * 2); }
+  :scope:has(> :is(img, video, picture)) > [data-part="motif"] { display: none; }
   /* With a photograph: it fills the frame and the placeholder type is hidden (the caption still describes it). */
   img, video, picture { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
 }

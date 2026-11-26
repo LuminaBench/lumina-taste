@@ -1387,9 +1387,9 @@
     {
       "id": "device-frame",
       "name": "Device frame",
-      "summary": "An outline browser window, desktop window, tablet or phone around a screenshot or live markup.",
+      "summary": "A laptop, phone, tablet, browser or desktop window around a screenshot or a live app screen built from the kit, drawn as a product shot: near-black bezel, metal band, real radii, a soft shadow.",
       "pattern": "<figure> + <figcaption>",
-      "states": ["browser","window","phone","tablet"],
+      "states": ["laptop","phone","tablet","browser","window","live screen","screenshot"],
       "aliases": [
         "phone mockup",
         "browser mockup",
@@ -1397,46 +1397,56 @@
         "screenshot frame",
         "app window chrome",
         "laptop mockup",
-        "device mockup"
+        "device mockup",
+        "macbook mockup",
+        "product shot",
+        "app screenshot mockup",
+        "hero device"
       ],
       "react": "DeviceFrame",
-      "api": "data-kind · --device-w",
+      "api": "data-kind=\"laptop|phone|tablet|browser|window\" · --device-w · [data-app=\"phone|desktop\"] · <img> screenshot",
       "w": 900,
       "preview": [],
       "called": [
         "a phone with my app screen in it",
         "fake browser window around a screenshot",
         "the three dots window frame",
-        "app preview on a phone"
+        "app preview on a phone",
+        "laptop and phone showing the app",
+        "a premium product shot of the dashboard"
       ],
       "anatomy": [
         {
-          "sel": "[data-kind=\"browser\"] [data-part=\"bar\"]",
-          "name": "Window bar",
-          "api": "aria-hidden",
-          "text": "Three quiet dots and an address pill; decoration only."
+          "sel": "[data-kind=\"laptop\"] [data-part=\"screen\"]",
+          "name": "Laptop lid",
+          "api": "data-kind=\"laptop\"",
+          "text": "A 16 / 10 screen in a thin near-black bezel with a camera dot, on a wider aluminium base with a thumb notch."
         },
         {
-          "sel": "[data-kind=\"browser\"] [data-part=\"screen\"]",
-          "name": "Screen",
-          "api": "",
-          "text": "An <img>, a <video> or live markup. Clipped to the frame."
+          "sel": "[data-kind=\"laptop\"] [data-app=\"desktop\"]",
+          "name": "Live screen",
+          "api": "[data-app] inert",
+          "text": "An app built from the kit's own parts at its real width (1280 or 390 px), zoomed to fit the screen. inert: it is a picture, not controls."
         },
         {
           "sel": "[data-kind=\"phone\"]",
           "name": "Phone",
-          "api": "data-kind=\"phone\"",
-          "text": "9 / 19.5 with a camera pill; width from --device-w."
+          "api": "data-kind=\"phone\" · --device-w",
+          "text": "9 / 19.5 with a metal band, a bezel, the island and side buttons; width from --device-w."
         }
       ],
-      "prompt": "Add a device frame: a <figure> that draws an outline device around its screen. data-kind=\"browser\" has a 36px bar with three small neutral dots and a centred mono address pill; \"window\" shows a centred title instead; \"phone\" is a 9 / 19.5 frame with 42px corners, a 7px rim and a camera pill; \"tablet\" is 4 / 3. The frame is a hairline border on a surface colour, not a photoreal bezel, and takes a small shadow. The screen holds an <img>, <video> or live markup and clips it. Give the figure a visually hidden <figcaption> that says what the screen shows. Never put coloured traffic-light dots on the bar.",
-      "debug": "Debug my device frame. Rule out: a screenshot stretched instead of cropped (object-fit: cover, top aligned); red, yellow and green window dots; a phone wider than its column on mobile; a photoreal bezel image that fights the theme; no text alternative for the screen. The symptom:",
+      "prompt": "Add a device frame: a <figure class=\"lt-device\"> that draws the product as a shot, not a wireframe. data-kind=\"laptop\" is a 16 / 10 screen in a thin near-black bezel (with a camera dot) above a wider aluminium base with a thumb notch; \"phone\" is 9 / 19.5 with a 2.5px metal band, an 8px near-black bezel, 48px outer corners, the island and side buttons; \"tablet\" is 4 / 3; \"browser\" and \"window\" keep a 36px bar with three quiet dots and an address pill or title. The shadow is soft and layered, never one heavy blur. The screen holds a real screenshot <img> (object-fit: cover, top) or a live screen: a <div data-app=\"phone\"> (390px wide) or <div data-app=\"desktop\"> (1280px) built from the kit's own parts (segmented control, badges, primary button, bottom nav, a table, one chart) and zoomed to fit with zoom: calc(100cqi / 390px). Mark the live screen inert and give the figure a visually hidden <figcaption> that says what the screen shows. Never coloured traffic-light dots, never a photoreal bezel image.",
+      "debug": "Debug my device frame. Rule out: a screenshot stretched instead of cropped (object-fit: cover, top aligned); a live screen drawn at the frame's size instead of the device's (tiny type, or controls at desktop size inside a phone: use [data-app] and its zoom); focusable buttons inside the picture (inert); red, yellow and green window dots; a phone wider than its column on mobile; one heavy blurred shadow; no text alternative for the screen. The symptom:",
       "code": [
-        ["HTML","<figure data-kind> + <figcaption>",""],
+        [
+          "HTML",
+          "<figure class=\"lt-device\" data-kind=\"laptop\"><div data-part=\"screen\"><div data-app=\"desktop\" inert>",
+          ""
+        ],
         ["lumina-taste","<DeviceFrame kind url label>","React"]
       ],
       "added": 12,
-      "note": "One device is enough on a page: copy a single <figure class=\"lt-device\"> (the outer .lt-device-demo only sets two side by side in the gallery). The small mock inside ([data-mock]) is styled wherever the device is; replace it with a real screenshot <img> or your own markup when you have one."
+      "note": "One product shot is enough on a page: a laptop with the phone in front of its corner (the .lt-device-demo wrapper does that), or one device alone. Put the real screenshot in the screen as an <img> when there is one; until then the live screen ([data-app=\"desktop\"] or [data-app=\"phone\"]) shows the product with the kit's own parts and your real words and numbers. It is drawn at the device's own width and zoomed, so it looks right at any size; keep it inert. --device-w sets a phone's or tablet's width."
     },
     {
       "id": "api-endpoint",
@@ -1584,9 +1594,9 @@
     {
       "id": "art-panel",
       "name": "Art panel",
-      "summary": "What stands in for a photograph until there is one: the thing's name set large on a tinted panel with one true fact. Variants: one large figure, the product's own colour, a keyline frame.",
+      "summary": "What stands in for a photograph until there is one: the thing's name set large on a tinted panel, with a flat spot illustration of the subject's own thing (a cup, a loaf, a crane, a document) on a disc, an arch or a floor. Variants: one large figure, the product's own colour, a keyline frame.",
       "pattern": "<figure> + <figcaption>",
-      "states": ["accent","figure","framed","ink","plain","swatch","with a photograph"],
+      "states": ["accent","figure","framed","ink","plain","swatch","with a motif","with a photograph"],
       "aliases": [
         "image placeholder",
         "no photo",
@@ -1595,17 +1605,29 @@
         "photo slot",
         "cover panel",
         "poster card",
-        "media placeholder"
+        "media placeholder",
+        "spot illustration",
+        "illustration placeholder",
+        "subject illustration",
+        "flat illustration"
       ],
       "react": "ArtPanel",
-      "api": "data-tone=\"accent|ink|swatch\" · data-variant=\"figure\" · data-frame · data-ratio · data-shot",
+      "api": "data-motif=\"cup|loaf|crane|document|scales|leaf|phone|chart|key|ticket|tool|house|tooth|bowl|scissors|book|vase|bag\" · data-pattern=\"sun|arch|floor|none\" · data-tone=\"accent|ink|swatch\" · data-variant=\"figure\" · data-frame · data-ratio · data-shot",
       "w": 900,
       "called": [
         "what do I put where the photo goes",
         "nice placeholder for a product picture",
-        "card with just the name in big letters"
+        "card with just the name in big letters",
+        "a little drawing of a coffee cup instead of a photo",
+        "illustration of what the business does"
       ],
       "anatomy": [
+        {
+          "sel": ".lt-art:first-child [data-part=\"motif\"]",
+          "name": "Motif",
+          "api": "data-motif",
+          "text": "A flat drawing of the subject's own thing: one stroke weight, ink, the accent and one pale tint, on a disc (or data-pattern=\"arch\" / \"floor\"). Decoration: aria-hidden."
+        },
         {
           "sel": ".lt-art:first-child [data-part=\"name\"]",
           "name": "Name",
@@ -1619,26 +1641,20 @@
           "text": "Origin, size, date: something true and specific."
         },
         {
-          "sel": ".lt-art:first-child [data-part=\"index\"]",
-          "name": "Index",
-          "api": "optional",
-          "text": "A number when the panels form a set."
-        },
-        {
           "sel": ".lt-art[data-tone=\"ink\"]",
           "name": "Tones",
           "api": "data-tone=\"accent | ink\"",
           "text": "Vary the tone across a set so three panels do not read as three grey boxes."
         }
       ],
-      "prompt": "When a page needs a picture and there is no photograph, use an art panel, never a grey box, a stock photo or a drawing of the product. It is a <figure> with a fixed aspect ratio (4:5 by default), a surface tinted 7% with the accent, the name of the thing set large in display type at the bottom left, one true fact under it, and an optional small mono index number at the top. Add a quiet backdrop (ruled lines, dots or grain) if the panel is large. Vary the tone across a set (plain, accent, ink). Write the photo brief in data-shot (\"bottle on pale stone, soft side light, 4:5\") so the owner knows what to shoot, and a visually hidden figcaption that says what it shows. When a photo exists, put the <img> first inside the figure: it covers the panel.",
-      "debug": "Debug my image area. Rule out: an empty grey rectangle; a hand-drawn SVG of the product; a stock photo that is not the product; type that does not scale with the panel (use container units); three identical panels in a row; no text alternative; a made-up fact. The symptom:",
+      "prompt": "When a page needs a picture and there is no photograph, use an art panel, never a grey box, a stock photo or a detailed drawing of the product. It is a <figure> with a fixed aspect ratio (4:5 by default), a surface tinted 7% with the accent, the name of the thing set large in display type at the bottom left and one true fact under it. Above the name, set a spot illustration of the subject's own thing (a cup for a café, a crane for a builder, a document for a solicitor): an inline <svg data-part=\"motif\" viewBox=\"0 0 160 160\" aria-hidden=\"true\"> drawn flat and geometric, one round-capped stroke weight, in three token colours (ink, the accent, a pale tint), about 58% of the panel's height, in the upper right, on a soft disc in the panel's own tone. Vary the tone across a set (plain, accent, ink) and keep one ratio. Write the photo brief in data-shot (\"bottle on pale stone, soft side light, 4:5\") so the owner knows what to shoot, and a visually hidden figcaption that says what it shows. When a photo exists, put the <img> first inside the figure: it covers the panel and the drawing.",
+      "debug": "Debug my image area. Rule out: an empty grey rectangle; clip art or an emoji instead of a flat motif; a motif in colours that are not the theme's tokens; strokes of different weights; a drawing that covers the name; type that does not scale with the panel (use container units); three identical panels in a row; no text alternative; a made-up fact. The symptom:",
       "code": [
-        ["HTML","<figure class=\"lt-art\" data-shot=\"…\"><p data-part=\"name\">",""],
-        ["lumina-taste","<ArtPanel name fact label shot>","React"]
+        ["HTML","<figure class=\"lt-art\" data-motif=\"cup\" data-shot=\"…\"><svg data-part=\"motif\">",""],
+        ["lumina-taste","<ArtPanel name fact label shot motif pattern>","React"]
       ],
       "added": 13,
-      "note": "Make the panel say one true thing, large. For a hero, use data-frame and either the name or data-variant=\"figure\" with <p data-part=\"figure\">20<small>min</small></p>. If the thing has a colour of its own (a glaze, a paint, a brand colour), data-tone=\"swatch\" with style=\"--art: <colour>\" shows it; the type picks dark or light ink by itself. Across a set vary the tone (plain, accent, ink) and keep one ratio. When the photograph arrives, put the <img> first inside the figure."
+      "note": "Make the panel say one true thing, large, and show the subject's own thing above it: data-motif names one of 18 drawings (art-panel.ts lists them with their keywords; find-images --fill picks one from the brief when no photograph fits), and the inline <svg data-part=\"motif\"> carries it, so it works without JavaScript (data-lt=\"art-panel\" draws a missing one). data-pattern=\"arch\" sets it in a niche, \"floor\" on a ground band, \"none\" on the bare panel. For a hero, data-frame with the name, or data-variant=\"figure\" with the one number that matters. data-tone=\"swatch\" with style=\"--art: <colour>\" shows the thing's own colour. Across a set vary the tone (plain, accent, ink) and keep one ratio. When the photograph arrives, put the <img> first inside the figure."
     },
     {
       "id": "task-list",
