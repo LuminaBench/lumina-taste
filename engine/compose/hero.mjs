@@ -7,7 +7,7 @@
 import { esc, keepHyphens, setHeroVisual } from './draft.mjs';
 import { heroPicture, itemsFrom, thingPanel, isSoftware } from './bands.mjs';
 import { dateFrom, timetable } from './compositions.mjs';
-import { rankMotifs } from '../../scripts/lib/image-motifs.mjs';
+import { rankMotifs, loadMotifs } from '../../scripts/lib/image-motifs.mjs';
 
 const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 const words = (s) => String(s ?? '').replace(/<[^>]+>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
@@ -102,7 +102,7 @@ export function composeHero(comp, html, ctx) {
       if (own) used.add(own);
       // Else the subject's own kind of thing (a pottery's vase), never a drawing from another world.
       // Never an empty tile: the subject's own world (never the domain's: a coffee shop is not a clothes shop).
-      motifs.push(own ?? [ctx.facts.kind ?? '', it.name].map((q) => rankMotifs(q.toLowerCase().replace(/\bstudios?\b/g, '')).find((m) => m !== prev && !motifs.includes(m))).find(Boolean) ?? rankMotifs('').find((m) => m !== prev && !motifs.includes(m)) ?? null);
+      motifs.push(own ?? [ctx.facts.kind ?? '', it.name].map((q) => rankMotifs(q.toLowerCase().replace(/\bstudios?\b/g, '')).find((m) => m !== prev && !motifs.includes(m))).find(Boolean) ?? rankMotifs(`${ctx.facts.kind ?? ''} ${ctx.domainWords ?? ''}`).concat(Object.keys(loadMotifs())).find((m) => m !== prev && !motifs.includes(m)) ?? null);
     }
     const tiles = items.map((it, k) => `<li>${thingPanel({ ...it, price: null, meta: null }, ctx, tones[k], motifs[k])}</li>`);
     // The headline's length, so the mosaic can size it to stay in its corner.
