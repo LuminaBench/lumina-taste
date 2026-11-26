@@ -1,2 +1,6 @@
 .lt-services [data-part="lede"] a, .lt-visit [data-part="note"] a { color: var(--accent-text); text-underline-offset: 3px; }
 .lt-footer-min { padding-block: var(--space-6); }
+/* The hall, between the programme and the speakers: one wide picture so two sets of rows never meet. */
+.ev-hall .lt-art { --art-ratio: 21 / 9; }
+.ev-hall .lt-art [data-part="name"] { max-width: 16ch; font-size: clamp(1.75rem, 1rem + 3cqi, 3.25rem); }
+@media (max-width: 640px) { .ev-hall .lt-art { --art-ratio: 4 / 5; } }

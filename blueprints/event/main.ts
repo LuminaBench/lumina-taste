@@ -8,9 +8,11 @@ import '../../components/ui/blocks/pricing-tiers/pricing-tiers.css';
 import '../../components/ui/blocks/visit-info/visit-info.css';
 import '../../components/ui/blocks/faq-section/faq-section.css';
 import '../../components/ui/navigation/footer-minimal/footer-minimal.css';
+import '../../components/ui/data/art-panel/art-panel.css';
 import './page.css';
 import { enhance as navbar } from '../../components/ui/navigation/navbar-simple/navbar-simple';
 import { enhance as settle } from '../../components/ui/motion/number-settle/number-settle';
+import { enhance as art } from '../../components/ui/data/art-panel/art-panel';
 
-// The hero's three true figures settle into place once (data-count); no scroll moment.
-boot({ 'number-settle': settle, 'navbar-simple': navbar });
+// One scroll moment: the hall picture settles in (data-zoom). The hero's three figures count once.
+boot({ 'number-settle': settle, 'art-panel': art, 'navbar-simple': navbar });
