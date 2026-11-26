@@ -28,7 +28,9 @@ const SKIP_NAMES = new Set(['node_modules', '.git', '.DS_Store', 'dist', 'genera
 export function resolveScripts(entries = ENTRY_SCRIPTS, base = root) {
   const seen = new Set();
   const missing = [];
-  const queue = [...entries];
+  // The engine is copied whole, but its modules import from scripts/ too: walk them as well.
+  const engineModules = (dir) => readdirSync(join(base, dir), { withFileTypes: true }).flatMap((d) => d.isDirectory() ? engineModules(join(dir, d.name)) : /\.mjs$/.test(d.name) ? [join(dir, d.name)] : []);
+  const queue = [...entries, ...(existsSync(join(base, 'engine')) ? engineModules('engine') : [])];
   while (queue.length) {
     const rel = queue.shift();
     if (seen.has(rel) || DEV_ONLY.has(rel)) continue;
@@ -45,12 +47,12 @@ export function resolveScripts(entries = ENTRY_SCRIPTS, base = root) {
       // Only module files: install-taste also holds import lines for code it writes into a project.
       if (s.includes('${') || !/\.(mjs|js)$/.test(s)) continue;
       const target = relative(base, resolve(dirname(abs), s));
-      if (target.startsWith('scripts/')) queue.push(target);
+      if (target.startsWith('scripts/') || target.startsWith('engine/')) queue.push(target);
     }
     // Scripts launched by path: join(root, 'scripts/x.mjs') and similar literals.
     for (const m of src.matchAll(/['"`](scripts\/[\w./-]+\.mjs)['"`]/g)) queue.push(m[1]);
   }
-  return { scripts: [...seen].sort(), missing: missing.filter((m) => !DEV_ONLY.has(m)) };
+  return { scripts: [...seen].filter((f) => f.startsWith('scripts/')).sort(), missing: missing.filter((m) => !DEV_ONLY.has(m)) };
 }
 
 function size(p) {
