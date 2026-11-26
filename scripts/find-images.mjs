@@ -26,7 +26,7 @@ import { tmpdir } from 'node:os';
 import { basename, dirname, extname, join, relative, resolve } from 'node:path';
 import { GRADES, paletteColours, parseFocus, parseRatio, treatImages, WIDTHS } from './lib/image-treat.mjs';
 import { imgTag, onFirstScreen, writeCredits } from './lib/image-html.mjs';
-import { motifSvg, pickMotif } from './lib/image-motifs.mjs';
+import { motifSvg, rankMotifs } from './lib/image-motifs.mjs';
 import { imageSize } from './lib/image-size.mjs';
 
 const args = process.argv.slice(2);
@@ -310,6 +310,23 @@ const results = items.length ? await finish(items.map(([, v]) => ({ ...v, focus:
 const byIndex = new Map(items.map(([idx], i) => [idx, results[i]]));
 const firstIdx = Math.min(...[...byIndex.keys()].filter((i) => onFirstScreen(html, i)), Infinity);
 
+// Motifs for the panels that stay drawn, in page order: the best match for each brief, a different one from its
+// neighbours where the brief allows, and a different ground when a drawing repeats.
+const drawnPlan = new Map();
+{
+  const usedMotifs = [];
+  for (const m of empty) {
+    if (byIndex.has(m.index) || noMotif || dry) continue;
+    const named = /data-motif="([\w-]+)"/.exec(m[0])?.[1];
+    const ranked = named ? [named] : rankMotifs(`${shotOf(m)} ${subject}`);
+    const motif = ranked.find((n) => !usedMotifs.includes(n)) ?? ranked[0];
+    if (!motif) continue;
+    const repeat = usedMotifs.filter((n) => n === motif).length;
+    usedMotifs.push(motif);
+    drawnPlan.set(m.index, { motif, named: !!named, pattern: !named && repeat && !/data-pattern=/.test(m[0]) ? ['arch', 'floor', 'sun'][(repeat - 1) % 3] : null });
+  }
+}
+
 let filled = 0, drawn = 0;
 for (const m of [...empty].reverse()) { // from the end, so earlier offsets stay valid
   const start = m.index, openEnd = m.index + m[0].length;
@@ -326,12 +343,11 @@ for (const m of [...empty].reverse()) { // from the end, so earlier offsets stay
     continue;
   }
   // No photograph: keep the art panel, drawn from the subject's own things.
-  if (noMotif || dry) continue;
+  const plan = drawnPlan.get(start);
+  if (!plan) continue;
   const has = /<svg data-part="motif"/.test(inner(m));
-  const named = /data-motif="([\w-]+)"/.exec(m[0])?.[1];
-  const motif = named ?? pickMotif(`${shot} ${subject}`);
-  if (!motif) continue;
-  const tag = named ? m[0] : m[0].replace(/>$/, ` data-motif="${motif}">`);
+  const { motif } = plan;
+  const tag = plan.named ? m[0] : m[0].replace(/>$/, ` data-motif="${motif}"${plan.pattern ? ` data-pattern="${plan.pattern}"` : ''}>`);
   html = html.slice(0, start) + tag + (has ? '' : `\n  ${motifSvg(motif)}`) + html.slice(openEnd);
   if (!has) { drawn++; console.log(`Drew “${motif}” in the panel for “${(shot || 'no brief').slice(0, 50)}”.`); }
 }

@@ -122,10 +122,10 @@
 /* Preview frame: not part of the component. A laptop with the phone in front of its right corner. */
 .lt-device-demo { container-type: inline-size; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; width: 100%; padding: 8px 0 24px; }
 .lt-device-demo > .lt-device[data-kind="laptop"] { grid-area: 1 / 1 / 2 / 3; width: 84%; }
-.lt-device-demo > .lt-device[data-kind="phone"] { grid-area: 1 / 2; z-index: 1; width: 24cqi; margin-bottom: -12px; }
-@container (max-width: 620px) {
+.lt-device-demo > .lt-device[data-kind="phone"] { grid-area: 1 / 2; z-index: 1; width: 22cqi; margin-bottom: -12px; }
+@container (max-width: 520px) {
   .lt-device-demo > .lt-device[data-kind="laptop"] { width: 100%; }
-  .lt-device-demo > .lt-device[data-kind="phone"] { width: 44cqi; justify-self: end; margin: -40cqi 3cqi 0 0; grid-area: 2 / 1 / 3 / 3; }
+  .lt-device-demo > .lt-device[data-kind="phone"] { width: 34cqi; justify-self: end; margin: -30cqi 4cqi 0 0; grid-area: 2 / 1 / 3 / 3; }
 }
 
 /* Earlier sample screens ([data-mock]): kept so pages built with them still render. */

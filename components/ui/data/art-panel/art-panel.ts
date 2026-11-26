@@ -30,17 +30,20 @@ export const MOTIFS: Record<string, readonly [string, string]> = {
   scissors: ['salon hair hairdresser hairdressing barber barbers beauty stylist tailor tailoring sewing alterations craft crafts haberdashery spa', '<path data-m="b" d="M60 100L104 20L112 24L72 104Z"/><path data-m="b" d="M100 100L56 20L48 24L88 104Z"/><circle data-m="a" cx="54" cy="116" r="18"/><circle data-m="a" cx="106" cy="116" r="18"/><circle data-m="cut" cx="54" cy="116" r="8"/><circle data-m="cut" cx="106" cy="116" r="8"/><g data-m="ink"><path d="M60 100L104 20L112 24L72 104M100 100L56 20L48 24L88 104"/><circle cx="54" cy="116" r="18"/><circle cx="106" cy="116" r="18"/><circle cx="54" cy="116" r="8"/><circle cx="106" cy="116" r="8"/></g><circle data-m="dot" cx="80" cy="70" r="4"/>'],
   book: ['book books bookshop bookstore library publisher publishing school tutor tutoring tuition course courses learning education teacher teaching reading author writer university college', '<path data-m="a" d="M14 50V130C40 124 62 128 80 138C98 128 120 124 146 130V50Z"/><path data-m="b" d="M80 46C64 36 42 34 22 38V120C42 116 64 120 80 130Z"/><path data-m="b" d="M80 46C96 36 118 34 138 38V120C118 116 96 120 80 130Z"/><g data-m="ink"><path d="M14 50V130C40 124 62 128 80 138C98 128 120 124 146 130V50"/><path d="M80 46C64 36 42 34 22 38V120C42 116 64 120 80 130ZM80 46C96 36 118 34 138 38V120C118 116 96 120 80 130Z"/><path d="M34 56C46 54 58 56 68 62M34 72C46 70 58 72 68 78M34 88C46 86 58 88 68 94M92 62C102 56 114 54 126 56M92 78C102 72 114 70 126 72"/></g>'],
   vase: ['pottery potter ceramics ceramic ceramicist stoneware porcelain kiln glaze glazes vase vases jug studio crockery tableware', '<ellipse data-m="b" cx="80" cy="140" rx="44" ry="6"/><path data-m="a" d="M60 22H100V32C100 42 92 44 92 52C116 64 126 86 120 108C116 126 102 138 80 138C58 138 44 126 40 108C34 86 44 64 68 52C68 44 60 42 60 32Z"/><path data-m="b" d="M38 86H122L121 100H39Z"/><g data-m="ink"><path d="M60 22H100V32C100 42 92 44 92 52C116 64 126 86 120 108C116 126 102 138 80 138C58 138 44 126 40 108C34 86 44 64 68 52C68 44 60 42 60 32Z"/><path d="M60 32H100M38 86H122M39 100H121"/></g>'],
-  bag: ['shop shops store retail boutique fashion clothing clothes gift gifts market shopping brand goods homeware maker makers candle candles skincare jewellery', '<path data-m="a" d="M32 56H128L136 142H24Z"/><path data-m="b" d="M30 74H130L131 86H29Z"/><g data-m="ink"><path d="M32 56H128L136 142H24Z"/><path d="M58 56V44A22 22 0 0 1 102 44V56"/></g><circle data-m="dot" cx="58" cy="66" r="3.5"/><circle data-m="dot" cx="102" cy="66" r="3.5"/>'],
+  bag: ['bag bags packet parcel shop shops store retail boutique fashion clothing clothes gift gifts market shopping brand goods homeware maker makers candle candles skincare jewellery', '<path data-m="a" d="M32 56H128L136 142H24Z"/><path data-m="b" d="M30 74H130L131 86H29Z"/><g data-m="ink"><path d="M32 56H128L136 142H24Z"/><path d="M58 56V44A22 22 0 0 1 102 44V56"/></g><circle data-m="dot" cx="58" cy="66" r="3.5"/><circle data-m="dot" cx="102" cy="66" r="3.5"/>'],
 };
 
 export type MotifName = keyof typeof MOTIFS;
 
+// Words that mean something else beside their neighbour: a "house blend" is coffee, a "key lime" is a pie.
+const NOT = /\b(house (blend|wine|special|music|plant|party|style|red|white)|key (lime|lime pie|points?|facts?|dates?)|book (now|online|a|your|today)|chart (topping)|ticket (price|prices)|tool ?kit|phone (number|call|us))\b/g;
+
 /** The motif whose keywords best match a brief ("bag of Huila beans on a counter", "law office"), or null. */
 export function pickMotif(text: string): string | null {
-  const words = text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').split(/[^a-z]+/).filter((w) => w.length > 2);
+  const words = `${text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')} `.replace(NOT, (m) => m.replace(/^\w+ /, '_ ')).split(/[^a-z]+/).filter((w) => w.length > 2);
   let best: string | null = null, score = 0;
   for (const [name, [keys]] of Object.entries(MOTIFS)) {
-    const list = keys.normalize('NFD').replace(/[̀-ͯ]/g, '').split(' ');
+    const list = keys.normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(' ');
     // Earlier words in the brief count more: the subject usually comes first.
     const s = words.reduce((acc, w, i) => acc + (list.some((k) => k === w || (k.length > 3 && w.startsWith(k)) || (w.length > 3 && k.startsWith(w) && k.length - w.length <= 2)) ? 1 / (1 + i * 0.08) : 0), 0);
     if (s > score) { score = s; best = name; }
@@ -54,13 +57,15 @@ export function motifSvg(name: string): string {
   return m ? `<svg data-part="motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false">${m[1]}</svg>` : '';
 }
 
-/** data-lt="art-panel": draws the panel's data-motif when the markup does not carry it yet. */
+/** data-lt="art-panel": draws the panel's data-motif (or, with data-motif="auto", the one its data-shot names) when the markup does not carry it yet. */
 export function enhance(root: HTMLElement): Cleanup {
   const panels = root.matches('.lt-art') ? [root] : [...root.querySelectorAll<HTMLElement>('.lt-art')];
   const added: Element[] = [];
   for (const el of panels) {
-    const name = el.dataset.motif;
+    let name = el.dataset.motif;
     if (!name || el.querySelector(':scope > [data-part="motif"], :scope > :is(img, picture, video)')) continue;
+    // data-motif="auto": the drawing that matches the photo brief.
+    if (name === 'auto') { name = pickMotif(el.dataset.shot ?? el.textContent ?? '') ?? ''; if (!name) continue; el.dataset.motif = name; }
     el.insertAdjacentHTML('afterbegin', motifSvg(name));
     if (el.firstElementChild?.matches('[data-part="motif"]')) added.push(el.firstElementChild);
   }

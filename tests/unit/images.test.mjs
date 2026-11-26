@@ -10,7 +10,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { deflateSync } from 'node:zlib';
 import { imageSize } from '../../scripts/lib/image-size.mjs';
-import { loadMotifs, motifSvg, pickMotif } from '../../scripts/lib/image-motifs.mjs';
+import { loadMotifs, motifSvg, pickMotif, rankMotifs } from '../../scripts/lib/image-motifs.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
@@ -186,7 +186,7 @@ test('motifs: one table for the component and the scripts, chosen from the brief
   assert.equal(pickMotif('coffee shop'), 'cup');
   assert.equal(pickMotif('construction site'), 'crane');
   assert.ok(['document', 'scales'].includes(pickMotif('law office')));
-  assert.equal(pickMotif('Bag of Huila beans on a wooden counter'), 'cup');
+  assert.deepEqual(rankMotifs('Bag of Huila beans on a wooden counter').slice(0, 2), ['bag', 'cup']);
   assert.equal(pickMotif('sourdough loaf on the bench'), 'loaf');
   assert.equal(pickMotif('the dental practice in Leith'), 'tooth');
   assert.equal(pickMotif('The kiln shed at dusk stoneware'), 'vase');

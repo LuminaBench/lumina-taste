@@ -15,18 +15,26 @@ export function loadMotifs() {
   return cache;
 }
 
-const fold = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+// Words that mean something else beside their neighbour: a "house blend" is coffee, a "key lime" is a pie.
+const NOT = /\b(house (blend|wine|special|music|plant|party|style|red|white)|key (lime|lime pie|points?|facts?|dates?)|book (now|online|a|your|today)|chart (topping)|ticket (price|prices)|tool ?kit|phone (number|call|us))\b/g;
+const plainWords = (s) => `${s} `.replace(NOT, (m) => m.replace(/^\w+ /, '_ ')).split(/[^a-z]+/).filter((w) => w.length > 2);
+const fold = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-/** The motif whose keywords best match a brief, or null. Same rule as pickMotif() in art-panel.ts. */
-export function pickMotif(text) {
-  const words = fold(text).split(/[^a-z]+/).filter((w) => w.length > 2);
-  let best = null, score = 0;
+/** Motifs whose keywords match a brief, best first. Earlier words in the brief count more. */
+export function rankMotifs(text) {
+  const words = plainWords(fold(text));
+  const scored = [];
   for (const [name, { words: keys }] of Object.entries(loadMotifs())) {
     const list = keys.map(fold);
     const s = words.reduce((acc, w, i) => acc + (list.some((k) => k === w || (k.length > 3 && w.startsWith(k)) || (w.length > 3 && k.startsWith(w) && k.length - w.length <= 2)) ? 1 / (1 + i * 0.08) : 0), 0);
-    if (s > score) { score = s; best = name; }
+    if (s > 0) scored.push([name, s]);
   }
-  return best;
+  return scored.sort((a, b) => b[1] - a[1]).map(([n]) => n);
+}
+
+/** The motif whose keywords best match a brief, or null. Same rule as pickMotif() in art-panel.ts. */
+export function pickMotif(text) {
+  return rankMotifs(text)[0] ?? null;
 }
 
 /** The inline SVG the art panel expects as its first child. */
