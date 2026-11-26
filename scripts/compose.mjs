@@ -380,7 +380,7 @@ function chooseMoments(ordered, ctx) {
 }
 function writeComposed(dir, run) {
   const todo = [...hero.todo];
-  const ctx = { facts, figures, product, hero, idea, action: hero.action, hours, used, typeId: type.id, snippet: partHtml };
+  const ctx = { facts, figures, product, hero, idea, action: hero.action, hours, used, typeId: type.id, snippet: partHtml, domainWords: (domain?.words ?? []).join(' '), usedMotifs: new Set() };
   const bands = [];
   // The first screen: the kit's hero in the brief's words.
   const heroSec = sections.find((x) => /^hero-/.test(x.id ?? ''));

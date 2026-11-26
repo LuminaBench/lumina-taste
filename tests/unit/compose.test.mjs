@@ -458,7 +458,15 @@ test('every band a draft writes has something to look at; software shows itself;
       for (let i = 1; i < motifs.length; i++) if (motifs[i]) assert.notEqual(motifs[i], motifs[i - 1], `${slug}: neighbouring drawings`);
     }
     const saas = readFileSync(join(dir, 'saas', 'index.html'), 'utf8');
-    assert.match(saas, /<figure class="lt-device" data-kind="laptop">[\s\S]*?<div data-app="desktop" inert>[\s\S]*?<p data-a="brand">Tally<\/p>/, 'the product itself in the first screen');
+    assert.match(saas, /<figure class="lt-device" data-kind="laptop" data-audit-ignore>[\s\S]*?<div data-app="desktop" inert>[\s\S]*?<p data-a="brand">Tally<\/p>/, 'the product itself in the first screen');
+    // The screen is filled from the brief: its figures as KPIs, what it does as a list, its steps as a table.
+    const screen = saas.slice(saas.indexOf('<div data-app="desktop"'), saas.indexOf('</figure>', saas.indexOf('<div data-app="desktop"')));
+    assert.match(screen, /data-a="kpis"[\s\S]*£9[\s\S]*30 seconds/);
+    assert.match(screen, /<ul data-a="list"><li><span><b>Sends an invoice in 30 seconds<\/b>/);
+    assert.match(screen, /<table data-a="table">[\s\S]*Add a client[\s\S]*Get paid/);
+    for (const m of screen.matchAll(/£\d[\d,.]*/g)) assert.ok(BRIEFS.saas.includes(m[0]), `${m[0]} is the brief's`);
+    // The pinned scene uses phones: a laptop's screen is a thumbnail on a 390px screen.
+    assert.match(saas.slice(saas.indexOf('data-lt="sticky-story"')), /class="lt-device" data-kind="phone"/);
     assert.ok(!/Larkspur|Kestrel|Halyard|Invoice 0042/.test(saas), 'never the sample invoice');
     assert.match(saas, /data-lt="sticky-story"/, 'three steps and a product: the pinned scene');
     const builder = readFileSync(join(dir, 'builder', 'index.html'), 'utf8');
@@ -466,6 +474,13 @@ test('every band a draft writes has something to look at; software shows itself;
     assert.match(builder, /Also: House extensions, on a fixed-price quote\./);
     const thin = readFileSync(join(dir, 'thin', 'index.html'), 'utf8');
     assert.match(thin, /data-motif="tooth"/, 'a thin brief still shows the subject');
+    // Never the same drawing twice when the subject has another that fits.
+    const thinMotifs = [...thin.matchAll(/data-motif="([a-z]+)"/g)].map((m) => m[1]);
+    assert.equal(new Set(thinMotifs).size, thinMotifs.length, thinMotifs.join(' '));
+    // People are something to look at without faces: initials in a disc.
+    const sol = node([join(root, 'scripts/compose.mjs'), 'Website for Harrow & Finch, a law firm in Manchester, partners Ruth Harrow, Sam Finch and Priya Shah, settlement agreement review from £450', '--project', join(dir, 'sol'), '--write']);
+    assert.equal(sol.status, 0, sol.stderr);
+    assert.match(readFileSync(join(dir, 'sol', 'index.html'), 'utf8'), /<li><span data-part="avatar" data-n="0" style="border-radius: 50%" aria-hidden="true">RH<\/span><strong>Ruth Harrow<\/strong>/);
     // The bold idea's panel stays a dark object in both modes on a short page (the palette's own dark tokens).
     assert.match(readFileSync(join(dir, 'bakery', 'index.html'), 'utf8'), /<figure class="lt-art" data-variant="figure" data-tone="dark"/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
