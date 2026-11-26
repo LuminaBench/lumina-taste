@@ -179,22 +179,22 @@
       "original": {"width":2426,"height":1728}
     },
     {
-      "id": "aerial-road-interchange",
-      "shows": "A road interchange seen from above, roads looping through trees",
-      "shot": ["aerial","roads","network","flows","city","data"],
+      "id": "hands-tracing-route-map",
+      "shows": "Hands tracing a route across an old paper map",
+      "shot": ["map","route","tracing","analysis","paths","planning"],
       "orientation": "wide",
-      "tone": "cool",
+      "tone": "warm",
       "focus": {"x":0.5,"y":0.5},
-      "title": "Yan'an East Road Interchange, Shanghai, China (Unsplash)",
-      "creator": "Denys Nevozhai dnevozhai",
+      "title": "Treasure hunt map (Unsplash)",
+      "creator": "N. ellladee",
       "licence": "CC0 1.0",
       "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
       "provider": "wikimedia",
-      "page": "https://commons.wikimedia.org/wiki/File:Yan'an_East_Road_Interchange%2C_Shanghai%2C_China_(Unsplash).jpg",
-      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Yan%27an_East_Road_Interchange%2C_Shanghai%2C_China_%28Unsplash%29.jpg/1920px-Yan%27an_East_Road_Interchange%2C_Shanghai%2C_China_%28Unsplash%29.jpg",
+      "page": "https://commons.wikimedia.org/wiki/File:Treasure_hunt_map_(Unsplash).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Treasure_hunt_map_%28Unsplash%29.jpg/1920px-Treasure_hunt_map_%28Unsplash%29.jpg",
       "width": 1920,
-      "height": 1439,
-      "original": {"width":3992,"height":2992}
+      "height": 1280,
+      "original": {"width":5184,"height":3456}
     }
   ]
 }

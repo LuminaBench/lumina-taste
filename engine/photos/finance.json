@@ -163,22 +163,22 @@
       "original": {"width":5046,"height":3364}
     },
     {
-      "id": "laptop-notebook-camera-flat",
-      "shows": "A laptop, a notebook, a phone and a camera laid flat on a grey desk",
-      "shot": ["laptop","notebook","desk","flat lay","work","tools"],
+      "id": "white-desk-clock-papers",
+      "shows": "A white clock, a pen and papers on a white desk",
+      "shot": ["desk","paperwork","clock","calm","minimal","office"],
       "orientation": "wide",
-      "tone": "cool",
-      "focus": {"x":0.5,"y":0.5},
-      "title": "Laptop camera phone notebook (Unsplash)",
-      "creator": "Héctor Martínez oria_hector",
+      "tone": "light",
+      "focus": {"x":0.45,"y":0.5},
+      "title": "Warsaw, Poland (Unsplash vcPtHBqHnKk)",
+      "creator": "freestocks.org freestocks",
       "licence": "CC0 1.0",
       "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
       "provider": "wikimedia",
-      "page": "https://commons.wikimedia.org/wiki/File:Laptop_camera_phone_notebook_(Unsplash).jpg",
-      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Laptop_camera_phone_notebook_%28Unsplash%29.jpg/1920px-Laptop_camera_phone_notebook_%28Unsplash%29.jpg",
+      "page": "https://commons.wikimedia.org/wiki/File:Warsaw%2C_Poland_(Unsplash_vcPtHBqHnKk).jpg",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Warsaw%2C_Poland_%28Unsplash_vcPtHBqHnKk%29.jpg/1920px-Warsaw%2C_Poland_%28Unsplash_vcPtHBqHnKk%29.jpg",
       "width": 1920,
-      "height": 1545,
-      "original": {"width":4276,"height":3441}
+      "height": 1280,
+      "original": {"width":5418,"height":3612}
     },
     {
       "id": "white-desk-mug-pen",
