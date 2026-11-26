@@ -53,10 +53,10 @@ const lowerFirst = (s) => (/^[A-Z][a-z]/.test(s) && !DAYS.some((d) => s.startsWi
  */
 export function extractFacts(brief, { product = null } = {}) {
   const b = ` ${String(brief ?? '').replace(/\s+/g, ' ').trim()} `;
-  const facts = { brief: String(brief ?? '').trim(), name: product ?? null, kind: null, place: null, street: null, audience: null, prices: [], times: [], days: null, durations: [], counts: [], claims: [], offers: [], phone: null, email: null, postcode: null, building: null, people: [], steps: [], says: [] };
+  const facts = { brief: String(brief ?? '').trim(), name: product ?? null, kind: null, place: null, street: null, audience: null, prices: [], times: [], days: null, durations: [], counts: [], claims: [], offers: [], phone: null, email: null, postcode: null, building: null, people: [], steps: [], says: [], lists: [], records: [] };
 
   // The kind of business: "…, a sourdough bakery on Mill Lane" / "an invoicing tool for freelancers".
-  const kindM = /,\s+(?:an?|the)\s+([a-z][\w'’-]*(?:\s+[a-z][\w'’-]*){0,4}?)(?=\s+(?:on|in|at|for|that|which|who|with|near|building|making|selling|run|based|offering|open)\b|[,.;]|\s*$)/.exec(b)
+  const kindM = /,\s+(?:an?|the)\s+([a-z][\w'’-]*(?:\s+(?:[a-z][\w'’-]*|[A-Z]{2,4}s?)){0,4}?)(?=\s+(?:on|in|at|for|that|which|who|with|near|building|making|selling|run|based|offering|open)\b|[,.;]|\s*$)/.exec(b)
     ?? /\b(?:for|page for|site for|website for)\s+(?:an?|the)\s+([a-z][\w'’-]*(?:\s+[a-z][\w'’-]*){0,4}?)(?=\s+(?:on|in|at|for|that|which|who|with|near|building|making|selling|run|based|offering|open)\b|[,.;]|\s*$)/.exec(b);
   if (kindM) facts.kind = clean(kindM[1]);
 
@@ -93,7 +93,7 @@ export function extractFacts(brief, { product = null } = {}) {
   if (stepsM) {
     for (const part of stepsM[1].split(/,\s*(?:and\s+)?(?:then\s+)?|\s+then\s+/)) {
       const st = clean(part);
-      if (!st || /^(phone|call|tel|email|open|opens)\b/i.test(st) || /\d{4,}/.test(st)) break;
+      if (!st || (/^(phone|call|tel|email)\b/i.test(st) || /^opens?\s+(?:on|from|at|every|daily|monday|tuesday|wednesday|thursday|friday|saturday|sunday|\d)/i.test(st)) || /\d{4,}/.test(st)) break;
       facts.steps.push(st);
     }
     if (facts.steps.length < 2) facts.steps = [];
@@ -162,8 +162,56 @@ export function extractFacts(brief, { product = null } = {}) {
   // Offers: the things made or sold, after building/making/selling/offering.
   const offM = /\b(?:building|builds|making|makes|selling|sells|offering|offers|baking|bakes|serving|serves|repairing|installing|designing|teaching|running|runs)\s+(.+?)(?=,|[.;]|\s+(?:for|in|on|from|with|that)\s|$)/.exec(b);
   if (offM) for (const part of offM[1].split(/\s+and\s+|,\s*/)) { const o = clean(part); if (o && words(o).length <= 4) facts.offers.push(o); }
+  Object.assign(facts, listsFrom(b));
   return facts;
 }
+
+// ---------------------------------------------------------------- lists the brief spells out
+// "services: API, webhooks and the dashboard", "bookings with dog, owner, date and price", "tracks bookings,
+// clients and invoices". Pages that are not marketing (a status page, an admin list, a pricing table, a
+// checkout) are drawn from these: each item exactly as written, nothing added.
+const ITEM_STOP = /^(?:phone|tel|call|email|open|opens|opening|from|how it works|then|plus|each|every|which|that|who|it|they|we|you|our|one tier|one plan)\b/i;
+/** The items of a list that starts at `s`: short noun phrases joined by commas, "and" or "or". */
+export function readList(s, { prices = false, max = 12 } = {}) {
+  const stopAt = s.search(/[.;](?:\s|$)|\s[—–]\s|:\s/);
+  const seg = stopAt >= 0 ? s.slice(0, stopAt) : s;
+  const out = [];
+  // Split on commas (not inside "10,000"), "and", "or" and "/", remembering which joined each item: in
+  // "a, b and c, dishwasher safe" the list ends at "c", the item after the "and".
+  const parts = seg.split(/(,(?!\d{3})\s*(?:and\s+|or\s+)?|\s+and\s+|\s+or\s+|\s*\/\s*)/);
+  for (let i = 0; i < parts.length; i += 2) {
+    const t = clean(parts[i]).replace(/^(?:a|an|the|its|their|your)\s+/i, '');
+    if (!t || words(t).length > 5 || ITEM_STOP.test(t) || /\s(?:with|for|from|by|that|which)\s|\s(?:in|at|on)\s+[A-Z]/.test(` ${t} `) || /\d{4,}/.test(t) || (!prices && /[£$€]/.test(t)) || /@/.test(t)) break;
+    out.push(t);
+    if (out.length >= max || /\b(and|or)\b/.test(parts[i - 1] ?? '')) break;
+  }
+  return out;
+}
+const LIST_VERBS = 'about|tracks|track|tracking|manages|manage|managing|lists|list of|keeps|stores|records|covers|shows|showing|includes|include|including|organises|organizes|handles|schedules';
+function listsFrom(b) {
+  const lists = [], records = [];
+  // Labelled lists: "services: API, webhooks", "columns: dog, owner, date".
+  for (const m of b.matchAll(/\b([a-z][a-z-]*(?:\s+[a-z][a-z-]*)?)\s*:\s+/gi)) {
+    const label = m[1].toLowerCase().split(/\s+/).pop();
+    if (/^(works|steps|process|phone|tel|email|note|at)$/.test(label)) continue;
+    const items = readList(b.slice(m.index + m[0].length), { prices: /^(plans?|tiers?|items?|prices?|options?)$/.test(label) });
+    if (items.length >= 1) lists.push({ label, items, at: m.index });
+  }
+  // Lists after a verb: "tracks bookings, clients and invoices".
+  for (const m of b.matchAll(new RegExp(`\\b(${LIST_VERBS})\\s+(?!a\\s|an\\s|up\\s|to\\s)`, 'gi'))) {
+    const items = readList(b.slice(m.index + m[0].length));
+    if (items.length >= 2) lists.push({ label: m[1].toLowerCase().replace(/^(track|tracking)$/, 'tracks').replace(/^(manage|managing)$/, 'manages').replace(/^(include|including)$/, 'includes'), items, at: m.index });
+  }
+  // A record and its fields: "bookings with dog, owner, groomer, date and status".
+  for (const m of b.matchAll(/\b([a-z]+(?:\s+[a-z]+)?s)\s+(?:with|showing|by)\s+(?:their\s+|the\s+|columns?\s+|fields?\s+)?/gi)) {
+    const name = m[1].toLowerCase().split(/\s+/).filter((w) => !STOP.has(w) && !VERBS.test(w)).join(' ');
+    const fields = readList(b.slice(m.index + m[0].length));
+    if (name && fields.length >= 2) records.push({ name, fields, at: m.index });
+  }
+  return { lists, records };
+}
+/** The items of the first list whose label matches. */
+export const listOf = (facts, re) => facts.lists?.find((l) => re.test(l.label))?.items ?? [];
 
 /** Every figure in the facts, most specific first, as { value, label } pairs for a figures row. */
 export function figuresFrom(facts) {

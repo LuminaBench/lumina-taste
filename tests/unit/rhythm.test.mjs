@@ -27,8 +27,8 @@ function plan(type, domain = null, { draft = true, canInsert = true } = {}) {
   return { rhythm, shapes, ordered, art };
 }
 
-test('all 27 page types: the rhythm rules hold, with and without the optional sections', () => {
-  assert.equal(kb.pageTypes.length, 27);
+test('all 29 page types: the rhythm rules hold, with and without the optional sections', () => {
+  assert.equal(kb.pageTypes.length, 29);
   for (const type of kb.pageTypes) for (const draft of [true, false]) for (const domain of [null, ...kb.domains]) {
     const { rhythm, shapes } = plan(type, domain, { draft });
     assert.ok(rhythm.beats.length > 0, `${type.id}: no bands`);

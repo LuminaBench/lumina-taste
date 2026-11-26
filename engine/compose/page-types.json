@@ -449,7 +449,12 @@
     "auth",
     "password reset",
     "magic link",
-    "verify email"
+    "verify email",
+    "sign-in",
+    "sign-in page",
+    "log-in",
+    "login page",
+    "sign-up"
    ],
    "primary": "One full-width button in the form.",
    "sections": [
@@ -991,6 +996,61 @@
    ]
   },
   {
+   "id": "workspace",
+   "name": "Desktop work app",
+   "kind": "app",
+   "blueprint": "workspace",
+   "density": "dense",
+   "pattern": "F",
+   "layout": "Saved views in a sidebar, a calm dense table, an inspector for the selected row; the page never scrolls, panes do. One pane at a time below 860px.",
+   "aliases": [
+    "desktop app",
+    "work app",
+    "desktop work app",
+    "ops app",
+    "operations app",
+    "scheduling app",
+    "dispatch app",
+    "internal tool",
+    "back office app",
+    "planner app",
+    "rota app"
+   ],
+   "primary": "New record top right of the table; the inspector holds the action for the selected row.",
+   "sections": [
+    {
+     "role": "Saved views",
+     "id": "app-sidebar"
+    },
+    {
+     "role": "Filter row",
+     "id": "filter-bar"
+    },
+    {
+     "role": "The table",
+     "id": "data-table"
+    },
+    {
+     "role": "Inspector",
+     "id": "description-list"
+    },
+    {
+     "role": "Command menu",
+     "id": "command-palette"
+    }
+   ],
+   "states": [
+    "loading: skeleton rows in the table and the inspector",
+    "empty: what this view will hold and the action that fills it",
+    "error: what failed, Try again, and the last copy kept"
+   ],
+   "avoid": [
+    "Modals for editing a record that has an inspector",
+    "Actions only on hover",
+    "Two tables side by side"
+   ]
+  },
+  {
    "id": "ai-chat",
    "name": "AI assistant chat",
    "kind": "app",
@@ -1057,7 +1117,7 @@
    "id": "inbox",
    "name": "Inbox or team chat",
    "kind": "app",
-   "blueprint": null,
+   "blueprint": "inbox",
    "density": "balanced",
    "pattern": "F",
    "layout": "Three panes: folders, list, reading pane; collapses to one pane on phones",
@@ -1470,20 +1530,16 @@
    "start": "blueprint",
    "layout": "One 430px column: app bar, content, one primary action in thumb reach, bottom tabs. Stays a centred column on wider screens.",
    "aliases": [
-    "mobile app",
-    "phone app",
-    "ios app",
-    "android app",
     "app screen",
     "mobile screen",
     "mobile home screen",
-    "react native",
-    "pwa",
     "mobile banking",
     "mobile dashboard",
-    "iphone app",
     "app home screen",
-    "mobile ui"
+    "mobile ui",
+    "home screen",
+    "one screen",
+    "single screen"
    ],
    "primary": "One full-width button above the tab bar. Everything else is a row or a tab.",
    "sections": [
@@ -1538,6 +1594,68 @@
     "Targets under 44px",
     "More than one filled button on a screen",
     "Stretching the layout full width on a tablet"
+   ]
+  },
+  {
+   "id": "app-phone",
+   "name": "Phone app (the whole flow)",
+   "kind": "app",
+   "blueprint": "app-phone",
+   "density": "balanced",
+   "pattern": "single",
+   "layout": "Every screen a phone of its own, side by side on a desktop and one at a time on a phone: welcome, the first useful screen, one record, settings. Tab bar, large titles, rows, a sheet for the one form.",
+   "aliases": [
+    "mobile app",
+    "phone app",
+    "ios app",
+    "android app",
+    "iphone app",
+    "react native",
+    "pwa",
+    "app flow",
+    "onboarding flow",
+    "app screens",
+    "mobile app flow",
+    "phone app flow"
+   ],
+   "primary": "One full-width button above the tab bar on each screen. Everything else is a row or a tab.",
+   "sections": [
+    {
+     "role": "Welcome: one choice moves on",
+     "id": "mobile-app-bar"
+    },
+    {
+     "role": "First useful screen: the list and the one action",
+     "id": "row-list"
+    },
+    {
+     "role": "One record",
+     "id": "description-list"
+    },
+    {
+     "role": "The one form, in a sheet",
+     "id": "bottom-sheet"
+    },
+    {
+     "role": "Settings that act at once",
+     "id": "toggle-switch"
+    },
+    {
+     "role": "Tabs",
+     "id": "bottom-nav"
+    }
+   ],
+   "states": [
+    "loading: skeleton of the figure and the rows on the first useful screen",
+    "empty: one sentence in the product's words and the action that fills it",
+    "error: what failed and Try again, keeping anything typed"
+   ],
+   "avoid": [
+    "A tour before the first useful screen",
+    "A hamburger menu hiding the main destinations",
+    "Icon-only tabs",
+    "Targets under 44px",
+    "More than one filled button on a screen"
    ]
   },
   {

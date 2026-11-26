@@ -76,6 +76,26 @@ In a `--write` draft each band carries its beat: `data-tone` for the ground (`we
 
 Every page gets one idea that is louder than everything else, chosen from the subject, not from a style: "the £40,000 fixed price set huge on navy", "the 7:30 opening time as the hero", "410 food parcels a week as the headline itself". The plan names it and where it lives (the hero's picture as an art panel in the brand colour, the headline at display size, or the dark picture band), and the draft says it in a comment after `<main>`. It comes from the brief's own figures first, in the order its visitors look for them (a trade: the price; a place: the opening time; a charity: the count with its period; software: how long the job takes), then from the art direction's signature. When the brief has no figure, the plan asks for one instead of inventing it. Everything else on the page stays quieter than the idea: no second huge figure, no second colour panel, no second moving thing.
 
+## 0d. Every page type is drafted from the brief
+
+`compose.mjs --write` drafts every page type, not only marketing pages with a hero. A pricing page, a contact page, a product in a shop, checkout, docs, a changelog, a status page, sign-in, a 404, a directory, an article and every app screen (dashboard, admin list, desktop work app, settings, inbox, assistant, agent, phone app) is written in its blueprint's working anatomy (the same classes, parts, ids and states, with the blueprint's page styles in `lumina-taste/page.css` and a small script in `lumina-taste/page.js` that joins the parts) and filled only with the brief's words (`engine/compose/model.mjs`, `pages.mjs`, `apps.mjs`):
+
+| Page | Drawn from the brief |
+| --- | --- |
+| Pricing | The plans as named, with their prices and what each includes. One price is one plan, centred; "£8 a month or £80 a year" adds a monthly/yearly toggle. Never invented tiers. |
+| Contact | The phone, email, address and opening hours as written; the hours become a table. |
+| Product in a shop | The maker, the thing, its price on the button, its options ("glazes: sea green, oat and slate"), its plain facts, delivery and returns. No reviews unless given. |
+| Checkout | The basket ("two wool throws at £42 each"), the delivery options and a free-delivery threshold; the total is worked out from them. |
+| Docs, changelog | The steps as the guide's headings; the releases ("v2.4 added shared folders") with their tags. |
+| Status | The brief's services ("services: API, webhooks, dashboard"). |
+| Apps | The records the product keeps ("tracks bookings, clients and payments") name the navigation; their fields ("bookings with dog, owner, date, price and status") name the columns; statuses come from the brief or from the record. Rows are seeded sample data (`scripts/sample-data.mjs`) labelled with the brief's own nouns ("Booking #1040", "Owner 03"), never invented customers; the brief's own people fill a staff column. |
+
+What the brief does not give is left out and listed once, in the TODO comment at the top of the draft.
+
+### Apps are planned as a flow
+
+For an app (phone app, desktop work app, dashboard, admin list, inbox, settings, assistant, agent, directory) the plan lists the flow before any screen: **first run** (the first step the brief names, one choice per screen) → **the first useful screen** (the main list and its one action) → **one record** (its fields and what can happen next) → **settings**. It also writes the words for the three states from the brief's nouns: empty ("No bookings yet. Bookings you add show here, newest first." + "New booking"), loading (a skeleton of the same layout, labelled "Loading bookings") and error ("Bookings could not load. Pawprint could not reach your bookings. Nothing you typed is lost." + "Try again"). `--write` drafts a phone app as every planned screen side by side (one at a time on a phone, `?screen=` opens one), and the other apps as their main screen with the detail in a drawer or inspector; every draft opens with `?state=loading|empty|error`.
+
 ## 1. Reading patterns
 
 | Page type | Pattern | What it means for layout |
