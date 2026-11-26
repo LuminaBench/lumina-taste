@@ -291,8 +291,43 @@ export const MEASURE = (opts = {}) => {
     return words(copy.textContent);
   })();
 
+  // ---- the kit's own default first screen: a line above, a 2–4 line headline on the left,
+  // a paragraph, two buttons, a note, one picture on the right. Count the marks of it.
+  const skeleton = (() => {
+    if (!hero || !shown(hero) || hero.closest('[data-composition-reason]') || hero.hasAttribute('data-composition-reason')) return null;
+    const h = hero.querySelector('h1');
+    if (!h || !shown(h)) return null;
+    const hr = rectOf(hero), r1 = rectOf(h), hs = parseFloat(getComputedStyle(h).fontSize);
+    const lh = parseFloat(getComputedStyle(h).lineHeight) || hs * 1.15;
+    const after = (a, b) => a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING;
+    const marks = [];
+    const above = hero.querySelector('[data-part="eyebrow"], .lt-eyebrow') || [...hero.querySelectorAll('p')].find((p) => shown(p) && after(p, h) && words(p.textContent) <= 8 && parseFloat(getComputedStyle(p).fontSize) < hs * 0.4);
+    if (above && shown(above)) marks.push('line above');
+    const lines = Math.round(r1.height / lh);
+    if (r1.left + r1.width / 2 < hr.left + hr.width / 2 && lines >= 2 && lines <= 4) marks.push('headline on the left');
+    if ([...hero.querySelectorAll('p')].some((p) => shown(p) && after(h, p) && words(p.textContent) >= 12)) marks.push('paragraph');
+    const btns = [...hero.querySelectorAll('.lt-btn, [role="button"], a[class*="btn"], button')].filter(shown);
+    const row = btns.length >= 2 && btns.some((a, i) => btns.some((b, j) => i !== j && Math.abs(rectOf(a).top - rectOf(b).top) < 8));
+    if (row) marks.push('two buttons');
+    const note = hero.querySelector('[data-part="note"], .bp-hero-note');
+    if (note && shown(note)) marks.push('note under the buttons');
+    else if (btns.length) {
+      const last = btns[btns.length - 1], group = last.parentElement?.matches('[data-part="actions"], [class*="actions"]') ? last.parentElement : last;
+      const nx = group.nextElementSibling;
+      if (nx && shown(nx) && words(nx.textContent) && words(nx.textContent) <= 14 && parseFloat(getComputedStyle(nx).fontSize) <= (parseFloat(getComputedStyle(body).fontSize) || 16)) marks.push('note under the buttons');
+    }
+    const copyCol = h.parentElement ? rectOf(h.parentElement) : r1;
+    const pic = [...hero.querySelectorAll('img, figure, .lt-art, .lt-device, [data-part="frame"], [data-part="visual"]')].find((e) => {
+      if (!shown(e)) return false; const r = rectOf(e);
+      return r.left > vw * 0.45 && r.width >= hr.width * 0.35 && r.width <= hr.width * 0.6 && r.height >= copyCol.height * 0.6 && r.height <= copyCol.height * 1.4;
+    });
+    if (pic) marks.push('one picture on the right');
+    const kitDefault = !!hero.closest('.lt-hero-split:not([data-variant])') && !!hero.querySelector('[data-part="note"]') && hero.querySelectorAll('.lt-btn').length >= 2;
+    return { marks, kitDefault };
+  })();
+
   return {
-    url: location.href, width: vw, height: vh, pageHeight: html.scrollHeight, colour, firstWords,
+    url: location.href, width: vw, height: vh, pageHeight: html.scrollHeight, colour, firstWords, skeleton,
     hero: !!hero, app, appMarked, sections, looseMoments, motion,
     type: { headline: Math.round(headline), h1: h1 ? Math.round(parseFloat(getComputedStyle(h1).fontSize)) : 0, body: bodySize, ratio: bodySize ? Math.round((headline / bodySize) * 100) / 100 : 0 },
     bars: fixedBottom.map((b) => ({ selector: sel(b), height: Math.round(rectOf(b).height) })),
@@ -318,6 +353,7 @@ export const LIMITS = {
   heroWords: 40,         // words in a marketing hero (headline, lede, actions, notes): above this it is a paragraph, not a first screen
   pageWords: 140,        // words per screen of page, on average, on a marketing page
   hueSpan: 35,           // degrees: grounds and accent within this of each other read as one colour
+  skeletonMarks: 5,      // of six marks of the default first screen (line above, left headline, paragraph, two buttons, note, picture right)
 };
 
 const plural = (n, one, many = one + 's') => `${n} ${n === 1 ? one : many}`;
@@ -383,6 +419,9 @@ export function judgeMeasures(m, { wide = m.width >= 900, limits = LIMITS } = {}
   const screens = Math.max(1, m.pageHeight / m.height);
   const pageWords = m.sections.reduce((n, x) => n + (x.use ? 0 : x.words), 0);
   if (marketing && wide && pageWords / screens > limits.pageWords) add('taste-word-budget', null, `About ${Math.round(pageWords / screens)} words per screen (${pageWords} over ${Math.round(screens * 10) / 10} screens, forms and questions not counted). Pictures carry a page further than paragraphs: aim under ${limits.pageWords}, words as captions.`);
+
+  // 5b'. The kit's own default first screen, used by habit.
+  if (marketing && m.width >= 1200 && m.skeleton && (m.skeleton.kitDefault || m.skeleton.marks.length >= limits.skeletonMarks)) add('taste-kit-skeleton', null, `The first screen is the default skeleton every generated page uses (${m.skeleton.kitDefault ? 'hero-split with a note and two buttons' : m.skeleton.marks.join(', ')}). Choose a composition from the subject: hero-split data-variant product, overlap, edge or bleed; hero-board; hero-cover; hero-mosaic; hero-statement tucked or poster; hero-centered wide (composition.md §5). If this really is the right shape, say why in data-composition-reason on the hero.`);
 
   // 5c. One colour everywhere: the ground, the top bar and the section grounds all in the accent's hue family.
   if (marketing && m.colour?.accent && m.colour.accent.C >= 0.05) {

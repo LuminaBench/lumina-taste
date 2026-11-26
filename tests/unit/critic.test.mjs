@@ -292,3 +292,12 @@ test('judge: a page in one hue is flagged; a contrasting bar or a neutral ground
   assert.ok(!rulesOf(page([section()], { colour: { ...one, canvas: { L: 0.976, C: 0.006, H: 70 }, bar: { L: 0.976, C: 0.006, H: 70 } } })).has('taste-monotone'), 'warm paper');
   assert.ok(!rulesOf(page([section()], { colour: { ...one, grounds: [...one.grounds, { L: 0.8, C: 0.1, H: 55 }] } })).has('taste-monotone'), 'a band in the second colour');
 });
+
+test('judge: the kit skeleton on a wide first screen is flagged; a chosen composition is not', () => {
+  const all = ['line above', 'headline on the left', 'paragraph', 'two buttons', 'note under the buttons', 'one picture on the right'];
+  assert.ok(rulesOf(page([section()], { width: 1440, skeleton: { marks: all.slice(0, 5), kitDefault: false } })).has('taste-kit-skeleton'));
+  assert.ok(rulesOf(page([section()], { width: 1440, skeleton: { marks: [], kitDefault: true } })).has('taste-kit-skeleton'), 'the plain split with a note and two buttons');
+  assert.ok(!rulesOf(page([section()], { width: 1440, skeleton: { marks: all.slice(0, 3), kitDefault: false } })).has('taste-kit-skeleton'));
+  assert.ok(!rulesOf(page([section()], { width: 1440, skeleton: null })).has('taste-kit-skeleton'), 'data-composition-reason');
+  assert.ok(!rulesOf(page([section()], { width: 1024, skeleton: { marks: all, kitDefault: true } })).has('taste-kit-skeleton'), 'wide only');
+});

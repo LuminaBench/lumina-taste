@@ -5,7 +5,7 @@ description: Make interfaces look designed, not generated. Use for any web or ap
 
 # Lumina Taste
 
-A design kit for coding agents: a **page composer** that plans the page's rhythm and one bold idea from the brief's own words, **24 OKLCH palettes** (light + dark, every pair WCAG-verified), **20 type pairings** chosen by subject, **39 visual styles**, **211 named UI patterns** (including **scroll moments** like a pinned scene, a sideways rail and a product reveal, and **9 page backdrops**), **47 subject drawings** for pages without photographs, a **photo finder that grades every picture to the palette**, **48 chart engines** (including charts that tell a story as you scroll), **27 page blueprints** (marketing pages, a native-feeling phone app, a desktop workspace), a **lockable taste profile**, a **Playwright auditor with a designer's critic** (rhythm, layout repeats, motion budget, app touch targets, speed), a **review pack** for judging screenshots, a **copy lint** and **36 eval briefs** with a score history per agent. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
+A design kit for coding agents: a **page composer** that plans the page's rhythm and one bold idea from the brief's own words, **24 OKLCH palettes** (light + dark, every pair WCAG-verified), **20 type pairings** chosen by subject, **39 visual styles**, **214 named UI patterns** (including **scroll moments** like a pinned scene, a sideways rail and a product reveal, and **9 page backdrops**), **47 subject drawings** for pages without photographs, a **photo finder that grades every picture to the palette**, **48 chart engines** (including charts that tell a story as you scroll), **27 page blueprints** (marketing pages, a native-feeling phone app, a desktop workspace), a **lockable taste profile**, a **Playwright auditor with a designer's critic** (rhythm, layout repeats, motion budget, app touch targets, speed), a **review pack** for judging screenshots, a **copy lint** and **36 eval briefs** with a score history per agent. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
 
 Run commands from this skill's directory with Node.js 20+. Pass absolute paths (or run from the user's project with the absolute script path). Search, install and token scripts need nothing installed; the auditor needs Playwright; the gallery needs `npm install` once.
 
@@ -257,6 +257,7 @@ node scripts/lint-copy.mjs src/                                # hype words, cli
 | `taste-type-jump` | The headline is under 2.5× the body on a marketing page: set it larger, or the body smaller. |
 | `taste-word-budget` | More than 40 words in the hero (headline, lede, actions and notes, not counting the picture) or about 140 words per screen across the page. Cut the note, keep one sentence, let the picture talk. |
 | `taste-monotone` | The ground, the top bar and every coloured band share the accent's hue: a one-colour page. Use a neutral or warm ground, a contrasting top bar (ink or paper), and the palette's second colour (`--highlight`, `data-highlight`) for one figure. |
+| `taste-kit-skeleton` | At 1200px and wider, the hero has five of the six marks of the default first screen (a line above, a 2–4 line headline on the left, a paragraph, two buttons in a row, a note under them, one picture on the right), or is a plain `hero-split` with a note and two buttons. Choose a composition from the table under "The first screen"; if the split really is right, say why in `data-composition-reason`. |
 | `taste-motion-*` | More than two scroll moments, two side by side, two pinned scenes, film with sound or no pause, a counter with no number, a pinned scene under `overflow: hidden`. Keep the two best. |
 | `app-touch-target` · `app-safe-area` · `app-states` | On app screens at phone width: controls under 44px, a fixed bottom bar without `env(safe-area-inset-bottom)`, a declared state with no view. |
 | `perf-*` (`--perf`, and `--strict` as warnings) | A lazy largest picture, no `fetchpriority`, layout shift over 0.1, heavy fonts, JS or CSS, images without width and height or more than twice their box. |
@@ -308,7 +309,22 @@ The blocks are the same for every page; what makes a page look designed for its 
 | Any section | `data-tone="well"` / `"dark"` | A tinted band, or the page's one dark band. Sections differ by space, scale and ground, not by rules or a label over every heading. |
 | `<main>` | `data-separators="rules"`, `data-numbered` | Rules and numbered labels, for a real publication only. |
 
-Three heroes: `hero-split` (something to show: a product frame, or `<div data-part="visual">` with a device frame, code, a chart, a photograph or an art panel), `hero-centered` (a wide picture under the words, or a backdrop) and `hero-statement` (no picture: one very large headline, then a ruled row with the pitch, the action and three facts).
+### The first screen, chosen from the subject
+
+The kit's split hero (a line above, a three-line headline, a paragraph, two buttons, a note, a picture on the right) is what generated pages look like; it is the last resort, never the habit. `compose.mjs` chooses the composition from the brief's facts and prints why (`artDirection.hero`, `.nav`, `.footer` in `--json`):
+
+| Composition | Markup | For |
+| --- | --- | --- |
+| Product first | `hero-split data-variant="product"` | Software: the screen large, the words beneath |
+| Overlap · Edge | `hero-split data-variant="overlap"` / `"edge"` | One object breaking the grid · a calm service, picture full height to the edge |
+| Bleed | `hero-split data-variant="bleed" data-tone="dark" data-calm="start"` | A place or a job with one great photograph; scrim only under the words |
+| Wide | `hero-centered data-variant="wide"` | One centred claim over a picture from edge to edge |
+| Tucked · Poster | `hero-statement data-variant="tucked"` / `"poster"` | The claim with a small picture tucked in · a date set enormous on the brand colour |
+| Board | `hero-board data-variant="menu"` / `"departures"` | Prices or times people come for, as the picture |
+| Cover · Mosaic | `hero-cover` / `hero-mosaic` | A name worth setting big · three to five real pictures of one set |
+| Film | `hero-video data-variant="full"` | A real 8–20 second film |
+
+Every first screen: the headline, one sentence, one action and at most one quiet link, no note under the buttons, 40 words at most (`taste-word-budget`). Every bar contrasts with its page: `navbar-simple data-tone="dark"` (ink; paper on a dark page) or `"accent"`, `data-variant="split"` to centre a maker's name, `"minimal"` over a cover. Feet: `footer-minimal`, `site-footer data-variant="wordmark"` (the name across the column), or `"contact"` (phone and address set large). Sections break the grid with variants, not new blocks: `media-band data-variant="bleed"`, `offer-cards data-variant="over"`, `feature-split data-variant="asym"`. No two neighbouring sections share a composition.
 
 Rules: one signature per page; never the same shape twice in a row; at most two rails; centre only what is symmetrical; the accent in three places at most; one left edge from the logo to the footer. `compose.mjs` assigns layouts that satisfy these; the critic reports the ones it can measure.
 
@@ -461,7 +477,7 @@ engine/profiles/             taste profile engine, schema, default profile
 engine/compose/              page types, domains and moods behind compose.mjs
 evals/                       36 briefs (evals.json), fixtures, reference scores, history.json
 tokens/                      base.css, layout.css, backdrops.css, composition.css, scroll.css, palettes/*.css (+ source.json), typography/, styles/
-components/ui/<family>/      211 patterns (html, css, ts, react.tsx)
+components/ui/<family>/      214 patterns (html, css, ts, react.tsx)
 components/charts/           core/ + 48 chart engines (+ React wrappers)
 blueprints/                  27 page blueprints (states via ?state=loading|empty|error|incident|sold-out|streaming|running)
 references/                  anti-slop-rules, ai-defaults, review, images, motion, typography, apps, page-flow, composition, copy-patterns, reading-a-reference, chart-selection, which-one, palettes, harvest-log

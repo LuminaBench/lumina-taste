@@ -48,7 +48,7 @@ npx skills remove lumina-taste -g
 | | | |
 | --- | ---: | --- |
 | **Page blueprints** | 27 | Complete pages to start from: landing, developer tool, practice, venue, shop, charity, event, a phone app flow, a desktop workspace, dashboard, docs, checkout, assistant chat and more, each with its empty, loading and error states |
-| **UI patterns** | 211 | Sections, controls, data views and motion parts, in vanilla TypeScript and React, found by describing them ("the bar that appears when I tick rows") |
+| **UI patterns** | 214 | Sections, controls, data views and motion parts, in vanilla TypeScript and React, found by describing them ("the bar that appears when I tick rows") |
 | **Charts** | 48 | From leaderboards and Pareto frontiers to story charts that build as you scroll, all theme-aware and readable in both modes |
 | **Palettes** | 24 × 2 | Light and dark, every text, control and chart pair contrast-checked |
 | **Type pairings** | 20 | Chosen by subject (a slab for trades, stencil lettering for builders, a legal serif that is not the AI default), variable axes, self-hostable with metric-matched fallbacks |
