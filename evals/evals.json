@@ -1,1613 +1,874 @@
 {
- "skill_name": "lumina-taste",
- "$comment": "Briefs for measuring what an agent builds with this skill. Score an output with scripts/eval-score.mjs. Format follows the skill-creator evals schema plus slug, pageType, kind and machine checks.",
- "evals": [
-  {
-   "id": 1,
-   "slug": "saas-landing-invoicing",
-   "pageType": "landing",
-   "kind": "marketing",
-   "prompt": "Build a landing page for \"Tally\", an invoicing tool for freelancers. It should make people trust it with their money and get them to start a free trial. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete landing page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
+  "skill_name": "lumina-taste",
+  "$comment": "Briefs for measuring what an agent builds with this skill. Score an output with scripts/eval-score.mjs. Format follows the skill-creator evals schema plus slug, pageType, kind and machine checks.",
+  "evals": [
     {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
+      "id": 1,
+      "slug": "saas-landing-invoicing",
+      "pageType": "landing",
+      "kind": "marketing",
+      "prompt": "Build a landing page for \"Tally\", an invoicing tool for freelancers. It should make people trust it with their money and get them to start a free trial. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete landing page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"top navigation","selector":"header nav, nav[aria-label], [role=\"navigation\"]","min":1},
+        {"name":"footer","selector":"footer","min":1},
+        {"name":"at least 4 sections","selector":"main > section, main > * > section, body > section","min":4},
+        {"name":"start CTA","text":"(start|try|get started)","min":1},
+        {"name":"FAQ or questions","selector":"details, [aria-expanded]","min":3}
+      ]
     },
     {
-     "name": "top navigation",
-     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
-     "min": 1
+      "id": 2,
+      "slug": "devtool-landing",
+      "pageType": "dev-landing",
+      "kind": "marketing",
+      "prompt": "Landing page for \"Relay\", a webhooks API for developers. Dark theme. Show code. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete landing page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"top navigation","selector":"header nav, nav[aria-label], [role=\"navigation\"]","min":1},
+        {"name":"footer","selector":"footer","min":1},
+        {"name":"at least 4 sections","selector":"main > section, main > * > section, body > section","min":4},
+        {"name":"code sample","selector":"pre, code","min":1}
+      ]
     },
     {
-     "name": "footer",
-     "selector": "footer",
-     "min": 1
+      "id": 3,
+      "slug": "ai-notes-landing",
+      "pageType": "landing",
+      "kind": "marketing",
+      "prompt": "Homepage for an AI note-taking app for teams called Quill. Clean and calm, not hypey. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete landing page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"top navigation","selector":"header nav, nav[aria-label], [role=\"navigation\"]","min":1},
+        {"name":"footer","selector":"footer","min":1},
+        {"name":"at least 4 sections","selector":"main > section, main > * > section, body > section","min":4}
+      ]
     },
     {
-     "name": "at least 4 sections",
-     "selector": "main > section, main > * > section, body > section",
-     "min": 4
+      "id": 4,
+      "slug": "clinic-landing",
+      "pageType": "service-landing",
+      "kind": "marketing",
+      "prompt": "Website homepage for a physiotherapy clinic in Leeds. Booking an appointment is the goal. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete landing page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"top navigation","selector":"header nav, nav[aria-label], [role=\"navigation\"]","min":1},
+        {"name":"footer","selector":"footer","min":1},
+        {"name":"at least 4 sections","selector":"main > section, main > * > section, body > section","min":4},
+        {"name":"book CTA","text":"book","min":1}
+      ]
     },
     {
-     "name": "start CTA",
-     "text": "(start|try|get started)",
-     "min": 1
+      "id": 5,
+      "slug": "coffee-store-product",
+      "pageType": "store-product",
+      "kind": "marketing",
+      "prompt": "Product page for a 1kg bag of single-origin coffee beans from \"Northbank Roasters\". Grind options and a subscription option. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete store product page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"top navigation","selector":"header nav, nav[aria-label], [role=\"navigation\"]","min":1},
+        {"name":"footer","selector":"footer","min":1},
+        {"name":"price","text":"[£$€]\\s?\\d","min":1},
+        {"name":"add to bag/cart","text":"add to (bag|cart|basket)","min":1}
+      ]
     },
     {
-     "name": "FAQ or questions",
-     "selector": "details, [aria-expanded]",
-     "min": 3
+      "id": 6,
+      "slug": "pricing-dev-api",
+      "pageType": "pricing",
+      "kind": "marketing",
+      "prompt": "Pricing page for a developer API with Free, Pro and Scale plans, monthly and annual billing. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete pricing page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"top navigation","selector":"header nav, nav[aria-label], [role=\"navigation\"]","min":1},
+        {"name":"footer","selector":"footer","min":1},
+        {"name":"at least 4 sections","selector":"main > section, main > * > section, body > section","min":4},
+        {"name":"three tiers","text":"(free|pro|scale)","min":3},
+        {
+          "name": "billing toggle",
+          "selector": "[role=\"radiogroup\"], [role=\"switch\"], [role=\"tablist\"], input[type=\"radio\"]",
+          "min": 1
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "slug": "pricing-meditation",
+      "pageType": "pricing",
+      "kind": "marketing",
+      "prompt": "Pricing for a meditation app: free, premium monthly, premium yearly, family plan. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete pricing page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"top navigation","selector":"header nav, nav[aria-label], [role=\"navigation\"]","min":1},
+        {"name":"footer","selector":"footer","min":1},
+        {"name":"at least 4 sections","selector":"main > section, main > * > section, body > section","min":4}
+      ]
+    },
+    {
+      "id": 8,
+      "slug": "analytics-dashboard",
+      "pageType": "dashboard",
+      "kind": "app",
+      "prompt": "Revenue analytics dashboard for a subscription business: MRR, churn, new customers, plan mix, top accounts. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete dashboard page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"navigation landmark","selector":"nav, [role=\"navigation\"]","min":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"charts","selector":"svg, canvas","min":3},
+        {"name":"table","selector":"table","min":1},
+        {"name":"tabular numbers","text":"\\d","min":8}
+      ]
+    },
+    {
+      "id": 9,
+      "slug": "ops-dashboard-dark",
+      "pageType": "dashboard",
+      "kind": "app",
+      "prompt": "Dark operations dashboard for a logistics company: deliveries today, on-time rate, delays by region, live incidents. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete dashboard page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"navigation landmark","selector":"nav, [role=\"navigation\"]","min":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"charts","selector":"svg, canvas","min":2}
+      ]
+    },
+    {
+      "id": 10,
+      "slug": "product-analytics",
+      "pageType": "dashboard",
+      "kind": "app",
+      "prompt": "Product usage dashboard: active users, retention cohorts, feature adoption, funnel from signup to paid. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete dashboard page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"navigation landmark","selector":"nav, [role=\"navigation\"]","min":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"charts","selector":"svg, canvas","min":3}
+      ]
+    },
+    {
+      "id": 11,
+      "slug": "settings-workspace",
+      "pageType": "settings",
+      "kind": "app",
+      "prompt": "Settings page for a team workspace: general, members, billing with usage, API keys, delete workspace. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete settings page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"navigation landmark","selector":"nav, [role=\"navigation\"]","min":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"danger action","text":"delete","min":1},
+        {"name":"form fields","selector":"input, select","min":4}
+      ]
+    },
+    {
+      "id": 12,
+      "slug": "settings-profile",
+      "pageType": "settings",
+      "kind": "app",
+      "prompt": "Personal account settings: profile photo, name, email, password, notification preferences, connected accounts. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete settings page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"navigation landmark","selector":"nav, [role=\"navigation\"]","min":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"switches or checkboxes","selector":"[role=\"switch\"], input[type=\"checkbox\"]","min":2}
+      ]
+    },
+    {
+      "id": 13,
+      "slug": "docs-api",
+      "pageType": "docs",
+      "kind": "reading",
+      "prompt": "Documentation page for \"Send your first event\" in an analytics API, with code in JavaScript, Python and curl. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete docs page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"paragraph text","selector":"main p","min":4},
+        {"name":"code blocks","selector":"pre","min":2},
+        {"name":"side navigation","selector":"nav","min":1}
+      ]
+    },
+    {
+      "id": 14,
+      "slug": "docs-help-center",
+      "pageType": "docs",
+      "kind": "reading",
+      "prompt": "Help center article: how to export your data, for a project management tool. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete docs page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"paragraph text","selector":"main p","min":4}
+      ]
+    },
+    {
+      "id": 15,
+      "slug": "auth-signin",
+      "pageType": "auth",
+      "kind": "flow",
+      "prompt": "Sign-in page for a B2B app with email, Google SSO and a magic link option. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete auth page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"a form","selector":"form","min":1},
+        {"name":"labelled inputs","selector":"label","min":1},
+        {"name":"email input","selector":"input[type=\"email\"]","min":1}
+      ]
+    },
+    {
+      "id": 16,
+      "slug": "onboarding-steps",
+      "pageType": "auth",
+      "kind": "flow",
+      "prompt": "Onboarding flow after sign-up: name your workspace, invite teammates, connect a data source. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete auth page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"a form","selector":"form","min":1},
+        {"name":"labelled inputs","selector":"label","min":1},
+        {"name":"steps indicator","text":"(step|1 of|of 3)","min":1}
+      ]
+    },
+    {
+      "id": 17,
+      "slug": "directory-integrations",
+      "pageType": "directory",
+      "kind": "app",
+      "prompt": "Integrations directory with search, category filters and 40 integrations as cards. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete directory page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"navigation landmark","selector":"nav, [role=\"navigation\"]","min":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {
+          "name": "search",
+          "selector": "input[type=\"search\"], [role=\"searchbox\"], [role=\"combobox\"]",
+          "min": 1
+        },
+        {"name":"cards","selector":"article, li","min":8}
+      ]
+    },
+    {
+      "id": 18,
+      "slug": "directory-templates",
+      "pageType": "directory",
+      "kind": "app",
+      "prompt": "A gallery of 24 report templates, filterable by team and sortable by popularity. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete directory page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"navigation landmark","selector":"nav, [role=\"navigation\"]","min":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1}
+      ]
+    },
+    {
+      "id": 19,
+      "slug": "blog-article",
+      "pageType": "blog",
+      "kind": "reading",
+      "prompt": "A long-form blog article about pricing experiments, with a pull quote, a chart and related posts. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete blog page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"paragraph text","selector":"main p","min":4},
+        {"name":"article","selector":"article","min":1}
+      ]
+    },
+    {
+      "id": 20,
+      "slug": "portfolio-architect",
+      "pageType": "portfolio",
+      "kind": "marketing",
+      "prompt": "Minimal portfolio for an architecture studio with 6 projects and a contact section. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete portfolio page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"top navigation","selector":"header nav, nav[aria-label], [role=\"navigation\"]","min":1},
+        {"name":"footer","selector":"footer","min":1},
+        {"name":"at least 4 sections","selector":"main > section, main > * > section, body > section","min":4},
+        {"name":"project images","selector":"img, figure, picture, [role=\"img\"]","min":4}
+      ]
+    },
+    {
+      "id": 21,
+      "slug": "checkout-shop",
+      "pageType": "checkout",
+      "kind": "flow",
+      "prompt": "Checkout page for an online furniture shop: contact, delivery options, payment, order summary. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete checkout page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"a form","selector":"form","min":1},
+        {"name":"labelled inputs","selector":"label","min":1},
+        {"name":"order total","text":"total","min":1},
+        {"name":"pay button","text":"(pay|place order)","min":1}
+      ]
+    },
+    {
+      "id": 22,
+      "slug": "changelog",
+      "pageType": "changelog",
+      "kind": "reading",
+      "prompt": "Changelog page for a design tool with 8 releases, tagged New, Improved and Fixed. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete changelog page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"paragraph text","selector":"main p","min":4},
+        {"name":"dates","text":"\\b(20\\d\\d|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)","min":4}
+      ]
+    },
+    {
+      "id": 23,
+      "slug": "status-page",
+      "pageType": "status",
+      "kind": "app",
+      "prompt": "Public status page for a cloud platform with 6 services, 90-day uptime and two past incidents. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete status page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"navigation landmark","selector":"nav, [role=\"navigation\"]","min":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"uptime figures","text":"\\d{2}\\.\\d+%","min":3}
+      ]
+    },
+    {
+      "id": 24,
+      "slug": "admin-users",
+      "pageType": "admin-table",
+      "kind": "app",
+      "prompt": "Admin page to manage 1,284 users: search, filter by role and status, bulk deactivate, invite user. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete admin table page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"navigation landmark","selector":"nav, [role=\"navigation\"]","min":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"table","selector":"table","min":1},
+        {"name":"checkboxes","selector":"input[type=\"checkbox\"], [role=\"checkbox\"]","min":3}
+      ]
+    },
+    {
+      "id": 25,
+      "slug": "admin-orders",
+      "pageType": "admin-table",
+      "kind": "app",
+      "prompt": "Orders list for a small e-commerce back office with status filters and a detail drawer. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete admin table page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"navigation landmark","selector":"nav, [role=\"navigation\"]","min":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"table","selector":"table","min":1}
+      ]
+    },
+    {
+      "id": 26,
+      "slug": "inbox-support",
+      "pageType": "inbox",
+      "kind": "app",
+      "prompt": "Support inbox for a helpdesk: conversation list, thread, reply box, customer details on the right. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete inbox page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"navigation landmark","selector":"nav, [role=\"navigation\"]","min":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"reply box","selector":"textarea, [contenteditable]","min":1}
+      ]
+    },
+    {
+      "id": 27,
+      "slug": "ai-chat",
+      "pageType": "ai-chat",
+      "kind": "app",
+      "prompt": "A chat interface for an AI assistant with a history sidebar and a prompt box. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete ai chat page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"navigation landmark","selector":"nav, [role=\"navigation\"]","min":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"prompt box","selector":"textarea, [contenteditable]","min":1}
+      ]
+    },
+    {
+      "id": 28,
+      "slug": "not-found",
+      "pageType": "not-found",
+      "kind": "flow",
+      "prompt": "A 404 page for a SaaS marketing site. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete not found page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"a form","selector":"form","min":1},
+        {"name":"labelled inputs","selector":"label","min":1},
+        {"name":"link home","selector":"a[href]","min":1}
+      ]
+    },
+    {
+      "id": 29,
+      "slug": "contact",
+      "pageType": "contact",
+      "kind": "marketing",
+      "prompt": "Contact sales page with a short form and office locations. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete contact page that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"top navigation","selector":"header nav, nav[aria-label], [role=\"navigation\"]","min":1},
+        {"name":"footer","selector":"footer","min":1},
+        {"name":"at least 4 sections","selector":"main > section, main > * > section, body > section","min":4},
+        {"name":"form","selector":"form","min":1}
+      ]
+    },
+    {
+      "id": 30,
+      "slug": "restyle-existing",
+      "pageType": "landing",
+      "kind": "marketing",
+      "prompt": "Restyle this existing page (evals/fixtures/plain-landing.html) to look designed, keeping all of its content. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete landing page that passes the audit and the taste critic.",
+      "files": ["evals/fixtures/plain-landing.html"],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"top navigation","selector":"header nav, nav[aria-label], [role=\"navigation\"]","min":1},
+        {"name":"footer","selector":"footer","min":1},
+        {"name":"at least 4 sections","selector":"main > section, main > * > section, body > section","min":4}
+      ]
+    },
+    {
+      "id": 31,
+      "slug": "agent-workspace",
+      "pageType": "agent-app",
+      "kind": "app",
+      "prompt": "A desktop app for a coding agent called \"Tiller\": sessions grouped by project in a sidebar, a box to describe a new task, and recent sessions underneath. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete agent workspace that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"navigation landmark","selector":"nav, [role=\"navigation\"]","min":1},
+        {"name":"task box","selector":"textarea, [contenteditable]","min":1},
+        {"name":"at least 3 sessions listed","selector":"nav li, aside li","min":3}
+      ]
+    },
+    {
+      "id": 32,
+      "slug": "mobile-habits",
+      "pageType": "mobile-app",
+      "kind": "app",
+      "prompt": "The home screen of a phone app for tracking daily habits, called \"Tally Up\": today's progress, a list of habits to tick off, a way to add one, and bottom tabs. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete phone app screen that passes the audit and the taste critic.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"main landmark","selector":"main","min":1,"max":1},
+        {"name":"bottom tabs","selector":"nav a, nav button","min":3,"max":5},
+        {"name":"a list of at least 3 rows","selector":"main li","min":3},
+        {"name":"one way to add","selector":"button, a.lt-btn","min":1}
+      ]
+    },
+    {
+      "id": 33,
+      "slug": "law-firm-landing",
+      "pageType": "service-landing",
+      "kind": "marketing",
+      "prompt": "Website home page for Harrow & Finch, a three-partner employment law firm in Manchester. People should book a free first call. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete page that passes the audit and the taste critic, with sections that fit the subject.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen",
+        "No software sections (logo wall, feature grid, \"Start free\") on a page that is not for software"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"top navigation","selector":"header nav, nav[aria-label], [role=\"navigation\"]","min":1},
+        {"name":"footer","selector":"footer","min":1},
+        {"name":"at least 4 sections","selector":"main > section, main > * > section, body > section","min":4},
+        {"name":"fees or first call stated","text":"free","min":1},
+        {"name":"phone link","selector":"a[href^=\"tel:\"]","min":1},
+        {"name":"no start-free","text":"start free","max":0,"min":0}
+      ]
+    },
+    {
+      "id": 34,
+      "slug": "food-bank-cause",
+      "pageType": "cause",
+      "kind": "marketing",
+      "prompt": "Home page for Canal Street Food Bank, a volunteer-run charity in Birmingham. Two audiences: people who need food this week, and people who want to give. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete page that passes the audit and the taste critic, with sections that fit the subject.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen",
+        "No software sections (logo wall, feature grid, \"Start free\") on a page that is not for software"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"top navigation","selector":"header nav, nav[aria-label], [role=\"navigation\"]","min":1},
+        {"name":"footer","selector":"footer","min":1},
+        {"name":"at least 4 sections","selector":"main > section, main > * > section, body > section","min":4},
+        {"name":"donate action","text":"donate","min":1},
+        {"name":"opening times as a table","selector":"table","min":1},
+        {"name":"no pricing tiers","selector":".lt-pricing-tiers","max":0,"min":0}
+      ]
+    },
+    {
+      "id": 35,
+      "slug": "ceramics-shop",
+      "pageType": "brand-landing",
+      "kind": "marketing",
+      "prompt": "Home page for Tidewater Pottery, one potter in Cornwall selling four stoneware pieces online. No photographs yet. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete page that passes the audit and the taste critic, with sections that fit the subject.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen",
+        "No software sections (logo wall, feature grid, \"Start free\") on a page that is not for software"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"top navigation","selector":"header nav, nav[aria-label], [role=\"navigation\"]","min":1},
+        {"name":"footer","selector":"footer","min":1},
+        {"name":"at least 4 sections","selector":"main > section, main > * > section, body > section","min":4},
+        {"name":"prices shown","text":"£","min":3},
+        {"name":"art panels in place of photographs","selector":".lt-art","min":3},
+        {"name":"delivery answered","text":"delivery","min":1}
+      ]
+    },
+    {
+      "id": 36,
+      "slug": "conference-event",
+      "pageType": "event",
+      "kind": "marketing",
+      "prompt": "Website for Signal & Noise, a one-day data journalism conference in Glasgow on 9 October 2027, 200 places, tickets £120. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
+      "expected_output": "A complete page that passes the audit and the taste critic, with sections that fit the subject.",
+      "files": [],
+      "expectations": [
+        "Ran compose.mjs (or followed its plan) before writing markup",
+        "Taste profile written and tokens used; no raw hex colours in component CSS",
+        "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
+        "Taste score (audit-ui --taste) is 90 or more",
+        "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
+        "One primary action per screen",
+        "No software sections (logo wall, feature grid, \"Start free\") on a page that is not for software"
+      ],
+      "checks": [
+        {"name":"one h1","selector":"h1","min":1,"max":1},
+        {"name":"top navigation","selector":"header nav, nav[aria-label], [role=\"navigation\"]","min":1},
+        {"name":"footer","selector":"footer","min":1},
+        {"name":"at least 4 sections","selector":"main > section, main > * > section, body > section","min":4},
+        {"name":"date as time element","selector":"time[datetime]","min":1},
+        {"name":"ticket action","text":"ticket","min":2},
+        {"name":"programme rows","selector":".lt-services li, table tr","min":4}
+      ]
     }
-   ]
-  },
-  {
-   "id": 2,
-   "slug": "devtool-landing",
-   "pageType": "dev-landing",
-   "kind": "marketing",
-   "prompt": "Landing page for \"Relay\", a webhooks API for developers. Dark theme. Show code. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete landing page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "top navigation",
-     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "footer",
-     "selector": "footer",
-     "min": 1
-    },
-    {
-     "name": "at least 4 sections",
-     "selector": "main > section, main > * > section, body > section",
-     "min": 4
-    },
-    {
-     "name": "code sample",
-     "selector": "pre, code",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 3,
-   "slug": "ai-notes-landing",
-   "pageType": "landing",
-   "kind": "marketing",
-   "prompt": "Homepage for an AI note-taking app for teams called Quill. Clean and calm, not hypey. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete landing page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "top navigation",
-     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "footer",
-     "selector": "footer",
-     "min": 1
-    },
-    {
-     "name": "at least 4 sections",
-     "selector": "main > section, main > * > section, body > section",
-     "min": 4
-    }
-   ]
-  },
-  {
-   "id": 4,
-   "slug": "clinic-landing",
-   "pageType": "service-landing",
-   "kind": "marketing",
-   "prompt": "Website homepage for a physiotherapy clinic in Leeds. Booking an appointment is the goal. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete landing page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "top navigation",
-     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "footer",
-     "selector": "footer",
-     "min": 1
-    },
-    {
-     "name": "at least 4 sections",
-     "selector": "main > section, main > * > section, body > section",
-     "min": 4
-    },
-    {
-     "name": "book CTA",
-     "text": "book",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 5,
-   "slug": "coffee-store-product",
-   "pageType": "store-product",
-   "kind": "marketing",
-   "prompt": "Product page for a 1kg bag of single-origin coffee beans from \"Northbank Roasters\". Grind options and a subscription option. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete store product page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "top navigation",
-     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "footer",
-     "selector": "footer",
-     "min": 1
-    },
-    {
-     "name": "price",
-     "text": "[£$€]\\s?\\d",
-     "min": 1
-    },
-    {
-     "name": "add to bag/cart",
-     "text": "add to (bag|cart|basket)",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 6,
-   "slug": "pricing-dev-api",
-   "pageType": "pricing",
-   "kind": "marketing",
-   "prompt": "Pricing page for a developer API with Free, Pro and Scale plans, monthly and annual billing. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete pricing page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "top navigation",
-     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "footer",
-     "selector": "footer",
-     "min": 1
-    },
-    {
-     "name": "at least 4 sections",
-     "selector": "main > section, main > * > section, body > section",
-     "min": 4
-    },
-    {
-     "name": "three tiers",
-     "text": "(free|pro|scale)",
-     "min": 3
-    },
-    {
-     "name": "billing toggle",
-     "selector": "[role=\"radiogroup\"], [role=\"switch\"], [role=\"tablist\"], input[type=\"radio\"]",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 7,
-   "slug": "pricing-meditation",
-   "pageType": "pricing",
-   "kind": "marketing",
-   "prompt": "Pricing for a meditation app: free, premium monthly, premium yearly, family plan. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete pricing page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "top navigation",
-     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "footer",
-     "selector": "footer",
-     "min": 1
-    },
-    {
-     "name": "at least 4 sections",
-     "selector": "main > section, main > * > section, body > section",
-     "min": 4
-    }
-   ]
-  },
-  {
-   "id": 8,
-   "slug": "analytics-dashboard",
-   "pageType": "dashboard",
-   "kind": "app",
-   "prompt": "Revenue analytics dashboard for a subscription business: MRR, churn, new customers, plan mix, top accounts. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete dashboard page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "navigation landmark",
-     "selector": "nav, [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "charts",
-     "selector": "svg, canvas",
-     "min": 3
-    },
-    {
-     "name": "table",
-     "selector": "table",
-     "min": 1
-    },
-    {
-     "name": "tabular numbers",
-     "text": "\\d",
-     "min": 8
-    }
-   ]
-  },
-  {
-   "id": 9,
-   "slug": "ops-dashboard-dark",
-   "pageType": "dashboard",
-   "kind": "app",
-   "prompt": "Dark operations dashboard for a logistics company: deliveries today, on-time rate, delays by region, live incidents. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete dashboard page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "navigation landmark",
-     "selector": "nav, [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "charts",
-     "selector": "svg, canvas",
-     "min": 2
-    }
-   ]
-  },
-  {
-   "id": 10,
-   "slug": "product-analytics",
-   "pageType": "dashboard",
-   "kind": "app",
-   "prompt": "Product usage dashboard: active users, retention cohorts, feature adoption, funnel from signup to paid. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete dashboard page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "navigation landmark",
-     "selector": "nav, [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "charts",
-     "selector": "svg, canvas",
-     "min": 3
-    }
-   ]
-  },
-  {
-   "id": 11,
-   "slug": "settings-workspace",
-   "pageType": "settings",
-   "kind": "app",
-   "prompt": "Settings page for a team workspace: general, members, billing with usage, API keys, delete workspace. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete settings page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "navigation landmark",
-     "selector": "nav, [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "danger action",
-     "text": "delete",
-     "min": 1
-    },
-    {
-     "name": "form fields",
-     "selector": "input, select",
-     "min": 4
-    }
-   ]
-  },
-  {
-   "id": 12,
-   "slug": "settings-profile",
-   "pageType": "settings",
-   "kind": "app",
-   "prompt": "Personal account settings: profile photo, name, email, password, notification preferences, connected accounts. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete settings page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "navigation landmark",
-     "selector": "nav, [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "switches or checkboxes",
-     "selector": "[role=\"switch\"], input[type=\"checkbox\"]",
-     "min": 2
-    }
-   ]
-  },
-  {
-   "id": 13,
-   "slug": "docs-api",
-   "pageType": "docs",
-   "kind": "reading",
-   "prompt": "Documentation page for \"Send your first event\" in an analytics API, with code in JavaScript, Python and curl. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete docs page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "paragraph text",
-     "selector": "main p",
-     "min": 4
-    },
-    {
-     "name": "code blocks",
-     "selector": "pre",
-     "min": 2
-    },
-    {
-     "name": "side navigation",
-     "selector": "nav",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 14,
-   "slug": "docs-help-center",
-   "pageType": "docs",
-   "kind": "reading",
-   "prompt": "Help center article: how to export your data, for a project management tool. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete docs page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "paragraph text",
-     "selector": "main p",
-     "min": 4
-    }
-   ]
-  },
-  {
-   "id": 15,
-   "slug": "auth-signin",
-   "pageType": "auth",
-   "kind": "flow",
-   "prompt": "Sign-in page for a B2B app with email, Google SSO and a magic link option. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete auth page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "a form",
-     "selector": "form",
-     "min": 1
-    },
-    {
-     "name": "labelled inputs",
-     "selector": "label",
-     "min": 1
-    },
-    {
-     "name": "email input",
-     "selector": "input[type=\"email\"]",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 16,
-   "slug": "onboarding-steps",
-   "pageType": "auth",
-   "kind": "flow",
-   "prompt": "Onboarding flow after sign-up: name your workspace, invite teammates, connect a data source. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete auth page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "a form",
-     "selector": "form",
-     "min": 1
-    },
-    {
-     "name": "labelled inputs",
-     "selector": "label",
-     "min": 1
-    },
-    {
-     "name": "steps indicator",
-     "text": "(step|1 of|of 3)",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 17,
-   "slug": "directory-integrations",
-   "pageType": "directory",
-   "kind": "app",
-   "prompt": "Integrations directory with search, category filters and 40 integrations as cards. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete directory page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "navigation landmark",
-     "selector": "nav, [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "search",
-     "selector": "input[type=\"search\"], [role=\"searchbox\"], [role=\"combobox\"]",
-     "min": 1
-    },
-    {
-     "name": "cards",
-     "selector": "article, li",
-     "min": 8
-    }
-   ]
-  },
-  {
-   "id": 18,
-   "slug": "directory-templates",
-   "pageType": "directory",
-   "kind": "app",
-   "prompt": "A gallery of 24 report templates, filterable by team and sortable by popularity. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete directory page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "navigation landmark",
-     "selector": "nav, [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    }
-   ]
-  },
-  {
-   "id": 19,
-   "slug": "blog-article",
-   "pageType": "blog",
-   "kind": "reading",
-   "prompt": "A long-form blog article about pricing experiments, with a pull quote, a chart and related posts. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete blog page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "paragraph text",
-     "selector": "main p",
-     "min": 4
-    },
-    {
-     "name": "article",
-     "selector": "article",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 20,
-   "slug": "portfolio-architect",
-   "pageType": "portfolio",
-   "kind": "marketing",
-   "prompt": "Minimal portfolio for an architecture studio with 6 projects and a contact section. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete portfolio page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "top navigation",
-     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "footer",
-     "selector": "footer",
-     "min": 1
-    },
-    {
-     "name": "at least 4 sections",
-     "selector": "main > section, main > * > section, body > section",
-     "min": 4
-    },
-    {
-     "name": "project images",
-     "selector": "img, figure, picture, [role=\"img\"]",
-     "min": 4
-    }
-   ]
-  },
-  {
-   "id": 21,
-   "slug": "checkout-shop",
-   "pageType": "checkout",
-   "kind": "flow",
-   "prompt": "Checkout page for an online furniture shop: contact, delivery options, payment, order summary. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete checkout page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "a form",
-     "selector": "form",
-     "min": 1
-    },
-    {
-     "name": "labelled inputs",
-     "selector": "label",
-     "min": 1
-    },
-    {
-     "name": "order total",
-     "text": "total",
-     "min": 1
-    },
-    {
-     "name": "pay button",
-     "text": "(pay|place order)",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 22,
-   "slug": "changelog",
-   "pageType": "changelog",
-   "kind": "reading",
-   "prompt": "Changelog page for a design tool with 8 releases, tagged New, Improved and Fixed. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete changelog page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "paragraph text",
-     "selector": "main p",
-     "min": 4
-    },
-    {
-     "name": "dates",
-     "text": "\\b(20\\d\\d|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)",
-     "min": 4
-    }
-   ]
-  },
-  {
-   "id": 23,
-   "slug": "status-page",
-   "pageType": "status",
-   "kind": "app",
-   "prompt": "Public status page for a cloud platform with 6 services, 90-day uptime and two past incidents. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete status page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "navigation landmark",
-     "selector": "nav, [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "uptime figures",
-     "text": "\\d{2}\\.\\d+%",
-     "min": 3
-    }
-   ]
-  },
-  {
-   "id": 24,
-   "slug": "admin-users",
-   "pageType": "admin-table",
-   "kind": "app",
-   "prompt": "Admin page to manage 1,284 users: search, filter by role and status, bulk deactivate, invite user. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete admin table page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "navigation landmark",
-     "selector": "nav, [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "table",
-     "selector": "table",
-     "min": 1
-    },
-    {
-     "name": "checkboxes",
-     "selector": "input[type=\"checkbox\"], [role=\"checkbox\"]",
-     "min": 3
-    }
-   ]
-  },
-  {
-   "id": 25,
-   "slug": "admin-orders",
-   "pageType": "admin-table",
-   "kind": "app",
-   "prompt": "Orders list for a small e-commerce back office with status filters and a detail drawer. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete admin table page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "navigation landmark",
-     "selector": "nav, [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "table",
-     "selector": "table",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 26,
-   "slug": "inbox-support",
-   "pageType": "inbox",
-   "kind": "app",
-   "prompt": "Support inbox for a helpdesk: conversation list, thread, reply box, customer details on the right. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete inbox page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "navigation landmark",
-     "selector": "nav, [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "reply box",
-     "selector": "textarea, [contenteditable]",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 27,
-   "slug": "ai-chat",
-   "pageType": "ai-chat",
-   "kind": "app",
-   "prompt": "A chat interface for an AI assistant with a history sidebar and a prompt box. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete ai chat page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "navigation landmark",
-     "selector": "nav, [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "prompt box",
-     "selector": "textarea, [contenteditable]",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 28,
-   "slug": "not-found",
-   "pageType": "not-found",
-   "kind": "flow",
-   "prompt": "A 404 page for a SaaS marketing site. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete not found page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "a form",
-     "selector": "form",
-     "min": 1
-    },
-    {
-     "name": "labelled inputs",
-     "selector": "label",
-     "min": 1
-    },
-    {
-     "name": "link home",
-     "selector": "a[href]",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 29,
-   "slug": "contact",
-   "pageType": "contact",
-   "kind": "marketing",
-   "prompt": "Contact sales page with a short form and office locations. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete contact page that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "top navigation",
-     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "footer",
-     "selector": "footer",
-     "min": 1
-    },
-    {
-     "name": "at least 4 sections",
-     "selector": "main > section, main > * > section, body > section",
-     "min": 4
-    },
-    {
-     "name": "form",
-     "selector": "form",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 30,
-   "slug": "restyle-existing",
-   "pageType": "landing",
-   "kind": "marketing",
-   "prompt": "Restyle this existing page (evals/fixtures/plain-landing.html) to look designed, keeping all of its content. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete landing page that passes the audit and the taste critic.",
-   "files": [
-    "evals/fixtures/plain-landing.html"
-   ],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "top navigation",
-     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "footer",
-     "selector": "footer",
-     "min": 1
-    },
-    {
-     "name": "at least 4 sections",
-     "selector": "main > section, main > * > section, body > section",
-     "min": 4
-    }
-   ]
-  },
-  {
-   "id": 31,
-   "slug": "agent-workspace",
-   "pageType": "agent-app",
-   "kind": "app",
-   "prompt": "A desktop app for a coding agent called \"Tiller\": sessions grouped by project in a sidebar, a box to describe a new task, and recent sessions underneath. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete agent workspace that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "navigation landmark",
-     "selector": "nav, [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "task box",
-     "selector": "textarea, [contenteditable]",
-     "min": 1
-    },
-    {
-     "name": "at least 3 sessions listed",
-     "selector": "nav li, aside li",
-     "min": 3
-    }
-   ]
-  },
-  {
-   "id": 32,
-   "slug": "mobile-habits",
-   "pageType": "mobile-app",
-   "kind": "app",
-   "prompt": "The home screen of a phone app for tracking daily habits, called \"Tally Up\": today's progress, a list of habits to tick off, a way to add one, and bottom tabs. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete phone app screen that passes the audit and the taste critic.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "main landmark",
-     "selector": "main",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "bottom tabs",
-     "selector": "nav a, nav button",
-     "min": 3,
-     "max": 5
-    },
-    {
-     "name": "a list of at least 3 rows",
-     "selector": "main li",
-     "min": 3
-    },
-    {
-     "name": "one way to add",
-     "selector": "button, a.lt-btn",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 33,
-   "slug": "law-firm-landing",
-   "pageType": "service-landing",
-   "kind": "marketing",
-   "prompt": "Website home page for Harrow & Finch, a three-partner employment law firm in Manchester. People should book a free first call. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete page that passes the audit and the taste critic, with sections that fit the subject.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen",
-    "No software sections (logo wall, feature grid, \"Start free\") on a page that is not for software"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "top navigation",
-     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "footer",
-     "selector": "footer",
-     "min": 1
-    },
-    {
-     "name": "at least 4 sections",
-     "selector": "main > section, main > * > section, body > section",
-     "min": 4
-    },
-    {
-     "name": "fees or first call stated",
-     "text": "free",
-     "min": 1
-    },
-    {
-     "name": "phone link",
-     "selector": "a[href^=\"tel:\"]",
-     "min": 1
-    },
-    {
-     "name": "no start-free",
-     "text": "start free",
-     "max": 0,
-     "min": 0
-    }
-   ]
-  },
-  {
-   "id": 34,
-   "slug": "food-bank-cause",
-   "pageType": "cause",
-   "kind": "marketing",
-   "prompt": "Home page for Canal Street Food Bank, a volunteer-run charity in Birmingham. Two audiences: people who need food this week, and people who want to give. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete page that passes the audit and the taste critic, with sections that fit the subject.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen",
-    "No software sections (logo wall, feature grid, \"Start free\") on a page that is not for software"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "top navigation",
-     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "footer",
-     "selector": "footer",
-     "min": 1
-    },
-    {
-     "name": "at least 4 sections",
-     "selector": "main > section, main > * > section, body > section",
-     "min": 4
-    },
-    {
-     "name": "donate action",
-     "text": "donate",
-     "min": 1
-    },
-    {
-     "name": "opening times as a table",
-     "selector": "table",
-     "min": 1
-    },
-    {
-     "name": "no pricing tiers",
-     "selector": ".lt-pricing-tiers",
-     "max": 0,
-     "min": 0
-    }
-   ]
-  },
-  {
-   "id": 35,
-   "slug": "ceramics-shop",
-   "pageType": "brand-landing",
-   "kind": "marketing",
-   "prompt": "Home page for Tidewater Pottery, one potter in Cornwall selling four stoneware pieces online. No photographs yet. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete page that passes the audit and the taste critic, with sections that fit the subject.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen",
-    "No software sections (logo wall, feature grid, \"Start free\") on a page that is not for software"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "top navigation",
-     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "footer",
-     "selector": "footer",
-     "min": 1
-    },
-    {
-     "name": "at least 4 sections",
-     "selector": "main > section, main > * > section, body > section",
-     "min": 4
-    },
-    {
-     "name": "prices shown",
-     "text": "£",
-     "min": 3
-    },
-    {
-     "name": "art panels in place of photographs",
-     "selector": ".lt-art",
-     "min": 3
-    },
-    {
-     "name": "delivery answered",
-     "text": "delivery",
-     "min": 1
-    }
-   ]
-  },
-  {
-   "id": 36,
-   "slug": "conference-event",
-   "pageType": "event",
-   "kind": "marketing",
-   "prompt": "Website for Signal & Noise, a one-day data journalism conference in Glasgow on 9 October 2027, 200 places, tickets £120. Use the lumina-taste skill. Write the result to index.html (plus any css/js files) in the output folder.",
-   "expected_output": "A complete page that passes the audit and the taste critic, with sections that fit the subject.",
-   "files": [],
-   "expectations": [
-    "Ran compose.mjs (or followed its plan) before writing markup",
-    "Taste profile written and tokens used; no raw hex colours in component CSS",
-    "node scripts/audit-ui.mjs reports 0 errors at 390px and 1440px, light and dark",
-    "Taste score (audit-ui --taste) is 90 or more",
-    "No placeholder copy (lorem ipsum, Acme, John Doe) and no hype words",
-    "One primary action per screen",
-    "No software sections (logo wall, feature grid, \"Start free\") on a page that is not for software"
-   ],
-   "checks": [
-    {
-     "name": "one h1",
-     "selector": "h1",
-     "min": 1,
-     "max": 1
-    },
-    {
-     "name": "top navigation",
-     "selector": "header nav, nav[aria-label], [role=\"navigation\"]",
-     "min": 1
-    },
-    {
-     "name": "footer",
-     "selector": "footer",
-     "min": 1
-    },
-    {
-     "name": "at least 4 sections",
-     "selector": "main > section, main > * > section, body > section",
-     "min": 4
-    },
-    {
-     "name": "date as time element",
-     "selector": "time[datetime]",
-     "min": 1
-    },
-    {
-     "name": "ticket action",
-     "text": "ticket",
-     "min": 2
-    },
-    {
-     "name": "programme rows",
-     "selector": ".lt-services li, table tr",
-     "min": 4
-    }
-   ]
-  }
- ]
+  ]
 }

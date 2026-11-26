@@ -7,13 +7,7 @@
   "bestFor": "Two to four goals tracked together, like activity rings",
   "avoidFor": "Comparing values precisely (rings of different radius mislead; use bars)",
   "dataShape": "items: label + value + max",
-  "aliases": [
-    "activity rings",
-    "progress rings chart",
-    "circular progress",
-    "goal rings",
-    "concentric bars"
-  ],
+  "aliases": ["activity rings","progress rings chart","circular progress","goal rings","concentric bars"],
   "react": "RadialBarChart",
   "wide": false
 }

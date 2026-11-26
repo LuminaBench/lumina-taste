@@ -4,14 +4,10 @@
   "name": "Funnel chart",
   "group": "Flow",
   "summary": "Ordered steps with drop-off between each.",
-  "bestFor": "Conversion through 3\u20136 ordered steps",
+  "bestFor": "Conversion through 3–6 ordered steps",
   "avoidFor": "Unordered categories",
   "dataShape": "steps: label + value",
-  "aliases": [
-    "conversion funnel",
-    "drop off chart",
-    "pipeline stages"
-  ],
+  "aliases": ["conversion funnel","drop off chart","pipeline stages"],
   "react": "FunnelChart",
   "wide": false
 }

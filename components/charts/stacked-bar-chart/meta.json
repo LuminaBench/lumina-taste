@@ -6,12 +6,8 @@
   "summary": "Totals per category split into parts.",
   "bestFor": "Totals plus composition across categories",
   "avoidFor": "Comparing middle segments precisely",
-  "dataShape": "categories + 2\u20135 series",
-  "aliases": [
-    "stacked columns",
-    "100 percent bar",
-    "composition bars"
-  ],
+  "dataShape": "categories + 2–5 series",
+  "aliases": ["stacked columns","100 percent bar","composition bars"],
   "react": "StackedBarChart",
   "wide": false
 }

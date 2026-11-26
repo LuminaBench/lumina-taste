@@ -8,30 +8,13 @@
       "name": "Motion tokens & curves",
       "summary": "Side-by-side ease-out, spring and in-out at 90–320ms, the only curves this kit uses.",
       "pattern": "CSS custom properties",
-      "states": [
-        "snappy",
-        "calm",
-        "reduced"
-      ],
-      "aliases": [
-        "easing curves",
-        "animation timing",
-        "spring easing",
-        "transition presets",
-        "durations"
-      ],
+      "states": ["snappy","calm","reduced"],
+      "aliases": ["easing curves","animation timing","spring easing","transition presets","durations"],
       "react": "MOTION",
-      "deps": [
-        "button"
-      ],
+      "deps": ["button"],
       "api": "--ease-out · --ease-spring · --dur-*",
       "w": 420,
-      "called": [
-        "easing curves",
-        "animation timing values",
-        "spring easing for toggles",
-        "how long should animations be"
-      ],
+      "called": ["easing curves","animation timing values","spring easing for toggles","how long should animations be"],
       "anatomy": [
         {
           "sel": "[data-part=\"lane\"]:nth-child(1)",
@@ -55,16 +38,8 @@
       "prompt": "Use motion tokens only: --dur-1 (90ms) to --dur-3 (200ms) for controls, --dur-4 (320ms) for sheets and drawers, --ease-out for entrances, --ease-in-out for swaps, --ease-spring for small indicators. All durations collapse to 1ms under prefers-reduced-motion.",
       "debug": "Debug my motion. Rule out: hard-coded durations that ignore reduced motion; ease-in on entrances; spring overshoot on large surfaces; transitions over 300ms on small controls. The symptom:",
       "code": [
-        [
-          "CSS",
-          "transition: scale var(--dur-1) var(--ease-out)",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "MOTION, transition()",
-          "TypeScript helpers"
-        ]
+        ["CSS","transition: scale var(--dur-1) var(--ease-out)",""],
+        ["lumina-taste","MOTION, transition()","TypeScript helpers"]
       ]
     },
     {
@@ -72,29 +47,13 @@
       "name": "View Transition helper",
       "summary": "Morph elements between layouts with the View Transitions API and a no-op fallback.",
       "pattern": "View Transitions API",
-      "states": [
-        "grid",
-        "list",
-        "transitioning"
-      ],
-      "aliases": [
-        "page transition",
-        "shared element transition",
-        "layout morph",
-        "magic move"
-      ],
+      "states": ["grid","list","transitioning"],
+      "aliases": ["page transition","shared element transition","layout morph","magic move"],
       "react": "useViewTransition",
-      "deps": [
-        "segmented-control"
-      ],
+      "deps": ["segmented-control"],
       "api": "document.startViewTransition",
       "w": 460,
-      "called": [
-        "smooth morph between grid and list",
-        "page transition",
-        "shared element animation",
-        "magic move"
-      ],
+      "called": ["smooth morph between grid and list","page transition","shared element animation","magic move"],
       "anatomy": [
         {
           "sel": "li:first-child",
@@ -106,21 +65,9 @@
       "prompt": "Animate layout changes with the View Transitions API: give moving elements unique view-transition-name values, wrap the DOM update in document.startViewTransition, and skip it under reduced motion or when unsupported.",
       "debug": "Debug my view transition. Rule out: duplicate view-transition-name values (the transition is skipped); React updates not flushed inside the callback (flushSync); transitions running under reduced motion. The symptom:",
       "code": [
-        [
-          "JS",
-          "document.startViewTransition()",
-          ""
-        ],
-        [
-          "React",
-          "flushSync inside the callback",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "useViewTransition()",
-          "React"
-        ]
+        ["JS","document.startViewTransition()",""],
+        ["React","flushSync inside the callback",""],
+        ["lumina-taste","useViewTransition()","React"]
       ]
     },
     {
@@ -128,26 +75,13 @@
       "name": "Scroll reveal",
       "summary": "Sections fade up once as they enter view, with no scroll-jacking.",
       "pattern": "IntersectionObserver utility",
-      "states": [
-        "armed",
-        "revealed"
-      ],
-      "aliases": [
-        "animate on scroll",
-        "fade in on scroll",
-        "aos",
-        "reveal on scroll"
-      ],
+      "states": ["armed","revealed"],
+      "aliases": ["animate on scroll","fade in on scroll","aos","reveal on scroll"],
       "react": "ScrollReveal",
       "fill": true,
       "api": "IntersectionObserver",
       "w": 460,
-      "called": [
-        "fade in when you scroll down",
-        "animate on scroll",
-        "sections appear as you scroll",
-        "reveal animation"
-      ],
+      "called": ["fade in when you scroll down","animate on scroll","sections appear as you scroll","reveal animation"],
       "anatomy": [
         {
           "sel": ".lt-reveal",
@@ -159,21 +93,9 @@
       "prompt": "Add a one-time scroll reveal: sections fade up 12px the first time they enter the viewport (IntersectionObserver, 15% threshold), hidden only after the script arms them so content is never lost, and visible immediately under reduced motion.",
       "debug": "Debug my scroll reveal. Rule out: content hidden in CSS before JS runs; elements re-animating every time; reveals that never fire near the bottom of the page. The symptom:",
       "code": [
-        [
-          "CSS",
-          "animation-timeline: view()",
-          "pure CSS"
-        ],
-        [
-          "JS",
-          "IntersectionObserver",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ScrollReveal>",
-          "React"
-        ]
+        ["CSS","animation-timeline: view()","pure CSS"],
+        ["JS","IntersectionObserver",""],
+        ["lumina-taste","<ScrollReveal>","React"]
       ]
     },
     {
@@ -181,16 +103,8 @@
       "name": "Cursor-follow spotlight",
       "summary": "A soft single-hue glow and border light that follow the pointer across a card.",
       "pattern": "Pointer-driven CSS variables",
-      "states": [
-        "rest",
-        "lit"
-      ],
-      "aliases": [
-        "spotlight card",
-        "glow on hover",
-        "mouse follow gradient",
-        "linear style card hover"
-      ],
+      "states": ["rest","lit"],
+      "aliases": ["spotlight card","glow on hover","mouse follow gradient","linear style card hover"],
       "react": "SpotlightCard",
       "fill": true,
       "api": "--mx · --my",
@@ -211,34 +125,15 @@
       ],
       "prompt": "Add a cursor spotlight: on pointermove (mouse only) set --mx/--my on the card; draw a soft radial gradient of --accent-soft at that point and a masked border highlight; fade out on leave; off under reduced motion.",
       "debug": "Debug my spotlight. Rule out: multi-colour gradients; effects on touch; the glow covering text contrast. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "radial-gradient + mask-composite",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<SpotlightCard>",
-          "React"
-        ]
-      ]
+      "code": [["CSS","radial-gradient + mask-composite",""],["lumina-taste","<SpotlightCard>","React"]]
     },
     {
       "id": "optical-align",
       "name": "Optical icon alignment",
       "summary": "Icons centred on cap height, play triangles nudged, trailing arrows tightened.",
       "pattern": "CSS utility",
-      "states": [
-        "default",
-        "hover"
-      ],
-      "aliases": [
-        "icon alignment",
-        "vertically center icon with text",
-        "icon baseline fix",
-        "optical centering"
-      ],
+      "states": ["default","hover"],
+      "aliases": ["icon alignment","vertically center icon with text","icon baseline fix","optical centering"],
       "react": "Optical",
       "api": ".lt-optical",
       "w": 440,
@@ -255,52 +150,23 @@
           "api": "translate: 1px 0",
           "text": "Nudged right because its weight sits left."
         },
-        {
-          "sel": "[data-trail]",
-          "name": "Trailing arrow",
-          "api": "gap: 0.3em",
-          "text": "Closer than a leading icon."
-        }
+        {"sel":"[data-trail]","name":"Trailing arrow","api":"gap: 0.3em","text":"Closer than a leading icon."}
       ],
       "prompt": "Align icons optically: inline-flex with align-items: center, icons sized in em, play triangles nudged 1px right, trailing arrows with a smaller gap than leading icons.",
       "debug": "Debug my icon alignment. Rule out: icons as inline images on the text baseline; fixed pixel icons in scaling text; play icons centred geometrically. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "display: inline-flex; align-items: center",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<Optical trail>",
-          "React"
-        ]
-      ]
+      "code": [["CSS","display: inline-flex; align-items: center",""],["lumina-taste","<Optical trail>","React"]]
     },
     {
       "id": "tactile-press",
       "name": "Tactile press",
       "summary": "Press-down scale on :active with a spring release, for any clickable surface.",
       "pattern": "CSS utility",
-      "states": [
-        "rest",
-        "pressed"
-      ],
-      "aliases": [
-        "press scale",
-        "button squish",
-        "click feedback",
-        "tap animation"
-      ],
+      "states": ["rest","pressed"],
+      "aliases": ["press scale","button squish","click feedback","tap animation"],
       "react": "PRESS",
       "api": ":active { scale }",
       "w": 400,
-      "called": [
-        "button squish when clicked",
-        "press animation",
-        "tap feedback",
-        "button that shrinks a bit when pressed"
-      ],
+      "called": ["button squish when clicked","press animation","tap feedback","button that shrinks a bit when pressed"],
       "anatomy": [
         {
           "sel": ".lt-press:first-child",
@@ -311,46 +177,20 @@
       ],
       "prompt": "Add tactile press feedback: on :active scale to --press-scale (0.97) in 90ms ease-out, release on a spring; 1 under reduced motion.",
       "debug": "Debug my press effect. Rule out: scale on disabled controls; long transitions that feel laggy; scale on large surfaces. The symptom:",
-      "code": [
-        [
-          "CSS",
-          ":active { scale: 0.97 }",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "className={PRESS}",
-          "React"
-        ]
-      ]
+      "code": [["CSS",":active { scale: 0.97 }",""],["lumina-taste","className={PRESS}","React"]]
     },
     {
       "id": "stagger-in",
       "name": "Staggered entrance",
       "summary": "List items enter 40ms apart, capped so long lists never drag.",
       "pattern": "CSS utility",
-      "states": [
-        "entering",
-        "settled"
-      ],
-      "aliases": [
-        "stagger animation",
-        "cascade in",
-        "list entrance",
-        "sequential fade"
-      ],
+      "states": ["entering","settled"],
+      "aliases": ["stagger animation","cascade in","list entrance","sequential fade"],
       "react": "Stagger",
-      "deps": [
-        "button"
-      ],
+      "deps": ["button"],
       "api": "animation-delay: calc(var(--i) × 40ms)",
       "w": 360,
-      "called": [
-        "items appearing one after another",
-        "cascade animation",
-        "staggered list entrance",
-        "sequential fade in"
-      ],
+      "called": ["items appearing one after another","cascade animation","staggered list entrance","sequential fade in"],
       "anatomy": [
         {
           "sel": ".lt-stagger > li:first-child",
@@ -361,35 +201,15 @@
       ],
       "prompt": "Stagger list entrances: each item fades up with animation-delay calc(min(var(--i), 6) * 40ms) so long lists never drag; none under reduced motion.",
       "debug": "Debug my stagger. Rule out: uncapped delays making long lists slow; stagger replaying on every re-render; animations under reduced motion. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "animation-delay with --i",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<Stagger>",
-          "React"
-        ]
-      ]
+      "code": [["CSS","animation-delay with --i",""],["lumina-taste","<Stagger>","React"]]
     },
     {
       "id": "text-shimmer",
       "name": "Text shimmer",
       "summary": "Loading text with a soft light sweeping across it; still under reduced motion.",
       "pattern": "background-clip: text",
-      "states": [
-        "animating",
-        "reduced motion"
-      ],
-      "aliases": [
-        "shimmering text",
-        "thinking text",
-        "loading text sweep",
-        "shiny text",
-        "glimmer"
-      ],
+      "states": ["animating","reduced motion"],
+      "aliases": ["shimmering text","thinking text","loading text sweep","shiny text","glimmer"],
       "react": "TextShimmer",
       "api": "background-clip: text",
       "w": 360,
@@ -409,18 +229,7 @@
       ],
       "prompt": "Add a text shimmer for in-progress states: muted text with a linear-gradient highlight in primary ink clipped to the text, sweeping left to right every 2.2s, role=\"status\" so the words are announced, and plain muted text under reduced motion.",
       "debug": "Debug my text shimmer. Rule out: the gradient colours hard-coded so it vanishes in dark mode; -webkit-text-fill-color missing in Safari; animation left running under reduced motion; shimmer on text people need to read carefully. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "background-clip: text",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<TextShimmer>",
-          "React"
-        ]
-      ],
+      "code": [["CSS","background-clip: text",""],["lumina-taste","<TextShimmer>","React"]],
       "added": 2
     },
     {
@@ -428,19 +237,8 @@
       "name": "Typewriter words",
       "summary": "A headline whose last word types, pauses and deletes itself to cycle through options.",
       "pattern": "aria-hidden animation + static text",
-      "states": [
-        "typing",
-        "holding",
-        "paused",
-        "reduced motion"
-      ],
-      "aliases": [
-        "rotating text",
-        "typing animation",
-        "changing words headline",
-        "typed.js effect",
-        "word cycler"
-      ],
+      "states": ["typing","holding","paused","reduced motion"],
+      "aliases": ["rotating text","typing animation","changing words headline","typed.js effect","word cycler"],
       "react": "Typewriter",
       "api": "aria-hidden + visually hidden",
       "w": 520,
@@ -466,18 +264,7 @@
       ],
       "prompt": "Add a typewriter headline: a fixed prefix and a last word that deletes at 38ms per letter, types at about 90ms, holds for 2s, then moves to the next word. Hide the moving text from screen readers and give them the full sentence once; pause on hover, focus and hidden tabs; swap words without typing under reduced motion.",
       "debug": "Debug my typewriter. Rule out: screen readers announcing every letter (aria-hidden on the animated text); layout shift as the word changes width (put it at the end of the line); timers running in background tabs; no reduced-motion path. The symptom:",
-      "code": [
-        [
-          "Typed.js",
-          "new Typed()",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<Typewriter words>",
-          "React"
-        ]
-      ],
+      "code": [["Typed.js","new Typed()",""],["lumina-taste","<Typewriter words>","React"]],
       "added": 2
     },
     {
@@ -485,18 +272,8 @@
       "name": "Logo marquee",
       "summary": "An endless, edge-faded strip of customer wordmarks that pauses on hover.",
       "pattern": "CSS animation with duplicated row",
-      "states": [
-        "scrolling",
-        "paused",
-        "reduced motion"
-      ],
-      "aliases": [
-        "logo cloud",
-        "scrolling logos",
-        "infinite ticker",
-        "customer logos strip",
-        "trusted by bar"
-      ],
+      "states": ["scrolling","paused","reduced motion"],
+      "aliases": ["logo cloud","scrolling logos","infinite ticker","customer logos strip","trusted by bar"],
       "react": "LogoMarquee",
       "api": "@keyframes translate: -100%",
       "w": 640,
@@ -528,18 +305,7 @@
       ],
       "prompt": "Add a logo marquee under the hero: a muted \"Trusted by teams at\" line, then two identical rows of wordmarks (the second aria-hidden) translating -100% over 32s linear infinite, edges faded with mask-image, paused on hover and focus, and a static centred wrap under reduced motion.",
       "debug": "Debug my marquee. Rule out: a jump at the loop point (rows must be identical with equal padding); screen readers reading every logo twice; colourful logos fighting the hero; animation under reduced motion. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "@keyframes + translate",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<LogoMarquee logos>",
-          "React"
-        ]
-      ],
+      "code": [["CSS","@keyframes + translate",""],["lumina-taste","<LogoMarquee logos>","React"]],
       "added": 2
     },
     {
@@ -547,11 +313,7 @@
       "name": "Text reveal",
       "summary": "The words of one headline rise in one after another, once, when it first comes on screen.",
       "pattern": "word spans + one transition",
-      "states": [
-        "before",
-        "revealed",
-        "reduced motion (static)"
-      ],
+      "states": ["before","revealed","reduced motion (static)"],
       "aliases": [
         "word by word reveal",
         "headline animation",
@@ -563,12 +325,7 @@
       "react": "TextReveal",
       "api": "--reveal-dur · --reveal-gap",
       "w": 620,
-      "preview": [
-        [
-          "click",
-          "[data-replay-reveal]"
-        ]
-      ],
+      "preview": [["click","[data-replay-reveal]"]],
       "called": [
         "headline where the words appear one at a time",
         "the text that slides up word by word",
@@ -585,16 +342,8 @@
       "prompt": "Add a text reveal to one headline per page: on first view, split its text into word spans (keep inline elements) and let each rise 0.4em and fade in over 520ms with an ease-out curve, 45ms after the word before it. Use opacity and translate only. Run once, never on scroll back. With reduced motion or no script the headline is plain text. Never use it on body copy, on more than one heading per screen, or letter by letter.",
       "debug": "Debug my text reveal. Rule out: text invisible when script fails (hide words only after splitting); layout shift from words changing size; replaying on every scroll; letter-by-letter splitting that breaks screen readers and ligatures; more than one revealed heading on a screen; a blur filter that smears on low-end devices. The symptom:",
       "code": [
-        [
-          "CSS",
-          "opacity + translate, transition-delay: calc(var(--i) * 45ms)",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<TextReveal as=\"h1\">",
-          "React"
-        ]
+        ["CSS","opacity + translate, transition-delay: calc(var(--i) * 45ms)",""],
+        ["lumina-taste","<TextReveal as=\"h1\">","React"]
       ],
       "added": 12
     }

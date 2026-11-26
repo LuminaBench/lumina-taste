@@ -1175,7 +1175,7 @@ test.describe('places and products', () => {
     await page.goto('/#/ui/visit-info');
     const s = card(page, 'visit-info');
     await expect(s.locator('tr[data-today]')).toHaveCount(1);
-    await expect(s.locator('[data-part="now"]')).toHaveText(/^(Open now, until \d+:\d+|Opens today at \d+:\d+|Closed now)$/);
+    await expect(s.locator('[data-part="now"]')).toHaveText(/^(Open now, until \d+:\d+|Opens today at \d+:\d+|Closed now(\. Opens (tomorrow|[A-Z][a-z]+day) at \d{1,2}(:\d{2})?)?)$/);
     await expect(s.locator('tbody tr')).toHaveCount(7);
   });
   test('booking bar: needs a date, then asks with date, time and people', async ({ page }) => {

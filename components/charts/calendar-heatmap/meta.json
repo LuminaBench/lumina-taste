@@ -7,12 +7,7 @@
   "bestFor": "Daily activity across months, weekly rhythms",
   "avoidFor": "Precise values or short ranges",
   "dataShape": "days: date + value",
-  "aliases": [
-    "contribution graph",
-    "github style heatmap",
-    "activity calendar",
-    "year heatmap"
-  ],
+  "aliases": ["contribution graph","github style heatmap","activity calendar","year heatmap"],
   "react": "CalendarHeatmap",
   "wide": true
 }

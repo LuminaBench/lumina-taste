@@ -8,17 +8,8 @@
       "name": "Hero, split",
       "summary": "Headline, one line of explanation and one primary action on the left; the product on the right.",
       "pattern": "<section> with labelled heading",
-      "states": [
-        "desktop two columns",
-        "stacked on narrow screens"
-      ],
-      "aliases": [
-        "landing hero",
-        "above the fold",
-        "header section with screenshot",
-        "split hero",
-        "marketing hero"
-      ],
+      "states": ["desktop two columns","stacked on narrow screens"],
+      "aliases": ["landing hero","above the fold","header section with screenshot","split hero","marketing hero"],
       "react": "HeroSplit",
       "api": "grid 1fr 1.05fr",
       "w": 1040,
@@ -29,12 +20,7 @@
         "first screen of a SaaS site"
       ],
       "anatomy": [
-        {
-          "sel": "h1",
-          "name": "Headline",
-          "api": "text-wrap: balance",
-          "text": "What it does, under 12 words."
-        },
+        {"sel":"h1","name":"Headline","api":"text-wrap: balance","text":"What it does, under 12 words."},
         {
           "sel": "[data-part=\"cta\"] [data-variant=\"primary\"]",
           "name": "Primary action",
@@ -47,27 +33,11 @@
           "api": "",
           "text": "Removes the main worry in one line."
         },
-        {
-          "sel": "[data-part=\"frame\"]",
-          "name": "Product",
-          "api": "",
-          "text": "The real product, not stock art."
-        }
+        {"sel":"[data-part=\"frame\"]","name":"Product","api":"","text":"The real product, not stock art."}
       ],
       "prompt": "Build a split hero: left column with a short eyebrow, a headline under 12 words, a one-sentence lede, one primary button plus a ghost secondary, and a reassurance line with two checks; right column shows the product in a framed card. Stack on narrow containers. Tokens only.",
       "debug": "Debug my hero. Rule out: two primary buttons; a headline over two lines on desktop; illustration instead of product; text over a busy image with low contrast. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<section> + grid",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<HeroSplit title lede primary>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<section> + grid",""],["lumina-taste","<HeroSplit title lede primary>","React"]],
       "added": 4,
       "note": "The right-hand side is a slot. Keep data-part=\"frame\" for a software product (put a real screenshot or a small live mock in it). For anything else replace the whole frame with <div data-part=\"visual\">…</div> holding one thing: an art-panel (a physical product or a place with no photograph yet), a device-frame, a code-block, a chart, or an <img>."
     },
@@ -76,16 +46,8 @@
       "name": "Hero, centred",
       "summary": "A centred headline with an announcement pill, two actions and a framed product shot below.",
       "pattern": "<section> with labelled heading",
-      "states": [
-        "default",
-        "narrow"
-      ],
-      "aliases": [
-        "centered hero",
-        "announcement pill hero",
-        "product launch hero",
-        "big headline section"
-      ],
+      "states": ["default","narrow"],
+      "aliases": ["centered hero","announcement pill hero","product launch hero","big headline section"],
       "react": "HeroCentered",
       "api": "justify-items: center",
       "w": 1040,
@@ -96,18 +58,8 @@
         "centred landing header with screenshot below"
       ],
       "anatomy": [
-        {
-          "sel": "[data-part=\"pill\"]",
-          "name": "Announcement",
-          "api": "<a>",
-          "text": "One recent thing, linked."
-        },
-        {
-          "sel": "h1",
-          "name": "Headline",
-          "api": "max-width: 16ch",
-          "text": "Short lines read better centred."
-        },
+        {"sel":"[data-part=\"pill\"]","name":"Announcement","api":"<a>","text":"One recent thing, linked."},
+        {"sel":"h1","name":"Headline","api":"max-width: 16ch","text":"Short lines read better centred."},
         {
           "sel": "[data-part=\"shot\"]",
           "name": "Product shot",
@@ -117,18 +69,7 @@
       ],
       "prompt": "Build a centred hero: an announcement pill (\"New\" chip + text + arrow) linking to the changelog, a headline capped at 16ch, a lede, a primary and a secondary button, then a framed product shot. Keep text centred only because every line is short.",
       "debug": "Debug my centred hero. Rule out: centred paragraphs longer than three lines; a pill nobody can click; the product shot cropped on mobile; gradient headline text. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<section>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<HeroCentered>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<section>",""],["lumina-taste","<HeroCentered>","React"]],
       "added": 4
     },
     {
@@ -136,27 +77,12 @@
       "name": "Feature grid",
       "summary": "Six features in three columns: a quiet icon, a short title and one sentence each.",
       "pattern": "<section> + <ul>",
-      "states": [
-        "3 columns",
-        "2 columns",
-        "1 column"
-      ],
-      "aliases": [
-        "features section",
-        "benefits grid",
-        "why us section",
-        "icon grid",
-        "feature list"
-      ],
+      "states": ["3 columns","2 columns","1 column"],
+      "aliases": ["features section","benefits grid","why us section","icon grid","feature list"],
       "react": "FeatureGrid",
       "api": "grid repeat(3)",
       "w": 1000,
-      "called": [
-        "grid of features with icons",
-        "six benefits in three columns",
-        "why choose us section",
-        "feature boxes"
-      ],
+      "called": ["grid of features with icons","six benefits in three columns","why choose us section","feature boxes"],
       "anatomy": [
         {
           "sel": "li:first-child [data-part=\"icon\"]",
@@ -164,33 +90,12 @@
           "api": "",
           "text": "One icon style, one accent; never emoji."
         },
-        {
-          "sel": "li:first-child h3",
-          "name": "Title",
-          "api": "",
-          "text": "Three to five words."
-        },
-        {
-          "sel": "li:first-child p",
-          "name": "Sentence",
-          "api": "",
-          "text": "One sentence with a concrete detail."
-        }
+        {"sel":"li:first-child h3","name":"Title","api":"","text":"Three to five words."},
+        {"sel":"li:first-child p","name":"Sentence","api":"","text":"One sentence with a concrete detail."}
       ],
       "prompt": "Build a feature grid: a two-line heading, then six features in three columns (two, then one on narrow containers), each with a short title and one concrete sentence (an icon only where it says something the title cannot, outlined, never in a tinted tile). No cards, no shadows: whitespace does the grouping.",
       "debug": "Debug my feature grid. Rule out: emoji icons; every feature in its own heavy card; paragraphs instead of one sentence; uneven icon styles. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ul> + grid",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<FeatureGrid features>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<ul> + grid",""],["lumina-taste","<FeatureGrid features>","React"]],
       "added": 4
     },
     {
@@ -198,17 +103,8 @@
       "name": "Pricing tiers",
       "summary": "Three plans side by side; the middle one is outlined in the accent and is the only filled button.",
       "pattern": "<section> + <ul> of plans",
-      "states": [
-        "three columns",
-        "stacked"
-      ],
-      "aliases": [
-        "pricing table",
-        "plans section",
-        "pricing cards",
-        "subscription tiers",
-        "pricing page"
-      ],
+      "states": ["three columns","stacked"],
+      "aliases": ["pricing table","plans section","pricing cards","subscription tiers","pricing page"],
       "react": "PricingTiers",
       "api": "grid repeat(3)",
       "w": 1000,
@@ -240,18 +136,7 @@
       ],
       "prompt": "Build pricing tiers: a centred heading and one-line lede, then three plan cards (name, who it is for, price with \"per seat / month\", a full-width button, then a hairline and a tick list). Feature the middle plan with an accent outline, a \"Most popular\" badge and the only primary button. Stack to one column under 760px.",
       "debug": "Debug my pricing cards. Rule out: three primary buttons; prices that jump width when toggled; feature lists of different lengths pushing buttons out of line; a featured plan that is just a different colour with no label. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ul> of plans",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<PricingTiers tiers>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<ul> of plans",""],["lumina-taste","<PricingTiers tiers>","React"]],
       "added": 4,
       "note": "One, two or three tiers: one or two sit centred at their own width. Never add a tier to fill the row."
     },
@@ -260,26 +145,12 @@
       "name": "Testimonial grid",
       "summary": "Three short customer quotes with a name and role, aligned so the names sit on one line.",
       "pattern": "<figure> + <blockquote>",
-      "states": [
-        "three columns",
-        "stacked"
-      ],
-      "aliases": [
-        "customer quotes",
-        "reviews section",
-        "social proof",
-        "testimonials",
-        "what customers say"
-      ],
+      "states": ["three columns","stacked"],
+      "aliases": ["customer quotes","reviews section","social proof","testimonials","what customers say"],
       "react": "TestimonialGrid",
       "api": "<blockquote>",
       "w": 1000,
-      "called": [
-        "customer quotes section",
-        "three reviews in boxes",
-        "what people say about us",
-        "social proof cards"
-      ],
+      "called": ["customer quotes section","three reviews in boxes","what people say about us","social proof cards"],
       "anatomy": [
         {
           "sel": "li:first-child blockquote",
@@ -296,18 +167,7 @@
       ],
       "prompt": "Build a testimonial grid: a heading, then three quote cards in a row (stacked when narrow), each a <figure> with a short <blockquote> about a concrete outcome and a <figcaption> with an initials avatar, name and role pinned to the bottom so names align. No star ratings, no carousels.",
       "debug": "Debug my testimonials. Rule out: quotes so long they become paragraphs; names at different heights; star ratings on B2B quotes; a carousel hiding two of the three. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<figure><blockquote>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<TestimonialGrid quotes>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<figure><blockquote>",""],["lumina-taste","<TestimonialGrid quotes>","React"]],
       "added": 4
     },
     {
@@ -315,17 +175,8 @@
       "name": "FAQ section",
       "summary": "Heading on the left, questions on the right as native details that open with a rotating plus.",
       "pattern": "<details> / <summary>",
-      "states": [
-        "first open",
-        "all closed",
-        "narrow"
-      ],
-      "aliases": [
-        "frequently asked questions",
-        "faq accordion",
-        "questions and answers",
-        "help section"
-      ],
+      "states": ["first open","all closed","narrow"],
+      "aliases": ["frequently asked questions","faq accordion","questions and answers","help section"],
       "react": "FaqSection",
       "api": "<details>",
       "w": 1000,
@@ -348,27 +199,11 @@
           "api": "rotate: 45deg",
           "text": "Turns into a cross when open."
         },
-        {
-          "sel": "[data-part=\"lede\"] a",
-          "name": "Way out",
-          "api": "",
-          "text": "Where to ask anything not listed."
-        }
+        {"sel":"[data-part=\"lede\"] a","name":"Way out","api":"","text":"Where to ask anything not listed."}
       ],
       "prompt": "Build an FAQ section: two columns (heading with a \"write to us\" line on the left, questions on the right), each question a native <details>/<summary> with hairline dividers and a plus that rotates to a cross; first one open; stacks under 760px; no JavaScript.",
       "debug": "Debug my FAQ. Rule out: a JS accordion where native <details> would do; the default disclosure triangle showing next to your icon; answers longer than four lines; questions nobody asks. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<details><summary>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<FaqSection items>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<details><summary>",""],["lumina-taste","<FaqSection items>","React"]],
       "added": 4
     },
     {
@@ -376,17 +211,8 @@
       "name": "Call-to-action band",
       "summary": "A calm closing panel with one sentence and one primary action, tinted with a single soft accent glow.",
       "pattern": "<section> + panel",
-      "states": [
-        "side by side",
-        "stacked"
-      ],
-      "aliases": [
-        "cta section",
-        "sign up band",
-        "closing banner",
-        "get started section",
-        "final call to action"
-      ],
+      "states": ["side by side","stacked"],
+      "aliases": ["cta section","sign up band","closing banner","get started section","final call to action"],
       "react": "CtaBand",
       "api": "flex space-between",
       "w": 1000,
@@ -397,12 +223,7 @@
         "closing banner with a button"
       ],
       "anatomy": [
-        {
-          "sel": "h2",
-          "name": "Promise",
-          "api": "max-width: 22ch",
-          "text": "What they get and how fast."
-        },
+        {"sel":"h2","name":"Promise","api":"max-width: 22ch","text":"What they get and how fast."},
         {
           "sel": "[data-variant=\"primary\"]",
           "name": "Primary action",
@@ -418,18 +239,7 @@
       ],
       "prompt": "Build a closing CTA band before the footer: a rounded panel with a single-hue accent glow from the top-right corner, a two-line promise heading, a short reassurance line, and the same primary action as the hero plus a ghost alternative; wraps to stacked on narrow screens.",
       "debug": "Debug my CTA band. Rule out: a purple-to-blue gradient background; a different primary action than the hero; three buttons; white text on a light tint. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<section>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<CtaBand title primary>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<section>",""],["lumina-taste","<CtaBand title primary>","React"]],
       "added": 4
     },
     {
@@ -437,17 +247,8 @@
       "name": "Stats band",
       "summary": "Four large figures with plain labels, divided by hairlines instead of boxes.",
       "pattern": "<dl> (label, value)",
-      "states": [
-        "four across",
-        "two by two"
-      ],
-      "aliases": [
-        "numbers section",
-        "metrics strip",
-        "by the numbers",
-        "social proof numbers",
-        "big stats row"
-      ],
+      "states": ["four across","two by two"],
+      "aliases": ["numbers section","metrics strip","by the numbers","social proof numbers","big stats row"],
       "react": "StatsBand",
       "api": "<dl>",
       "w": 1000,
@@ -479,18 +280,7 @@
       ],
       "prompt": "Build a stats band: a small eyebrow heading, then a <dl> of four figures in a row (two by two when narrow), each a large display-type value above a plain label that says what was counted and over what period, divided by hairlines, no boxes or icons.",
       "debug": "Debug my stats band. Rule out: rounded vanity numbers with no period (\"10k+ users\"); icons on every figure; numbers that jump width when counting up; boxes around each stat. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<dl><dt><dd>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<StatsBand stats>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<dl><dt><dd>",""],["lumina-taste","<StatsBand stats>","React"]],
       "added": 4
     },
     {
@@ -498,32 +288,12 @@
       "name": "Newsletter signup",
       "summary": "One-line email form that validates on submit, explains errors and confirms in place.",
       "pattern": "<form> + live message",
-      "states": [
-        "idle",
-        "error",
-        "subscribed"
-      ],
-      "aliases": [
-        "email signup",
-        "subscribe form",
-        "mailing list box",
-        "newsletter section",
-        "email capture"
-      ],
+      "states": ["idle","error","subscribed"],
+      "aliases": ["email signup","subscribe form","mailing list box","newsletter section","email capture"],
       "react": "NewsletterSignup",
       "api": "type=\"email\" · novalidate",
       "w": 900,
-      "preview": [
-        [
-          "type",
-          "input",
-          "ana@halyard.dev"
-        ],
-        [
-          "click",
-          "button[type=\"submit\"]"
-        ]
-      ],
+      "preview": [["type","input","ana@halyard.dev"],["click","button[type=\"submit\"]"]],
       "called": [
         "subscribe box with email field",
         "newsletter signup section",
@@ -546,18 +316,7 @@
       ],
       "prompt": "Build a newsletter section: a short promise on the left (\"One email a month\") and an email field with a Subscribe button on the right; validate on submit only, explain errors in words with an example, confirm in place (\"Check you@… for a link\"), and keep a \"No spam\" line under the field.",
       "debug": "Debug my signup form. Rule out: errors shown while the user is still typing; a placeholder as the only label; success shown as a toast that disappears; no autocomplete=\"email\". The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<form novalidate>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<NewsletterSignup onSubscribe>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<form novalidate>",""],["lumina-taste","<NewsletterSignup onSubscribe>","React"]],
       "added": 4
     },
     {
@@ -565,17 +324,8 @@
       "name": "How it works",
       "summary": "Three numbered steps on one thin connecting line, turning vertical on narrow screens.",
       "pattern": "<ol> of steps",
-      "states": [
-        "horizontal",
-        "vertical"
-      ],
-      "aliases": [
-        "steps section",
-        "process section",
-        "3 steps",
-        "getting started steps",
-        "how to use"
-      ],
+      "states": ["horizontal","vertical"],
+      "aliases": ["steps section","process section","3 steps","getting started steps","how to use"],
       "react": "HowItWorks",
       "api": "<ol> + connector line",
       "w": 1000,
@@ -598,27 +348,11 @@
           "api": "::before",
           "text": "One hairline links the steps; vertical when stacked."
         },
-        {
-          "sel": "li:nth-child(2) p",
-          "name": "Detail",
-          "api": "",
-          "text": "One sentence with the concrete action."
-        }
+        {"sel":"li:nth-child(2) p","name":"Detail","api":"","text":"One sentence with the concrete action."}
       ],
       "prompt": "Build a \"How it works\" section: a heading, then an <ol> of three steps each with a 35px numbered circle, a short title and one sentence, joined by a single hairline behind the circles; the line and list turn vertical under 760px. First step circle in the accent.",
       "debug": "Debug my steps section. Rule out: numbers as decorative divs in an unordered list; the connector line drawn through the text on mobile; more than four steps; icons and numbers competing. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ol>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<HowItWorks steps>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<ol>",""],["lumina-taste","<HowItWorks steps>","React"]],
       "added": 4
     },
     {
@@ -626,28 +360,12 @@
       "name": "Team grid",
       "summary": "Square portraits or initials with a name and role, in a grid that fills any width.",
       "pattern": "<ul> of people",
-      "states": [
-        "four or fewer",
-        "list rows",
-        "narrow",
-        "wide"
-      ],
-      "aliases": [
-        "team section",
-        "about us people",
-        "staff grid",
-        "meet the team",
-        "people cards"
-      ],
+      "states": ["four or fewer","list rows","narrow","wide"],
+      "aliases": ["team section","about us people","staff grid","meet the team","people cards"],
       "react": "TeamGrid",
       "api": "auto-fill minmax(140px)",
       "w": 1000,
-      "called": [
-        "meet the team section",
-        "grid of people photos with names",
-        "about us team",
-        "staff photos with roles"
-      ],
+      "called": ["meet the team section","grid of people photos with names","about us team","staff photos with roles"],
       "anatomy": [
         {
           "sel": "li:first-child [data-part=\"avatar\"]",
@@ -664,18 +382,7 @@
       ],
       "prompt": "Build a team section: heading and a one-line lede with a hiring link, then a grid (auto-fill, min 140px) of square portraits with rounded corners, falling back to large initials on a neutral tile, each with name and role underneath.",
       "debug": "Debug my team grid. Rule out: photos of different crops and sizes; social icons on every person; bios that make the grid uneven; images without width and height causing layout shift. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ul> + grid auto-fill",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<TeamGrid people>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<ul> + grid auto-fill",""],["lumina-taste","<TeamGrid people>","React"]],
       "added": 4,
       "note": "Three ways to show people. Five or more with photographs: the grid of tiles. Four or fewer: rows with a small picture, each with room for a <p> about the person (this happens by itself). No photographs, or the people are speakers, partners or a studio: data-variant=\"list\" sets them as ruled rows of name, role and one line, with no grey tiles. Put an <img> in place of the initials when there are photographs: same ratio for everyone."
     },
@@ -684,32 +391,12 @@
       "name": "Sign-in card",
       "summary": "A centred card with SSO buttons, an \"or\" divider and a passwordless email link.",
       "pattern": "<form> + provider buttons",
-      "states": [
-        "default",
-        "invalid email",
-        "link sent"
-      ],
-      "aliases": [
-        "login page",
-        "sign in form",
-        "auth card",
-        "magic link login",
-        "sso login"
-      ],
+      "states": ["default","invalid email","link sent"],
+      "aliases": ["login page","sign in form","auth card","magic link login","sso login"],
       "react": "SignInCard",
       "api": "autocomplete=\"email\"",
       "w": 560,
-      "preview": [
-        [
-          "type",
-          "input",
-          "ana@halyard.dev"
-        ],
-        [
-          "click",
-          "form button[type=\"submit\"]"
-        ]
-      ],
+      "preview": [["type","input","ana@halyard.dev"],["click","form button[type=\"submit\"]"]],
       "called": [
         "login box in the middle of the page",
         "sign in with google or email",
@@ -723,12 +410,7 @@
           "api": "",
           "text": "Secondary buttons; the email path is the one primary."
         },
-        {
-          "sel": "[data-part=\"or\"]",
-          "name": "Divider",
-          "api": "",
-          "text": "\"or\" between two hairlines."
-        },
+        {"sel":"[data-part=\"or\"]","name":"Divider","api":"","text":"\"or\" between two hairlines."},
         {
           "sel": "input",
           "name": "Email",
@@ -744,18 +426,7 @@
       ],
       "prompt": "Build a passwordless sign-in card: a small mark, \"Sign in to <product>\", one line of welcome, SSO provider buttons (secondary), an \"or\" divider, a labelled work-email field and one primary \"Email me a sign-in link\" button; validate on submit, confirm in place, and link to sign-up at the bottom.",
       "debug": "Debug my sign-in card. Rule out: provider buttons styled as primary alongside the main button; no visible label on the email field; errors that blame the user vaguely (\"Invalid input\"); autocomplete turned off. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<form> + <input type=\"email\">",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<SignInCard product>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<form> + <input type=\"email\">",""],["lumina-taste","<SignInCard product>","React"]],
       "added": 4
     },
     {
@@ -763,66 +434,26 @@
       "name": "Not found (404)",
       "summary": "A calm error page: what happened in plain words, a search box and four ways out.",
       "pattern": "<section> + search",
-      "states": [
-        "404",
-        "500 variant"
-      ],
-      "aliases": [
-        "404 page",
-        "error page",
-        "page not found",
-        "broken link page",
-        "oops page"
-      ],
+      "states": ["404","500 variant"],
+      "aliases": ["404 page","error page","page not found","broken link page","oops page"],
       "react": "NotFound",
       "api": "role=\"search\"",
       "w": 820,
-      "called": [
-        "page not found screen",
-        "404 page with search",
-        "error page design",
-        "broken link landing"
-      ],
+      "called": ["page not found screen","404 page with search","error page design","broken link landing"],
       "anatomy": [
-        {
-          "sel": "[data-part=\"code\"]",
-          "name": "Code",
-          "api": "",
-          "text": "Small and mono; the words matter more."
-        },
-        {
-          "sel": "h2",
-          "name": "What happened",
-          "api": "",
-          "text": "No jokes, no blame."
-        },
+        {"sel":"[data-part=\"code\"]","name":"Code","api":"","text":"Small and mono; the words matter more."},
+        {"sel":"h2","name":"What happened","api":"","text":"No jokes, no blame."},
         {
           "sel": "[data-part=\"search\"]",
           "name": "Search",
           "api": "role=\"search\"",
           "text": "The fastest way to what they wanted."
         },
-        {
-          "sel": "[data-part=\"links\"]",
-          "name": "Ways out",
-          "api": "",
-          "text": "Home, docs, status, a person."
-        }
+        {"sel":"[data-part=\"links\"]","name":"Ways out","api":"","text":"Home, docs, status, a person."}
       ],
       "prompt": "Build a 404 page: a small mono \"404\", a plain heading (\"This page moved or never existed\"), one line suggesting what to do, a rounded search field and four quiet links (Home, Docs, Status, Contact support). Centred, no illustration, no jokes.",
       "debug": "Debug my error page. Rule out: a giant illustration pushing the way out below the fold; a joke heading that hides what happened; no search; links styled as primary buttons. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<section> + <form role=\"search\">",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<NotFound title links>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<section> + <form role=\"search\">",""],["lumina-taste","<NotFound title links>","React"]],
       "added": 4
     },
     {
@@ -830,18 +461,8 @@
       "name": "Integrations grid",
       "summary": "One linked tile per tool with a two-letter mark, its name and what it is for.",
       "pattern": "<ul> of links",
-      "states": [
-        "four columns",
-        "two",
-        "one"
-      ],
-      "aliases": [
-        "integrations page",
-        "connectors grid",
-        "apps we work with",
-        "partner logos grid",
-        "app directory"
-      ],
+      "states": ["four columns","two","one"],
+      "aliases": ["integrations page","connectors grid","apps we work with","partner logos grid","app directory"],
       "react": "IntegrationsGrid",
       "api": "grid repeat(4)",
       "w": 1000,
@@ -864,27 +485,11 @@
           "api": "",
           "text": "\"Postgres · Database\": what it is and why."
         },
-        {
-          "sel": "li:first-child a > .lt-icon",
-          "name": "Link cue",
-          "api": "",
-          "text": "The whole tile is one link."
-        }
+        {"sel":"li:first-child a > .lt-icon","name":"Link cue","api":"","text":"The whole tile is one link."}
       ],
       "prompt": "Build an integrations section: a heading and a lede with a \"see all\" link, then a 4-column grid (2, then 1 when narrow) of whole-tile links each with a 36px monochrome mark, the tool name, a one-word purpose and an arrow; tiles lift 1px on hover.",
       "debug": "Debug my integrations grid. Rule out: full-colour logos shouting over the page; tiles that are not links; mixed logo sizes; dozens of tiles with no search. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ul> of <a>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<IntegrationsGrid items>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<ul> of <a>",""],["lumina-taste","<IntegrationsGrid items>","React"]],
       "added": 5
     },
     {
@@ -892,27 +497,12 @@
       "name": "Contact section",
       "summary": "Ways to reach you on the left, a four-field form on the right that validates on submit.",
       "pattern": "<form> + description list",
-      "states": [
-        "empty",
-        "errors",
-        "sent"
-      ],
-      "aliases": [
-        "contact us",
-        "contact form",
-        "get in touch",
-        "support form",
-        "sales enquiry"
-      ],
+      "states": ["empty","errors","sent"],
+      "aliases": ["contact us","contact form","get in touch","support form","sales enquiry"],
       "react": "ContactSection",
       "api": "<form novalidate>",
       "w": 1000,
-      "preview": [
-        [
-          "click",
-          "button[type=\"submit\"]"
-        ]
-      ],
+      "preview": [["click","button[type=\"submit\"]"]],
       "called": [
         "contact us page with a form",
         "get in touch section",
@@ -941,18 +531,7 @@
       ],
       "prompt": "Build a contact section: left column with a heading, reply-time promise and a description list (email, status page, office); right column a card form with name and work email side by side, a topic select, a message textarea and one primary button; validate on submit, mark invalid fields, list what is missing, confirm in place.",
       "debug": "Debug my contact form. Rule out: placeholder-only labels; validation on every keystroke; a CAPTCHA before anything is typed; no confirmation of what happens next. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<form> + <label>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ContactSection email>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<form> + <label>",""],["lumina-taste","<ContactSection email>","React"]],
       "added": 5
     },
     {
@@ -960,26 +539,12 @@
       "name": "Blog grid",
       "summary": "Three latest posts with an image, kind, date and title; the whole card is one link.",
       "pattern": "<article> cards with a stretched link",
-      "states": [
-        "three columns",
-        "stacked"
-      ],
-      "aliases": [
-        "latest posts",
-        "articles section",
-        "news grid",
-        "resources section",
-        "blog preview"
-      ],
+      "states": ["three columns","stacked"],
+      "aliases": ["latest posts","articles section","news grid","resources section","blog preview"],
       "react": "BlogGrid",
       "api": "h3 a::after inset 0",
       "w": 1000,
-      "called": [
-        "latest blog posts section",
-        "three article cards",
-        "news and updates grid",
-        "recent posts with images"
-      ],
+      "called": ["latest blog posts section","three article cards","news and updates grid","recent posts with images"],
       "anatomy": [
         {
           "sel": "li:first-child [data-part=\"meta\"] span",
@@ -993,27 +558,11 @@
           "api": "::after inset 0",
           "text": "One link per card, stretched over it."
         },
-        {
-          "sel": "[data-part=\"all\"]",
-          "name": "All posts",
-          "api": "",
-          "text": "Top-right, quiet."
-        }
+        {"sel":"[data-part=\"all\"]","name":"All posts","api":"","text":"Top-right, quiet."}
       ],
       "prompt": "Build a \"From the blog\" section: heading with an \"All posts →\" link on the right, then three post cards (16:10 image, kind in accent ink and date, a balanced two-line title, read time); the title link is stretched over the whole card so there is one link per card.",
       "debug": "Debug my blog grid. Rule out: several links per card (image, title, read more) for the same URL; titles over three lines; images of mixed ratios; dates without a year on old posts. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<article> + stretched link",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<BlogGrid posts>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<article> + stretched link",""],["lumina-taste","<BlogGrid posts>","React"]],
       "added": 5
     },
     {
@@ -1021,10 +570,7 @@
       "name": "Feature rows, alternating",
       "summary": "Text and a product picture side by side, swapping sides each row, with two ticked details.",
       "pattern": "<article> rows",
-      "states": [
-        "alternating",
-        "stacked"
-      ],
+      "states": ["alternating","stacked"],
       "aliases": [
         "zig zag features",
         "alternating sections",
@@ -1063,18 +609,7 @@
       ],
       "prompt": "Build alternating feature rows: each row is text (a display heading, one paragraph under 48ch, two ticked details) beside a framed product picture; odd rows swap sides using order, and everything stacks text-first under 760px. Keep 64px between rows.",
       "debug": "Debug my feature rows. Rule out: pictures before text on mobile; stock illustrations instead of product; rows of different heights that feel random; more than three rows in a row. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "grid + order",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<FeatureSplit rows>",
-          "React"
-        ]
-      ],
+      "code": [["CSS","grid + order",""],["lumina-taste","<FeatureSplit rows>","React"]],
       "added": 7,
       "note": "Each row's visual is a slot too: a list mock or bar mock suits software; for a product, a place or a service use an art-panel or a photograph, and for a process a short numbered list."
     },
@@ -1083,33 +618,14 @@
       "name": "Logo cloud",
       "summary": "One muted line, then six customer logos in an even grid, all in one ink.",
       "pattern": "<ul> grid",
-      "states": [
-        "six across",
-        "three by two"
-      ],
-      "aliases": [
-        "trusted by logos",
-        "customer logos",
-        "client logos row",
-        "as seen in",
-        "logo wall"
-      ],
+      "states": ["six across","three by two"],
+      "aliases": ["trusted by logos","customer logos","client logos row","as seen in","logo wall"],
       "react": "LogoCloud",
       "api": "filter: grayscale",
       "w": 1000,
-      "called": [
-        "row of company logos under the hero",
-        "used by these companies",
-        "customer logo grid",
-        "client logos"
-      ],
+      "called": ["row of company logos under the hero","used by these companies","customer logo grid","client logos"],
       "anatomy": [
-        {
-          "sel": "h2",
-          "name": "Lead line",
-          "api": "",
-          "text": "Says who, not \"trusted by thousands\"."
-        },
+        {"sel":"h2","name":"Lead line","api":"","text":"Says who, not \"trusted by thousands\"."},
         {
           "sel": "li:first-child",
           "name": "Logo",
@@ -1119,18 +635,7 @@
       ],
       "prompt": "Add a logo cloud under the hero: one muted line (\"Used by finance and data teams at\") and six customer logos in an even 6-column grid (3×2 when narrow), all monochrome at the same visual weight.",
       "debug": "Debug my logo cloud. Rule out: full-colour logos fighting the hero; logos of wildly different sizes; more than two rows; logos without permission. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ul> grid",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<LogoCloud logos>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<ul> grid",""],["lumina-taste","<LogoCloud logos>","React"]],
       "added": 7
     },
     {
@@ -1138,10 +643,7 @@
       "name": "Article layout",
       "summary": "One comfortable reading column with a pull quote, and a sticky \"On this page\" list beside it.",
       "pattern": "<article> + <aside> TOC",
-      "states": [
-        "two columns",
-        "stacked with TOC first"
-      ],
+      "states": ["two columns","stacked with TOC first"],
       "aliases": [
         "blog post layout",
         "docs page layout",
@@ -1159,18 +661,8 @@
         "long read layout"
       ],
       "anatomy": [
-        {
-          "sel": "article",
-          "name": "Measure",
-          "api": "68ch",
-          "text": "Lines short enough to read comfortably."
-        },
-        {
-          "sel": "blockquote",
-          "name": "Pull quote",
-          "api": "",
-          "text": "One per article, in the display face."
-        },
+        {"sel":"article","name":"Measure","api":"68ch","text":"Lines short enough to read comfortably."},
+        {"sel":"blockquote","name":"Pull quote","api":"","text":"One per article, in the display face."},
         {
           "sel": "aside",
           "name": "On this page",
@@ -1180,18 +672,7 @@
       ],
       "prompt": "Build an article layout: a reading column capped at --measure (68ch) with eyebrow, big title, a larger lede, h3 sections with scroll-margin-top, body at 1.7 line-height and one accent-ruled pull quote; beside it a 200px sticky \"On this page\" list on a hairline rail. Under 760px the list moves above the article.",
       "debug": "Debug my article layout. Rule out: lines longer than 80 characters; headings hidden under a sticky header when linked; a TOC that does not scroll with the page; body text below 16px. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<article> + <aside>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ArticleLayout toc>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<article> + <aside>",""],["lumina-taste","<ArticleLayout toc>","React"]],
       "added": 7
     },
     {
@@ -1199,10 +680,7 @@
       "name": "Before and after",
       "summary": "The old way, muted, beside the new way, outlined in the accent: three concrete lines each.",
       "pattern": "Two lists side by side",
-      "states": [
-        "side by side",
-        "stacked"
-      ],
+      "states": ["side by side","stacked"],
       "aliases": [
         "old way new way",
         "problem solution section",
@@ -1235,18 +713,7 @@
       ],
       "prompt": "Add a before/after section: a centred heading, then two columns; \"Before\" on a muted surface with three specific pains marked with crosses, \"With <product>\" outlined in the accent with three matching outcomes marked with green ticks. Each line on the right answers the line on the left.",
       "debug": "Debug my before/after. Rule out: vague pains (\"inefficient workflows\"); lines that do not pair up; red and green as the only difference; competitors named in a way you cannot back up. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "two <ul>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<BeforeAfter before after>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","two <ul>",""],["lumina-taste","<BeforeAfter before after>","React"]],
       "added": 7
     },
     {
@@ -1254,19 +721,8 @@
       "name": "Project grid",
       "summary": "A portfolio work grid: large 4:3 plates in two or three columns with the project name, type, place and year.",
       "pattern": "<ul> of linked cards",
-      "states": [
-        "default",
-        "hover",
-        "focus-visible"
-      ],
-      "aliases": [
-        "portfolio grid",
-        "case study grid",
-        "selected work",
-        "work gallery",
-        "projects section",
-        "case studies"
-      ],
+      "states": ["default","hover","focus-visible"],
+      "aliases": ["portfolio grid","case study grid","selected work","work gallery","projects section","case studies"],
       "react": "ProjectGrid",
       "api": "data-cols=\"2|3\"",
       "w": 1000,
@@ -1283,33 +739,12 @@
           "api": "aspect-ratio: 4 / 3",
           "text": "Holds an <img>; without one, a numbered plate."
         },
-        {
-          "sel": "h3",
-          "name": "Project",
-          "api": "",
-          "text": "The name; the whole card is one link."
-        },
-        {
-          "sel": "time",
-          "name": "Year",
-          "api": "tabular-nums",
-          "text": "Right-aligned on the title line."
-        }
+        {"sel":"h3","name":"Project","api":"","text":"The name; the whole card is one link."},
+        {"sel":"time","name":"Year","api":"tabular-nums","text":"Right-aligned on the title line."}
       ],
       "prompt": "Build a \"Selected work\" section for a portfolio: a heading, then a two-column grid of project cards (three with data-cols=\"3\"). Each card is one link with a 4:3 media plate holding the project photo, then the project name with the year right-aligned and a line for type and place. With no photo the plate shows a large two-digit index and the project type, in the same style for every card. One column on narrow containers.",
       "debug": "Debug my project grid. Rule out: plates of mixed ratios; some cards with art and some blank; several links per card; titles longer than two lines; hover effects that scale the image past its frame. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ul> + aspect-ratio",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ProjectGrid projects>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<ul> + aspect-ratio",""],["lumina-taste","<ProjectGrid projects>","React"]],
       "added": 10
     },
     {
@@ -1317,11 +752,7 @@
       "name": "Showcase tabs",
       "summary": "A segmented tab row over a framed example; each tab shows a different product with its own palette and type.",
       "pattern": "WAI-ARIA Tabs + framed panels",
-      "states": [
-        "selected",
-        "hover",
-        "focus-visible"
-      ],
+      "states": ["selected","hover","focus-visible"],
       "aliases": [
         "example switcher",
         "use case tabs",
@@ -1333,12 +764,7 @@
       "react": "ShowcaseTabs",
       "api": "role=\"tablist\" + data-palette on each panel",
       "w": 1000,
-      "preview": [
-        [
-          "click",
-          "[role=\"tab\"]:nth-child(2)"
-        ]
-      ],
+      "preview": [["click","[role=\"tab\"]:nth-child(2)"]],
       "called": [
         "the tabs that switch the preview under the hero",
         "use case switcher with a browser frame",
@@ -1366,18 +792,7 @@
       ],
       "prompt": "Build a showcase section: a centred heading and lede, a segmented pill of 3–5 tabs (the selected tab is a raised chip), and under it one framed panel per tab with a browser bar (three dots and a short URL) and an example screen. Give each panel its own data-palette, data-mode and data-type so the frame shows a visibly different product. Standard tabs behaviour: arrow keys move between tabs and select them; hidden panels use the hidden attribute.",
       "debug": "Debug my showcase tabs. Rule out: panels that all look the same; a carousel that moves on its own; tabs that are links to other pages; a frame taller than the screen; examples that are stock images. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "role=\"tablist\" + [hidden]",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ShowcaseTabs examples>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","role=\"tablist\" + [hidden]",""],["lumina-taste","<ShowcaseTabs examples>","React"]],
       "added": 11
     },
     {
@@ -1385,10 +800,7 @@
       "name": "Customer quote, featured",
       "summary": "One quote set as a headline with who said it, and two or three results beside it.",
       "pattern": "<h2> + <figure> + <blockquote> + <dl>",
-      "states": [
-        "side by side",
-        "stacked"
-      ],
+      "states": ["side by side","stacked"],
       "aliases": [
         "single testimonial",
         "big quote",
@@ -1400,11 +812,7 @@
       "react": "QuoteFeature",
       "api": "<blockquote> · <dl>",
       "w": 1000,
-      "called": [
-        "one big customer quote with numbers next to it",
-        "case study teaser",
-        "large testimonial"
-      ],
+      "called": ["one big customer quote with numbers next to it","case study teaser","large testimonial"],
       "anatomy": [
         {
           "sel": "blockquote p",
@@ -1428,16 +836,8 @@
       "prompt": "Build a featured customer quote: a section with a small eyebrow heading (\"Customer story\"), then a <figure> on the left holding the quote as display type (hanging opening quotation mark in the accent text colour, no card, no giant decorative quote icon), a caption with initials avatar, name, role and company and an optional \"Read the story\" link; on the right a <dl> of two or three results as large tabular figures over plain labels, separated by hairlines. Below 820px the results move under the quote in a row.",
       "debug": "Debug my featured quote. Rule out: a quote with no number or specific in it; a stock photo or made-up person; a giant decorative quote glyph; the quote inside a card inside a band; results that are adjectives, not figures; more than one featured quote on the page. The symptom:",
       "code": [
-        [
-          "HTML",
-          "<figure><blockquote> + <dl>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<QuoteFeature quote name role results>",
-          "React"
-        ]
+        ["HTML","<figure><blockquote> + <dl>",""],
+        ["lumina-taste","<QuoteFeature quote name role results>","React"]
       ],
       "added": 12
     },
@@ -1446,12 +846,7 @@
       "name": "Sticky story",
       "summary": "Steps scroll on the left while the visual for the step being read stays pinned on the right.",
       "pattern": "<ol> + position: sticky",
-      "states": [
-        "step 1",
-        "step 2",
-        "step 3",
-        "stacked (narrow)"
-      ],
+      "states": ["step 1","step 2","step 3","stacked (narrow)"],
       "aliases": [
         "scrollytelling",
         "pinned scroll section",
@@ -1486,16 +881,8 @@
       "prompt": "Build a sticky story section: a heading, then an ordered list of three or four steps laid out as a two-column grid. Each step holds its text (mono step number, heading, two lines) and its own visual. The text blocks stack in the left column, each about 340px tall, with a 2px left rule that turns to the accent colour for the current step. All visuals share one right-hand cell spanning every row and are position: sticky, so they stay pinned while the text scrolls; only the visual of the current step is opaque, with a 320ms fade. A small script marks the step nearest the middle of the viewport as current. Under 760px every visual sits under its own text and nothing is pinned. Use it once per page, for a process that really has an order.",
       "debug": "Debug my sticky story. Rule out: scroll hijacking (never change scroll speed or snap); visuals missing on mobile; a sticky element inside an ancestor with overflow hidden or auto; step text too short for the visual to pin; inactive text dimmed with opacity until it fails contrast; more than four steps. The symptom:",
       "code": [
-        [
-          "CSS",
-          "li { display: contents } figure { position: sticky; grid-row: 1 / span var(--steps) }",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<StickyStory title steps>",
-          "React"
-        ]
+        ["CSS","li { display: contents } figure { position: sticky; grid-row: 1 / span var(--steps) }",""],
+        ["lumina-taste","<StickyStory title steps>","React"]
       ],
       "added": 12
     },
@@ -1504,11 +891,7 @@
       "name": "Offer cards",
       "summary": "Two to four things on offer, each with a picture or an art panel, one line, two facts, a price and a link.",
       "pattern": "<ul> of <article> + <dl>",
-      "states": [
-        "three across",
-        "two across",
-        "stacked"
-      ],
+      "states": ["three across","two across","stacked"],
       "aliases": [
         "product cards",
         "product trio",
@@ -1524,9 +907,7 @@
       "react": "OfferCards",
       "api": "<article> · <dl> · art panel",
       "w": 1000,
-      "deps": [
-        "art-panel"
-      ],
+      "deps": ["art-panel"],
       "called": [
         "three products side by side with prices",
         "services with a picture each",
@@ -1561,16 +942,8 @@
       "prompt": "Build an offers section for a shop, a maker or a place: a heading, then two to four cards in a row (two across under 860px, one under 560px). Each card is an <article> with no box around it: a 4:5 picture (or an art panel with the name set large when there is no photograph), the name as an <h3>, one sentence, a <dl> of two or three facts that differ between the cards, then the price in full on the left and a text link named after the thing on the right. Vary the art panel tone across the set. No \"Learn more\" links, no badges unless something is really new or sold out.",
       "debug": "Debug my product or service cards. Rule out: cards inside a tinted band inside a card; facts that are the same on every card; prices hidden behind a click; links that all say \"Learn more\"; pictures at different ratios; a fourth card orphaned on its own row. The symptom:",
       "code": [
-        [
-          "HTML",
-          "<ul><li><article><figure class=\"lt-art\">",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<OfferCards title offers>",
-          "React"
-        ]
+        ["HTML","<ul><li><article><figure class=\"lt-art\">",""],
+        ["lumina-taste","<OfferCards title offers>","React"]
       ],
       "added": 13
     },
@@ -1579,12 +952,7 @@
       "name": "Visit information",
       "summary": "Where a place is, how to get there, how to reach it, and opening hours with today marked and \"open now\" in words.",
       "pattern": "<address> + hours <table>",
-      "states": [
-        "open now",
-        "opens later today",
-        "closed now",
-        "stacked"
-      ],
+      "states": ["open now","opens later today","closed now","stacked"],
       "aliases": [
         "opening hours",
         "find us",
@@ -1599,11 +967,7 @@
       "api": "data-day · data-now",
       "w": 1000,
       "preview": [],
-      "called": [
-        "when are you open and where are you",
-        "the address and opening times bit",
-        "find us section"
-      ],
+      "called": ["when are you open and where are you","the address and opening times bit","find us section"],
       "anatomy": [
         {
           "sel": "address",
@@ -1633,16 +997,8 @@
       "prompt": "Build a visit section for a place: on the left the full postal address in an <address> at a larger size, a \"Getting here\" list with one line per way of arriving (on foot, by bike, by car, by train) each with a real time or number, and phone and email as links (tel: and mailto:). On the right an opening hours table that lists all seven days with closed days written as \"Closed\", marks today in bold, and a line above it that says in words \"Open now, until 18:00\", \"Opens today at 9:00\" or \"Closed now\". Add one line for exceptions (holidays, last orders). No embedded map image; if a map matters, link to one.",
       "debug": "Debug my location and hours section. Rule out: hours as an image or a paragraph; days missing because they are closed; \"open now\" shown only by a green dot; a phone number that is not a tel: link; a map embed that loads a megabyte of script; times in a format locals do not use. The symptom:",
       "code": [
-        [
-          "HTML",
-          "<address> + <table> with data-day",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<VisitInfo title address days>",
-          "React"
-        ]
+        ["HTML","<address> + <table> with data-day",""],
+        ["lumina-taste","<VisitInfo title address days>","React"]
       ],
       "added": 13
     },
@@ -1651,10 +1007,7 @@
       "name": "Hero, statement",
       "summary": "A type-led hero: one very large headline across the page, then a ruled row with the pitch, the action and three facts.",
       "pattern": "<h1> + <dl>",
-      "states": [
-        "wide",
-        "stacked"
-      ],
+      "states": ["wide","stacked"],
       "aliases": [
         "type hero",
         "big headline hero",
@@ -1696,16 +1049,8 @@
       "prompt": "Build a statement hero: a small eyebrow, then an <h1> set very large (clamp from 44px to 100px with the container width), tight line height (0.98), tight tracking, 15 characters a line, text-wrap: balance. Under it a row that starts with a strong hairline: on the left the lede at 20px in secondary ink (44 characters a line) and the actions (one primary, one ghost); on the right a <dl> of three facts, each a large tabular figure over a plain label, divided by hairlines. Under 820px the row stacks; under 480px the facts become rows. No image, no background effect behind the headline: the type is the picture.",
       "debug": "Debug my type-led hero. Rule out: a headline that is a slogan with no claim; more than ten words at this size; lines broken mid-phrase (balance, or break by hand); a gradient or image behind the type; facts with no unit or period; three buttons. The symptom:",
       "code": [
-        [
-          "HTML",
-          "<h1> + <dl data-part=\"facts\">",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<HeroStatement title lede facts>",
-          "React"
-        ]
+        ["HTML","<h1> + <dl data-part=\"facts\">",""],
+        ["lumina-taste","<HeroStatement title lede facts>","React"]
       ],
       "added": 14
     },
@@ -1714,13 +1059,7 @@
       "name": "Service list",
       "summary": "Things on offer as ruled rows: a name, one sentence, how long it takes and the price, each in its own column down the list. Also a programme with times, or a menu.",
       "pattern": "<ul> rows on one shared grid (subgrid)",
-      "states": [
-        "rows with links",
-        "plain rows",
-        "timed rows",
-        "grouped lists",
-        "stacked on phones"
-      ],
+      "states": ["rows with links","plain rows","timed rows","grouped lists","stacked on phones"],
       "aliases": [
         "services and fees",
         "price list",
@@ -1774,16 +1113,8 @@
       "prompt": "Build a list of services as ruled rows, not cards: a heading, then a <ul> where every row shares one grid (use subgrid) so the names, the one-sentence descriptions, the durations and the prices each line up in a column down the list. A strong rule above the first row and a hairline under each. A row that leads somewhere is a single link with an arrow at the end that moves 3px on hover; a row that does not is plain. Prices are right-aligned with tabular figures. An optional leading column holds a start time in mono for a programme, and a small mono label can sit above each list when there are several (days, courses). Under 760px the name and price share the first line and the sentence and duration go beneath. A note under the list says when the prices apply from.",
       "debug": "Debug my service or price list. Rule out: prices that do not line up down the list; rows of different structure; \"Contact us\" in place of every price; cards where rows would scan faster; a description longer than two lines; times in mixed formats; links that all say \"Learn more\". The symptom:",
       "code": [
-        [
-          "HTML",
-          "<ul><li><a><h3>…</h3><p>…</p><b data-part=\"price\">",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ServiceList title services>",
-          "React"
-        ]
+        ["HTML","<ul><li><a><h3>…</h3><p>…</p><b data-part=\"price\">",""],
+        ["lumina-taste","<ServiceList title services>","React"]
       ],
       "added": 14,
       "note": "Use this instead of cards when there are four or more things, or when people compare prices and times. A row is the <li> itself, or one <a> or <div> inside it (use <a> when the row leads somewhere). Columns you do not use (when, meta, price) collapse. For a programme, put <time data-part=\"when\"> first in each row and a <p data-part=\"group\"> above each day's <ul>. It needs the full width: do not put it beside a rail."
@@ -1793,12 +1124,7 @@
       "name": "Scroll statement",
       "summary": "One large sentence that lights up word by word as it scrolls past. The keynote beat: a claim set big, with its quieter half in secondary ink.",
       "pattern": "<h2> + view-timeline",
-      "states": [
-        "unlit",
-        "lighting",
-        "lit",
-        "still (reduced motion)"
-      ],
+      "states": ["unlit","lighting","lit","still (reduced motion)"],
       "aliases": [
         "big statement",
         "manifesto",
@@ -1841,16 +1167,8 @@
       "prompt": "Build a statement section: one sentence of 12 to 25 words set very large (about 4.5rem at desktop, tight tracking, line-height 1.06, max 22ch), with its second half in secondary ink. Under it a short mono line of facts. As the section scrolls through the screen each word goes from 16% to full opacity in turn, using a named view-timeline on the section and an animation-range per word set by a small script that wraps the words in spans. Without support, without the script and under reduced motion the sentence is simply at full strength.",
       "debug": "Debug my scroll statement. Rule out: a paragraph instead of one sentence; words hidden when scroll-driven animations are not supported; text dimmed under reduced motion; more than one of these on a page; the sentence repeating the headline above it. The symptom:",
       "code": [
-        [
-          "HTML",
-          "<section class=\"lt-statement\"><h2>… <span data-part=\"quiet\">…</span></h2>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ScrollStatement quiet>",
-          "React"
-        ]
+        ["HTML","<section class=\"lt-statement\"><h2>… <span data-part=\"quiet\">…</span></h2>",""],
+        ["lumina-taste","<ScrollStatement quiet>","React"]
       ],
       "added": 16,
       "note": "One per page at most, between two busy sections: it is a pause, not a section of content. 12 to 25 words, a claim someone could disagree with, with facts in the note line. Never a paragraph."
@@ -1860,10 +1178,7 @@
       "name": "Stack cards",
       "summary": "Steps as large cards that pin near the top and stack as you scroll, each with a number, a title, one line and a picture. Replaces a numbered list of paragraphs.",
       "pattern": "<ol> of sticky <article>",
-      "states": [
-        "stacking",
-        "list (phones, reduced motion)"
-      ],
+      "states": ["stacking","list (phones, reduced motion)"],
       "aliases": [
         "sticky cards",
         "stacking cards",
@@ -1889,12 +1204,7 @@
           "api": "",
           "text": "In mono, at the top of the card."
         },
-        {
-          "sel": "li:first-child h3",
-          "name": "Title",
-          "api": "<h3>",
-          "text": "Three to six words, large."
-        },
+        {"sel":"li:first-child h3","name":"Title","api":"<h3>","text":"Three to six words, large."},
         {
           "sel": "li:first-child [data-part=\"text\"] p",
           "name": "One line",
@@ -1911,16 +1221,8 @@
       "prompt": "Build a steps section as stacking cards: each step is a large card (min-height about 380px, radius xl, hairline border) split into text on the left (a mono number at the top, a large title near the bottom, one line under it) and a picture on the right. Each <li> is position: sticky with top: calc(84px + index * 16px), so as you scroll each card slides over the last and the edges of the earlier cards stay visible above it. Alternate the card surface. Under 720px and under reduced motion they are a plain list with the picture under the text.",
       "debug": "Debug my stacking cards. Rule out: an ancestor with overflow hidden (it breaks sticky); cards of different heights; paragraphs instead of one line; no picture, so the stack is three boxes of text; more than five cards. The symptom:",
       "code": [
-        [
-          "HTML",
-          "<ol><li><article><div data-part=\"text\">…<div data-part=\"visual\">",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<StackCards cards>",
-          "React"
-        ]
+        ["HTML","<ol><li><article><div data-part=\"text\">…<div data-part=\"visual\">",""],
+        ["lumina-taste","<StackCards cards>","React"]
       ],
       "added": 16,
       "note": "Three to five steps, each with a real picture: the screen it happens on, the document it produces, or one figure. Never an ancestor with overflow: hidden. One stack per page."
@@ -1930,11 +1232,7 @@
       "name": "Media band",
       "summary": "One claim and one large picture on a dark ground, with three facts under it. The cinematic beat of a page; the picture settles into place as it scrolls in.",
       "pattern": "<section data-tone=\"dark\"> + <figure data-zoom>",
-      "states": [
-        "dark",
-        "light",
-        "picture settling"
-      ],
+      "states": ["dark","light","picture settling"],
       "aliases": [
         "dark band",
         "full bleed section",
@@ -1981,11 +1279,7 @@
           "<section class=\"lt-media-band\" data-tone=\"dark\"><figure data-part=\"media\" data-zoom>",
           ""
         ],
-        [
-          "lumina-taste",
-          "<MediaBand media facts>",
-          "React"
-        ]
+        ["lumina-taste","<MediaBand media facts>","React"]
       ],
       "added": 16,
       "note": "At most one dark band per page, from the middle on, for the strongest picture you have. Any block takes data-tone=\"dark\" the same way."
@@ -1995,12 +1289,7 @@
       "name": "Gallery rail",
       "summary": "A row of pictures at one ratio that runs off the right edge and snaps as it scrolls sideways, with previous and next buttons. Many pictures without a wall of cards.",
       "pattern": "<ul> with scroll-snap",
-      "states": [
-        "start",
-        "middle",
-        "end",
-        "swipe (phones)"
-      ],
+      "states": ["start","middle","end","swipe (phones)"],
       "aliases": [
         "carousel",
         "horizontal scroll",
@@ -2041,18 +1330,7 @@
       ],
       "prompt": "Build a gallery rail: a heading on the left with round previous and next buttons on the right, then a row of pictures at one ratio (3:4) that starts on the page's left edge and runs off the right edge of the screen, cut mid-picture. Native horizontal scroll with scroll-snap-type: x mandatory and no visible scrollbar; the track is focusable. Each picture has a one-line caption: name left, price or fact right. Buttons scroll by one picture and are disabled at either end. On phones each picture is 72% wide and the buttons hide.",
       "debug": "Debug my gallery rail. Rule out: a scrollbar showing; the first picture not on the page's left edge; pictures of mixed ratios; buttons that do not disable at the ends; autoplay. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ul data-part=\"track\" tabindex=\"0\">",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<GalleryRail items>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<ul data-part=\"track\" tabindex=\"0\">",""],["lumina-taste","<GalleryRail items>","React"]],
       "added": 16,
       "note": "Five to twelve pictures at one ratio: a range, rooms, projects, colours. Never autoplay. For two to four things use offer-cards instead."
     }

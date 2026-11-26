@@ -7,14 +7,7 @@
   "bestFor": "Comparing the shape of one measure across 4 to 12 groups: response time by region, order size by plan",
   "avoidFor": "Two or three groups (use a box plot or overlaid histograms) or exact values",
   "dataShape": "groups: { label, values: number[] }[]",
-  "aliases": [
-    "joy plot",
-    "joyplot",
-    "stacked density",
-    "density ridges",
-    "distribution by group",
-    "violin alternative"
-  ],
+  "aliases": ["joy plot","joyplot","stacked density","density ridges","distribution by group","violin alternative"],
   "wide": false,
   "react": "RidgelineChart"
 }

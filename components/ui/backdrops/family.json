@@ -8,12 +8,7 @@
       "name": "Grid backdrop",
       "summary": "A faint graph-paper grid that fades out towards the edges, with a soft light from the top.",
       "pattern": "Decorative ::before / ::after layer (no markup, hidden from assistive tech)",
-      "states": [
-        "light",
-        "dark",
-        "forced-colors: hidden",
-        "print: hidden"
-      ],
+      "states": ["light","dark","forced-colors: hidden","print: hidden"],
       "aliases": [
         "grid background",
         "graph paper background",
@@ -23,11 +18,7 @@
       ],
       "api": "data-backdrop=\"grid spot\"",
       "w": 1000,
-      "called": [
-        "faint grid behind the hero",
-        "graph paper lines background",
-        "grid pattern that fades out"
-      ],
+      "called": ["faint grid behind the hero","graph paper lines background","grid pattern that fades out"],
       "anatomy": [
         {
           "sel": ":scope",
@@ -44,18 +35,7 @@
       ],
       "prompt": "Give this section a grid backdrop backdrop: add data-backdrop=\"grid spot\" to the section (tokens/backdrops.css draws it from the palette on a pseudo-element, so it follows light and dark themes). Tune --backdrop-size (56px) and --backdrop-strength (8%). Use one backdrop per screen and keep text on the canvas or on its own surface.",
       "debug": "Debug my grid backdrop. Rule out: a second backdrop on the same screen; the pattern running under body text at full strength (restore the fade mask); hard-coded colours instead of the palette; the host missing position and isolation because data-backdrop sits on an inline element; forced-colors mode showing it. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "background + mask-image",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "data-backdrop=\"grid spot\"",
-          "attribute"
-        ]
-      ],
+      "code": [["CSS","background + mask-image",""],["lumina-taste","data-backdrop=\"grid spot\"","attribute"]],
       "react": "Backdrop",
       "added": 11
     },
@@ -64,12 +44,7 @@
       "name": "Dot grid backdrop",
       "summary": "An even field of small dots, like dotted notebook paper.",
       "pattern": "Decorative ::before / ::after layer (no markup, hidden from assistive tech)",
-      "states": [
-        "light",
-        "dark",
-        "forced-colors: hidden",
-        "print: hidden"
-      ],
+      "states": ["light","dark","forced-colors: hidden","print: hidden"],
       "aliases": [
         "dot grid background",
         "dotted background",
@@ -79,11 +54,7 @@
       ],
       "api": "data-backdrop=\"dots\"",
       "w": 760,
-      "called": [
-        "dots behind the page",
-        "dotted paper background",
-        "design tool canvas dots"
-      ],
+      "called": ["dots behind the page","dotted paper background","design tool canvas dots"],
       "anatomy": [
         {
           "sel": ":scope",
@@ -100,18 +71,7 @@
       ],
       "prompt": "Give this section a dot grid backdrop backdrop: add data-backdrop=\"dots\" to the section (tokens/backdrops.css draws it from the palette on a pseudo-element, so it follows light and dark themes). Tune --backdrop-size (22px) and --backdrop-strength (18%). Use one backdrop per screen and keep text on the canvas or on its own surface.",
       "debug": "Debug my dot grid backdrop. Rule out: a second backdrop on the same screen; the pattern running under body text at full strength (restore the fade mask); hard-coded colours instead of the palette; the host missing position and isolation because data-backdrop sits on an inline element; forced-colors mode showing it. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "background + mask-image",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "data-backdrop=\"dots\"",
-          "attribute"
-        ]
-      ],
+      "code": [["CSS","background + mask-image",""],["lumina-taste","data-backdrop=\"dots\"","attribute"]],
       "added": 11
     },
     {
@@ -119,12 +79,7 @@
       "name": "Ruled lines backdrop",
       "summary": "Horizontal hairlines at a steady pitch, like a ledger or a notebook.",
       "pattern": "Decorative ::before / ::after layer (no markup, hidden from assistive tech)",
-      "states": [
-        "light",
-        "dark",
-        "forced-colors: hidden",
-        "print: hidden"
-      ],
+      "states": ["light","dark","forced-colors: hidden","print: hidden"],
       "aliases": [
         "ruled paper background",
         "lined background",
@@ -134,11 +89,7 @@
       ],
       "api": "data-backdrop=\"lines\"",
       "w": 760,
-      "called": [
-        "lined paper behind the text",
-        "ledger style background",
-        "horizontal rules pattern"
-      ],
+      "called": ["lined paper behind the text","ledger style background","horizontal rules pattern"],
       "anatomy": [
         {
           "sel": ":scope",
@@ -155,18 +106,7 @@
       ],
       "prompt": "Give this section a ruled lines backdrop backdrop: add data-backdrop=\"lines\" to the section (tokens/backdrops.css draws it from the palette on a pseudo-element, so it follows light and dark themes). Tune --backdrop-size (32px, match your line height) and --backdrop-strength. Use one backdrop per screen and keep text on the canvas or on its own surface.",
       "debug": "Debug my ruled lines backdrop. Rule out: a second backdrop on the same screen; the pattern running under body text at full strength (restore the fade mask); hard-coded colours instead of the palette; the host missing position and isolation because data-backdrop sits on an inline element; forced-colors mode showing it. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "background + mask-image",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "data-backdrop=\"lines\"",
-          "attribute"
-        ]
-      ],
+      "code": [["CSS","background + mask-image",""],["lumina-taste","data-backdrop=\"lines\"","attribute"]],
       "added": 11
     },
     {
@@ -174,26 +114,11 @@
       "name": "Registration ticks backdrop",
       "summary": "Small plus marks at each grid crossing, like a printer’s registration marks.",
       "pattern": "Decorative ::before / ::after layer (no markup, hidden from assistive tech)",
-      "states": [
-        "light",
-        "dark",
-        "forced-colors: hidden",
-        "print: hidden"
-      ],
-      "aliases": [
-        "plus pattern background",
-        "crosshair grid",
-        "registration marks",
-        "plus sign pattern",
-        "tick marks grid"
-      ],
+      "states": ["light","dark","forced-colors: hidden","print: hidden"],
+      "aliases": ["plus pattern background","crosshair grid","registration marks","plus sign pattern","tick marks grid"],
       "api": "data-backdrop=\"ticks\"",
       "w": 760,
-      "called": [
-        "little plus signs in the background",
-        "crosses at grid points",
-        "blueprint tick marks"
-      ],
+      "called": ["little plus signs in the background","crosses at grid points","blueprint tick marks"],
       "anatomy": [
         {
           "sel": ":scope",
@@ -210,18 +135,7 @@
       ],
       "prompt": "Give this section a registration ticks backdrop backdrop: add data-backdrop=\"ticks\" to the section (tokens/backdrops.css draws it from the palette on a pseudo-element, so it follows light and dark themes). Tune --backdrop-size (72px) and --backdrop-strength (26%). Use one backdrop per screen and keep text on the canvas or on its own surface.",
       "debug": "Debug my registration ticks backdrop. Rule out: a second backdrop on the same screen; the pattern running under body text at full strength (restore the fade mask); hard-coded colours instead of the palette; the host missing position and isolation because data-backdrop sits on an inline element; forced-colors mode showing it. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "background + mask-image",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "data-backdrop=\"ticks\"",
-          "attribute"
-        ]
-      ],
+      "code": [["CSS","background + mask-image",""],["lumina-taste","data-backdrop=\"ticks\"","attribute"]],
       "added": 11
     },
     {
@@ -229,12 +143,7 @@
       "name": "Colour wash backdrop",
       "summary": "One hue rising from the bottom of the section, starting below the headline, with a little grain.",
       "pattern": "Decorative ::before / ::after layer (no markup, hidden from assistive tech)",
-      "states": [
-        "light",
-        "dark",
-        "forced-colors: hidden",
-        "print: hidden"
-      ],
+      "states": ["light","dark","forced-colors: hidden","print: hidden"],
       "aliases": [
         "gradient hero background",
         "single colour gradient",
@@ -265,18 +174,7 @@
       ],
       "prompt": "Give this section a colour wash backdrop backdrop: add data-backdrop=\"wash grain\" to the section (tokens/backdrops.css draws it from the palette on a pseudo-element, so it follows light and dark themes). Tune --wash-start (56%) and --wash-strength (58%, 26% on light themes): the wash must begin below the last line of text; anything placed on it needs its own surface. Use one backdrop per screen and keep text on the canvas or on its own surface.",
       "debug": "Debug my colour wash backdrop. Rule out: a second backdrop on the same screen; the pattern running under body text at full strength (restore the fade mask); hard-coded colours instead of the palette; the host missing position and isolation because data-backdrop sits on an inline element; forced-colors mode showing it. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "background + mask-image",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "data-backdrop=\"wash grain\"",
-          "attribute"
-        ]
-      ],
+      "code": [["CSS","background + mask-image",""],["lumina-taste","data-backdrop=\"wash grain\"","attribute"]],
       "added": 11
     },
     {
@@ -284,26 +182,11 @@
       "name": "Spotlight backdrop",
       "summary": "A soft pool of accent light from the top centre, low enough in strength to read as lighting.",
       "pattern": "Decorative ::before / ::after layer (no markup, hidden from assistive tech)",
-      "states": [
-        "light",
-        "dark",
-        "forced-colors: hidden",
-        "print: hidden"
-      ],
-      "aliases": [
-        "glow background",
-        "top light gradient",
-        "radial glow hero",
-        "spotlight hero",
-        "soft accent glow"
-      ],
+      "states": ["light","dark","forced-colors: hidden","print: hidden"],
+      "aliases": ["glow background","top light gradient","radial glow hero","spotlight hero","soft accent glow"],
       "api": "data-backdrop=\"spot\"",
       "w": 760,
-      "called": [
-        "glow at the top of the page",
-        "soft light behind the headline",
-        "radial highlight background"
-      ],
+      "called": ["glow at the top of the page","soft light behind the headline","radial highlight background"],
       "anatomy": [
         {
           "sel": ":scope",
@@ -320,18 +203,7 @@
       ],
       "prompt": "Give this section a spotlight backdrop backdrop: add data-backdrop=\"spot\" to the section (tokens/backdrops.css draws it from the palette on a pseudo-element, so it follows light and dark themes). Keep it at 13% accent or less: stronger, or in two colours, and it reads as the generic gradient blob. Use one backdrop per screen and keep text on the canvas or on its own surface.",
       "debug": "Debug my spotlight backdrop. Rule out: a second backdrop on the same screen; the pattern running under body text at full strength (restore the fade mask); hard-coded colours instead of the palette; the host missing position and isolation because data-backdrop sits on an inline element; forced-colors mode showing it. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "background + mask-image",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "data-backdrop=\"spot\"",
-          "attribute"
-        ]
-      ],
+      "code": [["CSS","background + mask-image",""],["lumina-taste","data-backdrop=\"spot\"","attribute"]],
       "added": 11
     },
     {
@@ -339,26 +211,11 @@
       "name": "Film grain backdrop",
       "summary": "A fine static noise over the section that takes the plastic edge off flat colour.",
       "pattern": "Decorative ::before / ::after layer (no markup, hidden from assistive tech)",
-      "states": [
-        "light",
-        "dark",
-        "forced-colors: hidden",
-        "print: hidden"
-      ],
-      "aliases": [
-        "noise texture",
-        "grainy background",
-        "film grain overlay",
-        "paper texture background",
-        "noise overlay"
-      ],
+      "states": ["light","dark","forced-colors: hidden","print: hidden"],
+      "aliases": ["noise texture","grainy background","film grain overlay","paper texture background","noise overlay"],
       "api": "data-backdrop=\"grain\"",
       "w": 760,
-      "called": [
-        "grainy texture over the background",
-        "subtle noise on the page",
-        "paper feel background"
-      ],
+      "called": ["grainy texture over the background","subtle noise on the page","paper feel background"],
       "anatomy": [
         {
           "sel": ":scope",
@@ -375,18 +232,7 @@
       ],
       "prompt": "Give this section a film grain backdrop backdrop: add data-backdrop=\"grain\" to the section (tokens/backdrops.css draws it from the palette on a pseudo-element, so it follows light and dark themes). Combine with another backdrop (data-backdrop=\"wash grain\"); alone it should be barely visible. Use one backdrop per screen and keep text on the canvas or on its own surface.",
       "debug": "Debug my film grain backdrop. Rule out: a second backdrop on the same screen; the pattern running under body text at full strength (restore the fade mask); hard-coded colours instead of the palette; the host missing position and isolation because data-backdrop sits on an inline element; forced-colors mode showing it. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "background + mask-image",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "data-backdrop=\"grain\"",
-          "attribute"
-        ]
-      ],
+      "code": [["CSS","background + mask-image",""],["lumina-taste","data-backdrop=\"grain\"","attribute"]],
       "added": 11
     },
     {
@@ -394,12 +240,7 @@
       "name": "Pixel dither backdrop",
       "summary": "An accent-coloured field that breaks into single pixels as it fades out: ordered dithering, drawn to a tiny canvas and scaled up crisp.",
       "pattern": "Decorative <canvas> (aria-hidden), redrawn on resize and theme change",
-      "states": [
-        "light",
-        "dark",
-        "no script: halftone fallback",
-        "forced-colors: hidden"
-      ],
+      "states": ["light","dark","no script: halftone fallback","forced-colors: hidden"],
       "aliases": [
         "dithered gradient",
         "pixel gradient background",
@@ -433,18 +274,7 @@
       ],
       "prompt": "Add a pixel dither backdrop: the host section gets data-backdrop=\"dither\" and, as its first child, <div class=\"lt-dither\" data-lt=\"backdrop-dither\" aria-hidden=\"true\"><canvas></canvas></div>. The script draws a 4×4 Bayer ordered dither in the accent colour on a canvas one pixel per 5px cell and scales it with image-rendering: pixelated; it is solid at the top edge and gone by half of the height. Redraw on resize and when the palette or mode changes. Draw the pixels in the accent mixed about halfway into the canvas colour so the field reads as texture, keep it static, and place the headline where the pixels are sparse.",
       "debug": "Debug my dither backdrop. Rule out: blurry pixels (missing image-rendering: pixelated or a canvas sized in CSS pixels); the field at full opacity under text; a hard straight edge where it ends; colours that do not follow the theme (read --accent-solid at draw time); a canvas that never redraws after resize. The symptom:",
-      "code": [
-        [
-          "Canvas",
-          "Bayer 4×4 threshold",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<DitherBackdrop>",
-          "React"
-        ]
-      ],
+      "code": [["Canvas","Bayer 4×4 threshold",""],["lumina-taste","<DitherBackdrop>","React"]],
       "added": 11
     },
     {
@@ -452,12 +282,7 @@
       "name": "Circuit traces backdrop",
       "summary": "A faint grid with a few accent lines running along it at the sides, a small pulse travelling each one, and a pause button.",
       "pattern": "Decorative inline SVG (aria-hidden) + a real pause button",
-      "states": [
-        "running",
-        "paused",
-        "reduced motion: static",
-        "forced-colors: hidden"
-      ],
+      "states": ["running","paused","reduced motion: static","forced-colors: hidden"],
       "aliases": [
         "circuit board background",
         "animated grid lines",
@@ -469,12 +294,7 @@
       "react": "CircuitBackdrop",
       "api": "data-lt=\"backdrop-circuit\" inside data-backdrop=\"grid\"",
       "w": 1000,
-      "preview": [
-        [
-          "click",
-          "[data-part=\"pause\"]"
-        ]
-      ],
+      "preview": [["click","[data-part=\"pause\"]"]],
       "called": [
         "the glowing lines on the grid",
         "circuit pattern behind the hero",
@@ -503,18 +323,7 @@
       ],
       "prompt": "Add a circuit traces backdrop to the hero: the section gets data-backdrop=\"grid\" and a first child <div class=\"lt-circuit\" data-lt=\"backdrop-circuit\"> containing a small round pause button. The script draws an aria-hidden SVG over the box: six polylines in the accent colour that follow the 56px grid lines, start and end on a 2px node, and stay in the outer 28% on each side so the centre is clear; a few grid cells behind them are tinted at 9%; a short bright dash travels each line on a 7s loop. Use a seeded random so the layout is the same on every load. Stop the motion under prefers-reduced-motion and wire the button to pause and resume it.",
       "debug": "Debug my circuit backdrop. Rule out: traces crossing the headline (keep them in the side zones); lines that miss the grid (centre the grid the same way as the CSS pattern); a different layout on every load (seed the random); animation running with reduced motion on; no way to pause it; more than one accent colour. The symptom:",
-      "code": [
-        [
-          "SVG",
-          "pathLength + stroke-dashoffset",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<CircuitBackdrop>",
-          "React"
-        ]
-      ],
+      "code": [["SVG","pathLength + stroke-dashoffset",""],["lumina-taste","<CircuitBackdrop>","React"]],
       "added": 11
     }
   ]

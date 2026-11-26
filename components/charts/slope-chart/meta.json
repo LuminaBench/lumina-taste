@@ -4,15 +4,10 @@
   "name": "Slope chart",
   "group": "Comparison",
   "summary": "Two columns of values joined by lines, so rises and falls read at a glance.",
-  "bestFor": "Before/after for 4\u201312 items where the change is the story",
+  "bestFor": "Before/after for 4–12 items where the change is the story",
   "avoidFor": "More than two points in time (use a line or bump chart)",
   "dataShape": "from, to + items: label + a + b",
-  "aliases": [
-    "slopegraph",
-    "before and after chart",
-    "two point line chart",
-    "change chart"
-  ],
+  "aliases": ["slopegraph","before and after chart","two point line chart","change chart"],
   "react": "SlopeChart",
   "wide": false
 }

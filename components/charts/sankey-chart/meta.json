@@ -4,15 +4,10 @@
   "name": "Sankey flow chart",
   "group": "Flow",
   "summary": "Flows between stages, width proportional to volume.",
-  "bestFor": "Where volume goes between 2\u20134 stages",
+  "bestFor": "Where volume goes between 2–4 stages",
   "avoidFor": "Cyclic flows or more than ~20 links",
   "dataShape": "nodes + links (source, target, value)",
-  "aliases": [
-    "flow diagram",
-    "alluvial",
-    "traffic flow",
-    "budget flow"
-  ],
+  "aliases": ["flow diagram","alluvial","traffic flow","budget flow"],
   "react": "SankeyChart",
   "wide": true
 }

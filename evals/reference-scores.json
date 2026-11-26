@@ -1,665 +1,303 @@
 {
- "generated": "2026-11-24T22:58:38.888Z",
- "mean": 99,
- "results": [
-  {
-   "slug": "saas-landing-invoicing",
-   "url": "blueprints/landing/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 6,
-    "total": 6,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "landing"
-  },
-  {
-   "slug": "devtool-landing",
-   "url": "blueprints/landing/",
-   "total": 96,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 4,
-    "total": 5,
-    "failed": [
-     "code sample (found 0)"
-    ],
-    "score": 80
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "landing"
-  },
-  {
-   "slug": "ai-notes-landing",
-   "url": "blueprints/landing/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 4,
-    "total": 4,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "landing"
-  },
-  {
-   "slug": "clinic-landing",
-   "url": "blueprints/landing/",
-   "total": 96,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 4,
-    "total": 5,
-    "failed": [
-     "book CTA (found 0)"
-    ],
-    "score": 80
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "landing"
-  },
-  {
-   "slug": "coffee-store-product",
-   "url": "blueprints/store/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 5,
-    "total": 5,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "store"
-  },
-  {
-   "slug": "pricing-dev-api",
-   "url": "blueprints/pricing/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 6,
-    "total": 6,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "pricing"
-  },
-  {
-   "slug": "pricing-meditation",
-   "url": "blueprints/pricing/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 4,
-    "total": 4,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "pricing"
-  },
-  {
-   "slug": "analytics-dashboard",
-   "url": "blueprints/dashboard/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 6,
-    "total": 6,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "dashboard"
-  },
-  {
-   "slug": "ops-dashboard-dark",
-   "url": "blueprints/dashboard/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 4,
-    "total": 4,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "dashboard"
-  },
-  {
-   "slug": "product-analytics",
-   "url": "blueprints/dashboard/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 4,
-    "total": 4,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "dashboard"
-  },
-  {
-   "slug": "settings-workspace",
-   "url": "blueprints/settings/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 5,
-    "total": 5,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "settings"
-  },
-  {
-   "slug": "settings-profile",
-   "url": "blueprints/settings/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 4,
-    "total": 4,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "settings"
-  },
-  {
-   "slug": "docs-api",
-   "url": "blueprints/docs/",
-   "total": 96,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 4,
-    "total": 5,
-    "failed": [
-     "code blocks (found 1)"
-    ],
-    "score": 80
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "docs"
-  },
-  {
-   "slug": "docs-help-center",
-   "url": "blueprints/docs/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 3,
-    "total": 3,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "docs"
-  },
-  {
-   "slug": "auth-signin",
-   "url": "blueprints/auth/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 4,
-    "total": 4,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "auth"
-  },
-  {
-   "slug": "onboarding-steps",
-   "url": "blueprints/auth/",
-   "total": 95,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 3,
-    "total": 4,
-    "failed": [
-     "steps indicator (found 0)"
-    ],
-    "score": 75
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "auth"
-  },
-  {
-   "slug": "directory-integrations",
-   "url": "blueprints/directory/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 5,
-    "total": 5,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "directory"
-  },
-  {
-   "slug": "directory-templates",
-   "url": "blueprints/directory/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 3,
-    "total": 3,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "directory"
-  },
-  {
-   "slug": "blog-article",
-   "url": "blueprints/editorial/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 4,
-    "total": 4,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "editorial"
-  },
-  {
-   "slug": "portfolio-architect",
-   "url": "blueprints/editorial/",
-   "total": 92,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 3,
-    "total": 5,
-    "failed": [
-     "at least 4 sections (found 3)",
-     "project images (found 0)"
-    ],
-    "score": 60
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "editorial"
-  },
-  {
-   "slug": "checkout-shop",
-   "url": "blueprints/checkout/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 5,
-    "total": 5,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "checkout"
-  },
-  {
-   "slug": "changelog",
-   "url": "blueprints/changelog/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 4,
-    "total": 4,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "changelog"
-  },
-  {
-   "slug": "status-page",
-   "url": "blueprints/status/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 4,
-    "total": 4,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "status"
-  },
-  {
-   "slug": "admin-users",
-   "url": "blueprints/admin/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 5,
-    "total": 5,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "admin"
-  },
-  {
-   "slug": "admin-orders",
-   "url": "blueprints/admin/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 4,
-    "total": 4,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "admin"
-  },
-  {
-   "slug": "ai-chat",
-   "url": "blueprints/assistant/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 4,
-    "total": 4,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "assistant"
-  },
-  {
-   "slug": "restyle-existing",
-   "url": "blueprints/landing/",
-   "total": 100,
-   "audit": {
-    "errors": 0,
-    "warnings": 0,
-    "score": 100
-   },
-   "taste": 100,
-   "checks": {
-    "passed": 4,
-    "total": 4,
-    "failed": [],
-    "score": 100
-   },
-   "hygiene": {
-    "copy": 0,
-    "hex": 0,
-    "score": 100
-   },
-   "rules": {},
-   "reference": "landing"
-  }
- ]
+  "generated": "2026-11-24T22:58:38.888Z",
+  "mean": 99,
+  "results": [
+    {
+      "slug": "saas-landing-invoicing",
+      "url": "blueprints/landing/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":6,"total":6,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "landing"
+    },
+    {
+      "slug": "devtool-landing",
+      "url": "blueprints/landing/",
+      "total": 96,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":4,"total":5,"failed":["code sample (found 0)"],"score":80},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "landing"
+    },
+    {
+      "slug": "ai-notes-landing",
+      "url": "blueprints/landing/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":4,"total":4,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "landing"
+    },
+    {
+      "slug": "clinic-landing",
+      "url": "blueprints/landing/",
+      "total": 96,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":4,"total":5,"failed":["book CTA (found 0)"],"score":80},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "landing"
+    },
+    {
+      "slug": "coffee-store-product",
+      "url": "blueprints/store/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":5,"total":5,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "store"
+    },
+    {
+      "slug": "pricing-dev-api",
+      "url": "blueprints/pricing/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":6,"total":6,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "pricing"
+    },
+    {
+      "slug": "pricing-meditation",
+      "url": "blueprints/pricing/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":4,"total":4,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "pricing"
+    },
+    {
+      "slug": "analytics-dashboard",
+      "url": "blueprints/dashboard/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":6,"total":6,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "dashboard"
+    },
+    {
+      "slug": "ops-dashboard-dark",
+      "url": "blueprints/dashboard/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":4,"total":4,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "dashboard"
+    },
+    {
+      "slug": "product-analytics",
+      "url": "blueprints/dashboard/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":4,"total":4,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "dashboard"
+    },
+    {
+      "slug": "settings-workspace",
+      "url": "blueprints/settings/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":5,"total":5,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "settings"
+    },
+    {
+      "slug": "settings-profile",
+      "url": "blueprints/settings/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":4,"total":4,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "settings"
+    },
+    {
+      "slug": "docs-api",
+      "url": "blueprints/docs/",
+      "total": 96,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":4,"total":5,"failed":["code blocks (found 1)"],"score":80},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "docs"
+    },
+    {
+      "slug": "docs-help-center",
+      "url": "blueprints/docs/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":3,"total":3,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "docs"
+    },
+    {
+      "slug": "auth-signin",
+      "url": "blueprints/auth/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":4,"total":4,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "auth"
+    },
+    {
+      "slug": "onboarding-steps",
+      "url": "blueprints/auth/",
+      "total": 95,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":3,"total":4,"failed":["steps indicator (found 0)"],"score":75},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "auth"
+    },
+    {
+      "slug": "directory-integrations",
+      "url": "blueprints/directory/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":5,"total":5,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "directory"
+    },
+    {
+      "slug": "directory-templates",
+      "url": "blueprints/directory/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":3,"total":3,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "directory"
+    },
+    {
+      "slug": "blog-article",
+      "url": "blueprints/editorial/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":4,"total":4,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "editorial"
+    },
+    {
+      "slug": "portfolio-architect",
+      "url": "blueprints/editorial/",
+      "total": 92,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":3,"total":5,"failed":["at least 4 sections (found 3)","project images (found 0)"],"score":60},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "editorial"
+    },
+    {
+      "slug": "checkout-shop",
+      "url": "blueprints/checkout/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":5,"total":5,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "checkout"
+    },
+    {
+      "slug": "changelog",
+      "url": "blueprints/changelog/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":4,"total":4,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "changelog"
+    },
+    {
+      "slug": "status-page",
+      "url": "blueprints/status/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":4,"total":4,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "status"
+    },
+    {
+      "slug": "admin-users",
+      "url": "blueprints/admin/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":5,"total":5,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "admin"
+    },
+    {
+      "slug": "admin-orders",
+      "url": "blueprints/admin/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":4,"total":4,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "admin"
+    },
+    {
+      "slug": "ai-chat",
+      "url": "blueprints/assistant/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":4,"total":4,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "assistant"
+    },
+    {
+      "slug": "restyle-existing",
+      "url": "blueprints/landing/",
+      "total": 100,
+      "audit": {"errors":0,"warnings":0,"score":100},
+      "taste": 100,
+      "checks": {"passed":4,"total":4,"failed":[],"score":100},
+      "hygiene": {"copy":0,"hex":0,"score":100},
+      "rules": {},
+      "reference": "landing"
+    }
+  ]
 }

@@ -4,15 +4,10 @@
   "name": "Bump chart",
   "group": "Trends",
   "summary": "Rank over time: lines cross as entries overtake each other.",
-  "bestFor": "Who led when, for 4\u201310 entries over a few periods",
+  "bestFor": "Who led when, for 4–10 entries over a few periods",
   "avoidFor": "When the size of the gap matters (ranks hide it)",
   "dataShape": "x labels + series: name + ranks[]",
-  "aliases": [
-    "rank chart",
-    "ranking over time",
-    "position chart",
-    "league table chart"
-  ],
+  "aliases": ["rank chart","ranking over time","position chart","league table chart"],
   "react": "BumpChart",
   "wide": true
 }

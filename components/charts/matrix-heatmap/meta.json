@@ -7,12 +7,7 @@
   "bestFor": "Two categorical dimensions with one value (hour × weekday, region × product, correlations)",
   "avoidFor": "Exact comparison between cells; retention by signup month (use the cohort grid)",
   "dataShape": "rows, cols, values[][]",
-  "aliases": [
-    "heat grid",
-    "correlation matrix",
-    "hour by day grid",
-    "hour by day heatmap"
-  ],
+  "aliases": ["heat grid","correlation matrix","hour by day grid","hour by day heatmap"],
   "react": "MatrixHeatmap",
   "wide": false
 }

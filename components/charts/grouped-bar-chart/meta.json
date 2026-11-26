@@ -4,14 +4,10 @@
   "name": "Grouped bar chart",
   "group": "Comparison",
   "summary": "Two or three series side by side per category.",
-  "bestFor": "Comparing 2\u20133 series across a few categories",
+  "bestFor": "Comparing 2–3 series across a few categories",
   "avoidFor": "More than 3 series per group (use small multiples)",
-  "dataShape": "categories + 2\u20133 series",
-  "aliases": [
-    "clustered bars",
-    "side by side bars",
-    "grouped columns"
-  ],
+  "dataShape": "categories + 2–3 series",
+  "aliases": ["clustered bars","side by side bars","grouped columns"],
   "react": "GroupedBarChart",
   "wide": false
 }

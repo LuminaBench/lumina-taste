@@ -7,12 +7,7 @@
   "bestFor": "Showing individual values and their spread for up to a few hundred points",
   "avoidFor": "Thousands of points (use a histogram)",
   "dataShape": "groups: label + values[]",
-  "aliases": [
-    "swarm plot",
-    "dot strip",
-    "jitter plot",
-    "dot distribution"
-  ],
+  "aliases": ["swarm plot","dot strip","jitter plot","dot distribution"],
   "react": "BeeswarmChart",
   "wide": false
 }

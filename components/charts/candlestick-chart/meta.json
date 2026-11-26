@@ -7,13 +7,7 @@
   "bestFor": "Price action for markets and trading products",
   "avoidFor": "Non-financial audiences (use a line)",
   "dataShape": "bars: t, open, high, low, close, volume",
-  "aliases": [
-    "ohlc chart",
-    "stock chart",
-    "k line",
-    "trading chart",
-    "price candles"
-  ],
+  "aliases": ["ohlc chart","stock chart","k line","trading chart","price candles"],
   "react": "CandlestickChart",
   "wide": true
 }

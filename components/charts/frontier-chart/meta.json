@@ -7,13 +7,7 @@
   "bestFor": "Picking the efficient options in a two-way trade-off",
   "avoidFor": "When one axis does not matter",
   "dataShape": "points: label + x + y + group",
-  "aliases": [
-    "efficient frontier",
-    "pareto chart",
-    "best value line",
-    "trade-off curve",
-    "frontier line"
-  ],
+  "aliases": ["efficient frontier","pareto chart","best value line","trade-off curve","frontier line"],
   "react": "FrontierChart",
   "wide": true
 }

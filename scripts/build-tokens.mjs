@@ -2,6 +2,7 @@
 // Builds tokens/palettes/*.css, tokens/palettes/palettes.json, tokens/typography/typography.css
 // and references/palettes.md from the curated seed files. Deterministic: same seeds, same bytes.
 import { readFileSync, writeFileSync } from 'node:fs';
+import { formatJson } from './lib/json.mjs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { clampChroma, contrast, oklchToRgb8, rgb8ToHex, round, toCss } from './lib/color.mjs';
@@ -148,7 +149,7 @@ for (const p of palettes) {
   out.push({ id: p.id, name: p.name, category: p.category, mood: p.mood, modes });
 }
 writeFileSync(join(root, 'tokens/palettes/all.css'), allCss.join('\n'));
-writeFileSync(join(root, 'tokens/palettes/palettes.json'), JSON.stringify({ version: 1, palettes: out }, null, 2) + '\n');
+writeFileSync(join(root, 'tokens/palettes/palettes.json'), formatJson({ version: 1, palettes: out }));
 
 // ---------- typography ----------
 const { pairings } = JSON.parse(readFileSync(join(root, 'tokens/typography/source.json'), 'utf8'));

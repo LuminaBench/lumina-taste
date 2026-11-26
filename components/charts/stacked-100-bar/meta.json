@@ -4,16 +4,10 @@
   "name": "100% stacked bar",
   "group": "Composition",
   "summary": "Horizontal bars that all reach 100%, split into parts with percentages inside.",
-  "bestFor": "Comparing the mix of 2\u20135 parts across categories (survey answers, traffic sources)",
+  "bestFor": "Comparing the mix of 2–5 parts across categories (survey answers, traffic sources)",
   "avoidFor": "Comparing totals (the totals are hidden)",
   "dataShape": "categories + series: name + values",
-  "aliases": [
-    "percent stacked bar",
-    "share bar",
-    "likert chart",
-    "composition bar",
-    "mix chart"
-  ],
+  "aliases": ["percent stacked bar","share bar","likert chart","composition bar","mix chart"],
   "react": "Stacked100Bar",
   "wide": false
 }

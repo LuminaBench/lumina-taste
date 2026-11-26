@@ -4,16 +4,10 @@
   "name": "Ranked columns",
   "group": "Leaderboards",
   "summary": "Sorted columns with the value on top, colour by group and hatched gaps for missing results.",
-  "bestFor": "Benchmark and leaderboard results across 6\u201320 entries",
+  "bestFor": "Benchmark and leaderboard results across 6–20 entries",
   "avoidFor": "Trends over time or more than ~24 entries (use the leaderboard table)",
   "dataShape": "items: label + value (null = not available) + group",
-  "aliases": [
-    "leaderboard bar chart",
-    "benchmark chart",
-    "ranked bar chart",
-    "intelligence index chart",
-    "score comparison"
-  ],
+  "aliases": ["leaderboard bar chart","benchmark chart","ranked bar chart","intelligence index chart","score comparison"],
   "react": "RankedColumns",
   "wide": true
 }

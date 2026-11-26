@@ -1,19 +1,13 @@
 {
   "id": "range-bar-chart",
   "order": 32,
-  "name": "Range bars (p5\u2013p95)",
+  "name": "Range bars (p5–p95)",
   "group": "Leaderboards",
   "summary": "A capsule from low to high percentile with a dot at the median, sorted by the median.",
   "bestFor": "Latency, price or estimate ranges where spread matters as much as the middle",
   "avoidFor": "Single values (use ranked columns)",
   "dataShape": "items: label + lo + mid + hi",
-  "aliases": [
-    "latency range chart",
-    "error bar chart",
-    "percentile chart",
-    "min max chart",
-    "interval chart"
-  ],
+  "aliases": ["latency range chart","error bar chart","percentile chart","min max chart","interval chart"],
   "react": "RangeBarChart",
   "wide": false
 }

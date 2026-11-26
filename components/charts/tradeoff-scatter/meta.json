@@ -7,13 +7,7 @@
   "bestFor": "Showing which entries win on two measures at once, like quality against price",
   "avoidFor": "More than ~40 labelled points (use a plain scatter)",
   "dataShape": "points: label + x + y + group",
-  "aliases": [
-    "quadrant chart",
-    "price vs quality chart",
-    "magic quadrant",
-    "labelled scatter",
-    "2x2 chart"
-  ],
+  "aliases": ["quadrant chart","price vs quality chart","magic quadrant","labelled scatter","2x2 chart"],
   "react": "TradeoffScatter",
   "wide": true
 }

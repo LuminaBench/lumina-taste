@@ -2,6 +2,7 @@
 // Builds catalog.json: one machine-readable index of every UI pattern, chart, blueprint, palette
 // and typography pairing, with plain-English aliases, ARIA pattern, states, files and dependencies.
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { formatJson } from './lib/json.mjs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -64,7 +65,7 @@ const catalog = {
   typography: typo,
   styles,
 };
-writeFileSync(join(root, 'catalog.json'), JSON.stringify(catalog, null, 2) + '\n');
+writeFileSync(join(root, 'catalog.json'), formatJson(catalog));
 // references/which-one.md: the comparison pairs as plain rules agents can follow.
 const cmp = read('components/ui/compare.json');
 const nameOf = (id) => ui.find((u) => u.id === id)?.name ?? id;

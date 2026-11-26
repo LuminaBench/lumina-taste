@@ -7,12 +7,7 @@
   "bestFor": "Relationship between two numeric measures, outliers",
   "avoidFor": "Time series (use a line)",
   "dataShape": "points: x, y (+ group)",
-  "aliases": [
-    "xy plot",
-    "correlation chart",
-    "dot chart",
-    "scatter graph"
-  ],
+  "aliases": ["xy plot","correlation chart","dot chart","scatter graph"],
   "react": "ScatterPlot",
   "wide": false
 }

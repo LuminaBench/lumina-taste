@@ -8,19 +8,8 @@
       "name": "Count-up number",
       "summary": "A KPI that counts up once when it scrolls into view, with width reserved so nothing moves.",
       "pattern": "<data> with aria-label",
-      "states": [
-        "idle",
-        "counting",
-        "done",
-        "reduced motion"
-      ],
-      "aliases": [
-        "animated number",
-        "number that counts up",
-        "kpi counter",
-        "stat counter",
-        "ticker number"
-      ],
+      "states": ["idle","counting","done","reduced motion"],
+      "aliases": ["animated number","number that counts up","kpi counter","stat counter","ticker number"],
       "react": "CountUp",
       "fill": true,
       "api": "font-variant-numeric: tabular-nums",
@@ -38,31 +27,14 @@
           "api": "<data value>",
           "text": "Width is reserved for the final number, so nothing shifts while it counts."
         },
-        {
-          "sel": ".lt-kpi-label",
-          "name": "Label",
-          "api": "",
-          "text": "Says what is being counted."
-        }
+        {"sel":".lt-kpi-label","name":"Label","api":"","text":"Says what is being counted."}
       ],
       "prompt": "Add a count-up KPI: a <data value> element that counts from 0 to its value once when it enters the viewport (ease-out exponential, about 1.1s), formatted with Intl.NumberFormat, tabular numbers, a min-width for the final value, and an aria-label with the final value. Skip the animation under reduced motion.",
       "debug": "Debug my count-up. Rule out: the number re-animating on every scroll; width jumping as digits change (tabular-nums and min-width); screen readers hearing every frame (set aria-label to the final value). The symptom:",
       "code": [
-        [
-          "CSS",
-          "tabular-nums",
-          ""
-        ],
-        [
-          "JS",
-          "Intl.NumberFormat",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<CountUp value format>",
-          "React"
-        ]
+        ["CSS","tabular-nums",""],
+        ["JS","Intl.NumberFormat",""],
+        ["lumina-taste","<CountUp value format>","React"]
       ]
     },
     {
@@ -70,28 +42,13 @@
       "name": "Rolling odometer",
       "summary": "Digits roll vertically to the new value like a mechanical counter.",
       "pattern": "role=img with aria-label",
-      "states": [
-        "rest",
-        "rolling"
-      ],
-      "aliases": [
-        "rolling numbers",
-        "slot machine digits",
-        "number roller",
-        "odometer counter"
-      ],
+      "states": ["rest","rolling"],
+      "aliases": ["rolling numbers","slot machine digits","number roller","odometer counter"],
       "react": "Odometer",
-      "deps": [
-        "button"
-      ],
+      "deps": ["button"],
       "api": "translateY per digit",
       "w": 320,
-      "preview": [
-        [
-          "click",
-          "[data-part=\"bump\"]"
-        ]
-      ],
+      "preview": [["click","[data-part=\"bump\"]"]],
       "called": [
         "rolling numbers like a slot machine",
         "digits that scroll to the new number",
@@ -111,45 +68,19 @@
           "api": "translateY(n × 1em)",
           "text": "Rolls to the new digit."
         },
-        {
-          "sel": "[data-part=\"sep\"]",
-          "name": "Separator",
-          "api": "",
-          "text": "Commas stay put."
-        }
+        {"sel":"[data-part=\"sep\"]","name":"Separator","api":"","text":"Commas stay put."}
       ],
       "prompt": "Add a rolling odometer: each digit is a 0–9 vertical strip inside a one-digit window, translated to the digit; separators stay still; rebuild only when the digit count changes; give the wrapper role=\"img\" with the value as its label.",
       "debug": "Debug my odometer. Rule out: strips rebuilt on every update (so nothing rolls); the window height not matching line-height; proportional figures misaligning columns. The symptom:",
-      "code": [
-        [
-          "lumina-taste",
-          "<Odometer value>",
-          "React"
-        ],
-        [
-          "CSS",
-          "tabular-nums",
-          ""
-        ]
-      ]
+      "code": [["lumina-taste","<Odometer value>","React"],["CSS","tabular-nums",""]]
     },
     {
       "id": "flip-clock",
       "name": "Split-flap flip clock",
       "summary": "A countdown whose digits flip like a departures board.",
       "pattern": "role=timer",
-      "states": [
-        "ticking",
-        "flipping",
-        "done"
-      ],
-      "aliases": [
-        "flip clock",
-        "countdown timer",
-        "split flap",
-        "departure board digits",
-        "sale countdown"
-      ],
+      "states": ["ticking","flipping","done"],
+      "aliases": ["flip clock","countdown timer","split flap","departure board digits","sale countdown"],
       "react": "FlipClock",
       "api": "role=\"timer\"",
       "w": 420,
@@ -166,12 +97,7 @@
           "api": "rotateX",
           "text": "Top half falls, the new bottom half rises."
         },
-        {
-          "sel": "[data-part=\"unit\"]",
-          "name": "Unit label",
-          "api": "",
-          "text": "Hours, minutes, seconds."
-        },
+        {"sel":"[data-part=\"unit\"]","name":"Unit label","api":"","text":"Hours, minutes, seconds."},
         {
           "sel": ".lt-flip",
           "name": "Timer",
@@ -181,47 +107,19 @@
       ],
       "prompt": "Add a split-flap countdown: each digit is a card of four halves (top, bottom, falling flap, rising flap) animated with rotateX and backface-visibility, role=\"timer\" on the group, and a visually hidden summary updated once a minute.",
       "debug": "Debug my flip clock. Rule out: flaps showing the old digit after flipping; perspective set on the wrong element; announcements every second; flips running under reduced motion. The symptom:",
-      "code": [
-        [
-          "WAI-ARIA",
-          "role=\"timer\"",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<FlipClock seconds>",
-          "React"
-        ]
-      ]
+      "code": [["WAI-ARIA","role=\"timer\"",""],["lumina-taste","<FlipClock seconds>","React"]]
     },
     {
       "id": "status-dot",
       "name": "Live status dot",
       "summary": "Small coloured dots with an optional pulse for live states, always paired with text.",
       "pattern": "Decorative + visible text",
-      "states": [
-        "positive",
-        "warning",
-        "negative",
-        "neutral",
-        "live"
-      ],
-      "aliases": [
-        "pulsing dot",
-        "online indicator",
-        "status light",
-        "health indicator",
-        "live badge"
-      ],
+      "states": ["positive","warning","negative","neutral","live"],
+      "aliases": ["pulsing dot","online indicator","status light","health indicator","live badge"],
       "react": "StatusDot",
       "api": "data-tone · @keyframes pulse",
       "w": 320,
-      "called": [
-        "green dot that pulses for online",
-        "presence indicator",
-        "live status light",
-        "red dot for outage"
-      ],
+      "called": ["green dot that pulses for online","presence indicator","live status light","red dot for outage"],
       "anatomy": [
         {
           "sel": ".lt-status-dot[data-live]",
@@ -238,44 +136,20 @@
       ],
       "prompt": "Add status dots: 8px circles in status colours, an optional pulse ring (::after scaling out and fading) for live states, always next to a text label, with the pulse removed under reduced motion.",
       "debug": "Debug my status dot. Rule out: colour as the only signal; the pulse running under reduced motion; dots that do not meet 3:1 against their background. The symptom:",
-      "code": [
-        [
-          "Fluent",
-          "<PresenceBadge>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<StatusDot tone live>",
-          "React"
-        ]
-      ]
+      "code": [["Fluent","<PresenceBadge>",""],["lumina-taste","<StatusDot tone live>","React"]]
     },
     {
       "id": "progress-bar",
       "name": "Progress bar",
       "summary": "Determinate and indeterminate bars with a label and tabular value.",
       "pattern": "role=progressbar",
-      "states": [
-        "determinate",
-        "indeterminate",
-        "complete"
-      ],
-      "aliases": [
-        "loading bar",
-        "upload progress",
-        "percent bar"
-      ],
+      "states": ["determinate","indeterminate","complete"],
+      "aliases": ["loading bar","upload progress","percent bar"],
       "react": "ProgressBar",
       "fill": true,
       "api": "role=\"progressbar\"",
       "w": 380,
-      "called": [
-        "loading bar with percent",
-        "upload progress line",
-        "bar that fills up",
-        "indeterminate loading strip"
-      ],
+      "called": ["loading bar with percent","upload progress line","bar that fills up","indeterminate loading strip"],
       "anatomy": [
         {
           "sel": ".lt-progress:not([data-indeterminate]) [data-part=\"fill\"]",
@@ -293,21 +167,9 @@
       "prompt": "Add progress bars: role=\"progressbar\" with aria-valuenow/min/max and a visible label; indeterminate bars omit aria-valuenow and slide a segment back and forth.",
       "debug": "Debug my progress bar. Rule out: aria-valuenow on an indeterminate bar; width transitions that lag behind fast updates; the label missing. The symptom:",
       "code": [
-        [
-          "HTML",
-          "<progress>",
-          ""
-        ],
-        [
-          "WAI-ARIA",
-          "role=\"progressbar\"",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ProgressBar value>",
-          "React"
-        ]
+        ["HTML","<progress>",""],
+        ["WAI-ARIA","role=\"progressbar\"",""],
+        ["lumina-taste","<ProgressBar value>","React"]
       ]
     },
     {
@@ -315,16 +177,8 @@
       "name": "Circular progress ring",
       "summary": "A ring that fills to a value, with the number in the middle.",
       "pattern": "role=progressbar",
-      "states": [
-        "partial",
-        "complete"
-      ],
-      "aliases": [
-        "progress circle",
-        "radial progress",
-        "donut progress",
-        "completion ring"
-      ],
+      "states": ["partial","complete"],
+      "aliases": ["progress circle","radial progress","donut progress","completion ring"],
       "react": "ProgressRing",
       "api": "stroke-dashoffset",
       "w": 320,
@@ -350,43 +204,20 @@
       ],
       "prompt": "Add a progress ring: an SVG circle with pathLength=\"100\", stroke-dasharray 100 and stroke-dashoffset 100 − value, rotated −90° to start at the top, with the value centred and role=\"progressbar\".",
       "debug": "Debug my progress ring. Rule out: the arc starting at 3 o'clock (rotate −90°); stroke clipped at the edges (radius minus half the stroke); no accessible value. The symptom:",
-      "code": [
-        [
-          "SVG",
-          "stroke-dasharray + pathLength",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ProgressRing value>",
-          "React"
-        ]
-      ]
+      "code": [["SVG","stroke-dasharray + pathLength",""],["lumina-taste","<ProgressRing value>","React"]]
     },
     {
       "id": "meter",
       "name": "Multi-segment meter",
       "summary": "One bar split into labelled segments, like a storage breakdown.",
       "pattern": "role=img + legend",
-      "states": [
-        "default"
-      ],
-      "aliases": [
-        "storage bar",
-        "stacked progress",
-        "usage breakdown",
-        "segmented bar"
-      ],
+      "states": ["default"],
+      "aliases": ["storage bar","stacked progress","usage breakdown","segmented bar"],
       "react": "SegmentedMeter",
       "fill": true,
       "api": "role=\"img\" + legend",
       "w": 440,
-      "called": [
-        "storage bar split into colours",
-        "usage breakdown bar",
-        "stacked progress bar",
-        "disk space meter"
-      ],
+      "called": ["storage bar split into colours","usage breakdown bar","stacked progress bar","disk space meter"],
       "anatomy": [
         {
           "sel": ".lt-meter [data-part=\"bar\"]",
@@ -403,44 +234,20 @@
       ],
       "prompt": "Add a multi-segment meter: one rounded bar split into coloured segments by share, a legend with values in tabular numbers, and role=\"img\" with a full text summary.",
       "debug": "Debug my meter. Rule out: segments with no gap blending together; a legend without values; segment colours under 3:1 against the track. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<meter>",
-          "single value only"
-        ],
-        [
-          "lumina-taste",
-          "<SegmentedMeter segments>",
-          "React"
-        ]
-      ]
+      "code": [["HTML","<meter>","single value only"],["lumina-taste","<SegmentedMeter segments>","React"]]
     },
     {
       "id": "skeleton",
       "name": "Shimmer skeleton",
       "summary": "Soft placeholder shapes with a subtle shimmer while content loads.",
       "pattern": "aria-busy container",
-      "states": [
-        "loading",
-        "reduced motion"
-      ],
-      "aliases": [
-        "loading placeholder",
-        "ghost loader",
-        "content placeholder",
-        "shimmer loader"
-      ],
+      "states": ["loading","reduced motion"],
+      "aliases": ["loading placeholder","ghost loader","content placeholder","shimmer loader"],
       "react": "Skeleton",
       "fill": true,
       "api": "aria-busy=\"true\"",
       "w": 360,
-      "called": [
-        "grey boxes while loading",
-        "shimmer placeholder",
-        "content loading ghost",
-        "loading skeleton"
-      ],
+      "called": ["grey boxes while loading","shimmer placeholder","content loading ghost","loading skeleton"],
       "anatomy": [
         {
           "sel": ".lt-skeleton[data-shape=\"circle\"]",
@@ -463,45 +270,20 @@
       ],
       "prompt": "Add skeleton placeholders that match the real layout (same sizes and aspect ratios), a subtle shimmer gradient that stops under reduced motion, and aria-busy=\"true\" with a label on the container.",
       "debug": "Debug my skeleton. Rule out: skeletons of a different size from the content (layout jumps on load); shimmer under reduced motion; skeletons shown for under 300ms (flash). The symptom:",
-      "code": [
-        [
-          "WAI-ARIA",
-          "aria-busy",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<Skeleton shape>",
-          "React"
-        ]
-      ]
+      "code": [["WAI-ARIA","aria-busy",""],["lumina-taste","<Skeleton shape>","React"]]
     },
     {
       "id": "empty-state",
       "name": "Empty state",
       "summary": "A calm block that explains why a list is empty and offers one clear action.",
       "pattern": "Section with heading",
-      "states": [
-        "default"
-      ],
-      "aliases": [
-        "no results",
-        "blank slate",
-        "nothing here yet",
-        "zero state"
-      ],
+      "states": ["default"],
+      "aliases": ["no results","blank slate","nothing here yet","zero state"],
       "react": "EmptyState",
-      "deps": [
-        "button"
-      ],
+      "deps": ["button"],
       "api": "<section aria-labelledby>",
       "w": 420,
-      "called": [
-        "nothing here yet message",
-        "blank page with a button to start",
-        "no results screen",
-        "zero state"
-      ],
+      "called": ["nothing here yet message","blank page with a button to start","no results screen","zero state"],
       "anatomy": [
         {
           "sel": ".lt-empty [data-part=\"icon\"]",
@@ -509,12 +291,7 @@
           "api": "aria-hidden",
           "text": "Quiet and related to the content."
         },
-        {
-          "sel": ".lt-empty h3",
-          "name": "Headline",
-          "api": "",
-          "text": "Says what is missing, plainly."
-        },
+        {"sel":".lt-empty h3","name":"Headline","api":"","text":"Says what is missing, plainly."},
         {
           "sel": ".lt-empty [data-part=\"actions\"]",
           "name": "Next step",
@@ -524,48 +301,20 @@
       ],
       "prompt": "Add an empty state: a muted icon, a plain headline saying what is missing (\"No reports yet\"), one sentence on how it fills up, one primary action and one secondary.",
       "debug": "Debug my empty state. Rule out: clever copy that does not say what to do; two primary buttons; empty states shown while data is still loading. The symptom:",
-      "code": [
-        [
-          "lumina-taste",
-          "<EmptyState title body actions>",
-          "React"
-        ]
-      ]
+      "code": [["lumina-taste","<EmptyState title body actions>","React"]]
     },
     {
       "id": "toast-stack",
       "name": "Toast stack",
       "summary": "Stacked notifications that expand on hover, pause while read and swipe away.",
       "pattern": "role=status / alert live region",
-      "states": [
-        "entering",
-        "stacked",
-        "expanded",
-        "dismissing"
-      ],
-      "aliases": [
-        "snackbar",
-        "notification popup",
-        "toast message",
-        "flash message",
-        "sonner style toasts"
-      ],
+      "states": ["entering","stacked","expanded","dismissing"],
+      "aliases": ["snackbar","notification popup","toast message","flash message","sonner style toasts"],
       "react": "ToastProvider",
-      "deps": [
-        "button"
-      ],
+      "deps": ["button"],
       "api": "role=\"status\"",
       "w": 480,
-      "preview": [
-        [
-          "click",
-          "[data-toast=\"positive\"]"
-        ],
-        [
-          "click",
-          "[data-toast=\"info\"]"
-        ]
-      ],
+      "preview": [["click","[data-toast=\"positive\"]"],["click","[data-toast=\"info\"]"]],
       "called": [
         "little notification that pops up in the corner",
         "snackbar",
@@ -595,21 +344,9 @@
       "prompt": "Add a toast stack: a fixed region bottom-right, newest toast in front with older ones tucked behind, expand on hover or focus, pause timers while hovered, swipe or Esc to dismiss, role=\"status\" for info and role=\"alert\" for errors.",
       "debug": "Debug my toasts. Rule out: toasts disappearing while being read (pause on hover/focus); focus moved into the toast; every toast as role=\"alert\"; the stack covering primary buttons on mobile. The symptom:",
       "code": [
-        [
-          "sonner",
-          "toast()",
-          "React"
-        ],
-        [
-          "Radix",
-          "<Toast.Root>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ToastProvider> + useToast()",
-          "React"
-        ]
+        ["sonner","toast()","React"],
+        ["Radix","<Toast.Root>",""],
+        ["lumina-taste","<ToastProvider> + useToast()","React"]
       ]
     },
     {
@@ -617,29 +354,13 @@
       "name": "Callout",
       "summary": "Inline info, tip, warning and danger notes inside content.",
       "pattern": "aside (complementary)",
-      "states": [
-        "info",
-        "positive",
-        "warning",
-        "negative"
-      ],
-      "aliases": [
-        "admonition",
-        "note box",
-        "alert box",
-        "tip box",
-        "warning box"
-      ],
+      "states": ["info","positive","warning","negative"],
+      "aliases": ["admonition","note box","alert box","tip box","warning box"],
       "react": "Callout",
       "fill": true,
       "api": "<aside>",
       "w": 480,
-      "called": [
-        "note box in documentation",
-        "yellow warning box",
-        "tip with an icon",
-        "admonition"
-      ],
+      "called": ["note box in documentation","yellow warning box","tip with an icon","admonition"],
       "anatomy": [
         {
           "sel": ".lt-callout[data-tone=\"warning\"] [data-part=\"icon\"]",
@@ -656,39 +377,18 @@
       ],
       "prompt": "Add callouts: <aside> blocks with an icon, a short bold title and body text on the matching status-soft background, in four tones (info, tip, warning, danger).",
       "debug": "Debug my callouts. Rule out: body text on tinted backgrounds under 4.5:1; colour as the only difference between tones; callouts used for every paragraph. The symptom:",
-      "code": [
-        [
-          "GitHub",
-          "> [!NOTE]",
-          "markdown alerts"
-        ],
-        [
-          "lumina-taste",
-          "<Callout tone title>",
-          "React"
-        ]
-      ]
+      "code": [["GitHub","> [!NOTE]","markdown alerts"],["lumina-taste","<Callout tone title>","React"]]
     },
     {
       "id": "banner",
       "name": "Announcement banner",
       "summary": "A thin, dismissible page-top strip for one announcement.",
       "pattern": "region landmark",
-      "states": [
-        "visible",
-        "dismissed"
-      ],
-      "aliases": [
-        "top banner",
-        "announcement bar",
-        "promo strip",
-        "notice bar"
-      ],
+      "states": ["visible","dismissed"],
+      "aliases": ["top banner","announcement bar","promo strip","notice bar"],
       "react": "Banner",
       "fill": true,
-      "deps": [
-        "badge"
-      ],
+      "deps": ["badge"],
       "api": "role=\"region\"",
       "w": 640,
       "called": [
@@ -698,18 +398,8 @@
         "site notice"
       ],
       "anatomy": [
-        {
-          "sel": ".lt-banner .lt-badge",
-          "name": "Label",
-          "api": "",
-          "text": "One badge, at most."
-        },
-        {
-          "sel": ".lt-banner a",
-          "name": "Link",
-          "api": "",
-          "text": "Says where it goes."
-        },
+        {"sel":".lt-banner .lt-badge","name":"Label","api":"","text":"One badge, at most."},
+        {"sel":".lt-banner a","name":"Link","api":"","text":"Says where it goes."},
         {
           "sel": ".lt-banner [data-part=\"close\"]",
           "name": "Dismiss",
@@ -719,43 +409,19 @@
       ],
       "prompt": "Add an announcement banner: one line with a badge, a short message and a link, a dismiss button with an aria-label, and dismissal remembered in localStorage.",
       "debug": "Debug my banner. Rule out: banners that come back on every page; the close button without a name; the banner pushing content down after load (reserve its height). The symptom:",
-      "code": [
-        [
-          "lumina-taste",
-          "<Banner persistKey>",
-          "React"
-        ]
-      ]
+      "code": [["lumina-taste","<Banner persistKey>","React"]]
     },
     {
       "id": "badge",
       "name": "Badge system",
       "summary": "Neutral, accent and status pills, with dot, outline and count variants.",
       "pattern": "Inline text",
-      "states": [
-        "neutral",
-        "accent",
-        "positive",
-        "warning",
-        "negative",
-        "info"
-      ],
-      "aliases": [
-        "pill",
-        "tag",
-        "label chip",
-        "status pill",
-        "count bubble"
-      ],
+      "states": ["neutral","accent","positive","warning","negative","info"],
+      "aliases": ["pill","tag","label chip","status pill","count bubble"],
       "react": "Badge",
       "api": "data-tone",
       "w": 420,
-      "called": [
-        "small coloured label",
-        "status pill",
-        "new tag next to a heading",
-        "count bubble"
-      ],
+      "called": ["small coloured label","status pill","new tag next to a heading","count bubble"],
       "anatomy": [
         {
           "sel": ".lt-badge[data-tone=\"accent\"]",
@@ -763,12 +429,7 @@
           "api": "data-tone=\"accent\"",
           "text": "At most two accent or status badges in view."
         },
-        {
-          "sel": ".lt-badge[data-dot]",
-          "name": "Dot badge",
-          "api": "data-dot",
-          "text": "A dot plus text for states."
-        },
+        {"sel":".lt-badge[data-dot]","name":"Dot badge","api":"data-dot","text":"A dot plus text for states."},
         {
           "sel": ".lt-badge[data-variant=\"count\"]",
           "name": "Count",
@@ -778,37 +439,19 @@
       ],
       "prompt": "Add badges: small pills in neutral, accent and status tones with optional dot, outline and count variants. One badge per heading, two accent badges in view at most.",
       "debug": "Debug my badges. Rule out: five badges in one header; tinted text under 4.5:1; counts without spoken labels. The symptom:",
-      "code": [
-        [
-          "lumina-taste",
-          "<Badge tone dot>",
-          "React"
-        ]
-      ]
+      "code": [["lumina-taste","<Badge tone dot>","React"]]
     },
     {
       "id": "kbd",
       "name": "Keyboard key cap",
       "summary": "Crisp key caps for shortcuts and key sequences.",
       "pattern": "<kbd>",
-      "states": [
-        "default"
-      ],
-      "aliases": [
-        "keyboard shortcut",
-        "hotkey",
-        "key cap",
-        "shortcut hint"
-      ],
+      "states": ["default"],
+      "aliases": ["keyboard shortcut","hotkey","key cap","shortcut hint"],
       "react": "Kbd",
       "api": "<kbd>",
       "w": 340,
-      "called": [
-        "keyboard shortcut keys",
-        "command k hint",
-        "little key caps in a menu",
-        "hotkey label"
-      ],
+      "called": ["keyboard shortcut keys","command k hint","little key caps in a menu","hotkey label"],
       "anatomy": [
         {
           "sel": ".lt-kbd",
@@ -819,35 +462,15 @@
       ],
       "prompt": "Add keyboard shortcut caps with <kbd>: mono, small, a 2px bottom border, one element per key, and \"then\" between sequential keys.",
       "debug": "Debug my key caps. Rule out: ⌘ shown to Windows users (show Ctrl); combinations written as one <kbd>; caps that wrap. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<kbd>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<Kbd keys=\"⌘ K\">",
-          "React"
-        ]
-      ]
+      "code": [["HTML","<kbd>",""],["lumina-taste","<Kbd keys=\"⌘ K\">","React"]]
     },
     {
       "id": "loaders",
       "name": "Loaders",
       "summary": "Spinner, three dots and an indeterminate bar for short waits, plus a busy button.",
       "pattern": "role=\"status\" / progressbar",
-      "states": [
-        "loading",
-        "reduced motion"
-      ],
-      "aliases": [
-        "spinner",
-        "loading indicator",
-        "loading dots",
-        "throbber",
-        "indeterminate progress"
-      ],
+      "states": ["loading","reduced motion"],
+      "aliases": ["spinner","loading indicator","loading dots","throbber","indeterminate progress"],
       "react": "Spinner",
       "api": "role=\"status\"",
       "w": 480,
@@ -879,18 +502,7 @@
       ],
       "prompt": "Add loaders for short waits: a 22px spinner (faint ring, accent top arc), three pulsing dots, a 3px indeterminate bar, and a busy button with a small spinner and \"Saving\". All use role=\"status\" or progressbar with a label, and slow down or stop under reduced motion. Use skeletons instead when the layout is known.",
       "debug": "Debug my loader. Rule out: a spinner with no accessible name; spinners shown for waits under 300ms (flicker); loaders that shift layout when they appear; full-screen spinners where a skeleton would do. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "@keyframes rotate",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<Spinner>, <LoadingDots>, <BarLoader>",
-          "React"
-        ]
-      ],
+      "code": [["CSS","@keyframes rotate",""],["lumina-taste","<Spinner>, <LoadingDots>, <BarLoader>","React"]],
       "added": 3
     },
     {
@@ -898,11 +510,7 @@
       "name": "Setup checklist",
       "summary": "Onboarding steps with round checkboxes, a progress ring and a running count.",
       "pattern": "Checkbox list + progress",
-      "states": [
-        "not started",
-        "in progress",
-        "all done"
-      ],
+      "states": ["not started","in progress","all done"],
       "aliases": [
         "onboarding checklist",
         "getting started list",
@@ -941,18 +549,7 @@
       ],
       "prompt": "Add a setup checklist card: a title with a live \"2 of 5 done\" count and a small progress ring, then 3–6 steps each with a round role=\"checkbox\" tick, a title and one line of help. Done steps get a filled green tick and a quiet strike-through; the count changes to a short sentence when everything is done.",
       "debug": "Debug my checklist. Rule out: ticks that are divs with no keyboard path; progress shown only by the ring; steps that cannot be unticked; celebrating with confetti instead of a quiet line. The symptom:",
-      "code": [
-        [
-          "WAI-ARIA",
-          "Checkbox",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<SetupChecklist steps>",
-          "React"
-        ]
-      ],
+      "code": [["WAI-ARIA","Checkbox",""],["lumina-taste","<SetupChecklist steps>","React"]],
       "added": 3
     },
     {
@@ -960,28 +557,12 @@
       "name": "Undo snackbar",
       "summary": "Delete at once and offer Undo for a few seconds, instead of asking \"Are you sure?\".",
       "pattern": "role=\"status\" + timed commit",
-      "states": [
-        "hidden",
-        "offering undo",
-        "paused",
-        "committed"
-      ],
-      "aliases": [
-        "undo toast",
-        "snackbar with undo",
-        "soft delete",
-        "undo delete",
-        "reversible action bar"
-      ],
+      "states": ["hidden","offering undo","paused","committed"],
+      "aliases": ["undo toast","snackbar with undo","soft delete","undo delete","reversible action bar"],
       "react": "UndoSnackbar",
       "api": "role=\"status\"",
       "w": 380,
-      "preview": [
-        [
-          "click",
-          "li:nth-child(2) [data-part=\"delete\"]"
-        ]
-      ],
+      "preview": [["click","li:nth-child(2) [data-part=\"delete\"]"]],
       "called": [
         "message at the bottom with an undo button",
         "deleted with undo",
@@ -995,12 +576,7 @@
           "api": "role=\"status\"",
           "text": "Names the thing, in the past tense."
         },
-        {
-          "sel": "[data-part=\"undo\"]",
-          "name": "Undo",
-          "api": "",
-          "text": "One action; restores focus to the row."
-        },
+        {"sel":"[data-part=\"undo\"]","name":"Undo","api":"","text":"One action; restores focus to the row."},
         {
           "sel": "[data-part=\"timer\"]",
           "name": "Time left",
@@ -1010,18 +586,7 @@
       ],
       "prompt": "Replace confirm dialogs for reversible deletes with an undo snackbar: remove the item immediately, show a dark status bar (\"Deleted “Q4 forecast”.\" + Undo) with a thin countdown line, pause the timer while hovered or focused, commit after six seconds, and restore the row and focus on Undo.",
       "debug": "Debug my undo snackbar. Rule out: deleting on the server before the timer ends; a timer that keeps running while the user reaches for Undo; focus lost after Undo; using it for actions that cannot be undone. The symptom:",
-      "code": [
-        [
-          "Material",
-          "Snackbar with action",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<UndoSnackbar open onUndo>",
-          "React"
-        ]
-      ],
+      "code": [["Material","Snackbar with action",""],["lumina-taste","<UndoSnackbar open onUndo>","React"]],
       "added": 5
     },
     {
@@ -1029,11 +594,7 @@
       "name": "Announcement pill",
       "summary": "One short line in a pill above a headline: a tagged link to what is new, a two-part fact, or a live status.",
       "pattern": "<a> or <p>",
-      "states": [
-        "default",
-        "hover",
-        "focus-visible"
-      ],
+      "states": ["default","hover","focus-visible"],
       "aliases": [
         "hero pill",
         "announcement badge",
@@ -1045,45 +606,15 @@
       "react": "AnnouncementPill",
       "api": "",
       "w": 520,
-      "called": [
-        "the little pill above the headline",
-        "new feature banner chip",
-        "rounded announcement link in the hero"
-      ],
+      "called": ["the little pill above the headline","new feature banner chip","rounded announcement link in the hero"],
       "anatomy": [
-        {
-          "sel": "[data-part=\"tag\"]",
-          "name": "Tag",
-          "api": "",
-          "text": "One word: New, Beta, v4."
-        },
-        {
-          "sel": "b",
-          "name": "Lead",
-          "api": "",
-          "text": "The fact in primary ink; the rest stays secondary."
-        },
-        {
-          "sel": ".lt-icon",
-          "name": "Arrow",
-          "api": "translate on hover",
-          "text": "Only when the pill is a link."
-        }
+        {"sel":"[data-part=\"tag\"]","name":"Tag","api":"","text":"One word: New, Beta, v4."},
+        {"sel":"b","name":"Lead","api":"","text":"The fact in primary ink; the rest stays secondary."},
+        {"sel":".lt-icon","name":"Arrow","api":"translate on hover","text":"Only when the pill is a link."}
       ],
       "prompt": "Add an announcement pill above the hero headline: a fully rounded hairline pill on a surface fill, 14px text in secondary ink. Variant one is a link with a one-word accent tag (\"New\"), a short line and a small arrow that nudges 2px on hover. Variant two is a two-part fact with the first part bold in primary ink. Variant three is a status with a 7px green dot. One pill per hero, under 60 characters.",
       "debug": "Debug my announcement pill. Rule out: two pills in one hero; a sentence that wraps to two lines; a pill that looks clickable but is not a link; emoji as the tag; the pill competing with the primary button for colour. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<a class=\"lt-pill\">",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<AnnouncementPill tag href>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<a class=\"lt-pill\">",""],["lumina-taste","<AnnouncementPill tag href>","React"]],
       "added": 11
     }
   ]

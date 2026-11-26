@@ -4,16 +4,10 @@
   "name": "Treemap",
   "group": "Composition",
   "summary": "Nested rectangles sized by value: parts of a whole when there are too many for a bar chart.",
-  "bestFor": "10\u201340 parts of one total, such as spend by team or revenue by product",
+  "bestFor": "10–40 parts of one total, such as spend by team or revenue by product",
   "avoidFor": "Comparing similar values precisely (use sorted bars)",
   "dataShape": "items: label + value + group",
-  "aliases": [
-    "tree map",
-    "rectangles chart",
-    "spend breakdown",
-    "area chart of parts",
-    "mosaic"
-  ],
+  "aliases": ["tree map","rectangles chart","spend breakdown","area chart of parts","mosaic"],
   "react": "Treemap",
   "wide": true
 }

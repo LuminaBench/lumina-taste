@@ -7,13 +7,7 @@
   "bestFor": "Headline metrics at the top of dashboards and reports",
   "avoidFor": "Several numbers in one card",
   "dataShape": "label, value, delta, spark[]",
-  "aliases": [
-    "stat card",
-    "metric tile",
-    "kpi tile",
-    "number card",
-    "scorecard"
-  ],
+  "aliases": ["stat card","metric tile","kpi tile","number card","scorecard"],
   "react": "KpiCard",
   "wide": false
 }

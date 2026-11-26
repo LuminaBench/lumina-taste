@@ -7,13 +7,7 @@
   "bestFor": "Project plans and roadmaps with up to ~20 tasks",
   "avoidFor": "Dependencies-heavy planning (use a real planner)",
   "dataShape": "tasks: label + start + end (+ done, milestone)",
-  "aliases": [
-    "project timeline",
-    "roadmap chart",
-    "schedule bars",
-    "timeline chart",
-    "project plan"
-  ],
+  "aliases": ["project timeline","roadmap chart","schedule bars","timeline chart","project plan"],
   "react": "GanttChart",
   "wide": true
 }

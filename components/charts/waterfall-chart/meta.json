@@ -7,13 +7,7 @@
   "bestFor": "Explaining how one number became another: revenue bridges, budget changes",
   "avoidFor": "Unordered parts of a whole (use a stacked bar)",
   "dataShape": "items: label + value (+ total: true for subtotals)",
-  "aliases": [
-    "bridge chart",
-    "revenue bridge",
-    "cascade chart",
-    "walk chart",
-    "mario chart"
-  ],
+  "aliases": ["bridge chart","revenue bridge","cascade chart","walk chart","mario chart"],
   "react": "WaterfallChart",
   "wide": true
 }

@@ -7,12 +7,7 @@
   "bestFor": "Long category names, rankings, top-N lists",
   "avoidFor": "Time series (use a line or column)",
   "dataShape": "items: label + value",
-  "aliases": [
-    "bar chart with long labels",
-    "ranking chart",
-    "top n list",
-    "sideways bars"
-  ],
+  "aliases": ["bar chart with long labels","ranking chart","top n list","sideways bars"],
   "react": "HorizontalBarChart",
   "wide": false
 }

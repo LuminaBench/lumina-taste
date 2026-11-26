@@ -7,12 +7,7 @@
   "bestFor": "Several KPIs against targets in little space",
   "avoidFor": "Showing change over time",
   "dataShape": "items: label + value + target + bands [poor, ok, good]",
-  "aliases": [
-    "target bar",
-    "kpi bar against goal",
-    "progress against target",
-    "linear gauge"
-  ],
+  "aliases": ["target bar","kpi bar against goal","progress against target","linear gauge"],
   "react": "BulletChart",
   "wide": false
 }

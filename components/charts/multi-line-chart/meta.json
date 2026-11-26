@@ -4,15 +4,10 @@
   "name": "Multi-series comparison",
   "group": "Trends",
   "summary": "Several series on one axis, labelled at their ends, with one highlighted.",
-  "bestFor": "Comparing 2\u20136 series over the same time range",
+  "bestFor": "Comparing 2–6 series over the same time range",
   "avoidFor": "More than 6 series (use small multiples)",
-  "dataShape": "x: dates; 2\u20136 numeric series",
-  "aliases": [
-    "comparison line chart",
-    "multiple lines",
-    "spaghetti chart done right",
-    "highlight one line"
-  ],
+  "dataShape": "x: dates; 2–6 numeric series",
+  "aliases": ["comparison line chart","multiple lines","spaghetti chart done right","highlight one line"],
   "react": "MultiLineChart",
   "wide": true
 }

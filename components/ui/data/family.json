@@ -8,34 +8,15 @@
       "name": "Sortable data table",
       "summary": "Sticky header, sort chevrons with aria-sort, expandable detail rows and tabular numbers.",
       "pattern": "Table with sortable columns (APG Sortable Table)",
-      "states": [
-        "unsorted",
-        "ascending",
-        "descending",
-        "row expanded",
-        "hover"
-      ],
-      "aliases": [
-        "sortable table",
-        "grid table",
-        "admin table",
-        "table with expandable rows",
-        "sticky header table"
-      ],
+      "states": ["unsorted","ascending","descending","row expanded","hover"],
+      "aliases": ["sortable table","grid table","admin table","table with expandable rows","sticky header table"],
       "react": "DataTable",
       "fill": true,
       "wide": true,
-      "deps": [
-        "badge"
-      ],
+      "deps": ["badge"],
       "api": "<table> · aria-sort",
       "w": 760,
-      "preview": [
-        [
-          "click",
-          "[data-part=\"expand\"]"
-        ]
-      ],
+      "preview": [["click","[data-part=\"expand\"]"]],
       "called": [
         "rows and columns you can sort by clicking the header",
         "table with arrows on column names",
@@ -71,26 +52,10 @@
       "prompt": "Add a data table: real <table> with a caption, sticky <th> headers containing sort buttons, aria-sort on the sorted column, numbers right-aligned in tabular figures, expandable detail rows (aria-expanded), and a scrolling wrapper with role=\"region\" tabindex=\"0\" so the page never scrolls sideways.",
       "debug": "Debug my table. Rule out: divs instead of a table; aria-sort on the button instead of the th; the page scrolling sideways on mobile; numbers left-aligned in proportional figures; sticky headers hidden behind the app header. The symptom:",
       "code": [
-        [
-          "HTML",
-          "<table> + <th aria-sort>",
-          ""
-        ],
-        [
-          "TanStack",
-          "useReactTable()",
-          "headless"
-        ],
-        [
-          "AppKit",
-          "NSTableView",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<DataTable columns rows>",
-          "React"
-        ]
+        ["HTML","<table> + <th aria-sort>",""],
+        ["TanStack","useReactTable()","headless"],
+        ["AppKit","NSTableView",""],
+        ["lumina-taste","<DataTable columns rows>","React"]
       ]
     },
     {
@@ -98,18 +63,8 @@
       "name": "Virtualised list",
       "summary": "Renders only the visible rows of 10,000 so scrolling stays smooth.",
       "pattern": "WAI-ARIA Listbox with aria-activedescendant",
-      "states": [
-        "idle",
-        "scrolling",
-        "active row"
-      ],
-      "aliases": [
-        "infinite list",
-        "windowed list",
-        "long log list",
-        "virtual scroll",
-        "big list"
-      ],
+      "states": ["idle","scrolling","active row"],
+      "aliases": ["infinite list","windowed list","long log list","virtual scroll","big list"],
       "react": "VirtualList",
       "fill": true,
       "api": "role=\"listbox\" · aria-setsize",
@@ -143,21 +98,9 @@
       "prompt": "Add a virtualised list: a fixed-height scroll container, a spacer of count × rowHeight, and a window translated to the first visible row that renders only visible rows plus overscan. Keep keyboard navigation with aria-activedescendant and aria-posinset/aria-setsize.",
       "debug": "Debug my virtual list. Rule out: rows of variable height with a fixed rowHeight; re-rendering on every scroll event without rAF; focus lost when the focused row unmounts; the scrollbar length wrong. The symptom:",
       "code": [
-        [
-          "TanStack",
-          "useVirtualizer()",
-          ""
-        ],
-        [
-          "react-window",
-          "<FixedSizeList>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<VirtualList count renderRow>",
-          "React"
-        ]
+        ["TanStack","useVirtualizer()",""],
+        ["react-window","<FixedSizeList>",""],
+        ["lumina-taste","<VirtualList count renderRow>","React"]
       ]
     },
     {
@@ -165,16 +108,8 @@
       "name": "Bento grid",
       "summary": "Asymmetric feature tiles that collapse to one column on narrow containers.",
       "pattern": "Section of articles",
-      "states": [
-        "default",
-        "single column"
-      ],
-      "aliases": [
-        "bento box",
-        "feature grid",
-        "tile grid",
-        "apple style grid"
-      ],
+      "states": ["default","single column"],
+      "aliases": ["bento box","feature grid","tile grid","apple style grid"],
       "react": "BentoGrid",
       "fill": true,
       "wide": true,
@@ -199,43 +134,19 @@
           "api": "grid-row: span 2",
           "text": "A supporting story."
         },
-        {
-          "sel": ".lt-bento > article:nth-child(3)",
-          "name": "Small tile",
-          "api": "",
-          "text": "One fact each."
-        }
+        {"sel":".lt-bento > article:nth-child(3)","name":"Small tile","api":"","text":"One fact each."}
       ],
       "prompt": "Add a bento grid: a 3-column grid with one wide and one tall tile, each tile one idea (eyebrow, short heading, one line, a small visual), collapsing to one column when its container is under 620px.",
       "debug": "Debug my bento grid. Rule out: every tile the same size (that is a card grid); tiles with paragraphs; container queries on the grid itself (style its children); holes from spans on narrow screens. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "grid + span",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<BentoGrid> + <BentoTile span>",
-          "React"
-        ]
-      ]
+      "code": [["CSS","grid + span",""],["lumina-taste","<BentoGrid> + <BentoTile span>","React"]]
     },
     {
       "id": "card-stack",
       "name": "Scroll-stacking cards",
       "summary": "Sticky cards that pile on top of each other as you scroll, earlier ones receding.",
       "pattern": "Ordered list",
-      "states": [
-        "flat",
-        "stacking"
-      ],
-      "aliases": [
-        "stacked cards on scroll",
-        "sticky card pile",
-        "card deck scroll",
-        "stacking sections"
-      ],
+      "states": ["flat","stacking"],
+      "aliases": ["stacked cards on scroll","sticky card pile","card deck scroll","stacking sections"],
       "react": "CardStack",
       "fill": true,
       "api": "position: sticky",
@@ -263,21 +174,9 @@
       "prompt": "Add scroll-stacking cards: list items with position: sticky and increasing top offsets so they pile up, and buried cards scaled down by a few percent based on how many cards cover them. Plain stacking under reduced motion.",
       "debug": "Debug my card stack. Rule out: an ancestor with overflow: hidden breaking sticky; cards without solid backgrounds showing through; scale updates on every scroll without rAF. The symptom:",
       "code": [
-        [
-          "CSS",
-          "position: sticky",
-          ""
-        ],
-        [
-          "CSS",
-          "animation-timeline: view()",
-          "scroll-driven variant"
-        ],
-        [
-          "lumina-taste",
-          "<CardStack cards>",
-          "React"
-        ]
+        ["CSS","position: sticky",""],
+        ["CSS","animation-timeline: view()","scroll-driven variant"],
+        ["lumina-taste","<CardStack cards>","React"]
       ]
     },
     {
@@ -285,21 +184,12 @@
       "name": "Comparison table",
       "summary": "Plan-by-feature matrix with a highlighted column and grouped rows.",
       "pattern": "Table with row groups",
-      "states": [
-        "default"
-      ],
-      "aliases": [
-        "feature matrix",
-        "plan comparison",
-        "pricing table",
-        "compare plans grid"
-      ],
+      "states": ["default"],
+      "aliases": ["feature matrix","plan comparison","pricing table","compare plans grid"],
       "react": "ComparisonTable",
       "fill": true,
       "wide": true,
-      "deps": [
-        "badge"
-      ],
+      "deps": ["badge"],
       "api": "<table> · scope=\"rowgroup\"",
       "w": 620,
       "called": [
@@ -330,46 +220,20 @@
       ],
       "prompt": "Add a comparison table: a real <table> with plans as columns, grouped feature rows (scope=\"rowgroup\"), one featured column tinted, ticks and dashes with visually hidden \"Included\"/\"Not included\", and a horizontal scroll container on mobile.",
       "debug": "Debug my comparison table. Rule out: ticks with no text alternative; the featured column tinted with low-contrast text; the page scrolling sideways on mobile. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<table>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ComparisonTable plans groups>",
-          "React"
-        ]
-      ]
+      "code": [["HTML","<table>",""],["lumina-taste","<ComparisonTable plans groups>","React"]]
     },
     {
       "id": "timeline",
       "name": "Timeline / changelog",
       "summary": "Dated entries on a quiet rail, the newest marked with the accent.",
       "pattern": "Ordered list with <time>",
-      "states": [
-        "default",
-        "latest"
-      ],
-      "aliases": [
-        "changelog list",
-        "release notes",
-        "activity timeline",
-        "history list"
-      ],
+      "states": ["default","latest"],
+      "aliases": ["changelog list","release notes","activity timeline","history list"],
       "react": "Timeline",
-      "deps": [
-        "badge"
-      ],
+      "deps": ["badge"],
       "api": "<ol> + <time>",
       "w": 520,
-      "called": [
-        "vertical line with dots and dates",
-        "changelog list",
-        "release history",
-        "activity feed with a line"
-      ],
+      "called": ["vertical line with dots and dates","changelog list","release history","activity feed with a line"],
       "anatomy": [
         {
           "sel": ".lt-timeline li[data-tone=\"accent\"]",
@@ -386,46 +250,20 @@
       ],
       "prompt": "Add a timeline: an ordered list where each item has a <time datetime>, a title and a short line; a thin rail with dots; the newest entry marked with the accent and a \"Latest\" badge.",
       "debug": "Debug my timeline. Rule out: dates without datetime attributes; the rail misaligned with the dots at different text sizes; reverse order without saying so. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ol> + <time>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<Timeline items>",
-          "React"
-        ]
-      ]
+      "code": [["HTML","<ol> + <time>",""],["lumina-taste","<Timeline items>","React"]]
     },
     {
       "id": "split-pane",
       "name": "Resizable split pane",
       "summary": "Two panes and a grip you can drag or move with the arrow keys.",
       "pattern": "WAI-ARIA Window Splitter",
-      "states": [
-        "rest",
-        "hover",
-        "dragging",
-        "focus-visible"
-      ],
-      "aliases": [
-        "resize handle",
-        "split view",
-        "draggable divider",
-        "panel resizer"
-      ],
+      "states": ["rest","hover","dragging","focus-visible"],
+      "aliases": ["resize handle","split view","draggable divider","panel resizer"],
       "react": "SplitPane",
       "fill": true,
       "api": "role=\"separator\" · aria-valuenow",
       "w": 560,
-      "called": [
-        "drag handle between two panels",
-        "resizable split view",
-        "panel resizer",
-        "divider you can drag"
-      ],
+      "called": ["drag handle between two panels","resizable split view","panel resizer","divider you can drag"],
       "anatomy": [
         {
           "sel": "[data-part=\"grip\"]",
@@ -437,21 +275,9 @@
       "prompt": "Add a resizable split pane: two panes with a role=\"separator\" grip (aria-orientation, aria-valuenow/min/max), drag with pointer capture, arrows ±2% and Shift+arrows ±10%, Home/End to limits, double-click to reset.",
       "debug": "Debug my split pane. Rule out: dragging selecting text (pointer capture and user-select: none); no keyboard path; panes shrinking below usable sizes. The symptom:",
       "code": [
-        [
-          "WAI-ARIA",
-          "Window Splitter",
-          ""
-        ],
-        [
-          "react-resizable-panels",
-          "<PanelResizeHandle>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<SplitPane>",
-          "React"
-        ]
+        ["WAI-ARIA","Window Splitter",""],
+        ["react-resizable-panels","<PanelResizeHandle>",""],
+        ["lumina-taste","<SplitPane>","React"]
       ]
     },
     {
@@ -459,23 +285,10 @@
       "name": "Drag-to-reorder list",
       "summary": "Reorder rows by dragging a handle or with Space and the arrow keys.",
       "pattern": "List + live region (keyboard-accessible drag and drop)",
-      "states": [
-        "rest",
-        "grabbed",
-        "moving",
-        "dropped"
-      ],
-      "aliases": [
-        "drag and drop list",
-        "reorder handle",
-        "draggable rows",
-        "sortable items",
-        "six dots handle"
-      ],
+      "states": ["rest","grabbed","moving","dropped"],
+      "aliases": ["drag and drop list","reorder handle","draggable rows","sortable items","six dots handle"],
       "react": "SortableList",
-      "deps": [
-        "badge"
-      ],
+      "deps": ["badge"],
       "api": "aria-live=\"assertive\"",
       "w": 420,
       "called": [
@@ -501,21 +314,9 @@
       "prompt": "Add a reorderable list: a six-dot handle button per row; pointer drag with live reordering; a keyboard alternative (Space to pick up, arrows to move, Space to drop, Esc to cancel); every move announced in an assertive live region.",
       "debug": "Debug my sortable list. Rule out: no keyboard path; announcements missing; the whole row draggable so text cannot be selected; jank from layout reads during drag. The symptom:",
       "code": [
-        [
-          "dnd-kit",
-          "useSortable()",
-          ""
-        ],
-        [
-          "SortableJS",
-          "Sortable.create()",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<SortableList>",
-          "React"
-        ]
+        ["dnd-kit","useSortable()",""],
+        ["SortableJS","Sortable.create()",""],
+        ["lumina-taste","<SortableList>","React"]
       ]
     },
     {
@@ -523,22 +324,11 @@
       "name": "Code block",
       "summary": "Monospace code with language tabs, a filename and a copy button.",
       "pattern": "Figure + WAI-ARIA Tabs",
-      "states": [
-        "default",
-        "copied"
-      ],
-      "aliases": [
-        "code snippet",
-        "copyable code",
-        "syntax block",
-        "install command box"
-      ],
+      "states": ["default","copied"],
+      "aliases": ["code snippet","copyable code","syntax block","install command box"],
       "react": "CodeBlock",
       "fill": true,
-      "deps": [
-        "tabs",
-        "copy-button"
-      ],
+      "deps": ["tabs","copy-button"],
       "api": "<figure> + role=\"tablist\"",
       "w": 560,
       "called": [
@@ -569,45 +359,21 @@
       ],
       "prompt": "Add a code block: a <figure> with a caption bar holding language tabs, a filename and a copy button that copies the visible panel; the <pre> scrolls horizontally on its own and is focusable.",
       "debug": "Debug my code block. Rule out: the page scrolling sideways on long lines; copy grabbing the hidden tab; syntax colours under 4.5:1 in one of the modes. The symptom:",
-      "code": [
-        [
-          "Shiki",
-          "codeToHtml()",
-          "highlighting"
-        ],
-        [
-          "lumina-taste",
-          "<CodeBlock snippets>",
-          "React"
-        ]
-      ]
+      "code": [["Shiki","codeToHtml()","highlighting"],["lumina-taste","<CodeBlock snippets>","React"]]
     },
     {
       "id": "stat-strip",
       "name": "Stat strip",
       "summary": "A row of KPIs with tabular values and semantic delta arrows.",
       "pattern": "Description list",
-      "states": [
-        "default",
-        "two-up"
-      ],
-      "aliases": [
-        "kpi row",
-        "metrics bar",
-        "stats row",
-        "numbers strip"
-      ],
+      "states": ["default","two-up"],
+      "aliases": ["kpi row","metrics bar","stats row","numbers strip"],
       "react": "StatStrip",
       "fill": true,
       "wide": true,
       "api": "<dl> · tabular-nums",
       "w": 760,
-      "called": [
-        "row of numbers at the top of a dashboard",
-        "kpi bar",
-        "four metrics in a row",
-        "stats with up arrows"
-      ],
+      "called": ["row of numbers at the top of a dashboard","kpi bar","four metrics in a row","stats with up arrows"],
       "anatomy": [
         {
           "sel": ".lt-stat-strip > div:first-child dt",
@@ -630,45 +396,20 @@
       ],
       "prompt": "Add a stat strip: a <dl> of 3–5 metrics with labels above large tabular values, deltas coloured by whether the change is good (churn up is red), and hairline dividers; wraps to two per row on narrow containers.",
       "debug": "Debug my stat strip. Rule out: deltas coloured by direction instead of meaning; proportional digits; more than five metrics fighting for attention. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<dl>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<StatStrip stats>",
-          "React"
-        ]
-      ]
+      "code": [["HTML","<dl>",""],["lumina-taste","<StatStrip stats>","React"]]
     },
     {
       "id": "media-card",
       "name": "Media card",
       "summary": "Image cards locked to an aspect ratio so a grid of them always lines up.",
       "pattern": "Link card",
-      "states": [
-        "default",
-        "hover",
-        "focus-visible"
-      ],
-      "aliases": [
-        "blog card",
-        "article card",
-        "thumbnail card",
-        "image card"
-      ],
+      "states": ["default","hover","focus-visible"],
+      "aliases": ["blog card","article card","thumbnail card","image card"],
       "react": "MediaCard",
       "fill": true,
       "api": "aspect-ratio",
       "w": 520,
-      "called": [
-        "blog post card with an image",
-        "article thumbnail card",
-        "case study card",
-        "image card grid"
-      ],
+      "called": ["blog post card with an image","article thumbnail card","case study card","image card grid"],
       "anatomy": [
         {
           "sel": ".lt-media-card:first-child [data-part=\"media\"]",
@@ -685,43 +426,19 @@
       ],
       "prompt": "Add media cards: the whole card is one link, the image cropped with aspect-ratio and object-fit: cover, a 1.03 zoom on hover inside its frame, an eyebrow, a balanced title and a meta line.",
       "debug": "Debug my media cards. Rule out: images of different ratios breaking the grid; the zoom escaping its frame (overflow: hidden on the media); nested links inside the card. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "aspect-ratio + object-fit",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<MediaCard>",
-          "React"
-        ]
-      ]
+      "code": [["CSS","aspect-ratio + object-fit",""],["lumina-taste","<MediaCard>","React"]]
     },
     {
       "id": "avatar-stack",
       "name": "Avatar stack",
       "summary": "Overlapping initials with a +n counter for collaborators.",
       "pattern": "List with accessible count",
-      "states": [
-        "default",
-        "hover"
-      ],
-      "aliases": [
-        "facepile",
-        "people stack",
-        "collaborators",
-        "avatar group"
-      ],
+      "states": ["default","hover"],
+      "aliases": ["facepile","people stack","collaborators","avatar group"],
       "react": "AvatarStack",
       "api": "<ul aria-label>",
       "w": 340,
-      "called": [
-        "overlapping profile pictures",
-        "facepile",
-        "people avatars with +3",
-        "collaborators circles"
-      ],
+      "called": ["overlapping profile pictures","facepile","people avatars with +3","collaborators circles"],
       "anatomy": [
         {
           "sel": ".lt-avatars li:first-child",
@@ -738,46 +455,22 @@
       ],
       "prompt": "Add an avatar stack: a list with an aria-label of the total, overlapping circles with a 2px ring in the page colour, initials as fallback, and a \"+n\" item for the rest.",
       "debug": "Debug my avatar stack. Rule out: no accessible count; rings in a fixed colour that clash in dark mode; images without alt. The symptom:",
-      "code": [
-        [
-          "lumina-taste",
-          "<AvatarStack people>",
-          "React"
-        ]
-      ]
+      "code": [["lumina-taste","<AvatarStack people>","React"]]
     },
     {
       "id": "description-list",
       "name": "Description list",
       "summary": "Clean key–value rows for settings and record details.",
       "pattern": "<dl>",
-      "states": [
-        "default",
-        "stacked"
-      ],
-      "aliases": [
-        "key value list",
-        "details list",
-        "properties panel",
-        "info rows"
-      ],
+      "states": ["default","stacked"],
+      "aliases": ["key value list","details list","properties panel","info rows"],
       "react": "DescriptionList",
       "fill": true,
       "api": "<dl>",
       "w": 480,
-      "called": [
-        "key value rows",
-        "details panel with labels on the left",
-        "properties list",
-        "settings info rows"
-      ],
+      "called": ["key value rows","details panel with labels on the left","properties list","settings info rows"],
       "anatomy": [
-        {
-          "sel": ".lt-dl > div:first-child dt",
-          "name": "Term",
-          "api": "<dt>",
-          "text": "Muted, left."
-        },
+        {"sel":".lt-dl > div:first-child dt","name":"Term","api":"<dt>","text":"Muted, left."},
         {
           "sel": ".lt-dl > div:first-child dd",
           "name": "Value",
@@ -787,41 +480,19 @@
       ],
       "prompt": "Add a description list: a <dl> of term/value rows with hairline dividers, terms muted on the left, values on the right, stacking on narrow containers.",
       "debug": "Debug my description list. Rule out: divs instead of dt/dd; long values overflowing (overflow-wrap: anywhere); terms wrapping into two lines at common widths. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<dl><dt><dd>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<DescriptionList items>",
-          "React"
-        ]
-      ]
+      "code": [["HTML","<dl><dt><dd>",""],["lumina-taste","<DescriptionList items>","React"]]
     },
     {
       "id": "filter-bar",
       "name": "Global filter bar",
       "summary": "One filter bar per dashboard: date range, removable chips, add and reset.",
       "pattern": "WAI-ARIA Toolbar",
-      "states": [
-        "default",
-        "filtered",
-        "reset"
-      ],
-      "aliases": [
-        "dashboard filters",
-        "filter chips",
-        "global filters",
-        "date range filter bar"
-      ],
+      "states": ["default","filtered","reset"],
+      "aliases": ["dashboard filters","filter chips","global filters","date range filter bar"],
       "react": "FilterBar",
       "fill": true,
       "wide": true,
-      "deps": [
-        "segmented-control"
-      ],
+      "deps": ["segmented-control"],
       "api": "role=\"toolbar\"",
       "w": 760,
       "called": [
@@ -843,41 +514,19 @@
           "api": "<button>",
           "text": "Click to remove."
         },
-        {
-          "sel": ".lt-filterbar [data-part=\"reset\"]",
-          "name": "Reset",
-          "api": "",
-          "text": "Back to the defaults."
-        }
+        {"sel":".lt-filterbar [data-part=\"reset\"]","name":"Reset","api":"","text":"Back to the defaults."}
       ],
       "prompt": "Add one global filter bar for a dashboard: a date-range segmented control, removable filter chips, an \"Add filter\" button and Reset, emitting one state object every card reads. Never repeat filter bars inside cards.",
       "debug": "Debug my filter bar. Rule out: cards with their own filters disagreeing with the global ones; chip remove buttons without names; focus lost after removing a chip. The symptom:",
-      "code": [
-        [
-          "lumina-taste",
-          "<FilterBar ranges filters>",
-          "React"
-        ]
-      ]
+      "code": [["lumina-taste","<FilterBar ranges filters>","React"]]
     },
     {
       "id": "chat-thread",
       "name": "Chat thread",
       "summary": "Message bubbles grouped by sender, with read status, an attachment and a typing indicator.",
       "pattern": "role=\"log\" (live region)",
-      "states": [
-        "incoming",
-        "outgoing",
-        "attachment",
-        "typing"
-      ],
-      "aliases": [
-        "message bubbles",
-        "chat ui",
-        "conversation view",
-        "imessage style chat",
-        "dm thread"
-      ],
+      "states": ["incoming","outgoing","attachment","typing"],
+      "aliases": ["message bubbles","chat ui","conversation view","imessage style chat","dm thread"],
       "react": "ChatThread",
       "api": "role=\"log\"",
       "w": 480,
@@ -915,18 +564,7 @@
       ],
       "prompt": "Build a chat thread: an <ol role=\"log\" aria-live=\"polite\">, consecutive messages from one sender grouped with one avatar, name and <time>, incoming bubbles on a neutral surface and outgoing on the accent, small tail corners only where bubbles stack, a file attachment card, \"Read 09:45\" under the latest outgoing group, and a three-dot typing indicator with hidden text.",
       "debug": "Debug my chat thread. Rule out: every message repeating the avatar and time; long URLs breaking the bubble (overflow-wrap: anywhere); the log announcing old messages on load; accent bubbles with text below 4.5:1. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ol role=\"log\">",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ChatThread groups>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<ol role=\"log\">",""],["lumina-taste","<ChatThread groups>","React"]],
       "added": 2
     },
     {
@@ -934,30 +572,12 @@
       "name": "Prompt composer",
       "summary": "A chat input that grows with its text, sends with ⌘↵ and keeps attach and mode within reach.",
       "pattern": "<form> + auto-growing <textarea>",
-      "states": [
-        "empty",
-        "typing",
-        "near limit",
-        "sent",
-        "focus-within"
-      ],
-      "aliases": [
-        "chat input",
-        "message box",
-        "ai prompt box",
-        "composer",
-        "send message field"
-      ],
+      "states": ["empty","typing","near limit","sent","focus-within"],
+      "aliases": ["chat input","message box","ai prompt box","composer","send message field"],
       "react": "PromptComposer",
       "api": "field-sizing: content",
       "w": 520,
-      "preview": [
-        [
-          "type",
-          "textarea",
-          "Summarise churn by plan for Q4"
-        ]
-      ],
+      "preview": [["type","textarea","Summarise churn by plan for Q4"]],
       "called": [
         "message box at the bottom of a chat",
         "text box with a send arrow",
@@ -992,18 +612,7 @@
       ],
       "prompt": "Add a prompt composer: a rounded form with a textarea that grows to eight lines (field-sizing: content with a JS fallback), a bar with an attach button, a small Ask/Edit radiogroup, a \"⌘↵ to send\" hint, a character count that warns near the limit and a round send button that is disabled until there is text. Enter adds a line; ⌘/Ctrl+Enter sends.",
       "debug": "Debug my composer. Rule out: Enter sending when people expect a new line (or the reverse, document whichever you pick); the textarea jumping height on every keystroke; send enabled for whitespace; the page scrolling when the textarea grows. The symptom:",
-      "code": [
-        [
-          "CSS",
-          "field-sizing: content",
-          "auto-grow"
-        ],
-        [
-          "lumina-taste",
-          "<PromptComposer onSend>",
-          "React"
-        ]
-      ],
+      "code": [["CSS","field-sizing: content","auto-grow"],["lumina-taste","<PromptComposer onSend>","React"]],
       "added": 2
     },
     {
@@ -1011,19 +620,8 @@
       "name": "Kanban board",
       "summary": "Cards in status columns you can drag, or move with Space and the arrow keys.",
       "pattern": "Drag and drop with keyboard alternative",
-      "states": [
-        "idle",
-        "dragging",
-        "lifted (keyboard)",
-        "drop target"
-      ],
-      "aliases": [
-        "task board",
-        "trello board",
-        "status columns",
-        "drag cards between columns",
-        "scrum board"
-      ],
+      "states": ["idle","dragging","lifted (keyboard)","drop target"],
+      "aliases": ["task board","trello board","status columns","drag cards between columns","scrum board"],
       "react": "KanbanBoard",
       "api": "draggable + aria-live",
       "w": 720,
@@ -1056,21 +654,9 @@
       "prompt": "Add a kanban board: columns as <section> with a heading and a live count, cards as list items that are draggable with native drag and drop, plus a keyboard path: Space lifts a card, arrows move it between columns and within a column, Space drops, Esc cancels; announce every move in an assertive live region.",
       "debug": "Debug my kanban board. Rule out: drag and drop with no keyboard alternative; every card as its own tab stop; counts that do not update; layout reads inside dragover causing jank; the board forcing the page to scroll sideways on mobile (scroll the board instead). The symptom:",
       "code": [
-        [
-          "dnd-kit",
-          "<DndContext> + useSortable",
-          ""
-        ],
-        [
-          "HTML",
-          "draggable + dragover",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<KanbanBoard columns>",
-          "React"
-        ]
+        ["dnd-kit","<DndContext> + useSortable",""],
+        ["HTML","draggable + dragover",""],
+        ["lumina-taste","<KanbanBoard columns>","React"]
       ],
       "added": 2
     },
@@ -1079,18 +665,8 @@
       "name": "Before/after slider",
       "summary": "Two images stacked with a draggable divider; arrows move it too.",
       "pattern": "Native range driving clip-path",
-      "states": [
-        "default",
-        "dragging",
-        "focus-visible"
-      ],
-      "aliases": [
-        "image comparison slider",
-        "before after",
-        "reveal slider",
-        "compare images",
-        "juxtapose"
-      ],
+      "states": ["default","dragging","focus-visible"],
+      "aliases": ["image comparison slider","before after","reveal slider","compare images","juxtapose"],
       "react": "ImageCompare",
       "api": "<input type=\"range\"> + clip-path",
       "w": 520,
@@ -1117,21 +693,9 @@
       "prompt": "Add a before/after slider: two images stacked in a 16:9 frame, the top one clipped with clip-path: inset(0 0 0 var(--pos)), a round handle on a 2px divider, and a transparent full-size <input type=\"range\"> on top so drag, touch and arrow keys all work. Label both images and show focus on the handle.",
       "debug": "Debug my before/after slider. Rule out: a custom pointer handler with no keyboard path; images of different sizes drifting apart (object-fit: cover on both); the range thumb invisible but still the hit target; no aria-valuetext. The symptom:",
       "code": [
-        [
-          "HTML",
-          "<input type=\"range\">",
-          ""
-        ],
-        [
-          "CSS",
-          "clip-path: inset()",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ImageCompare before after>",
-          "React"
-        ]
+        ["HTML","<input type=\"range\">",""],
+        ["CSS","clip-path: inset()",""],
+        ["lumina-taste","<ImageCompare before after>","React"]
       ],
       "added": 2
     },
@@ -1140,27 +704,12 @@
       "name": "Masonry grid",
       "summary": "Cards of different heights packed into columns with no gaps, in plain CSS.",
       "pattern": "CSS multi-column layout",
-      "states": [
-        "3 columns",
-        "2 columns",
-        "1 column"
-      ],
-      "aliases": [
-        "pinterest layout",
-        "waterfall grid",
-        "brick layout",
-        "staggered grid",
-        "uneven card grid"
-      ],
+      "states": ["3 columns","2 columns","1 column"],
+      "aliases": ["pinterest layout","waterfall grid","brick layout","staggered grid","uneven card grid"],
       "react": "MasonryGrid",
       "api": "columns: 3 160px",
       "w": 560,
-      "called": [
-        "pinterest style grid",
-        "cards of different heights with no gaps",
-        "staggered card wall",
-        "brick layout"
-      ],
+      "called": ["pinterest style grid","cards of different heights with no gaps","staggered card wall","brick layout"],
       "anatomy": [
         {
           "sel": "li:nth-child(1) [data-part=\"tile\"]",
@@ -1178,21 +727,9 @@
       "prompt": "Add a masonry grid with CSS columns: columns: 3 160px, column-gap 12px, each item break-inside: avoid with 12px bottom margin, tiles with media of varying height, a small tag and a title. Note that reading order runs down each column.",
       "debug": "Debug my masonry grid. Rule out: cards split across columns (break-inside: avoid); JS masonry libraries re-laying out on every image load; order that matters (columns read down, not across, so use grid when order is important). The symptom:",
       "code": [
-        [
-          "CSS",
-          "columns + break-inside: avoid",
-          ""
-        ],
-        [
-          "CSS (future)",
-          "grid-template-rows: masonry",
-          "experimental"
-        ],
-        [
-          "lumina-taste",
-          "<MasonryGrid>",
-          "React"
-        ]
+        ["CSS","columns + break-inside: avoid",""],
+        ["CSS (future)","grid-template-rows: masonry","experimental"],
+        ["lumina-taste","<MasonryGrid>","React"]
       ],
       "added": 3
     },
@@ -1201,19 +738,8 @@
       "name": "Swipe actions",
       "summary": "Swipe a row right to archive or left to delete; buttons do the same for mouse and keyboard.",
       "pattern": "Pointer drag + visible buttons",
-      "states": [
-        "idle",
-        "dragging right",
-        "dragging left",
-        "removed"
-      ],
-      "aliases": [
-        "swipe to delete",
-        "swipe to archive",
-        "swipeable list",
-        "slide row actions",
-        "mail swipe"
-      ],
+      "states": ["idle","dragging right","dragging left","removed"],
+      "aliases": ["swipe to delete","swipe to archive","swipeable list","slide row actions","mail swipe"],
       "react": "SwipeActions",
       "api": "touch-action: pan-y",
       "w": 420,
@@ -1245,18 +771,7 @@
       ],
       "prompt": "Add swipe actions to inbox rows: drag right to archive (green underlay) or left to delete (red underlay), commit past 30% of the row width, snap back otherwise, keep vertical scrolling (touch-action: pan-y), show Archive/Delete icon buttons on hover and focus for mouse and keyboard users, and announce each action in a status line.",
       "debug": "Debug my swipe rows. Rule out: no non-swipe way to act (buttons or a menu); swipes hijacking vertical scroll; deletes with no undo or confirmation; the row text staying selectable while dragging. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "pointer events + <button>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<SwipeActions rows>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","pointer events + <button>",""],["lumina-taste","<SwipeActions rows>","React"]],
       "added": 3
     },
     {
@@ -1264,27 +779,12 @@
       "name": "Uptime bars",
       "summary": "A status-page strip with one small bar per day per service: green, amber or red.",
       "pattern": "<ol> of days",
-      "states": [
-        "all operational",
-        "degraded day",
-        "outage day"
-      ],
-      "aliases": [
-        "status page",
-        "uptime history",
-        "service health bars",
-        "incident history",
-        "availability strip"
-      ],
+      "states": ["all operational","degraded day","outage day"],
+      "aliases": ["status page","uptime history","service health bars","incident history","availability strip"],
       "react": "UptimeBars",
       "api": "grid repeat(90)",
       "w": 640,
-      "called": [
-        "status page with green bars",
-        "uptime history strip",
-        "90 day availability bars",
-        "service status bars"
-      ],
+      "called": ["status page with green bars","uptime history strip","90 day availability bars","service status bars"],
       "anatomy": [
         {
           "sel": "[data-part=\"now\"]",
@@ -1307,18 +807,7 @@
       ],
       "prompt": "Add a status-page uptime strip: a header with the current state as a green pill, then one row per service with name and exact uptime, and 90 thin day bars coloured by status (operational, degraded, outage) each with visually hidden text, plus a legend and \"90 days ago / Today\" labels.",
       "debug": "Debug my uptime bars. Rule out: status by colour alone; 90 separate tab stops; bars too thin to see on mobile (drop to 30 days); a rounded \"99.9%\" that hides real outages. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ol> + CSS grid",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<UptimeBars services>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<ol> + CSS grid",""],["lumina-taste","<UptimeBars services>","React"]],
       "added": 5
     },
     {
@@ -1326,17 +815,8 @@
       "name": "Review summary",
       "summary": "The average rating in large type, a row of stars and a five-to-one breakdown in bars.",
       "pattern": "Figure + <ol> distribution",
-      "states": [
-        "default",
-        "narrow"
-      ],
-      "aliases": [
-        "rating breakdown",
-        "reviews histogram",
-        "star distribution",
-        "average rating",
-        "product reviews summary"
-      ],
+      "states": ["default","narrow"],
+      "aliases": ["rating breakdown","reviews histogram","star distribution","average rating","product reviews summary"],
       "react": "ReviewSummary",
       "api": "<ol> bars",
       "w": 520,
@@ -1368,18 +848,7 @@
       ],
       "prompt": "Add a review summary: the average (one decimal) in large display type, five stars with an aria-label, the total review count, and a distribution list of 5 to 1 star rows each with a bar and a percentage.",
       "debug": "Debug my review summary. Rule out: stars without a text alternative; bars without percentages; an average without the count; partial-star fills that ignore the actual value. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ol> + width %",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ReviewSummary average counts>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<ol> + width %",""],["lumina-taste","<ReviewSummary average counts>","React"]],
       "added": 5
     },
     {
@@ -1387,18 +856,8 @@
       "name": "File list",
       "summary": "Files with a type tile, name, size and owner, date and two quiet actions per row.",
       "pattern": "<ul> of rows",
-      "states": [
-        "default",
-        "hover",
-        "long names"
-      ],
-      "aliases": [
-        "attachments list",
-        "documents list",
-        "file browser rows",
-        "uploaded files",
-        "drive list"
-      ],
+      "states": ["default","hover","long names"],
+      "aliases": ["attachments list","documents list","file browser rows","uploaded files","drive list"],
       "react": "FileList",
       "api": "grid 36px 1fr auto auto",
       "w": 560,
@@ -1430,18 +889,7 @@
       ],
       "prompt": "Add a file list: a header with count and total size, then rows with a 36×40 type tile (PDF red tint, sheets green tint, others neutral) showing three mono letters, the file name as a link with \"size · owner\" under it, the date, and Share/More icon buttons labelled with the file name.",
       "debug": "Debug my file list. Rule out: icon buttons without names; long names pushing the date off; file type shown by colour only; rows that are not links to anything. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ul> + grid",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<FileList files>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<ul> + grid",""],["lumina-taste","<FileList files>","React"]],
       "added": 5
     },
     {
@@ -1449,18 +897,8 @@
       "name": "Diff view",
       "summary": "A unified code diff with old and new line numbers, +/− signs and softly tinted rows.",
       "pattern": "<table> in a scroll region",
-      "states": [
-        "context",
-        "added",
-        "removed"
-      ],
-      "aliases": [
-        "code diff",
-        "git diff",
-        "changes view",
-        "pull request diff",
-        "before after code"
-      ],
+      "states": ["context","added","removed"],
+      "aliases": ["code diff","git diff","changes view","pull request diff","before after code"],
       "react": "DiffView",
       "api": "<table> + tints",
       "w": 620,
@@ -1483,27 +921,11 @@
           "api": "user-select: none",
           "text": "Old and new; copying code skips them."
         },
-        {
-          "sel": "[data-part=\"stat\"]",
-          "name": "Summary",
-          "api": "",
-          "text": "+2 −1 at a glance."
-        }
+        {"sel":"[data-part=\"stat\"]","name":"Summary","api":"","text":"+2 −1 at a glance."}
       ],
       "prompt": "Add a unified diff view: a caption bar with the file path in mono and a +N −N summary, then a table in a horizontally scrolling region with old and new line numbers (not selectable), a +/− sign column, the code, softly tinted added/removed rows and visually hidden \"added\"/\"removed\" text.",
       "debug": "Debug my diff view. Rule out: red/green as the only signal; line numbers copied with the code; long lines widening the page; full-saturation backgrounds that hide syntax colours. The symptom:",
-      "code": [
-        [
-          "diff2html",
-          "Diff2Html.html()",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<DiffView lines>",
-          "React"
-        ]
-      ],
+      "code": [["diff2html","Diff2Html.html()",""],["lumina-taste","<DiffView lines>","React"]],
       "added": 5
     },
     {
@@ -1511,27 +933,12 @@
       "name": "JSON viewer",
       "summary": "Collapsible JSON as a keyboard-navigable tree, with types told apart by colour and text.",
       "pattern": "WAI-ARIA Tree View",
-      "states": [
-        "expanded",
-        "collapsed",
-        "focused node"
-      ],
-      "aliases": [
-        "json tree",
-        "object inspector",
-        "api response viewer",
-        "collapsible json",
-        "data inspector"
-      ],
+      "states": ["expanded","collapsed","focused node"],
+      "aliases": ["json tree","object inspector","api response viewer","collapsible json","data inspector"],
       "react": "JsonViewer",
       "api": "role=\"tree\"",
       "w": 480,
-      "called": [
-        "expandable json view",
-        "api response viewer",
-        "tree of json keys",
-        "object inspector like devtools"
-      ],
+      "called": ["expandable json view","api response viewer","tree of json keys","object inspector like devtools"],
       "anatomy": [
         {
           "sel": "[aria-level=\"2\"][aria-expanded] [data-part=\"caret\"]",
@@ -1554,18 +961,7 @@
       ],
       "prompt": "Add a JSON viewer: render an object as a role=\"tree\" with nested groups, a caret that rotates on expanded nodes, {n}/[n] size hints, typed values (strings quoted in accent ink, numbers and booleans in amber, null in italic muted), one tab stop with arrow-key travel, Right/Left to expand and collapse, and a Collapse all button.",
       "debug": "Debug my JSON viewer. Rule out: building HTML from values without escaping (XSS); every node a tab stop; types shown by colour only; huge payloads rendered all at once (collapse past depth 2). The symptom:",
-      "code": [
-        [
-          "react-json-view",
-          "<ReactJson src>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<JsonViewer value>",
-          "React"
-        ]
-      ],
+      "code": [["react-json-view","<ReactJson src>",""],["lumina-taste","<JsonViewer value>","React"]],
       "added": 5
     },
     {
@@ -1573,28 +969,12 @@
       "name": "Month calendar",
       "summary": "A month grid with colour-tagged events per day; arrows move by day and week, Enter shows the day.",
       "pattern": "WAI-ARIA Grid",
-      "states": [
-        "today",
-        "selected day",
-        "busy day",
-        "narrow (dots)"
-      ],
-      "aliases": [
-        "event calendar",
-        "month view",
-        "schedule grid",
-        "calendar with events",
-        "planner"
-      ],
+      "states": ["today","selected day","busy day","narrow (dots)"],
+      "aliases": ["event calendar","month view","schedule grid","calendar with events","planner"],
       "react": "MonthCalendar",
       "api": "role=\"grid\"",
       "w": 760,
-      "called": [
-        "calendar month with meetings in the boxes",
-        "schedule view",
-        "monthly planner grid",
-        "events calendar"
-      ],
+      "called": ["calendar month with meetings in the boxes","schedule view","monthly planner grid","events calendar"],
       "anatomy": [
         {
           "sel": "[data-today] [data-part=\"day\"]",
@@ -1602,12 +982,7 @@
           "api": "aria-current=\"date\"",
           "text": "Filled circle; the only accent fill."
         },
-        {
-          "sel": "td ul li",
-          "name": "Event",
-          "api": "",
-          "text": "Coloured edge plus the title; dots when narrow."
-        },
+        {"sel":"td ul li","name":"Event","api":"","text":"Coloured edge plus the title; dots when narrow."},
         {
           "sel": "[data-part=\"sel\"]",
           "name": "Day summary",
@@ -1617,18 +992,7 @@
       ],
       "prompt": "Add a month calendar: a header with month and Previous/Today/Next, a 7-column table with weekday headers, out-of-month cells tinted, today as a filled accent circle with aria-current=\"date\", events as small rows with a coloured left edge (dots under 560px), one tab stop with arrows by day/week, and a live line summarising the selected day.",
       "debug": "Debug my calendar. Rule out: every day a tab stop; events cut off with no way to see them; weeks starting on Sunday when users expect Monday (make it a setting); colour as the only event label. The symptom:",
-      "code": [
-        [
-          "FullCalendar",
-          "dayGridMonth",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<MonthCalendar events>",
-          "React"
-        ]
-      ],
+      "code": [["FullCalendar","dayGridMonth",""],["lumina-taste","<MonthCalendar events>","React"]],
       "added": 6
     },
     {
@@ -1636,32 +1000,12 @@
       "name": "Order summary",
       "summary": "Line items, a promo code that recalculates VAT and total, and one clear action.",
       "pattern": "<dl> totals + <form> promo",
-      "states": [
-        "default",
-        "code applied",
-        "invalid code"
-      ],
-      "aliases": [
-        "checkout summary",
-        "cart total",
-        "basket summary",
-        "invoice preview",
-        "price breakdown"
-      ],
+      "states": ["default","code applied","invalid code"],
+      "aliases": ["checkout summary","cart total","basket summary","invoice preview","price breakdown"],
       "react": "OrderSummary",
       "api": "<data value> · tabular-nums",
       "w": 380,
-      "preview": [
-        [
-          "type",
-          "#lt-os-code",
-          "team10"
-        ],
-        [
-          "click",
-          "[data-part=\"promo\"] button"
-        ]
-      ],
+      "preview": [["type","#lt-os-code","team10"],["click","[data-part=\"promo\"] button"]],
       "called": [
         "checkout box with subtotal and total",
         "cart summary with promo code",
@@ -1690,18 +1034,7 @@
       ],
       "prompt": "Add an order summary card: line items with a detail line and right-aligned tabular prices, a small promo-code form that explains failures and shows the discount as its own row, subtotal, VAT and a large total (\"per month\"), one full-width primary button and a reassurance line about when payment is taken.",
       "debug": "Debug my order summary. Rule out: totals that change width as they update (tabular-nums); VAT hidden until the last step; a promo field more prominent than the pay button; floating-point rounding in money (use integer pence). The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<dl> + <data value>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<OrderSummary items>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<dl> + <data value>",""],["lumina-taste","<OrderSummary items>","React"]],
       "added": 6
     },
     {
@@ -1709,28 +1042,12 @@
       "name": "Product card",
       "summary": "Shop card with image, favourite, sale price, colour swatches that recolour the item and Add to basket.",
       "pattern": "<article> + radio swatches",
-      "states": [
-        "default",
-        "favourited",
-        "added",
-        "on sale"
-      ],
-      "aliases": [
-        "shop card",
-        "ecommerce product tile",
-        "item card",
-        "store listing",
-        "product thumbnail"
-      ],
+      "states": ["default","favourited","added","on sale"],
+      "aliases": ["shop card","ecommerce product tile","item card","store listing","product thumbnail"],
       "react": "ProductCard",
       "api": "<article> + <s> price",
       "w": 280,
-      "preview": [
-        [
-          "click",
-          "[data-part=\"sw\"]:nth-of-type(3) input"
-        ]
-      ],
+      "preview": [["click","[data-part=\"sw\"]:nth-of-type(3) input"]],
       "called": [
         "product box in an online shop",
         "item card with price and add to cart",
@@ -1759,18 +1076,7 @@
       ],
       "prompt": "Add a product card: square image area with a \"New\" tag and a round favourite button (aria-pressed), the product name as a link, a one-line spec, price with a struck-through old price announced as \"was £60\", colour swatches as radios that recolour the image and show the colour name, and a full-width secondary \"Add to basket\" that confirms in place.",
       "debug": "Debug my product card. Rule out: the whole card and the button both being links; prices with no \"was\" for screen readers; swatches with no names; favourite icons with no accessible name. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<article> + <input type=\"radio\">",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ProductCard>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<article> + <input type=\"radio\">",""],["lumina-taste","<ProductCard>","React"]],
       "added": 6
     },
     {
@@ -1778,28 +1084,12 @@
       "name": "Comment thread",
       "summary": "Comments with one level of replies on a thin rail, +1 reactions and an inline reply box.",
       "pattern": "Nested lists + forms",
-      "states": [
-        "default",
-        "reacted",
-        "replying",
-        "new comment"
-      ],
-      "aliases": [
-        "comments section",
-        "discussion thread",
-        "replies",
-        "threaded comments",
-        "feedback thread"
-      ],
+      "states": ["default","reacted","replying","new comment"],
+      "aliases": ["comments section","discussion thread","replies","threaded comments","feedback thread"],
       "react": "CommentThread",
       "api": "<ul> nested once",
       "w": 520,
-      "preview": [
-        [
-          "click",
-          "[data-part=\"reply\"]"
-        ]
-      ],
+      "preview": [["click","[data-part=\"reply\"]"]],
       "called": [
         "comments with replies indented",
         "discussion under a document",
@@ -1807,12 +1097,7 @@
         "comment section with likes"
       ],
       "anatomy": [
-        {
-          "sel": "[data-part=\"replies\"]",
-          "name": "Replies",
-          "api": "",
-          "text": "One level only, on a thin rail."
-        },
+        {"sel":"[data-part=\"replies\"]","name":"Replies","api":"","text":"One level only, on a thin rail."},
         {
           "sel": "[data-part=\"react\"]",
           "name": "+1",
@@ -1828,18 +1113,7 @@
       ],
       "prompt": "Add a comment thread: a heading with the count, comments with avatar, name, relative time and text, replies one level deep on a 2px left rail, +1 reaction toggles with counts, Reply opening an inline form under that comment, and a new-comment box at the bottom. Escape all user text.",
       "debug": "Debug my comments. Rule out: replies nested five levels deep; user text inserted as HTML (XSS); reactions with no count or pressed state; a Reply that opens a modal. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "nested <ul>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<CommentThread comments>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","nested <ul>",""],["lumina-taste","<CommentThread comments>","React"]],
       "added": 6
     },
     {
@@ -1847,26 +1121,12 @@
       "name": "Activity feed",
       "summary": "Recent events as one-line sentences on a thin rail, with an icon per kind and the time on the right.",
       "pattern": "<ol> timeline",
-      "states": [
-        "default",
-        "status event"
-      ],
-      "aliases": [
-        "activity log",
-        "recent activity",
-        "audit trail",
-        "event feed",
-        "history list"
-      ],
+      "states": ["default","status event"],
+      "aliases": ["activity log","recent activity","audit trail","event feed","history list"],
       "react": "ActivityFeed",
       "api": "<ol> + rail",
       "w": 460,
-      "called": [
-        "recent activity list",
-        "who did what feed",
-        "audit log on a dashboard",
-        "event history"
-      ],
+      "called": ["recent activity list","who did what feed","audit log on a dashboard","event history"],
       "anatomy": [
         {
           "sel": "li:first-child [data-part=\"dot\"]",
@@ -1880,27 +1140,11 @@
           "api": "",
           "text": "Who did what to which thing; nouns in bold."
         },
-        {
-          "sel": "li:first-child time",
-          "name": "Time",
-          "api": "<time>",
-          "text": "Relative, aligned right."
-        }
+        {"sel":"li:first-child time","name":"Time","api":"<time>","text":"Relative, aligned right."}
       ],
       "prompt": "Add an activity feed: heading with \"View all\", then an ordered list on a thin vertical rail; each event has a 28px round icon (status events tinted green or amber), one sentence with the actor and object in bold, and a right-aligned relative time.",
       "debug": "Debug my activity feed. Rule out: every event a card; colour as the only status signal; absolute timestamps everywhere; sentences without the object (\"Ana edited\"). The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ol>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ActivityFeed items>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<ol>",""],["lumina-taste","<ActivityFeed items>","React"]],
       "added": 6
     },
     {
@@ -1908,18 +1152,8 @@
       "name": "Delivery tracker",
       "summary": "The arrival promise as the heading, then order steps on one progress line with times.",
       "pattern": "<ol> + aria-current=\"step\"",
-      "states": [
-        "in transit",
-        "delivered",
-        "vertical on narrow"
-      ],
-      "aliases": [
-        "order tracking",
-        "shipping progress",
-        "package status",
-        "delivery steps",
-        "order timeline"
-      ],
+      "states": ["in transit","delivered","vertical on narrow"],
+      "aliases": ["order tracking","shipping progress","package status","delivery steps","order timeline"],
       "react": "DeliveryTracker",
       "api": "aria-current=\"step\"",
       "w": 620,
@@ -1930,12 +1164,7 @@
         "order progress with dots"
       ],
       "anatomy": [
-        {
-          "sel": "h3",
-          "name": "Promise",
-          "api": "",
-          "text": "The answer first: when it arrives."
-        },
+        {"sel":"h3","name":"Promise","api":"","text":"The answer first: when it arrives."},
         {
           "sel": "li[aria-current]",
           "name": "Current step",
@@ -1951,18 +1180,7 @@
       ],
       "prompt": "Add a delivery tracker: the heading states the arrival (\"Arriving today\") with the time window and order number below and a secondary \"Track on map\"; then four steps on one horizontal line (vertical when narrow) with filled green segments up to the current step, a ringed current dot (aria-current=\"step\") and a time under each label.",
       "debug": "Debug my tracker. Rule out: the arrival time hidden under the steps; progress shown only in colour; no time window; the horizontal line overflowing on phones. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ol>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<DeliveryTracker steps>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<ol>",""],["lumina-taste","<DeliveryTracker steps>","React"]],
       "added": 6
     },
     {
@@ -1970,18 +1188,8 @@
       "name": "Search results",
       "summary": "The query and count as the heading, kind filters, and rows with the matched words highlighted.",
       "pattern": "<ol> of links + <mark>",
-      "states": [
-        "results",
-        "filtered",
-        "few results"
-      ],
-      "aliases": [
-        "search page",
-        "results list",
-        "search hits",
-        "find results",
-        "site search results"
-      ],
+      "states": ["results","filtered","few results"],
+      "aliases": ["search page","results list","search hits","find results","site search results"],
       "react": "SearchResults",
       "api": "<mark>",
       "w": 560,
@@ -1992,12 +1200,7 @@
         "found results list"
       ],
       "anatomy": [
-        {
-          "sel": "h3",
-          "name": "Query and count",
-          "api": "",
-          "text": "Echoes exactly what was searched."
-        },
+        {"sel":"h3","name":"Query and count","api":"","text":"Echoes exactly what was searched."},
         {
           "sel": "li:first-child mark",
           "name": "Match",
@@ -2013,18 +1216,7 @@
       ],
       "prompt": "Add a search results view: heading \"3 results for “forecast”\", pill tabs filtering by kind with counts, then a list where each whole row is a link with a kind label, title, meta line and a one-line snippet with matches in <mark>; end with suggested alternative queries.",
       "debug": "Debug my results. Rule out: the query not echoed; highlights by colour only without <mark>; several links per row; no suggestion when results are few. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<ol> + <mark>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<SearchResults hits>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<ol> + <mark>",""],["lumina-taste","<SearchResults hits>","React"]],
       "added": 6
     },
     {
@@ -2032,17 +1224,8 @@
       "name": "Usage meters",
       "summary": "One labelled bar per plan limit; turns amber at 90% and offers a way to add capacity.",
       "pattern": "role=\"meter\"",
-      "states": [
-        "normal",
-        "near limit"
-      ],
-      "aliases": [
-        "plan usage",
-        "quota bars",
-        "limits meter",
-        "billing usage",
-        "storage used"
-      ],
+      "states": ["normal","near limit"],
+      "aliases": ["plan usage","quota bars","limits meter","billing usage","storage used"],
       "react": "UsageMeters",
       "api": "role=\"meter\"",
       "w": 560,
@@ -2065,27 +1248,11 @@
           "api": "role=\"meter\"",
           "text": "Amber from 90%, never red until it stops working."
         },
-        {
-          "sel": "[data-part=\"note\"]",
-          "name": "Way out",
-          "api": "",
-          "text": "Says what to do, with a link."
-        }
+        {"sel":"[data-part=\"note\"]","name":"Way out","api":"","text":"Says what to do, with a link."}
       ],
       "prompt": "Add a usage card: heading and reset date, then a two-column grid of meters (one per plan limit) each with label, \"12 of 15\" in tabular figures and a 6px bar with role=\"meter\"; at 90% or more the bar turns amber and a note offers \"Add capacity\".",
       "debug": "Debug my usage meters. Rule out: progressbar role for levels (use meter); red for \"almost full\" (keep red for blocked); percentages without the real numbers; no reset date. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<meter>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<UsageMeters items>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<meter>",""],["lumina-taste","<UsageMeters items>","React"]],
       "added": 8
     },
     {
@@ -2093,16 +1260,8 @@
       "name": "Plan card",
       "summary": "Current plan and price, seats, next invoice and card on file, with one upgrade action.",
       "pattern": "<section> + <dl>",
-      "states": [
-        "default"
-      ],
-      "aliases": [
-        "billing overview",
-        "subscription card",
-        "current plan box",
-        "account plan",
-        "billing summary"
-      ],
+      "states": ["default"],
+      "aliases": ["billing overview","subscription card","current plan box","account plan","billing summary"],
       "react": "PlanCard",
       "api": "<dl>",
       "w": 560,
@@ -2113,12 +1272,7 @@
         "billing settings card"
       ],
       "anatomy": [
-        {
-          "sel": "h3",
-          "name": "Plan",
-          "api": "",
-          "text": "Name and period as a small pill."
-        },
+        {"sel":"h3","name":"Plan","api":"","text":"Name and period as a small pill."},
         {
           "sel": "dl > div:nth-child(2)",
           "name": "Next invoice",
@@ -2134,18 +1288,7 @@
       ],
       "prompt": "Add a plan card for billing settings: eyebrow \"Current plan\", the plan name with a period pill and the price on the right, a hairline description list (seats used, next invoice amount and date, card on file with an Update link), and one primary upgrade action plus a ghost \"View invoices\".",
       "debug": "Debug my plan card. Rule out: hiding the next charge; a cancel button styled as the main action; dates without a year; card numbers beyond the last four. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<dl>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<PlanCard facts>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<dl>",""],["lumina-taste","<PlanCard facts>","React"]],
       "added": 8
     },
     {
@@ -2153,33 +1296,12 @@
       "name": "Team members",
       "summary": "Invite by email, change roles in place, remove people; the owner row is protected.",
       "pattern": "<table> + inline controls",
-      "states": [
-        "active",
-        "invited",
-        "role changed",
-        "removed"
-      ],
-      "aliases": [
-        "members table",
-        "user management",
-        "team settings",
-        "invite users",
-        "roles and permissions"
-      ],
+      "states": ["active","invited","role changed","removed"],
+      "aliases": ["members table","user management","team settings","invite users","roles and permissions"],
       "react": "TeamMembers",
       "api": "<table> + <select>",
       "w": 720,
-      "preview": [
-        [
-          "type",
-          "#lt-tm-email",
-          "riya@halyard.dev"
-        ],
-        [
-          "click",
-          "[data-part=\"invite\"] button"
-        ]
-      ],
+      "preview": [["type","#lt-tm-email","riya@halyard.dev"],["click","[data-part=\"invite\"] button"]],
       "called": [
         "team members list with roles",
         "invite people by email table",
@@ -2199,27 +1321,11 @@
           "api": "aria-label per row",
           "text": "Changes in place and says so."
         },
-        {
-          "sel": "[data-s=\"invited\"]",
-          "name": "Invited",
-          "api": "",
-          "text": "Neutral pill until they join."
-        }
+        {"sel":"[data-s=\"invited\"]","name":"Invited","api":"","text":"Neutral pill until they join."}
       ],
       "prompt": "Add a team members table: header with seat count and an inline invite form, rows with avatar, name and email, a status pill (Active green, Invited neutral), a role select labelled per person (owner shown as fixed text), and a remove button; each change is announced in a status line.",
       "debug": "Debug my members table. Rule out: role selects without per-row labels; removing the last owner; invites with no validation; destructive remove with no undo or confirmation in production. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<table> + <select>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<TeamMembers members>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<table> + <select>",""],["lumina-taste","<TeamMembers members>","React"]],
       "added": 8
     },
     {
@@ -2227,12 +1333,7 @@
       "name": "Assistant conversation",
       "summary": "An AI chat thread: your message in a soft bubble, the answer as plain prose with lists, tables and code, then Copy and Retry; a caret while it streams.",
       "pattern": "<ol> of turns + role=\"status\" live region",
-      "states": [
-        "complete",
-        "streaming",
-        "error",
-        "copied"
-      ],
+      "states": ["complete","streaming","error","copied"],
       "aliases": [
         "ai chat messages",
         "chatbot conversation",
@@ -2245,12 +1346,7 @@
       "react": "AssistantThread",
       "api": "data-role, data-state=\"streaming\"",
       "w": 760,
-      "preview": [
-        [
-          "click",
-          "[data-action=\"copy\"]"
-        ]
-      ],
+      "preview": [["click","[data-action=\"copy\"]"]],
       "called": [
         "the AI answer area",
         "chatbot messages with copy button",
@@ -2285,18 +1381,7 @@
       ],
       "prompt": "Build an AI assistant conversation as an ordered list of turns: the user turn is a soft bubble aligned right; the assistant turn is plain prose on the left that renders paragraphs, ordered lists, a small table with right-aligned tabular numbers and a code block; under each finished answer put ghost Copy and Retry buttons and a quiet \"From …\" sources line. While an answer streams, set data-state=\"streaming\", show a blinking caret at the end of the text and hide the actions. Errors appear under the question with \"Try again\". Announce \"Answer copied\" in a live region. No avatars, sparkles or gradients.",
       "debug": "Debug my assistant chat. Rule out: both sides in identical bubbles; answers as one wall of text with no lists or code blocks; actions visible while text is still streaming; the page jumping as tokens arrive (reserve space or stick to bottom); no live region for screen readers; an error that deletes the question. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<li data-role=\"assistant\">",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<AssistantThread turns>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<li data-role=\"assistant\">",""],["lumina-taste","<AssistantThread turns>","React"]],
       "added": 10
     },
     {
@@ -2304,12 +1389,7 @@
       "name": "Device frame",
       "summary": "An outline browser window, desktop window, tablet or phone around a screenshot or live markup.",
       "pattern": "<figure> + <figcaption>",
-      "states": [
-        "browser",
-        "window",
-        "phone",
-        "tablet"
-      ],
+      "states": ["browser","window","phone","tablet"],
       "aliases": [
         "phone mockup",
         "browser mockup",
@@ -2352,16 +1432,8 @@
       "prompt": "Add a device frame: a <figure> that draws an outline device around its screen. data-kind=\"browser\" has a 36px bar with three small neutral dots and a centred mono address pill; \"window\" shows a centred title instead; \"phone\" is a 9 / 19.5 frame with 42px corners, a 7px rim and a camera pill; \"tablet\" is 4 / 3. The frame is a hairline border on a surface colour, not a photoreal bezel, and takes a small shadow. The screen holds an <img>, <video> or live markup and clips it. Give the figure a visually hidden <figcaption> that says what the screen shows. Never put coloured traffic-light dots on the bar.",
       "debug": "Debug my device frame. Rule out: a screenshot stretched instead of cropped (object-fit: cover, top aligned); red, yellow and green window dots; a phone wider than its column on mobile; a photoreal bezel image that fights the theme; no text alternative for the screen. The symptom:",
       "code": [
-        [
-          "HTML",
-          "<figure data-kind> + <figcaption>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<DeviceFrame kind url label>",
-          "React"
-        ]
+        ["HTML","<figure data-kind> + <figcaption>",""],
+        ["lumina-taste","<DeviceFrame kind url label>","React"]
       ],
       "added": 12,
       "note": "One device is enough on a page: copy a single <figure class=\"lt-device\"> (the outer .lt-device-demo only sets two side by side in the gallery). The small mock inside ([data-mock]) is styled wherever the device is; replace it with a real screenshot <img> or your own markup when you have one."
@@ -2371,31 +1443,13 @@
       "name": "API endpoint row",
       "summary": "An endpoint as a disclosure row: method tag, path with its variables marked, what it does; parameters and a sample response inside.",
       "pattern": "<details> + <table> + <pre>",
-      "states": [
-        "closed",
-        "open",
-        "GET",
-        "POST",
-        "PATCH",
-        "DELETE"
-      ],
-      "aliases": [
-        "api reference row",
-        "rest endpoint",
-        "method and path",
-        "endpoint list",
-        "api docs entry",
-        "swagger row"
-      ],
+      "states": ["closed","open","GET","POST","PATCH","DELETE"],
+      "aliases": ["api reference row","rest endpoint","method and path","endpoint list","api docs entry","swagger row"],
       "react": "ApiEndpoint",
       "api": "<details> · <var>",
       "w": 900,
       "preview": [],
-      "called": [
-        "GET POST rows in API docs",
-        "the expandable endpoint list",
-        "api method badge with the url"
-      ],
+      "called": ["GET POST rows in API docs","the expandable endpoint list","api method badge with the url"],
       "anatomy": [
         {
           "sel": "details[open] [data-part=\"method\"]",
@@ -2425,16 +1479,8 @@
       "prompt": "Build an API endpoint list from <details> rows. Each summary shows a fixed-width mono method tag (GET in the info tone, POST positive, PUT and PATCH warning, DELETE negative, always with the word), the path in mono on one line with {variables} wrapped in <var> and coloured with the accent text colour, a short \"what it does\" label that hides under 560px, and a chevron that rotates when open. The body holds a parameters table with a caption (name in mono with \"required\" written under it, type, description) and a sample response figure with the status code and a focusable <pre>. Keep rows 48px tall and closed by default except the first.",
       "debug": "Debug my API endpoint rows. Rule out: method shown by colour alone; a path that wraps onto two lines; required marked with only an asterisk or colour; a sample response that cannot be scrolled by keyboard; every row open at once on a long reference page; invented fields in the sample. The symptom:",
       "code": [
-        [
-          "HTML",
-          "<details><summary> + <table> + <pre>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ApiEndpoint method path summary params sample>",
-          "React"
-        ]
+        ["HTML","<details><summary> + <table> + <pre>",""],
+        ["lumina-taste","<ApiEndpoint method path summary params sample>","React"]
       ],
       "added": 12
     },
@@ -2443,11 +1489,7 @@
       "name": "Terminal window",
       "summary": "A terminal that types its commands and prints their output once, when it scrolls into view.",
       "pattern": "<figure> + typed lines",
-      "states": [
-        "playing",
-        "done",
-        "reduced motion (complete)"
-      ],
+      "states": ["playing","done","reduced motion (complete)"],
       "aliases": [
         "animated terminal",
         "cli demo",
@@ -2459,12 +1501,7 @@
       "react": "TerminalWindow",
       "api": "data-kind=\"cmd|out\" · data-tone · data-speed",
       "w": 520,
-      "preview": [
-        [
-          "click",
-          "[data-part=\"replay\"]"
-        ]
-      ],
+      "preview": [["click","[data-part=\"replay\"]"]],
       "called": [
         "the fake terminal that types a command",
         "animated command line in the hero",
@@ -2492,18 +1529,7 @@
       ],
       "prompt": "Add a terminal window: a <figure> with a 36px bar (three neutral dots, centred mono title, replay button) and a mono screen. Lines are paragraphs: data-kind=\"cmd\" gets a muted \"$ \" prompt and is typed at about 26ms a character with a block caret in the accent colour; data-kind=\"out\" is indented, secondary ink, and appears 240ms after the line before it (data-tone=\"ok\", \"warn\" or \"error\" colours it). All text is in the markup from the start and waiting lines keep their space, so the window never changes height. Play once when 40% visible; show everything at once under reduced motion. Use real commands and real output from the product, six to ten lines.",
       "debug": "Debug my terminal window. Rule out: the window growing as lines appear (layout shift); looping forever; text that only exists in script; invented commands or output; a black terminal forced onto a light page; no way to replay. The symptom:",
-      "code": [
-        [
-          "HTML",
-          "<figure> + <p data-kind>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<TerminalWindow label lines>",
-          "React"
-        ]
-      ],
+      "code": [["HTML","<figure> + <p data-kind>",""],["lumina-taste","<TerminalWindow label lines>","React"]],
       "added": 12
     },
     {
@@ -2511,12 +1537,7 @@
       "name": "Media player",
       "summary": "Audio controls: play or pause, a scrubber, elapsed and total time, back 15 seconds and playback speed.",
       "pattern": "<audio> + <input type=\"range\">",
-      "states": [
-        "paused",
-        "playing",
-        "seeking",
-        "ended"
-      ],
+      "states": ["paused","playing","seeking","ended"],
       "aliases": [
         "audio player",
         "podcast player",
@@ -2529,17 +1550,8 @@
       "react": "MediaPlayer",
       "api": "<audio> · data-duration",
       "w": 560,
-      "preview": [
-        [
-          "click",
-          "[data-part=\"play\"]"
-        ]
-      ],
-      "called": [
-        "play button with the line you drag",
-        "podcast episode player",
-        "audio bar with speed"
-      ],
+      "preview": [["click","[data-part=\"play\"]"]],
+      "called": ["play button with the line you drag","podcast episode player","audio bar with speed"],
       "anatomy": [
         {
           "sel": "[data-part=\"play\"]",
@@ -2559,26 +1571,13 @@
           "api": "tabular-nums",
           "text": "Elapsed and total, so the width never jumps."
         },
-        {
-          "sel": "[data-part=\"speed\"]",
-          "name": "Speed",
-          "api": "",
-          "text": "Cycles 1×, 1.25×, 1.5×, 2×."
-        }
+        {"sel":"[data-part=\"speed\"]","name":"Speed","api":"","text":"Cycles 1×, 1.25×, 1.5×, 2×."}
       ],
       "prompt": "Build an audio player bar: a 44px round accent play/pause button whose aria-label swaps with its icon, the title and a muted subtitle on one line each, a native <input type=\"range\"> scrubber with a 4px track filled to the current position and aria-valuetext like \"6:52 of 32:14\", tabular elapsed / total time, a \"−15\" back button and a speed button that cycles 1×, 1.25×, 1.5×, 2×. Drive a real <audio> element when there is one. No autoplay, no waveform made of random bars, no volume slider (the device has one).",
       "debug": "Debug my media player. Rule out: a div scrubber with no keyboard support; time text that changes width as it counts; autoplay; play state out of sync after the track ends; a seek that fires on every pixel and stutters; no accessible name for icon-only buttons. The symptom:",
       "code": [
-        [
-          "HTML",
-          "<audio> + <input type=\"range\" aria-valuetext>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<MediaPlayer title src>",
-          "React"
-        ]
+        ["HTML","<audio> + <input type=\"range\" aria-valuetext>",""],
+        ["lumina-taste","<MediaPlayer title src>","React"]
       ],
       "added": 12
     },
@@ -2587,15 +1586,7 @@
       "name": "Art panel",
       "summary": "What stands in for a photograph until there is one: the thing's name set large on a tinted panel with one true fact. Variants: one large figure, the product's own colour, a keyline frame.",
       "pattern": "<figure> + <figcaption>",
-      "states": [
-        "accent",
-        "figure",
-        "framed",
-        "ink",
-        "plain",
-        "swatch",
-        "with a photograph"
-      ],
+      "states": ["accent","figure","framed","ink","plain","swatch","with a photograph"],
       "aliases": [
         "image placeholder",
         "no photo",
@@ -2643,16 +1634,8 @@
       "prompt": "When a page needs a picture and there is no photograph, use an art panel, never a grey box, a stock photo or a drawing of the product. It is a <figure> with a fixed aspect ratio (4:5 by default), a surface tinted 7% with the accent, the name of the thing set large in display type at the bottom left, one true fact under it, and an optional small mono index number at the top. Add a quiet backdrop (ruled lines, dots or grain) if the panel is large. Vary the tone across a set (plain, accent, ink). Write the photo brief in data-shot (\"bottle on pale stone, soft side light, 4:5\") so the owner knows what to shoot, and a visually hidden figcaption that says what it shows. When a photo exists, put the <img> first inside the figure: it covers the panel.",
       "debug": "Debug my image area. Rule out: an empty grey rectangle; a hand-drawn SVG of the product; a stock photo that is not the product; type that does not scale with the panel (use container units); three identical panels in a row; no text alternative; a made-up fact. The symptom:",
       "code": [
-        [
-          "HTML",
-          "<figure class=\"lt-art\" data-shot=\"…\"><p data-part=\"name\">",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<ArtPanel name fact label shot>",
-          "React"
-        ]
+        ["HTML","<figure class=\"lt-art\" data-shot=\"…\"><p data-part=\"name\">",""],
+        ["lumina-taste","<ArtPanel name fact label shot>","React"]
       ],
       "added": 13,
       "note": "Make the panel say one true thing, large. For a hero, use data-frame and either the name or data-variant=\"figure\" with <p data-part=\"figure\">20<small>min</small></p>. If the thing has a colour of its own (a glaze, a paint, a brand colour), data-tone=\"swatch\" with style=\"--art: <colour>\" shows it; the type picks dark or light ink by itself. Across a set vary the tone (plain, accent, ink) and keep one ratio. When the photograph arrives, put the <img> first inside the figure."
@@ -2662,11 +1645,7 @@
       "name": "Task list",
       "summary": "Tickable rows with a title, a detail line and an optional value, a running \"2 of 5 done\" and a progress track.",
       "pattern": "native checkboxes in whole-row labels",
-      "states": [
-        "to do",
-        "done",
-        "all done"
-      ],
+      "states": ["to do","done","all done"],
       "aliases": [
         "todo list",
         "checklist",
@@ -2681,11 +1660,7 @@
       "api": "<input type=\"checkbox\"> · data-noun",
       "w": 480,
       "preview": [],
-      "called": [
-        "list of things you tick off",
-        "habits with a circle you tap",
-        "to do list with a counter"
-      ],
+      "called": ["list of things you tick off","habits with a circle you tap","to do list with a counter"],
       "anatomy": [
         {
           "sel": "li:nth-child(3) label",
@@ -2715,16 +1690,8 @@
       "prompt": "Build a task list from native checkboxes: each row is a <label> holding a visually hidden checkbox, a 22px circle that fills with the accent and shows a tick when checked, a title, a secondary detail line under it and an optional right-aligned value (a streak, an amount). Rows are 52px tall with hairlines between them. Done rows strike the title through in secondary ink (never fade them with opacity). Above the list, the heading and a status line \"2 of 5 done\" that updates and is announced, with a thin progress track under it. No drag handles, priorities or due-date chips unless the product needs them.",
       "debug": "Debug my checklist. Rule out: a div with a click handler instead of a checkbox; only the circle being clickable; done rows faded until unreadable; the count not announced; rows that jump position when ticked; a tick shown by colour alone. The symptom:",
       "code": [
-        [
-          "HTML",
-          "<label><input type=\"checkbox\">",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<TaskList title tasks onToggle>",
-          "React"
-        ]
+        ["HTML","<label><input type=\"checkbox\">",""],
+        ["lumina-taste","<TaskList title tasks onToggle>","React"]
       ],
       "added": 13
     },
@@ -2733,13 +1700,7 @@
       "name": "Invoice sheet",
       "summary": "A document set like one: who it is from, its number and status, three facts, lines with every figure in one right-aligned column, and one total. For invoices, quotes, receipts and statements.",
       "pattern": "<article> + <dl> + <table> with <tfoot>",
-      "states": [
-        "due",
-        "paid",
-        "overdue",
-        "draft",
-        "narrow"
-      ],
+      "states": ["due","paid","overdue","draft","narrow"],
       "aliases": [
         "invoice",
         "receipt",
@@ -2790,16 +1751,8 @@
       "prompt": "Build an invoice as a document, not a card of widgets: a white sheet with a hairline edge and a small shadow, at most 560px wide. Top: who it is from on the left (name, then address in small muted text), the invoice number in mono and a status pill on the right; the status is words (\"Due in 14 days\", \"Paid 4 Nov\") with a coloured dot. Under a hairline: three facts in a row (billed to, issued, due). Then a real <table>: item with a small detail line under it, quantity, rate, amount; every figure right-aligned with tabular numerals and two decimals. A strong rule above the totals; subtotal and tax in secondary ink; the total larger and bold. A one-line note at the foot. Under 380px hide quantity and rate and keep item and amount. The lines must add up.",
       "debug": "Debug my invoice or receipt. Rule out: figures that do not add up; amounts left-aligned or in a proportional font; mixed decimals (£120 beside £1,800.00); a status shown by colour alone; a total no larger than the lines; a card full of badges where a plain table would do. The symptom:",
       "code": [
-        [
-          "HTML",
-          "<article class=\"lt-invoice\"><table>…<tfoot>",
-          ""
-        ],
-        [
-          "lumina-taste",
-          "<InvoiceSheet from title meta lines total>",
-          "React"
-        ]
+        ["HTML","<article class=\"lt-invoice\"><table>…<tfoot>",""],
+        ["lumina-taste","<InvoiceSheet from title meta lines total>","React"]
       ],
       "added": 15,
       "note": "Use it as the hero picture for anything that makes documents (invoicing, quotes, payroll, bookings): put it in hero-split's <div data-part=\"visual\">. Keep the sums true: lines add up to the subtotal, tax follows, the total is their sum. Change data-state and the status words together."

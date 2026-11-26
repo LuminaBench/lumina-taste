@@ -3,16 +3,11 @@
   "order": 18,
   "name": "Radial progress gauge",
   "group": "Single value",
-  "summary": "One value against a target on a 240\u00b0 arc.",
+  "summary": "One value against a target on a 240° arc.",
   "bestFor": "A single KPI against a goal or limit",
   "avoidFor": "Comparing several values",
   "dataShape": "value, max, target",
-  "aliases": [
-    "gauge",
-    "speedometer",
-    "radial progress",
-    "goal meter"
-  ],
+  "aliases": ["gauge","speedometer","radial progress","goal meter"],
   "react": "RadialGauge",
   "wide": false
 }

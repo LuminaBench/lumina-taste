@@ -7,11 +7,7 @@
   "bestFor": "Three measures per item, up to ~40 items",
   "avoidFor": "Precise size comparison (area is hard to judge)",
   "dataShape": "points: x, y, size, label",
-  "aliases": [
-    "bubble plot",
-    "three variable scatter",
-    "bubble graph"
-  ],
+  "aliases": ["bubble plot","three variable scatter","bubble graph"],
   "react": "BubbleChart",
   "wide": false
 }
