@@ -15,7 +15,7 @@ export function enhance(root: HTMLElement): Cleanup {
   let hoverTimer = 0;
   const fine = matchMedia('(hover: hover) and (pointer: fine)');
   return combine(
-    on(trigger, 'click', () => setMega(mega.hidden)),
+    on(trigger, 'click', () => setMega(mega.hidden !== false)),
     on(trigger, 'pointerenter', () => { if (fine.matches && !root.hasAttribute('data-open')) { clearTimeout(hoverTimer); hoverTimer = window.setTimeout(() => setMega(true), 120); } }),
     on(root, 'pointerleave', () => { clearTimeout(hoverTimer); if (fine.matches && !root.hasAttribute('data-open')) hoverTimer = window.setTimeout(() => setMega(false), 220); }),
     on(mega, 'pointerenter', () => clearTimeout(hoverTimer)),

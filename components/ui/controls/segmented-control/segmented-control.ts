@@ -17,7 +17,9 @@ export function enhance(root: HTMLElement): Cleanup {
   };
   place();
   requestAnimationFrame(() => root.setAttribute('data-ready', ''));
-  const ro = new ResizeObserver(place);
+  // Placed on the next frame: moving the indicator inside the observer trips WebKit's ResizeObserver loop error.
+  let raf = 0;
+  const ro = new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(place); });
   ro.observe(root);
   return combine(
     on(root, 'click', (e: MouseEvent) => {
@@ -25,6 +27,6 @@ export function enhance(root: HTMLElement): Cleanup {
       if (b) select(b);
     }),
     roving(root, options, { orientation: 'horizontal', onMove: (el) => select(el as HTMLButtonElement) }),
-    () => ro.disconnect(),
+    () => { cancelAnimationFrame(raf); ro.disconnect(); },
   );
 }

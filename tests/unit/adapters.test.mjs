@@ -108,7 +108,7 @@ test('install --framework tailwind writes a v4 entry stylesheet whose theme foll
     const r = node([join(root, 'scripts/install-taste.mjs'), '--project', dir, '--framework', 'tailwind', '--palette', 'navy-sand', '--components', 'hero-split,faq-section']);
     assert.equal(r.status, 0, r.stderr);
     const css = readFileSync(join(dir, 'lumina-taste', 'tailwind.css'), 'utf8');
-    assert.match(css, /^@import "tailwindcss";$/m);
+    assert.match(css, /^@import "tailwindcss\/utilities\.css" layer\(utilities\);$/m);
     assert.match(css, /^@import "\.\/lumina\.css";$/m);
     assert.match(css, /@theme inline \{[\s\S]*--color-canvas: var\(--bg-canvas\);[\s\S]*--color-accent: var\(--accent-solid\);[\s\S]*--font-display: var\(--font-display\);[\s\S]*--radius-md: var\(--radius-md\);/);
     assert.match(css, /@custom-variant dark \(&:where\(\[data-mode="dark"\]/);

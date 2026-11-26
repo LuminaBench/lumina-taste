@@ -15,13 +15,17 @@
 //   fonts.json    what was downloaded, from where, its size and licence.
 // The faces are open-licence (SIL OFL 1.1); keep fonts.json with them.
 //
+// --record (kit maintainers) also writes the measured metrics into tokens/typography/source.json, from which
+// `npm run tokens` builds tokens/typography/fallbacks.css. Run it for every pairing when Google updates a face.
+//
 // This makes network requests, so it runs only when a person runs it: nothing in the kit calls it.
 // LT_GOOGLE_FONTS overrides the CSS2 endpoint (tests point it at a local stand-in).
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { fallbackFaces, fontMetrics } from './lib/font-metrics.mjs';
-import { css2Url, parseWebfont } from './lib/webfont.mjs';
+import { faceTargets, fallbackFaces, fontMetrics } from './lib/font-metrics.mjs';
+import { formatJson } from './lib/json.mjs';
+import { css2Url, mergeFaces, parseCss, parseWebfont } from './lib/webfont.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -29,7 +33,7 @@ const opt = (name, def) => { const i = args.indexOf(`--${name}`); return i < 0 ?
 const flag = (name) => args.includes(`--${name}`);
 const pairings = JSON.parse(readFileSync(join(root, 'tokens/typography/source.json'), 'utf8')).pairings;
 const usage = () => {
-  console.error(`Usage: node scripts/fonts.mjs --pairing <id> --out <dir> [--subsets latin,latin-ext] [--href <url prefix>] [--mono] [--dry-run]\nPairings: ${pairings.map((p) => p.id).join(', ')}`);
+  console.error(`Usage: node scripts/fonts.mjs --pairing <id> --out <dir> [--subsets latin,latin-ext] [--href <url prefix>] [--mono] [--dry-run] [--record]\nPairings: ${pairings.map((p) => p.id).join(', ')}`);
   process.exit(2);
 };
 
@@ -66,26 +70,9 @@ async function get(u, as) {
   return as === 'css' ? res.text() : Buffer.from(await res.arrayBuffer());
 }
 
-/** The @font-face blocks of a CSS2 response, each with the subset named in the comment before it. */
-function parseCss(css) {
-  const faces = [];
-  for (const m of css.matchAll(/(?:\/\*\s*([\w-]+)\s*\*\/\s*)?@font-face\s*{([^}]*)}/g)) {
-    const body = m[2];
-    const prop = (k) => body.match(new RegExp(`${k}\\s*:\\s*([^;]+);`))?.[1].trim();
-    const src = body.match(/url\(\s*['"]?([^'")]+)['"]?\s*\)\s*format\(\s*['"]?([\w-]+)['"]?\s*\)/);
-    if (!src) continue;
-    faces.push({
-      subset: m[1] ?? 'all', family: prop('font-family')?.replace(/['"]/g, ''), style: prop('font-style') ?? 'normal',
-      weight: prop('font-weight') ?? '400', stretch: prop('font-stretch') ?? null, unicodeRange: prop('unicode-range') ?? null,
-      url: src[1], format: src[2],
-    });
-  }
-  return faces;
-}
-
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const css = await get(url, 'css');
-const faces = parseCss(css).filter((f) => subsets.includes(f.subset) || f.subset === 'all');
+const faces = mergeFaces(parseCss(css).filter((f) => subsets.includes(f.subset) || f.subset === 'all'));
 if (!faces.length) { console.error(`No ${subsets.join('/')} faces in the response from ${new URL(url).origin}.`); process.exit(1); }
 if (faces.some((f) => f.format !== 'woff2')) { console.error('The font service did not offer WOFF2 for every face; nothing written.'); process.exit(1); }
 
@@ -106,28 +93,46 @@ for (const f of faces) {
   byFamily.get(f.family).push({ ...f, file, buf });
 }
 
-// Metric-matched fallbacks, measured from the regular-most upright file of each family.
+// The upright file that covers weight w (a variable file's range, or the nearest static cut), latin first.
+const span = (w) => { const [lo, hi = lo] = String(w).split(/\s+/).map(Number); return [lo, hi]; };
+const distance = (f, w) => { const [lo, hi] = span(f.weight); return w < lo ? lo - w : w > hi ? w - hi : 0; };
+const fileFor = (list, w) => [...list].sort((a, b) => (a.style === 'normal' ? 0 : 1) - (b.style === 'normal' ? 0 : 1) || (a.subset === 'latin' ? 0 : 1) - (b.subset === 'latin' ? 0 : 1) || distance(a, w) - distance(b, w))[0];
+
+// Metric-matched fallbacks: each face measured at the weight and optical size the pairing sets the family at
+// (a variable file is read at that instance; Google's files keep the whole axis, with an extreme default).
 let fallbacks = '';
-const near400 = (w) => Math.abs(parseFloat(w) - 400);
+const measured = new Map();
 for (const [family, list] of byFamily) {
-  const pick = [...list].sort((a, b) => (a.style === 'normal' ? 0 : 1) - (b.style === 'normal' ? 0 : 1) || (a.subset === 'latin' ? 0 : 1) - (b.subset === 'latin' ? 0 : 1) || near400(a.weight) - near400(b.weight))[0];
   try {
-    const m = fontMetrics(pick.buf);
+    const at = faceTargets(p, family);
+    const measure = (which) => { const f = fileFor(list, at[which].wght); return { file: f.file, ...fontMetrics(f.buf, at[which]) }; };
+    const m = { regular: measure('regular'), bold: measure('bold') };
     const kind = p.fonts?.find((x) => x.family === family)?.fallback ?? 'sans';
     const fb = fallbackFaces(family, m, kind);
     fallbacks += fb.css;
-    manifest.files.find((x) => x.file === pick.file).metrics = { ...m, sizeAdjust: fb.sizeAdjust, fallback: kind };
+    const entry = manifest.files.find((x) => x.file === m.regular.file);
+    const strip = ({ wght, opsz }, avgWidth) => ({ wght, opsz, avgWidth });
+    measured.set(family, { unitsPerEm: m.regular.unitsPerEm, ascent: m.regular.ascent, descent: m.regular.descent, lineGap: m.regular.lineGap, regular: strip(at.regular, m.regular.avgWidth), bold: strip(at.bold, m.bold.avgWidth) });
+    entry.metrics = { unitsPerEm: m.regular.unitsPerEm, ascent: m.regular.ascent, descent: m.regular.descent, lineGap: m.regular.lineGap, regular: { ...at.regular, avgWidth: m.regular.avgWidth }, bold: { ...at.bold, avgWidth: m.bold.avgWidth }, sizeAdjust: fb.sizeAdjust, sizeAdjustBold: fb.sizeAdjustBold, fallback: kind };
   } catch (e) {
     console.warn(`  ${family}: could not measure metrics (${e.message}); no fallback face written.`);
   }
 }
 rules += `\n/* Metric-matched fallbacks: local faces scaled to each web font, named in the kit's font stacks. */\n${fallbacks}`;
 writeFileSync(join(out, 'fonts.css'), rules);
+if (flag('record')) {
+  const srcPath = join(root, 'tokens/typography/source.json');
+  const src = JSON.parse(readFileSync(srcPath, 'utf8'));
+  for (const f of src.pairings.find((x) => x.id === p.id).fonts ?? []) if (measured.has(f.family)) f.metrics = measured.get(f.family);
+  writeFileSync(srcPath, formatJson(src));
+  console.log(`Recorded the metrics of ${[...measured.keys()].join(', ')} in tokens/typography/source.json; run npm run tokens.`);
+}
 
-// Preload the latin files for the headline and body faces (at most two requests ahead of the CSS).
+// Preload the latin files for the headline and body faces at the weights the pairing sets them in (Barlow
+// Condensed's 600 cut for a 600 headline, not its 500), at most two requests ahead of the CSS.
 const roleFamily = (role) => p.fonts?.find((f) => f.roles.includes(role))?.family;
-const pre = [...new Set([roleFamily('display'), roleFamily('body')].filter(Boolean))]
-  .map((fam) => manifest.files.filter((x) => x.family === fam && x.style === 'normal' && x.subset === (subsets.includes('latin') ? 'latin' : subsets[0])).sort((a, b) => near400(a.weight) - near400(b.weight))[0])
+const firstSubset = subsets.includes('latin') ? 'latin' : subsets[0];
+const pre = [...new Set([[roleFamily('display'), p.displayWeight], [roleFamily('body'), p.bodyWeight]].filter(([fam]) => fam).map(([fam, w]) => fileFor(manifest.files.filter((x) => x.family === fam && x.subset === firstSubset), w)))]
   .filter(Boolean);
 const preload = `<!-- ${p.name}: self-hosted fonts. Put these in <head>, before the kit's stylesheets. -->\n${pre.map((x) => `<link rel="preload" href="${href}${x.file}" as="font" type="font/woff2" crossorigin>`).join('\n')}\n<link rel="stylesheet" href="${href}fonts.css">\n`;
 writeFileSync(join(out, 'preload.html'), preload);

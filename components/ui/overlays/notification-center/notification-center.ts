@@ -34,7 +34,7 @@ export function enhance(root: HTMLElement): Cleanup {
   };
   render();
   return combine(
-    on(bell, 'click', (e) => set(panel.hidden, e)),
+    on(bell, 'click', (e) => set(panel.hidden !== false, e)),
     on(panel, 'keydown', (e: KeyboardEvent) => {
       if (e.key === 'Escape') { e.stopPropagation(); set(false); bell.focus(); }
       if ((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && (e.target as Element).getAttribute('role') === 'tab') {

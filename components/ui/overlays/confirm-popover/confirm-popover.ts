@@ -16,7 +16,7 @@ export function enhance(root: HTMLElement): Cleanup {
     if (open) { undismiss = dismissable(part(root, 'anchor-wrap') ?? root, () => set(false)); focusFor(e, part<HTMLElement>(panel, 'cancel')); }
   };
   return combine(
-    on(trigger, 'click', (e) => set(panel.hidden, e)),
+    on(trigger, 'click', (e) => set(panel.hidden !== false, e)),
     on(part(panel, 'cancel')!, 'click', () => { set(false); trigger.focus(); }),
     on(part(panel, 'confirm')!, 'click', () => { set(false); trigger.disabled = true; trigger.textContent = 'Revoked'; if (result) result.textContent = 'Key revoked. Create a new one in Settings.'; emit(root, { confirmed: true }); }),
     on(panel, 'keydown', (e: KeyboardEvent) => { if (e.key === 'Escape') { e.stopPropagation(); set(false); trigger.focus(); } }),
