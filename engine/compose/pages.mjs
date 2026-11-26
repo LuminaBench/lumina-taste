@@ -16,7 +16,7 @@ import { APP_PAGES } from './apps.mjs';
 // Every page's top bar is ink (paper on a dark page): the top never shares its ground's hue.
 const INK_BAR = { id: 'ink', variant: null, tone: 'dark' };
 
-const brand = (ctx) => ctx.product ?? (ctx.facts.kind ? cap(ctx.facts.kind) : 'Home');
+const brand = (ctx) => ctx.product ?? (ctx.facts.kind ? cap(ctx.facts.kind) : 'TODO: name');
 const tel = (p) => `tel:${String(p).replace(/[^\d+]/g, '')}`;
 const year = () => new Date().getFullYear();
 /** Short clauses of the brief that state a plain fact: "450 ml", "dishwasher safe", "made by hand in Cornwall". */

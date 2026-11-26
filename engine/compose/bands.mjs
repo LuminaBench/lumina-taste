@@ -497,7 +497,7 @@ export function navBar({ product, links, action, facts, style = null }) {
   const li = links.map((l) => `<li><a href="#${l.slug}">${esc(l.label)}</a></li>`).join('');
   const attrs = `${style?.variant ? ` data-variant="${style.variant}"` : ''}${style?.tone ? ` data-tone="${style.tone}"` : ''}`;
   return `<header class="lt-nav-simple" data-lt="navbar-simple"${attrs}>
-  <a href="#top" data-part="brand"><span data-part="mark" aria-hidden="true"></span>${esc(product ?? 'Home')}</a>
+  <a href="#top" data-part="brand"><span data-part="mark" aria-hidden="true"></span>${esc(product ?? 'TODO: name')}</a>
   <nav aria-label="Main"><ul data-part="links">${li}</ul></nav>
   <div data-part="actions">${facts.phone ? `<a data-part="signin" href="tel:${esc(facts.phone.replace(/[^\d+]/g, ''))}">${esc(facts.phone)}</a>` : ''}<a class="lt-btn" data-variant="primary" data-size="sm" href="${esc(action.href)}">${esc(action.label)}</a></div>
   <button type="button" data-part="toggle" aria-expanded="false" aria-controls="lt-ns-panel" aria-label="Menu"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
