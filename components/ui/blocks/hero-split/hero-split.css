@@ -139,7 +139,10 @@
     :scope[data-variant="bleed"]:has(> [data-part="visual"] > .lt-device) { min-height: 0; align-items: start; padding-block: 0 calc(var(--section-y) / 2); }
     :scope[data-variant="overlap"] > [data-part="visual"] { grid-column: 1 / -1; grid-row: 1; min-height: 0; aspect-ratio: 4 / 3; margin-inline: calc(-1 * var(--hs-bleed)); border-radius: 0; }
     /* The panel's own words stay clear of the block that rises over its foot. */
-    :scope[data-variant="overlap"] > [data-part="visual"] > .lt-art { padding-bottom: 88px; }
+    :scope[data-variant="overlap"] > [data-part="visual"] > .lt-art { padding-bottom: 80px; }
+    :scope[data-variant="overlap"] > [data-part="visual"] > .lt-art > [data-part="motif"] { height: 44%; }
+    /* The picture starts right under the bar, so the first screen opens on it rather than on an empty strip. */
+    :scope[data-variant="overlap"] > [data-part="visual"] { margin-top: calc(-1 * var(--block-y, calc(var(--section-y) * 0.75))); }
     :scope[data-variant="overlap"] > [data-part="copy"] { grid-column: 1 / -1; grid-row: 2; margin-block: -64px 0; margin-inline: calc(-1 * var(--hs-bleed)) 12%; padding-inline: var(--hs-bleed) clamp(20px, 5cqi, 40px); padding-block-end: 0; }
     :scope[data-variant="edge"] > [data-part="visual"] { grid-row: 1; aspect-ratio: 16 / 10; margin-inline: calc(-1 * var(--hs-bleed)); }
     :scope[data-variant="edge"] > [data-part="copy"] { padding-block: 32px calc(var(--section-y) / 2); padding-inline-end: var(--hs-bleed); }
