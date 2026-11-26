@@ -306,3 +306,10 @@ test('judge: a collapsed picture is an error', () => {
   assert.ok(rulesOf(page([section()], { collapsed: ['figure.lt-device (21×46)'] })).has('taste-collapsed-visual'));
   assert.ok(!rulesOf(page([section()], { collapsed: [] })).has('taste-collapsed-visual'));
 });
+
+test('judge: app tab bars hold four labelled tabs; switches need no Save', () => {
+  assert.ok(rulesOf(page([section()], { tabBars: [{ selector: 'nav', items: 5, unlabeled: 0 }] })).has('app-tabs'));
+  assert.ok(rulesOf(page([section()], { tabBars: [{ selector: 'nav', items: 4, unlabeled: 1 }] })).has('app-tabs'));
+  assert.ok(!rulesOf(page([section()], { tabBars: [{ selector: 'nav', items: 4, unlabeled: 0 }] })).has('app-tabs'));
+  assert.ok(rulesOf(page([section()], { saveOnSwitches: ['form'] })).has('app-settings-save'));
+});

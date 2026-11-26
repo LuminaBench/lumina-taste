@@ -153,6 +153,10 @@ button.as-row, a.as-row { cursor: pointer; transition: background-color var(--du
   .as[data-pane="onboard"] .as-side { display: none; }
   .as-onboard { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto auto auto; align-content: center; column-gap: 64px; width: min(100%, 1040px); margin-inline: auto; padding: 48px; }
   .as-onboard > .lt-art { grid-column: 2; grid-row: 1 / span 5; align-self: center; }
+  /* Wide, the welcome is a first screen of its own: the line set large, the action at a desktop size, not a phone's. */
+  .as-onboard h2 { font-size: clamp(2.5rem, 1rem + 2.6vw, 3.75rem); letter-spacing: -0.03em; }
+  .as-onboard p { font-size: var(--step-1); max-width: 26em; }
+  .as-onboard .lt-btn { width: auto; justify-self: start; min-width: 14em; }
   .as-onboard > :not(.lt-art) { grid-column: 1; }
   .as-onboard .lt-btn { width: auto; justify-self: start; min-width: 220px; }
   .as-onboard .as-dots { justify-content: flex-start; }

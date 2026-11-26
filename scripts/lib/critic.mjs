@@ -334,8 +334,21 @@ export const MEASURE = (opts = {}) => {
     return (r.width < 64 && r.height > r.width * 1.2) || (r.width >= 64 && r.height > 0 && r.height < 24 && e.matches('.lt-device, .lt-art'));
   }).map((e) => `${sel(e)} (${Math.round(rectOf(e).width)}×${Math.round(rectOf(e).height)})`).slice(0, 3);
 
+  // ---- app chrome: tab bars (how many, labelled?) and Save buttons on screens of switches only.
+  const tabBars = [...document.querySelectorAll('.lt-bottom-nav, nav[class*="tabs"], [role="tablist"][data-placement="bottom"]')].filter((b) => shown(b) && rectOf(b).bottom > vh * 0.75 && !b.closest('[data-app], .lt-device')).map((b) => {
+    const items = [...b.querySelectorAll(':scope > a, :scope > button, :scope > li > a, :scope > li > button')].filter(shown);
+    return { selector: sel(b), items: items.length, unlabeled: items.filter((a) => !words(a.textContent) && !/\S/.test(a.textContent)).length };
+  });
+  const saveOnSwitches = [...document.querySelectorAll('form, section, [data-screen]')].filter((f) => {
+    if (!shown(f) || f.closest('[data-app], .lt-device')) return false;
+    const btn = [...f.querySelectorAll('button, .lt-btn')].find((b) => shown(b) && /^\s*(save|apply)\b/i.test(b.textContent));
+    if (!btn) return false;
+    const ctrls = [...f.querySelectorAll('input:not([type=hidden]), select, textarea')].filter((c) => shown(c) || shown(c.parentElement));
+    return ctrls.length >= 2 && ctrls.every((c) => c.getAttribute('role') === 'switch' || c.closest('.lt-switch, [data-lt="toggle-switch"]'));
+  }).map(sel).slice(0, 2);
+
   return {
-    url: location.href, width: vw, height: vh, pageHeight: html.scrollHeight, colour, firstWords, skeleton, collapsed,
+    url: location.href, width: vw, height: vh, pageHeight: html.scrollHeight, colour, firstWords, skeleton, collapsed, tabBars, saveOnSwitches,
     hero: !!hero, app, appMarked, sections, looseMoments, motion,
     type: { headline: Math.round(headline), h1: h1 ? Math.round(parseFloat(getComputedStyle(h1).fontSize)) : 0, body: bodySize, ratio: bodySize ? Math.round((headline / bodySize) * 100) / 100 : 0 },
     bars: fixedBottom.map((b) => ({ selector: sel(b), height: Math.round(rectOf(b).height) })),
@@ -427,6 +440,13 @@ export function judgeMeasures(m, { wide = m.width >= 900, limits = LIMITS } = {}
   const screens = Math.max(1, m.pageHeight / m.height);
   const pageWords = m.sections.reduce((n, x) => n + (x.use ? 0 : x.words), 0);
   if (marketing && wide && pageWords / screens > limits.pageWords) add('taste-word-budget', null, `About ${Math.round(pageWords / screens)} words per screen (${pageWords} over ${Math.round(screens * 10) / 10} screens, forms and questions not counted). Pictures carry a page further than paragraphs: aim under ${limits.pageWords}, words as captions.`);
+
+  // 4b. App chrome: four tabs at most, each with its label; switches apply at once.
+  for (const t of m.tabBars ?? []) {
+    if (t.items > 4) add('app-tabs', t.selector, `The tab bar has ${t.items} tabs. Keep four at most: the rest go in a More screen or into the screens they belong to.`);
+    else if (t.unlabeled) add('app-tabs', t.selector, `${t.unlabeled} tab${t.unlabeled === 1 ? ' has' : 's have'} an icon and no visible label. Put the word under every icon.`);
+  }
+  if (m.saveOnSwitches?.length) add('app-settings-save', m.saveOnSwitches[0], 'A Save or Apply button on a screen of switches only. A switch applies the moment it is flipped; drop the button (say so with a short confirmation if the change matters).');
 
   // 5a. A picture that collapsed to a sliver: the page shows a stray shape where its product should be.
   if (m.collapsed?.length) add('taste-collapsed-visual', m.collapsed[0].split(' (')[0], `A picture is drawn a few pixels wide (${m.collapsed.join(', ')}): a device frame, art panel or photo with width: auto inside a centred grid or flex box shrinks to nothing. Give it a width (width: min(100%, var(--device-w)) for a phone frame).`, 'error');

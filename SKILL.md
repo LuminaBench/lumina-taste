@@ -5,7 +5,7 @@ description: Make interfaces look designed, not generated. Use for any web or ap
 
 # Lumina Taste
 
-A design kit for coding agents: a **page composer** that plans the page's rhythm and one bold idea from the brief's own words, **24 OKLCH palettes** (light + dark, every pair WCAG-verified), **20 type pairings** chosen by subject, **39 visual styles**, **214 named UI patterns** (including **scroll moments** like a pinned scene, a sideways rail and a product reveal, and **9 page backdrops**), **47 subject drawings** for pages without photographs, a **photo finder that grades every picture to the palette**, **48 chart engines** (including charts that tell a story as you scroll), **27 page blueprints** (marketing pages, a native-feeling phone app, a desktop workspace), a **lockable taste profile**, a **Playwright auditor with a designer's critic** (rhythm, layout repeats, motion budget, app touch targets, speed), a **review pack** for judging screenshots, a **copy lint** and **36 eval briefs** with a score history per agent. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
+A design kit for coding agents: a **page composer** that plans the page's rhythm and one bold idea from the brief's own words, **24 OKLCH palettes** (light + dark, every pair WCAG-verified), **20 type pairings** chosen by subject, **39 visual styles**, **221 named UI patterns** (including **scroll moments** like a pinned scene, a sideways rail and a product reveal, and **9 page backdrops**), **47 subject drawings** for pages without photographs, a **photo finder that grades every picture to the palette**, **48 chart engines** (including charts that tell a story as you scroll), **32 page blueprints** (marketing pages, a native-feeling phone app, a desktop workspace), a **lockable taste profile**, a **Playwright auditor with a designer's critic** (rhythm, layout repeats, motion budget, app touch targets, speed), a **review pack** for judging screenshots, a **copy lint** and **36 eval briefs** with a score history per agent. Everything is plain TypeScript and CSS with zero runtime dependencies, in vanilla and React.
 
 Run commands from this skill's directory with Node.js 20+. Pass absolute paths (or run from the user's project with the absolute script path). Search, install and token scripts need nothing installed; the auditor needs Playwright; the gallery needs `npm install` once.
 
@@ -205,7 +205,16 @@ Starting fresh on one of these stacks: `install-taste.mjs --framework tailwind` 
 | Event or conference | `event` | The date and place above a statement headline with three figures, the programme as timed rows, speakers as ruled rows with their talks, three tickets, venue and door times, questions |
 | Phone app screen | `mobile` | Collapsing large title, one headline figure with a week of bars, whole-row lists, primary action above bottom tabs, a bottom-sheet form; loading and empty states |
 | Phone app, whole flow | `app-phone` | Six working screens (choose, today, detail, pay, tickets, settings) side by side on desktop and one at a time on a phone: tab bar, large title, swipe rows, pull to refresh, a sheet with detents; `?screen=` opens one; loading, empty and error states |
+| Bank app on a phone | `app-banking` | Balance set large, one-glance week chart (one hue, the biggest day highlighted), payments grouped by day, a send sheet with a number pad, the card with a freeze switch; sidebar and two panes when wide; `?screen=`, `?state=` |
+| Fitness app | `app-fitness` | Today's rings and week chart, a dark workout screen with one big timer and one action, history, a run summary with splits |
+| Booking app (the customer's) | `app-booking` | A date strip and slot grid, a confirm sheet that repeats every choice, my bookings with the next one large |
+| Messaging app | `app-messaging` | Conversations with unread counts, a thread with grouped bubbles, day dividers, photo and voice note, read state, a composer above the keyboard |
+| Settings-heavy app | `app-settings` | Search that filters as you type, rows that are switches or links with their value, a detail page, closing the account on a page of its own |
 | Desktop work app | `workspace` | Saved views in a resizable sidebar, a calm dense table with sticky header, an inspector, J/K, ⌘K and `?` shortcuts, a delay dialog that updates the row; one pane at a time below 860px; loading, empty and error states |
+
+**Apps with their own blueprint.** A bank, running/fitness, chat, the customer's booking or a settings-heavy app brief plans its blueprint and look, drafts with the brief's name, marks sample rows `data-sample` and lists brief features the blueprint lacks as one TODO. A business's own bookings (with owners and statuses) are a `workspace`. Every app screen comes with its welcome (a drawn scene), empty, loading and error states; tab bars hold four items at most, labels under icons; switches apply at once (no Save).
+
+**Photographs** come as a set with one look: `find-images --look bright|moody|editorial` (auto from `--subject`; the composer chooses and says why). `treat-images --cutout` stands an object from a plain ground on a coloured `lt-art[data-variant=cutout]`. For words on a picture use `photo-words` (the scrim only behind the words); for three to five pictures of one place use `photo-collage`.
 
 ```sh
 node scripts/install-taste.mjs --project /abs/app --blueprints dashboard --dest src/pages
@@ -259,6 +268,9 @@ node scripts/lint-copy.mjs src/                                # hype words, cli
 | `taste-monotone` | The ground, the top bar and every coloured band share the accent's hue: a one-colour page. Use a neutral or warm ground, a contrasting top bar (ink or paper), and the palette's second colour (`--highlight`, `data-highlight`) for one figure. |
 | `taste-kit-skeleton` | At 1200px and wider, the hero has five of the six marks of the default first screen (a line above, a 2–4 line headline on the left, a paragraph, two buttons in a row, a note under them, one picture on the right), or is a plain `hero-split` with a note and two buttons. Choose a composition from the table under "The first screen"; if the split really is right, say why in `data-composition-reason`. |
 | `taste-collapsed-visual` (error) | A device frame, art panel or photo is drawn a few pixels wide: usually `width: auto` inside a centred grid. Give it a width. |
+| `app-tabs` | A bottom tab bar with more than four tabs, or a tab with an icon and no visible label. |
+| `app-settings-save` | A Save or Apply button on a screen whose controls are all switches: switches apply at once. |
+| `taste-sample-rows` (error, with `--product`) | Rows a draft marked `data-sample` are still on the page. |
 | `taste-motion-*` | More than two scroll moments, two side by side, two pinned scenes, film with sound or no pause, a counter with no number, a pinned scene under `overflow: hidden`. Keep the two best. |
 | `app-touch-target` · `app-safe-area` · `app-states` | On app screens at phone width: controls under 44px, a fixed bottom bar without `env(safe-area-inset-bottom)`, a declared state with no view. |
 | `perf-*` (`--perf`, and `--strict` as warnings) | A lazy largest picture, no `fetchpriority`, layout shift over 0.1, heavy fonts, JS or CSS, images without width and height or more than twice their box. |
@@ -478,9 +490,9 @@ engine/profiles/             taste profile engine, schema, default profile
 engine/compose/              page types, domains and moods behind compose.mjs
 evals/                       36 briefs (evals.json), fixtures, reference scores, history.json
 tokens/                      base.css, layout.css, backdrops.css, composition.css, scroll.css, palettes/*.css (+ source.json), typography/, styles/
-components/ui/<family>/      214 patterns (html, css, ts, react.tsx)
+components/ui/<family>/      221 patterns (html, css, ts, react.tsx)
 components/charts/           core/ + 48 chart engines (+ React wrappers)
-blueprints/                  27 page blueprints (states via ?state=loading|empty|error|incident|sold-out|streaming|running)
+blueprints/                  32 page blueprints (states via ?state=loading|empty|error|incident|sold-out|streaming|running)
 references/                  anti-slop-rules, ai-defaults, review, images, motion, typography, apps, page-flow, composition, copy-patterns, reading-a-reference, chart-selection, which-one, palettes, harvest-log
 scripts/                     compose, directions, search, install-taste, sniff, export-tokens, sample-data, find-images, treat-images, fonts, brand-kit, audit-ui, audit-all, review-page, compare-pages, lint-copy, eval-score, eval-run, eval-history, pack-skill, build-tokens, test-contrast, build, serve
 ```

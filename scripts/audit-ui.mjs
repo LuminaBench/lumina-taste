@@ -693,6 +693,9 @@ const TASTE_CHECKS = (arg = null) => {
     const text = document.body.innerText;
     const left = SAMPLES.filter((s) => text.includes(s) && !product.toLowerCase().includes(s.toLowerCase()));
     if (left.length) add('taste-sample-copy', null, `Sample copy from the kit is still on the page: ${left.slice(0, 5).map((s) => `“${s}”`).join(', ')}${left.length > 5 ? ` and ${left.length - 5} more` : ''}. Replace it with ${product}’s own names, words and numbers.`, 'error');
+    // Rows a draft marked as sample data (data-sample) are not the product's yet.
+    const sampled = [...document.querySelectorAll('[data-sample]')].filter((e) => e.getClientRects().length);
+    if (sampled.length) add('taste-sample-rows', sampled[0], `${sampled.length} element${sampled.length === 1 ? ' is' : 's are'} still marked data-sample: the draft's made-up rows. Replace them with ${product}’s real records (or an empty state), then remove the attribute.`, 'error');
 
     // 9c. Leftover sample content: sentences and figures that came with a blueprint or a snippet and were
     // never rewritten. Swapping the brand name is not enough, so the product's name is ignored when comparing.
