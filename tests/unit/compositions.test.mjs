@@ -78,10 +78,10 @@ test('drafts carry the composition: variant, bar and foot are written, and the f
       assert.ok(words.length <= 40, `${k}: ${words.length} words in the first screen`);
       assert.ok((hero.match(/class="lt-btn"/g) ?? []).length <= 2, `${k}: one action and at most one quiet link`);
     }
-    // Bars and feet: the ferry has an ink bar, the studio a minimal one and its name as the foot's wordmark.
+    // Bars and feet: the ferry has an ink bar, the studio a minimal ink one and its name as the foot's wordmark.
     assert.match(readFileSync(join(dir, 'ferry', 'index.html'), 'utf8'), /<header class="lt-nav-simple" data-lt="navbar-simple" data-tone="dark">/);
     const studio = readFileSync(join(dir, 'studio', 'index.html'), 'utf8');
-    assert.match(studio, /<header class="lt-nav-simple" data-lt="navbar-simple" data-variant="minimal">/);
+    assert.match(studio, /<header class="lt-nav-simple" data-lt="navbar-simple" data-variant="minimal" data-tone="dark">/);
     assert.match(studio, /<footer class="lt-footer" data-variant="wordmark">[\s\S]*?<p data-part="wordmark" aria-hidden="true" style="--wordmark-len: 8">Meridian<\/p>/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });

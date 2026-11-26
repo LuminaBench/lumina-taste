@@ -238,7 +238,8 @@ test('plans put pictures where paragraphs were, and say how the page moves', () 
     node([join(root, 'scripts/compose.mjs'), 'Website for Harrow & Finch, a three-partner employment law firm at 4 King Street, Manchester M2 4LQ, settlement agreement review from £450, unfair dismissal advice from £300, a free 20-minute first call, partners Ruth Harrow, Sam Finch and Priya Shah, open Monday to Friday 9 to 5.30, phone 0161 496 0322', '--project', dir, '--write']);
     const html = readFileSync(join(dir, 'index.html'), 'utf8');
     assert.match(html, /<main id="main" data-scroll( data-lt="number-settle")?>/);
-    assert.ok((html.match(/data-tone="dark"/g) ?? []).length <= 1);
+    // One dark band in the page (the ink top bar is the bar, not a band).
+    assert.ok((html.slice(html.indexOf('<main'), html.indexOf('</main>')).match(/data-tone="dark"/g) ?? []).length <= 1);
     // Grounds alternate: no two neighbouring bands on the same ground (plain, well, dark, brand).
     const tones = [...html.matchAll(/<section class="lt-[^"]+"([^>]*)>/g)].map((m) => /data-tone="(\w+)"/.exec(m[1])?.[1] ?? 'plain');
     for (let i = 1; i < tones.length; i++) assert.ok(tones[i] !== tones[i - 1], `bands ${i - 1} and ${i} share the ${tones[i]} ground`);
