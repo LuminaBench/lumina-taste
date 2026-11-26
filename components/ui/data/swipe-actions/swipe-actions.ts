@@ -6,6 +6,8 @@ import { combine, emit, on, part, type Cleanup } from '../../_shared/dom';
  */
 export function enhance(root: HTMLElement): Cleanup {
   const live = part(root, 'live')!;
+  // A drag from the outer 20px of the screen belongs to the system's edge gesture (back).
+  root.dataset.edgeGuard = '20';
   let drag: { row: HTMLElement; x0: number; dx: number } | null = null;
   const commit = (row: HTMLElement, act: 'archive' | 'delete') => {
     const who = row.querySelector('strong')?.textContent ?? 'Message';
@@ -19,6 +21,7 @@ export function enhance(root: HTMLElement): Cleanup {
     on(root, 'pointerdown', (e: PointerEvent) => {
       const row = (e.target as Element).closest<HTMLElement>('[data-part="row"]');
       if (!row || (e.target as Element).closest('button')) return;
+      if (e.pointerType !== 'mouse' && (e.clientX < 20 || e.clientX > innerWidth - 20)) return;
       drag = { row, x0: e.clientX, dx: 0 };
     }),
     on(document, 'pointermove', (e: PointerEvent) => {

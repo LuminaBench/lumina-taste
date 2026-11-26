@@ -10,6 +10,10 @@
 //                                  the first screen blurred and without colour: what stands out
 //   slice-desktop-01.png …, slice-mobile-01.png …
 //                                  the whole page cut into screen-height slices, in order
+//   first-tablet-light.png         the first screen at 1024×768, where apps change shape (a sidebar, two panes)
+//   access-rtl-mobile.png, access-forced-desktop.png, access-text200-mobile.png
+//                                  the same page right to left, in forced colours (a Windows contrast theme)
+//                                  and at 200% text: what everyone else sees
 //   review.json                    the measurements: sections (what each gives the eye, layout, ground, density),
 //                                  type jump, scroll moments, app checks, what stands out at a squint, speed,
 //                                  and the critic's findings (audit-ui --taste --perf)
@@ -114,6 +118,23 @@ try {
       await ctx.close();
     }
   }
+  // The page for everyone else: a tablet, right to left, forced colours, the largest text.
+  const VIEWS = [
+    ['first-tablet-light.png', { width: 1024, height: 768 }, {}, null],
+    ['access-rtl-mobile.png', VIEWPORTS.mobile, {}, () => document.documentElement.setAttribute('dir', 'rtl')],
+    ['access-forced-desktop.png', VIEWPORTS.desktop, { forcedColors: 'active' }, null],
+    ['access-text200-mobile.png', VIEWPORTS.mobile, {}, () => { document.documentElement.style.fontSize = '200%'; }],
+  ];
+  for (const [file, v, extra, change] of VIEWS) {
+    const ctx = await browser.newContext({ viewport: { width: v.width, height: v.height }, isMobile: !!v.isMobile, hasTouch: !!v.hasTouch, colorScheme: 'light', reducedMotion: 'reduce', ...extra });
+    const page = await ctx.newPage();
+    await page.goto(url, { waitUntil: 'load' });
+    await settle(page, 'light');
+    if (change) { await page.evaluate(change); await page.waitForTimeout(200); }
+    await page.screenshot({ path: join(out, file) });
+    (images.access ??= []).push(file);
+    await ctx.close();
+  }
 } finally { await browser.close(); }
 
 // The critic's own findings and speed, from the auditor (no focus rings: the pack is about looks).
@@ -147,7 +168,8 @@ writeFileSync(join(out, 'review.json'), JSON.stringify(summary, null, 2) + '\n')
 // ---------------------------------------------------------------- review.md
 const pct = (x) => `${Math.round(x * 100)}%`;
 const sectionLine = (s, i) => `${i + 1}. \`${s.block}\`${s.hero ? ' (first screen)' : ''}: ${s.looks.length ? `to look at: ${s.looks.join(', ')}` : s.use ? `used, not looked at (${s.use})` : '**nothing to look at**'}; ${s.words} words, text covers ${pct(s.density)}; columns ${s.tracks.replaceAll('|', ' : ')}, heading ${s.heading}; ground ${s.tone ?? s.ground}${s.moment ? `; scroll moment: ${s.moment}` : ''}`;
-const facts = (rules) => summary.measured.filter((f) => rules.includes(f.rule)).map((f) => `   - measured (${f.viewport}): ${f.message}`).join('\n');
+// What was measured for a question: the page's own measures, and the critic's loads (rtl, forced colours, 200% text…).
+const facts = (rules) => { const seen = new Set(); return [...summary.measured, ...(critic?.findings ?? [])].filter((f) => rules.includes(f.rule) && !seen.has(f.rule + f.message) && seen.add(f.rule + f.message)).map((f) => `   - measured (${f.viewport}): ${f.message}`).join('\n'); };
 const md = `# Review: ${url}
 
 Generated ${summary.generated}. Pictures are in this folder. Open each one before you answer; answer every question in your own words, then fix what the answers find and run the pack again.
@@ -159,6 +181,7 @@ Generated ${summary.generated}. Pictures are in this folder. Open each one befor
 - Squint (blurred, no colour): ${images.squint.desktop}, ${images.squint.mobile}
 - The whole page, wide, in screens: ${images.slices.desktop.join(', ')}${images.slices.desktopMore ? ` (${images.slices.desktopMore})` : ''}
 - The whole page, phone, in screens: ${images.slices.mobile.join(', ')}${images.slices.mobileMore ? ` (${images.slices.mobileMore})` : ''}
+- For everyone else: ${(images.access ?? []).join(', ')} (a tablet at 1024px, right to left, forced colours, 200% text)
 
 ## What was measured
 
@@ -191,10 +214,13 @@ ${facts(['taste-type-jump', 'taste-type-scale', 'taste-focal'])}
    - Answer:
 7. **Would a demanding designer ship it?** Yes, or no and the three changes that would get it there, most important first.
    - Answer:
+8. **Does it hold for everyone?** Open ${(images.access ?? []).join(', ')}. On the tablet, is it laid out for the width (a sidebar, two panes) or a stretched phone? Right to left, does everything sit on the other side, arrows included? In forced colours, can you still see the selected option, the switches, the chart and where focus is? At 200% text, is anything cut off or on top of something else?
+${facts(['a11y-rtl-mirror', 'a11y-rtl-overflow', 'a11y-forced-colors', 'a11y-long-words', 'a11y-reduced-data', 'app-dynamic-type', 'app-reach', 'app-sheet-handle', 'app-gesture-conflict', 'app-gesture-edge'])}
+   - Answer:
 `;
 writeFileSync(join(out, 'review.md'), md);
 const rel = relative(process.cwd(), out);
 console.log(`Review pack: ${rel.startsWith('..') ? out : rel}/`);
-console.log(`  ${Object.keys(images.first).length} first screens, 2 squints, ${images.slices.desktop.length + images.slices.mobile.length} slices, review.json, review.md`);
+console.log(`  ${Object.keys(images.first).length} first screens, 2 squints, ${images.slices.desktop.length + images.slices.mobile.length} slices, ${(images.access ?? []).length} views for everyone else, review.json, review.md`);
 console.log(`  ${d.sections.length} sections · type jump ${d.type.ratio} · ${summary.moments.length} scroll moments · ${summary.measured.length} measured findings${critic ? ` · critic ${critic.errors} errors, ${critic.warnings} warnings, taste ${critic.score}/100` : ''}`);
 console.log('Open the pictures and answer the checklist in review.md (references/review.md shows how).');

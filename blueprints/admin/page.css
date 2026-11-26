@@ -49,6 +49,9 @@
 /* On a phone the one action rides low, where the thumb is: a floating button above the home indicator. It steps
    aside while the bulk bar is up, so the two never stack. */
 @media (max-width: 640px) {
+  /* Four statuses in one row at any text size: tighter segments on a phone. */
+  #ad-status { max-width: 100%; }
+  #ad-status button { min-width: 0; padding-inline: 8px; }
   .ad-main { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
   .ad-head > .lt-btn[data-variant="primary"] { position: fixed; inset-inline-end: 16px; bottom: calc(20px + env(safe-area-inset-bottom)); z-index: 30; height: 52px; padding-inline: 20px; border-radius: var(--radius-pill); box-shadow: var(--shadow-md); }
   .ad-main:has([data-part="bar"]:not([hidden])) .ad-head > .lt-btn[data-variant="primary"] { visibility: hidden; }

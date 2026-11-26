@@ -236,8 +236,8 @@ test('review-page writes the pictures, the measurements and the checklist', () =
     assert.equal(j.squint.desktop.length, 3);
     assert.ok(j.critic && typeof j.critic.score === 'number');
     const md = readFileSync(join(out, 'review.md'), 'utf8');
-    for (const q of ['clear in 3 seconds', 'when you squint', 'one bold idea', 'look like a template', 'something to look at', 'type scale jump', 'demanding designer ship']) assert.ok(md.includes(q), q);
-    assert.equal((md.match(/- Answer:/g) ?? []).length, 7);
+    for (const q of ['clear in 3 seconds', 'when you squint', 'one bold idea', 'look like a template', 'something to look at', 'type scale jump', 'demanding designer ship', 'hold for everyone']) assert.ok(md.includes(q), q);
+    assert.equal((md.match(/- Answer:/g) ?? []).length, 8);
   } finally { rmSync(out, { recursive: true, force: true }); }
 });
 

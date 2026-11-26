@@ -249,10 +249,11 @@
 }
 /* Long words (German and Finnish compounds, long names, addresses) break rather than push the page wider than
    the screen. Table cells keep their width (a table scrolls in its own frame), so they only break when they must. */
-:where([data-palette]) :where(h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, figcaption, label, legend, summary, caption, a) {
+:where([data-palette]) :where(h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, figcaption, label, legend, summary, caption) {
   overflow-wrap: anywhere;
 }
-:where([data-palette]) :where(td, th, td *, th *, pre, code, kbd, time, data, output) {
+/* Links, cells, times and figures set large break only a word that cannot fit, and keep their width in a row of others. */
+:where([data-palette]) :where(a, td, th, td *, th *, pre, code, kbd, time, data, output, [data-num], .lt-num, [data-part="figure"]) {
   overflow-wrap: break-word;
 }
 /* Forced colours (Windows contrast themes) remove box-shadows, so a ring drawn with one disappears: there, focus

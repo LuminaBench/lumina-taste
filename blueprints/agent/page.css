@@ -16,8 +16,9 @@ html, body { height: 100%; }
 .ag-close, .ag-menu, .ag-scrim { display: none; }
 
 .ag-main { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
-.ag-top { display: flex; align-items: center; gap: var(--space-3); height: 52px; padding: 0 var(--space-5); border-bottom: 1px solid var(--border-hairline); }
+.ag-top { display: flex; align-items: center; gap: var(--space-3); min-height: 52px; padding: 0 var(--space-5); border-bottom: 1px solid var(--border-hairline); }
 .ag-crumb { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+.ag-crumb > span { white-space: nowrap; }
 .ag-crumb b { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--text-primary); font-weight: 600; }
 .ag-home, .ag-run { flex: 1; min-height: 0; overflow-y: auto; }
 /* A quiet field: the headline has to read on it without help. */

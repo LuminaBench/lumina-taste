@@ -36,7 +36,7 @@ import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { COPY_RULES } from './lib/copy-rules.mjs';
-import { MEASURE, judgeMeasures, PERF_INIT, PERF_COLLECT, judgePerf, RTL_PROBE, judgeRtl, LONG_WORDS, FORCED_MARKS, CONTROL_FIT, SAVE_DATA_INIT, SAVE_DATA_COLLECT, judgeSaveData } from './lib/critic.mjs';
+import { MEASURE, judgeMeasures, PERF_INIT, PERF_COLLECT, judgePerf, RTL_PROBE, judgeRtl, LONG_WORDS, FORCED_MARKS, CONTROL_FIT, TEXT_OVERLAP, SAVE_DATA_INIT, SAVE_DATA_COLLECT, judgeSaveData } from './lib/critic.mjs';
 
 // Playwright is looked up next to this script first, then in the project you run it from,
 // so a globally installed skill can audit a project that already has Playwright.
@@ -1034,7 +1034,29 @@ async function dynamicType(browser, url, vpName) {
   await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
   await page.waitForTimeout(250);
   const fixed = await page.evaluate((before) => { let same = 0, n = 0; for (const e of document.querySelectorAll('[data-lt-dt]')) { const cs = getComputedStyle(e); if (cs.display === 'none' || e.closest('[hidden], [aria-hidden="true"], svg')) continue; n++; if (parseFloat(cs.fontSize) <= before[+e.getAttribute('data-lt-dt')] * 1.05) same++; } return { same, n }; }, before);
-  const page2 = (await page.evaluate(PAGE_CHECKS, [])).filter(PICK(['clipped-text', 'overlap']));
+  const page2 = (await page.evaluate(PAGE_CHECKS, [])).filter(PICK(['clipped-text']));
+  for (const o of await page.evaluate(TEXT_OVERLAP)) page2.push({ rule: 'overlap', selector: null, message: `text sits on other text: ${o}` });
+  // Text pushed past the side of the screen. A pane that scrolls up and down clips sideways without scrolling, so only
+  // a real sideways scroller (a rail, a table frame) excuses it.
+  const past = await page.evaluate(() => {
+    const W = document.documentElement.clientWidth, out = [];
+    const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let n = tw.nextNode(); n && out.length < 3; n = tw.nextNode()) {
+      const el = n.parentElement; if (!el || !n.textContent.trim() || el.closest('svg, [aria-hidden="true"], [inert], [hidden], dialog:not([open]), .lt-visually-hidden, [data-audit-ignore]')) continue;
+      const cs = getComputedStyle(el); if (cs.display === 'none' || cs.visibility === 'hidden' || cs.textOverflow === 'ellipsis') continue;
+      // Visually hidden text (clipped to a pixel) is for screen readers: it takes no room.
+      let tiny = false; for (let a = el; a && a !== document.body; a = a.parentElement) { const b = a.getBoundingClientRect(); if ((b.width <= 2 || b.height <= 2) && getComputedStyle(a).overflow !== 'visible') { tiny = true; break; } }
+      if (tiny) continue;
+      const range = document.createRange(); range.selectNodeContents(n);
+      const r = range.getBoundingClientRect(); if (r.width < 2 || r.right <= W + 2 || r.left >= W) continue;
+      let sideways = false;
+      // A sideways scroller: it scrolls across and not down (a rail of tabs, a strip), or it is a table's frame.
+      for (let a = el; a && a !== document.body; a = a.parentElement) { const c = getComputedStyle(a); if (/auto|scroll/.test(c.overflowX) && (a.scrollHeight <= a.clientHeight + 1 || a.querySelector('table') || a.matches('[role="region"][tabindex]'))) { sideways = true; break; } if (c.position === 'fixed') break; }
+      if (!sideways) out.push(`“${n.textContent.trim().slice(0, 24)}” runs to x=${Math.round(r.right)}`);
+    }
+    return out;
+  });
+  if (past.length) page2.push({ rule: 'clipped-text', selector: null, message: `text runs past the screen edge: ${past.join(', ')}` });
   const spill = await page.evaluate(CONTROL_FIT);
   await ctx.close();
   if (fixed.n && fixed.same / fixed.n > 0.25) out.push({ rule: 'app-dynamic-type', severity: 'warning', selector: null, message: `At 200% text, ${fixed.same} of ${fixed.n} pieces of text stay the same size: they are set in px. Size text in rem (the kit's --step-* and --text-ui* already are) so it follows the reader's text size.` });

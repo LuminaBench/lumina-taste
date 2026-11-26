@@ -5,11 +5,15 @@ import { combine, emit, focusFor, on, part, parts, type Cleanup } from '../../_s
  * or the row is tapped. One row is open at a time. The keyboard (and switch, and voice) path is a real button
  * in each row, [data-part="more"], that opens the same actions and moves focus into them; Escape closes.
  * Pressing an action emits lt-change { action, id } and announces it; the page decides what it does.
+ * Right to left, the actions wait on the left and the drag runs the other way. A drag that starts in the outer 20px
+ * of the screen is left to the system's edge gesture (back), and the part says so with data-edge-guard.
  */
+const EDGE = 20;
 export function enhance(root: HTMLElement): Cleanup {
   const live = part(root, 'live');
   let open: HTMLElement | null = null;
-  let drag: { row: HTMLElement; x0: number; y0: number; base: number; dx: number; t0: number; axis: '' | 'x' | 'y' } | null = null;
+  let drag: { row: HTMLElement; x0: number; y0: number; base: number; dx: number; t0: number; axis: '' | 'x' | 'y'; dir: number } | null = null;
+  root.dataset.edgeGuard = String(EDGE);
   let swallowClick = false;
   const actionsOf = (row: HTMLElement) => part(row, 'actions');
   const widthOf = (row: HTMLElement) => actionsOf(row)?.offsetWidth ?? 0;
@@ -36,7 +40,9 @@ export function enhance(root: HTMLElement): Cleanup {
       const t = e.target as Element;
       const row = t.closest<HTMLElement>('[data-part="row"]');
       if (!row || t.closest('[data-part="more"], [data-part="actions"]') || e.button > 0) return;
-      drag = { row, x0: e.clientX, y0: e.clientY, base: row === open ? -widthOf(row) : 0, dx: 0, t0: e.timeStamp, axis: '' };
+      if (e.pointerType !== 'mouse' && (e.clientX < EDGE || e.clientX > innerWidth - EDGE)) return;
+      const dir = getComputedStyle(root).direction === 'rtl' ? -1 : 1;
+      drag = { row, x0: e.clientX, y0: e.clientY, base: row === open ? -widthOf(row) : 0, dx: 0, t0: e.timeStamp, axis: '', dir };
     }),
     on(document, 'pointermove', (e: PointerEvent) => {
       if (!drag) return;
@@ -48,13 +54,14 @@ export function enhance(root: HTMLElement): Cleanup {
         drag.row.setAttribute('data-dragging', '');
         if (open && open !== drag.row) setOpen(open, false);
       }
-      drag.dx = dx;
+      // Measured along the line: towards its start is negative, whichever way the line reads.
+      drag.dx = dx * drag.dir;
       const w = widthOf(drag.row);
-      let x = drag.base + dx;
+      let x = drag.base + drag.dx;
       // Rubber band past either end, so the row never feels stuck or loose.
       if (x > 0) x *= 0.2;
       else if (x < -w) x = -w + (x + w) * 0.3;
-      drag.row.style.setProperty('--dx', `${x}px`);
+      drag.row.style.setProperty('--dx', `${x * drag.dir}px`);
     }),
     on(document, 'pointerup', (e: PointerEvent) => {
       if (!drag) return;

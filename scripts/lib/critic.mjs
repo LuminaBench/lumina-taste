@@ -550,6 +550,43 @@ export const CONTROL_FIT = () => {
   return out;
 };
 
+/** In-page, after the root text size is doubled: lines of text that sit on other lines. Each line is taken at its
+ *  line height (not its glyphs), so tight display type is not an overlap. Fixed and sticky bars float over the
+ *  content by design and are left out. */
+export const TEXT_OVERLAP = () => {
+  const sel = (el) => { const p = []; for (let e = el; e && e.nodeType === 1 && p.length < 3; e = e.parentElement) { let s = e.tagName.toLowerCase(); if (e.id) { p.unshift(s + '#' + e.id); break; } const c = [...e.classList].slice(0, 2); if (c.length) s += '.' + c.join('.'); p.unshift(s); } return p.join(' > '); };
+  const lines = [];
+  const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  for (let n = tw.nextNode(); n && lines.length < 3000; n = tw.nextNode()) {
+    const el = n.parentElement; if (!el || !n.textContent.trim() || el.closest('svg, [aria-hidden="true"], [inert], [hidden], dialog:not([open]), [data-audit-ignore], .lt-visually-hidden')) continue;
+    let ok = true, fixed = false;
+    for (let a = el; a && a.nodeType === 1; a = a.parentElement) { const c = getComputedStyle(a); if (c.display === 'none' || c.visibility === 'hidden' || +c.opacity === 0) { ok = false; break; } if (c.position === 'fixed' || c.position === 'sticky') fixed = true; const r = a.getBoundingClientRect(); if ((r.width <= 2 || r.height <= 2) && c.overflow !== 'visible') { ok = false; break; } }
+    if (!ok || fixed) continue;
+    const cs = getComputedStyle(el); const fs = parseFloat(cs.fontSize); const lh = parseFloat(cs.lineHeight) || fs * 1.2;
+    // What a scroller or a clipping box hides is not on top of anything: clip each line by them.
+    let clip = { l: -1e9, r: 1e9, t: -1e9, b: 1e9 };
+    for (let a = el; a && a !== document.body; a = a.parentElement) { const c = getComputedStyle(a); if (c.overflowX !== 'visible' || c.overflowY !== 'visible') { const b = a.getBoundingClientRect(); clip = { l: Math.max(clip.l, b.left), r: Math.min(clip.r, b.right), t: Math.max(clip.t, b.top), b: Math.min(clip.b, b.bottom) }; } }
+    const range = document.createRange(); range.selectNodeContents(n);
+    for (const r of range.getClientRects()) {
+      if (r.width < 2 || r.top > innerHeight * 2) continue;
+      const mid = (r.top + r.bottom) / 2, h = Math.min(r.height, lh);
+      const line = { el, t: n.textContent.trim(), l: Math.max(r.left, clip.l), r: Math.min(r.right, clip.r), top: Math.max(mid - h / 2, clip.t), bottom: Math.min(mid + h / 2, clip.b) };
+      if (line.r - line.l > 2 && line.bottom - line.top > 2) lines.push(line);
+    }
+  }
+  const out = [];
+  for (let i = 0; i < lines.length && out.length < 3; i++) for (let j = i + 1; j < lines.length; j++) {
+    const a = lines[i], b = lines[j];
+    if (a.el === b.el || a.el.contains(b.el) || b.el.contains(a.el)) continue;
+    const ix = Math.min(a.r, b.r) - Math.max(a.l, b.l), iy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+    if (ix <= 2 || iy <= 2) continue;
+    const small = Math.min((a.r - a.l) * (a.bottom - a.top), (b.r - b.l) * (b.bottom - b.top));
+    if (ix * iy < small * 0.25) continue;
+    out.push(`“${a.t.slice(0, 20)}” and “${b.t.slice(0, 20)}” (${sel(b.el)})`); break;
+  }
+  return out;
+};
+
 /** In-page, before any page script: pretend the reader asked for less data (Save-Data and prefers-reduced-data). */
 export const SAVE_DATA_INIT = () => {
   try { Object.defineProperty(navigator, 'connection', { configurable: true, value: { saveData: true, effectiveType: '3g', addEventListener() {}, removeEventListener() {} } }); } catch { /* read-only here */ }
