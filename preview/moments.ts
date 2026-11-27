@@ -42,13 +42,13 @@ function fitFrame(stage: HTMLElement, frame: HTMLIFrameElement, height: (wide: b
 // ------------------------------------------------------------------ Moments
 function momentCard(m: Moment) {
   return `<article class="g-moment" id="m-${m.id}" data-moment="${m.id}">
-    <div class="g-mstage" data-frame-stage><iframe title="${esc(m.name)}, playing" tabindex="-1"></iframe></div>
+    <div class="g-mstage" data-frame-stage data-audit-ignore><iframe title="${esc(m.name)}, playing" tabindex="-1"></iframe></div>
     ${bar(`m-${m.id}`, m.name, m.line, m.api)}
   </article>`;
 }
 function microCard(c: Micro) {
   return `<article class="g-micro" id="mi-${c.id}" data-micro="${c.id}">
-    <div class="g-micro-stage" data-theme-root data-lock="motion" ${themeAttrs().replace(/data-motion="[^"]*"/, 'data-motion="snappy"')}>${c.body}</div>
+    <div class="g-micro-stage" data-audit-ignore data-theme-root data-lock="motion" ${themeAttrs().replace(/data-motion="[^"]*"/, 'data-motion="snappy"')}>${c.body}</div>
     ${bar(`mi-${c.id}`, c.name, c.line, c.api)}
   </article>`;
 }
@@ -232,8 +232,8 @@ export function viewBeforeAfter(main: HTMLElement): () => void {
       <h2 id="ba-${p.id}-t">${esc(p.title)}</h2>
       <p class="g-rule">${esc(p.rule)}</p>
       <div class="g-pair-row">
-        <figure class="g-side" data-side="before"><div class="g-mstage" data-frame-stage><iframe title="${esc(p.title)}: the generic version" tabindex="-1" srcdoc="${esc(beforeDoc(p.id, dark))}"></iframe></div><figcaption>Generic</figcaption></figure>
-        <figure class="g-side" data-side="after"><div class="g-mstage" data-frame-stage><iframe title="${esc(p.title)}: the kit’s version" tabindex="-1" src="./?stage=after-${p.id}&${stageQuery(false)}"></iframe></div><figcaption>With the kit</figcaption></figure>
+        <figure class="g-side" data-side="before"><div class="g-mstage" data-frame-stage data-audit-ignore><iframe title="${esc(p.title)}: the generic version" tabindex="-1" srcdoc="${esc(beforeDoc(p.id, dark))}"></iframe></div><figcaption>Generic</figcaption></figure>
+        <figure class="g-side" data-side="after"><div class="g-mstage" data-frame-stage data-audit-ignore><iframe title="${esc(p.title)}: the kit’s version" tabindex="-1" src="./?stage=after-${p.id}&${stageQuery(false)}"></iframe></div><figcaption>With the kit</figcaption></figure>
       </div>
     </section>`).join('')}`;
   const offs: Array<() => void> = [];

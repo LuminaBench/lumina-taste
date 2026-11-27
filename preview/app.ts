@@ -2,7 +2,7 @@
 import { BLUEPRINTS, CHARTS, COMPARE, STYLES, UI } from './generated/registry';
 import { PALETTES, TYPOGRAPHY } from '../engine/profiles/options.mjs';
 import { ICON, announce, copyText, ensureFont, esc, html, setTheme, syncRoots, theme, themeAttrs } from './core';
-import { byId, unmountPreviews, viewElement, viewIndex, fitMade } from './elements';
+import { byId, unmountPreviews, viewElement, viewIndex, fitMade, brief } from './elements';
 import { viewCompare } from './compare';
 import { viewBeforeAfter, viewMoments } from './moments';
 import { rank } from './search';
@@ -114,7 +114,7 @@ document.addEventListener('keydown', (e) => {
 function chartCard(m: any, big = false) {
   return `<article class="g-chart-card${m.wide || big ? ' is-wide' : ''}" data-chart="${m.id}" id="chart-${m.id}">
     <header><a href="#/charts/${m.id}"><h3>${esc(m.name)}</h3></a><span class="g-tag">${esc(m.group)}</span></header>
-    <div class="g-chart-stage" data-chart-stage data-no-export data-theme-root ${themeAttrs()}></div>
+    <div class="g-chart-stage" data-chart-stage data-audit-ignore data-no-export data-theme-root ${themeAttrs()}></div>
   </article>`;
 }
 function mountCharts(list: any[]) {
@@ -157,7 +157,7 @@ function viewCharts(id?: string) {
 
 // ------------------------------------------------------------------ styles atlas
 function styleMini(s: any) {
-  return `<div class="g-style-prev" data-theme-root data-lock="palette mode type radius density style" data-palette="${s.palette}" data-mode="${s.mode}" data-type="${s.type}" data-radius="${s.radius}" data-density="balanced" data-motion="snappy" data-style="${s.id}"${s.backdrop ? ` data-backdrop="${s.backdrop}"` : ''}>
+  return `<div class="g-style-prev" data-audit-ignore data-theme-root data-lock="palette mode type radius density style" data-palette="${s.palette}" data-mode="${s.mode}" data-type="${s.type}" data-radius="${s.radius}" data-density="balanced" data-motion="snappy" data-style="${s.id}"${s.backdrop ? ` data-backdrop="${s.backdrop}"` : ''}>
     <div class="g-mini" data-audit-ignore>
       <div class="g-mini-card">
         <span class="lt-eyebrow">${esc(s.sample?.eyebrow ?? 'Plan')}</span>
@@ -207,7 +207,7 @@ function viewPages(id?: string) {
       <div class="g-seg" role="radiogroup" aria-label="Viewport"><button type="button" role="radio" aria-checked="true" data-vp="100%">Desktop</button><button type="button" role="radio" aria-checked="false" data-vp="390px">Mobile</button></div>
       ${bp.states?.length ? `<div class="g-seg" role="radiogroup" aria-label="Page state"><button type="button" role="radio" aria-checked="true" data-state="">Ready</button>${bp.states.map((s: string) => `<button type="button" role="radio" aria-checked="false" data-state="${esc(s)}">${esc(s[0].toUpperCase() + s.slice(1).replace('-', ' '))}</button>`).join('')}</div>` : ''}
       <a class="g-back g-push" href="./blueprints/${bp.id}/" target="_blank" rel="noopener">${ICON.external}<span>Open full page</span></a></div>
-      <div class="g-frame"><iframe data-blueprint title="${esc(bp.name)}" src="./blueprints/${bp.id}/"></iframe></div>`;
+      <div class="g-frame" data-audit-ignore><iframe data-blueprint title="${esc(bp.name)}" src="./blueprints/${bp.id}/"></iframe></div>`;
     const frame = main.querySelector<HTMLIFrameElement>('iframe')!;
     frame.addEventListener('load', () => syncRoots());
     main.querySelector<HTMLSelectElement>('#g-bp-switch')!.addEventListener('change', (e) => (location.hash = `#/pages/${(e.target as HTMLSelectElement).value}`));
@@ -223,7 +223,7 @@ function viewPages(id?: string) {
     return;
   }
   main.innerHTML = `<section class="g-hero g-hero-sm"><h1>Whole pages, already laid out</h1><p class="g-sub">Each one follows the page-flow rules: one primary action, a 4px rhythm, the right navigation for the job. They follow your theme.</p><p class="g-meta">${BLUEPRINTS.length} pages</p></section>
-    <h2 class="lt-visually-hidden">All pages and apps</h2><div class="g-page-grid">${BLUEPRINTS.map((b) => `<a class="g-page-card" href="#/pages/${b.id}"><div class="g-page-thumb" data-audit-ignore><iframe data-blueprint tabindex="-1" aria-hidden="true" loading="lazy" title="${esc(b.name)} thumbnail" src="./blueprints/${b.id}/"></iframe></div><div class="g-card-body"><div class="g-card-title"><h3>${esc(b.name)}</h3>${b.states?.length ? `<span class="g-new">${b.states.length + 1} states</span>` : ''}</div><p>${esc(b.summary)}</p></div></a>`).join('')}</div>`;
+    <h2 class="lt-visually-hidden">All pages and apps</h2><div class="g-page-grid">${BLUEPRINTS.map((b) => `<a class="g-page-card" href="#/pages/${b.id}"><div class="g-page-thumb" data-audit-ignore><iframe data-blueprint tabindex="-1" aria-hidden="true" loading="lazy" title="${esc(b.name)} thumbnail" src="./blueprints/${b.id}/"></iframe></div><div class="g-card-body"><div class="g-card-title"><h3>${esc(b.name)}</h3>${b.states?.length ? `<span class="g-new">${b.states.length + 1} states</span>` : ''}</div><p>${esc(brief(b.summary))}</p></div></a>`).join('')}</div>`;
   main.querySelectorAll<HTMLIFrameElement>('iframe').forEach((f) => f.addEventListener('load', () => syncRoots()));
   const ro = new ResizeObserver((entries) => entries.forEach((en) => (en.target as HTMLElement).style.setProperty('--s', String(en.contentRect.width / 1440))));
   main.querySelectorAll<HTMLElement>('.g-page-thumb').forEach((t) => ro.observe(t));
@@ -238,7 +238,7 @@ function viewPalettes(id?: string) {
     const tokens = ['bg-canvas', 'bg-surface-1', 'bg-surface-2', 'bg-surface-3', 'border-hairline', 'border-strong', 'text-primary', 'text-secondary', 'text-muted', 'accent-solid', 'accent-hover', 'accent-ink', 'accent-soft', 'accent-text', 'status-positive', 'status-negative', 'status-warning', 'status-info', 'chart-1', 'chart-2', 'chart-3', 'chart-4', 'chart-5', 'chart-6', 'chart-7', 'chart-8'];
     main.innerHTML = `<nav class="g-crumbs" aria-label="Breadcrumb"><a href="#/palettes">Palettes</a><span aria-hidden="true">/</span><span>${esc(p.category)}</span></nav>
       <div class="g-pal-head"><h1>${esc(p.name)}</h1><button type="button" class="lt-btn" data-variant="primary" data-apply><span data-part="label">Use this palette</span></button></div>
-      <div class="g-pal-modes">${['light', 'dark'].map((m) => `<section class="g-pal-mode" data-palette="${p.id}" data-mode="${m}"><h2>${m === 'light' ? 'Light' : 'Dark'}</h2><ul>${tokens.map((t) => `<li><i style="background: var(--${t})"></i><code>--${t}</code></li>`).join('')}</ul></section>`).join('')}</div>`;
+      <div class="g-pal-modes">${['light', 'dark'].map((m) => `<section class="g-pal-mode" data-audit-ignore data-lock="mode" data-palette="${p.id}" data-mode="${m}"><h2>${m === 'light' ? 'Light' : 'Dark'}</h2><ul>${tokens.map((t) => `<li><i style="background: var(--${t})"></i><code>--${t}</code></li>`).join('')}</ul></section>`).join('')}</div>`;
     main.querySelector('[data-apply]')!.addEventListener('click', () => { setTheme({ palette: p.id }); announce(`Palette: ${p.name}`); });
     return;
   }

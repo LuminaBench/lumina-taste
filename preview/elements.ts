@@ -34,14 +34,15 @@ export function doc(c: Doc) {
 }
 
 // ------------------------------------------------------------------ index
+/** A card's line: the first sentence, and no more than fourteen words (cut at a comma when it runs on). */
+export function brief(t: string) { const first = String(t ?? '').split(/(?<=\.)\s/)[0]; const w = first.split(/\s+/); if (w.length <= 14) return first; const cut = w.slice(0, 14).join(' '); const at = cut.lastIndexOf(','); return `${(at > 30 ? cut.slice(0, at) : cut).replace(/[,;:]$/, '')}.`; }
 function card(c: Doc) {
   // An <article> with a stretched title link: demos contain their own links, and links cannot nest.
   return `<article class="g-card" data-id="${c.id}" id="card-${c.id}"${(c.w ?? 0) >= 620 ? ' data-wide' : ''}>
     <div class="g-prev" data-stage data-theme-root data-contained inert data-audit-ignore ${themeAttrs()}><div class="g-prev-in" ${widthOf(c)}>${c.html}</div></div>
     <div class="g-card-body">
       <div class="g-card-title"><h3><a class="g-stretch" href="#/ui/${c.id}">${esc(c.name)}</a>${c.added ? '<span class="g-new">New</span>' : ''}</h3><span class="g-tag">${esc(c.familyTitle.split(' ')[0].replace(',', ''))}</span></div>
-      <code class="g-api">${esc(doc(c).api)}</code>
-      <p>${esc(String(c.summary).split(/(?<=\.)\s/)[0])}</p>
+      <p>${esc(brief(c.summary))}</p>
     </div>
   </article>`;
 }
@@ -130,7 +131,7 @@ function homeHero() {
   return `<section class="g-home" aria-labelledby="g-home-h">
       <div class="g-home-copy">
         <h1 id="g-home-h">What is that UI element called?</h1>
-        <p class="g-sub">Describe it in your own words. Get its real name, working code in vanilla and React, and a prompt your agent can build from.</p>
+        <p class="g-sub">Describe it in your own words. Get its real name, working code and a prompt your agent can build from.</p>
         <div class="g-examples">${EXAMPLES.slice(0, 3).map((e) => `<button type="button" data-example="${esc(e)}">“${esc(e)}”</button>`).join('')}</div>
         <dl class="g-facts"><div><dt>elements</dt><dd>${ALL.length}</dd></div><div><dt>charts</dt><dd>${CHARTS.length}</dd></div><div><dt>pages and apps</dt><dd>${BLUEPRINTS.length}</dd></div><div><dt>styles</dt><dd>${STYLES.length}</dd></div></dl>
       </div>

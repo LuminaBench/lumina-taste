@@ -328,7 +328,7 @@ html[data-view^="pages"] .g-main { max-width: 1640px; }
 .g-el.g-el-wide .g-stage { min-height: min(640px, 72vh); }
 .g-el.g-el-wide .g-el-right { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 56px; align-items: start; }
 .g-el.g-el-wide .g-el-right > :is(h1, .g-apis, .g-aka, .g-about) { grid-column: 1 / -1; }
-@media (max-width: 980px) { .g-el.g-el-wide .g-el-right { grid-template-columns: 1fr; } }
+@media (max-width: 980px) { .g-el.g-el-wide .g-el-right { grid-template-columns: minmax(0, 1fr); } }
 .g-style-detail .g-aka { margin-top: 10px; }
 .g-style-prev { min-width: 0; overflow: hidden; }
 
@@ -417,3 +417,19 @@ html[data-view="stage"] body { min-height: 0; display: block; }
   :is(.g-chips, .g-sort, .g-examples) button { position: relative; }
   :is(.g-chips, .g-sort, .g-examples) button::before { content: ""; position: absolute; inset: 50% auto auto 50%; width: max(100%, 44px); height: 44px; translate: -50% -50%; }
 }
+
+/* ---------------------------------------------------------------- calmer repeats */
+/* Palette cards sit on a ground of their own, no outline: the swatches carry the card. */
+.g-pal { border-color: transparent; background: var(--bg-surface-1); }
+.g-pal:hover { border-color: transparent; background: var(--bg-surface-2); translate: none; }
+/* Long lists of the same kind of section alternate their ground, so the eye finds where each one starts. */
+.g-cmp, .g-pair { padding-block: 28px; }
+.g-cmp:nth-of-type(even), .g-pair:nth-of-type(even) { margin-inline: -20px; padding-inline: 20px; border-radius: var(--radius-xl); background: var(--bg-surface-1); }
+@media (max-width: 700px) { .g-cmp:nth-of-type(even), .g-pair:nth-of-type(even) { margin-inline: -10px; padding-inline: 10px; } }
+/* A long word (German, Finnish, a long API name) wraps instead of pushing a phone screen sideways. */
+.g-main :is(h1, h2, h3) { overflow-wrap: anywhere; }
+.g-el-right, .g-sec, .g-el-right > * { min-width: 0; }
+.g-sec table { width: 100%; }
+.g-sec :is(td, th, h2) { overflow-wrap: anywhere; }
+/* Each mode panel shows the palette's own ground, so light and dark read as what they are. */
+.g-pal-mode { padding: 20px; border-radius: var(--radius-xl); background: var(--bg-canvas); color: var(--text-primary); }

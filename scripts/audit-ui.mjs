@@ -546,8 +546,8 @@ const TASTE_CHECKS = (arg = null) => {
         || [...band.querySelectorAll('svg')].some((e) => shown(e) && rectOf(e).width >= 96 && rectOf(e).height >= 64)
         || bigType(band) || scans(band, total);
       // Visible words only (innerText: a closed answer is not read), less those inside a preview or mock-up.
-      const prose = (b) => { let t = b.innerText; for (const n of b.querySelectorAll('[inert], [data-audit-ignore]')) if (!n.parentElement?.closest('[inert], [data-audit-ignore]')) t = t.replace(n.innerText, ' '); return t; };
-      const walls = bands.filter((b) => rectOf(b).height > 200 && !b.matches('[class*="hero"], [class*="footer"], [class*="nav"]')).map((b) => { const words = count(prose(b)); return { el: b, words, pic: looksAt(b, words) }; });
+      const proseCount = (b) => Math.max(0, count(b.innerText) - [...b.querySelectorAll('[inert], [data-audit-ignore]')].filter((n) => !n.parentElement?.closest('[inert], [data-audit-ignore]')).reduce((a, n) => a + count(n.innerText), 0));
+      const walls = bands.filter((b) => rectOf(b).height > 200 && !b.matches('[class*="hero"], [class*="footer"], [class*="nav"]')).map((b) => { const words = proseCount(b); return { el: b, words, pic: looksAt(b, words) }; });
       let flagged = false;
       for (let i = 0; i < walls.length && !flagged; i++) {
         const w = walls[i];
@@ -682,6 +682,8 @@ const TASTE_CHECKS = (arg = null) => {
         const cs = getComputedStyle(e), r = rectOf(e);
         for (const [side, len] of [['Top', r.width], ['Bottom', r.width], ['Left', r.height], ['Right', r.height]]) {
           if (len < 160 || cs[`border${side}Style`] === 'none' || parseFloat(cs[`border${side}Width`]) === 0 || parseFloat(cs[`border${side}Width`]) > 1.5) continue;
+          // An invisible edge (transparent, or nearly) is not a rule anyone sees.
+          { const m = /rgba?\(([^)]+)\)/.exec(cs[`border${side}Color`]); const a = m ? (m[1].split(/[,\s/]+/).filter(Boolean)[3] ?? '1') : '1'; if (parseFloat(a) < 0.12 || cs[`border${side}Color`] === 'transparent') continue; }
           if (side === 'Left' || side === 'Right') { if (parseFloat(cs.borderTopWidth) > 0 && cs.borderTopStyle !== 'none') continue; } // a box's sides count once, as its top
           lines++;
         }
@@ -784,7 +786,8 @@ async function auditOne(browser, url, vpName, mode) {
   // Apply the mode to lumina-taste roots as well as prefers-color-scheme.
   // Remember the mode the page was written in: the default-look rule judges the look as built, not a mode the audit switched to.
   await page.evaluate(() => { const r = document.documentElement; if (!r.hasAttribute('data-authored-mode')) r.setAttribute('data-authored-mode', r.getAttribute('data-mode') ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')); });
-  await page.evaluate((m) => document.querySelectorAll('[data-mode]').forEach((e) => e.setAttribute('data-mode', m)), mode);
+  // Every themed root follows the run's mode, except a panel that shows one mode on purpose (data-lock names "mode").
+  await page.evaluate((m) => document.querySelectorAll('[data-mode]').forEach((e) => { if (!/\bmode\b/.test(e.getAttribute('data-lock') ?? '')) e.setAttribute('data-mode', m); }), mode);
   await page.addStyleTag({ content: '*,*::before,*::after{transition-duration:0s!important;animation-duration:0s!important;animation-delay:0s!important;caret-color:transparent!important;scroll-behavior:auto!important}' });
   // Scroll through so lazy and reveal-on-scroll content is present, then return to the top.
   await page.evaluate(async () => {
