@@ -16,6 +16,7 @@
   [data-part="arc"] { stroke: currentColor; stroke-dasharray: 1; stroke-dashoffset: calc(1 - min(var(--p), 1) * 0.82); }
   :scope[data-state="armed"] [data-part="indicator"] { scale: 1.08; }
   :scope[data-state="refreshing"] { --pull: 52px; --p: 1; }
+  :scope[data-state="refreshing"][data-via="button"] { --pull: 0px; --p: 0; }
   :scope[data-state="refreshing"] [data-part="arc"] { stroke-dashoffset: 0.72; }
   :scope[data-state="refreshing"] [data-part="indicator"] svg { animation: lt-pull-spin 760ms linear infinite; }
   [data-part="stamp"] { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; }

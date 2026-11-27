@@ -245,6 +245,11 @@ export function viewElement(main: HTMLElement, id: string) {
     cleanup.push(fitter);
     requestAnimationFrame(() => { if (preview) runPreview(c, inner); requestAnimationFrame(placePins); });
   };
+  // Whatever the visitor presses stays where it is while the demo opens, closes or grows around it.
+  const CONTROL = 'button, summary, a[href], label, input, select, [role="button"], [role="tab"], [role="switch"], [role="checkbox"], [role="option"], [role="menuitem"], [tabindex]';
+  const holdPressed = (e: Event) => { const t = (e.target as Element).closest?.(CONTROL); if (t && inner.contains(t)) fitter?.hold(t); };
+  inner.addEventListener('pointerdown', holdPressed, true);
+  inner.addEventListener('keydown', (e) => { if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') holdPressed(e); }, true);
   const showPins = () => main.querySelector('[data-pins]')!.getAttribute('aria-pressed') === 'true';
   function placePins() {
     pinsLayer.innerHTML = '';
@@ -296,7 +301,14 @@ export function viewElement(main: HTMLElement, id: string) {
     if (records.some((r) => !(r.target === inner && r.attributeName === 'style'))) { clearTimeout(refitTimer); refitTimer = window.setTimeout(() => fitter?.refit(), 60); }
   });
   mo.observe(inner, { attributes: true, subtree: true, childList: true });
-  const ro = new ResizeObserver(() => requestAnimationFrame(placePins));
+  let stageWidth = 0;
+  const ro = new ResizeObserver(() => {
+    // A new width is a new layout: centre again rather than hold the last control.
+    const w = Math.round(stage.getBoundingClientRect().width);
+    if (stageWidth && w !== stageWidth) fitter?.hold(null);
+    stageWidth = w;
+    requestAnimationFrame(placePins);
+  });
   ro.observe(stage);
   cleanup.push(() => { mo.disconnect(); ro.disconnect(); });
   const offTheme = onTheme(() => requestAnimationFrame(placePins));

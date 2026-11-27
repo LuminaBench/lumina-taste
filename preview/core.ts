@@ -74,6 +74,8 @@ function scheduleFit(job: FitJob) {
 
 export function fit(box: HTMLElement, inner: HTMLElement, pad = 24) {
   const base = inner.getAttribute('style') ?? '';
+  // The control the visitor just pressed, and where it was in the box at that moment.
+  let held: { el: Element; x: number; y: number } | null = null;
   const reset = () => { inner.setAttribute('style', base); inner.style.transform = 'none'; };
   // Reads only: what to write once every preview due this frame has been measured.
   const measure = (): Partial<CSSStyleDeclaration> => {
@@ -111,7 +113,21 @@ export function fit(box: HTMLElement, inner: HTMLElement, pad = 24) {
     const s = Math.max(0.3, Math.min(1, (b.width - pad * 2) / Math.max(1, w), (b.height - pad * 2) / Math.max(1, h)));
     // Move the drawing's centre to the box centre, scaling around the drawing's centre.
     const cx = (L + R) / 2, cy = (T + B) / 2;
-    const tx = b.left + b.width / 2 - cx, ty = b.top + b.height / 2 - cy;
+    let tx = b.left + b.width / 2 - cx, ty = b.top + b.height / 2 - cy;
+    // The control just used stays where it was (a disclosure opens beneath it, a list closing above it does not
+    // pull it up): the drawing moves only as far as it must to stay inside the box.
+    if (held && held.el.isConnected) {
+      const q = held.el.getBoundingClientRect();
+      if (q.width > 0 && q.height > 0) {
+        // Scaled around (cx, cy): a point p lands at cx + (p - cx) * s + tx. Put the held control's corner back where
+        // it was, then keep the whole drawing inside the box (it already fits at this scale).
+        const fx = b.left + held.x - cx - (q.left - cx) * s, fy = b.top + held.y - cy - (q.top - cy) * s;
+        const minX = b.left + pad - (cx + (L - cx) * s), maxX = b.right - pad - (cx + (R - cx) * s);
+        const minY = b.top + pad - (cy + (T - cy) * s), maxY = b.bottom - pad - (cy + (B - cy) * s);
+        tx = minX <= maxX ? Math.min(Math.max(fx, minX), maxX) : tx;
+        ty = minY <= maxY ? Math.min(Math.max(fy, minY), maxY) : ty;
+      }
+    }
     return { transformOrigin: `${cx - r.left}px ${cy - r.top}px`, transform: `translate(${Math.round(tx)}px, ${Math.round(ty)}px) scale(${s.toFixed(3)})` };
   };
   const job: FitJob = { reset, measure, apply: (v) => Object.assign(inner.style, v) };
@@ -121,7 +137,12 @@ export function fit(box: HTMLElement, inner: HTMLElement, pad = 24) {
   const timers = [150, 700].map((ms) => setTimeout(later, ms));
   const ro = new ResizeObserver(later);
   ro.observe(box);
-  return Object.assign(() => { ro.disconnect(); timers.forEach(clearTimeout); fitQueue.delete(job); }, { refit: run });
+  const hold = (el: Element | null) => {
+    if (!el) { held = null; return; }
+    const q = el.getBoundingClientRect(), b = box.getBoundingClientRect();
+    held = { el, x: q.left - b.left, y: q.top - b.top };
+  };
+  return Object.assign(() => { ro.disconnect(); timers.forEach(clearTimeout); fitQueue.delete(job); }, { refit: run, hold });
 }
 
 // ------------------------------------------------------------------ copy to clipboard (no downloads anywhere in the gallery)

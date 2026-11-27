@@ -1,4 +1,4 @@
-import { combine, emit, on, parts, roving, type Cleanup } from '../../_shared/dom';
+import { combine, emit, on, parts, roving, holdInView, type Cleanup } from '../../_shared/dom';
 
 /** Accordion (WAI-ARIA Accordion pattern). Single-open by default; add data-multiple for many. */
 export function enhance(root: HTMLElement): Cleanup {
@@ -15,7 +15,8 @@ export function enhance(root: HTMLElement): Cleanup {
       // Safari does not focus a button on click: focus it here so the arrow keys work straight after.
       if (document.activeElement !== t) t.focus({ preventScroll: true });
       const open = t.getAttribute('aria-expanded') !== 'true';
-      if (open && !root.hasAttribute('data-multiple')) triggers().forEach((o) => o !== t && set(o, false));
+      // Closing an item above the one opened would pull it up the page: keep it under the pointer instead.
+      if (open && !root.hasAttribute('data-multiple')) { holdInView(t); triggers().forEach((o) => o !== t && set(o, false)); }
       set(t, open);
       emit(root, { open: triggers().filter((x) => x.getAttribute('aria-expanded') === 'true').map((x) => x.id) });
     }),

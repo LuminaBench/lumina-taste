@@ -1,4 +1,4 @@
-import { combine, emit, on, part, type Cleanup } from '../../_shared/dom';
+import { combine, emit, on, part, reserveWidth, type Cleanup } from '../../_shared/dom';
 
 /**
  * Cookie consent: "Essential only" and "Accept all" carry equal weight (no dark pattern), and
@@ -17,6 +17,7 @@ export function enhance(root: HTMLElement): Cleanup {
     emit(root, choice);
   };
   return combine(
+    reserveWidth(customise, ['Customise', 'Save choices']),
     on(customise, 'click', () => {
       const open = prefs.hidden;
       prefs.hidden = !open;

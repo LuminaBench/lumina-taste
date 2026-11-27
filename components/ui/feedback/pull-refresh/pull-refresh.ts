@@ -28,7 +28,7 @@ export function enhance(root: HTMLElement): Cleanup {
     root.style.setProperty('--p', String(Math.min(1.2, px / MARK)));
     root.dataset.state = px >= MARK ? 'armed' : 'pulling';
   };
-  const reset = () => { root.style.removeProperty('--pull'); root.style.removeProperty('--p'); delete root.dataset.state; };
+  const reset = () => { root.style.removeProperty('--pull'); root.style.removeProperty('--p'); delete root.dataset.state; delete root.dataset.via; };
   const finish = (label?: string) => {
     clearTimeout(timer);
     if (root.dataset.state !== 'refreshing') return;
@@ -38,9 +38,12 @@ export function enhance(root: HTMLElement): Cleanup {
     if (live) live.textContent = label ?? 'Updated just now';
     emit(root, { state: 'done' });
   };
-  const refresh = () => {
+  // A pull leaves the list lowered over the spinner; the button refreshes in place (its own icon turns) and the
+  // list, and the button itself, stay exactly where they are.
+  const refresh = (via: 'pull' | 'button' = 'pull') => {
     if (root.dataset.state === 'refreshing') return;
     root.style.removeProperty('--pull'); root.style.removeProperty('--p');
+    root.dataset.via = via;
     root.dataset.state = 'refreshing';
     btn?.setAttribute('aria-disabled', 'true');
     if (live) live.textContent = 'Refreshing';
@@ -68,7 +71,7 @@ export function enhance(root: HTMLElement): Cleanup {
   };
 
   return combine(
-    btn ? on(btn, 'click', () => refresh()) : () => {},
+    btn ? on(btn, 'click', () => refresh('button')) : () => {},
     // Touch: own the gesture only while the list is at the top and the finger moves down.
     on(root, 'touchstart', (e: TouchEvent) => { if (e.touches.length === 1 && !begin(e.touches[0].clientY)) y0 = NaN; }, { passive: true }),
     on(root, 'touchmove', (e: TouchEvent) => { if (Number.isNaN(y0) || e.touches.length !== 1) return; if (move(e.touches[0].clientY)) e.preventDefault(); }, { passive: false }),

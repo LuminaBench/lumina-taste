@@ -24,7 +24,8 @@
   /* 24px hit area, small visible dot inside. */
   [data-part="dot"] { display: grid; place-items: center; width: 24px; height: 24px; padding: 0; border: 0; border-radius: var(--radius-pill); background: none; cursor: pointer; transition: width var(--dur-3) var(--ease-out); }
   [data-part="dot"]::before { content: ""; width: 8px; height: 8px; border-radius: var(--radius-pill); background: var(--border-strong); transition: width var(--dur-3) var(--ease-out), background-color var(--dur-2); }
-  [data-part="dot"][aria-current="true"] { width: 34px; }
+  /* Every dot has the slot the current one needs: the pill grows inside it and nothing beside it moves. */
+  [data-part="dot"] { width: 30px; }
   [data-part="dot"][aria-current="true"]::before { width: 22px; background: var(--accent-solid); }
 }
 @media (prefers-reduced-motion: reduce) { .lt-carousel [data-part="track"] { scroll-behavior: auto; } }

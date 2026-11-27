@@ -1,4 +1,4 @@
-import { combine, emit, on, type Cleanup } from '../../_shared/dom';
+import { combine, emit, on, reserveWidth, type Cleanup } from '../../_shared/dom';
 
 /**
  * Assistant conversation: Copy puts an answer on the clipboard, Retry and "Try again" emit
@@ -8,7 +8,10 @@ export function enhance(root: HTMLElement): Cleanup {
   const live = root.querySelector<HTMLElement>('[data-part="live"]');
   const say = (t: string) => { if (live) live.textContent = t; };
   let timer = 0;
+  // Copy becomes Copied for a moment: the button keeps one width, so Retry beside it never shifts.
+  const held = [...root.querySelectorAll<HTMLButtonElement>('button[data-action="copy"]')].flatMap((b) => { const l = b.querySelector<HTMLElement>('span'); return l ? [reserveWidth(b, ['Copy', 'Copied'], l)] : []; });
   return combine(
+    ...held,
     on(root, 'click', (e: MouseEvent) => {
       const b = (e.target as Element).closest<HTMLButtonElement>('button[data-action]');
       if (!b) return;

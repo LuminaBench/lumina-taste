@@ -1,4 +1,4 @@
-import { combine, emit, on, part, type Cleanup } from '../../_shared/dom';
+import { combine, emit, on, part, reserveWidth, type Cleanup } from '../../_shared/dom';
 
 /** API key: masked by default, reveal toggles, copy copies the full key, Roll asks once, then rotates. */
 export function enhance(root: HTMLElement): Cleanup {
@@ -9,6 +9,7 @@ export function enhance(root: HTMLElement): Cleanup {
   const msg = part(root, 'msg')!;
   let armed = false, t = 0;
   return combine(
+    reserveWidth(roll, ['Roll key…', 'Click again to roll']),
     on(reveal, 'click', () => {
       const show = reveal.getAttribute('aria-pressed') !== 'true';
       reveal.setAttribute('aria-pressed', String(show)); reveal.setAttribute('aria-label', show ? 'Hide key' : 'Show key');

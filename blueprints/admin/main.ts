@@ -26,6 +26,7 @@ const q = document.querySelector<HTMLInputElement>('#ad-q')!;
 const rows = [...document.querySelectorAll<HTMLTableRowElement>('.ad-table tbody tr')];
 const nomatch = document.querySelector<HTMLElement>('#ad-nomatch')!;
 let status = 'all';
+const pager = document.querySelector<HTMLElement>('.ad-main .lt-pagination');
 function filter() {
   const term = q.value.trim().toLowerCase();
   let shown = 0;
@@ -36,6 +37,8 @@ function filter() {
   }
   nomatch.hidden = shown > 0;
   nomatch.querySelector('span')!.textContent = q.value.trim() || status;
+  // The page numbers count all 1,284 people: while a filter or search narrows the list, they would be wrong.
+  if (pager) pager.style.visibility = status === 'all' && !term ? '' : 'hidden';
 }
 q.addEventListener('input', filter);
 document.querySelector('#ad-status')!.addEventListener('lt-change', (e) => { status = String((e as CustomEvent).detail?.value ?? 'all'); filter(); });

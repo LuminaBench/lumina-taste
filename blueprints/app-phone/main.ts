@@ -92,7 +92,7 @@ function show(id: string, dir: 'forward' | 'back' | 'tab' = 'forward', from: HTM
     } else swap();
   } else {
     mark(id);
-    frame.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', inline: 'start', block: 'nearest' });
+    slideTo(frame, !reducedMotion());
     heading?.focus({ preventScroll: true });
   }
 }
@@ -121,7 +121,7 @@ const step = (by: number) => { const i = order.indexOf(current); show(order[Math
 $('#ap-prev')!.addEventListener('click', () => step(-1));
 $('#ap-next')!.addEventListener('click', () => step(1));
 for (const mq of [phone, tablet]) mq.addEventListener('change', () => { syncMode(); mark(current); });
-if (current !== 'start' && board()) requestAnimationFrame(() => frameOf(current)?.scrollIntoView({ inline: 'start', block: 'nearest' }));
+if (current !== 'start' && board()) requestAnimationFrame(() => { const f = frameOf(current); if (f) slideTo(f, false); });
 
 // ------------------------------------------------------------------ harbour, destination, refresh
 const harbours: Record<string, string[]> = { Ardmore: ['Kestrel Isle', 'Larkspur Bay'], 'Kestrel Isle': ['Ardmore'], 'Larkspur Bay': ['Ardmore'] };
@@ -215,3 +215,13 @@ $('#ap-appearance')!.addEventListener('lt-change', (e) => {
 });
 $<HTMLInputElement>('#ap-remind')!.addEventListener('change', (e) => { $('#ap-remind-when')!.hidden = !(e.target as HTMLInputElement).checked; });
 $('#ap-signout')!.addEventListener('click', () => say('Signed out. Your tickets stay on this phone.'));
+
+// Slide the row of screens sideways to a screen. Only the row scrolls: the page itself stays where it is, so the arrow
+// just pressed does not move (scrollIntoView would also nudge the page to bring the whole phone into view).
+function slideTo(frame: HTMLElement, smooth: boolean) {
+  let row = frame.parentElement;
+  while (row && !/(auto|scroll)/.test(getComputedStyle(row).overflowX)) row = row.parentElement;
+  if (!row) return;
+  const pad = parseFloat(getComputedStyle(row).scrollPaddingInlineStart) || 0;
+  row.scrollTo({ left: row.scrollLeft + frame.getBoundingClientRect().left - row.getBoundingClientRect().left - pad, behavior: smooth ? 'smooth' : 'auto' });
+}

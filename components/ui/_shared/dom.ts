@@ -146,7 +146,7 @@ export function dismissable(el: HTMLElement, close: () => void, ignore: Element[
 
 /** Enhance every [data-lt="name"] under root with the matching enhancer. */
 export function autoEnhance(root: ParentNode, registry: Record<string, Enhancer>): Cleanup {
-  const cleanups: Cleanup[] = [];
+  const cleanups: Cleanup[] = root === document ? [keepFloor()] : [];
   for (const el of $$<HTMLElement>(root, '[data-lt]')) {
     const fn = registry[el.dataset.lt!];
     if (fn && !el.dataset.ltReady) { el.dataset.ltReady = ''; cleanups.push(fn(el)); }
@@ -185,4 +185,82 @@ export function fixedOrigin(el: HTMLElement) {
   const r = el.getBoundingClientRect();
   Object.assign(el.style, { left: prev.l, top: prev.t, position: prev.p });
   return { x: r.left, y: r.top };
+}
+
+/**
+ * A button whose words change ("Customise" → "Save choices") is as wide as its longest wording from the start, so
+ * pressing it never nudges what sits beside it. Measured once it is on screen, and again when web fonts arrive.
+ * The visible words and the accessible name stay exactly as they are. Plain-text buttons only.
+ */
+export function reserveWidth(btn: HTMLElement, labels: string[], label: HTMLElement = btn): Cleanup {
+  let done = false;
+  const measure = () => {
+    if (!btn.isConnected || btn.getBoundingClientRect().width < 1) return;
+    const now = label.textContent;
+    btn.style.minWidth = '';
+    let max = 0;
+    for (const l of labels) { label.textContent = l; max = Math.max(max, btn.getBoundingClientRect().width); }
+    label.textContent = now;
+    btn.style.minWidth = `${Math.ceil(max)}px`;
+    done = true;
+  };
+  const ro = new ResizeObserver(() => { if (!done) measure(); });
+  ro.observe(btn);
+  document.fonts?.ready.then(() => { done = false; measure(); });
+  measure();
+  return () => { ro.disconnect(); btn.style.minWidth = ''; };
+}
+
+/**
+ * Keep `el` where it is on screen while the layout around it settles (an item above it closing, a panel growing):
+ * the page, or the nearest scrolling box, scrolls by however far it would have moved, frame by frame for `ms`.
+ */
+export function holdInView(el: HTMLElement, ms = 450): void {
+  const top0 = el.getBoundingClientRect().top;
+  let box: Element | null = el.parentElement;
+  while (box && box !== document.body) { const o = getComputedStyle(box).overflowY; if ((o === 'auto' || o === 'scroll') && box.scrollHeight > box.clientHeight) break; box = box.parentElement; }
+  const scroller: { scrollBy: (o: ScrollToOptions) => void } = box && box !== document.body ? box : window;
+  const end = performance.now() + ms;
+  const tick = () => {
+    if (!el.isConnected) return;
+    const d = el.getBoundingClientRect().top - top0;
+    if (Math.abs(d) >= 1) scroller.scrollBy({ top: d, behavior: 'instant' as ScrollBehavior });
+    if (performance.now() < end) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+/**
+ * Near the end of a page, closing something (an answer, a panel, a filtered list) makes the page shorter, the browser
+ * pulls the page down to fit and the button just pressed slides away under the pointer. keepFloor() keeps the page
+ * where it was instead: it adds the missing height as blank space after the last section, then gives that space
+ * back as the reader scrolls up, out of sight. autoEnhance(document) turns it on; it returns its own cleanup.
+ */
+export function keepFloor(): Cleanup {
+  let spacer: HTMLElement | null = null, size = 0, base = 0;
+  const doc = document.documentElement;
+  const set = (n: number) => {
+    size = Math.max(0, Math.round(n));
+    if (!size) { spacer?.remove(); spacer = null; return; }
+    if (!spacer) { spacer = document.createElement('div'); spacer.setAttribute('aria-hidden', 'true'); spacer.dataset.ltFloor = ''; spacer.style.cssText = 'display:block;width:1px;pointer-events:none;visibility:hidden;margin:0;padding:0;'; }
+    if (!spacer.isConnected) document.body.append(spacer);
+    spacer.style.height = `${size}px`;
+  };
+  const onScroll = () => { if (!spacer) return; if (scrollY < base) set(size - (base - scrollY)); base = scrollY; };
+  const press = (e: Event) => {
+    const t = (e.target as Element | null)?.closest?.('summary, [aria-expanded], [aria-controls], [role="tab"], [role="radio"], button');
+    if (!t || t.closest('dialog, [popover], [data-contained]')) return;
+    const y0 = scrollY, end = performance.now() + 600;
+    const tick = () => {
+      const max = doc.scrollHeight - innerHeight;
+      if (scrollY < y0 - 0.5 && max <= scrollY + 1) { set(size + (y0 - scrollY)); window.scrollTo({ top: y0, behavior: 'instant' as ScrollBehavior }); base = scrollY; }
+      if (performance.now() < end) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+  const onKey = (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') press(e); };
+  document.addEventListener('pointerdown', press, true);
+  document.addEventListener('keydown', onKey, true);
+  addEventListener('scroll', onScroll, { passive: true });
+  return () => { document.removeEventListener('pointerdown', press, true); document.removeEventListener('keydown', onKey, true); removeEventListener('scroll', onScroll); set(0); };
 }

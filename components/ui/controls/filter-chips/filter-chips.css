@@ -1,10 +1,13 @@
 @scope (.lt-chips) {
   :scope { display: flex; flex-wrap: wrap; gap: 8px; }
-  [data-part="chip"] { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-pill); background: var(--bg-surface-1); color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 550; cursor: pointer; transition: background-color var(--dur-1), border-color var(--dur-1), color var(--dur-1), scale var(--dur-1) var(--ease-out); }
+  /* The tick appears inside the chip's own padding (the words move over by half its width), so choosing a chip
+     never changes its width or nudges the chips beside it. */
+  [data-part="chip"] { position: relative; display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 19px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: var(--radius-pill); background: var(--bg-surface-1); color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 550; cursor: pointer; transition: background-color var(--dur-1), border-color var(--dur-1), color var(--dur-1), scale var(--dur-1) var(--ease-out); }
   [data-part="chip"]:hover { border-color: var(--text-secondary); color: var(--text-primary); }
   [data-part="chip"]:active { scale: var(--press-scale); }
   [data-part="chip"][aria-pressed="true"] { border-color: transparent; background: var(--accent-soft); color: var(--accent-text); }
-  [data-part="check"] { display: grid; width: 0; overflow: hidden; transition: width var(--dur-2) var(--ease-out); }
+  [data-part="chip"][aria-pressed="true"] { padding-inline: 26px 12px; }
+  [data-part="check"] { position: absolute; inset-inline-start: 9px; top: 50%; display: grid; translate: 0 -50%; opacity: 0; scale: 0.6; transition: opacity var(--dur-1), scale var(--dur-2) var(--ease-out); }
   [data-part="check"] .lt-icon { width: 14px; height: 14px; }
-  [aria-pressed="true"] [data-part="check"] { width: 14px; }
+  [aria-pressed="true"] [data-part="check"] { opacity: 1; scale: 1; }
 }

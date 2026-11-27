@@ -1,4 +1,4 @@
-import { $$, combine, emit, on, part, type Cleanup } from '../../_shared/dom';
+import { $$, combine, emit, on, part, reserveWidth, type Cleanup } from '../../_shared/dom';
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
@@ -34,6 +34,7 @@ export function enhance(root: HTMLElement): Cleanup {
   const focus = (el: HTMLElement) => { $$<HTMLElement>(tree, '[role="treeitem"]').forEach((x) => (x.tabIndex = x === el ? 0 : -1)); el.focus(); };
   const toggle = (el: HTMLElement, open?: boolean) => { if (!el.hasAttribute('aria-expanded')) return; const next = open ?? el.getAttribute('aria-expanded') !== 'true'; el.setAttribute('aria-expanded', String(next)); emit(root, { path: el.querySelector('[data-part="key"]')?.textContent ?? 'root', open: next }); };
   return combine(
+    toggleAll ? reserveWidth(toggleAll, ['Collapse all', 'Expand all']) : () => {},
     on(tree, 'click', (e) => { const row = (e.target as Element).closest('[data-part="row"]'); const it = row?.parentElement as HTMLElement | undefined; if (it) { toggle(it); focus(it); } }),
     on(tree, 'keydown', (e: KeyboardEvent) => {
       const it = (e.target as Element).closest<HTMLElement>('[role="treeitem"]');
