@@ -527,3 +527,11 @@ test('one-line business briefs land on the right page type', () => {
   ];
   for (const [want, brief] of cases) assert.equal(compose(brief).pageType.id, want, brief);
 });
+
+test('the first screen offers other true headlines from the same facts, never near-copies', () => {
+  const bakery = compose('Sourdough bakery on Mill Lane in Frome, open Tuesday to Sunday 7:30 to 15:00, loaves from £4.20, cinnamon buns £3').words.firstScreen;
+  assert.ok(bakery.options.includes('Loaves from £4.20'), JSON.stringify(bakery.options));
+  for (const o of bakery.options) assert.ok(!bakery.headline.toLowerCase().includes(o.toLowerCase()), o);
+  const tally = compose('Tally invoicing app for sole traders: send an invoice from your phone in 30 seconds, chase late payers automatically, £9 a month').words.firstScreen;
+  assert.deepEqual(tally.options, ['Chase late payers automatically']);
+});

@@ -871,6 +871,7 @@ L.push(H('Words from the brief'), '');
   const got = [facts.kind && `kind: ${facts.kind}`, facts.place && `place: ${facts.place}`, facts.street && `street: ${facts.street}`, facts.days && `days: ${facts.days}`, ...figures.map((f) => `${f.value} (${f.label})`), ...facts.claims.map((c) => `"${c}"`), ...facts.offers.map((o) => `offer: ${o}`)].filter(Boolean);
   L.push(got.length ? `Found in the brief: ${got.join('; ')}. Headlines and captions are written from these; nothing else is a fact.` : 'The brief names no place, price, time or figure.');
   if (hero.headline) L.push('', `First screen: eyebrow "${hero.eyebrow ?? '(sample)'}", headline "${hero.headline}"${hero.lede ? `, lede "${hero.lede}"` : ''}${hero.action ? `, action "${hero.action}"` : ''}.`);
+  if (hero.options?.length) L.push(`Other headlines from the same facts, if one says it better: ${hero.options.map((o) => `“${o}”`).join(', ')}.`);
   if (plan.words.missing.length) L.push('', `Still needed (the draft marks these TODO rather than inventing them): ${plan.words.missing.join('; ')}.`);
   L.push('');
 }

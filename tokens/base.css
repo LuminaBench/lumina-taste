@@ -327,3 +327,20 @@
 :where([data-palette]) [hidden]:not([hidden="until-found"]) {
   display: none !important;
 }
+
+/* ---------------------------------------------------------------------------------------------------------------
+   Pressed: every control answers a touch. Zero specificity (:where), so a component's own pressed state wins.
+   Small controls press down a pixel (transform only, so nothing reflows); rows, options and menu items darken a
+   step. Nothing moves under reduced motion; forced colours keep the system's own feedback. */
+@media (prefers-reduced-motion: no-preference) {
+  :where(button, [role="button"], [role="tab"], [role="switch"], summary, [data-part="trigger"], [data-part="toggle"]):where(:not(.lt-btn, :disabled, [aria-disabled="true"])):active {
+    translate: 0 1px;
+    transition: translate 60ms var(--ease-out, ease-out);
+  }
+}
+:where([role="option"], [role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"], [role="gridcell"] > button, [data-part="item"], [data-part="row"]):where(:not(:disabled, [aria-disabled="true"])):active {
+  background-color: color-mix(in oklab, var(--text-primary) 8%, transparent);
+}
+@media (forced-colors: active) {
+  :where([role="option"], [role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"], [data-part="item"], [data-part="row"]):active { background-color: Highlight; color: HighlightText; }
+}

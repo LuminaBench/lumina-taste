@@ -6,6 +6,7 @@
 // admin, settings, inbox, assistant, agent, workspace, directory, app-phone), so their page styles apply.
 //
 // Pure functions, no I/O.
+import { trendFinding, shareFinding } from './finding.mjs';
 import { esc, keepHyphens } from './draft.mjs';
 import { motifFor, motifParts } from './bands.mjs';
 import { plansFrom } from './model.mjs';
@@ -38,7 +39,8 @@ function dashboard(ctx) {
   const metricKpi = (label, k) => {
     const pct = /churn|retention|conversion|margin|growth/i.test(label);
     const base = /net retention/i.test(label) ? 1.08 : /retention/i.test(label) ? 0.91 : /churn/i.test(label) ? 0.021 : /conversion/i.test(label) ? 0.034 : /margin/i.test(label) ? 0.42 : /growth/i.test(label) ? 0.061 : /revenue|mrr|arr|sales/i.test(label) ? 48210 : 1240;
-    const drift = (i) => base * (1 + (((i * 7 + k * 3) % 5) - 2) / (pct ? 40 : 18));
+    // A believable sample: a steady trend with small week-to-week noise (±3%), never a zigzag.
+    const drift = (i) => base * (1 + (((i * 7 + k * 3) % 5) - 2) / (pct ? 60 : 66));
     const spark = Array.from({ length: 12 }, (_, i) => +(drift(i) * (pct ? 1 : (0.82 + i * 0.016))).toFixed(pct ? 4 : 0));
     return { label: cap(label), value: spark.at(-1), previous: spark.at(-2), spark, fmt: pct ? { percent: true, decimals: 1 } : /revenue|mrr|arr|sales/i.test(label) ? { prefix: m.sym, compact: true } : undefined, upIsGood: !/churn|refunds/i.test(label) };
   };
@@ -80,8 +82,14 @@ function dashboard(ctx) {
           ${kpis.map((k) => chart('kpi-card', { label: k.label, value: k.value, previous: k.previous, spark: k.spark }, { size: 'compact', ...(k.fmt ? { format: k.fmt } : {}), ...(k.upIsGood === false ? { upIsGood: false } : {}) }, ' data-chart-slot="kpi"')).join('\n          ')}
         </section>
         <section class="bp-main" aria-label="Charts" data-view="ready"${bars.length ? '' : ' data-one'}>
-          <div class="bp-card" data-chart-slot>${chart('multi-line-chart', { x: w.x, series: [{ name: Many, values: w.values }] }, { title: `${Many} per week`, subtitle: 'Sample data until it is connected', height: 300 })}</div>
-          ${bars.length ? `<div class="bp-card" data-chart-slot>${chart('horizontal-bar-chart', bars, { title: `${Many} by ${breakdownBy.name.toLowerCase()}`, subtitle: 'Last 16' })}</div>` : ''}
+          <div class="bp-card" data-chart-slot>${(() => {
+            // The brief's own headline figure when it names one (monthly revenue), else the records per week; the
+            // title says what the line shows, the subtitle what it is.
+            const lead = briefKpis.find((k) => !k.fmt?.percent) ?? null;
+            const label = lead ? lead.label : Many, values = lead ? lead.spark : w.values;
+            return chart('multi-line-chart', { x: w.x, series: [{ name: label, values }] }, { title: trendFinding(label, values), subtitle: `${label}${lead ? '' : ' per week'}, last ${values.length} weeks · sample data until it is connected`, height: 300, ...(lead?.fmt ? { format: lead.fmt } : {}) });
+          })()}</div>
+          ${bars.length ? `<div class="bp-card" data-chart-slot>${chart('horizontal-bar-chart', bars, { title: shareFinding(rec.many, bars) ?? `${Many} by ${breakdownBy.name.toLowerCase()}`, subtitle: `${Many} by ${breakdownBy.name.toLowerCase()}, last 16` })}</div>` : ''}
         </section>
         <section class="bp-card bp-accounts" aria-labelledby="t-h" data-view="ready">
           <header class="bp-card-head"><h2 class="bp-card-title" id="t-h">${esc(`Latest ${rec.many}`)}</h2><p class="lt-secondary">${esc(`${rows.length} ${rec.many}`)}</p></header>

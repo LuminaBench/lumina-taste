@@ -349,6 +349,15 @@ export function heroCopy(facts, { typeId, product }) {
     // A line above that only repeats the headline is a label over a heading: drop it (keep the town if the headline lacks it).
     eyebrow: headline && facts.kind && headline.toLowerCase().includes(facts.kind.toLowerCase().replace(/^(?:a|an|the)\s+/, '')) ? (facts.place && !headline.includes(facts.place) ? facts.place : null) : eyebrow,
     headline: headline ?? null,
+    // Other true headlines from the same facts, for the person to choose between: what and where, the price people
+    // come for, what it does, a figure with its period. Never more than three, never the chosen one again.
+    options: [...new Set([
+      facts.kind && (facts.street || facts.place || facts.route) ? cap(`${facts.kind.replace(/^(?:a|an|the)\s+/i, '')}${facts.route ? ` from ${facts.route.from} to ${facts.route.to}` : facts.street ? ` on ${facts.street.replace(/^\d+\s+/, '')}` : ` in ${facts.place}`}`) : null,
+      price?.what ? cap(`${/s$/.test(price.what.split(' ').pop()) || /^(fixed|free|work|advice|help|care|tuition|training|support)/i.test(price.what) ? '' : 'a '}${price.what} ${price.from ? 'from' : 'for'} ${price.value.replace(/\s+(a|per)\s+.*/, '')}`) : null,
+      claim ? imperative(claim) : null,
+      facts.claims[1] ? imperative(facts.claims[1]) : null,
+      count && count.what ? `${count.value} ${count.what}${count.per ? ` ${count.per}` : ''}${count.when ? ` ${count.when}` : ''}` : null,
+    ].filter((h) => h && h.split(/\s+/).length <= 12 && !(headline && (headline.toLowerCase().includes(h.toLowerCase()) || h.toLowerCase().includes(headline.toLowerCase())))))].slice(0, 3),
     lede: ledeParts.length ? ledeParts.join(' ') : null,
     note,
     todo: [
