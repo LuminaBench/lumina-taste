@@ -52,7 +52,9 @@ if (!brand && name) {
 const pagePath = plan.draft?.path ? resolve(plan.draft.path) : join(dir, 'index.html');
 const rel = relative(dir, pagePath) || 'index.html';
 const page = existsSync(pagePath) ? readFileSync(pagePath, 'utf8') : '';
-const samples = (page.match(/data-sample/g) ?? []).length;
+// Sample records drawn in the product picture (a device frame) are a product shot; elsewhere they are the page's own.
+const pictured = (page.match(/data-a="table" data-sample/g) ?? []).length;
+const samples = (page.match(/data-sample/g) ?? []).length - pictured;
 const todo = [...new Set([...(name ? [] : ['the business\'s name (the bar says TODO: name until then)']), ...(plan.words?.missing ?? []), ...(plan.draft?.todo ?? [])])];
 const lines = [
   `# ${name ?? 'Your'} starter (${kind})`, '',
@@ -64,6 +66,7 @@ const lines = [
   ...(plan.words?.firstScreen?.options?.length ? [`- Other headlines from the same facts: ${plan.words.firstScreen.options.map((o) => `“${o}”`).join(', ')}`] : []),
   '', '## Before it ships', '',
   ...(samples ? [`- ${samples} part(s) hold sample rows (marked data-sample): replace them with your own records`] : []),
+  ...(pictured ? ['- The product picture shows made-up records (marked data-sample): fine for a launch, but a real screenshot of your product is better'] : []),
   ...todo.map((t) => `- ${t}`),
   `- Check it: node <lumina-taste>/scripts/audit-ui.mjs ${rel} --taste${name ? ` --product "${name}"` : ''}`,
 ];

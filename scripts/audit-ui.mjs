@@ -696,11 +696,15 @@ const TASTE_CHECKS = (arg = null) => {
   // 9b. Leftover sample copy: with --product "Name", the kit's own demo brands and people must be gone.
   if (product) {
     const SAMPLES = ['Halyard', 'Kestrel Labs', 'Moss Studio', 'Juniper & Co', 'Juniper Coffee', 'Juniper Freight', 'Larkspur', 'Harbour & Co', 'Moss & Oak', 'Ana López', 'Kai Moreno', 'Riya Mehta', 'Lee Park', ...kitBrands];
-    const text = document.body.innerText;
+    // A screen drawn inside a device frame (inert, a picture of the product) may show made-up records, as any product
+    // shot does; the page's own words may not.
+    const DEPICT = '.lt-device, [data-mock], [data-app][inert]';
+    let text = document.body.innerText;
+    for (const d of document.querySelectorAll(DEPICT)) { const t = d.innerText; if (t) text = text.split(t).join(' '); }
     const left = SAMPLES.filter((s) => text.includes(s) && !product.toLowerCase().includes(s.toLowerCase()));
     if (left.length) add('taste-sample-copy', null, `Sample copy from the kit is still on the page: ${left.slice(0, 5).map((s) => `“${s}”`).join(', ')}${left.length > 5 ? ` and ${left.length - 5} more` : ''}. Replace it with ${product}’s own names, words and numbers.`, 'error');
     // Rows a draft marked as sample data (data-sample) are not the product's yet.
-    const sampled = [...document.querySelectorAll('[data-sample]')].filter((e) => e.getClientRects().length);
+    const sampled = [...document.querySelectorAll('[data-sample]')].filter((e) => e.getClientRects().length && !e.closest(DEPICT));
     if (sampled.length) add('taste-sample-rows', sampled[0], `${sampled.length} element${sampled.length === 1 ? ' is' : 's are'} still marked data-sample: the draft's made-up rows. Replace them with ${product}’s real records (or an empty state), then remove the attribute.`, 'error');
 
     // 9c. Leftover sample content: sentences and figures that came with a blueprint or a snippet and were

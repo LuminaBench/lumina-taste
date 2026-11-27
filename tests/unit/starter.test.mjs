@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, existsSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, existsSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -44,6 +44,23 @@ test('a café to order from and a podcast player are their own apps, from a plai
   const type = (brief) => JSON.parse(spawnSync(process.execPath, [join(root, 'scripts/compose.mjs'), brief, '--json'], { encoding: 'utf8' }).stdout).pageType.id;
   assert.equal(type('Copper Hare café app to order ahead: menu, basket, collect'), 'app-ordering');
   assert.equal(type('Field Notes podcast app: library, episodes, player'), 'app-listening');
+});
+
+test('made-up records in the product picture pass the ship check; the same rows on the page itself do not', { timeout: 240000 }, () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lt-starter-sw-'));
+  try {
+    const r = spawnSync(process.execPath, [join(root, 'scripts/starter.mjs'), 'software', 'Larkspur, invoicing for small studios, send an invoice in a minute, £12 a month', '--project', dir], { encoding: 'utf8' });
+    assert.equal(r.status, 0, r.stderr);
+    assert.match(readFileSync(join(dir, 'STARTER.md'), 'utf8'), /product picture shows made-up records/);
+    const audit = () => spawnSync(process.execPath, [join(root, 'scripts/audit-ui.mjs'), join(dir, 'index.html'), '--taste', '--product', 'Larkspur', '--viewports', 'desktop', '--modes', 'light'], { encoding: 'utf8' });
+    const ok = audit();
+    assert.equal(ok.status, 0, ok.stdout.split('\n').filter((l) => /✗|!/.test(l)).join('\n'));
+    const page = readFileSync(join(dir, 'index.html'), 'utf8');
+    writeFileSync(join(dir, 'index.html'), page.replace('</main>', '<section aria-label="Invoices"><table data-sample><tr><td>INV-1</td><td>Halyard</td></tr></table></section></main>'));
+    const bad = audit();
+    assert.notEqual(bad.status, 0);
+    assert.match(bad.stdout, /taste-sample-rows/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
 test('an unknown kind or a missing project is a usage error', () => {
