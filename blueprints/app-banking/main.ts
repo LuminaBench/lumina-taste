@@ -9,17 +9,19 @@ import '../../components/ui/navigation/bottom-nav/bottom-nav.css';
 import '../../components/ui/overlays/bottom-sheet/bottom-sheet.css';
 import '../../components/ui/controls/number-pad/number-pad.css';
 import '../../components/ui/controls/settings-group/settings-group.css';
+import '../../components/ui/feedback/pull-refresh/pull-refresh.css';
 import '../_shared/app.css';
 import './page.css';
 import { enhance as appbar } from '../../components/ui/navigation/mobile-app-bar/mobile-app-bar';
 import { enhance as sheet } from '../../components/ui/overlays/bottom-sheet/bottom-sheet';
 import { enhance as pad, setValue } from '../../components/ui/controls/number-pad/number-pad';
 import { enhance as settings } from '../../components/ui/controls/settings-group/settings-group';
+import { enhance as pull, type RefreshDetail } from '../../components/ui/feedback/pull-refresh/pull-refresh';
 import { openDialog } from '../../components/ui/_shared/dom';
 import { render as bars } from '../../components/charts/bar-chart/bar-chart';
 
 pageStates();
-boot({ 'mobile-app-bar': appbar, 'bottom-sheet': sheet, 'number-pad': pad, 'settings-group': settings });
+boot({ 'mobile-app-bar': appbar, 'bottom-sheet': sheet, 'number-pad': pad, 'settings-group': settings, 'pull-refresh': pull });
 const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector<T>(s)!;
 const app = appShell({ home: 'home' });
 
@@ -32,7 +34,7 @@ bars($('#bk-chart'), days.map((label, i) => ({ label, value: spent[i] })), { tit
 const PAY: Record<string, [string, string, string, string]> = {
   coffee: ['Wren Coffee', '−£4.20', 'Today at 08:14 · Contactless', 'Eating out'], tfl: ['Halyard Buses', '−£1.75', 'Today at 07:52 · Contactless', 'Transport'],
   rent: ['Priya Shah', '+£450.00', 'Yesterday at 09:00 · Bank transfer', 'Rent share'], shop: ['Moss Market', '−£38.40', 'Yesterday at 18:40 · Chip and PIN', 'Groceries'],
-  books: ['Larkspur Books', '−£12.99', 'Yesterday at 12:05 · Online', 'Shopping'], gym: ['Kestrel Climbing', '−£44.50', 'Monday at 06:00 · Direct debit', 'Health'],
+  bakery: ['Fernhill Bakery', '−£3.40', 'Today at 09:40 · Contactless', 'Eating out'], books: ['Larkspur Books', '−£12.99', 'Yesterday at 12:05 · Online', 'Shopping'], gym: ['Kestrel Climbing', '−£44.50', 'Monday at 06:00 · Direct debit', 'Health'],
 };
 document.addEventListener('click', (e) => {
   const row = (e.target as Element).closest<HTMLElement>('[data-pay]');
@@ -46,6 +48,16 @@ document.addEventListener('click', (e) => {
   const mark = row.querySelector('.as-mark')!.innerHTML;
   $('#screen-payment .bk-mark').innerHTML = mark;
 }, true);
+// Pull the list down (or press Refresh): the payment that came in since arrives at the top of Today.
+$('#bk-pull').addEventListener('lt-refresh', (e) => {
+  const ev = e as CustomEvent<RefreshDetail>;
+  ev.preventDefault();
+  window.setTimeout(() => {
+    const tpl = document.querySelector<HTMLTemplateElement>('#bk-new');
+    if (tpl) { $('#bk-today').prepend(tpl.content.cloneNode(true)); tpl.remove(); }
+    ev.detail.done('Updated 09:41');
+  }, 700);
+});
 $('#bk-split').addEventListener('click', () => app.say('Split request sent to Priya for half'));
 
 // Send money: who to, how much, one button that says both.

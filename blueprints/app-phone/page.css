@@ -292,15 +292,27 @@ button.ap-row:active { background: var(--bg-surface-3); }
   .ap-device { width: 100%; height: 100dvh; padding-top: env(safe-area-inset-top); border: 0; border-radius: 0; box-shadow: none; }
   .ap-toast { bottom: calc(88px + env(safe-area-inset-bottom)); }
 }
-/* Pushing a screen slides it in from the trailing edge; going back slides it out. Tabs cross-fade. */
+/* Pushing a screen slides it in from the trailing edge over the old one, which drifts back and dims; back is the
+   same in reverse with the leaving screen on top. Tabs cross-fade. On the motion tokens, off under reduced motion. */
+html[data-app] { --ap-dir: 1; }
+html[data-app]:dir(rtl) { --ap-dir: -1; }
 @media (prefers-reduced-motion: no-preference) {
-  html[data-nav="forward"]::view-transition-old(root) { animation: ap-out 280ms var(--ease-out) both; }
-  html[data-nav="forward"]::view-transition-new(root) { animation: ap-in 280ms var(--ease-out) both; }
-  html[data-nav="back"]::view-transition-old(root) { animation: ap-in 280ms var(--ease-out) reverse both; }
-  html[data-nav="back"]::view-transition-new(root) { animation: ap-out 280ms var(--ease-out) reverse both; }
+  html[data-nav]::view-transition-group(root) { animation-duration: var(--dur-4); }
+  html:is([data-nav="forward"], [data-nav="back"])::view-transition-old(root),
+  html:is([data-nav="forward"], [data-nav="back"])::view-transition-new(root) { mix-blend-mode: normal; }
+  html[data-nav="forward"]::view-transition-old(root) { animation: ap-drift-out var(--dur-4) var(--ease-out) both; }
+  html[data-nav="forward"]::view-transition-new(root) { animation: ap-slide-in var(--dur-4) var(--ease-out) both; box-shadow: 0 0 28px oklch(0 0 0 / 0.16); }
+  html[data-nav="back"]::view-transition-old(root) { z-index: 1; animation: ap-slide-out var(--dur-4) var(--ease-out) both; box-shadow: 0 0 28px oklch(0 0 0 / 0.16); }
+  html[data-nav="back"]::view-transition-new(root) { animation: ap-drift-in var(--dur-4) var(--ease-out) both; }
+  html[data-nav="tab"]::view-transition-old(root) { animation: ap-fade-out var(--dur-3) var(--ease-out) both; }
+  html[data-nav="tab"]::view-transition-new(root) { animation: ap-fade-in var(--dur-3) var(--ease-out) both; }
 }
-@keyframes ap-in { from { translate: 100% 0; } }
-@keyframes ap-out { to { translate: -30% 0; opacity: 0.6; } }
+@keyframes ap-slide-in { from { translate: calc(var(--ap-dir) * 100%) 0; } }
+@keyframes ap-slide-out { to { translate: calc(var(--ap-dir) * 100%) 0; } }
+@keyframes ap-drift-out { to { translate: calc(var(--ap-dir) * -28%) 0; filter: brightness(0.9); } }
+@keyframes ap-drift-in { from { translate: calc(var(--ap-dir) * -28%) 0; filter: brightness(0.9); } }
+@keyframes ap-fade-out { to { opacity: 0; } }
+@keyframes ap-fade-in { from { opacity: 0; } }
 @media print { .ap-rail { flex-wrap: wrap; overflow: visible; } .ap-pager { display: none; } }
 /* Forced colours (Windows contrast themes) repaint fills: the meters keep an edge and a system-coloured fill. */
 @media (forced-colors: active) {

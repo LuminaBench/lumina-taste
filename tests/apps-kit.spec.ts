@@ -131,3 +131,84 @@ test('fitness: the rings show the true numbers; Pause holds the timer and says R
   await expect(page.locator('#ft-time')).toHaveText(t!);
   await expect(page.locator('#ft-pause')).toHaveText(/Resume/);
 });
+
+// ------------------------------------------------------------------ native motion and feel (shared shell)
+test('shell: a push slides, a tab cross-fades, and back returns focus to the row that opened the record, with the list where it was', async ({ page }) => {
+  await page.setViewportSize(phone);
+  await open(page, '/blueprints/app-banking/?screen=home');
+  const scroller = page.locator('#screen-home .as-scroll');
+  await scroller.evaluate((el) => { el.scrollTop = 420; });
+  const row = page.locator('[data-pay="books"]');
+  await row.click();
+  // The push runs as a view transition named by its direction.
+  expect(await page.evaluate(() => document.documentElement.dataset.nav)).toBe('forward');
+  await page.waitForFunction(() => document.body.dataset.screen === 'payment' && !document.documentElement.dataset.nav);
+  await expect(page.locator('#pay-h')).toBeFocused();
+  await page.locator('#screen-payment [data-part="back"]').click();
+  expect(await page.evaluate(() => document.documentElement.dataset.nav)).toBe('back');
+  await page.waitForFunction(() => document.body.dataset.screen === 'home' && !document.documentElement.dataset.nav);
+  await expect(row).toBeFocused();
+  expect(await scroller.evaluate((el) => el.scrollTop)).toBeGreaterThan(300);
+  await page.locator('.as-tabs a[href="#screen-card"]').click();
+  expect(await page.evaluate(() => document.documentElement.dataset.nav)).toBe('tab');
+});
+
+test('shell: under reduced motion every change is instant', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize(phone);
+  await open(page, '/blueprints/app-banking/?screen=home');
+  await page.locator('[data-pay="coffee"]').click();
+  expect(await page.evaluate(() => [document.body.dataset.screen, document.documentElement.dataset.nav ?? ''])).toEqual(['payment', '']);
+});
+
+test('messaging: a chat swipes towards the start to show Mute and Archive; the More button is the keyboard path', async ({ page }) => {
+  await page.setViewportSize(phone);
+  await open(page, '/blueprints/app-messaging/?screen=chats');
+  const first = page.locator('#ms-chats [data-part="row"]').first();
+  const box = (await first.boundingBox())!;
+  await page.mouse.move(box.x + box.width * 0.7, box.y + box.height / 2);
+  await page.mouse.down();
+  for (let i = 1; i <= 8; i++) await page.mouse.move(box.x + box.width * 0.7 - i * 25, box.y + box.height / 2);
+  await page.mouse.up();
+  await expect(first).toHaveAttribute('data-open', '');
+  // The drag did not open the chat underneath.
+  expect(await page.evaluate(() => document.body.dataset.screen)).toBe('chats');
+  // Keyboard: the row's More button opens the same actions and moves focus into them.
+  const second = page.locator('#ms-chats [data-part="row"]').nth(1);
+  await second.locator('[data-part="more"]').focus();
+  await page.keyboard.press('Enter');
+  await expect(second).toHaveAttribute('data-open', '');
+  await expect(second.locator('[data-action="mute"]')).toBeFocused();
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#ms-chats [data-part="row"]')).toHaveCount(5);
+  await expect(page.locator('.as-toast')).toHaveText('Climbing on Thursday archived');
+});
+
+test('banking: pull to refresh has a Refresh button that does the same; a new payment arrives at the top', async ({ page }) => {
+  await page.setViewportSize(phone);
+  await open(page, '/blueprints/app-banking/?screen=home');
+  await page.locator('#bk-pull [data-part="refresh"]').click();
+  await expect(page.locator('#bk-pull')).toHaveAttribute('data-state', 'refreshing');
+  await expect(page.locator('#bk-pull [data-part="when"]')).toHaveText('Updated 09:41');
+  await expect(page.locator('#bk-today > li').first()).toContainText('Fernhill Bakery');
+  // The charts and marks in the list are not turned by the indicator's own styles.
+  expect(await page.locator('#bk-chart svg').first().evaluate((s) => getComputedStyle(s).rotate)).toBe('none');
+});
+
+test('sheets: the whole sheet drags down to close once its content is at the top, and focus goes back', async ({ page }) => {
+  await page.setViewportSize(phone);
+  await open(page, '/blueprints/app-booking/?screen=book');
+  await page.locator('#bo-review').click();
+  const sheet = page.locator('#bo-sheet');
+  await expect(sheet).toBeVisible();
+  await page.waitForTimeout(400);
+  const head = (await sheet.locator('.as-sheet-head h2').boundingBox())!;
+  await page.mouse.move(head.x + 20, head.y + 8);
+  await page.mouse.down();
+  for (let i = 1; i <= 10; i++) await page.mouse.move(head.x + 20, head.y + 8 + i * 30);
+  expect(await sheet.evaluate((d) => d.hasAttribute('data-dragging'))).toBe(true);
+  await page.mouse.up();
+  await expect(sheet).toBeHidden();
+  await expect(page.locator('#bo-review')).toBeFocused();
+});

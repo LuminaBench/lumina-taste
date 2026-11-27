@@ -6,7 +6,7 @@
   :scope { display: grid; gap: 28px; font-size: var(--text-ui); }
   [data-part="search"] { position: relative; display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: var(--radius-md); background: var(--bg-surface-2); color: var(--text-secondary); }
   [data-part="search"]:focus-within { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 1px; }
-  [data-part="search"] input { flex: 1; min-width: 0; height: 100%; padding: 0; border: 0; background: none; color: var(--text-primary); font: inherit; outline: none; }
+  [data-part="search"] input { flex: 1; min-width: 0; height: 100%; padding: 0; border: var(--bw) solid transparent; background: none; color: var(--text-primary); font: inherit; outline: none; }
   [data-part="search"] input::placeholder { color: var(--text-muted); }
   [data-part="group"] { display: grid; gap: 8px; }
   [data-part="group"][hidden] { display: none; }
@@ -27,6 +27,8 @@
   /* A switch the size of a thumb, drawn from the checkbox itself. */
   input[role="switch"] { appearance: none; flex: none; position: relative; width: 51px; height: 31px; margin: 0; border-radius: var(--radius-lg); background: var(--bg-surface-3); box-shadow: inset 0 0 0 var(--bw) var(--border-strong); cursor: pointer; transition: background-color var(--dur-2) var(--ease-out); }
   input[role="switch"]::before { content: ""; position: absolute; top: 2px; inset-inline-start: 2px; width: 27px; height: 27px; border-radius: 50%; background: var(--bg-canvas); box-shadow: 0 1px 3px oklch(0 0 0 / 0.25); transition: translate var(--dur-3) var(--ease-overshoot, var(--ease-out)); }
+  /* The row is the target, and the switch on its own still has a 44px hit area around it. */
+  input[role="switch"]::after { content: ""; position: absolute; inset: -7px -4px; }
   input[role="switch"]:checked { background: var(--accent-solid); box-shadow: none; }
   input[role="switch"]:checked::before { translate: 20px 0; }
   input[role="switch"]:dir(rtl):checked::before { translate: -20px 0; }

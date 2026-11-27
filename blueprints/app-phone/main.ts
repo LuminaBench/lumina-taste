@@ -69,10 +69,15 @@ const mark = (id: string) => {
 };
 mark(current);
 
-function show(id: string, dir: 'forward' | 'back' | 'tab' = 'forward') {
+// What opened each pushed screen: going back puts focus on it again, not on the title of the list.
+const openers = new Map<string, HTMLElement>();
+function show(id: string, dir: 'forward' | 'back' | 'tab' = 'forward', from: HTMLElement | null = null) {
   const frame = frameOf(id);
   if (!frame) return;
-  const heading = $<HTMLElement>('h2[tabindex="-1"]', frame);
+  if (dir === 'forward') { const f = from ?? (document.activeElement as HTMLElement | null); if (f && f !== document.body) openers.set(current, f); }
+  const back = dir === 'back' ? openers.get(id) : undefined;
+  openers.delete(id);
+  const heading = back && back.isConnected && frame.contains(back) ? back : $<HTMLElement>('h2[tabindex="-1"]', frame);
   current = id;
   if (tablet.matches) {
     // Two panes: the list stays, the detail pane changes. No slide: the eye stays where it was.
@@ -81,7 +86,10 @@ function show(id: string, dir: 'forward' | 'back' | 'tab' = 'forward') {
   } else if (phone.matches) {
     const swap = () => { mark(id); frame.querySelector('.ap-scroll')?.scrollTo(0, 0); heading?.focus({ preventScroll: true }); };
     const vt = (document as Document & { startViewTransition?: (cb: () => void) => unknown }).startViewTransition;
-    if (vt && !reducedMotion()) { html.dataset.nav = dir; vt.call(document, swap); } else swap();
+    if (vt && !reducedMotion()) {
+      html.dataset.nav = dir;
+      (vt.call(document, swap) as { finished?: Promise<void> })?.finished?.catch(() => {}).finally(() => { if (html.dataset.nav === dir) delete html.dataset.nav; });
+    } else swap();
   } else {
     mark(id);
     frame.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', inline: 'start', block: 'nearest' });
@@ -106,7 +114,7 @@ document.addEventListener('click', (e) => {
   if (!go || e.defaultPrevented) return;
   e.preventDefault();
   if (go.dataset.harbour) setHarbour(go.dataset.harbour);
-  show(go.dataset.go!, (go.dataset.dir as 'back') ?? 'forward');
+  show(go.dataset.go!, (go.dataset.dir as 'back') ?? 'forward', go);
 });
 
 const step = (by: number) => { const i = order.indexOf(current); show(order[Math.max(0, Math.min(order.length - 1, i + by))], by < 0 ? 'back' : 'forward'); };

@@ -6,8 +6,10 @@
   }
   :scope[open] { display: grid; gap: var(--gap-sm); align-content: start; translate: 0 var(--drag, 0px); }
   @starting-style { :scope[open] { translate: 0 100%; } }
-  :scope[data-dragging] { transition: none; }
-  :scope::backdrop { background: var(--scrim); }
+  :scope[data-dragging] { transition: none; cursor: grabbing; }
+  /* The page behind brightens as the sheet is dragged down (--drag-p, 0 to 1), and dims again if it springs back. */
+  :scope::backdrop { background: var(--scrim); opacity: calc(1 - var(--drag-p, 0) * 0.85); transition: opacity var(--dur-4) var(--ease-out); }
+  :scope[data-dragging]::backdrop { transition: none; }
   /* Detents: the sheet has a height and its content scrolls under a grabber that stays put. Dragging up grows it live. */
   :scope[data-detents] { --sheet-h: min(calc(var(--sheet-medium, 52dvh) + var(--grow, 0px)), var(--sheet-large, 92dvh)); height: var(--sheet-h); max-height: none; overflow-y: auto; }
   :scope[data-detents][data-detent="large"] { --sheet-h: var(--sheet-large, 92dvh); }
@@ -31,7 +33,7 @@
   [data-detent-only] { display: none; }
 }
 .lt-sheet[data-detent="large"] [data-detent-only="large"] { display: revert; }
-@media (prefers-reduced-motion: reduce) { .lt-sheet { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .lt-sheet, .lt-sheet::backdrop { transition: none; } }
 /* A contained sheet opens without ::backdrop: a spread shadow dims the box it opens in (and is clipped by it). */
 [data-contained] .lt-sheet[data-contained-open] { position: absolute; inset: auto 0 0 0; z-index: 2; width: 100%; max-height: 90%; box-shadow: 0 0 0 200vmax var(--scrim); }
 [data-contained] .lt-sheet[data-contained-open][data-detents] { --sheet-medium: 56%; --sheet-large: 94%; max-height: none; }

@@ -18,7 +18,9 @@
 .bo-slots [data-part="label"] { font-size: var(--text-ui-sm); }
 
 /* The check-and-book sheet */
-.bo-sheet { display: grid; gap: 16px; }
+.bo-sheet { gap: 16px; }
+/* Only an open sheet is laid out: a closed one stays display: none and never sits over the page. */
+.bo-sheet[open] { display: grid; }
 .bo-sheet-when { display: grid; gap: 2px; margin: 4px 0 0; }
 .bo-sheet-when b { font-family: var(--font-display); font-size: 1.75rem; font-weight: var(--weight-display); letter-spacing: -0.02em; }
 .bo-sheet-when span { color: var(--text-secondary); font-variant-numeric: tabular-nums; }

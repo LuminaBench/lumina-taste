@@ -4,8 +4,9 @@
 .ms-list { gap: 16px; }
 .ms-search { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: var(--radius-md); background: var(--bg-surface-2); color: var(--text-secondary); }
 .ms-search:focus-within { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 1px; }
-.ms-search input { flex: 1; min-width: 0; height: 100%; border: 0; background: none; color: var(--text-primary); font: inherit; outline: none; }
+.ms-search input { flex: 1; min-width: 0; height: 100%; border: var(--bw) solid transparent; background: none; color: var(--text-primary); font: inherit; outline: none; }
 .ms-search input::placeholder { color: var(--text-muted); }
+.ms-swipe { --as-rule-in: 66px; }
 .as-mark[data-n] { width: 52px; height: 52px; font-size: var(--text-ui); }
 .as-mark[data-n="0"] { background: color-mix(in oklab, var(--accent-solid) 18%, var(--bg-surface-1)); color: var(--accent-text); }
 .as-mark[data-n="1"] { background: color-mix(in oklab, var(--highlight) 24%, var(--bg-surface-1)); color: var(--text-primary); }
