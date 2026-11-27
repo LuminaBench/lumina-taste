@@ -337,6 +337,8 @@ The kit's split hero (a line above, a three-line headline, a paragraph, two butt
 | Cover · Mosaic | `hero-cover` / `hero-mosaic` | A name worth setting big · three to five real pictures of one set |
 | Film | `hero-video data-variant="full"` | A real 8–20 second film |
 
+The gallery's First screens page shows every one live, side by side; when the person points at one, `compose.mjs "<brief>" --hero <id>` (split, overlap, edge, product, bleed, wide, tucked, poster, menu, departures, cover, mosaic, film) uses it, and the plan records it as their choice.
+
 Every first screen: the headline, one sentence, one action and at most one quiet link, no note under the buttons, 40 words at most (`taste-word-budget`). Every bar contrasts with its page: `navbar-simple data-tone="dark"` (ink; paper on a dark page) or `"accent"`, `data-variant="split"` to centre a maker's name, `"minimal"` over a cover. Feet: `footer-minimal`, `site-footer data-variant="wordmark"` (the name across the column), or `"contact"` (phone and address set large). Sections break the grid with variants, not new blocks: `media-band data-variant="bleed"`, `offer-cards data-variant="over"`, `feature-split data-variant="asym"`. No two neighbouring sections share a composition.
 
 Rules: one signature per page; never the same shape twice in a row; at most two rails; centre only what is symmetrical; the accent in three places at most; one left edge from the logo to the footer. `compose.mjs` assigns layouts that satisfy these; the critic reports the ones it can measure.

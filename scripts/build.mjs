@@ -4,7 +4,7 @@
 import { build } from 'esbuild';
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -99,6 +99,15 @@ for (const bp of blueprints) {
   // bare for a frame, then moved it: a layout shift of up to 0.9). The script stays where the page put it.
   const page = readFileSync(join(src, 'index.html'), 'utf8').replace('</head>', '  <link rel="stylesheet" href="./main.css">\n</head>').replace(/<script type="module" src="\.\/main\.ts"><\/script>/, '<script type="module" src="./main.js"></script>');
   writeFileSync(join(out, 'index.html'), page);
+}
+
+// First screens: every hero composition as a page of its own, for the gallery's side-by-side view
+// (#/first-screens). The markup is the compositions test's own, so the gallery shows exactly what is tested.
+if (existsSync(join(root, 'tests/compositions/build.mjs'))) {
+  const { compositionFiles } = await import(pathToFileURL(join(root, 'tests/compositions/build.mjs')).href);
+  const files = await compositionFiles();
+  mkdirSync(join(dist, 'first-screens'), { recursive: true });
+  for (const [f, text] of Object.entries(files)) writeFileSync(join(dist, 'first-screens', f), text);
 }
 
 // React harness used by the test suite (not part of the hosted gallery).

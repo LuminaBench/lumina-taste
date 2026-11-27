@@ -316,7 +316,9 @@ export function heroCopy(facts, { typeId, product }) {
     if (facts.offers.length) ledeParts.push(`${cap(facts.offers.join(' and '))}${facts.place && !headline?.includes(facts.place) ? ` in ${facts.place}` : ''}.`);
     const others = facts.prices.filter((p) => p !== price && p.what);
     if (typeId !== 'service-landing' && price && !headline?.includes(price.value)) ledeParts.push(`${cap(price.what ?? 'prices')} ${price.from ? 'from' : 'at'} ${price.value}.`);
-    for (const p of others.slice(0, 1)) ledeParts.push(`${cap(p.what)} ${p.from ? 'from' : 'for'} ${p.value}.`);
+    // A price named by its period reads as the period: "£48 a month", never "Monthly for £48".
+    const PERIOD = { monthly: 'month', yearly: 'year', annual: 'year', weekly: 'week', daily: 'day', nightly: 'night' };
+    for (const p of others.slice(0, 1)) ledeParts.push(PERIOD[p.what.toLowerCase()] ? `${p.from ? 'From ' : ''}${p.value} a ${PERIOD[p.what.toLowerCase()]}.` : `${cap(p.what)} ${p.from ? 'from' : 'for'} ${p.value}.`);
     for (const d of facts.durations.filter((x) => x.phrase && !headline?.includes(x.value)).slice(0, 1)) ledeParts.push(`${cap(d.phrase)}.`);
   } else {
     for (const c of facts.claims.slice(headline === imperative(claim ?? '') ? 1 : 0, 2)) ledeParts.push(`${name ?? 'It'} ${c}.`);

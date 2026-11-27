@@ -2,6 +2,7 @@
 import { BLUEPRINTS, CHARTS, COMPARE, STYLES, UI } from './generated/registry';
 import { PALETTES, TYPOGRAPHY } from '../engine/profiles/options.mjs';
 import { ICON, announce, copyText, ensureFont, esc, html, setTheme, syncRoots, theme, themeAttrs } from './core';
+import { viewFirsts } from './firsts';
 import { byId, unmountPreviews, viewElement, viewIndex, fitMade, brief } from './elements';
 import { viewCompare } from './compare';
 import { viewBeforeAfter, viewMoments } from './moments';
@@ -264,6 +265,7 @@ function render() {
   else if (r.name === 'pages' || r.name === 'blueprints') viewPages(r.id);
   else if (r.name === 'palettes') viewPalettes(r.id);
   else if (r.name === 'compare') viewCompare(main, r.id);
+  else if (r.name === 'first-screens') cleanups.push(viewFirsts(main));
   else if (r.name === 'moments') cleanups.push(viewMoments(main, r.id));
   else if (r.name === 'before-after') cleanups.push(viewBeforeAfter(main));
   else if (r.id && byId(r.id)) viewElement(main, r.id);

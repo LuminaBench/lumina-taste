@@ -156,6 +156,23 @@ export function heroPicture(ctx) {
 }
 
 /** A thin brief still gets one picture: the subject's drawing large, with its name and where it is. */
+/** The words on the picture band: something the first screen does not already say (never its headline again). */
+function pictureLine(ctx, name) {
+  const f = ctx.facts, said = ` ${String(ctx.hero?.headline ?? '')} ${String(ctx.hero?.lede ?? '')} `.toLowerCase();
+  const fresh = (t) => t && !said.includes(t.toLowerCase().replace(/\.$/, '')) && !t.toLowerCase().split(/,|\s+in\s+/)[0].trim().split(' ').every((w) => said.includes(w));
+  const join = (xs) => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}` : xs[0]);
+  const offers = f.offers?.length ? cap(join(f.offers.slice(0, 3))) : null;
+  const items = (f.prices ?? []).filter((p) => p.what).map((p) => p.what.replace(/^(?:a|an|the)\s+/i, ''));
+  const candidates = [
+    f.days ? `Open ${f.days}${(f.times ?? [])[0]?.value ? `, from ${f.times[0].value}` : ''}` : null,
+    offers,
+    items.length >= 2 ? cap(join(items.slice(0, 3))) : null,
+    f.claims?.[1] ? cap(f.claims[1]) : null,
+    f.street ? `On ${f.street.replace(/^\d+\s+/, '')}${f.place ? `, ${f.place}` : ''}` : null,
+  ];
+  return candidates.find(fresh) ?? `${name ?? ''}${f.place ? ` in ${f.place}` : ''}`;
+}
+
 export function pictureBand(ctx) {
   // The head noun of the brief's main count names the thing ("food parcels" → a parcel), else its kind.
   const head = (ctx.facts.counts[0]?.what ?? '').split(' ').pop();
@@ -171,7 +188,7 @@ export function pictureBand(ctx) {
       <figcaption class="lt-visually-hidden">${esc(`${ctx.product ?? name}${ctx.facts.place ? `, ${ctx.facts.place}` : ''}`)}</figcaption>
     </figure>
   </figure>
-  <div data-part="words" data-tone="dark"><h2 id="h-picture">${keepHyphens(esc(`${name ?? ''}${ctx.facts.place ? ` in ${ctx.facts.place}` : ''}`))}</h2></div>
+  <div data-part="words" data-tone="dark"><h2 id="h-picture">${keepHyphens(esc(pictureLine(ctx, name)))}</h2></div>
 </section>` };
 }
 

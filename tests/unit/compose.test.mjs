@@ -535,3 +535,12 @@ test('the first screen offers other true headlines from the same facts, never ne
   const tally = compose('Tally invoicing app for sole traders: send an invoice from your phone in 30 seconds, chase late payers automatically, £9 a month').words.firstScreen;
   assert.deepEqual(tally.options, ['Chase late payers automatically']);
 });
+
+test('--hero uses the first screen the person pointed at, and says so', () => {
+  const b = 'Home page for Crumb & Co, a sourdough bakery at 12 Mill Lane, Frome, loaves from £4.20, cinnamon buns £3 and a bread class for £65';
+  assert.equal(compose(b).artDirection.hero.composition, 'menu');
+  const chosen = compose(b, '--hero', 'cover').artDirection.hero;
+  assert.equal(chosen.composition, 'cover');
+  assert.match(chosen.why, /chosen by the person/);
+  assert.equal(compose(b, '--hero', 'nonsense').artDirection.hero.composition, 'menu', 'an unknown name keeps the composer\'s choice');
+});

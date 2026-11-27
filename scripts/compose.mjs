@@ -43,13 +43,15 @@ const lookFlags = { palette: opt('palette', null), typography: opt('typeface', n
 const brandSrc = opt('brand-from', null);
 const framework = opt('framework', 'static');
 const project = opt('project', '/abs/app');
+// --hero <id>: the first screen the person pointed at (the gallery's First screens), instead of the composer's choice.
+const heroChoice = (() => { const i = args.indexOf('--hero'); if (i < 0) return null; const v = args[i + 1]; args.splice(i, 2); return v ?? null; })();
 // --media <folder>: the person's own photographs, logo, video and menu, read first and used before anything else.
 const mediaDir = (() => { const i = args.indexOf('--media'); if (i < 0) return null; const v = args[i + 1]; args.splice(i, 2); return v ? resolve(v) : null; })();
 const media = mediaDir ? scanMedia(mediaDir) : null;
 const menuPhrases = media ? menuFrom(media) : [];
 // A flag the composer does not know would otherwise become words of the brief and land on the page.
 const unknown = args.filter((a) => /^--[a-z]/.test(a));
-if (unknown.length) { console.error(`Unknown option ${unknown.join(', ')}. Options: --type, --palette, --typeface, --mode, --style, --media, --brand-from, --framework, --project, --write, --json, --images (run with no brief for the full usage).`); process.exit(2); }
+if (unknown.length) { console.error(`Unknown option ${unknown.join(', ')}. Options: --type, --palette, --typeface, --mode, --style, --media, --hero, --brand-from, --framework, --project, --write, --json, --images (run with no brief for the full usage).`); process.exit(2); }
 const brief = [args.join(' ').trim(), ...menuPhrases].filter(Boolean).join(', ');
 if (!brief && !forceTypeRaw) {
   console.error('Usage: node scripts/compose.mjs "<one-line brief>" [--type <page-type>] [--brand-from <#hex | logo.png|svg | site.html | url>] [--framework static|tailwind|next|vanilla|react] [--project /abs/app] [--write] [--json]');
@@ -235,7 +237,7 @@ const flow = flow0 && type.screens ? { ...flow0, screens: type.screens.map(([id,
 let sections = type.sections.map((s, i) => ({ n: i + 1, ...s, exists: !s.id || uiIds.has(s.id) }));
 // Developer products show code: a code-block figure takes the place of the hero's product frame.
 // Art direction: one signature, a hero, a layout for each section and where colour and type may go.
-const subjectInput = { facts, items: itemsFrom(facts), software: ['landing', 'dev-landing'].includes(type.id) };
+const subjectInput = { facts, items: itemsFrom(facts), software: ['landing', 'dev-landing'].includes(type.id), heroChoice };
 const art0 = direct({ type, domain, profile, sections, uiIds, ...subjectInput });
 for (const x of sections) if (/^hero-/.test(x.id ?? '') && art0.composition) {
   if (art0.hero !== x.id) { x.alt = [...new Set([x.id, ...(x.alt ?? [])])]; x.id = art0.hero; }

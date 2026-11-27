@@ -365,9 +365,9 @@ html[data-view="stage"] body { min-height: 0; display: block; }
 .g-side { display: grid; gap: 10px; margin: 0; min-width: 0; }
 .g-side figcaption { color: var(--text-secondary); font-size: 0.875rem; font-weight: 600; }
 .g-side[data-side="after"] figcaption { color: var(--text-primary); }
-/* Eight sections on a phone: two rows of four, every one visible. */
+/* Nine sections on a phone: three rows of three, every one visible. */
 @media (max-width: 480px) {
-  .g-nav { display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; row-gap: 2px; }
+  .g-nav { display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; row-gap: 2px; }
 }
 /* Before / after, the kit's proof: three figure panels in a row (one column on a phone). */
 .g-ba-figs h2 { margin: 0 0 28px; font-family: var(--font-display); font-size: var(--step-3); font-weight: var(--weight-display); letter-spacing: var(--tracking-display); text-wrap: balance; }
@@ -433,3 +433,7 @@ html[data-view="stage"] body { min-height: 0; display: block; }
 .g-sec :is(td, th, h2) { overflow-wrap: anywhere; }
 /* Each mode panel shows the palette's own ground, so light and dark read as what they are. */
 .g-pal-mode { padding: 20px; border-radius: var(--radius-xl); background: var(--bg-canvas); color: var(--text-primary); }
+
+.g-first-h { margin: 40px 0 16px; font-family: var(--font-display); font-size: 1.5rem; font-weight: var(--weight-display); letter-spacing: var(--tracking-display); }
+.g-first .g-page-thumb iframe { width: 1440px; }
+.g-bars { grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); align-items: start; }

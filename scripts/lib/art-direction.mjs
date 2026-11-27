@@ -4,7 +4,7 @@
 // in a row), and says where the accent colour and the type sizes are allowed to go.
 //
 // Pure functions, no I/O: compose.mjs calls direct(); tests call it directly.
-import { chooseHero, chooseChrome, sectionComposition } from '../../engine/compose/compositions.mjs';
+import { chooseHero, chooseChrome, sectionComposition, HERO_COMPOSITIONS } from '../../engine/compose/compositions.mjs';
 
 /** How a section block is laid out, and the visual shape that layout has (what must not repeat next door). */
 const LAYOUTS = {
@@ -90,7 +90,7 @@ const DEFAULT_SIGNATURE = { name: 'One clear picture', how: 'Choose one thing to
 /**
  * @param {{ type: any, domain: any, profile: any, sections: any[], uiIds: Set<string>, facts?: any, items?: any[], software?: boolean }} input
  */
-export function direct({ type, domain, profile, sections, uiIds, facts = null, items = [], software = false }) {
+export function direct({ type, domain, profile, sections, uiIds, facts = null, items = [], software = false, heroChoice = null }) {
   const marketing = type.kind === 'marketing';
   const style = profile.style ?? null;
   const printlike = (style && PRINTLIKE_STYLES.has(style)) || (!style && (PRINTLIKE_DOMAINS.has(domain?.id) || ['event', 'cause'].includes(type.id)));
@@ -101,6 +101,8 @@ export function direct({ type, domain, profile, sections, uiIds, facts = null, i
   let hero = heroSection?.id ?? null, heroWhy = null, composition = null, chrome = null;
   if (marketing && heroSection) {
     composition = chooseHero({ type, domain, facts: facts ?? { brief: '' }, items, software });
+    // The person pointed at a first screen (compose --hero <id>, the gallery's First screens): theirs, not the default.
+    if (heroChoice && HERO_COMPOSITIONS[heroChoice]) composition = { id: heroChoice, ...HERO_COMPOSITIONS[heroChoice], why: 'chosen by the person (--hero)' };
     // A statement style (swiss, editorial…) keeps the words first when the subject has no shape of its own.
     if (STATEMENT_STYLES.has(style) && ['overlap', 'edge', 'product', 'wide'].includes(composition.id) && type.id !== 'dev-landing' && type.id !== 'landing') composition = { ...composition, id: 'tucked', block: 'hero-statement', variant: 'tucked', name: 'huge type with a small picture tucked in', why: `the ${style} style sets the words first; one small picture beside them` };
     if (!uiIds.has(composition.block)) composition = { id: 'split', block: 'hero-split', variant: null, name: 'split', why: 'the composition this subject needs is not installed' };
