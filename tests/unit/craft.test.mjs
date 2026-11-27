@@ -28,7 +28,7 @@ const BRIEFS = [
 test('scenes: art-panel.ts and image-motifs.mjs pick and draw exactly the same scene', async () => {
   const ts = await component();
   const names = Object.keys(loadMotifs());
-  assert.equal(names.length, 47, 'the 47 motif names stay');
+  assert.equal(names.length, 48, 'the 48 motif names stay');
   for (const b of BRIEFS) {
     assert.deepEqual(ts.rankMotifs(b), rankMotifs(b), `rank: ${b}`);
     assert.deepEqual(ts.pickScene(b), pickScene(b), `pick: ${b}`);

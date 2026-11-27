@@ -6,7 +6,11 @@
 // Pure functions, no I/O.
 import { beatAttrs } from './rhythm.mjs';
 
-export const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+// A "$" in the brief ("$20 a month") would be read as "$2" by every String.replace that inserts escaped text, so
+// escaped text carries it as a private-use mark; compose.mjs turns the mark back into "$" as it writes or prints.
+export const DOLLAR = '\uE024';
+export const unmark = (s) => (typeof s === 'string' ? s.replaceAll(DOLLAR, '$') : s);
+export const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/\$/g, DOLLAR);
 
 /** Split a page at <main>: the text before, each top-level child of <main> as its own string, and the text after. */
 export function splitMain(page) {
@@ -85,7 +89,9 @@ export function applyHeroCopy(html, copy) {
   if (copy.eyebrow) out = setPart(out, 'eyebrow', esc(copy.eyebrow)); else drop('eyebrow');
   if (!copy.lede) drop('lede');
   if (!copy.note) drop('note');
-  if (copy.headline) out = out.replace(/(<h1\b[^>]*>)[\s\S]*?(<\/h1>)/, `$1${keepHyphens(esc(copy.headline))}$2`);
+  // No headline in the brief: the name, else a marked gap, never the sample's own line.
+  const h1 = copy.headline ?? copy.name ?? 'TODO: the one line that says what this is';
+  out = out.replace(/(<h1\b[^>]*>)[\s\S]*?(<\/h1>)/, (m, a, b) => `${a}${keepHyphens(esc(h1))}${b}`);
   if (copy.secondary) out = out.replace(/(<a class="lt-btn"[^>]*data-variant="(?:ghost|secondary)"[^>]*>)[^<]*/, `$1${esc(copy.secondary)} `);
   if (copy.action) {
     // The primary action in the subject's words: every button that said the sample's action says this one.

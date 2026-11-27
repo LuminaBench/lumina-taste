@@ -10,6 +10,10 @@ const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 const DAY = `(?:${DAYS.join('|')})s?`;
 const STREET = '(?:Lane|Street|Road|Row|Way|Square|Avenue|Hill|Place|Yard|Walk|Terrace|Parade|Quay|Wharf|Gate|Green|Close|Crescent|Market)';
 const UNIT = '(?:second|minute|min|hour|day|week|month|year|night)s?';
+// Plain verbs a clause opens with when it says what a product does: "send an invoice in a minute".
+const CLAIM_VERB = /^(send|chase|get|track|book|find|plan|pay|see|keep|share|write|add|build|run|ship|query|store|sync|manage|check|watch|read|record|log|learn|compare|save|move|sign|scan|turn|answer|catch|cut|deploy|test|search|ask|schedule|invoice|split|draw|edit|publish|collect|post|preview|review|merge|host|monitor|automate|replace)$/i;
+// Verbs that open a giving clause: "donate £10 to fill a bag".
+const GIVE = /^(?:donate|give|gift|sponsor|pledge|chip)$/i;
 const NUM_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twelve: 12 };
 // Words that end a noun phrase when reading forwards or backwards from a figure.
 const STOP = new Set(['a', 'an', 'the', 'and', 'or', 'for', 'from', 'in', 'on', 'at', 'of', 'to', 'with', 'that', 'which', 'who', 'is', 'are', 'was', 'open', 'opens', 'gave', 'give', 'gives', 'sends', 'send', 'by', 'it', 'its', 'our', 'their', 'per', 'every', 'each', 'last', 'this', 'than', 'up', 'out', 'about', 'around', 'over', 'under', 'into', 'within', 'after', 'before']);
@@ -62,7 +66,7 @@ export function extractFacts(brief, { product = null } = {}) {
   // "Moss Yard climbing and strength gym in…", or a brief that opens with the kind: "Sourdough bakery on…".
   const KSTOP = '(?:on|in|at|for|from|that|which|who|with|near|run|based|open|opening|every)';
   const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const anchored = (product && new RegExp(`^\\s*${esc(product)}(?:\\s+(?:API|SDK|App))?\\s*[,:]?\\s+([a-z][\\w'’-]*(?:\\s+[a-z][\\w'’-]*){0,4}?)(?=\\s+${KSTOP}\\b|\\s*[,.;:]|\\s*$)`).exec(b))
+  const anchored = (product && new RegExp(`^\\s*${esc(product)}(?:\\s+(?:API|SDK|App|CLI))?\\s*[,:]?\\s+([a-z][\\w'’-]*(?:\\s+[a-z][\\w'’-]*){0,4}?)(?=\\s+${KSTOP}\\b|\\s*[,.;:]|\\s*$)`).exec(b))
     || (!product && new RegExp(`^\\s*([A-Z][a-z][\\w'’-]*(?:\\s+[a-z][\\w'’-]*){0,3}?)(?=\\s+${KSTOP}\\b|\\s*[,;:])`).exec(b));
   // Not a kind of business: a verb phrase, a time, or the page itself ("bank app", "status page", "workspace settings").
   const plausible = (k) => k && !/\b(is|are|was|has|have|can|will)\b/.test(k) && !/^(first|week|month|year|day|calendar|thread|plan|training|today|this)\b/i.test(k) && !/\b(app|apps|page|settings|pricing|dashboard|website|site|homepage)$/i.test(k.trim());
@@ -85,6 +89,8 @@ export function extractFacts(brief, { product = null } = {}) {
     if (DAYS.includes(p) || /^(January|February|March|April|May|June|July|August|September|October|November|December)$/.test(p) || p === product) continue;
     facts.place = p; break;
   }
+  // Where it comes from: "handmade stoneware mugs from Cornwall" (not a route, not a price, not a month).
+  if (!facts.route) { const o = /\bfrom\s+([A-Z][a-zA-Z'’-]+(?:\s+[A-Z][a-zA-Z'’-]+)?)(?=[,.;]|\s*$)/.exec(b)?.[1]; if (o && !DAYS.includes(o) && !/^(January|February|March|April|May|June|July|August|September|October|November|December)$/.test(o) && o !== product) facts.origin = o; }
   const audM = /\bfor\s+((?:small\s+|independent\s+|busy\s+|local\s+)?[a-z]+(?:ers|ists|ants|ents|people|teams|families|parents|owners))\b/.exec(b);
   if (audM && !/^(a|an|the)$/.test(audM[1])) facts.audience = audM[1];
 
@@ -122,6 +128,12 @@ export function extractFacts(brief, { product = null } = {}) {
     const at = m.index + (m[1]?.length ?? 0);
     // A price after a comma starts its own clause: it belongs to the product, not to the words before it.
     let what = /,\s*$/.test(b.slice(0, m.index)) ? '' : nounBefore(b, m.index);
+    // The clause the price closes, back to the comma: "fish and chips £14" names "fish and chips", not "chips".
+    const clause = clean(b.slice(b.lastIndexOf(',', m.index - 1) + 1, m.index));
+    const cw = words(clause);
+    // "donate £10 to fill a bag": a clause that opens with a verb is a statement, said as the brief says it.
+    if (cw.length === 1 && GIVE.test(cw[0])) { facts.says.push(clean(`${clause} ${m[0]} ${/^\s+(to\s+[^,.;]+)/.exec(b.slice(m.index + m[0].length))?.[1] ?? ''}`).replace(/^\w/, (c) => c.toLowerCase())); continue; }
+    if (cw.length >= 2 && cw.length <= 5 && !/\d/.test(clause) && !VERBS.test(cw[0]) && !GIVE.test(cw[0]) && !/^(?:a|an|the|from|for|over|under|at|by|with)$/i.test(cw.at(-1)) && /\b(?:and|&|with|of)\b/.test(clause) && !/^(?:open|opens|phone|call|email|tickets?)\b/i.test(clause)) what = clause;
     const after = nounAfter(b, m.index + m[0].length);
     // "a £40,000 single-storey extension": the noun follows the price.
     if (after && (!what || /\b(?:a|an)\s*$/.test(b.slice(0, at)))) what = after;
@@ -190,7 +202,7 @@ export function extractFacts(brief, { product = null } = {}) {
   // "Tally invoicing app: send an invoice from your phone in 30 seconds, chase late payers automatically": what
   // follows a colon, clause by clause, when a clause opens with a plain verb. Stored as "sends…", like the above.
   if (!facts.claims.length && b.includes(':')) {
-    const BASE = /^(send|chase|get|track|book|find|plan|pay|see|keep|share|write|add|build|run|ship|query|store|sync|manage|check|watch|read|record|log|learn|compare|save|move|sign|scan|turn|answer|catch|cut|deploy|test|search|ask|schedule|invoice|split|draw|edit|publish|collect|post)$/i;
+    const BASE = CLAIM_VERB;
     for (const part of b.slice(b.indexOf(':') + 1).split(/,\s*|;\s*/)) {
       const ws = words(clean(part));
       if (ws.length < 3 || !BASE.test(ws[0]) || /[£$€]/.test(part)) continue;
@@ -199,9 +211,23 @@ export function extractFacts(brief, { product = null } = {}) {
       if (facts.claims.length >= 2) break;
     }
   }
+  // "Larkspur, invoicing for small studios, send an invoice in a minute": a clause after the name that opens with a
+  // plain verb says what the product does, as surely as one after a colon.
+  if (!facts.claims.length) {
+    for (const part of b.split(/,\s*|;\s*/).slice(1)) {
+      const ws = words(clean(part));
+      if (ws.length < 3 || !CLAIM_VERB.test(ws[0]) || /[£$€]/.test(part)) continue;
+      const v = ws[0].toLowerCase();
+      facts.claims.push(clean(part).replace(/^\w+/, /(ch|sh|s|x|z)$/.test(v) ? `${v}es` : `${v}s`));
+      if (facts.claims.length >= 2) break;
+    }
+  }
   // Offers: the things made or sold, after building/making/selling/offering.
   const offM = /\b(?:building|builds|making|makes|selling|sells|offering|offers|baking|bakes|serving|serves|repairing|installing|designing|teaching|running|runs)\s+(.+?)(?=,|[.;]|\s+(?:for|in|on|from|with|that)\s|$)/.exec(b);
   if (offM) for (const part of offM[1].split(/\s+and\s+|,\s*/)) { const o = clean(part); if (o && words(o).length <= 4) facts.offers.push(o); }
+  // A "kind" that is only the start of what it does ("deploy previews" in "deploy previews for every pull request")
+  // is a claim, not a kind of business.
+  if (facts.kind && facts.claims.some((c) => c.replace(/^(\w+?)(?:es|s)\b/, '$1').toLowerCase().startsWith(facts.kind.toLowerCase()))) facts.kind = null;
   Object.assign(facts, listsFrom(b));
   return facts;
 }
@@ -291,7 +317,7 @@ export function heroCopy(facts, { typeId, product }) {
   let headline = null;
   // A place, a practice, a studio or a maker: say what it is and where, plainly ("Family dentist on Harrogate
   // Road", "Car and foot ferry from Ardmore to Kestrel Isle"). The price goes to the picture, not the headline.
-  const where2 = facts.route ? ` from ${facts.route.from} to ${facts.route.to}` : facts.street ? ` on ${facts.street.replace(/^\d+\s+/, '')}${facts.place ? `, ${facts.place}` : ''}` : facts.place && !facts.kind?.includes(facts.place) ? ` in ${facts.place}` : '';
+  const where2 = typeId === 'brand-landing' && facts.origin && !facts.place ? ` from ${facts.origin}` : facts.route ? ` from ${facts.route.from} to ${facts.route.to}` : facts.street ? ` on ${facts.street.replace(/^\d+\s+/, '')}${facts.place ? `, ${facts.place}` : ''}` : facts.place && !facts.kind?.includes(facts.place) ? ` in ${facts.place}` : '';
   // A service with a price and how long it takes keeps that ("Single-storey extensions in 12 weeks"): it is the better line.
   const timed = typeId === 'service-landing' && price?.what && facts.durations.some((d) => d.what === price.what);
   if (!timed && where2 && ['venue', 'service-landing', 'portfolio', 'brand-landing'].includes(typeId) && facts.kind && !/\b(app|page|settings|pricing|dashboard|tool)\b/.test(facts.kind) && facts.kind.split(' ').length <= 6) headline = cap(`${facts.kind.replace(/^(?:a|an|the)\s+/i, '')}${where2}`);
@@ -317,6 +343,7 @@ export function heroCopy(facts, { typeId, product }) {
     if (typeId === 'cause' && facts.claims.length && !facts.counts.some((c) => headline?.includes(c.value) && facts.claims[0].includes(c.value))) ledeParts.push(`${cap(facts.claims[0])}.`);
     if (facts.offers.length) ledeParts.push(`${cap(facts.offers.join(' and '))}${facts.place && !headline?.includes(facts.place) ? ` in ${facts.place}` : ''}.`);
     const others = facts.prices.filter((p) => p !== price && p.what);
+    if (typeId === 'cause' && facts.says.length) ledeParts.push(`${cap(facts.says[0])}.`);
     if (typeId !== 'service-landing' && price && !headline?.includes(price.value)) ledeParts.push(`${cap(price.what ?? 'prices')} ${price.from ? 'from' : 'at'} ${price.value}.`);
     // A price named by its period reads as the period: "£48 a month", never "Monthly for £48".
     const PERIOD = { monthly: 'month', yearly: 'year', annual: 'year', weekly: 'week', daily: 'day', nightly: 'night' };

@@ -9,7 +9,7 @@
 //   node scripts/compose.mjs "home page for Kiln & Co, a pottery in Penryn" --brand-from ./logo.svg --project /abs/site --write
 import { scanMedia, menuFrom } from './lib/media-intake.mjs';
 import { spawnSync } from 'node:child_process';
-import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync as writeRaw } from 'node:fs';
 import { basename, dirname, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { lookFor } from './lib/image-treat.mjs';
@@ -21,7 +21,9 @@ import { boldIdea, colourName } from '../engine/compose/idea.mjs';
 import { brandFrom } from '../engine/compose/brand.mjs';
 import { renderBand, navBar, footer as footerBar, heroPicture, pictureBand, pinnedSteps, sideScroll, motifFor, motifParts, sceneFor, sceneParts, isSoftware, itemsFrom } from '../engine/compose/bands.mjs';
 import { rankMotifs } from './lib/image-motifs.mjs';
-import { splitMain, joinMain, idOfBlock, applyBeat, applyHeroCopy, heroIdeaPanel, setHeroVisual, setFacts, applyMediaIdea, applyClose, applyHours, ideaComment, esc } from '../engine/compose/draft.mjs';
+import { splitMain, joinMain, idOfBlock, applyBeat, applyHeroCopy, heroIdeaPanel, setHeroVisual, setFacts, applyMediaIdea, applyClose, applyHours, ideaComment, esc, unmark } from '../engine/compose/draft.mjs';
+// Every file and every line printed turns the escaped dollar mark back into "$" (see draft.mjs).
+const writeFileSync = (path, data, ...rest) => writeRaw(path, unmark(data), ...rest);
 import { pageModel, appFlow } from '../engine/compose/model.mjs';
 import { composeHero, fitWords } from '../engine/compose/hero.mjs';
 import { PAGES } from '../engine/compose/pages.mjs';
@@ -215,12 +217,14 @@ const afterFor = [...brief.matchAll(new RegExp(`\\bfor\\s+(${NAME})(?=[\\s,.;:)]
 const leading = brief.match(new RegExp(`^(${NAME}),\\s+(?:an?|the)\\s`))?.[1];
 // "Kestrel Dental, family dentist…", "Halyard Ferries: car and foot ferry…", "Moss Yard climbing gym…":
 // two or more capitalised words opening the brief are its name (a trailing API, App or SDK is what it is).
-const opening = brief.match(/^((?:[A-Z][\w.'’-]*)(?:\s+(?:&\s+)?[A-Z][\w.'’-]*){1,3})(?=[\s,:;]|$)/)?.[1]?.replace(/\s+(API|SDK|App|CLI)$/, '');
+const opening = brief.match(/^((?:[A-Z][\w.'’-]*)(?:\s+(?:(?:&|and|of)\s+)?[A-Z][\w.'’-]*){1,3})(?=[\s,:;]|$)/)?.[1]?.replace(/\s+(API|SDK|App|CLI)$/, '');
 // "Tally invoicing app…", "Juniper notes app pricing…": one capitalised word before what the thing is.
 const single = brief.match(/^([A-Z][\w'’-]+)(?=(?:\s+[a-z][\w-]*){0,3}\s+(?:app|apps|api|dashboard|status page|settings|pricing|workspace|platform|tool)\b)/)?.[1];
 // "Juniper: balance, pots, send money": one capitalised word opening the brief, then a colon, is its name.
 const colonName = brief.match(/^([A-Z][\w'’-]+):\s/)?.[1];
-const product = quoted ?? named ?? leading ?? (opening && !GENERIC.has(opening.split(' ')[0]) ? opening : null) ?? afterFor ?? (single && !GENERIC.has(single) ? single : null) ?? (colonName && !GENERIC.has(colonName) ? colonName : null) ?? null;
+// "Larkspur, invoicing for small studios": one capitalised word, a comma, then lower case words about it.
+const commaName = brief.match(/^([A-Z][\w'’-]+),\s+[a-z]/)?.[1];
+const product = quoted ?? named ?? leading ?? (opening && !GENERIC.has(opening.split(' ')[0]) ? opening : null) ?? afterFor ?? (single && !GENERIC.has(single) ? single : null) ?? (colonName && !GENERIC.has(colonName) ? colonName : null) ?? (commaName && !GENERIC.has(commaName) ? commaName : null) ?? null;
 const restyle = (kb.restyle?.words ?? []).some((w) => text.includes(` ${w} `) || text.includes(` ${w}`));
 
 // ---------------------------------------------------------------- words from the subject
@@ -379,7 +383,7 @@ const mediaHeadline = () => (facts.claims[1] ? `${facts.claims[1][0].toUpperCase
 let sampleAction = null;
 function subjectHero(html, id) {
   sampleAction = /<a class="lt-btn"[^>]*data-variant="primary"[^>]*>([^<]+)</.exec(html)?.[1]?.trim() ?? null;
-  let out = applyHeroCopy(html, hero);
+  let out = applyHeroCopy(html, { ...hero, name: product });
   if (idea.place === 'hero-visual' && idea.figure) { out = setHeroVisual(out, heroIdeaPanel(idea, facts)); used.add(idea.figure); }
   else if (heroInvoice && id === 'hero-split') out = setHeroVisual(out, `<h2 class="lt-visually-hidden">An invoice${product ? ` sent with ${esc(product)}` : ''}</h2>\n        ` + readFileSync(join(root, cat.ui.find((u) => u.id === 'invoice-sheet').files.find((f) => f.endsWith('.html'))), 'utf8').trim().split('\n').join('\n        '));
   if (idea.place === 'hero-headline' && idea.figure) used.add(idea.figure);
@@ -468,7 +472,7 @@ function chooseMoments(ordered, ctx) {
 }
 function writeComposed(dir, run) {
   const todo = [...hero.todo];
-  const ctx = { facts, figures, product, hero, idea, action: hero.action, hours, used, typeId: type.id, snippet: partHtml, domainWords: (domain?.words ?? []).join(' '), usedMotifs: new Set() };
+  const ctx = { facts, figures, product, hero, idea, action: hero.action, hours, used, typeId: type.id, sample, snippet: partHtml, domainWords: (domain?.words ?? []).join(' '), usedMotifs: new Set() };
   const bands = [];
   // The first screen: the kit's hero in the brief's words.
   const heroSec = sections.find((x) => /^hero-/.test(x.id ?? ''));
@@ -569,7 +573,8 @@ function writeComposed(dir, run) {
   });
   const closeBand = ordered.find((b) => b.id === 'cta-band');
   const action = { label: ctx.action ?? 'Get in touch', href: `#${closeBand?.slug ?? 'top'}` };
-  const links = ordered.slice(1).filter((b) => b !== closeBand).slice(0, 4).map((b) => ({ slug: b.slug, label: b.label }));
+  // A picture band is not somewhere to go: the top bar links to sections with something to read or do.
+  const links = ordered.slice(1).filter((b) => b !== closeBand && b.slug !== 'picture').slice(0, 4).map((b) => ({ slug: b.slug, label: b.label }));
   const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''} data-vt`;
   const list = todo.length ? `<!-- TODO before this page ships. The brief did not say, so the draft leaves these out rather than inventing them:\n${todo.map((t) => `  - ${t.replace(/--/g, '–')}`).join('\n')}\n-->\n` : '';
   let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${esc(product ?? 'TODO: page title')}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. Every word on it comes from the brief; check each one, then add what the TODO list asks for. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${list}${navBar({ product, links, action, facts, style: art.chrome?.nav })}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}${moments.some((m) => m.name === 'number-settle') ? ' data-lt="number-settle"' : ''}>${ideaComment(idea)}\n${body.join('\n\n')}\n</main>\n${footerBar({ product, facts, year: new Date().getFullYear(), style: art.chrome?.footer, links })}\n</body>\n</html>\n`;
@@ -825,7 +830,7 @@ if (writeDraft) {
 }
 
 // No process.exit() here: exiting straight after a large write can cut piped output short.
-if (asJson) console.log(JSON.stringify(plan, null, 2));
+if (asJson) console.log(unmark(JSON.stringify(plan, null, 2)));
 else printPlan();
 
 function printPlan() {
@@ -925,5 +930,5 @@ if (flow) {
 if (type.states.length) { L.push(H('States to build'), ''); for (const s of type.states) L.push(`- ${s}`); L.push(''); }
 L.push(H('Avoid'), ''); for (const a of type.avoid) L.push(`- ${a}`); L.push('');
 L.push(H('Finish'), ''); for (const f of plan.finish) L.push(`- ${f.startsWith('node') ? '`' + f.replace(/\s{2,}\(.*$/, '') + '`' + (f.match(/\s{2,}(\(.*)$/)?.[1] ? ' ' + f.match(/\s{2,}(\(.*)$/)[1] : '') : f}`);
-console.log(L.join('\n'));
+console.log(unmark(L.join('\n')));
 }

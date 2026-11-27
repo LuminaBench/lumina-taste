@@ -84,6 +84,7 @@ function screenNav(ctx) {
   return nouns.slice(0, 4);
 }
 const BADGE = ['positive', 'accent', ''];
+const count = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
 /**
  * A live kit screen of the product, from the brief's own words and figures: its name, the sections its steps
  * name, the figures it states, the steps as the work in progress and the one action. Nothing invented: no
@@ -124,10 +125,40 @@ export function productScreen(ctx, { kind = null, current = 0, stepsOnly = false
               <span class="lt-btn" data-variant="primary"><span data-part="label">${esc(action)}</span></span>
             </div>
             ${figs.length ? `<div data-a="kpis">${figs.map((f) => `<p data-a="kpi"><span>${esc(cap(f.label))}</span><b>${esc(f.value)}</b></p>`).join('')}</div>` : ''}
-            ${rows.length ? `<table data-a="table"><thead><tr><th>Step</th><th>What</th><th>Status</th></tr></thead><tbody>${rows.map((r, k) => `<tr${k === current ? ' data-mark' : ''}><td>${k + 1}</td><td>${esc(r.name)}</td><td>${badge(r)}</td></tr>`).join('')}</tbody></table>` : ''}
-            ${!stepsOnly && (facts.claims.length || facts.offers.length) ? `<div data-a="card"><p data-a="card-h"><b>${esc(product ?? 'It')} does this for you</b><span>${esc(`${facts.claims.length + facts.offers.length} things`)}</span></p><ul data-a="list">${[...facts.claims, ...facts.offers].slice(0, 5).map((c) => `<li><span><b>${esc(cap(c))}</b>${facts.audience ? `<small>${esc(`For ${facts.audience}`)}</small>` : ''}</span><span><span class="lt-badge" data-tone="positive">On</span></span></li>`).join('')}</ul></div>` : ''}
+            ${rows.length >= 2 || (rows.length && !(ctx.sample && nav[0])) ? `<table data-a="table"><thead><tr><th>Step</th><th>What</th><th>Status</th></tr></thead><tbody>${rows.map((r, k) => `<tr${k === current ? ' data-mark' : ''}><td>${k + 1}</td><td>${esc(r.name)}</td><td>${badge(r)}</td></tr>`).join('')}</tbody></table>` : ''}
+            ${!stepsOnly && rows.length < 3 ? sampleRecords(ctx, nav[0]) : ''}
+            ${!stepsOnly && (facts.claims.length || facts.offers.length) ? `<div data-a="card"><p data-a="card-h"><b>${esc(product ?? 'It')} does this for you</b><span>${esc(count(facts.claims.length + facts.offers.length, 'thing'))}</span></p><ul data-a="list">${[...facts.claims, ...facts.offers].slice(0, 5).map((c) => `<li><span><b>${esc(cap(c))}</b>${facts.audience ? `<small>${esc(`For ${facts.audience}`)}</small>` : ''}</span><span><span class="lt-badge" data-tone="positive">On</span></span></li>`).join('')}</ul></div>` : ''}
           </div>
         </div>` };
+}
+/**
+ * A brief too short to fill the screen gets the product's own records as seeded sample rows, named with its own
+ * noun ("Invoices", "Previews") and marked data-sample, so the screen looks used and the checklist asks for the
+ * real ones. Amounts and names come from scripts/sample-data.mjs (fictional, fixed seed).
+ */
+function sampleRecords(ctx, noun) {
+  if (!ctx.sample || !noun) return '';
+  const one = noun.replace(/ies$/, 'y').replace(/(ch|sh|x)es$/, '$1').replace(/s$/, '');
+  const users = ctx.sample('users', { rows: 6 });
+  if (!users.length) return '';
+  const who = (k) => users[k % users.length].name ?? users[k % users.length].company ?? '';
+  let head, rows;
+  if (/invoice|bill|receipt/i.test(noun)) {
+    const inv = ctx.sample('invoices', { rows: 5 });
+    head = [one, 'Client', 'Amount', 'Status'];
+    rows = inv.map((r) => [r.id, r.customer, r.display, r.status]);
+  } else if (/order|sale|basket/i.test(noun)) {
+    const ord = ctx.sample('orders', { rows: 5 });
+    head = [one, 'Customer', 'Total', 'Status'];
+    rows = ord.map((r) => [r.id ?? '', r.customer ?? who(0), r.display ?? r.total ?? '', r.status ?? '']);
+  } else {
+    const STATES = ['Ready', 'Ready', 'In progress', 'Ready', 'Needs a look'];
+    const WHEN = ['2 min ago', '18 min ago', '1 hour ago', 'Yesterday', '2 days ago'];
+    head = [one, 'By', 'Status', 'When'];
+    rows = STATES.map((st, k) => [`${one} ${128 - k * 3}`, who(k), st, WHEN[k]]);
+  }
+  const tone = (st) => (/^(paid|ready|done|delivered|sent)$/i.test(st) ? 'positive' : /overdue|failed|needs/i.test(st) ? 'danger' : /progress|pending|due|draft|building/i.test(st) ? 'accent' : '');
+  return `<table data-a="table" data-sample><thead><tr>${head.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.slice(0, 5).map((r) => `<tr>${r.map((c, k) => (k === 3 && head[3] === 'Status') || (k === 2 && head[2] === 'Status') ? `<td><span class="lt-badge"${tone(c) ? ` data-tone="${tone(c)}"` : ''}>${esc(c)}</span></td>` : `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
 }
 /** The product screen inside a device frame. */
 export function deviceFigure(ctx, opts = {}) {
@@ -441,6 +472,7 @@ function visit(ctx) {
       ${hours ? '<p data-part="now" role="status"></p>' : ''}
       ${table}${loose}
     </div>` : ''}
+    ${!hours && hasAddress ? (() => { const m = motifParts('pin'); return `<figure class="lt-art"${m.attr} data-ratio="5/4" data-shot="${esc(`A photograph of ${product ?? 'the door'} from ${street ?? 'the street'}${facts.place ? `, ${facts.place}` : ''}, so people know it when they arrive, 5:4`)}">${m.svg}<p data-part="name">${esc(street ?? facts.place ?? 'Find us')}</p>${facts.place && street ? `<p data-part="fact">${esc(facts.place)}</p>` : ''}</figure>`; })() : ''}
   </div>
 </section>` };
 }

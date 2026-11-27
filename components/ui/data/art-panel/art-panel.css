@@ -102,6 +102,11 @@
   :scope[data-variant="figure"] > [data-part="motif"] { height: 46%; }
   /* With a photograph: it fills the frame and the placeholder type is hidden (the caption still describes it). */
   img, video, picture { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+  /* Words a panel keeps on its photograph (a drawn panel's figure and name, lifted above the picture) stand on a
+     dark fade at the foot, light on dark, so they read whatever the picture holds there. */
+  :scope:is([data-pattern], :has(> :is([data-part="motif"], [data-part="scene"]))):has(> :is(img, video, picture)):has(> :is([data-part="figure"], [data-part="name"], [data-part="fact"]))::before { content: ""; position: absolute; inset: 35% 0 0; z-index: 2; border-radius: inherit; background: linear-gradient(to top, rgb(14 12 10 / 0.78), rgb(14 12 10 / 0.46) 48%, rgb(14 12 10 / 0)); pointer-events: none; }
+  :scope:is([data-pattern], :has(> :is([data-part="motif"], [data-part="scene"]))):has(> :is(img, video, picture)) > :is([data-part="figure"], [data-part="name"], [data-part="fact"], [data-part="index"]) { z-index: 3; color: #fff; }
+  :scope:is([data-pattern], :has(> :is([data-part="motif"], [data-part="scene"]))):has(> :is(img, video, picture)) > [data-part="fact"] { color: rgb(255 255 255 / 0.84); }
   /* data-variant="cutout": a cut-out (treat-images --cutout, a transparent WebP) stands on the panel's own colour,
      its foot on the line above the name, which stays. Use data-tone="accent" or "swatch" for the ground. */
   :scope[data-variant="cutout"] { align-content: end; }

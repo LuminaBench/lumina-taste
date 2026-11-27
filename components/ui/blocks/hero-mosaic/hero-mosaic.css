@@ -37,6 +37,14 @@
   [data-part="tiles"] > li:nth-child(5) { grid-column: 10 / span 3; grid-row: 1; }
   [data-part="tiles"]:has(> li:nth-child(5)) > li:nth-child(1) { grid-column: 1 / span 6; }
   [data-part="tiles"] > li:nth-child(n + 6) { display: none; }
+  /* Three pictures: they fill the end seven columns, one wide over two tall, and the words stand centred beside
+     them, so no row is left half empty. */
+  @container (min-width: 861px) {
+    [data-part="tiles"]:has(> li:nth-child(3):last-child) > li:nth-child(1) { grid-column: 6 / -1; grid-row: 1 / span 3; }
+    [data-part="tiles"]:has(> li:nth-child(3):last-child) > li:nth-child(2) { grid-column: 6 / span 4; grid-row: 4 / span 3; }
+    [data-part="tiles"]:has(> li:nth-child(3):last-child) > li:nth-child(3) { grid-column: 10 / span 3; grid-row: 4 / span 3; }
+    [data-part="copy"]:has(~ [data-part="tiles"] > li:nth-child(3):last-child) { grid-column: 1 / span 5; grid-row: 1 / -1; align-self: center; }
+  }
 
   /* Narrow: the words first, then the pictures two across, the first one wide. */
   @container (max-width: 860px) {

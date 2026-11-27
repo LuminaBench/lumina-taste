@@ -122,7 +122,11 @@
   :scope[data-variant="bleed"][data-scrim="none"] > [data-part="visual"]::after { content: none; }
   /* A drawing stands on the far side of the words; a device sits there on the ground, with no scrim. */
   :scope[data-variant="bleed"] > [data-part="visual"] > .lt-art > :is(p, [data-part="name"], [data-part="fact"], [data-part="index"], [data-part="figure"]) { display: none; }
-  :scope[data-variant="bleed"] > [data-part="visual"] > .lt-art > [data-part="scene"] { position: absolute; inset-block: 10% 0; inset-inline-end: 0; width: 56%; height: auto; margin: 0; }
+  :scope[data-variant="bleed"] > [data-part="visual"] > .lt-art > [data-part="scene"] { position: absolute; inset-block: 10% 0; inset-inline-end: 0; width: 56%; height: auto; margin: 0; overflow: hidden; }
+  /* The drawing's floor stops short of the words: it fades in from the calm side instead of running under the headline. */
+  :scope[data-variant="bleed"] > [data-part="visual"] > .lt-art > [data-part="scene"] { -webkit-mask-image: linear-gradient(to right, transparent 0 12%, #000 38%); mask-image: linear-gradient(to right, transparent 0 12%, #000 38%); }
+  :scope[data-variant="bleed"][data-calm="end"] > [data-part="visual"] > .lt-art > [data-part="scene"] { inset-inline: 0 auto; }
+  :scope[data-variant="bleed"]:is(:dir(rtl):not([data-calm="end"]), [data-calm="end"]:dir(ltr)) > [data-part="visual"] > .lt-art > [data-part="scene"] { -webkit-mask-image: linear-gradient(to left, transparent 0 12%, #000 38%); mask-image: linear-gradient(to left, transparent 0 12%, #000 38%); }
   :scope[data-variant="bleed"] > [data-part="visual"] > .lt-art > [data-part="motif"] { inset-inline-end: 8%; inset-inline-start: auto; right: auto; top: 14%; height: 70%; }
   :scope[data-variant="bleed"][data-calm="end"] > [data-part="visual"] > .lt-art > [data-part="scene"] { inset-inline: 0 auto; }
   :scope[data-variant="bleed"] > [data-part="visual"]:has(> .lt-device) { place-items: center end; padding-inline-end: var(--hs-bleed); }
