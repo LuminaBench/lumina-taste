@@ -1999,6 +1999,177 @@
    }
   },
   {
+   "id": "app-listening",
+   "name": "Listening app (phone)",
+   "kind": "app",
+   "blueprint": "app-listening",
+   "density": "balanced",
+   "pattern": "single",
+   "layout": "A phone first: a library with the episode to carry on with, shows as a rail of covers, latest episodes with play; an episode with chapters; now playing rising from a mini player above the tabs; Up next to reorder; a sidebar from 768px.",
+   "aliases": [
+    "podcast app",
+    "podcast player",
+    "listening app",
+    "audio app",
+    "audiobook app",
+    "radio app"
+   ],
+   "primary": "Play, on the card to carry on with and on the player.",
+   "sections": [
+    {
+     "role": "Library",
+     "id": "art-panel"
+    },
+    {
+     "role": "Up next",
+     "id": "sortable-list"
+    },
+    {
+     "role": "Settings",
+     "id": "settings-group"
+    },
+    {
+     "role": "Tabs",
+     "id": "bottom-nav"
+    }
+   ],
+   "screens": [
+    [
+     "welcome",
+     "Welcome",
+     "A drawing, one sentence, Find shows to follow."
+    ],
+    [
+     "library",
+     "Library",
+     "Carry on, shows you follow, latest episodes."
+    ],
+    [
+     "episode",
+     "Episode",
+     "Cover, title, Play from where you were, chapters."
+    ],
+    [
+     "playing",
+     "Now playing",
+     "Scrubber with chapters, skip, speed, sleep."
+    ],
+    [
+     "queue",
+     "Up next",
+     "Reorder by drag or keyboard."
+    ],
+    [
+     "settings",
+     "Settings",
+     "Grouped settings."
+    ]
+   ],
+   "states": [
+    "loading: a skeleton of the figure and the rows on the first useful screen",
+    "empty: a drawing of the subject, one sentence in its words and the action that fills it",
+    "error: what failed in plain words and Try again"
+   ],
+   "avoid": [
+    "Autoplay on open",
+    "A scrubber too thin to grab",
+    "The player covering the tabs with no way back"
+   ],
+   "look": {
+    "palette": "paper-ink",
+    "typography": "editorial"
+   }
+  },
+  {
+   "id": "app-ordering",
+   "name": "Ordering app (phone)",
+   "kind": "app",
+   "blueprint": "app-ordering",
+   "density": "balanced",
+   "pattern": "single",
+   "layout": "A phone first: the menu as pictures with prices under section chips, an item sheet with its options and the price on Add, a basket above the tabs with the collection time and one Pay, and the order live from received to ready; the basket beside the menu from 768px.",
+   "aliases": [
+    "ordering app",
+    "order ahead app",
+    "food ordering app",
+    "café app",
+    "cafe app",
+    "coffee shop app",
+    "takeaway app",
+    "click and collect app",
+    "restaurant ordering app"
+   ],
+   "primary": "Add for £x in the item sheet, then Pay £x in the basket.",
+   "sections": [
+    {
+     "role": "Menu",
+     "id": "art-panel"
+    },
+    {
+     "role": "Item",
+     "id": "bottom-sheet"
+    },
+    {
+     "role": "Options",
+     "id": "radio-group"
+    },
+    {
+     "role": "Account",
+     "id": "settings-group"
+    },
+    {
+     "role": "Tabs",
+     "id": "bottom-nav"
+    }
+   ],
+   "screens": [
+    [
+     "welcome",
+     "Welcome",
+     "A drawing, one sentence, See the menu."
+    ],
+    [
+     "menu",
+     "Menu",
+     "Section chips, items as pictures with prices, the basket bar."
+    ],
+    [
+     "basket",
+     "Basket",
+     "Lines with − and +, when to collect, Pay."
+    ],
+    [
+     "orders",
+     "Orders",
+     "The order on its way, earlier orders with Again."
+    ],
+    [
+     "track",
+     "Order",
+     "Ready time, the steps filling, the number for the counter."
+    ],
+    [
+     "account",
+     "Account",
+     "Grouped settings."
+    ]
+   ],
+   "states": [
+    "loading: a skeleton of the figure and the rows on the first useful screen",
+    "empty: a drawing of the subject, one sentence in its words and the action that fills it",
+    "error: what failed in plain words and Try again"
+   ],
+   "avoid": [
+    "A price that changes after Add",
+    "The basket hidden behind a tab",
+    "Stock photographs of someone else's food"
+   ],
+   "look": {
+    "palette": "espresso-terracotta",
+    "typography": "humanist"
+   }
+  },
+  {
    "id": "app-settings",
    "name": "Settings-heavy app (phone)",
    "kind": "app",

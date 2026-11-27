@@ -50,11 +50,13 @@ export const BRIEFS = {
   running: ['Kestrel running app on the phone: today\'s run, weekly distance chart, a training plan for a 10k, routes near you, settings', 'app-fitness'],
   grooming: ['Moss dog grooming bookings app on the phone for dog owners: book a groom, my bookings, my dogs, settings', 'app-booking'],
   messaging: ['Moss chat app on the phone: conversations list, a thread with photos and voice notes, new message, contacts, settings', 'app-messaging'],
+  ordering: ['Copper Hare café app to order ahead: menu, basket, collect your order', 'app-ordering'],
+  listening: ['Field Notes podcast app: library, episodes, up next', 'app-listening'],
   settingsApp: ['Settings-heavy app for Tern, an invoicing tool: invoices, payment terms, reminders, team, notifications, close account', 'app-settings'],
 };
 // Apps drafted from a blueprint of their own (a bank, a run, bookings, a chat, a settings-heavy tool) keep its
 // screens and its sample rows, marked data-sample, in the subject's own nouns; the name is the brief's.
-const FROM_BLUEPRINT = new Set(['bank', 'running', 'grooming', 'messaging', 'settingsApp']);
+const FROM_BLUEPRINT = new Set(['bank', 'running', 'grooming', 'messaging', 'settingsApp', 'ordering', 'listening']);
 
 // The sample businesses' words: each blueprint's brand (meta.json), the proper nouns, prices and string
 // literals in its copy and script, and the nouns of its subject. A word the brief also uses is the brief's.

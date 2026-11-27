@@ -40,6 +40,12 @@ test('an app starter is its own app: "settings" or "bookings" in the feature lis
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
+test('a café to order from and a podcast player are their own apps, from a plain brief', () => {
+  const type = (brief) => JSON.parse(spawnSync(process.execPath, [join(root, 'scripts/compose.mjs'), brief, '--json'], { encoding: 'utf8' }).stdout).pageType.id;
+  assert.equal(type('Copper Hare café app to order ahead: menu, basket, collect'), 'app-ordering');
+  assert.equal(type('Field Notes podcast app: library, episodes, player'), 'app-listening');
+});
+
 test('an unknown kind or a missing project is a usage error', () => {
   const r = spawnSync(process.execPath, [join(root, 'scripts/starter.mjs'), 'spaceship', 'Anything'], { encoding: 'utf8' });
   assert.equal(r.status, 2);

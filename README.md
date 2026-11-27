@@ -54,7 +54,7 @@ npx skills remove lumina-taste -g
 | **Type pairings** | 20 | Chosen by subject (a slab for trades, stencil lettering for builders, a legal serif that is not the AI default), variable axes, self-hostable with metric-matched fallbacks |
 | **Styles** | 39 | Whole-page looks, each with its own radius, density and surface treatment |
 | **Motion** | 8 moments | Pinned scene, sideways scroll, product reveal, counting figures, before-and-after slider, video hero, page transitions, picture zoom. Plain CSS scroll timelines, at most two per page, still under reduced motion |
-| **Composer** | 34 page types | Brief → plan → draft for every page type and app flow, with a rhythm, one bold idea and the brief's own words; brand from a colour, logo or old site; Tailwind v4 and Next.js output |
+| **Composer** | 36 page types | Brief → plan → draft for every page type and app flow, with a rhythm, one bold idea and the brief's own words; brand from a colour, logo or old site; Tailwind v4 and Next.js output |
 | **Critic** | `--taste` | Layout, type, colour, rhythm, words against pictures, motion budget, app rules, speed, and the looks models fall back on; plus a review pack and blind side-by-side comparisons |
 | **Pictures** | 26 photo sets | Hand-checked public-domain and CC0 photographs for each kind of business, filled into a page with one crop, one grade, focal points and WebP sizes; 48 drawings of the subject's own things, composable into scenes, when there are none |
 | **Evals** | 36 briefs | Score any page an agent builds, run any agent over all of them, and keep a score history per agent |

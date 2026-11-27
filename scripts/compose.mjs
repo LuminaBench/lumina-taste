@@ -176,7 +176,7 @@ const explicitStyle = Object.prototype.hasOwnProperty.call(mood, 'style') ? mood
 // A marketing page with no recognisable subject still gets a headline face distinct from the stock sans.
 const defaults = { marketing: ['slate-forest', 'geometric'], app: ['slate-forest', 'precision'], reading: ['paper-ink', 'editorial'], flow: ['slate-forest', 'precision'] }[type.kind];
 // A consumer phone app reads friendlier than a developer console: humanist type, not the stock app sans.
-if (['app-phone', 'mobile-app', 'app-booking', 'app-messaging'].includes(type.id)) defaults[1] = 'humanist';
+if (['app-phone', 'mobile-app', 'app-booking', 'app-messaging', 'app-ordering'].includes(type.id)) defaults[1] = 'humanist';
 const profile = {
   // An app type with a blueprint of its own brings that blueprint's look (the bank's navy, the run's coral).
   palette: type.look?.palette ?? domain?.palette ?? defaults[0],
@@ -236,7 +236,7 @@ const facts = extractFacts(brief, { product });
 const figures = figuresFrom(facts);
 // Pages that are not a marketing story (an app, a checkout, a status page) are drawn from a model of the
 // product: its records and their fields, statuses, plans, basket, services; apps are planned as a flow.
-const APP_TYPES = new Set(['dashboard', 'admin-table', 'settings', 'inbox', 'ai-chat', 'agent-app', 'mobile-app', 'app-phone', 'workspace', 'directory', 'app-banking', 'app-fitness', 'app-booking', 'app-messaging', 'app-settings']);
+const APP_TYPES = new Set(['dashboard', 'admin-table', 'settings', 'inbox', 'ai-chat', 'agent-app', 'mobile-app', 'app-phone', 'workspace', 'directory', 'app-banking', 'app-fitness', 'app-booking', 'app-messaging', 'app-settings', 'app-ordering', 'app-listening']);
 const model = pageModel(facts, { product, typeId: type.id });
 const flow0 = APP_TYPES.has(type.id) ? appFlow(model, facts, { typeId: type.id, product }) : null;
 // An app with a blueprint of its own lists that blueprint's screens, in the order they are used.

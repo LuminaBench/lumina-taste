@@ -7,7 +7,7 @@
 //   node scripts/starter.mjs bank-app "Juniper bank app on the phone: balance, pots, send money" --project ./app
 //
 // Kinds: cafe, restaurant, shop, trade, practice, charity, event, software, devtool, bank-app, fitness-app,
-// booking-app, chat-app. Each fixes the page type (an app kind, its own app blueprint) so a short brief lands right:
+// booking-app, chat-app, ordering-app, podcast-app. Each fixes the page type (an app kind, its own app blueprint) so a short brief lands right:
 // "bookings" or "settings" in an app's feature list never sends it to another kind.
 // --images also fetches public-domain photographs for what the person's media does not cover.
 import { spawnSync } from 'node:child_process';
@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const KINDS = {
   cafe: 'venue', restaurant: 'venue', shop: 'brand-landing', trade: 'service-landing', practice: 'service-landing', charity: 'cause', event: 'event',
-  software: 'landing', devtool: 'dev-landing', 'bank-app': 'app-banking', 'fitness-app': 'app-fitness', 'booking-app': 'app-booking', 'chat-app': 'app-messaging',
+  software: 'landing', devtool: 'dev-landing', 'bank-app': 'app-banking', 'fitness-app': 'app-fitness', 'booking-app': 'app-booking', 'chat-app': 'app-messaging', 'ordering-app': 'app-ordering', 'podcast-app': 'app-listening',
 };
 
 const args = process.argv.slice(2);
