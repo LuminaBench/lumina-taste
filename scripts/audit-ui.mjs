@@ -545,7 +545,8 @@ const TASTE_CHECKS = (arg = null) => {
       const looksAt = (band, total) => [...band.querySelectorAll(PICTURE)].some((e) => seen(e) && rectOf(e).width >= 120 && rectOf(e).height >= 60)
         || [...band.querySelectorAll('svg')].some((e) => shown(e) && rectOf(e).width >= 96 && rectOf(e).height >= 64)
         || bigType(band) || scans(band, total);
-      const prose = (b) => { const c = b.cloneNode(true); c.querySelectorAll('[inert], [data-audit-ignore]').forEach((n) => n.remove()); return c.textContent; };
+      // Visible words only (innerText: a closed answer is not read), less those inside a preview or mock-up.
+      const prose = (b) => { let t = b.innerText; for (const n of b.querySelectorAll('[inert], [data-audit-ignore]')) if (!n.parentElement?.closest('[inert], [data-audit-ignore]')) t = t.replace(n.innerText, ' '); return t; };
       const walls = bands.filter((b) => rectOf(b).height > 200 && !b.matches('[class*="hero"], [class*="footer"], [class*="nav"]')).map((b) => { const words = count(prose(b)); return { el: b, words, pic: looksAt(b, words) }; });
       let flagged = false;
       for (let i = 0; i < walls.length && !flagged; i++) {

@@ -179,7 +179,7 @@ export const MEASURE = (opts = {}) => {
   const sections = bands.map((band, i) => {
     const r = rectOf(band);
     // Words inside an inert or marked rendering (a live preview, a mock) belong to that picture, not to the prose.
-    const w = (() => { const c = band.cloneNode(true); c.querySelectorAll('[inert], [data-audit-ignore]').forEach((n) => n.remove()); return words(c.innerText ?? c.textContent); })();
+    const w = (() => { let t = band.innerText; for (const n of band.querySelectorAll('[inert], [data-audit-ignore]')) if (!n.parentElement?.closest('[inert], [data-audit-ignore]')) t = t.replace(n.innerText, ' '); return words(t); })();
     const looks = lookAt(band);
     const isHero = band.matches('[class*="hero"]') || (i === 0 && !!band.querySelector('h1'));
     return {
