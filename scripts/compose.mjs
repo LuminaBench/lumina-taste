@@ -818,6 +818,7 @@ if (writeDraft) {
     const byNote = new Map();
     for (const [, file, note] of r.stdout.matchAll(/^! photo ([^:]+): (.+)$/gm)) { const k = note.replace(/^\d+×\d+ is/, 'Each is').replace('it needs', 'a photograph needs'); byNote.set(k, [...(byNote.get(k) ?? []), { file, note }]); }
     const photoNotes = [...byNote].map(([k, fs]) => (fs.length === 1 ? `your photograph ${fs[0].file}: ${fs[0].note}` : `your photographs ${fs.map((f) => f.file).join(', ')}: ${k}`));
+    for (const [, note] of r.stdout.matchAll(/^! photos: (.+)$/gm)) photoNotes.unshift(`your photographs were ${note}`);
     if (photoNotes.length) plan.words.missing = [...new Set([...plan.words.missing, ...photoNotes])];
     const set = (readFileSync(draft.path, 'utf8').match(/<img src="images\//g) ?? []).length;
     plan.draft.images = { ran: true, status: r.status, set, look: look.look, lookWhy: look.why, yours, note: r.status === 0 ? `${set} photograph${set === 1 ? '' : 's'} set${yours ? ` (${yours} of them yours)` : ''}${set > yours ? ' from openly licensed sources' : ''} (credits in images/credits.json), ${look.look} look (${look.why}); look at each one` : `find-images could not run: ${(r.stderr || r.stdout).trim().split('\n').pop()}` };

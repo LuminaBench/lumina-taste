@@ -343,6 +343,8 @@ const used = new Set();
 // beyond the set's shared ratio and grade.
 if (mineDir) {
   const mine = await checkMine(scanMedia(resolve(mineDir)));
+  // Without a browser (Playwright) the pictures are placed as they are: not checked, not cut to the set's sizes.
+  if (mine.some((i) => i.kind === 'photo') && !mine.some((i) => i.check)) console.log('! photos: not checked for size, exposure or focus, and placed at their own size rather than cut to the set: that needs Playwright (npm i -D @playwright/test && npx playwright install chromium in the skill folder), then compose again');
   // What the check found, one line a photograph (compose.mjs carries these lines into the draft's checklist).
   for (const it of mine) for (const i of it.check?.issues ?? []) console.log(`! photo ${it.file}: ${i.message}${it.check.fit ? '' : ' (left out)'}`);
   const placed = assignMine(mine, briefed.map((m, i) => ({ key: m.index, shot: shotOf(m), weight: i === 0 && onFirstScreen(html, m.index) ? 2 : 1 })));
