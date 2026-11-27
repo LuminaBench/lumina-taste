@@ -19,7 +19,8 @@ export function enhance(root: HTMLElement): Cleanup {
     emit(root, { open: t.textContent?.trim() });
   };
   return combine(
-    ...triggers.map((t) => on(t, 'click', (e) => (t.getAttribute('aria-expanded') === 'true' ? closeAll() : open(t, e)))),
+    // Safari does not focus a button on click: focus it here so Down and Esc work straight after.
+    ...triggers.map((t) => on(t, 'click', (e) => { if (document.activeElement !== t) t.focus({ preventScroll: true }); return t.getAttribute('aria-expanded') === 'true' ? closeAll() : open(t, e); })),
     ...triggers.map((t) => on(t, 'keydown', (e: KeyboardEvent) => { if (e.key === 'ArrowDown') { e.preventDefault(); open(t, e, true); } })),
     on(root, 'keydown', (e: KeyboardEvent) => {
       const p = (e.target as Element).closest<HTMLElement>('[data-part="flyout"]');

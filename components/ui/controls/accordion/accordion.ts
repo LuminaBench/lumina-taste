@@ -12,6 +12,8 @@ export function enhance(root: HTMLElement): Cleanup {
     on(root, 'click', (e: MouseEvent) => {
       const t = (e.target as Element).closest<HTMLButtonElement>('[data-part="trigger"]');
       if (!t || !root.contains(t)) return;
+      // Safari does not focus a button on click: focus it here so the arrow keys work straight after.
+      if (document.activeElement !== t) t.focus({ preventScroll: true });
       const open = t.getAttribute('aria-expanded') !== 'true';
       if (open && !root.hasAttribute('data-multiple')) triggers().forEach((o) => o !== t && set(o, false));
       set(t, open);

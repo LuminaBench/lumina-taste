@@ -152,8 +152,9 @@ test.describe('micro-interactions', () => {
     }
   });
 
-  test('copy confirms in place: tick, "Copied" rolling in, the same width; still under reduced motion', async ({ page, context }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  test('copy confirms in place: tick, "Copied" rolling in, the same width; still under reduced motion', async ({ page, context, browserName }) => {
+    // WebKit has no clipboard permissions to grant: the button falls back to a hidden textarea there.
+    if (browserName === 'chromium') await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     for (const motion of ['no-preference', 'reduce'] as const) {
       const s = await stage(page, 'copy-button', motion);
       const btn = s.locator('.lt-copy');

@@ -19,7 +19,8 @@ export function enhance(root: HTMLElement): Cleanup {
     if (hadFocus) (all ?? rows()[0])?.focus();
   };
   return combine(
-    on(root, 'change', (e: Event) => { if (all && e.target === all) rows().forEach((r) => (r.checked = all.checked)); sync(); }),
+    // Safari does not focus a ticked checkbox: focus it so Esc (clear the selection) works straight after.
+    on(root, 'change', (e: Event) => { const t = e.target as HTMLElement; if (t instanceof HTMLInputElement && document.activeElement !== t) t.focus({ preventScroll: true }); if (all && e.target === all) rows().forEach((r) => (r.checked = all.checked)); sync(); }),
     on(bar, 'click', (e: MouseEvent) => {
       const b = (e.target as Element).closest<HTMLElement>('button');
       if (!b) return;

@@ -285,7 +285,7 @@ test.describe('dense dashboard', () => {
 // Tablets (768 to 1180px) and foldables: the phone app becomes a sidebar and two panes, its sheet a popover;
 // the work app keeps the table and the inspector side by side with the sidebar as a rail of icons.
 test.describe('tablet and foldable layouts', () => {
-  test('the phone app on a tablet: a sidebar, Today beside the sailing, and pages that never scroll sideways', async ({ page }) => {
+  test('the phone app on a tablet: a sidebar, Today beside the sailing, and pages that never scroll sideways', async ({ page, browserName }) => {
     await page.setViewportSize({ width: 1024, height: 768 });
     await page.goto(app('?screen=home'));
     await expect(page.locator('#ap-side')).toBeVisible();
@@ -310,7 +310,8 @@ test.describe('tablet and foldable layouts', () => {
     expect((await page.locator('#ap-side').boundingBox())!.width).toBeLessThan(100);
     // The foldable's two-pane rule is in the stylesheet, with the width rule as the fallback.
     const css = await page.evaluate(() => [...document.styleSheets].flatMap((s) => [...s.cssRules].map((r) => r.cssText)).join('\n'));
-    expect(css).toContain('horizontal-viewport-segments: 2');
+    // WebKit drops media features it does not know from the stylesheet it reports, so only Chromium can show the rule.
+    if (browserName === 'chromium') expect(css).toContain('horizontal-viewport-segments: 2');
   });
 
   test('on a tablet the tickets sheet is a popover by its button: every option shown, Escape closes, focus returns', async ({ page }) => {

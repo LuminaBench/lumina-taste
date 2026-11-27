@@ -73,6 +73,6 @@
   :scope[data-variant="poster"][data-tone="accent"] [data-part="eyebrow"] { color: var(--text-primary); }
   @container (max-width: 820px) {
     :scope[data-variant="poster"] > :is([data-part="date"], h1) { grid-column: 1 / -1; }
-    :scope[data-variant="poster"] > [data-part="visual"] { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 16 / 9; min-height: 0; margin-top: 24px; }
+    :scope[data-variant="poster"] > [data-part="visual"] { grid-column: 1 / -1; grid-row: auto; align-self: start; aspect-ratio: 16 / 9; min-height: 0; margin-top: 24px; }
   }
 }

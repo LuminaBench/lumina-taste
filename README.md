@@ -1,120 +1,69 @@
-# Lumina Taste
+![Lumina Taste — Interfaces, charts and sites without AI slop.](.github/artwork/masthead.png)
 
-**Pages that look designed, not generated.** A design skill for coding agents: it plans a page from a one-line brief, builds it from a library of tasteful parts, and critiques the result the way a designer would, including the habits that make AI-built pages recognisable.
+[![Explore the live Lumina Taste showroom: 221 elements, 48 charts and 39 styles.](.github/artwork/showroom-preview.png)](https://luminabench.github.io/lumina-taste/)
 
-- **Plans before it builds.** `compose.mjs` turns "website for my bakery" into a page type, a look and typeface taken from the subject, a rhythm of quiet and loud sections, one bold idea, and a first draft written from the brief's own facts.
-- **Shows instead of tells.** Picture-led sections, Apple-style scroll moments (a pinned scene, a sideways rail, a product reveal, figures that count up), openly licensed photographs graded to the palette, and 48 drawings of the subject's own things when there are no photographs.
-- **Catches the defaults.** A Playwright critic flags indigo-and-Inter, cream-serif-and-terracotta, labels over every heading, walls of words, sections with nothing to look at, the same layout twice, too much motion, small touch targets and slow pictures, and scores the page out of 100.
+**Pages that look designed, not generated.** Describe a site, an app or a dashboard; your agent plans it from your words, builds it from tested parts and audits it the way a designer would. [Explore the live showroom](https://luminabench.github.io/lumina-taste/)
 
 ## Install
 
-With Git and Node.js 20 or newer installed, run this command and select your coding agent.
+With Git and Node.js 22.20 or newer installed, run this and select your coding agent.
 
 ```sh
 npx skills add LuminaBench/lumina-taste -g
 ```
 
-The first time your agent drafts a page, the skill installs its one dependency itself (esbuild, about 10 MB, in the skill's own folder) and says so. Checking pages in a browser (the audit, the photo check, PNG icons) also needs Playwright, which the agent asks for when it gets there. Pages work in current Chrome, Edge and Firefox, and in Safari 17.4 or newer.
-
-Open a fresh agent session in your project and try one of these prompts.
-
-> Use lumina-taste to build a pricing page for my app with a monthly/annual toggle. Navy and sand, soft corners.
-
-> Use lumina-taste to add a sortable accounts table and a revenue chart to my existing dashboard without touching my current styles.
-
-> Use lumina-taste to audit http://localhost:3000 on mobile and dark mode, then fix everything it finds.
-
-> Use lumina-taste to restyle my landing page so it stops looking generated. Keep all the content.
+Open a fresh session in your project and describe what you want built; first-run setup is automatic. Your agent can draw on 221 UI elements, 48 charts, 39 styles and 34 page and app layouts, each audited to 100/100.
 
 <details>
-<summary>Update or remove Lumina Taste</summary>
+<summary>Update, remove &amp; usage guides</summary>
 
-**Update**
+Update your global installation, then open a fresh session.
 
 ```sh
 npx skills update lumina-taste -g
 ```
 
-Open a fresh agent session after updating. Components already copied into a project keep their version; ask your agent to reinstall the ones you want to refresh. Your `taste-profile.json` and its locks are kept.
-
-**Remove**
+Remove the global skill.
 
 ```sh
 npx skills remove lumina-taste -g
 ```
 
-</details>
+Try a prompt.
 
-## What's inside
+> Use lumina-taste to build a website for my café: Copper Hare on Gillygate, York, flat white £3.40. Use the photos in ./our-media.
 
-| | | |
-| --- | ---: | --- |
-| **Page blueprints** | 34 | Complete pages to start from: landing, developer tool, practice, venue, shop, charity, event, phone apps (a bank, a café to order from, a podcast player and more), a desktop workspace, dashboard, docs, checkout, assistant chat and more, each with its empty, loading and error states |
-| **UI patterns** | 221 | Sections, controls, data views and motion parts, in vanilla TypeScript and React, found by describing them ("the bar that appears when I tick rows") |
-| **Charts** | 48 | From leaderboards and Pareto frontiers to story charts that build as you scroll, all theme-aware and readable in both modes |
-| **Palettes** | 24 × 2 | Light and dark, every text, control and chart pair contrast-checked |
-| **Type pairings** | 20 | Chosen by subject (a slab for trades, stencil lettering for builders, a legal serif that is not the AI default), variable axes, self-hostable with metric-matched fallbacks |
-| **Styles** | 39 | Whole-page looks, each with its own radius, density and surface treatment |
-| **Motion** | 8 moments | Pinned scene, sideways scroll, product reveal, counting figures, before-and-after slider, video hero, page transitions, picture zoom. Plain CSS scroll timelines, at most two per page, still under reduced motion |
-| **Composer** | 36 page types | Brief → plan → draft for every page type and app flow, with a rhythm, one bold idea and the brief's own words; brand from a colour, logo or old site; Tailwind v4 and Next.js output |
-| **Critic** | `--taste` | Layout, type, colour, rhythm, words against pictures, motion budget, app rules, speed, and the looks models fall back on; plus a review pack and blind side-by-side comparisons |
-| **Pictures** | 26 photo sets | Hand-checked public-domain and CC0 photographs for each kind of business, filled into a page with one crop, one grade, focal points and WebP sizes; 48 drawings of the subject's own things, composable into scenes, when there are none |
-| **Evals** | 36 briefs | Score any page an agent builds, run any agent over all of them, and keep a score history per agent |
+> Use lumina-taste to add a sortable accounts table and a revenue chart to my dashboard without touching my current styles.
 
-## How an agent uses it
+> Use lumina-taste to audit http://localhost:3000 on mobile and in dark mode, then fix everything it finds.
 
-1. **Compose**: `node scripts/compose.mjs "<brief>"` prints the plan; `--write` drafts the page.
-2. **Choose the look from the subject**: three nouns from its world decide the palette and typeface (`references/ai-defaults.md`).
-3. **Build and write**: real copy, something to look at in every section, no invented customers or figures.
-4. **Look at it**: screenshots at 1440px and 390px, then the detail pass in `references/composition.md`.
-5. **Critique**: `node scripts/audit-ui.mjs <page> --product "<name>"` until it reports no errors.
+**Browser checks.** The audit, the photo check and the brand kit's PNG icons use Playwright. In the skill's folder, run `npm i -D @playwright/test && npx playwright install chromium`. Pages work in current Chrome, Edge and Firefox, and in Safari 17.4 or newer. `npm run test:webkit` checks Safari's engine after `npx playwright install webkit`.
 
-<details>
-<summary>CLI commands for search, install, audit and the live gallery</summary>
+**Your own media.** A film becomes the first screen and a PDF menu becomes the prices. On a Mac this needs nothing extra; elsewhere, install `ffmpeg` and `pdftotext` (poppler).
 
-Run these from the installed skill directory or a clone of this repository.
-
-```sh
-node scripts/compose.mjs "pricing page for a developer API"
-node scripts/directions.mjs "landing page for a webhooks API" --out ./directions
-node scripts/search.mjs "bar when ticking rows"
-node scripts/search.mjs --card bulk-action-bar
-node scripts/install-taste.mjs --project /path/to/app --framework react --palette slate-forest --components data-table,command-palette --charts kpi-card
-node scripts/install-taste.mjs --project /path/to/app --attach --root "#panel" --components toast-stack
-node scripts/install-taste.mjs --project /path/to/app --density dense            # locked axes stay put
-node scripts/audit-ui.mjs http://localhost:3000 --taste
-node scripts/sniff.mjs http://localhost:3000
-node scripts/export-tokens.mjs --format shadcn --palette navy-sand > app/globals.css   # also swiftui, compose, figma
-node scripts/sample-data.mjs invoices --rows 20 --format csv
-node scripts/starter.mjs cafe "Copper Hare, a coffee shop in York, flat white £3.40" --project ./site   # page, brand kit, checklist
-node scripts/media-intake.mjs ./our-media --page index.html          # your photos, logo, menu: where each would go
-node scripts/compose.mjs "<brief>" --media ./our-media --project . --write   # built with yours first
-node scripts/find-images.mjs --fill index.html --subject "bakery"     # openly licensed photographs, credited
-node scripts/compose.mjs "builder in Glasgow, extensions from £40,000" --brand-from "#c8102e"
-node scripts/review-page.mjs ./index.html --out ./review     # screenshots, squint view, checklist
-node scripts/fonts.mjs --pairing stamped --out ./fonts        # self-host a pairing
-node scripts/eval-score.mjs ./out --brief saas-landing-invoicing
-node scripts/pack-skill.mjs --out ~/skills/lumina-taste       # lean copy for an agent's skills folder
-```
-
-The installer copies only what you ask for plus the files those import, and writes `taste-profile.json`. Colour overrides are contrast-checked before they are accepted. The auditor needs Playwright (`npm i -D @playwright/test && npx playwright install chromium`).
-
-**Live gallery**
+**The showroom on your machine.**
 
 ```sh
 npm install
-npm run preview      # the gallery on this machine
-npm run showroom     # the same as a static site for any folder of a website (./showroom)
+npm run preview      # the gallery at http://127.0.0.1:4321
+npm run showroom     # a static copy for any folder of a website (./showroom)
 ```
 
-Look up any element by describing it, see it live in a contained demo with its parts numbered, copy a prompt for your agent, and switch palette, mode, type and style from one panel. `npm test` runs the contrast checks, copy lint, unit tests, type checks, the browser tests and the full audit.
+**From the command line.** Run these from the installed skill's folder.
+
+```sh
+node scripts/starter.mjs cafe "Copper Hare, a coffee shop in York, flat white £3.40" --project ./site
+node scripts/compose.mjs "pricing page for a developer API" --project ./site --write
+node scripts/search.mjs "bar when ticking rows"
+node scripts/audit-ui.mjs http://localhost:3000 --taste
+```
+
+[Agent guide](SKILL.md) · [Composition](references/composition.md) · [Changelog](CHANGELOG.md)
 
 </details>
 
-## License
+## Licence
 
-You can use, modify and ship the components, charts, palettes and blueprints in personal or commercial websites, apps, SaaS products and client work for free, with no royalties or attribution required. The CLI, auditor and `SKILL.md` use MIT. The design library license prohibits redistributing, rebranding or reselling the catalog as a competing UI kit, template pack, dataset or Agent Skill. [Full license](LICENSE)
+Use, modify and ship the components, charts, palettes and layouts in personal and commercial websites, apps and client work, royalty-free, with no credit required. The design library licence prohibits redistributing the catalogue as a competing UI kit, template pack, dataset or agent skill. [Full terms and code licence](LICENSE)
 
----
-
-**Support** · [LuminaBench](https://luminabench.com) · [Sponsor LuminaBench on GitHub](https://github.com/sponsors/LuminaBench)
+[LuminaBench](https://luminabench.com) · [Sponsor the project](https://github.com/sponsors/LuminaBench)

@@ -135,8 +135,10 @@
   :scope[data-variant="bleed"] > [data-part="visual"] > .lt-device { width: min(52%, 720px); }
   :scope[data-variant="bleed"] :is(h1, h2) { font-size: max(var(--step-5), clamp(2.75rem, 1rem + 4.4vw, 5rem)); max-width: 13ch; }
 
-  /* Below 960px every composition stacks; each keeps its character. */
+  /* Below 960px every composition stacks; each keeps its character. A picture slot sized by aspect-ratio sits at
+     the start of its row: stretched, WebKit gives it no height at all. */
   @container (max-width: 960px) {
+    :scope[data-variant]:not([data-variant="bleed"]) > [data-part="visual"] { align-self: start; }
     :scope[data-variant="overlap"] { grid-template-columns: minmax(0, 1fr); padding-inline-end: var(--block-x, 24px); }
     :scope[data-variant="edge"] { grid-template-columns: minmax(0, 1fr); min-height: 0; padding-inline-end: var(--block-x, 24px); }
     :scope[data-variant="bleed"] { grid-template-columns: minmax(0, 1fr); min-height: min(86svh, 760px); padding-block: 40px; }

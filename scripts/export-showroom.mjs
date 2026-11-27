@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// The showroom: the gallery as a self-contained static site, ready to drop into a folder of another site
-// (luminabench.com/skills/lumina-taste/). Every path in it is relative, so it works under any base path; the
+// The showroom: the gallery as a self-contained static site, published at luminabench.github.io/lumina-taste/ by
+// .github/workflows/pages.yml, and ready to drop into a folder of any other site. Every path in it is relative, so it works under any base path; the
 // routes are hash routes, so the host needs no rewrite rules. Nothing downloads and the demos' own links lead
 // nowhere (preview/showroom.js). Test-only folders (_react, _hc, _mt) are left out.
 //
-//   node scripts/export-showroom.mjs                                  # → ./showroom/, checked under /skills/lumina-taste/
+//   node scripts/export-showroom.mjs                                  # → ./showroom/, checked under /lumina-taste/
 //   node scripts/export-showroom.mjs --out ../site/skills/lumina-taste --base /skills/lumina-taste/
 //   node scripts/export-showroom.mjs --no-build --no-check
 //
@@ -20,7 +20,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
 const opt = (n, d) => { const i = args.indexOf(`--${n}`); return i < 0 ? d : args[i + 1]; };
 const out = resolve(opt('out', join(root, 'showroom')));
-const base = `/${opt('base', '/skills/lumina-taste/').replace(/^\/+|\/+$/g, '')}/`;
+const base = `/${opt('base', '/lumina-taste/').replace(/^\/+|\/+$/g, '')}/`;
 const dist = join(root, 'preview/dist');
 
 if (!args.includes('--no-build')) {
@@ -41,6 +41,8 @@ const html = all.filter((f) => f.endsWith('.html'));
 const rootRefs = html.flatMap((f) => [...readFileSync(f, 'utf8').matchAll(/<(?:script|link|img|source|iframe)\b[^>]*\b(?:src|href)="(\/(?!\/)[^"]*)"/g)].map((m) => `${relative(out, f)}: ${m[1]}`));
 const missingShowroom = html.filter((f) => !readFileSync(f, 'utf8').includes('showroom.js')).map((f) => relative(out, f));
 const bytes = all.reduce((n, f) => n + statSync(f).size, 0);
+// GitHub Pages: serve every file as it is (no Jekyll, which would hide folders starting with an underscore).
+writeFileSync(join(out, '.nojekyll'), '');
 writeFileSync(join(out, 'SHOWROOM.txt'), `Lumina Taste showroom: the kit's gallery as a static site.\nUpload the contents of this folder to ${base} (or any folder: every path is relative).\nBuilt from lumina-taste with: node scripts/export-showroom.mjs\n`);
 
 let checked = null;

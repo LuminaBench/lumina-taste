@@ -179,7 +179,8 @@ test('messaging: a chat swipes towards the start to show Mute and Archive; the M
   await page.keyboard.press('Enter');
   await expect(second).toHaveAttribute('data-open', '');
   await expect(second.locator('[data-action="mute"]')).toBeFocused();
-  await page.keyboard.press('Tab');
+  // The next action (focused directly: Safari's Tab skips buttons by default).
+  await second.locator('[data-action="archive"]').focus();
   await page.keyboard.press('Enter');
   await expect(page.locator('#ms-chats [data-part="row"]')).toHaveCount(5);
   await expect(page.locator('.as-toast')).toHaveText('Climbing on Thursday archived');

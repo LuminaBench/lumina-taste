@@ -39,7 +39,8 @@ export function enhance(root: HTMLElement): Cleanup {
   render(false);
   (root as HTMLElement & { ltSet?: (t: string) => void }).ltSet = (t: string) => { text = t; render(); };
   return combine(
-    on(root, 'click', (e) => { const b = (e.target as Element).closest<HTMLButtonElement>('button[data-key]'); if (b) press(b.dataset.key!); }),
+    // Safari does not focus a button on click: focus the key so typing and Backspace carry on from it.
+    on(root, 'click', (e) => { const b = (e.target as Element).closest<HTMLButtonElement>('button[data-key]'); if (!b) return; if (document.activeElement !== b) b.focus({ preventScroll: true }); press(b.dataset.key!); }),
     on(root, 'keydown', (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       const k = e.key === 'Backspace' || e.key === 'Delete' ? 'back' : e.key === ',' ? '.' : e.key;

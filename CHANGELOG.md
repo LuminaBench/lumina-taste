@@ -18,6 +18,8 @@ The first public release. A design skill for coding agents that plans a page fro
 - Off a Mac, a film or a PDF menu nothing can read says what to install (ffmpeg, pdftotext) and the page still builds.
 - Safari: -webkit- twins for backdrop-filter, user-select and mask-image; anchor positioning, field sizing and typed attr() keep their fallbacks. Pages need Safari 17.4 or newer (CSS @scope).
 - `export-showroom.mjs` (`npm run showroom`): the gallery as a static site for any folder of a website, checked under its base path; the demos' own links, mail links and forms do nothing there but say so.
+- Safari: the whole browser suite passes in WebKit. Stacked first screens no longer collapse their picture to nothing (an aspect-ratio slot stretched by its row), and the accordion, flyout menu, number pad and bulk-select focus what was clicked, as Safari does not.
+- The live showroom at luminabench.github.io/lumina-taste, published by a GitHub Pages workflow on every push to main after the export is checked under /lumina-taste/.
 - A site grows page by page: a second page type goes to its own file, joined to the first by its top bar, with a smooth cross-fade between pages while the bar holds still.
 - `starter.mjs`: a finished starting point in one command for fifteen kinds of business and app: the page, the brand kit and one checklist of what is still sample.
 - A gallery page shows every first screen, top bar and footer live, side by side; `compose --hero <id>` uses the one the person points at. A picture band never repeats the first screen's headline.

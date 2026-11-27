@@ -65,8 +65,10 @@ async function wordsOverPicture(page: Page) {
     const c = document.createElement('canvas'); c.width = img.width; c.height = img.height; const x = c.getContext('2d')!; x.drawImage(img, 0, 0);
     const lin = (v: number) => { v /= 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
     const L = (r: number, g: number, b: number) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+    // The screenshot may be at the screen's pixel density (WebKit on a 2× display): scale the boxes to it.
+    const k = img.width / innerWidth;
     return boxes.map((b) => {
-      const d = x.getImageData(Math.max(0, b.x), Math.max(0, b.y), Math.max(1, b.w), Math.max(1, b.h)).data;
+      const d = x.getImageData(Math.max(0, b.x * k), Math.max(0, b.y * k), Math.max(1, b.w * k), Math.max(1, b.h * k)).data;
       let max = 0; for (let i = 0; i < d.length; i += 16) max = Math.max(max, L(d[i], d[i + 1], d[i + 2]));
       const cv = document.createElement('canvas').getContext('2d')!; cv.fillStyle = b.color; cv.fillRect(0, 0, 1, 1); const [r, g, bl] = cv.getImageData(0, 0, 1, 1).data;
       const t = L(r, g, bl); const ratio = (Math.max(t, max) + 0.05) / (Math.min(t, max) + 0.05);

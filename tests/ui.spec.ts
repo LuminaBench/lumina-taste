@@ -46,7 +46,9 @@ test('every pattern re-skins across all 48 palette × mode themes', async ({ pag
   expect(result.distinct).toBe(48);
 });
 
-test('keyboard focus is visible on the first control of every stage', async ({ page }) => {
+test('keyboard focus is visible on the first control of every stage', async ({ page, browserName }) => {
+  // Two screenshots for each of about 175 controls; WebKit's screenshots of this long page take about a second each.
+  test.setTimeout(browserName === 'webkit' ? 600_000 : 120_000);
   await page.goto('/#/ui');
   await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important} .g-prev-in{transform:none!important;width:auto!important} .g-prev{aspect-ratio:auto!important;min-height:220px;contain:none!important} .g-stretch::after{display:none}' });
   // Rings are for keyboard users: switch the page into keyboard modality.
@@ -70,7 +72,10 @@ test('keyboard focus is visible on the first control of every stage', async ({ p
   const missing: string[] = [];
   for (const id of ids) {
     const el = page.locator(`[data-focus-probe="${id}"]`);
-    await el.scrollIntoViewIfNeeded();
+    // A control can hide itself once its part settles (a backdrop with no room for its motion drops its pause button).
+    if (!(await el.isVisible())) continue;
+    // Scrolled directly: Playwright's own scroll waits for a still element, and a live demo beside it may keep moving.
+    await el.evaluate((n: HTMLElement) => n.scrollIntoView({ block: 'center' }));
     const box = (await el.boundingBox())!;
     const clip = { x: Math.max(0, box.x - 8), y: Math.max(0, box.y - 8), width: box.width + 16, height: box.height + 16 };
     await page.evaluate(() => (document.activeElement as HTMLElement)?.blur());
@@ -188,8 +193,8 @@ test.describe('controls', () => {
     await page.keyboard.press('Escape');
     await expect(s.locator('[data-part="menu"]')).toBeHidden();
   });
-  test('copy button morphs to Copied', async ({ page, context }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  test('copy button morphs to Copied', async ({ page, context, browserName }) => {
+    if (browserName === 'chromium') await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     const s = await solo(page, 'copy-button');
     await s.locator('.lt-copy').click();
     await expect(s.locator('[data-part="text"]')).toHaveText('Copied');
@@ -337,10 +342,9 @@ test.describe('overlays', () => {
   });
   test('tooltip shows on keyboard focus', async ({ page }) => {
     await solo(page, 'tooltip');
-    await page.keyboard.press('Tab'); // skip link etc. — focus first stage button directly instead
-    await page.locator('#ui-tooltip [aria-describedby="lt-tt-1"]').focus();
-    await page.keyboard.press('Shift+Tab');
-    await page.keyboard.press('Tab');
+    // Keyboard modality first (a plain key press), then focus the trigger: Safari's Tab skips buttons by default.
+    await page.keyboard.press('Shift');
+    await page.locator('#ui-tooltip [aria-describedby="lt-tt-1"]').evaluate((el: HTMLElement) => el.focus({ focusVisible: true } as FocusOptions));
     await expect(page.locator('#lt-tt-1')).toBeVisible();
   });
   test('popover opens and focuses its input', async ({ page }) => {
@@ -1167,8 +1171,8 @@ test.describe('places and products', () => {
     await expect(s.locator('[data-part="count"]')).toHaveText('3 of 5 done');
     expect(await page.evaluate(() => (window as any).__t)).toEqual([{ name: 't3', done: true, doneCount: 3, total: 5 }]);
     expect(await s.locator('[data-part="track"] span').evaluate((el) => el.style.getPropertyValue('--p'))).toBe('60%');
-    await s.locator('li').nth(3).locator('input').focus();
-    await page.keyboard.press('Space'); await page.keyboard.press('Tab'); await page.keyboard.press('Space');
+    // Space ticks a focused row (focused directly: Safari's Tab skips checkboxes by default).
+    for (const n of [3, 4]) { await s.locator('li').nth(n).locator('input').focus(); await page.keyboard.press('Space'); }
     await expect(s.locator('[data-part="count"]')).toHaveText('All 5 done');
   });
   test('visit info: marks today and says whether the place is open, in words', async ({ page }) => {
