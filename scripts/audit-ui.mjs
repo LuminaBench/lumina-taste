@@ -788,7 +788,8 @@ async function auditOne(browser, url, vpName, mode) {
   const runtimeErrors = [];
   page.on('pageerror', (e) => runtimeErrors.push(e.message));
   page.on('console', (m) => { if (m.type() === 'error') runtimeErrors.push(m.text()); });
-  await page.goto(url, { waitUntil: 'load' });
+  // One slow load on a busy machine is retried once rather than ending the whole run.
+  try { await page.goto(url, { waitUntil: 'load' }); } catch (e) { if (!/Timeout/.test(e.message)) throw e; await page.goto(url, { waitUntil: 'load', timeout: 60000 }); }
   // Apply the mode to lumina-taste roots as well as prefers-color-scheme.
   // Remember the mode the page was written in: the default-look rule judges the look as built, not a mode the audit switched to.
   await page.evaluate(() => { const r = document.documentElement; if (!r.hasAttribute('data-authored-mode')) r.setAttribute('data-authored-mode', r.getAttribute('data-mode') ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')); });
