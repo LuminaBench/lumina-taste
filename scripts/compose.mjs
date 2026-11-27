@@ -93,11 +93,14 @@ function pickType() {
   if (/ settings(-heavy| heavy)? apps? /.test(head) && byId('app-settings')) return { type: byId('app-settings'), confident: true };
   if (/ apps? /.test(head) && !headNames && !/ (website|site|landing page|home page|homepage) /.test(head)) {
     const sells = / (a|per) (month|year|seat|user) | how it works | free trial | pricing | sign up | download | for (sole traders|teams|small businesses|freelancers) /.test(text);
-    // An app whose subject has a blueprint of its own: a bank, a run, a chat, bookings, a settings-heavy tool.
+    // An app whose subject has a blueprint of its own: a bank, a run, a chat, bookings, a podcast player, a café to
+    // order from, a settings-heavy tool. (Each needs its page type in engine/compose/page-types.json to be planned.)
     const own = / (bank|banking|money|wallet|budget|budgeting|savings) /.test(head) ? 'app-banking'
       : / (running|run|runner|fitness|workout|workouts|gym|training|exercise|cycling|swimming|steps) /.test(head) ? 'app-fitness'
       : / (chat|chats|messaging|messages|messenger|texting) /.test(head) ? 'app-messaging'
       : / (booking|bookings|appointment|appointments|reservation|reservations|classes) /.test(head) ? 'app-booking'
+      : / (podcast|podcasts|listening|audiobook|audiobooks) /.test(head) ? 'app-listening'
+      : / (ordering|order ahead|takeaway|cafe|caf|coffee shop|click and collect) /.test(head) ? 'app-ordering'
       : / (settings|preferences) /.test(head) ? 'app-settings' : null;
     // Bookings kept by the business (each with its owner, status, staff) are a work app with real columns, not
     // the customer's booking app.

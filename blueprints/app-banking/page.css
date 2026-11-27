@@ -4,6 +4,12 @@
 .bk-me { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--bg-surface-2); color: var(--text-primary); font-size: var(--text-ui-xs); font-weight: 650; }
 .lt-appbar [data-part="action"]:has(.bk-me) { width: 44px; height: 44px; padding: 0; justify-content: center; }
 
+/* Pull to refresh: the stamp sits under Recent; a payment that arrives slides in at the top of Today. */
+.bk-pull [data-part="stamp"] { margin: 0 0 -10px; }
+.bk-new { animation: bk-arrive var(--dur-4) var(--ease-out) both; }
+@keyframes bk-arrive { from { opacity: 0; translate: 0 -12px; } }
+@media (prefers-reduced-motion: reduce) { .bk-new { animation: none; } }
+
 /* The balance */
 .bk-balance { display: grid; gap: 6px; }
 .bk-acct { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 550; }
@@ -19,13 +25,6 @@
 .bk-week { color: var(--text-secondary); font-size: var(--text-ui); font-weight: 550; font-variant-numeric: tabular-nums; }
 .bk-chart { --chart-1: var(--highlight); --border-strong: color-mix(in oklab, var(--accent-solid) 30%, var(--bg-canvas)); margin-inline: -4px; }
 .bk-chart .lt-chart-head h3 { font-size: var(--text-ui); }
-
-/* Payment marks: the merchant's own drawing small in the round tile. */
-.as-mark [data-part="mark-motif"] { --mi: var(--text-primary); --ma: var(--accent-solid); --mb: var(--bg-surface-1); width: 30px; height: 30px; overflow: visible; }
-.as-mark [data-part="mark-motif"] [data-m="a"] { fill: var(--ma); }
-.as-mark [data-part="mark-motif"] [data-m="b"], .as-mark [data-part="mark-motif"] [data-m="cut"] { fill: var(--mb); }
-.as-mark [data-part="mark-motif"] [data-m="dot"] { fill: var(--mi); }
-.as-mark [data-part="mark-motif"] :is([data-m="ink"], [data-m="sil"]) { fill: none; stroke: var(--mi); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
 
 /* One payment */
 .bk-head { display: grid; justify-items: center; gap: 6px; padding-top: 8px; text-align: center; }
@@ -61,7 +60,9 @@
 .bk-me-lg { width: 56px; height: 56px; font-size: var(--text-ui); }
 
 /* The send sheet: who to, the pad, the one button. */
-.bk-sheet { display: grid; gap: 16px; align-content: start; }
+.bk-sheet { gap: 16px; align-content: start; }
+/* Only an open sheet is laid out: a closed one stays display: none and never sits over the page. */
+.bk-sheet[open] { display: grid; }
 .bk-to { display: flex; gap: 8px; overflow-x: auto; margin-inline: -4px; padding: 2px 4px; scrollbar-width: none; }
 .bk-to button { flex: none; display: grid; justify-items: center; gap: 6px; width: 76px; min-height: 84px; padding: 8px 0; border: 0; border-radius: var(--radius-lg); background: none; color: var(--text-secondary); font: 500 var(--text-ui-sm) var(--font-body); cursor: pointer; }
 .bk-to button[aria-checked="true"] { background: var(--bg-surface-2); color: var(--text-primary); }

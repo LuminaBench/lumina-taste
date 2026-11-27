@@ -3,20 +3,24 @@
    booking on a phone, where a month calendar is too small to tap and too much to read. */
 @scope (.lt-datestrip) {
   :scope { position: relative; width: 100%; min-width: 0; }
-  [data-part="track"] { display: grid; grid-auto-flow: column; grid-auto-columns: 56px; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scroll-padding-inline: var(--ds-edge, 0px); padding: 4px var(--ds-edge, 0px); scrollbar-width: none; }
+  [data-part="track"] { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(56px, auto); gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scroll-padding-inline: var(--ds-edge, 0px); padding: 4px var(--ds-edge, 0px); scrollbar-width: none; }
   [data-part="track"]::-webkit-scrollbar { display: none; }
-  button { position: relative; display: grid; justify-items: center; align-content: center; gap: 2px; height: 76px; padding: 0; border: 0; border-radius: var(--radius-lg); background: transparent; color: var(--text-primary); font: inherit; cursor: pointer; scroll-snap-align: start; -webkit-tap-highlight-color: transparent; transition: background-color var(--dur-2) var(--ease-out), color var(--dur-2), scale var(--dur-1) var(--ease-out); }
+  button { position: relative; display: grid; justify-items: center; align-content: center; gap: 2px; min-height: 76px; padding: 8px 4px; border: 0; border-radius: var(--radius-lg); background: transparent; color: var(--text-primary); font: inherit; cursor: pointer; scroll-snap-align: start; -webkit-tap-highlight-color: transparent; transition: background-color var(--dur-2) var(--ease-out), color var(--dur-2), scale var(--dur-1) var(--ease-out); }
   button > span:first-child { color: var(--text-secondary); font-size: var(--text-ui-xs); font-weight: 550; }
   button b { font-family: var(--font-display); font-size: 1.375rem; font-weight: var(--weight-display); letter-spacing: -0.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
   [data-part="dot"] { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-solid); }
   button:hover:not([aria-disabled="true"]) { background: var(--bg-surface-2); }
   button:active:not([aria-disabled="true"]) { scale: 0.95; }
   button[aria-checked="true"] { background: var(--accent-solid); color: var(--accent-ink); }
-  button[aria-checked="true"] > span:first-child { color: inherit; opacity: 0.86; }
+  button[aria-checked="true"] > span:first-child { color: inherit; }
   button[aria-checked="true"] [data-part="dot"] { background: var(--accent-ink); }
   button[aria-disabled="true"] { color: var(--text-muted); cursor: not-allowed; }
   button[aria-disabled="true"] b { font-weight: 400; }
   button:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) { button { transition: none; } }
 }
-@media (forced-colors: active) { .lt-datestrip button[aria-checked="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; } }
+@media (forced-colors: active) {
+  .lt-datestrip button[aria-checked="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+  .lt-datestrip [data-part="dot"] { forced-color-adjust: none; background: CanvasText; }
+  .lt-datestrip button[aria-checked="true"] [data-part="dot"] { background: HighlightText; }
+}

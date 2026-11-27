@@ -2,7 +2,7 @@
   "name": "lumina-taste",
   "version": "1.0.0",
   "generated": "scripts/build-catalog.mjs",
-  "counts": {"ui":221,"charts":48,"blueprints":32,"palettes":24,"themes":48,"typography":20,"styles":39},
+  "counts": {"ui":221,"charts":48,"blueprints":34,"palettes":24,"themes":48,"typography":20,"styles":39},
   "families": [
     {
       "id": "controls",
@@ -6687,6 +6687,81 @@
         "blueprints/app-settings/page.css"
       ],
       "path": "blueprints/app-settings"
+    },
+    {
+      "id": "app-ordering",
+      "order": 33,
+      "name": "Ordering app",
+      "summary": "A made-up café's order-ahead app on a phone: the menu as drawn pictures with prices, two to a row, under chips for its sections; an item sheet with size, milk and extras and an Add button that says the price; a basket that rides above the tabs, with the collection time and one Pay button; and the order live, its line filling from received to being made to ready, with the number to show at the counter. From 768px the basket stays beside the menu, and the orders list beside the order. Onboarding, loading, empty and error states.",
+      "anatomy": "Welcome (drawing, one sentence, See the menu) → Menu: large title, where and how long, section chips that stay under the bar, items as pictures with name, line and price, a + on each, the basket bar low → Item sheet: its picture, size, milk, extras, how many, Add for £x → Basket: lines with − and +, when to collect, the sum, Pay £x low → Orders: the order on its way as the one card, earlier orders with Again → Order: ready time large, the steps filling live, the number for the counter, where → Account: grouped settings",
+      "aliases": [
+        "ordering app",
+        "order ahead app",
+        "food ordering app",
+        "café app",
+        "cafe app",
+        "coffee shop app",
+        "takeaway app",
+        "click and collect app",
+        "restaurant ordering app",
+        "order tracking app"
+      ],
+      "uses": [
+        "mobile-app-bar",
+        "bottom-nav",
+        "bottom-sheet",
+        "segmented-control",
+        "radio-group",
+        "toggle-switch",
+        "settings-group",
+        "art-panel",
+        "skeleton",
+        "button"
+      ],
+      "states": ["loading","empty","error"],
+      "type": "humanist: warm, open letters that read well on a menu at 17px",
+      "motion": "An app moves only to answer the person: a pushed screen slides in from the trailing edge, a tab cross-fades, the item sheet rises and drags down to close, and the order's line fills as it is made.",
+      "brand": ["Copper Hare"],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/app-ordering/index.html",
+        "blueprints/app-ordering/main.ts",
+        "blueprints/app-ordering/meta.json",
+        "blueprints/app-ordering/page.css"
+      ],
+      "path": "blueprints/app-ordering"
+    },
+    {
+      "id": "app-listening",
+      "order": 34,
+      "name": "Listening app",
+      "summary": "A made-up podcast player on a phone: a library with the episode to carry on with as the one card, followed shows as drawn covers on a rail, and the latest episodes with a play button each; one episode with its chapters; a now-playing screen that rises from a mini player above the tab bar and drags down to close, its cover stepping back while paused, a scrubber notched at each chapter, skip back and forward, speed and a sleep timer; and Up next, reordered by drag or by keyboard. From 768px a sidebar, and the episode beside the library. Onboarding, loading, empty and error states.",
+      "anatomy": "Welcome (drawing, one sentence, Find shows to follow) → Library: large title, Carry on (cover, title, time left, play, progress), shows you follow as a rail of covers, latest episodes with play → Episode: cover, number and date, title, Play from 19:05, queue and download, about, chapters → Now playing (rises from the mini player): close, cover, title and chapter, scrubber with chapter notches, back 15, play, forward 30, speed, sleep, chapters → Up next: reorder by drag or keyboard → Settings: grouped settings. The mini player rides above the tab bar on every screen.",
+      "aliases": [
+        "podcast app",
+        "podcast player",
+        "listening app",
+        "audio app",
+        "audiobook app",
+        "radio app",
+        "music player app",
+        "now playing screen",
+        "mini player",
+        "media player app"
+      ],
+      "uses": ["mobile-app-bar","bottom-nav","sortable-list","settings-group","art-panel","skeleton","button"],
+      "states": ["loading","empty","error"],
+      "type": "editorial: a reading face for titles that are sentences, set large on the player",
+      "motion": "An app moves only to answer the person: a pushed screen slides in from the trailing edge, a tab cross-fades, the player rises from the mini player and drags down to close, and its cover steps back a little while paused.",
+      "brand": ["Field Notes"],
+      "kind": "blueprint",
+      "files": [
+        "blueprints/app-listening/index.html",
+        "blueprints/app-listening/main.ts",
+        "blueprints/app-listening/meta.json",
+        "blueprints/app-listening/page.css"
+      ],
+      "path": "blueprints/app-listening"
     }
   ],
   "palettes": [

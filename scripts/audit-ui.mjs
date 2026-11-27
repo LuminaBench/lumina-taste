@@ -756,6 +756,8 @@ const TASTE_CHECKS = (arg = null) => {
     if (/\?\s*$/.test(el.textContent.trim()) || el.hasAttribute('data-suggest')) continue;
     // A row in a list that happens to be a button (a chapter, a conversation, a file) is named by its content.
     if (el.parentElement?.tagName === 'LI' && el.parentElement.children.length === 1) continue;
+    // The same row inside a swipe row (its main part, beside the More button that is its keyboard path).
+    if (el.matches('[data-part="main"]') && el.closest('li[data-part="row"]')) continue;
     if (words.length > 5) { add('taste-button-label', el, `Button label has ${words.length} words (“${el.textContent.trim().slice(0, 40)}”). Use a verb and an object: “Export report”.`); break; }
   }
   return out;

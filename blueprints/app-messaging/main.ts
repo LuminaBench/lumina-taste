@@ -14,9 +14,10 @@ import './page.css';
 import { enhance as appbar } from '../../components/ui/navigation/mobile-app-bar/mobile-app-bar';
 import { enhance as composer } from '../../components/ui/controls/message-composer/message-composer';
 import { enhance as settings } from '../../components/ui/controls/settings-group/settings-group';
+import { enhance as swipeRow, removeRow } from '../../components/ui/navigation/swipe-row/swipe-row';
 
 pageStates();
-boot({ 'mobile-app-bar': appbar, 'message-composer': composer, 'settings-group': settings });
+boot({ 'mobile-app-bar': appbar, 'message-composer': composer, 'settings-group': settings, 'swipe-row': swipeRow });
 const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector<T>(s)!;
 const scroller = $('#ms-scroll');
 const toEnd = () => scroller.scrollTo({ top: scroller.scrollHeight });
@@ -61,3 +62,17 @@ $('.lt-composer').addEventListener('lt-change', (e) => {
   toEnd();
 });
 document.addEventListener('click', (e) => { if ((e.target as Element).closest('.ms-play')) app.say('Playing the voice note, 0:42'); });
+
+// Swipe a chat towards the leading edge (or use its More button) to mute it or put it away.
+$('.ms-swipe').addEventListener('lt-change', (e) => {
+  const { action, id } = (e as CustomEvent<{ action: string; id: string }>).detail;
+  const row = document.querySelector<HTMLElement>(`#ms-chats [data-id="${id}"]`);
+  const who = row?.querySelector('[data-who]')?.getAttribute('data-who') ?? '';
+  if (action === 'archive' && row) {
+    // Focus would be lost with the row: it moves to the next chat's row (or the one before).
+    const next = (row.nextElementSibling ?? row.previousElementSibling)?.querySelector<HTMLElement>('[data-part="main"]');
+    if (row.contains(document.activeElement)) next?.focus();
+    removeRow(row);
+    app.say(`${who} archived`);
+  } else if (action === 'mute') app.say(`${who} muted for 8 hours`);
+});

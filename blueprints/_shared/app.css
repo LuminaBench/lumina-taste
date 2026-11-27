@@ -64,6 +64,12 @@ button.as-row, a.as-row { cursor: pointer; transition: background-color var(--du
 /* The thing's mark: a round tile with its initial or its drawing, in a quiet tint. */
 .as-mark { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--bg-surface-2); color: var(--text-secondary); font-weight: 650; font-size: var(--text-ui-sm); }
 .as-mark svg { width: 22px; height: 22px; }
+/* A mark can hold the thing's own drawing (an art-panel motif with data-part="mark-motif"), small and in the tint. */
+.as-mark [data-part="mark-motif"] { --mi: var(--text-primary); --ma: var(--accent-solid); --mb: var(--bg-surface-1); width: 30px; height: 30px; overflow: visible; }
+.as-mark [data-part="mark-motif"] [data-m="a"] { fill: var(--ma); }
+.as-mark [data-part="mark-motif"] [data-m="b"], .as-mark [data-part="mark-motif"] [data-m="cut"] { fill: var(--mb); }
+.as-mark [data-part="mark-motif"] [data-m="dot"] { fill: var(--mi); }
+.as-mark [data-part="mark-motif"] :is([data-m="ink"], [data-m="sil"]) { fill: none; stroke: var(--mi); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
 .as-day { margin: 18px 0 2px; color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 600; }
 .as-day:first-child { margin-top: 0; }
 
@@ -140,7 +146,7 @@ button.as-row, a.as-row { cursor: pointer; transition: background-color var(--du
   .as-panes { grid-template-columns: minmax(320px, 400px) minmax(0, 1fr); }
   .as-screen[data-pane="list"] { grid-area: 1 / 1; }
   .as-screen[data-pane="detail"] { grid-area: 1 / 2; box-shadow: inset 1px 0 0 var(--border-hairline); }
-  .as-screen:is([data-pane="full"], [data-pane="onboard"]) { grid-area: 1 / 1 / 2 / 3; }
+  .as-screen:is([data-pane="full"], [data-pane="onboard"], [data-pane="sheet"]) { grid-area: 1 / 1 / 2 / 3; }
   .as-screen[data-pane="full"] .as-scroll > * { width: min(100%, 720px); margin-inline: auto; }
   /* The list's default record shows beside it; the list shows beside its record. */
   .as-screen[data-shown] { display: flex; }
@@ -179,12 +185,78 @@ button.as-row, a.as-row { cursor: pointer; transition: background-color var(--du
   .as { grid-template-columns: 260px minmax(0, 1fr); }
   .as-panes { grid-template-columns: minmax(360px, 420px) minmax(0, 1fr); }
 }
+/* ------------------------------------------------------------------ motion: push, back, tabs (app.ts)
+   A push slides the new screen in from the trailing edge over the old one, which drifts a little the other way
+   and dims; back is the same in reverse, the top screen leaving towards the trailing edge. A tab, or a record
+   changing beside its list on a wide screen, cross-fades. All on the motion tokens; nothing under reduced motion. */
+html[data-app] { --as-dir: 1; }
+html[data-app]:dir(rtl) { --as-dir: -1; }
 @media (prefers-reduced-motion: no-preference) {
-  html[data-nav="forward"]::view-transition-old(root) { animation: as-out 300ms var(--ease-out) both; }
-  html[data-nav="forward"]::view-transition-new(root) { animation: as-in 300ms var(--ease-out) both; }
-  html[data-nav="back"]::view-transition-old(root) { animation: as-in 300ms var(--ease-out) reverse both; }
-  html[data-nav="back"]::view-transition-new(root) { animation: as-out 300ms var(--ease-out) reverse both; }
+  html[data-nav]::view-transition-group(root) { animation-duration: var(--dur-4); }
+  html:is([data-nav="forward"], [data-nav="back"])::view-transition-old(root),
+  html:is([data-nav="forward"], [data-nav="back"])::view-transition-new(root) { mix-blend-mode: normal; }
+  html[data-nav="forward"]::view-transition-old(root) { animation: as-drift-out var(--dur-4) var(--ease-out) both; }
+  html[data-nav="forward"]::view-transition-new(root) { animation: as-slide-in var(--dur-4) var(--ease-out) both; box-shadow: 0 0 28px oklch(0 0 0 / 0.16); }
+  html[data-nav="back"]::view-transition-old(root) { z-index: 1; animation: as-slide-out var(--dur-4) var(--ease-out) both; box-shadow: 0 0 28px oklch(0 0 0 / 0.16); }
+  html[data-nav="back"]::view-transition-new(root) { animation: as-drift-in var(--dur-4) var(--ease-out) both; }
+  html:is([data-nav="tab"], [data-nav="pane"])::view-transition-old(root) { animation: as-fade-out var(--dur-3) var(--ease-out) both; }
+  html:is([data-nav="tab"], [data-nav="pane"])::view-transition-new(root) { animation: as-fade-in var(--dur-3) var(--ease-out) both; }
+  /* A screen that rises like a sheet (data-dir="up"): it comes up from the bottom while the app behind steps back
+     and dims; "down" lets it fall away and the app comes forward again. */
+  html:is([data-nav="up"], [data-nav="down"])::view-transition-old(root),
+  html:is([data-nav="up"], [data-nav="down"])::view-transition-new(root) { mix-blend-mode: normal; }
+  html[data-nav="up"]::view-transition-old(root) { animation: as-recede var(--dur-4) var(--ease-out) both; }
+  html[data-nav="up"]::view-transition-new(root) { animation: as-rise var(--dur-4) var(--ease-out) both; border-radius: var(--radius-xl) var(--radius-xl) 0 0; box-shadow: 0 -8px 32px oklch(0 0 0 / 0.18); }
+  html[data-nav="down"]::view-transition-old(root) { z-index: 1; animation: as-fall var(--dur-4) var(--ease-out) both; border-radius: var(--radius-xl) var(--radius-xl) 0 0; box-shadow: 0 -8px 32px oklch(0 0 0 / 0.18); }
+  html[data-nav="down"]::view-transition-new(root) { animation: as-come-forward var(--dur-4) var(--ease-out) both; }
 }
-@keyframes as-in { from { translate: 100% 0; } }
-@keyframes as-out { to { translate: -24% 0; opacity: 0.7; } }
+@keyframes as-rise { from { translate: 0 100%; } }
+@keyframes as-fall { to { translate: 0 100%; } }
+@keyframes as-recede { to { scale: 0.94; filter: brightness(0.82); } }
+@keyframes as-come-forward { from { scale: 0.94; filter: brightness(0.82); } }
+@keyframes as-slide-in { from { translate: calc(var(--as-dir) * 100%) 0; } }
+@keyframes as-slide-out { to { translate: calc(var(--as-dir) * 100%) 0; } }
+@keyframes as-drift-out { to { translate: calc(var(--as-dir) * -28%) 0; filter: brightness(0.9); } }
+@keyframes as-drift-in { from { translate: calc(var(--as-dir) * -28%) 0; filter: brightness(0.9); } }
+@keyframes as-fade-out { to { opacity: 0; } }
+@keyframes as-fade-in { from { opacity: 0; } }
+
+/* The bar once the large title has gone under it: the content shows through, softly, like glass. */
+.as-scroll .lt-appbar[data-scrolled] { background: color-mix(in oklab, var(--bg-canvas) 90%, transparent); -webkit-backdrop-filter: blur(20px) saturate(1.4); backdrop-filter: blur(20px) saturate(1.4); }
+.as-scroll .lt-appbar[data-scrolled] [data-part="row"] { background: transparent; }
+
+/* ------------------------------------------------------------------ swipe rows (swipe-row's script on the shell's rows)
+   <div class="as-swipe" data-lt="swipe-row"> <ul class="as-rows" data-part="list"> <li data-part="row"> <div data-part="content"> <button class="as-row"
+   data-part="main"> … <button data-part="more"> </div> <div data-part="actions" inert> <button data-action> … </ul> <p data-part="live">
+   Edge to edge like a native list: the row slides towards the leading edge over its actions; the keyboard path is
+   the row's own More button, shown when it has focus. */
+.as-swipe { --as-action-w: 76px; --sw-dir: 1; margin-inline: calc(var(--as-pad) * -1); }
+.as-swipe:dir(rtl) { --sw-dir: -1; }
+.as-swipe [data-part="row"] { position: relative; overflow: hidden; }
+.as-swipe [data-part="content"] { position: relative; z-index: 1; display: flex; align-items: center; background: var(--bg-canvas); translate: var(--dx, 0px) 0; transition: translate var(--dur-4) var(--ease-out); touch-action: pan-y; }
+.as-swipe [data-part="row"][data-open] > [data-part="content"] { translate: var(--dx, calc(var(--actions, 2) * var(--as-action-w) * -1 * var(--sw-dir))) 0; }
+.as-swipe [data-part="row"][data-dragging] > [data-part="content"] { transition: none; }
+.as-swipe [data-part="row"] + [data-part="row"] > [data-part="content"]::before { content: ""; position: absolute; top: 0; inset-inline: calc(var(--as-pad) + var(--as-rule-in, 58px)) 0; height: var(--bw); background: var(--border-hairline); }
+.as-swipe .as-row { flex: 1; min-width: 0; padding-inline: var(--as-pad); user-select: none; -webkit-user-drag: none; }
+.as-swipe [data-part="more"] { flex: none; display: grid; place-items: center; width: 44px; height: 44px; margin-inline-end: 12px; padding: 0; border: 0; border-radius: var(--radius-md); background: none; color: var(--text-secondary); cursor: pointer; }
+.as-swipe [data-part="more"]:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -2px; }
+.as-swipe [data-part="more"]:not(:focus-visible) { position: absolute; inset-inline-end: 0; width: 1px; height: 1px; margin: 0; overflow: hidden; clip-path: inset(50%); }
+@media (hover: hover) and (pointer: fine) {
+  .as-swipe [data-part="row"]:hover [data-part="more"] { position: static; width: 44px; height: 44px; margin-inline-end: 12px; overflow: visible; clip-path: none; }
+  .as-swipe [data-part="more"]:hover { background: var(--bg-surface-2); color: var(--text-primary); }
+}
+.as-swipe [data-part="actions"] { position: absolute; inset-block: 0; inset-inline-end: 0; z-index: 0; display: flex; }
+.as-swipe [data-part="actions"] button { display: grid; place-content: center; justify-items: center; gap: 4px; width: var(--as-action-w); min-height: 44px; padding: 0 6px; border: 0; background: var(--bg-surface-3); color: var(--text-primary); font: 600 var(--text-ui-xs) var(--font-body); cursor: pointer; }
+/* The outermost action, the one a long swipe lands on, carries the accent. */
+.as-swipe [data-part="actions"] button:last-child { background: var(--accent-solid); color: var(--accent-ink); }
+.as-swipe [data-part="actions"] button:active { filter: brightness(0.92); }
+.as-swipe [data-part="actions"] button:focus-visible { outline: var(--focus-width) solid var(--text-primary); outline-offset: -4px; }
+.as-swipe [data-part="row"][data-leaving] { animation: as-row-out var(--dur-3) var(--ease-out) forwards; }
+@keyframes as-row-out { to { opacity: 0; height: 0; } }
+@media (prefers-reduced-motion: reduce) { .as-swipe [data-part="content"] { transition: none; } .as-swipe [data-part="row"][data-leaving] { animation: none; } }
+@media (forced-colors: active) { .as-swipe [data-part="actions"] button { border: 1px solid ButtonText; } }
+
+/* Pull to refresh inside a screen: the stamp says when the list last changed, with the same Refresh as a button. */
+.as .lt-pull [data-part="stamp"] { margin-bottom: 6px; }
+
 @media print { .as { display: block; height: auto; overflow: visible; } .as-screen { display: flex !important; break-after: page; } .as-scroll { overflow: visible; } .as-tabs, .as-side { display: none !important; } }
