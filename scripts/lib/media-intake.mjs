@@ -4,7 +4,9 @@
 // page's picture slots, best fit first, then fills the rest in page order, because the business's own picture of
 // its own place beats any stock photograph; menuFrom() reads a plain-text menu or price list into brief facts.
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { extname, join } from 'node:path';
+import { dirname, extname, join } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { imageSize } from './image-size.mjs';
 
 const PHOTO = new Set(['.jpg', '.jpeg', '.png', '.webp']);
@@ -56,6 +58,7 @@ export function scanMedia(dir) {
     const shows = n.shows ?? null;
     items.push({
       file: f, path, kind, shows, use: n.use ?? null, focus: n.focus ?? null,
+      ...(kind === 'video' ? { start: n.start ?? null, seconds: n.seconds ?? null } : {}),
       width: size?.width ?? null, height: size?.height ?? null,
       orientation: size ? (size.width > size.height * 1.15 ? 'wide' : size.height > size.width * 1.15 ? 'tall' : 'square') : null,
       words: [...new Set([...nameWords(f), ...(shows ? nameWords(shows) : [])])],
@@ -118,11 +121,20 @@ export async function checkMine(items, from = import.meta.url) {
   return items.map((i) => checked.find((c) => c.path === i.path) ?? i);
 }
 
+/** The text of a PDF: pdftotext when installed, else PDFKit on a Mac (nothing to install), else null. */
+export function pdfText(file) {
+  const run = (cmd, args) => { try { const r = spawnSync(cmd, args, { encoding: 'utf8' }); return r.status === 0 ? r.stdout : null; } catch { return null; } };
+  return run('pdftotext', ['-layout', file, '-'])
+    ?? (process.platform === 'darwin' ? run('swift', [join(dirname(fileURLToPath(import.meta.url)), 'macos', 'pdf-text.swift'), file]) : null);
+}
+
 /** A plain-text menu or price list ("Margherita £11.50" per line, or "name, price" CSV) as "name £price" phrases. */
 export function menuFrom(items) {
   const phrases = [];
-  for (const it of items.filter((i) => i.kind === 'menu' && TEXT.has(extname(i.file).toLowerCase()))) {
-    for (const raw of readFileSync(it.path, 'utf8').split(/\r?\n/)) {
+  for (const it of items.filter((i) => i.kind === 'menu' && (TEXT.has(extname(i.file).toLowerCase()) || /\.pdf$/i.test(i.file)))) {
+    // A PDF menu is read as text (see pdfText); one that is only a scan has no text, and is said so by the caller.
+    const text = /\.pdf$/i.test(it.file) ? pdfText(it.path) ?? '' : readFileSync(it.path, 'utf8');
+    for (const raw of text.split(/\r?\n/)) {
       const line = raw.replace(/^[-*#\s]+/, '').trim();
       const m = /^(.{2,60}?)[\s.,:–—-]*([£$€]\s?\d+(?:[.,]\d{2})?)\s*$/.exec(line);
       // The name is what comes before the first comma ("Pizza, artichoke and ham" is the pizza).

@@ -246,7 +246,7 @@ const flow = flow0 && type.screens ? { ...flow0, screens: type.screens.map(([id,
 let sections = type.sections.map((s, i) => ({ n: i + 1, ...s, exists: !s.id || uiIds.has(s.id) }));
 // Developer products show code: a code-block figure takes the place of the hero's product frame.
 // Art direction: one signature, a hero, a layout for each section and where colour and type may go.
-const subjectInput = { facts, items: itemsFrom(facts), software: ['landing', 'dev-landing'].includes(type.id), heroChoice, ownPhotos: media?.filter((i) => i.kind === 'photo') ?? null };
+const subjectInput = { facts, items: itemsFrom(facts), software: ['landing', 'dev-landing'].includes(type.id), heroChoice, ownPhotos: media?.filter((i) => i.kind === 'photo') ?? null, ownFilm: media?.find((i) => i.kind === 'video') ?? null };
 const art0 = direct({ type, domain, profile, sections, uiIds, ...subjectInput });
 for (const x of sections) if (/^hero-/.test(x.id ?? '') && art0.composition) {
   if (art0.hero !== x.id) { x.alt = [...new Set([x.id, ...(x.alt ?? [])])]; x.id = art0.hero; }
@@ -809,6 +809,27 @@ if (writeDraft) {
     if (photoNotes.length) plan.words.missing = [...new Set([...plan.words.missing, ...photoNotes])];
     const set = (readFileSync(draft.path, 'utf8').match(/<img src="images\//g) ?? []).length;
     plan.draft.images = { ran: true, status: r.status, set, look: look.look, lookWhy: look.why, yours, note: r.status === 0 ? `${set} photograph${set === 1 ? '' : 's'} set${yours ? ` (${yours} of them yours)` : ''}${set > yours ? ' from openly licensed sources' : ''} (credits in images/credits.json), ${look.look} look (${look.why}); look at each one` : `find-images could not run: ${(r.stderr || r.stdout).trim().split('\n').pop()}` };
+  }
+  // The person's own film: trimmed to 8 to 20 seconds, about 1600 px wide and under 3 MB, with a still from its middle,
+  // and set as the first screen's film (it plays muted, only when motion is allowed and Save-Data is off).
+  const ownFilm = media?.find((i) => i.kind === 'video');
+  if (ownFilm && draft.kind === 'composed' && /data-part="video"/.test(readFileSync(draft.path, 'utf8'))) {
+    const { trimFilm } = await import('./lib/film.mjs');
+    try {
+      const f = trimFilm(ownFilm.path, join(dirname(draft.path), 'images'), { name: 'film', start: ownFilm.start ?? 0, seconds: ownFilm.seconds ?? undefined });
+      if (!f.tool) plan.words.missing = [...plan.words.missing, `your film ${ownFilm.file}: nothing here can trim it, so the first screen shows a still until it is ready. Trim it with: ${f.command[0]}`];
+      else {
+        const rel = (x) => relative(dirname(draft.path), x).split('\\').join('/');
+        const { width: pw, height: ph } = f.posterSize ?? {};
+        let html = readFileSync(draft.path, 'utf8');
+        html = html.replace(/<video data-part="video"([^>]*)>\s*<source data-src="[^"]*"/, (m, a) => `<video data-part="video"${a} poster="${rel(f.poster)}"><source data-src="${rel(f.film)}"`);
+        // The still is the poster panel's picture, so it shows before the film plays and when it never does.
+        html = html.replace(/(<figure class="lt-art"[^>]*data-part="poster"[^>]*>)(?:\s*<img[^>]*>)?/, (m, open) => `${open}<img src="${rel(f.poster)}"${pw ? ` width="${pw}" height="${ph}"` : ''} alt="${esc(ownFilm.shows ?? 'A still from the film')}" loading="eager" fetchpriority="high">`);
+        writeFileSync(draft.path, html);
+        plan.draft.film = { file: ownFilm.file, tool: f.tool, seconds: f.seconds, start: f.start, bytes: f.bytes, length: f.length };
+        plan.words.missing = [...plan.words.missing, `your film ${ownFilm.file}: trimmed to ${f.seconds} seconds from ${f.start ? `${f.start} s in` : 'the start'}${f.length ? ` (of ${Math.round(f.length)})` : ''}, ${Math.round(f.bytes / 1024)} KB${f.sound ? '; any sound stays in the file but is never played' : ', no sound'}. Watch it once: pick the best 8 to 20 seconds with "start" and "seconds" in media.json if this is not it`, ...(f.tooBig ? ['the film is still over 3 MB: a shorter or calmer clip loads faster'] : [])];
+      }
+    } catch (e) { plan.words.missing = [...plan.words.missing, `your film ${ownFilm.file}: ${e.message}`]; }
   }
   // The person's logo: in the top bar in place of the drawn mark (on a fixed paper tile when it is dark and the bar
   // is ink: the ink bar flips the page's surface tokens, so the tile cannot use them), and every icon size a site and an app ask for (brand-kit --logo).

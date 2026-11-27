@@ -48,7 +48,10 @@ function nounAfter(brief, start, max = 4) {
   }
   return clean(out.join(' '));
 }
-const lowerFirst = (s) => (/^[A-Z][a-z]/.test(s) && !DAYS.some((d) => s.startsWith(d)) ? s[0].toLowerCase() + s.slice(1) : s);
+// A word the brief capitalises more than once ("Whitby crab on toast", "…, Whitby") is a name and keeps its capital.
+let briefNow = '';
+const properIn = (w) => (briefNow.match(new RegExp(`\\b${w}\\b`, 'g')) ?? []).length > 1;
+const lowerFirst = (s) => (/^[A-Z][a-z]/.test(s) && !DAYS.some((d) => s.startsWith(d)) && !properIn(s.split(/\s/)[0]) ? s[0].toLowerCase() + s.slice(1) : s);
 
 /**
  * Everything specific a brief says, each value exactly as written.
@@ -57,6 +60,7 @@ const lowerFirst = (s) => (/^[A-Z][a-z]/.test(s) && !DAYS.some((d) => s.startsWi
  */
 export function extractFacts(brief, { product = null } = {}) {
   const b = ` ${String(brief ?? '').replace(/\s+/g, ' ').trim()} `;
+  briefNow = b;
   const facts = { brief: String(brief ?? '').trim(), name: product ?? null, kind: null, place: null, street: null, audience: null, prices: [], times: [], days: null, durations: [], counts: [], claims: [], offers: [], phone: null, email: null, postcode: null, building: null, people: [], steps: [], says: [], lists: [], records: [] };
 
   // The kind of business: "…, a sourdough bakery on Mill Lane" / "an invoicing tool for freelancers".
@@ -133,7 +137,7 @@ export function extractFacts(brief, { product = null } = {}) {
     const cw = words(clause);
     // "donate £10 to fill a bag": a clause that opens with a verb is a statement, said as the brief says it.
     if (cw.length === 1 && GIVE.test(cw[0])) { facts.says.push(clean(`${clause} ${m[0]} ${/^\s+(to\s+[^,.;]+)/.exec(b.slice(m.index + m[0].length))?.[1] ?? ''}`).replace(/^\w/, (c) => c.toLowerCase())); continue; }
-    if (cw.length >= 2 && cw.length <= 5 && !/\d/.test(clause) && !VERBS.test(cw[0]) && !GIVE.test(cw[0]) && !/^(?:a|an|the|from|for|over|under|at|by|with)$/i.test(cw.at(-1)) && /\b(?:and|&|with|of)\b/.test(clause) && !/^(?:open|opens|phone|call|email|tickets?)\b/i.test(clause)) what = clause;
+    if (cw.length >= 2 && cw.length <= 5 && !/\d/.test(clause) && !VERBS.test(cw[0]) && !GIVE.test(cw[0]) && !/^(?:a|an|the|from|for|over|under|at|by|with)$/i.test(cw.at(-1)) && /\b(?:and|&|with|of|on|in)\b/.test(clause) && !/^(?:open|opens|phone|call|email|tickets?)\b/i.test(clause)) what = clause;
     const after = nounAfter(b, m.index + m[0].length);
     // "a £40,000 single-storey extension": the noun follows the price.
     if (after && (!what || /\b(?:a|an)\s*$/.test(b.slice(0, at)))) what = after;
@@ -384,7 +388,7 @@ export function heroCopy(facts, { typeId, product }) {
     // come for, what it does, a figure with its period. Never more than three, never the chosen one again.
     options: [...new Set([
       facts.kind && (facts.street || facts.place || facts.route) ? cap(`${facts.kind.replace(/^(?:a|an|the)\s+/i, '')}${facts.route ? ` from ${facts.route.from} to ${facts.route.to}` : facts.street ? ` on ${facts.street.replace(/^\d+\s+/, '')}` : ` in ${facts.place}`}`) : null,
-      price?.what ? cap(`${/s$/.test(price.what.split(' ').pop()) || /^(fixed|free|work|advice|help|care|tuition|training|support)/i.test(price.what) ? '' : 'a '}${price.what} ${price.from ? 'from' : 'for'} ${price.value.replace(/\s+(a|per)\s+.*/, '')}`) : null,
+      price?.what ? cap(`${/s$/.test(price.what.split(' ').pop()) || /^[A-Z]/.test(price.what) || /^(fixed|free|work|advice|help|care|tuition|training|support)/i.test(price.what) ? '' : 'a '}${price.what} ${price.from ? 'from' : 'for'} ${price.value.replace(/\s+(a|per)\s+.*/, '')}`) : null,
       claim ? imperative(claim) : null,
       facts.claims[1] ? imperative(facts.claims[1]) : null,
       count && count.what ? `${count.value} ${count.what}${count.per ? ` ${count.per}` : ''}${count.when ? ` ${count.when}` : ''}` : null,

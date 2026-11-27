@@ -33,7 +33,7 @@
   :scope[data-started] [data-part="video"] { opacity: 1; }
 
   /* Pause and play: always on top of the film, 44px, on its own surface so it reads over any frame. */
-  [data-part="toggle"] { position: absolute; right: clamp(12px, 2cqi, 20px); bottom: clamp(12px, 2cqi, 20px); z-index: 2; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: color-mix(in oklab, var(--bg-surface-1) 88%, transparent); color: var(--text-primary); box-shadow: 0 0 0 1px var(--border-hairline), var(--shadow-sm); cursor: pointer; transition: background var(--dur-2), translate var(--dur-2) var(--ease-out); }
+  [data-part="toggle"] { position: absolute; inset-inline-end: clamp(12px, 2cqi, 20px); bottom: clamp(12px, 2cqi, 20px); z-index: 2; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: color-mix(in oklab, var(--bg-surface-1) 88%, transparent); color: var(--text-primary); box-shadow: 0 0 0 1px var(--border-hairline), var(--shadow-sm); cursor: pointer; transition: background var(--dur-2), translate var(--dur-2) var(--ease-out); }
   [data-part="toggle"][hidden] { display: none; }
   [data-part="toggle"]:hover { background: var(--bg-surface-1); }
   [data-part="toggle"]:active { translate: 0 1px; }

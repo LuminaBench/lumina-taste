@@ -16,7 +16,6 @@
 // there is nothing of theirs, and only with --images.
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { spawnSync } from 'node:child_process';
 import { scanMedia, assignMine, menuFrom, checkMine } from './lib/media-intake.mjs';
 import { formatJson } from './lib/json.mjs';
 
@@ -33,7 +32,8 @@ let items;
 try { items = scanMedia(resolve(dir)); } catch (e) { console.error(e.message); process.exit(2); }
 if (!noCheck) items = await checkMine(items);
 const menu = menuFrom(items);
-const hasFfmpeg = spawnSync('ffmpeg', ['-version']).status === 0;
+const { filmTool, filmLength } = await import('./lib/film.mjs');
+const trimWith = items.some((i) => i.kind === 'video') ? filmTool() : null;
 let plan = null;
 if (pageArg) {
   const html = readFileSync(resolve(pageArg), 'utf8');
@@ -62,8 +62,8 @@ for (const p of out.photographs) {
   for (const i of p.issues ?? []) L.push(`  ! ${i}`);
 }
 if (out.logos.length) L.push('', `**Logo**: ${out.logos.join(', ')}. It goes in the top bar and becomes every icon size (favicons, apple-touch-icon, Android, maskable, a web manifest). A wide logo's icons use its symbol; add the symbol alone as mark.svg if that is wrong.`);
-if (out.films.length) L.push('', `**Film**: ${out.films.join(', ')}. ${hasFfmpeg ? 'A hero film is 8 to 20 seconds, muted, under 3 MB, with a still poster frame.' : 'A hero film is 8 to 20 seconds, muted, under 3 MB, with a still poster frame; ffmpeg is not installed here, so trim and compress it first (for example ffmpeg -i in.mov -t 12 -an -vf scale=1600:-2 -crf 28 hero.mp4).'}`);
-if (out.menus.length) L.push('', `**Menu or prices**: ${out.menus.join(', ')}${menu.length ? `: ${menu.length} priced item(s) read (${menu.slice(0, 4).join(', ')}${menu.length > 4 ? ', …' : ''})` : ': no "name £price" lines found (a PDF needs its text pasted into a .txt)'}.`);
+if (out.films.length) L.push('', `**Film**: ${items.filter((i) => i.kind === 'video').map((i) => { const n = filmLength(i.path); return `${i.file}${n ? ` (${Math.round(n)} s)` : ''}`; }).join(', ')}. The first screen becomes the film: compose --media trims it to 8 to 20 seconds (12 unless media.json says "start" and "seconds"), about 1600 px wide and under 3 MB, muted, with a still from its middle${trimWith === 'ffmpeg' ? ' (with ffmpeg)' : trimWith === 'avconvert' ? " (with the Mac's own avconvert: nothing to install)" : '. Nothing here can trim it: install ffmpeg, or trim it first (ffmpeg -i in.mov -t 12 -an -vf scale=1600:-2 -crf 28 film.mp4)'}.`);
+if (out.menus.length) L.push('', `**Menu or prices**: ${out.menus.join(', ')}${menu.length ? `: ${menu.length} priced item(s) read (${menu.slice(0, 4).join(', ')}${menu.length > 4 ? ', …' : ''})` : ': no "name £price" lines found (a scanned PDF has no text: type the prices into a .txt, one "name £price" a line)'}.`);
 if (out.other.length) L.push('', `**Not used**: ${out.other.join(', ')}.`);
 if (plan) {
   L.push('', `**Where each picture goes on ${pageArg}**`);

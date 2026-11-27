@@ -57,6 +57,8 @@ const hash = (s) => [...String(s)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >
  * @returns {{ id: string, block: string, variant: string | null, name: string, why: string }}
  */
 export function chooseHero(input) {
+  // Their own film is the strongest first screen there is: a place or a thing moving, in its own light.
+  if (input.ownFilm && !input.software) return { id: 'film', ...HERO_COMPOSITIONS.film, why: `your film (${input.ownFilm.file}) is the first screen, trimmed and muted, with a still from it for before it plays` };
   const h = pickHero(input);
   // The person's own photographs lead the first screen. A screen-wide composition blows a picture up to the full
   // width; when none of theirs is wide enough to stay sharp there, the picture takes the half where it is.
