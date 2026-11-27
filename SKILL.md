@@ -266,6 +266,8 @@ node scripts/lint-copy.mjs src/                                # hype words, cli
 | `taste-same-layout` | Two neighbours with the same block, columns and ground: change one's layout or ground. |
 | `taste-density` | Three dense sections in a row: put a quiet one (a statement, a picture band) between them. |
 | `taste-type-jump` | The headline is under 2.5× the body on a marketing page: set it larger, or the body smaller. |
+| `taste-ragged-row` | Cards side by side start level but end ragged, with empty space under the shorter one: stretch the row (`align-items: stretch`, card `height: 100%`). A bento's stacked tiles and a `data-variant="stagger"` set are left alone. |
+| `photo-upscaled` / `photo-stretched` / `photo-repeated` | A photograph blown up past its own pixels, squashed out of shape, or shown twice. |
 | `taste-word-budget` | More than 40 words in the hero (headline, lede, actions and notes, not counting the picture) or about 140 words per screen across the page. Cut the note, keep one sentence, let the picture talk. |
 | `taste-monotone` | The ground, the top bar and every coloured band share the accent's hue: a one-colour page. Use a neutral or warm ground, a contrasting top bar (ink or paper), and the palette's second colour (`--highlight`, `data-highlight`) for one figure. |
 | `taste-kit-skeleton` | At 1200px and wider, the hero has five of the six marks of the default first screen (a line above, a 2–4 line headline on the left, a paragraph, two buttons in a row, a note under them, one picture on the right), or is a plain `hero-split` with a note and two buttons. Choose a composition from the table under "The first screen"; if the split really is right, say why in `data-composition-reason`. |

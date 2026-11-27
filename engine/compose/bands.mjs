@@ -347,7 +347,8 @@ export function sideScroll(ctx) {
   if (items.length < 5) return null;
   const tones = ['', ' data-tone="accent"', ' data-tone="dark"'];
   const motifs = motifsFor(items, ctx);
-  return { id: 'side-scroll', slug: 'range', label: 'Prices', html: `<section class="lt-side-scroll" data-lt="side-scroll" aria-labelledby="h-range">
+  // A price list is read, not performed: a paged row of whole cards (data-paged), never pinned to the scroll.
+  return { id: 'side-scroll', slug: 'range', label: 'Prices', html: `<section class="lt-side-scroll" data-lt="side-scroll" data-paged aria-labelledby="h-range">
   <div data-part="pin">
     <header><h2 id="h-range">${keepHyphens(esc(listName(items) ?? 'What it costs'))}</h2></header>
     <ul data-part="track" tabindex="0" aria-label="${esc(`${items.length} things, scroll sideways`)}">

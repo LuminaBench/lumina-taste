@@ -4,8 +4,12 @@
    - pinned (data-pin, set by the script on wide screens with motion allowed and CSS scroll-driven animations
      supported): the section is one screen tall plus the row's overflow (--travel), the row is pinned and
      translated by the section's own view timeline. Transform only; nothing reads layout on scroll.
-   - native (everything else: phones, reduced motion, no script, preview boxes): the row is a horizontal
-     scroller with scroll-snap that you swipe or scroll by keyboard, running off the right edge. */
+   - native (everything else: phones, reduced motion, no script, data-paged, preview boxes): the row is a
+     horizontal scroller with scroll-snap. On a phone it runs to the screen edge so the next card shows; wider,
+     it stays inside the page's margins and shows whole cards only (four, or three on a tablet), with previous
+     and next buttons the script adds beside the progress line. A row that fits needs neither (data-fits).
+   - pinned stays inside the margins too: the row fades in and out just outside them instead of running off the
+     screen (10 px of room, so a focused card's ring is never faded). */
 @scope (.lt-side-scroll) {
   :scope { --gutter: max(var(--block-x, 24px), calc((100cqi - var(--container, 1180px)) / 2)); --item: clamp(240px, 28cqi, 360px); container-type: inline-size; display: block; width: 100%; padding: var(--block-y, calc(var(--section-y) / 2)) 0; background: var(--bg-canvas); color: var(--text-primary); font-size: var(--text-ui); overflow-x: clip; }
   :scope[data-tone="well"] { background: var(--bg-surface-2); }
@@ -27,13 +31,32 @@
   [data-part="caption"] b { font-weight: 600; }
   [data-part="caption"] span { color: var(--text-secondary); font-variant-numeric: tabular-nums; }
 
+  /* Wider than a phone: whole cards inside the page's margins, paged by the buttons. --room keeps 8 px inside the
+     scroller's clip, so a focused card's ring is never cut at the edge. */
+  @container (min-width: 641px) {
+    :scope:not([data-pin]) [data-part="track"] { --per: 4; --gap: clamp(14px, 2cqi, 24px); --room: 8px; gap: var(--gap); margin-inline: calc(var(--gutter) - var(--room)); padding: var(--room); scroll-padding-inline: var(--room); }
+    :scope:not([data-pin]) [data-part="track"] > li { flex-basis: calc((100cqi - 2 * var(--gutter) - (var(--per) - 1) * var(--gap)) / var(--per)); }
+  }
+  @container (min-width: 641px) and (max-width: 1000px) { :scope:not([data-pin]) [data-part="track"] { --per: 3; } }
+  /* The progress line and the buttons share one row under the cards. */
+  [data-part="pin"] { grid-template-columns: minmax(0, 1fr) auto; }
+  [data-part="pin"] > :is(header, [data-part="track"]) { grid-column: 1 / -1; }
+  [data-part="progress"] { align-self: center; }
+  [data-part="nav"] { display: flex; gap: 8px; margin-inline-end: var(--gutter); }
+  [data-part="nav"] .lt-btn { border-radius: 50%; }
+  [data-part="nav"] .lt-btn:disabled { opacity: 0.4; }
+  :scope:is([data-pin], [data-fits]) [data-part="nav"], :scope[data-fits] [data-part="progress"] { display: none; }
+  @container (max-width: 640px) { [data-part="nav"] { display: none; } }
+
   /* the progress line: how far along the row you are */
   [data-part="progress"] { width: min(160px, 30cqi); height: 2px; margin-inline: var(--gutter); border-radius: 2px; background: var(--border-hairline); overflow: hidden; }
   [data-part="progress"] span { display: block; height: 100%; background: var(--text-primary); transform-origin: 0 50%; transform: scaleX(0.16); }
 
   /* pinned */
   :scope[data-pin] { height: calc(100svh + var(--travel, 0px)); padding: 0; view-timeline: --lt-ss block; }
-  :scope[data-pin] [data-part="pin"] { position: sticky; top: 0; height: 100svh; align-content: center; overflow: hidden; }
+  :scope[data-pin] [data-part="pin"] { position: sticky; top: 0; height: 100svh; align-content: center; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent calc(var(--gutter) - 44px), #000 calc(var(--gutter) - 10px), #000 calc(100% - var(--gutter) + 10px), transparent calc(100% - var(--gutter) + 44px)); mask-image: linear-gradient(90deg, transparent calc(var(--gutter) - 44px), #000 calc(var(--gutter) - 10px), #000 calc(100% - var(--gutter) + 10px), transparent calc(100% - var(--gutter) + 44px)); }
+  /* Keyboard focus inside the row: no fade, so the focused card and its ring are fully seen wherever it sits. */
+  :scope[data-pin] [data-part="pin"]:focus-within { -webkit-mask-image: none; mask-image: none; }
   :scope[data-pin] [data-part="track"] { --item: calc(min(54svh, 500px) * 0.8); overflow: visible; scroll-snap-type: none; }
 }
 @keyframes lt-ss-move { to { transform: translateX(calc(-1 * var(--travel, 0px))); } }

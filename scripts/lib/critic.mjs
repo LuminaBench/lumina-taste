@@ -782,3 +782,57 @@ export function judgePagePhotos(list, { upscale = 1.2, stretch = 0.04 } = {}) {
   if (twice.length) add('photo-repeated', 'warning', twice[0][1][1].selector, `The same photograph appears more than once on the page: ${twice.slice(0, 3).map(([f, ps]) => `${f} (${ps.length}×)`).join(', ')}. Each picture should show something new; use another, or a drawing.`);
   return out;
 }
+
+// ------------------------------------------------------------------ boxes side by side (--taste)
+// Cards in one row end on one line: a row of boxes whose tops line up but whose bottoms do not reads as
+// unfinished. Staggered sets (a mosaic, data-variant="stagger") and drawn screens are left alone.
+
+/** In-page: rows of box-like siblings (a surface, a border or a shadow) that start level, with their heights. */
+export const RAGGED_ROWS = () => {
+  const sel = (el) => { const s = []; for (let e = el; e && e.nodeType === 1 && s.length < 3; e = e.parentElement) { let t = e.tagName.toLowerCase(); if (e.id) { s.unshift(t + '#' + e.id); break; } const c = [...e.classList].slice(0, 2); if (c.length) t += '.' + c.join('.'); s.unshift(t); } return s.join(' > '); };
+  const SKIP = '[data-audit-ignore], [inert], [aria-hidden="true"], .lt-device, [data-mock], [data-app] [data-app], [data-variant="stagger"], [data-part="tiles"], [data-masonry], dialog, [popover], [hidden]';
+  // The alpha of any computed colour (rgb, oklch, oklab, color()): "transparent" is 0, "/ 0.4" is 0.4, else 1.
+  const alpha = (c) => { if (!c || c === 'transparent') return 0; const m = /rgba\([^,]+,[^,]+,[^,]+,\s*([\d.]+)\)/.exec(c) ?? /\/\s*([\d.]+)(%?)\s*\)$/.exec(c); return m ? (m[2] === '%' ? +m[1] / 100 : +m[1]) : 1; };
+  const rgba = (c) => [0, 0, 0, alpha(c)];
+  const boxy = (e) => {
+    const cs = getComputedStyle(e);
+    const r = e.getBoundingClientRect();
+    if (r.width < 140 || r.height < 72) return false;
+    const bg = rgba(cs.backgroundColor)[3] > 0.05 && cs.backgroundColor !== getComputedStyle(e.parentElement).backgroundColor;
+    const border = ['Top', 'Right', 'Bottom', 'Left'].filter((s) => parseFloat(cs[`border${s}Width`]) >= 1 && rgba(cs[`border${s}Color`])[3] > 0.08).length >= 3;
+    const shadow = cs.boxShadow && cs.boxShadow !== 'none';
+    return bg || border || shadow;
+  };
+  // The box a grid cell holds: the cell itself, or the one box that fills it (li > article.card).
+  const boxOf = (cell) => { if (boxy(cell)) return cell; const kids = [...cell.children].filter((k) => k.getClientRects().length); return kids.length === 1 && boxy(kids[0]) ? kids[0] : null; };
+  const out = [];
+  for (const parent of document.querySelectorAll('*')) {
+    const d = getComputedStyle(parent).display;
+    if (!/grid|flex/.test(d) || parent.closest(SKIP)) continue;
+    if (/flex/.test(d) && /column/.test(getComputedStyle(parent).flexDirection)) continue;
+    const cells = [...parent.children].filter((c) => c.getClientRects().length && getComputedStyle(c).position !== 'absolute');
+    if (cells.length < 2) continue;
+    const boxes = cells.map((c) => ({ c, b: boxOf(c) })).filter((x) => x.b);
+    // Group the boxes by their top edge.
+    const rows = new Map();
+    for (const x of boxes) { const r = x.b.getBoundingClientRect(); const key = [...rows.keys()].find((t) => Math.abs(t - r.top) <= 2) ?? r.top; rows.set(key, [...(rows.get(key) ?? []), { el: x.b, h: r.height }]); }
+    // Uneven means a shorter box with empty space under it beside a taller one. A box with another stacked under
+    // it (a bento's two small tiles beside one tall one) is a column, not a ragged end.
+    const rects = boxes.map((x) => x.b.getBoundingClientRect());
+    const stacked = (r) => rects.some((q) => q.top >= r.bottom - 1 && q.top <= r.bottom + 64 && q.left < r.right - 4 && q.right > r.left + 4);
+    for (const row of rows.values()) {
+      if (row.length < 2) continue;
+      const rs = row.map((x) => x.el.getBoundingClientRect());
+      const hi = Math.max(...rs.map((r) => r.bottom));
+      const short = rs.filter((r) => hi - r.bottom > 6 && !stacked(r));
+      if (short.length) out.push({ selector: sel(row[rs.indexOf(short[0])].el), heights: row.map((x) => Math.round(x.h)), container: sel(parent) });
+    }
+  }
+  return out;
+};
+
+/** Judge RAGGED_ROWS' list: one finding per page naming the first rows. */
+export function judgeRaggedRows(rows) {
+  if (!rows.length) return [];
+  return [{ rule: 'taste-ragged-row', severity: 'warning', selector: rows[0].selector, message: `${rows.length === 1 ? 'A row of boxes starts level but ends ragged' : `${rows.length} rows of boxes start level but end ragged`}: ${rows.slice(0, 3).map((r) => `${r.container} (${r.heights.join(' / ')} px)`).join('; ')}. Boxes side by side end on one line: let the row stretch them (align-items: stretch, the card height: 100%) and let the shorter one's content sit at its top.` }];
+}

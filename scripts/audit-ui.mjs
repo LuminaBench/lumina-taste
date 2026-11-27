@@ -36,7 +36,7 @@ import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { COPY_RULES } from './lib/copy-rules.mjs';
-import { MEASURE, judgeMeasures, PERF_INIT, PERF_COLLECT, judgePerf, RTL_PROBE, judgeRtl, LONG_WORDS, FORCED_MARKS, CONTROL_FIT, TEXT_OVERLAP, SAVE_DATA_INIT, SAVE_DATA_COLLECT, judgeSaveData, PAGE_PHOTOS, judgePagePhotos } from './lib/critic.mjs';
+import { MEASURE, judgeMeasures, PERF_INIT, PERF_COLLECT, judgePerf, RTL_PROBE, judgeRtl, LONG_WORDS, FORCED_MARKS, CONTROL_FIT, TEXT_OVERLAP, SAVE_DATA_INIT, SAVE_DATA_COLLECT, judgeSaveData, PAGE_PHOTOS, judgePagePhotos, RAGGED_ROWS, judgeRaggedRows } from './lib/critic.mjs';
 
 // Playwright is looked up next to this script first, then in the project you run it from,
 // so a globally installed skill can audit a project that already has Playwright.
@@ -811,6 +811,7 @@ async function auditOne(browser, url, vpName, mode) {
     measures = await page.evaluate(MEASURE, { states: await declaredStates(ctx, url) });
     for (const f of judgeMeasures(measures, { wide: vp.width >= 900 })) findings.push({ ...f, viewport: vpName, mode });
     for (const f of judgePagePhotos(await page.evaluate(PAGE_PHOTOS))) findings.push({ ...f, viewport: vpName, mode });
+    for (const f of judgeRaggedRows(await page.evaluate(RAGGED_ROWS))) findings.push({ ...f, viewport: vpName, mode });
     if (vp.width < 900 && measures.bars.length) for (const f of await safeAreaGaps(ctx, page, measures)) findings.push({ ...f, viewport: vpName, mode });
   }
   for (const e of runtimeErrors) findings.push({ rule: 'runtime-error', severity: 'error', selector: null, message: e, viewport: vpName, mode });
@@ -881,6 +882,8 @@ async function auditOne(browser, url, vpName, mode) {
     const box = await page.evaluate((k) => {
       const el = window.__ltAudit.controls[k];
       if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
+      // Focus once first, as a Tab would: that scrolls any row the control sits in (a snapping carousel) to show it.
+      el.focus(); el.blur();
       el.scrollIntoView({ block: 'center', inline: 'nearest' });
       const r = el.getBoundingClientRect();
       const vis = r.width > 1 && r.height > 1 && getComputedStyle(el).visibility !== 'hidden';
@@ -1132,7 +1135,7 @@ async function forcedColours(browser, url, vpName) {
   await page.keyboard.press('Shift');
   const blind = [];
   for (let i = 0; i < Math.min(idx, 40); i++) {
-    const box = await page.evaluate((k) => { const el = document.querySelector(`[data-lt-ff="${k}"]`); document.activeElement?.blur?.(); el.scrollIntoView({ block: 'center', inline: 'nearest' }); const r = el.getBoundingClientRect(); if (r.top < 0 || r.left < 0 || r.bottom > innerHeight || r.right > innerWidth) return null; return { x: Math.max(0, r.left - 8), y: Math.max(0, r.top - 8), width: Math.min(innerWidth, r.right + 8) - Math.max(0, r.left - 8), height: Math.min(innerHeight, r.bottom + 8) - Math.max(0, r.top - 8) }; }, i);
+    const box = await page.evaluate((k) => { const el = document.querySelector(`[data-lt-ff="${k}"]`); document.activeElement?.blur?.(); el.focus(); el.blur(); el.scrollIntoView({ block: 'center', inline: 'nearest' }); const r = el.getBoundingClientRect(); if (r.top < 0 || r.left < 0 || r.bottom > innerHeight || r.right > innerWidth) return null; return { x: Math.max(0, r.left - 8), y: Math.max(0, r.top - 8), width: Math.min(innerWidth, r.right + 8) - Math.max(0, r.left - 8), height: Math.min(innerHeight, r.bottom + 8) - Math.max(0, r.top - 8) }; }, i);
     if (!box || box.width < 4 || box.height < 4) continue;
     let a, b;
     try { a = await page.screenshot({ clip: box }); } catch { continue; }

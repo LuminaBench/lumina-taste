@@ -19,11 +19,12 @@ const state = { family: 'all', sort: 'featured', chartGroup: 'all' };
 const modeBtn = document.getElementById('g-mode')!;
 const syncModeBtn = () => modeBtn.setAttribute('aria-label', html.dataset.mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
 syncModeBtn();
+// One cross-fade of the whole screen (a view transition: a single snapshot) rather than a colour transition on every
+// one of the page's thousands of elements, which took a second or more on the home page. Instant with reduced motion.
 modeBtn.addEventListener('click', () => {
-  document.body.classList.add('lt-mode-fade');
-  setTimeout(() => document.body.classList.remove('lt-mode-fade'), 420);
-  setTheme({ mode: html.dataset.mode === 'dark' ? 'light' : 'dark' });
-  syncModeBtn();
+  const flip = () => { setTheme({ mode: html.dataset.mode === 'dark' ? 'light' : 'dark' }); syncModeBtn(); };
+  const vt = (document as Document & { startViewTransition?: (cb: () => void) => unknown }).startViewTransition;
+  if (vt && !matchMedia('(prefers-reduced-motion: reduce)').matches) vt.call(document, flip); else flip();
 });
 
 // ------------------------------------------------------------------ theme panel

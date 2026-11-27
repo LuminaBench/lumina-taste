@@ -115,4 +115,13 @@ if (existsSync(join(root, 'tests/react/harness.tsx'))) {
   await build({ ...common, entryPoints: { harness: join(root, 'tests/react/harness.tsx') }, outdir: join(dist, '_react') });
   writeFileSync(join(dist, '_react/index.html'), `<!doctype html><html lang="en" data-palette="slate-forest" data-mode="light" data-type="precision" data-density="balanced" data-radius="balanced" data-motion="snappy"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>React harness</title><link rel="stylesheet" href="./harness.css"></head><body><div id="root"></div><script type="module" src="./harness.js"></script></body></html>`);
 }
+// Showroom mode on every hosted page (not the React test harness): nothing downloads, a short note says so instead.
+cpSync(join(root, 'preview/showroom.js'), join(dist, 'showroom.js'));
+const pages = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((d) => (d.isDirectory() ? (d.name === '_react' ? [] : pages(join(dir, d.name))) : d.name.endsWith('.html') ? [join(dir, d.name)] : []));
+for (const f of pages(dist)) {
+  const up = relative(dirname(f), dist).split('\\').join('/');
+  const tag = `<script src="${up ? `${up}/` : './'}showroom.js"></script>`;
+  const text = readFileSync(f, 'utf8');
+  if (!text.includes('showroom.js')) writeFileSync(f, text.includes('</head>') ? text.replace('</head>', `  ${tag}\n</head>`) : `${tag}\n${text}`);
+}
 console.log(`Built gallery: ${entries.split('\n').length - 1} UI patterns, ${chartEntries.split('\n').length - 1} charts, ${blueprints.length} blueprints → preview/dist`);

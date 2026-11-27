@@ -15,7 +15,7 @@
 .bp-kpis .lt-kpi h3 { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 
 /* One main chart, with the breakdown that explains it beside it. */
-.bp-main { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: start; gap: var(--space-4); }
+.bp-main { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: stretch; gap: var(--space-4); }
 
 /* The table holds every account; its header stays put while it scrolls. */
 .bp-accounts { display: grid; gap: var(--space-4); padding-bottom: 0; }

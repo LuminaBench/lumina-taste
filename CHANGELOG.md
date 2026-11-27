@@ -11,6 +11,9 @@ The first public release. A design skill for coding agents that plans a page fro
 - Photographs are checked before they are placed (size for the slot, exposure, focus) and as the page shows them (blown up, squashed, repeated); a blurred one is left out with a plain reason, and narrow ones get a half-screen first screen instead of a soft full-screen one.
 - The person's own film becomes the first screen, trimmed, sized and given a still (ffmpeg, or the Mac's own avconvert with nothing to install); a PDF menu is read into prices like a text one.
 - A short software brief's product screen shows the product's own records as marked sample rows; the ship check lets them stand inside the drawn screen, never on the page itself.
+- Boxes side by side end level: the critic flags a row of cards that starts level but ends ragged (taste-ragged-row), and the dashboard's chart row stretches.
+- Side-scrolling rows show whole cards inside the page's margins, paged by Previous and Next (data-paged for a price list); a pinned row fades at the margins instead of running off the screen.
+- The hosted gallery is a showroom: nothing downloads there, a short note says so; the theme switch is one cross-fade instead of a second-long recolour.
 - A site grows page by page: a second page type goes to its own file, joined to the first by its top bar, with a smooth cross-fade between pages while the bar holds still.
 - `starter.mjs`: a finished starting point in one command for fifteen kinds of business and app: the page, the brand kit and one checklist of what is still sample.
 - A gallery page shows every first screen, top bar and footer live, side by side; `compose --hero <id>` uses the one the person points at. A picture band never repeats the first screen's headline.
