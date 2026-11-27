@@ -166,7 +166,7 @@ async function playMicro(stage: HTMLElement, id: string, alive: () => boolean) {
 }
 
 export function viewMoments(main: HTMLElement, id?: string): () => void {
-  main.innerHTML = `<section class="g-hero g-hero-sm"><p class="g-kicker">${MOMENTS.length} scroll moments · ${MICROS.length} micro-interactions · motion on</p><h1>How the kit moves</h1><p class="g-sub">Each one plays when it comes into view. Replay it, or switch on reduced motion to see the still version every visitor who asks for it gets.</p></section>
+  main.innerHTML = `<section class="g-hero g-hero-sm"><h1>How the kit moves</h1><p class="g-sub">Each one plays when it comes into view. Replay it, or switch on reduced motion to see the still version every visitor who asks for it gets.</p><p class="g-meta">${MOMENTS.length} scroll moments · ${MICROS.length} micro-interactions · motion on</p></section>
     <section class="g-msec" aria-labelledby="g-ms-scroll"><h2 id="g-ms-scroll">Scroll moments</h2><p class="g-rule">At most two per page, never side by side. Each stage is a page of its own, scrolled for you.</p><div class="g-moment-grid">${MOMENTS.map(momentCard).join('')}</div></section>
     <section class="g-msec" aria-labelledby="g-ms-micro"><h2 id="g-ms-micro">Micro-interactions</h2><p class="g-rule">How a control answers a touch: transform and opacity only, nothing reflows, all still under reduced motion. Try them.</p><div class="g-micro-grid">${MICROS.map(microCard).join('')}</div></section>`;
   const offs: Array<() => void> = [];
@@ -227,7 +227,7 @@ export function viewMoments(main: HTMLElement, id?: string): () => void {
 // ------------------------------------------------------------------ Before / after
 export function viewBeforeAfter(main: HTMLElement): () => void {
   const dark = theme().mode === 'dark';
-  main.innerHTML = `<section class="g-hero g-hero-sm"><p class="g-kicker">${PAIRS.length} sections · one made-up roaster</p><h1>The same section, generated and designed</h1><p class="g-sub">On the left, what an assistant writes when nothing pushes it. On the right, the kit’s version of the same section for the same business.</p></section>
+  main.innerHTML = `<section class="g-hero g-hero-sm"><h1>The same section, generated and designed</h1><p class="g-sub">On the left, what an assistant writes when nothing pushes it. On the right, the kit’s version of the same section for the same business.</p><p class="g-meta">${PAIRS.length} sections · one made-up roaster</p></section>
     ${PAIRS.map((p) => `<section class="g-pair" id="ba-${p.id}" aria-labelledby="ba-${p.id}-t">
       <h2 id="ba-${p.id}-t">${esc(p.title)}</h2>
       <p class="g-rule">${esc(p.rule)}</p>

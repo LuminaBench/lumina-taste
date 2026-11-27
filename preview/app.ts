@@ -2,7 +2,7 @@
 import { BLUEPRINTS, CHARTS, COMPARE, STYLES, UI } from './generated/registry';
 import { PALETTES, TYPOGRAPHY } from '../engine/profiles/options.mjs';
 import { ICON, announce, copyText, ensureFont, esc, html, setTheme, syncRoots, theme, themeAttrs } from './core';
-import { byId, unmountPreviews, viewElement, viewIndex } from './elements';
+import { byId, unmountPreviews, viewElement, viewIndex, fitMade } from './elements';
 import { viewCompare } from './compare';
 import { viewBeforeAfter, viewMoments } from './moments';
 import { rank } from './search';
@@ -149,16 +149,16 @@ function viewCharts(id?: string) {
   }
   const groups = [...new Set(all.map((c) => c.meta.group))];
   const list = state.chartGroup === 'all' ? all : all.filter((c) => c.meta.group === state.chartGroup);
-  main.innerHTML = `<section class="g-hero g-hero-sm"><p class="g-kicker">${all.length} chart engines · SVG and Canvas · no dependencies</p><h1>Charts that explain themselves</h1><p class="g-sub">Titled with the finding, labelled directly, with tabular axes, a magnetic crosshair and keyboard navigation. Hover any chart.</p></section>
+  main.innerHTML = `<section class="g-hero g-hero-sm"><h1>Charts that explain themselves</h1><p class="g-sub">Titled with the finding, labelled directly, with tabular axes, a magnetic crosshair and keyboard navigation. Hover any chart.</p><p class="g-meta">${all.length} chart engines · SVG and Canvas · no dependencies</p></section>
     <div class="g-filters"><div class="g-chips"><button type="button" data-cgroup="all" aria-pressed="${state.chartGroup === 'all'}">All <span>${all.length}</span></button>${groups.map((g) => `<button type="button" data-cgroup="${esc(g)}" aria-pressed="${state.chartGroup === g}">${esc(g)} <span>${all.filter((c) => c.meta.group === g).length}</span></button>`).join('')}</div></div>
-    <div class="g-chart-grid">${list.map((c) => chartCard(c.meta)).join('')}</div>`;
+    <h2 class="lt-visually-hidden">All charts</h2><div class="g-chart-grid">${list.map((c) => chartCard(c.meta)).join('')}</div>`;
   mountCharts(list);
 }
 
 // ------------------------------------------------------------------ styles atlas
 function styleMini(s: any) {
   return `<div class="g-style-prev" data-theme-root data-lock="palette mode type radius density style" data-palette="${s.palette}" data-mode="${s.mode}" data-type="${s.type}" data-radius="${s.radius}" data-density="balanced" data-motion="snappy" data-style="${s.id}"${s.backdrop ? ` data-backdrop="${s.backdrop}"` : ''}>
-    <div class="g-mini">
+    <div class="g-mini" data-audit-ignore>
       <div class="g-mini-card">
         <span class="lt-eyebrow">${esc(s.sample?.eyebrow ?? 'Plan')}</span>
         <strong>${esc(s.sample?.title ?? 'Team workspace')}</strong>
@@ -193,8 +193,8 @@ function viewStyles(id?: string) {
     main.querySelector('[data-apply]')?.addEventListener('click', () => { setTheme({ style: s.id, palette: s.palette, mode: s.mode, type: s.type, radius: s.radius }); syncModeBtn(); announce(`Applied ${s.name}`); });
     return;
   }
-  main.innerHTML = `<section class="g-hero g-hero-sm"><p class="g-kicker">${STYLES.length} styles</p><h1>What style is this?</h1><p class="g-sub">Whole looks, not just colours: borders, depth, corners, type and surfaces change together. Pick one, read its signals, copy the brief.</p></section>
-    <div class="g-style-grid">${STYLES.map((s) => `<a class="g-style-card" href="#/styles/${s.id}" data-id="${s.id}">${styleMini(s)}<div class="g-card-body"><div class="g-card-title"><h3>${esc(s.name)}</h3><span class="g-tag">${esc(s.kind)}</span></div><p class="g-quote">“${esc(s.aliases?.[0] ?? s.summary)}”</p><div class="g-signal-tags">${s.signals.slice(0, 3).map((x: string) => `<span>${esc(x)}</span>`).join('')}</div></div></a>`).join('')}</div>`;
+  main.innerHTML = `<section class="g-hero g-hero-sm"><h1>What style is this?</h1><p class="g-sub">Whole looks, not just colours: borders, depth, corners, type and surfaces change together. Pick one, read its signals, copy the brief.</p><p class="g-meta">${STYLES.length} styles</p></section>
+    <h2 class="lt-visually-hidden">All styles</h2><div class="g-style-grid">${STYLES.map((s) => `<a class="g-style-card" href="#/styles/${s.id}" data-id="${s.id}">${styleMini(s)}<div class="g-card-body"><div class="g-card-title"><h3>${esc(s.name)}</h3><span class="g-tag">${esc(s.kind)}</span></div><p class="g-quote">“${esc(s.aliases?.[0] ?? s.summary)}”</p><div class="g-signal-tags">${s.signals.slice(0, 3).map((x: string) => `<span>${esc(x)}</span>`).join('')}</div></div></a>`).join('')}</div>`;
 }
 
 // ------------------------------------------------------------------ pages (blueprints)
@@ -222,8 +222,8 @@ function viewPages(id?: string) {
     }));
     return;
   }
-  main.innerHTML = `<section class="g-hero g-hero-sm"><p class="g-kicker">${BLUEPRINTS.length} pages</p><h1>Whole pages, already laid out</h1><p class="g-sub">Each one follows the page-flow rules: one primary action, a 4px rhythm, the right navigation for the job. They follow your theme.</p></section>
-    <div class="g-page-grid">${BLUEPRINTS.map((b) => `<a class="g-page-card" href="#/pages/${b.id}"><div class="g-page-thumb"><iframe data-blueprint tabindex="-1" aria-hidden="true" loading="lazy" title="${esc(b.name)} thumbnail" src="./blueprints/${b.id}/"></iframe></div><div class="g-card-body"><div class="g-card-title"><h3>${esc(b.name)}</h3>${b.states?.length ? `<span class="g-new">${b.states.length + 1} states</span>` : ''}</div><p>${esc(b.summary)}</p></div></a>`).join('')}</div>`;
+  main.innerHTML = `<section class="g-hero g-hero-sm"><h1>Whole pages, already laid out</h1><p class="g-sub">Each one follows the page-flow rules: one primary action, a 4px rhythm, the right navigation for the job. They follow your theme.</p><p class="g-meta">${BLUEPRINTS.length} pages</p></section>
+    <h2 class="lt-visually-hidden">All pages and apps</h2><div class="g-page-grid">${BLUEPRINTS.map((b) => `<a class="g-page-card" href="#/pages/${b.id}"><div class="g-page-thumb" data-audit-ignore><iframe data-blueprint tabindex="-1" aria-hidden="true" loading="lazy" title="${esc(b.name)} thumbnail" src="./blueprints/${b.id}/"></iframe></div><div class="g-card-body"><div class="g-card-title"><h3>${esc(b.name)}</h3>${b.states?.length ? `<span class="g-new">${b.states.length + 1} states</span>` : ''}</div><p>${esc(b.summary)}</p></div></a>`).join('')}</div>`;
   main.querySelectorAll<HTMLIFrameElement>('iframe').forEach((f) => f.addEventListener('load', () => syncRoots()));
   const ro = new ResizeObserver((entries) => entries.forEach((en) => (en.target as HTMLElement).style.setProperty('--s', String(en.contentRect.width / 1440))));
   main.querySelectorAll<HTMLElement>('.g-page-thumb').forEach((t) => ro.observe(t));
@@ -242,8 +242,8 @@ function viewPalettes(id?: string) {
     main.querySelector('[data-apply]')!.addEventListener('click', () => { setTheme({ palette: p.id }); announce(`Palette: ${p.name}`); });
     return;
   }
-  main.innerHTML = `<section class="g-hero g-hero-sm"><p class="g-kicker">18 palettes · light and dark · 2,196 contrast checks</p><h1>Colour you do not have to check</h1><p class="g-sub">Every text, control and chart colour pairing passes WCAG: primary text at 7:1 or better, all other text at 4.5:1, controls and chart marks at 3:1.</p></section>
-    <div class="g-pal-grid">${PALETTES.map((pp) => `<a class="g-pal" href="#/palettes/${pp.id}" data-palette="${pp.id}" data-mode="${theme().mode}" aria-current="${pp.id === theme().palette ? 'true' : 'false'}"><span class="g-pal-sw">${SW.map((t) => `<i style="background:var(--${t})"></i>`).join('')}</span><span class="g-pal-name">${esc(pp.name)}</span><span class="g-pal-cat">${pp.category === 'dev-tool' ? 'Dev tools' : pp.category}</span></a>`).join('')}</div>`;
+  main.innerHTML = `<section class="g-hero g-hero-sm"><h1>Colour you do not have to check</h1><p class="g-sub">Every text, control and chart colour pairing passes WCAG: primary text at 7:1 or better, all other text at 4.5:1, controls and chart marks at 3:1.</p><p class="g-meta">18 palettes · light and dark · 2,196 contrast checks</p></section>
+    <div class="g-pal-grid">${PALETTES.map((pp) => `<a class="g-pal" href="#/palettes/${pp.id}" data-palette="${pp.id}" data-mode="${theme().mode}" aria-current="${pp.id === theme().palette ? 'true' : 'false'}"><span class="g-pal-sw" data-audit-ignore>${SW.map((t) => `<i style="background:var(--${t})"></i>`).join('')}</span><span class="g-pal-name">${esc(pp.name)}</span><span class="g-pal-cat">${pp.category === 'dev-tool' ? 'Dev tools' : pp.category}</span></a>`).join('')}</div>`;
 }
 
 // ------------------------------------------------------------------ router
@@ -267,7 +267,7 @@ function render() {
   else if (r.name === 'moments') cleanups.push(viewMoments(main, r.id));
   else if (r.name === 'before-after') cleanups.push(viewBeforeAfter(main));
   else if (r.id && byId(r.id)) viewElement(main, r.id);
-  else viewIndex(main, q.value.trim(), state.family, state.sort);
+  else { viewIndex(main, q.value.trim(), state.family, state.sort); cleanups.push(fitMade(main)); }
 }
 main.addEventListener('click', (e) => {
   const t = e.target as Element;

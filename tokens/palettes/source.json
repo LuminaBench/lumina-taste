@@ -151,7 +151,7 @@
       "category": "data",
       "mood": "Analytics workhorse. Sky blue on neutral charcoal, built for dense dashboards.",
       "light": {"neutral":[80,0.003],"canvasL":0.98,"accent":[0.53,0.13,236]},
-      "dark": {"neutral":[240,0.01],"canvasL":0.165,"accent":[0.76,0.12,232]},
+      "dark": {"neutral":[80,0.003],"canvasL":0.165,"accent":[0.76,0.12,232]},
       "highlight": [85,0.13]
     },
     {

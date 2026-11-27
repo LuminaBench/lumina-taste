@@ -42,13 +42,15 @@ export const MEASURE = (opts = {}) => {
     .sort((a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1));
 
   // ---- what there is to look at in a band
-  const PICTURE = 'img, picture, video, canvas, iframe, [role="img"], .lt-art, [class*="art-panel"], .lt-device, [class*="device"], [data-part="visual"], [data-part="media"], [data-part="frame"], [data-part="shot"], [data-part="art"], [data-stage], [data-mock], [data-shot]';
+  const PICTURE = 'img, picture, video, canvas, iframe, [role="img"], .lt-art, [class*="art-panel"], .lt-device, [class*="device"], [data-part="visual"], [data-part="media"], [data-part="frame"], [data-part="shot"], [data-part="art"], [data-stage], [data-mock], [data-shot], [inert], [data-audit-ignore]';
   const CHART = '.lt-chart, [class*="chart"], [data-chart-stage], meter, progress';
   const DOCUMENT = '.lt-invoice, [class*="invoice"], [class*="receipt"], [class*="document"], [class*="terminal"], [class*="code-block"], .lt-code, pre';
   const lookAt = (band) => {
     const found = [];
     const big = (e, w = 120, h = 60) => { const r = rectOf(e); return r.width >= w && r.height >= h; };
-    if ([...band.querySelectorAll(PICTURE)].some((e) => shown(e) && big(e))) found.push('picture');
+    // An inert rendering (a live preview, a mock) is hidden from assistive tech but is a picture to the eye.
+    const seen = (e) => (e.closest('[inert], [data-audit-ignore], [aria-hidden="true"]') ? getComputedStyle(e).display !== 'none' && getComputedStyle(e).visibility !== 'hidden' : shown(e));
+    if ([...band.querySelectorAll(PICTURE)].some((e) => seen(e) && big(e))) found.push('picture');
     // A drawing: an illustration, or a small chart such as a sparkline (wide and low), but not an icon.
     if ([...band.querySelectorAll('svg')].some((e) => { if (!shown(e)) return false; const r = rectOf(e); return (r.width >= 96 && r.height >= 64) || (r.width * r.height >= 6000 && Math.min(r.width, r.height) >= 24); })) found.push('drawing');
     if ([...band.querySelectorAll(CHART)].some((e) => shown(e) && big(e, 120, 48))) found.push('chart');
@@ -176,7 +178,8 @@ export const MEASURE = (opts = {}) => {
 
   const sections = bands.map((band, i) => {
     const r = rectOf(band);
-    const w = words(band.innerText);
+    // Words inside an inert or marked rendering (a live preview, a mock) belong to that picture, not to the prose.
+    const w = (() => { const c = band.cloneNode(true); c.querySelectorAll('[inert], [data-audit-ignore]').forEach((n) => n.remove()); return words(c.innerText ?? c.textContent); })();
     const looks = lookAt(band);
     const isHero = band.matches('[class*="hero"]') || (i === 0 && !!band.querySelector('h1'));
     return {
@@ -202,7 +205,8 @@ export const MEASURE = (opts = {}) => {
   const headline = Math.max(0, ...heads.map((h) => parseFloat(getComputedStyle(h).fontSize)));
 
   // ---- is it an app? Marked so, or no marketing hero and the furniture of one: a shell, a side nav, a bar at the bottom.
-  const fixedBottom = [...document.querySelectorAll('body *')].filter((e) => { const cs = getComputedStyle(e); if (!/fixed|sticky/.test(cs.position) || !shown(e)) return false; const r = rectOf(e); return r.bottom >= vh - 2 && r.top > vh * 0.55 && r.width >= vw * 0.8 && r.height < vh * 0.4 && !e.parentElement.closest('[style*="fixed"]'); });
+  const fixedBottom = [...document.querySelectorAll('body *')].filter((e) => { const cs = getComputedStyle(e); if (!/fixed|sticky/.test(cs.position) || !shown(e)) return false; // A sticky bar pinned to the top that only happens to sit low before any scroll is not a bottom bar.
+    if (cs.position === 'sticky' && cs.bottom === 'auto') return false; const r = rectOf(e); return r.bottom >= vh - 2 && r.top > vh * 0.55 && r.width >= vw * 0.8 && r.height < vh * 0.4 && !e.parentElement.closest('[style*="fixed"]'); });
   fixedBottom.forEach((b, i) => b.setAttribute('data-lt-audit-bar', String(i)));
   const sideNav = [...document.querySelectorAll('aside, nav, [class*="sidebar"]')].some((e) => shown(e) && rectOf(e).height >= vh * 0.6 && rectOf(e).width < vw * 0.35 && e.querySelectorAll('a, button').length >= 4);
   const shell = !!document.querySelector('.lt-shell, [class*="shell"], [class*="app-bar"], [class*="tab-bar"], [class*="tabbar"], [class*="bottom-nav"], [role="application"]');

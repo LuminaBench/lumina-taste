@@ -37,11 +37,11 @@ export function doc(c: Doc) {
 function card(c: Doc) {
   // An <article> with a stretched title link: demos contain their own links, and links cannot nest.
   return `<article class="g-card" data-id="${c.id}" id="card-${c.id}"${(c.w ?? 0) >= 620 ? ' data-wide' : ''}>
-    <div class="g-prev" data-stage data-theme-root data-contained inert ${themeAttrs()}><div class="g-prev-in" ${widthOf(c)}>${c.html}</div></div>
+    <div class="g-prev" data-stage data-theme-root data-contained inert data-audit-ignore ${themeAttrs()}><div class="g-prev-in" ${widthOf(c)}>${c.html}</div></div>
     <div class="g-card-body">
       <div class="g-card-title"><h3><a class="g-stretch" href="#/ui/${c.id}">${esc(c.name)}</a>${c.added ? '<span class="g-new">New</span>' : ''}</h3><span class="g-tag">${esc(c.familyTitle.split(' ')[0].replace(',', ''))}</span></div>
       <code class="g-api">${esc(doc(c).api)}</code>
-      <p>${esc(c.summary)}</p>
+      <p>${esc(String(c.summary).split(/(?<=\.)\s/)[0])}</p>
     </div>
   </article>`;
 }
@@ -103,7 +103,7 @@ const widthOf = (c: Doc) => (c.w ? `style="width:${c.w}px"` : '');
 /** A compact card for comparison rows: live thumbnail, name and a one-line "use it for". */
 export function miniCard(c: Doc, note: string) {
   return `<article class="g-card g-cmp-card" data-id="${c.id}">
-    <div class="g-prev" data-stage data-theme-root data-contained inert ${themeAttrs()}><div class="g-prev-in" ${widthOf(c)}>${c.html}</div></div>
+    <div class="g-prev" data-stage data-theme-root data-contained inert data-audit-ignore ${themeAttrs()}><div class="g-prev-in" ${widthOf(c)}>${c.html}</div></div>
     <div class="g-card-body"><div class="g-card-title"><h3><a class="g-stretch" href="#/ui/${c.id}">${esc(c.name)}</a></h3></div><p>${esc(note)}</p></div>
   </article>`;
 }
@@ -121,18 +121,43 @@ export function mountPreviews(scope: ParentNode) {
 }
 export const unmountPreviews = () => { mounted.splice(0).forEach((f) => { try { f(); } catch { /* already gone */ } }); };
 
-const EXAMPLES = ['the arrow that rotates when it opens', 'nine dots that open more apps', 'the bar that appears when I tick rows', 'boxes for a 6-digit code', 'numbers that roll like an odometer', 'search everything with cmd k'];
+const EXAMPLES = ['arrow that turns open', 'nine dots for apps', 'bar for ticked rows', 'boxes for a code', 'numbers that roll up', 'search with cmd k'];
+
+// The first screen shows what the kit makes, live: a café, a bank app, an event poster and a practice, each a real
+// blueprint scaled into its tile (the phone at a phone's own proportions). The words sit beside them; the counts are one line of figures.
+const MADE: Array<[string, string, number]> = [['venue', 'A café', 1440], ['app-banking?screen=home', 'A bank app', 390], ['event', 'A conference', 1440], ['practice', 'A practice', 1440]];
+function homeHero() {
+  return `<section class="g-home" aria-labelledby="g-home-h">
+      <div class="g-home-copy">
+        <h1 id="g-home-h">What is that UI element called?</h1>
+        <p class="g-sub">Describe it in your own words. Get its real name, working code in vanilla and React, and a prompt your agent can build from.</p>
+        <div class="g-examples">${EXAMPLES.slice(0, 3).map((e) => `<button type="button" data-example="${esc(e)}">“${esc(e)}”</button>`).join('')}</div>
+        <dl class="g-facts"><div><dt>elements</dt><dd>${ALL.length}</dd></div><div><dt>charts</dt><dd>${CHARTS.length}</dd></div><div><dt>pages and apps</dt><dd>${BLUEPRINTS.length}</dd></div><div><dt>styles</dt><dd>${STYLES.length}</dd></div></dl>
+      </div>
+      <div class="g-made" aria-label="Made with the kit">
+        ${MADE.map(([id, label, w], k) => `<a class="g-made-tile" data-k="${k}" data-w="${w}" href="#/pages/${id.split('?')[0]}"><div class="g-made-frame"><iframe data-blueprint tabindex="-1" aria-hidden="true" loading="${k < 3 ? 'eager' : 'lazy'}" title="${esc(label)}" src="./blueprints/${id.replace('?', '/?')}${id.includes('?') ? '' : '/'}" style="width:${w}px;height:${w < 500 ? 844 : 900}px"></iframe></div><span>${esc(label)}</span></a>`).join('')}
+      </div>
+    </section>`;
+}
+/** Scale each live tile's page to its box: a 1440 page or a 390 phone. */
+export function fitMade(scope: ParentNode) {
+  // A page fills its tile's width; a phone fills its tile's height and sits centred, so the screen is never cut short.
+  const ro = new ResizeObserver((entries) => entries.forEach((en) => {
+    const el = en.target as HTMLElement, w = Number(el.closest<HTMLElement>('[data-w]')!.dataset.w), h = w < 500 ? 844 : 900;
+    const { width, height } = en.contentRect;
+    const s = w < 500 ? Math.max(width / w, height / h) : width / w;
+    el.style.setProperty('--s', String(s));
+    el.style.setProperty('--x', `${Math.round((width - w * s) / 2)}px`);
+  }));
+  scope.querySelectorAll<HTMLElement>('.g-made-frame').forEach((f) => ro.observe(f));
+  return () => ro.disconnect();
+}
 
 export function viewIndex(main: HTMLElement, query: string, family: string, sort: string) {
   const list = query ? rank(query, ALL) : sort === 'az' ? [...ALL].sort((a, b) => a.name.localeCompare(b.name)) : sort === 'new' ? [...ALL].sort((a, b) => (b.added ?? 0) - (a.added ?? 0)) : ALL;
   const shown = family === 'all' ? list : list.filter((c) => c.family === family);
   main.innerHTML = `
-    <section class="g-hero">
-      <p class="g-kicker">${ALL.length} elements · ${CHARTS.length} charts · ${STYLES.length} styles · ${BLUEPRINTS.length} pages</p>
-      <h1>What is that UI element called?</h1>
-      <p class="g-sub">Describe it in your own words. Get the real name, working code in vanilla and React, and a prompt your coding agent can build from.</p>
-      <div class="g-examples">${EXAMPLES.map((e) => `<button type="button" data-example="${esc(e)}">“${esc(e)}”</button>`).join('')}</div>
-    </section>
+    ${query || family !== 'all' ? '' : homeHero()}
     <div class="g-filters" role="toolbar" aria-label="Filter elements">
       <div class="g-chips">
         <button type="button" data-fam="all" aria-pressed="${family === 'all'}">All <span>${ALL.length}</span></button>
@@ -146,6 +171,7 @@ export function viewIndex(main: HTMLElement, query: string, family: string, sort
       </div>
     </div>
     ${query ? `<p class="g-count">${shown.length} match${shown.length === 1 ? '' : 'es'} for “${esc(query)}”</p>` : ''}
+    <h2 class="lt-visually-hidden">${query ? 'Matches' : family === 'all' ? 'All elements' : esc(FAMILIES.find((f: { id: string }) => f.id === family)?.title ?? 'Elements')}</h2>
     <div class="g-grid">${shown.map(card).join('') || `<div class="g-none"><h2>Nothing by that name yet</h2><p>Try fewer words, like “menu”, “toggle” or “table”.</p></div>`}</div>`;
   mountPreviews(main);
 }

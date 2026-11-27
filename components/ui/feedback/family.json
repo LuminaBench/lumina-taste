@@ -239,7 +239,7 @@
     {
       "id": "skeleton",
       "name": "Shimmer skeleton",
-      "summary": "Soft placeholder shapes with a subtle shimmer while content loads.",
+      "summary": "Soft grey shapes in the layout of the content, with a subtle shimmer while it loads.",
       "pattern": "aria-busy container",
       "states": ["loading","reduced motion"],
       "aliases": ["loading placeholder","ghost loader","content placeholder","shimmer loader"],

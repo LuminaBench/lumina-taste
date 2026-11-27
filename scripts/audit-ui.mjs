@@ -535,15 +535,18 @@ const TASTE_CHECKS = (arg = null) => {
     // is anything to look at: an image, a figure, a device or document, a chart, a large icon, or type set
     // large enough to be the picture (a figure or statement at 48px or more).
     if (wide && document.querySelector('[class*="hero"]')) {
-      const PICTURE = 'img, picture, video, canvas, figure, [role="img"], .lt-art, .lt-device, .lt-invoice, .lt-bento, [data-part="visual"], [data-part="media"], [class*="chart"]';
+      const PICTURE = 'img, picture, video, canvas, iframe, figure, [role="img"], .lt-art, .lt-device, .lt-invoice, .lt-bento, [data-part="visual"], [data-part="media"], [class*="chart"], [inert], [data-audit-ignore]';
       const count = (t) => (t || '').split(/\s+/).filter((w) => /[a-z]{2}/i.test(w)).length;
       const bigType = (band) => { const tw = document.createTreeWalker(band, NodeFilter.SHOW_TEXT); for (let n = tw.nextNode(); n; n = tw.nextNode()) { const el = n.parentElement; if (el && n.textContent.trim() && shown(el) && parseFloat(getComputedStyle(el).fontSize) >= 48) return true; } return false; };
       // A list of short items (a timetable, opening hours, prices with a name each) scans like a table: it is not a wall.
       const scans = (band, total) => [...band.querySelectorAll('ul, ol, tbody, dl')].some((l) => { const items = [...l.children].filter(shown); if (items.length < 4) return false; const words = items.reduce((a, it) => a + count(it.innerText), 0); return words / items.length <= 9 && total - words <= 50; });
-      const looksAt = (band, total) => [...band.querySelectorAll(PICTURE)].some((e) => shown(e) && rectOf(e).width >= 120 && rectOf(e).height >= 60)
+      // An inert rendering (a live preview) is hidden from assistive tech but is a picture to the eye.
+      const seen = (e) => (e.closest('[inert], [data-audit-ignore], [aria-hidden="true"]') ? getComputedStyle(e).display !== 'none' && getComputedStyle(e).visibility !== 'hidden' : shown(e));
+      const looksAt = (band, total) => [...band.querySelectorAll(PICTURE)].some((e) => seen(e) && rectOf(e).width >= 120 && rectOf(e).height >= 60)
         || [...band.querySelectorAll('svg')].some((e) => shown(e) && rectOf(e).width >= 96 && rectOf(e).height >= 64)
         || bigType(band) || scans(band, total);
-      const walls = bands.filter((b) => rectOf(b).height > 200 && !b.matches('[class*="hero"], [class*="footer"], [class*="nav"]')).map((b) => { const words = count(b.innerText); return { el: b, words, pic: looksAt(b, words) }; });
+      const prose = (b) => { const c = b.cloneNode(true); c.querySelectorAll('[inert], [data-audit-ignore]').forEach((n) => n.remove()); return c.textContent; };
+      const walls = bands.filter((b) => rectOf(b).height > 200 && !b.matches('[class*="hero"], [class*="footer"], [class*="nav"]')).map((b) => { const words = count(prose(b)); return { el: b, words, pic: looksAt(b, words) }; });
       let flagged = false;
       for (let i = 0; i < walls.length && !flagged; i++) {
         const w = walls[i];

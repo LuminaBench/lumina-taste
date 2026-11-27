@@ -3173,7 +3173,7 @@
       "kind": "ui",
       "family": "feedback",
       "name": "Shimmer skeleton",
-      "summary": "Soft placeholder shapes with a subtle shimmer while content loads.",
+      "summary": "Soft grey shapes in the layout of the content, with a subtle shimmer while it loads.",
       "aliases": ["loading placeholder","ghost loader","content placeholder","shimmer loader"],
       "pattern": "aria-busy container",
       "states": ["loading","reduced motion"],
@@ -7049,9 +7049,9 @@
       ],
       "swatches": {
         "light": {"canvas":"#f9f8f6","accent":"#0074a4","text":"#171614"},
-        "dark": {"canvas":"#0a0f12","accent":"#55bef0","text":"#eaf5fd"}
+        "dark": {"canvas":"#0f0e0d","accent":"#55bef0","text":"#f5f3f0"}
       },
-      "minTextContrast": {"light":14.66,"dark":14.01},
+      "minTextContrast": {"light":14.66,"dark":14},
       "files": ["tokens/palettes/charcoal-sky.css"]
     },
     {
