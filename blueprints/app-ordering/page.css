@@ -37,6 +37,8 @@
 
 /* The basket, low in reach above the tabs: how many, and what it comes to. */
 .or-bagbar[data-empty] { display: none; }
+/* The tab bar under it already clears the home indicator. */
+.or-bagbar { padding-bottom: 12px; }
 .or-bagbar .lt-btn { justify-content: space-between; gap: 12px; padding-inline: 10px 18px; }
 .or-bag-count { display: grid; place-items: center; min-width: 30px; height: 30px; padding: 0 6px; border-radius: var(--radius-md); background: var(--accent-ink); color: var(--accent-solid); font-variant-numeric: tabular-nums; }
 .or-bag-total { font-variant-numeric: tabular-nums; }

@@ -33,15 +33,16 @@
 .bo-sheet > .lt-btn { width: 100%; }
 
 /* Bookings: the next one is the one card on the screen. */
-.bo-next { display: grid; gap: 4px; padding: 22px; border-radius: var(--radius-xl); background: var(--accent-solid); color: var(--accent-ink); text-decoration: none; box-shadow: none; }
+/* The next booking is the one card: a tint of the accent, the time set large in ink. */
+.bo-next { display: grid; gap: 4px; padding: 22px; border-radius: var(--radius-xl); background: color-mix(in oklab, var(--accent-solid) 14%, var(--bg-surface-1)); color: var(--text-primary); text-decoration: none; box-shadow: 0 0 0 var(--bw) color-mix(in oklab, var(--accent-solid) 22%, transparent); }
 .bo-next:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 3px; }
-.bo-next-when { font-size: var(--text-ui-sm); font-weight: 600; opacity: 0.86; }
+.bo-next-when { color: var(--accent-text); font-size: var(--text-ui-sm); font-weight: 650; }
 .bo-next-day { font-size: var(--step-1); font-weight: 600; }
 .bo-next-time { font-family: var(--font-display); font-size: 4rem; font-weight: var(--weight-display); letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
 .bo-next-what { display: flex; align-items: center; gap: 12px; margin-top: 12px; padding-top: 14px; box-shadow: inset 0 1px 0 color-mix(in oklab, currentColor 24%, transparent); }
 .bo-next-what > span:last-child { display: grid; gap: 2px; }
-.bo-next-what small { opacity: 0.86; font-size: var(--text-ui-sm); }
-.bo-next .as-mark { background: color-mix(in oklab, var(--accent-ink) 16%, var(--accent-solid)); }
+.bo-next-what small { color: var(--text-secondary); font-size: var(--text-ui-sm); }
+.bo-next .as-mark { background: var(--bg-surface-1); }
 .as-mark [data-part="mark-motif"] { width: 28px; height: 28px; overflow: visible; }
 .as-mark [data-part="mark-motif"] [data-m="a"] { fill: currentColor; }
 .as-mark [data-part="mark-motif"] :is([data-m="b"], [data-m="cut"]) { fill: transparent; }
