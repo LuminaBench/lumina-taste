@@ -31,6 +31,15 @@ test('a café starter writes the page, a brand kit and a checklist that asks onl
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
+test('an app starter is its own app: "settings" or "bookings" in the feature list never sends it elsewhere', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lt-starter-app-'));
+  try {
+    const r = spawnSync(process.execPath, [join(root, 'scripts/starter.mjs'), 'chat-app', 'Halyard Chat: conversations, people, settings', '--project', dir], { encoding: 'utf8' });
+    assert.equal(r.status, 0, r.stderr);
+    assert.match(r.stdout, /- Page: index\.html \(messaging app \(phone\)/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
 test('an unknown kind or a missing project is a usage error', () => {
   const r = spawnSync(process.execPath, [join(root, 'scripts/starter.mjs'), 'spaceship', 'Anything'], { encoding: 'utf8' });
   assert.equal(r.status, 2);

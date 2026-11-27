@@ -7,7 +7,8 @@
 //   node scripts/starter.mjs bank-app "Juniper bank app on the phone: balance, pots, send money" --project ./app
 //
 // Kinds: cafe, restaurant, shop, trade, practice, charity, event, software, devtool, bank-app, fitness-app,
-// booking-app, chat-app. Each fixes the page type (and the app blueprint) so a short brief lands right.
+// booking-app, chat-app. Each fixes the page type (an app kind, its own app blueprint) so a short brief lands right:
+// "bookings" or "settings" in an app's feature list never sends it to another kind.
 // --images also fetches public-domain photographs for what the person's media does not cover.
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -17,10 +18,8 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const KINDS = {
   cafe: 'venue', restaurant: 'venue', shop: 'brand-landing', trade: 'service-landing', practice: 'service-landing', charity: 'cause', event: 'event',
-  software: 'landing', devtool: 'dev-landing', 'bank-app': null, 'fitness-app': null, 'booking-app': null, 'chat-app': null,
+  software: 'landing', devtool: 'dev-landing', 'bank-app': 'app-banking', 'fitness-app': 'app-fitness', 'booking-app': 'app-booking', 'chat-app': 'app-messaging',
 };
-// App starters: the brief is steered to the app's own blueprint by naming it plainly.
-const APP_WORDS = { 'bank-app': 'bank app on the phone', 'fitness-app': 'running app on the phone', 'booking-app': 'booking app on the phone for customers', 'chat-app': 'chat app on the phone' };
 
 const args = process.argv.slice(2);
 const opt = (n) => { const i = args.indexOf(`--${n}`); if (i < 0) return null; const v = args[i + 1]; args.splice(i, 2); return v; };
@@ -33,11 +32,10 @@ if (!kind || !(kind in KINDS) || !brief || !project) {
   process.exit(2);
 }
 const dir = resolve(project);
-const steered = KINDS[kind] === null && !new RegExp(APP_WORDS[kind].split(' ')[0], 'i').test(brief) ? `${brief}, ${APP_WORDS[kind]}` : brief;
 const run = (script, a) => spawnSync(process.execPath, [join(root, 'scripts', script), ...a], { encoding: 'utf8', env: process.env });
 
 // 1. The page (or the app), drafted from the brief, with the person's media first.
-const c = run('compose.mjs', [steered, '--project', dir, '--write', '--json', ...(KINDS[kind] ? ['--type', KINDS[kind]] : []), ...(media ? ['--media', resolve(media)] : []), ...(images ? ['--images'] : [])]);
+const c = run('compose.mjs', [brief, '--project', dir, '--write', '--json', '--type', KINDS[kind], ...(media ? ['--media', resolve(media)] : []), ...(images ? ['--images'] : [])]);
 if (c.status !== 0) { console.error(c.stderr || c.stdout); process.exit(1); }
 const plan = JSON.parse(c.stdout);
 const name = plan.designBrief?.product && !/^not named/.test(plan.designBrief.product) ? plan.designBrief.product : null;

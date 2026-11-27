@@ -516,7 +516,7 @@ function media(ctx) {
 export function navBar({ product, links, action, facts, style = null }) {
   const li = links.map((l) => `<li><a href="#${l.slug}">${esc(l.label)}</a></li>`).join('');
   const attrs = `${style?.variant ? ` data-variant="${style.variant}"` : ''}${style?.tone ? ` data-tone="${style.tone}"` : ''}`;
-  return `<header class="lt-nav-simple" data-lt="navbar-simple" data-vt-name="lt-bar"${attrs}>
+  return `<header class="lt-nav-simple" data-lt="navbar-simple"${attrs} data-vt-name="lt-bar">
   <a href="#top" data-part="brand"><span data-part="mark" aria-hidden="true"></span>${esc(product ?? 'TODO: name')}</a>
   <nav aria-label="Main"><ul data-part="links">${li}</ul></nav>
   <div data-part="actions">${facts.phone ? `<a data-part="signin" href="tel:${esc(facts.phone.replace(/[^\d+]/g, ''))}">${esc(facts.phone)}</a>` : ''}<a class="lt-btn" data-variant="primary" data-size="sm" href="${esc(action.href)}">${esc(action.label)}</a></div>
