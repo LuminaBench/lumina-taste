@@ -18,6 +18,16 @@ test('a café starter writes the page, a brand kit and a checklist that asks onl
     assert.match(md, /# Copper Hare starter \(cafe\)/);
     assert.match(md, /- Page: index\.html \(place or venue/);
     assert.doesNotMatch(md, /the address/, 'the brief gave the address');
+    // A second page grows the site: its own file, linked from the first, both cross-fading between them.
+    const c = spawnSync(process.execPath, [join(root, 'scripts/compose.mjs'), 'Copper Hare, a coffee shop at 21 Gillygate, York, phone 01904 600 100', '--type', 'contact', '--project', dir, '--write'], { encoding: 'utf8' });
+    assert.equal(c.status, 0, c.stderr);
+    const index = readFileSync(join(dir, 'index.html'), 'utf8'), contact = readFileSync(join(dir, 'contact.html'), 'utf8');
+    assert.match(index, /<a href="contact\.html">Contact<\/a>/);
+    assert.match(index, /<html [^>]*data-vt>/);
+    assert.match(contact, /<html [^>]*data-vt>/);
+    assert.match(contact, /href="index\.html"/);
+    assert.match(contact, /lumina-taste\/page-contact\.css/);
+    assert.match(index, /data-vt-name="lt-bar"/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 

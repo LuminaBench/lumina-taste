@@ -56,7 +56,20 @@ const hash = (s) => [...String(s)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >
  * @param {{ type: any, domain: any, facts: any, items?: Array<{ name: string, price: string | null }>, software?: boolean }} input
  * @returns {{ id: string, block: string, variant: string | null, name: string, why: string }}
  */
-export function chooseHero({ type, domain, facts, items = [], software = false }) {
+export function chooseHero(input) {
+  const h = pickHero(input);
+  // The person's own photographs lead the first screen. A screen-wide composition blows a picture up to the full
+  // width; when none of theirs is wide enough to stay sharp there, the picture takes the half where it is.
+  const own = input.ownPhotos ?? [];
+  if (own.length && ['bleed', 'wide', 'cover'].includes(h.id) && !own.some((p) => (p.width ?? 0) >= FULL_WIDTH)) {
+    return { id: 'edge', ...HERO_COMPOSITIONS.edge, why: `${h.why.split(':')[0]}; your photographs are under ${FULL_WIDTH.toLocaleString('en-GB')} px wide, so the picture takes the half of the screen where it stays sharp` };
+  }
+  return h;
+}
+/** The narrowest photograph that stays sharp across a large screen's first screen (cover crops the rest). */
+export const FULL_WIDTH = 1200;
+
+function pickHero({ type, domain, facts, items = [], software = false }) {
   const brief = facts?.brief ?? '';
   const d = domain?.id ?? null;
   const priced = items.filter((i) => i.price).length;

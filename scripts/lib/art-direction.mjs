@@ -90,7 +90,7 @@ const DEFAULT_SIGNATURE = { name: 'One clear picture', how: 'Choose one thing to
 /**
  * @param {{ type: any, domain: any, profile: any, sections: any[], uiIds: Set<string>, facts?: any, items?: any[], software?: boolean }} input
  */
-export function direct({ type, domain, profile, sections, uiIds, facts = null, items = [], software = false, heroChoice = null }) {
+export function direct({ type, domain, profile, sections, uiIds, facts = null, items = [], software = false, heroChoice = null, ownPhotos = null }) {
   const marketing = type.kind === 'marketing';
   const style = profile.style ?? null;
   const printlike = (style && PRINTLIKE_STYLES.has(style)) || (!style && (PRINTLIKE_DOMAINS.has(domain?.id) || ['event', 'cause'].includes(type.id)));
@@ -100,7 +100,7 @@ export function direct({ type, domain, profile, sections, uiIds, facts = null, i
   const heroSection = sections.find((s) => /^hero-/.test(s.id ?? ''));
   let hero = heroSection?.id ?? null, heroWhy = null, composition = null, chrome = null;
   if (marketing && heroSection) {
-    composition = chooseHero({ type, domain, facts: facts ?? { brief: '' }, items, software });
+    composition = chooseHero({ type, domain, facts: facts ?? { brief: '' }, items, software, ownPhotos });
     // The person pointed at a first screen (compose --hero <id>, the gallery's First screens): theirs, not the default.
     if (heroChoice && HERO_COMPOSITIONS[heroChoice]) composition = { id: heroChoice, ...HERO_COMPOSITIONS[heroChoice], why: 'chosen by the person (--hero)' };
     // A statement style (swiss, editorial…) keeps the words first when the subject has no shape of its own.

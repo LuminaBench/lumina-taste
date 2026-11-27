@@ -36,7 +36,7 @@ import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { COPY_RULES } from './lib/copy-rules.mjs';
-import { MEASURE, judgeMeasures, PERF_INIT, PERF_COLLECT, judgePerf, RTL_PROBE, judgeRtl, LONG_WORDS, FORCED_MARKS, CONTROL_FIT, TEXT_OVERLAP, SAVE_DATA_INIT, SAVE_DATA_COLLECT, judgeSaveData } from './lib/critic.mjs';
+import { MEASURE, judgeMeasures, PERF_INIT, PERF_COLLECT, judgePerf, RTL_PROBE, judgeRtl, LONG_WORDS, FORCED_MARKS, CONTROL_FIT, TEXT_OVERLAP, SAVE_DATA_INIT, SAVE_DATA_COLLECT, judgeSaveData, PAGE_PHOTOS, judgePagePhotos } from './lib/critic.mjs';
 
 // Playwright is looked up next to this script first, then in the project you run it from,
 // so a globally installed skill can audit a project that already has Playwright.
@@ -804,6 +804,7 @@ async function auditOne(browser, url, vpName, mode) {
   if (tasteOn) {
     measures = await page.evaluate(MEASURE, { states: await declaredStates(ctx, url) });
     for (const f of judgeMeasures(measures, { wide: vp.width >= 900 })) findings.push({ ...f, viewport: vpName, mode });
+    for (const f of judgePagePhotos(await page.evaluate(PAGE_PHOTOS))) findings.push({ ...f, viewport: vpName, mode });
     if (vp.width < 900 && measures.bars.length) for (const f of await safeAreaGaps(ctx, page, measures)) findings.push({ ...f, viewport: vpName, mode });
   }
   for (const e of runtimeErrors) findings.push({ rule: 'runtime-error', severity: 'error', selector: null, message: e, viewport: vpName, mode });

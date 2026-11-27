@@ -731,3 +731,54 @@ export function judgeSaveData({ media = 0, playing = [], eager = [] }) {
   if (eager.length) out.push({ rule: 'a11y-reduced-data', severity: 'warning', selector: eager[0], message: `${eager.length} picture${eager.length > 1 ? 's' : ''} far below the first screen load at once (${eager.slice(0, 2).join(', ')}). Give them loading="lazy" so a reader on a metered connection only pays for what they scroll to.` });
   return out;
 }
+
+// ------------------------------------------------------------------ photographs as placed (--taste)
+// The pixels are the person's (photo-check.mjs judges the files); here, how the page shows them: blown up past
+// their own size, squashed out of shape, or the same picture twice.
+
+/** In-page: every loaded raster picture people can see, with its own size, its box and how it fills the box. */
+export const PAGE_PHOTOS = () => {
+  const sel = (el) => { const s = []; for (let e = el; e && e.nodeType === 1 && s.length < 3; e = e.parentElement) { let t = e.tagName.toLowerCase(); if (e.id) { s.unshift(t + '#' + e.id); break; } const c = [...e.classList].slice(0, 2); if (c.length) t += '.' + c.join('.'); s.unshift(t); } return s.join(' > '); };
+  const out = [];
+  for (const im of document.images) {
+    const src = im.currentSrc || im.src || '';
+    if (!im.complete || !im.naturalWidth || /\.svg(\?|#|$)|^data:image\/svg/i.test(src)) continue;
+    if (im.closest('[data-audit-ignore], [aria-hidden="true"], [inert], [hidden]')) continue;
+    const r = im.getBoundingClientRect();
+    if (r.width < 120 || r.height < 80) continue;
+    const cs = getComputedStyle(im);
+    if (cs.visibility === 'hidden' || +cs.opacity === 0) continue;
+    // The box the picture is drawn into, without borders and padding.
+    const pad = (a, b) => parseFloat(cs[a]) + parseFloat(cs[b]);
+    const w = r.width - pad('paddingLeft', 'paddingRight') - pad('borderLeftWidth', 'borderRightWidth');
+    const h = r.height - pad('paddingTop', 'paddingBottom') - pad('borderTopWidth', 'borderBottomWidth');
+    // naturalWidth is in CSS pixels after srcset's density: the file's own pixels come from its w descriptor.
+    let nw = im.naturalWidth, nh = im.naturalHeight;
+    for (const part of (im.getAttribute('srcset') ?? '').split(',')) {
+      const [u, d] = part.trim().split(/\s+/);
+      if (u && /^\d+w$/.test(d ?? '') && new URL(u, document.baseURI).href === src) { const pw = parseInt(d, 10); nh = Math.round(nh * pw / nw); nw = pw; }
+    }
+    out.push({ selector: sel(im), file: src.split(/[?#]/)[0].split('/').pop(), w: Math.round(w), h: Math.round(h), nw, nh, fit: cs.objectFit, dpr: devicePixelRatio || 1 });
+  }
+  return out;
+};
+
+/** Judge PAGE_PHOTOS' list. The same picture at two widths (cafe-640.webp, cafe-1024.webp) is one picture. */
+export function judgePagePhotos(list, { upscale = 1.2, stretch = 0.04 } = {}) {
+  const out = [];
+  const add = (rule, severity, selector, message) => out.push({ rule, severity, selector, message });
+  const up = [], squashed = [];
+  for (const p of list) {
+    const k = p.fit === 'contain' || p.fit === 'scale-down' ? Math.min(p.w / p.nw, p.h / p.nh) : p.fit === 'none' ? 1 : p.fit === 'cover' ? Math.max(p.w / p.nw, p.h / p.nh) : Math.max(p.w / p.nw, p.h / p.nh);
+    if (k * p.dpr > upscale) up.push({ ...p, k });
+    if (p.fit === 'fill' && Math.abs((p.w / p.h) / (p.nw / p.nh) - 1) > stretch) squashed.push(p);
+  }
+  if (up.length) add('photo-upscaled', 'warning', up[0].selector, `${up.length === 1 ? 'A photograph is' : `${up.length} photographs are`} shown larger than ${up.length === 1 ? 'its' : 'their'} own pixels, so ${up.length === 1 ? 'it looks' : 'they look'} soft: ${up.slice(0, 3).map((p) => `${p.file} (${p.nw}×${p.nh}) in a ${p.w}×${p.h} box`).join(', ')}. Use a larger original (twice the box for sharp screens), or show it smaller.`);
+  if (squashed.length) add('photo-stretched', 'error', squashed[0].selector, `${squashed.length === 1 ? 'A photograph is' : `${squashed.length} photographs are`} squashed out of shape: ${squashed.slice(0, 3).map((p) => `${p.file} (${p.nw}×${p.nh}) drawn into ${p.w}×${p.h}`).join(', ')}. Give it object-fit: cover (and object-position for the subject), or a box of its own shape.`);
+  const base = (f) => f.replace(/-\d{2,4}(w)?(?=\.\w+$)/, '').replace(/@\dx(?=\.\w+$)/, '');
+  const seen = new Map();
+  for (const p of list) { const b = base(p.file); seen.set(b, [...(seen.get(b) ?? []), p]); }
+  const twice = [...seen.entries()].filter(([, ps]) => ps.length > 1);
+  if (twice.length) add('photo-repeated', 'warning', twice[0][1][1].selector, `The same photograph appears more than once on the page: ${twice.slice(0, 3).map(([f, ps]) => `${f} (${ps.length}×)`).join(', ')}. Each picture should show something new; use another, or a drawing.`);
+  return out;
+}

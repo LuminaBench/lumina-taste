@@ -10,7 +10,7 @@
 import { scanMedia, menuFrom } from './lib/media-intake.mjs';
 import { spawnSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, extname, join, relative, resolve } from 'node:path';
+import { basename, dirname, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { lookFor } from './lib/image-treat.mjs';
 import { search } from './lib/search-core.mjs';
@@ -239,7 +239,7 @@ const flow = flow0 && type.screens ? { ...flow0, screens: type.screens.map(([id,
 let sections = type.sections.map((s, i) => ({ n: i + 1, ...s, exists: !s.id || uiIds.has(s.id) }));
 // Developer products show code: a code-block figure takes the place of the hero's product frame.
 // Art direction: one signature, a hero, a layout for each section and where colour and type may go.
-const subjectInput = { facts, items: itemsFrom(facts), software: ['landing', 'dev-landing'].includes(type.id), heroChoice };
+const subjectInput = { facts, items: itemsFrom(facts), software: ['landing', 'dev-landing'].includes(type.id), heroChoice, ownPhotos: media?.filter((i) => i.kind === 'photo') ?? null };
 const art0 = direct({ type, domain, profile, sections, uiIds, ...subjectInput });
 for (const x of sections) if (/^hero-/.test(x.id ?? '') && art0.composition) {
   if (art0.hero !== x.id) { x.alt = [...new Set([x.id, ...(x.alt ?? [])])]; x.id = art0.hero; }
@@ -570,7 +570,7 @@ function writeComposed(dir, run) {
   const closeBand = ordered.find((b) => b.id === 'cta-band');
   const action = { label: ctx.action ?? 'Get in touch', href: `#${closeBand?.slug ?? 'top'}` };
   const links = ordered.slice(1).filter((b) => b !== closeBand).slice(0, 4).map((b) => ({ slug: b.slug, label: b.label }));
-  const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''}`;
+  const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''} data-vt`;
   const list = todo.length ? `<!-- TODO before this page ships. The brief did not say, so the draft leaves these out rather than inventing them:\n${todo.map((t) => `  - ${t.replace(/--/g, '–')}`).join('\n')}\n-->\n` : '';
   let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${esc(product ?? 'TODO: page title')}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. Every word on it comes from the brief; check each one, then add what the TODO list asks for. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${list}${navBar({ product, links, action, facts, style: art.chrome?.nav })}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}${moments.some((m) => m.name === 'number-settle') ? ' data-lt="number-settle"' : ''}>${ideaComment(idea)}\n${body.join('\n\n')}\n</main>\n${footerBar({ product, facts, year: new Date().getFullYear(), style: art.chrome?.footer, links })}\n</body>\n</html>\n`;
   // Buttons: the primary goes to the close; a secondary goes to the prices if they are on the page; any other is dropped.
@@ -585,7 +585,8 @@ function writeComposed(dir, run) {
   page = retitle(page);
   // Install exactly the parts the page uses.
   const rc = rootClasses();
-  const ids = new Set(['button', 'navbar-simple']);
+  // view-transition: moving between the site's pages cross-fades while the top bar holds still (<html data-vt>).
+  const ids = new Set(['button', 'navbar-simple', 'view-transition']);
   for (const m of page.matchAll(/class="([^"]+)"/g)) for (const c of m[1].split(/\s+/)) if (rc.has(c)) ids.add(rc.get(c));
   run(`${base} --components ${[...ids].join(',')}`);
   const MARK = '<!-- lumina-taste draft for:';
@@ -616,24 +617,41 @@ function writePage(dir, run) {
   if (!/\sid="top"/.test(r.body)) r.body = r.body.replaceAll('href="#top"', 'href="#main"');
   if (!product) ctx.todo.unshift('the product\'s name');
   const kit = join(dir, 'lumina-taste');
+  // Which file: the site's first page is index.html; a further page of another type (contact, pricing, a product)
+  // goes beside it as contact.html and so on, joined to the first by its top bar, so a site grows page by page.
+  const MARK = '<!-- lumina-taste draft for:';
+  const indexFile = join(dir, 'index.html');
+  const indexHtml = existsSync(indexFile) ? readFileSync(indexFile, 'utf8') : null;
+  const sameType = indexHtml?.includes(MARK) && indexHtml.includes(`. A ${type.name.toLowerCase()} in the `);
+  const slug = type.id.replace(/[^a-z0-9-]+/g, '-');
+  const own = (f) => !existsSync(f) || readFileSync(f, 'utf8').includes(MARK);
+  const target = !indexHtml || sameType ? (indexHtml && !indexHtml.includes(MARK) ? join(dir, 'index.draft.html') : indexFile) : own(join(dir, `${slug}.html`)) ? join(dir, `${slug}.html`) : join(dir, `${slug}.draft.html`);
+  const home = basename(target) !== 'index.html' && indexHtml != null;
+  const cssFile = home ? `page-${slug}.css` : 'page.css';
+  if (home) r.body = r.body.replace(/(<a class="[a-z]{2}-brand") href="#main"/, '$1 href="index.html"').replace(/<a href="#(?:top|main)" data-part="brand">/, '<a href="index.html" data-part="brand">');
   // Install exactly the parts the page uses, and the charts it draws.
   const rc = rootClasses();
   const ids = new Set(['button']);
   for (const m of r.body.matchAll(/class="([^"]+)"/g)) for (const c of m[1].split(/\s+/)) if (rc.has(c)) ids.add(rc.get(c));
   for (const m of r.body.matchAll(/data-lt="([a-z-]+)"/g)) if (uiIds.has(m[1])) ids.add(m[1]);
   for (const u of r.uses ?? []) ids.add(u);
+  if (!r.htmlData?.includes('data-app')) ids.add('view-transition');
   run(`${base} --components ${[...ids].filter((x) => uiIds.has(x)).join(',')}${ctx.charts.size ? ` --charts ${[...ctx.charts].join(',')}` : ''}`);
   // The blueprint's own page styles (its layout classes), then the draft's few additions, tokens only.
   const bpCss = (id) => { const f = join(root, 'blueprints', id, 'page.css'); return existsSync(f) ? `\n/* blueprints/${id}/page.css */\n${readFileSync(f, 'utf8')}` : ''; };
-  writeFileSync(join(kit, 'page.css'), `/* Page styles for this draft: the kit's blueprint layer${r.css ? ` and the ${r.css} blueprint's page styles` : ''}, then the draft's additions. Edit freely. */\n${readFileSync(join(root, 'blueprints/_shared/blueprint.css'), 'utf8')}${r.css ? bpCss(r.css) : ''}\n/* the draft's additions */\n${DRAFT_CSS}`);
+  writeFileSync(join(kit, cssFile), `/* Page styles for this draft: the kit's blueprint layer${r.css ? ` and the ${r.css} blueprint's page styles` : ''}, then the draft's additions. Edit freely. */\n${readFileSync(join(root, 'blueprints/_shared/blueprint.css'), 'utf8')}${r.css ? bpCss(r.css) : ''}\n/* the draft's additions */\n${DRAFT_CSS}`);
   writeFileSync(join(kit, 'page.js'), PAGE_SCRIPT);
-  const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''}${r.htmlData ?? ''}`;
+  const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''}${r.htmlData ?? ''}${r.htmlData?.includes('data-app') ? '' : ' data-vt'}`;
   const todo = [...new Set(ctx.todo)];
   const list = todo.length ? `<!-- TODO before this page ships. The brief did not say, so the draft leaves these out (or shows seeded sample rows labelled with your nouns) rather than inventing them:\n${todo.map((t) => `  - ${t.replace(/--/g, '–')}`).join('\n')}\n-->\n` : '';
   const page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1${r.htmlData?.includes('data-app') ? ', viewport-fit=cover' : ''}">\n  <title>${esc(r.title)}</title>\n  <meta name="description" content="${esc(r.desc.endsWith('.') ? r.desc : `${r.desc}.`)}">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. A ${type.name.toLowerCase()} in the ${blueprint ?? type.id} anatomy, written from the brief: check every word, then work through the TODO list. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <link rel="stylesheet" href="lumina-taste/page.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n  <script defer src="lumina-taste/page.js"></script>\n</head>\n<body>\n${list}  <a class="bp-skip" href="#main">Skip to content</a>\n  ${r.body}\n</body>\n</html>\n`;
-  const MARK = '<!-- lumina-taste draft for:';
-  const target = existsSync(join(dir, 'index.html')) && !readFileSync(join(dir, 'index.html'), 'utf8').includes(MARK) ? join(dir, 'index.draft.html') : join(dir, 'index.html');
-  writeFileSync(target, page);
+  writeFileSync(target, page.replace('href="lumina-taste/page.css"', `href="lumina-taste/${cssFile}"`));
+  // The first page's top bar gains a link to this one (once), so the two are one site.
+  if (home && indexHtml.includes(MARK) && !indexHtml.includes(`href="${basename(target)}"`)) {
+    const label = { contact: 'Contact', pricing: 'Pricing', product: 'Shop', checkout: 'Basket', docs: 'Docs', changelog: 'Changes', status: 'Status', article: 'Journal', directory: 'Directory' }[type.id] ?? type.name;
+    const linked = indexHtml.replace(/(<ul data-part="links">[\s\S]*?)(<\/ul>)/, `$1<li><a href="${basename(target)}">${esc(label)}</a></li>$2`);
+    if (linked !== indexHtml) writeFileSync(indexFile, linked);
+  }
   return { path: target, kind: 'page', todo, flow: flow ? flow.screens.filter((s) => s.build).map((s) => s.id) : null, charts: [...ctx.charts] };
 }
 
@@ -706,7 +724,7 @@ if (writeDraft) {
     const LABEL = { features: 'Features', how: 'How it works', figures: 'In numbers', questions: 'Questions', pricing: 'Pricing', range: 'The range', visit: 'Visit', book: 'Book', contact: 'Contact', team: 'Team', posts: 'Writing', work: 'Work', integrations: 'Integrations', code: 'Code', quickstart: 'Quickstart', api: 'API', details: 'Details', compare: 'Compare', story: 'How it works', examples: 'Examples', product: 'The product', promise: 'Our promise' };
     const isChrome = (id) => /^(navbar|footer|site-footer|floating-pill-nav|hide-on-scroll)/.test(id);
     const picked = sections.filter((x) => (x.id ? uiIds.has(x.id) : type.kind === 'marketing' && x.role && x.copy) && !(x.optional && PROOF.has(x.id))).map((x) => ({ ...x, id: x.id === 'navbar-mega' && (x.alt ?? []).includes('navbar-simple') ? 'navbar-simple' : x.id }));
-    const ids = [...new Set([...picked.map((x) => x.id).filter(Boolean), 'button', ...(idea.place === 'hero-visual' || idea.place === 'media-band' ? ['art-panel'] : []), ...(heroInvoice ? ['invoice-sheet'] : [])])];
+    const ids = [...new Set([...picked.map((x) => x.id).filter(Boolean), 'button', 'view-transition', ...(idea.place === 'hero-visual' || idea.place === 'media-band' ? ['art-panel'] : []), ...(heroInvoice ? ['invoice-sheet'] : [])])];
     run(`${base} --components ${ids.join(',')}${charts.length ? ` --charts ${charts.join(',')}` : ''}`);
     const kit = join(dir, 'lumina-taste');
     const snippet = (id) => readFileSync(join(kit, 'snippets', `${id}.html`), 'utf8').replace(/<!--[\s\S]*?-->\n?/, '').trim();
@@ -757,7 +775,7 @@ if (writeDraft) {
     const chrome = (id) => footCols(pill(snippet(id))).replace(/<ul data-part="links">[\s\S]*?<\/ul>/, `<ul data-part="links">${li}</ul>`).replace(/(<div[^>]*data-part="panel"[^>]*>)<ul>[\s\S]*?<\/ul>/, `$1<ul>${li}</ul>`).replace(/href="#home"/g, 'href="#top"').replace(/href="#start"/g, `href="${action}"`).replace(/<a href="#signin"[^>]*>[^<]*<\/a>/g, '');
     const top = picked.filter((y) => /^(navbar|floating-pill-nav|hide-on-scroll)/.test(y.id ?? '')).map((y) => chrome(y.id)).join('\n');
     const foot = picked.filter((y) => /footer/.test(y.id ?? '')).map((y) => chrome(y.id)).join('\n');
-    const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''}`;
+    const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''} data-vt`;
     let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${product ?? 'TODO: page title'}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. The first screen is written from the brief; every other sentence, name, number and link target is sample content: rewrite all of it. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${top}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}${moments.some((m) => m.name === 'number-settle') ? ' data-lt="number-settle"' : ''}>${ideaComment(idea)}\n${body.join('\n\n')}\n</main>\n${foot}\n</body>\n</html>\n`;
     // A button that led to one of the sample's pages: the primary one takes this page's action, the others go.
     { const have = new Set([...page.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
@@ -776,6 +794,11 @@ if (writeDraft) {
     const look = lookFor(facts.kind || '', brief);
     const r = spawnSync(process.execPath, [join(root, 'scripts/find-images.mjs'), '--fill', draft.path, '--subject', facts.kind || brief, '--look', look.look, '--out', join(dirname(draft.path), 'images'), ...(mediaDir ? ['--mine', mediaDir] : []), ...(withImages ? [] : ['--no-starter', '--offline'])], { encoding: 'utf8', env: process.env });
     const yours = (r.stdout.match(/\(yours: /g) ?? []).length;
+    // One line a finding, the photographs it is about named together ("cafe.jpg, buns.jpg: … to lead …").
+    const byNote = new Map();
+    for (const [, file, note] of r.stdout.matchAll(/^! photo ([^:]+): (.+)$/gm)) { const k = note.replace(/^\d+×\d+ is/, 'Each is').replace('it needs', 'a photograph needs'); byNote.set(k, [...(byNote.get(k) ?? []), { file, note }]); }
+    const photoNotes = [...byNote].map(([k, fs]) => (fs.length === 1 ? `your photograph ${fs[0].file}: ${fs[0].note}` : `your photographs ${fs.map((f) => f.file).join(', ')}: ${k}`));
+    if (photoNotes.length) plan.words.missing = [...new Set([...plan.words.missing, ...photoNotes])];
     const set = (readFileSync(draft.path, 'utf8').match(/<img src="images\//g) ?? []).length;
     plan.draft.images = { ran: true, status: r.status, set, look: look.look, lookWhy: look.why, yours, note: r.status === 0 ? `${set} photograph${set === 1 ? '' : 's'} set${yours ? ` (${yours} of them yours)` : ''}${set > yours ? ' from openly licensed sources' : ''} (credits in images/credits.json), ${look.look} look (${look.why}); look at each one` : `find-images could not run: ${(r.stderr || r.stdout).trim().split('\n').pop()}` };
   }

@@ -40,7 +40,7 @@ import { tmpdir } from 'node:os';
 import { basename, dirname, extname, join, relative, resolve } from 'node:path';
 import { GRADES, LOOKS, lookFor, paletteColours, parseFocus, parseRatio, treatImages, WIDTHS } from './lib/image-treat.mjs';
 import { imgTag, onFirstScreen, writeCredits } from './lib/image-html.mjs';
-import { scanMedia, assignMine } from './lib/media-intake.mjs';
+import { scanMedia, assignMine, checkMine } from './lib/media-intake.mjs';
 import { motifSvg, rankMotifs } from './lib/image-motifs.mjs';
 import { imageSize } from './lib/image-size.mjs';
 import { assignStarters, completeSet, fitScore, starterCandidate, starterFor } from './lib/image-starter.mjs';
@@ -342,14 +342,16 @@ const used = new Set();
 // first, then in page order. They are theirs: no licence to record, and they are never graded away from themselves
 // beyond the set's shared ratio and grade.
 if (mineDir) {
-  const mine = scanMedia(resolve(mineDir));
+  const mine = await checkMine(scanMedia(resolve(mineDir)));
+  // What the check found, one line a photograph (compose.mjs carries these lines into the draft's checklist).
+  for (const it of mine) for (const i of it.check?.issues ?? []) console.log(`! photo ${it.file}: ${i.message}${it.check.fit ? '' : ' (left out)'}`);
   const placed = assignMine(mine, briefed.map((m, i) => ({ key: m.index, shot: shotOf(m), weight: i === 0 && onFirstScreen(html, m.index) ? 2 : 1 })));
   for (const m of briefed) {
     const p = placed.get(m.index);
     if (!p) continue;
     const it = p.item;
     const c = { source: 'mine', id: slug(it.file.replace(/\.[^.]+$/, '')), path: it.path, url: it.path, title: it.shows ?? it.file, shows: it.shows ?? it.words.join(' '), creator: 'Your own', licence: 'Your own', licenceUrl: null, page: null, provider: 'yours', needsCredit: false, focus: it.focus ?? null };
-    if (it.small) console.log(`! ${it.file} is ${it.width}×${it.height}: it will look soft on a large screen. A larger original is better.`);
+    if (it.small && !it.check) console.log(`! photo ${it.file}: ${it.width}×${it.height} will look soft on a large screen. A larger original is better.`);
     if (dry) { console.log(`Would fill “${shotOf(m).slice(0, 50)}” with your ${it.file} (${p.how})`); continue; }
     chosen.set(m.index, { c, file: await download(c, tmp, c.id), name: c.id, shot: shotOf(m), focus: c.focus });
   }
@@ -436,6 +438,11 @@ const drawnPlan = new Map();
   }
 }
 
+// A picture inside a screen-wide first screen or band (cover, bleed, wide, film, a media band) fills the width.
+const spansScreen = (html, at) => {
+  const open = [...html.slice(0, at).matchAll(/<section\b[^>]*>/g)].at(-1)?.[0] ?? '';
+  return /\b(hero-cover|lt-media-band|lt-hero-video)\b|data-variant="(bleed|wide|full)"/.test(open);
+};
 let filled = 0, drawn = 0;
 for (const m of [...empty].reverse()) { // from the end, so earlier offsets stay valid
   const start = m.index, openEnd = m.index + m[0].length;
@@ -444,7 +451,7 @@ for (const m of [...empty].reverse()) { // from the end, so earlier offsets stay
   if (r) {
     const src = relative(dirname(page), out).split('\\').join('/');
     const alt = chosen.get(start).c.shows ?? shot.split(/[,.]/)[0];
-    const sizes = /data-sizes="([^"]+)"/.exec(m[0])?.[1] ?? sizesArg ?? undefined;
+    const sizes = /data-sizes="([^"]+)"/.exec(m[0])?.[1] ?? sizesArg ?? (spansScreen(html, start) ? '100vw' : undefined);
     let rest = html.slice(openEnd).replace(/^\s*<svg data-part="motif"[\s\S]*?<\/svg>/, '');
     // A photograph takes the panel over: the stand-in's pattern and drawing go, so the placeholder type stays
     // under the picture (art-panel.css raises it above the ground only for a drawn panel).

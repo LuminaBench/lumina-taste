@@ -71,7 +71,12 @@ export function scanMedia(dir) {
  * a word from a brief) places a picture outright; then the best word matches; then the rest in page order.
  */
 export function assignMine(items, slots) {
-  const photos = items.filter((i) => i.kind === 'photo');
+  // A photograph the check found unusable (out of focus, tiny, unreadable) is not placed; one that is usable but
+  // not fit to lead (dark, soft, small) is kept out of the first screen when another can lead.
+  const photos = items.filter((i) => i.kind === 'photo' && i.check?.fit !== false);
+  const canLead = (it) => it.check?.hero !== false;
+  const leads = photos.some(canLead);
+  const heroSlot = (i) => i === 0 && (slots[0]?.weight ?? 1) > 1;
   const out = new Map(), used = new Set();
   const words = (s) => String(s).toLowerCase().split(/[^a-z]+/).filter((w) => w.length > 2 && !STOP.test(w)).map(stem);
   const sw = slots.map((s) => new Set(words(s.shot)));
@@ -86,15 +91,31 @@ export function assignMine(items, slots) {
   for (const it of photos) {
     if (used.has(it.file)) continue;
     const iw = new Set(it.words.map(stem));
-    slots.forEach((s, i) => { const hit = [...sw[i]].filter((w) => iw.has(w)).length; if (hit) pairs.push({ it, s, score: hit * (s.weight ?? 1) }); });
+    slots.forEach((s, i) => { if (heroSlot(i) && leads && !canLead(it)) return; const hit = [...sw[i]].filter((w) => iw.has(w)).length; if (hit) pairs.push({ it, s, score: hit * (s.weight ?? 1) }); });
   }
   pairs.sort((a, b) => b.score - a.score);
   for (const p of pairs) { if (used.has(p.it.file) || out.has(p.s.key)) continue; out.set(p.s.key, { item: p.it, score: p.score, how: 'match' }); used.add(p.it.file); }
   // The rest in page order: the business's own picture of its own place beats any stock photograph. Wide pictures
   // go to the first screen, the others follow.
-  const rest = photos.filter((it) => !used.has(it.file)).sort((a, b) => (b.orientation === 'wide') - (a.orientation === 'wide'));
-  for (const s of slots) { if (!rest.length) break; if (out.has(s.key)) continue; const it = rest.shift(); out.set(s.key, { item: it, score: 0, how: 'order' }); used.add(it.file); }
+  const rest = photos.filter((it) => !used.has(it.file)).sort((a, b) => (canLead(b) - canLead(a)) || ((b.orientation === 'wide') - (a.orientation === 'wide')));
+  slots.forEach((s, i) => {
+    if (!rest.length || out.has(s.key)) return;
+    const k = heroSlot(i) && leads ? rest.findIndex(canLead) : 0;
+    if (k < 0) return;
+    const [it] = rest.splice(k, 1); out.set(s.key, { item: it, score: 0, how: 'order' }); used.add(it.file);
+  });
   return out;
+}
+
+/** Look at each photograph (size, exposure, focus) in a browser, when there is one; see photo-check.mjs. */
+export async function checkMine(items, from = import.meta.url) {
+  const { loadChromium } = await import('./browser.mjs');
+  const { checkPhotos } = await import('./photo-check.mjs');
+  const chromium = await loadChromium(from).catch(() => null);
+  const photos = items.filter((i) => i.kind === 'photo');
+  if (!chromium || !photos.length) return items;
+  const checked = await checkPhotos(photos, { chromium, use: (it) => (it.use === 'hero' ? 'hero' : 'card') });
+  return items.map((i) => checked.find((c) => c.path === i.path) ?? i);
 }
 
 /** A plain-text menu or price list ("Margherita £11.50" per line, or "name, price" CSV) as "name £price" phrases. */

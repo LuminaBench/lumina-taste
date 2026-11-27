@@ -17,7 +17,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { scanMedia, assignMine, menuFrom } from './lib/media-intake.mjs';
+import { scanMedia, assignMine, menuFrom, checkMine } from './lib/media-intake.mjs';
 import { formatJson } from './lib/json.mjs';
 
 const args = process.argv.slice(2);
@@ -25,11 +25,13 @@ const opt = (n, d = null) => { const i = args.indexOf(`--${n}`); if (i < 0) retu
 const flag = (n) => { const i = args.indexOf(`--${n}`); if (i < 0) return false; args.splice(i, 1); return true; };
 const pageArg = opt('page');
 const asJson = flag('json');
+const noCheck = flag('no-check'); // skip looking at the pixels (size, exposure, focus)
 const dir = args[0];
-if (!dir) { console.error('Usage: node scripts/media-intake.mjs <folder> [--page index.html] [--json]'); process.exit(2); }
+if (!dir) { console.error('Usage: node scripts/media-intake.mjs <folder> [--page index.html] [--json] [--no-check]'); process.exit(2); }
 
 let items;
 try { items = scanMedia(resolve(dir)); } catch (e) { console.error(e.message); process.exit(2); }
+if (!noCheck) items = await checkMine(items);
 const menu = menuFrom(items);
 const hasFfmpeg = spawnSync('ffmpeg', ['-version']).status === 0;
 let plan = null;
@@ -41,7 +43,7 @@ if (pageArg) {
 }
 const out = {
   folder: resolve(dir),
-  photographs: items.filter((i) => i.kind === 'photo').map(({ file, width, height, orientation, shows, use, small }) => ({ file, size: width ? `${width}×${height}` : null, orientation, shows, use, small })),
+  photographs: items.filter((i) => i.kind === 'photo').map(({ file, width, height, orientation, shows, use, small, check }) => ({ file, size: width ? `${width}×${height}` : null, orientation, shows, use, small, ...(check ? { fit: check.fit, canLead: check.hero, issues: check.issues.map((i) => i.message) } : {}) })),
   logos: items.filter((i) => i.kind === 'logo').map((i) => i.file),
   films: items.filter((i) => i.kind === 'video').map((i) => i.file),
   menus: items.filter((i) => i.kind === 'menu').map((i) => i.file),
@@ -54,7 +56,11 @@ if (asJson) { console.log(formatJson(out)); process.exit(0); }
 const L = [];
 L.push(`# Your media: ${out.folder}`, '');
 L.push(`**Photographs (${out.photographs.length})**`);
-for (const p of out.photographs) L.push(`- ${p.file}  ·  ${p.size ?? '?'} ${p.orientation ?? ''}${p.use ? `  ·  use: ${p.use}` : ''}${p.small ? '  ·  small: will look soft on a large screen' : ''}\n  ${p.shows ? `shows: ${p.shows}` : 'shows: (not described yet: look at it and say what it shows in media.json)'}`);
+for (const p of out.photographs) {
+  const verdict = p.fit === false ? '  ·  not used as it is' : p.canLead === false ? '  ·  fine inside the page, not as the first picture' : p.fit ? '  ·  good' : p.small ? '  ·  small: will look soft on a large screen' : '';
+  L.push(`- ${p.file}  ·  ${p.size ?? '?'} ${p.orientation ?? ''}${p.use ? `  ·  use: ${p.use}` : ''}${verdict}\n  ${p.shows ? `shows: ${p.shows}` : 'shows: (not described yet: look at it and say what it shows in media.json)'}`);
+  for (const i of p.issues ?? []) L.push(`  ! ${i}`);
+}
 if (out.logos.length) L.push('', `**Logo**: ${out.logos.join(', ')}. It goes in the top bar and becomes every icon size (favicons, apple-touch-icon, Android, maskable, a web manifest). A wide logo's icons use its symbol; add the symbol alone as mark.svg if that is wrong.`);
 if (out.films.length) L.push('', `**Film**: ${out.films.join(', ')}. ${hasFfmpeg ? 'A hero film is 8 to 20 seconds, muted, under 3 MB, with a still poster frame.' : 'A hero film is 8 to 20 seconds, muted, under 3 MB, with a still poster frame; ffmpeg is not installed here, so trim and compress it first (for example ffmpeg -i in.mov -t 12 -an -vf scale=1600:-2 -crf 28 hero.mp4).'}`);
 if (out.menus.length) L.push('', `**Menu or prices**: ${out.menus.join(', ')}${menu.length ? `: ${menu.length} priced item(s) read (${menu.slice(0, 4).join(', ')}${menu.length > 4 ? ', …' : ''})` : ': no "name £price" lines found (a PDF needs its text pasted into a .txt)'}.`);
