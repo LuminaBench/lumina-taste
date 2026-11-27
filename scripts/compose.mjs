@@ -218,7 +218,9 @@ const leading = brief.match(new RegExp(`^(${NAME}),\\s+(?:an?|the)\\s`))?.[1];
 const opening = brief.match(/^((?:[A-Z][\w.'’-]*)(?:\s+(?:&\s+)?[A-Z][\w.'’-]*){1,3})(?=[\s,:;]|$)/)?.[1]?.replace(/\s+(API|SDK|App|CLI)$/, '');
 // "Tally invoicing app…", "Juniper notes app pricing…": one capitalised word before what the thing is.
 const single = brief.match(/^([A-Z][\w'’-]+)(?=(?:\s+[a-z][\w-]*){0,3}\s+(?:app|apps|api|dashboard|status page|settings|pricing|workspace|platform|tool)\b)/)?.[1];
-const product = quoted ?? named ?? leading ?? (opening && !GENERIC.has(opening.split(' ')[0]) ? opening : null) ?? afterFor ?? (single && !GENERIC.has(single) ? single : null) ?? null;
+// "Juniper: balance, pots, send money": one capitalised word opening the brief, then a colon, is its name.
+const colonName = brief.match(/^([A-Z][\w'’-]+):\s/)?.[1];
+const product = quoted ?? named ?? leading ?? (opening && !GENERIC.has(opening.split(' ')[0]) ? opening : null) ?? afterFor ?? (single && !GENERIC.has(single) ? single : null) ?? (colonName && !GENERIC.has(colonName) ? colonName : null) ?? null;
 const restyle = (kb.restyle?.words ?? []).some((w) => text.includes(` ${w} `) || text.includes(` ${w}`));
 
 // ---------------------------------------------------------------- words from the subject

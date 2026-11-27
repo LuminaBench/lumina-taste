@@ -84,6 +84,7 @@ node scripts/audit-ui.mjs http://localhost:3000 --taste
 node scripts/sniff.mjs http://localhost:3000
 node scripts/export-tokens.mjs --format shadcn --palette navy-sand > app/globals.css   # also swiftui, compose, figma
 node scripts/sample-data.mjs invoices --rows 20 --format csv
+node scripts/starter.mjs cafe "Copper Hare, a coffee shop in York, flat white £3.40" --project ./site   # page, brand kit, checklist
 node scripts/media-intake.mjs ./our-media --page index.html          # your photos, logo, menu: where each would go
 node scripts/compose.mjs "<brief>" --media ./our-media --project . --write   # built with yours first
 node scripts/find-images.mjs --fill index.html --subject "bakery"     # openly licensed photographs, credited

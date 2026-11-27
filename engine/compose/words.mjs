@@ -77,6 +77,8 @@ export function extractFacts(brief, { product = null } = {}) {
   if (streetM) facts.street = streetM[1];
   // A numbered street without a street word, before a town and a postcode: "at 21 Gillygate, York YO31 7EA".
   if (!facts.street) { const m = /\bat\s+(\d+\s+[A-Z][\w'’-]*(?:\s+[A-Z][\w'’-]*){0,2}),\s+[A-Z][a-zA-Z'’-]+\s+[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}\b/.exec(b); if (m) facts.street = m[1]; }
+  // "at 21 Gillygate, York": a numbered street and its town, no postcode.
+  if (!facts.street) { const m = /\bat\s+(\d+\s+[A-Z][\w'’-]*(?:\s+[A-Z][\w'’-]*){0,2}),\s+([A-Z][a-zA-Z'’-]+)(?=[,.;]|\s*$)/.exec(b); if (m) { facts.street = m[1]; if (!facts.place) facts.place = m[2]; } }
   // A place is a capitalised name after "in", that is not a month, a day or the product.
   for (const m of b.matchAll(/\bin\s+([A-Z][a-zA-Z'’-]+(?:\s+(?:upon|on|-on-)?\s*[A-Z][a-zA-Z'’-]+){0,2})/g)) {
     const p = m[1].trim();
