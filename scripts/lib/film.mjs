@@ -9,12 +9,14 @@ import { imageSize } from './image-size.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const FILM_LIMITS = { min: 8, max: 20, seconds: 12, bytes: 3 * 1024 * 1024, width: 1600 };
+// LT_NO_NATIVE=1 behaves as on Linux or Windows: no avconvert, no AVFoundation (for tests and for checking hints).
+const mac = () => process.platform === 'darwin' && !process.env.LT_NO_NATIVE;
 const has = (cmd, args = ['-version']) => { try { return spawnSync(cmd, args, { stdio: 'ignore' }).status === 0; } catch { return false; } };
 
 /** Which tool can trim a film here: 'ffmpeg', 'avconvert' (macOS) or null. */
 export function filmTool() {
   if (has('ffmpeg')) return 'ffmpeg';
-  if (process.platform === 'darwin' && existsSync('/usr/bin/avconvert') && has('swift', ['--version'])) return 'avconvert';
+  if (mac() && existsSync('/usr/bin/avconvert') && has('swift', ['--version'])) return 'avconvert';
   return null;
 }
 
@@ -40,7 +42,7 @@ export function filmLength(src) {
     const r = spawnSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', src], { encoding: 'utf8' });
     const n = parseFloat(r.stdout); if (Number.isFinite(n)) return n;
   }
-  if (process.platform === 'darwin' && has('swift', ['--version'])) {
+  if (mac() && has('swift', ['--version'])) {
     const r = swift('film-length.swift', [src]);
     const n = parseFloat(r.stdout); if (r.status === 0 && Number.isFinite(n)) return n;
   }

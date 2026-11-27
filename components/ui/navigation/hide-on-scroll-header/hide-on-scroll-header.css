@@ -6,7 +6,7 @@
   :scope {
     position: sticky; top: 0; z-index: var(--z-sticky); display: flex; align-items: center; justify-content: space-between; gap: var(--gap-md);
     height: 56px; margin-bottom: -56px; padding: 0 var(--gap-lg); background: color-mix(in oklab, var(--bg-surface-1) 94%, transparent);
-    backdrop-filter: blur(8px); border-bottom: var(--bw) var(--border-style) var(--border-hairline);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: var(--bw) var(--border-style) var(--border-hairline);
     transition: translate var(--dur-3) var(--ease-out), box-shadow var(--dur-2);
   }
   :scope[data-hidden] { translate: 0 -100%; }

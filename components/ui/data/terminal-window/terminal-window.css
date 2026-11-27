@@ -8,7 +8,7 @@
   [data-part="screen"] { display: grid; gap: 2px; padding: 16px 18px 18px; font: var(--text-ui-sm)/1.7 var(--font-mono); overflow-x: auto; }
   p { margin: 0; white-space: pre; }
   [data-kind="cmd"] { color: var(--text-primary); }
-  [data-kind="cmd"]::before { content: "$ "; color: var(--text-muted); user-select: none; }
+  [data-kind="cmd"]::before { content: "$ "; color: var(--text-muted); -webkit-user-select: none; user-select: none; }
   [data-kind="cmd"]:not(:first-child) { margin-top: 10px; }
   [data-kind="out"] { padding-left: 2ch; color: var(--text-secondary); }
   [data-kind="out"][data-tone="ok"] { color: var(--status-positive); }

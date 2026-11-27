@@ -51,9 +51,17 @@ const heroChoice = (() => { const i = args.indexOf('--hero'); if (i < 0) return 
 const mediaDir = (() => { const i = args.indexOf('--media'); if (i < 0) return null; const v = args[i + 1]; args.splice(i, 2); return v ? resolve(v) : null; })();
 const media = mediaDir ? scanMedia(mediaDir) : null;
 const menuPhrases = media ? menuFrom(media) : [];
+// A PDF menu nothing here can read: said once on the checklist, with what to install or do instead.
+const unreadMenus = media?.filter((i) => i.kind === 'menu' && i.unreadable).map((i) => i.file) ?? [];
 // A flag the composer does not know would otherwise become words of the brief and land on the page.
 const unknown = args.filter((a) => /^--[a-z]/.test(a));
 if (unknown.length) { console.error(`Unknown option ${unknown.join(', ')}. Options: --type, --palette, --typeface, --mode, --style, --media, --hero, --brand-from, --framework, --project, --write, --json, --images (run with no brief for the full usage).`); process.exit(2); }
+// --write drafts and bundles a page: the one package that needs (esbuild) is installed on the first run, with a status line.
+if (writeDraft) {
+  const { ensureEsbuild } = await import('./lib/ensure-esbuild.mjs');
+  const ready = await ensureEsbuild(join(dirname(fileURLToPath(import.meta.url)), '..'));
+  if (!ready.esbuild) { console.error(`Drafting needs esbuild, and it could not be installed (${ready.why}). Run \`npm install --omit=dev\` once in the skill folder, then try again.`); process.exit(1); }
+}
 const brief = [args.join(' ').trim(), ...menuPhrases].filter(Boolean).join(', ');
 if (!brief && !forceTypeRaw) {
   console.error('Usage: node scripts/compose.mjs "<one-line brief>" [--type <page-type>] [--brand-from <#hex | logo.png|svg | site.html | url>] [--framework static|tailwind|next|vanilla|react] [--project /abs/app] [--write] [--json]');
@@ -808,6 +816,7 @@ if (writeDraft) {
   }
   plan.draft = { ...draft, path: relative(process.cwd(), draft.path) || draft.path };
   if (draft.todo) plan.words.missing = [...new Set([...plan.words.missing, ...draft.todo])];
+  if (unreadMenus.length) plan.words.missing = [...plan.words.missing, `your menu ${unreadMenus.join(', ')}: nothing on this machine reads PDF text, so its prices are not on the page. Install pdftotext (poppler-utils on Linux, poppler on Windows) and compose again, or copy the prices into a .txt, one "name £price" a line`];
   if ((withImages || media?.some((i) => i.kind === 'photo')) && draft.kind === 'composed') {
     // The subject is the business, never its town: a photograph of Edinburgh is not the restaurant.
     // The set's art direction (bright, moody, editorial) comes from the business first, then the rest of the brief.
@@ -830,7 +839,7 @@ if (writeDraft) {
     const { trimFilm } = await import('./lib/film.mjs');
     try {
       const f = trimFilm(ownFilm.path, join(dirname(draft.path), 'images'), { name: 'film', start: ownFilm.start ?? 0, seconds: ownFilm.seconds ?? undefined });
-      if (!f.tool) plan.words.missing = [...plan.words.missing, `your film ${ownFilm.file}: nothing here can trim it, so the first screen shows a still until it is ready. Trim it with: ${f.command[0]}`];
+      if (!f.tool) { const stem = ownFilm.file.replace(/\.[^.]+$/, ''); plan.words.missing = [...plan.words.missing, `your film ${ownFilm.file}: nothing on this machine can trim it, so the first screen shows a drawing until it is ready. Install ffmpeg and compose again (it trims the film for you), or trim it yourself in the media folder: ffmpeg -i ${ownFilm.file} -t ${f.seconds} -an -vf "scale='min(1600,iw)':-2" -crf 28 -movflags +faststart ${stem}-trimmed.mp4, then remove the original`]; }
       else {
         const rel = (x) => relative(dirname(draft.path), x).split('\\').join('/');
         const { width: pw, height: ph } = f.posterSize ?? {};

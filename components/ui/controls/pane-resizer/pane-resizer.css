@@ -9,7 +9,7 @@
   :scope:hover [data-part="grip"], :scope[data-dragging] [data-part="grip"] { background: var(--accent-solid); }
   :scope:focus-visible [data-part="grip"] { inset: 0 -2px; background: var(--focus-ring); }
 }
-html[data-resizing], html[data-resizing] * { cursor: col-resize !important; user-select: none !important; }
+html[data-resizing], html[data-resizing] * { cursor: col-resize !important; -webkit-user-select: none !important; user-select: none !important; }
 html[data-resizing="row"], html[data-resizing="row"] * { cursor: row-resize !important; }
 /* Gallery demo: two panes, the right one sized by --side-w. */
 .lt-resizer-demo { display: flex; width: 100%; max-width: 560px; height: 200px; border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-lg); background: var(--bg-surface-1); overflow: hidden; color: var(--text-primary); font-size: var(--text-ui-sm); }

@@ -4,7 +4,7 @@
 .lt-actionbar-demo [data-part="page"] span { height: 64px; border-radius: var(--radius-md); background: var(--bg-surface-2); }
 .lt-actionbar-demo .lt-actionbar { position: absolute; }
 @scope (.lt-actionbar) {
-  :scope { position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-sticky, 20); display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); border-top: var(--bw) var(--border-style) var(--border-hairline); background: color-mix(in oklab, var(--bg-surface-1) 92%, transparent); backdrop-filter: blur(10px); font-size: var(--text-ui); }
+  :scope { position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-sticky, 20); display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); border-top: var(--bw) var(--border-style) var(--border-hairline); background: color-mix(in oklab, var(--bg-surface-1) 92%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); font-size: var(--text-ui); }
   p { display: grid; margin: 0; }
   strong { font-family: var(--font-display); font-size: var(--step-1); font-weight: 700; font-variant-numeric: tabular-nums; }
   p span { color: var(--status-positive); font-size: var(--text-ui-xs); font-weight: 600; }

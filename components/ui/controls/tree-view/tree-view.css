@@ -6,7 +6,7 @@
   [role="treeitem"] { outline: none; }
   [data-part="row"] {
     display: flex; align-items: center; gap: 6px; min-height: var(--control-h-sm);
-    padding: 0 var(--gap-sm) 0 2px; border-radius: var(--radius-sm); cursor: pointer; user-select: none;
+    padding: 0 var(--gap-sm) 0 2px; border-radius: var(--radius-sm); cursor: pointer; -webkit-user-select: none; user-select: none;
     transition: background-color var(--dur-1) var(--ease-out);
   }
   [data-part="row"] > .lt-icon { color: var(--text-muted); }

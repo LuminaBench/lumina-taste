@@ -3,7 +3,7 @@
    on-screen keyboard (the page's viewport meta uses interactive-widget=resizes-content; the script follows the
    visual viewport where that is not supported). */
 @scope (.lt-composer) {
-  :scope { display: flex; align-items: flex-end; gap: 8px; margin: 0; padding: 8px 12px calc(8px + max(env(safe-area-inset-bottom), var(--kb, 0px))); background: color-mix(in oklab, var(--bg-canvas) 94%, transparent); border-top: var(--bw) var(--border-style) var(--border-hairline); backdrop-filter: blur(16px); }
+  :scope { display: flex; align-items: flex-end; gap: 8px; margin: 0; padding: 8px 12px calc(8px + max(env(safe-area-inset-bottom), var(--kb, 0px))); background: color-mix(in oklab, var(--bg-canvas) 94%, transparent); border-top: var(--bw) var(--border-style) var(--border-hairline); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
   [data-part="field"] { flex: 1; min-width: 0; display: flex; }
   textarea { flex: 1; min-height: 44px; max-height: calc(5 * 1.4em + 22px); padding: 11px 16px; border: var(--bw) var(--border-style) var(--border-strong); border-radius: 22px; background: var(--bg-surface-1); color: var(--text-primary); font: 400 var(--text-ui, 1rem)/1.4 var(--font-body); resize: none; field-sizing: content; overflow-y: auto; }
   textarea::placeholder { color: var(--text-muted); }

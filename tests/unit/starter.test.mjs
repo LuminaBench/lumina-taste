@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, existsSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, existsSync, writeFileSync, mkdirSync, copyFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -72,6 +72,21 @@ test('a fresh install needs one package to draft: esbuild, and nothing else', ()
   const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
   assert.deepEqual(Object.keys(pkg.dependencies ?? {}), ['esbuild']);
   assert.ok(!pkg.devDependencies?.esbuild);
+});
+
+test('first run: with no node_modules the skill installs esbuild itself, says so, and drafts', { timeout: 240000 }, (t) => {
+  if (process.env.LT_OFFLINE) return t.skip('offline');
+  const dir = mkdtempSync(join(tmpdir(), 'lt-firstrun-'));
+  try {
+    // A copy of the skill with nothing installed, as `npx skills add` leaves it.
+    const skill = join(dir, 'skill');
+    const r0 = spawnSync('git', ['-C', root, 'ls-files', '-z', '--cached', '--others', '--exclude-standard'], { encoding: 'utf8' });
+    for (const f of r0.stdout.split('\0').filter(Boolean)) { const to = join(skill, f); mkdirSync(dirname(to), { recursive: true }); copyFileSync(join(root, f), to); }
+    const r = spawnSync(process.execPath, [join(skill, 'scripts/starter.mjs'), 'charity', 'Moss Lane Food Bank, a charity in Sheffield', '--project', join(dir, 'site')], { encoding: 'utf8' });
+    assert.equal(r.status, 0, r.stderr);
+    assert.match(r.stderr, /first run, installing its one dependency \(esbuild/);
+    assert.ok(existsSync(join(dir, 'site', 'index.html')));
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
 test('an unknown kind or a missing project is a usage error', () => {

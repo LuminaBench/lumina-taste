@@ -125,7 +125,7 @@ export async function checkMine(items, from = import.meta.url) {
 export function pdfText(file) {
   const run = (cmd, args) => { try { const r = spawnSync(cmd, args, { encoding: 'utf8' }); return r.status === 0 ? r.stdout : null; } catch { return null; } };
   return run('pdftotext', ['-layout', file, '-'])
-    ?? (process.platform === 'darwin' ? run('swift', [join(dirname(fileURLToPath(import.meta.url)), 'macos', 'pdf-text.swift'), file]) : null);
+    ?? (process.platform === 'darwin' && !process.env.LT_NO_NATIVE ? run('swift', [join(dirname(fileURLToPath(import.meta.url)), 'macos', 'pdf-text.swift'), file]) : null);
 }
 
 /** A plain-text menu or price list ("Margherita £11.50" per line, or "name, price" CSV) as "name £price" phrases. */
@@ -133,7 +133,8 @@ export function menuFrom(items) {
   const phrases = [];
   for (const it of items.filter((i) => i.kind === 'menu' && (TEXT.has(extname(i.file).toLowerCase()) || /\.pdf$/i.test(i.file)))) {
     // A PDF menu is read as text (see pdfText); one that is only a scan has no text, and is said so by the caller.
-    const text = /\.pdf$/i.test(it.file) ? pdfText(it.path) ?? '' : readFileSync(it.path, 'utf8');
+    const text = /\.pdf$/i.test(it.file) ? pdfText(it.path) : readFileSync(it.path, 'utf8');
+    if (text == null) { it.unreadable = true; continue; }
     for (const raw of text.split(/\r?\n/)) {
       const line = raw.replace(/^[-*#\s]+/, '').trim();
       const m = /^(.{2,60}?)[\s.,:–—-]*([£$€]\s?\d+(?:[.,]\d{2})?)\s*$/.exec(line);

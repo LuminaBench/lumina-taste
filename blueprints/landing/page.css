@@ -1,4 +1,4 @@
-.bp-sticky { position: sticky; top: 0; z-index: var(--z-sticky); background: color-mix(in oklab, var(--bg-canvas) 92%, transparent); backdrop-filter: blur(8px); }
+.bp-sticky { position: sticky; top: 0; z-index: var(--z-sticky); background: color-mix(in oklab, var(--bg-canvas) 92%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
 /* The hero sets the headline on the left and the lede, action and note beside it, so the product frame starts
    inside the first screen at 1440×900. */
 .bp-frame { border: var(--bw) var(--border-style) var(--border-hairline); border-radius: var(--radius-xl); background: var(--bg-surface-1); box-shadow: var(--shadow-md); overflow: hidden; }

@@ -2,7 +2,7 @@
   :scope { width: 100%; }
   [data-part="area"] {
     display: grid; justify-items: center; gap: 6px; padding: var(--gap-xl) var(--gap-md); border: var(--bw-strong) dashed var(--border-strong); border-radius: var(--radius-lg);
-    color: var(--text-secondary); text-align: center; cursor: context-menu; user-select: none; -webkit-touch-callout: none;
+    color: var(--text-secondary); text-align: center; cursor: context-menu; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
   }
   [data-part="area"] strong { color: var(--text-primary); }
   [data-part="area"] span { font-size: var(--text-ui-xs); color: var(--text-muted); }

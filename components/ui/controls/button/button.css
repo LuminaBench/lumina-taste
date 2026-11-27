@@ -5,7 +5,7 @@
     position: relative; display: inline-flex; align-items: center; justify-content: center; gap: var(--gap-sm);
     height: var(--control-h); padding: 0 var(--control-px); border: var(--bw) var(--border-style) var(--btn-border); border-radius: var(--radius-md); box-shadow: var(--control-shadow);
     background: var(--btn-bg); color: var(--btn-fg); font-size: var(--text-ui); font-weight: 550; line-height: 1; white-space: nowrap;
-    text-decoration: none; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
+    text-decoration: none; cursor: pointer; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;
     /* Let go and it springs back up, passing its rest by a hair (tokens/scroll.css: --dur-release, --ease-release). */
     transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1), color var(--dur-1), translate var(--dur-release, 360ms) var(--ease-release, var(--ease-out)), transform var(--dur-release, 360ms) var(--ease-release, var(--ease-out)), box-shadow var(--dur-1) var(--ease-out);
   }

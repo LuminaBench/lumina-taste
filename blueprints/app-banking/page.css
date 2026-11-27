@@ -49,7 +49,7 @@
 .bk-card-top span:last-child { color: var(--text-secondary); font-weight: 550; }
 .bk-card-num { align-self: end; font: 500 1.375rem var(--font-mono); letter-spacing: 0.08em; }
 .bk-card .bk-card-foot { display: flex; justify-content: space-between; margin-top: 6px; color: var(--text-secondary); font: 500 var(--text-ui-sm) var(--font-mono); letter-spacing: 0.06em; }
-.bk-card-frozen { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 8px; background: color-mix(in oklab, var(--text-primary) 18%, transparent); backdrop-filter: blur(6px) saturate(0.6); color: var(--text-primary); font-weight: 650; opacity: 0; transition: opacity var(--dur-3) var(--ease-out); pointer-events: none; }
+.bk-card-frozen { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 8px; background: color-mix(in oklab, var(--text-primary) 18%, transparent); -webkit-backdrop-filter: blur(6px) saturate(0.6); backdrop-filter: blur(6px) saturate(0.6); color: var(--text-primary); font-weight: 650; opacity: 0; transition: opacity var(--dur-3) var(--ease-out); pointer-events: none; }
 .bk-card[data-frozen] .bk-card-frozen { opacity: 1; }
 
 /* Profile */

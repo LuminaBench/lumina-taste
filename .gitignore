@@ -14,3 +14,6 @@ evals/runs/
 
 # Authoring helpers (kept locally)
 scripts/docs/
+
+# The static showroom export (node scripts/export-showroom.mjs): built, never committed
+showroom/

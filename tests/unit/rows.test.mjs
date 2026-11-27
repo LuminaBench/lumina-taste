@@ -1,7 +1,8 @@
 // Boxes side by side end level; the hosted gallery is a showroom where nothing downloads.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, rmSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { RAGGED_ROWS, judgeRaggedRows } from '../../scripts/lib/critic.mjs';
@@ -49,4 +50,15 @@ test('the hosted gallery is a showroom: every page carries it, and a download on
     assert.equal(downloaded, false);
     assert.match(await p.locator('[role="status"]').last().textContent(), /showroom/);
   } finally { await b.close(); }
+});
+
+test('the showroom export has no test folders and nothing that points at the site root', { timeout: 120000 }, (t) => {
+  if (!existsSync(join(root, 'preview/dist/index.html'))) return t.skip('gallery not built');
+  const out = join(root, '.tmp', 'showroom-test');
+  const r = spawnSync(process.execPath, [join(root, 'scripts/export-showroom.mjs'), '--no-build', '--no-check', '--out', out], { encoding: 'utf8' });
+  try {
+    assert.equal(r.status, 0, r.stdout + r.stderr);
+    assert.ok(readdirSync(out).every((e) => !e.startsWith('_')), 'no _react, _hc or _mt');
+    assert.ok(existsSync(join(out, 'showroom.js')) && existsSync(join(out, 'index.html')));
+  } finally { rmSync(out, { recursive: true, force: true }); }
 });

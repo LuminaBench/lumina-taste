@@ -1,7 +1,7 @@
 @scope (.lt-pillnav) {
   :scope {
     position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: 2px; padding: 5px; border-radius: var(--radius-pill);
-    background: color-mix(in oklab, var(--bg-surface-1) 90%, transparent); box-shadow: var(--shadow-overlay); backdrop-filter: blur(8px); font-size: var(--text-ui-sm);
+    background: color-mix(in oklab, var(--bg-surface-1) 90%, transparent); box-shadow: var(--shadow-overlay); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); font-size: var(--text-ui-sm);
     max-width: 100%; overflow-x: auto; scrollbar-width: none;
   }
   a { position: relative; z-index: 1; flex: none; padding: 7px 14px; border-radius: var(--radius-pill); color: var(--text-secondary); font-weight: 550; text-decoration: none; transition: color var(--dur-2); }

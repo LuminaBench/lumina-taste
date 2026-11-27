@@ -34,6 +34,11 @@ if (!kind || !(kind in KINDS) || !brief || !project) {
 const dir = resolve(project);
 const run = (script, a) => spawnSync(process.execPath, [join(root, 'scripts', script), ...a], { encoding: 'utf8', env: process.env });
 
+// 0. The one package drafting needs, installed on the first run (with a status line) rather than failing.
+const { ensureEsbuild } = await import('./lib/ensure-esbuild.mjs');
+const ready = await ensureEsbuild(root);
+if (!ready.esbuild) { console.error(`Drafting needs esbuild, and it could not be installed (${ready.why}). Run \`npm install --omit=dev\` once in ${root}, then try again.`); process.exit(1); }
+
 // 1. The page (or the app), drafted from the brief, with the person's media first.
 const c = run('compose.mjs', [brief, '--project', dir, '--write', '--json', '--type', KINDS[kind], ...(media ? ['--media', resolve(media)] : []), ...(images ? ['--images'] : [])]);
 if (c.status !== 0) { console.error(c.stderr || c.stdout); process.exit(1); }

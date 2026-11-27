@@ -2,7 +2,7 @@
   /* --pull is how far the content has been pulled (px); --p is the progress to the refresh point (0 to 1). */
   :scope { position: relative; --pull: 0px; --p: 0; color: var(--text-primary); }
   [data-part="body"] { translate: 0 var(--pull); transition: translate var(--dur-4) var(--ease-out); }
-  :scope[data-state="pulling"] [data-part="body"], :scope[data-state="armed"] [data-part="body"] { transition: none; user-select: none; }
+  :scope[data-state="pulling"] [data-part="body"], :scope[data-state="armed"] [data-part="body"] { transition: none; -webkit-user-select: none; user-select: none; }
   [data-part="indicator"] {
     position: absolute; top: 0; left: 50%; z-index: 0; display: grid; place-items: center; width: 36px; height: 36px; margin-left: -18px; border-radius: 50%;
     background: var(--bg-surface-1); box-shadow: var(--shadow-sm); color: var(--accent-text);

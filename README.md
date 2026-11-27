@@ -14,7 +14,7 @@ With Git and Node.js 20 or newer installed, run this command and select your cod
 npx skills add LuminaBench/lumina-taste -g
 ```
 
-The first time your agent drafts a page it runs `npm install --omit=dev` in the skill's folder: that fetches esbuild (about 10 MB), the one thing drafting needs. Checking pages in a browser (the audit, the photo check, PNG icons) also needs Playwright, which the agent asks for when it gets there.
+The first time your agent drafts a page, the skill installs its one dependency itself (esbuild, about 10 MB, in the skill's own folder) and says so. Checking pages in a browser (the audit, the photo check, PNG icons) also needs Playwright, which the agent asks for when it gets there. Pages work in current Chrome, Edge and Firefox, and in Safari 17.4 or newer.
 
 Open a fresh agent session in your project and try one of these prompts.
 
@@ -103,7 +103,8 @@ The installer copies only what you ask for plus the files those import, and writ
 
 ```sh
 npm install
-npm run preview
+npm run preview      # the gallery on this machine
+npm run showroom     # the same as a static site for any folder of a website (./showroom)
 ```
 
 Look up any element by describing it, see it live in a contained demo with its parts numbered, copy a prompt for your agent, and switch palette, mode, type and style from one panel. `npm test` runs the contrast checks, copy lint, unit tests, type checks, the browser tests and the full audit.

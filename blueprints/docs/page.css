@@ -1,5 +1,5 @@
 html { scroll-padding-top: 76px; }
-.dc-top { position: sticky; top: 0; z-index: var(--z-sticky); display: flex; align-items: center; gap: var(--space-5); height: 60px; padding: 0 var(--space-5); background: color-mix(in oklab, var(--bg-canvas) 92%, transparent); backdrop-filter: blur(8px); border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
+.dc-top { position: sticky; top: 0; z-index: var(--z-sticky); display: flex; align-items: center; gap: var(--space-5); height: 60px; padding: 0 var(--space-5); background: color-mix(in oklab, var(--bg-canvas) 92%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
 .dc-brand { font-weight: 650; color: var(--text-primary); text-decoration: none; white-space: nowrap; }
 .dc-brand span { color: var(--text-muted); font-weight: 500; }
 .dc-top .lt-search { width: min(360px, 100%); }

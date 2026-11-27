@@ -1,7 +1,7 @@
 @scope (.lt-marquee) {
   :scope { --gap: 48px; --speed: 32s; display: grid; gap: 14px; width: 100%; }
   [data-part="lead"] { margin: 0; text-align: center; font-size: var(--text-ui-sm); color: var(--text-muted); }
-  [data-part="track"] { display: flex; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+  [data-part="track"] { display: flex; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
   [data-part="row"] { display: flex; flex: none; align-items: center; gap: var(--gap); margin: 0; padding: 0 calc(var(--gap) / 2); list-style: none; animation: lt-marquee var(--speed) linear infinite; }
   li { flex: none; color: var(--text-secondary); font-size: 1.25rem; white-space: nowrap; opacity: 0.85; }
   [data-part="track"]:hover [data-part="row"], [data-part="track"]:focus-within [data-part="row"] { animation-play-state: paused; }
@@ -10,5 +10,5 @@
 @media (prefers-reduced-motion: reduce) {
   .lt-marquee [data-part="row"] { animation: none; flex: 1 1 100%; min-width: 0; flex-wrap: wrap; justify-content: center; row-gap: 12px; }
   .lt-marquee [data-part="row"][aria-hidden] { display: none; }
-  .lt-marquee [data-part="track"] { mask-image: none; justify-content: center; }
+  .lt-marquee [data-part="track"] { -webkit-mask-image: none; mask-image: none; justify-content: center; }
 }

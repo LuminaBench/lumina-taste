@@ -63,3 +63,12 @@ test('a PDF menu is read into “name £price” lines, headings and description
     assert.deepEqual(menuFrom(scanMedia(dir)), ['Fish and chips £14', 'Crab salad £16', 'Mussels £15.50']);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
+
+test('off a Mac (LT_NO_NATIVE), a film and a PDF menu say what to install instead of failing', () => {
+  const run = (code) => spawnSync(process.execPath, ['--input-type=module', '-e', code], { encoding: 'utf8', env: { ...process.env, LT_NO_NATIVE: '1' }, cwd: root });
+  const film = run(`import { filmTool, trimFilm } from './scripts/lib/film.mjs'; const r = trimFilm('missing.mov', '${tmpdir()}/lt-nonative'); console.log(JSON.stringify({ tool: filmTool() ?? null, r }));`);
+  const out = JSON.parse(film.stdout.trim());
+  if (out.tool === 'ffmpeg') return; // a machine with ffmpeg trims anywhere
+  assert.equal(out.r.tool, null);
+  assert.match(out.r.command[0], /^ffmpeg .*-t \d+ .*-an /);
+});

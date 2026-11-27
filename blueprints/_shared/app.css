@@ -84,7 +84,7 @@ button.as-row, a.as-row { cursor: pointer; transition: background-color var(--du
 .as-actionbar p small { color: var(--text-secondary); font-size: var(--text-ui-sm); }
 
 /* Tab bar: four tabs at most, labels under icons, the current one in the accent. Above the home indicator. */
-.as-tabs.lt-bottom-nav { position: relative; z-index: 3; padding: 4px 8px calc(4px + env(safe-area-inset-bottom)); background: color-mix(in oklab, var(--bg-canvas) 94%, transparent); border-top: var(--bw) var(--border-style) var(--border-hairline); backdrop-filter: blur(16px); }
+.as-tabs.lt-bottom-nav { position: relative; z-index: 3; padding: 4px 8px calc(4px + env(safe-area-inset-bottom)); background: color-mix(in oklab, var(--bg-canvas) 94%, transparent); border-top: var(--bw) var(--border-style) var(--border-hairline); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
 .as-tabs.lt-bottom-nav a { min-height: 52px; align-content: center; gap: 3px; font-size: 0.6875rem; }
 .as-tabs.lt-bottom-nav a[aria-current="page"] { color: var(--accent-text); }
 .as-tabs.lt-bottom-nav [data-part="pill"] { display: none; }
@@ -237,7 +237,7 @@ html[data-app]:dir(rtl) { --as-dir: -1; }
 .as-swipe [data-part="row"][data-open] > [data-part="content"] { translate: var(--dx, calc(var(--actions, 2) * var(--as-action-w) * -1 * var(--sw-dir))) 0; }
 .as-swipe [data-part="row"][data-dragging] > [data-part="content"] { transition: none; }
 .as-swipe [data-part="row"] + [data-part="row"] > [data-part="content"]::before { content: ""; position: absolute; top: 0; inset-inline: calc(var(--as-pad) + var(--as-rule-in, 58px)) 0; height: var(--bw); background: var(--border-hairline); }
-.as-swipe .as-row { flex: 1; min-width: 0; padding-inline: var(--as-pad); user-select: none; -webkit-user-drag: none; }
+.as-swipe .as-row { flex: 1; min-width: 0; padding-inline: var(--as-pad); -webkit-user-select: none; user-select: none; -webkit-user-drag: none; }
 .as-swipe [data-part="more"] { flex: none; display: grid; place-items: center; width: 44px; height: 44px; margin-inline-end: 12px; padding: 0; border: 0; border-radius: var(--radius-md); background: none; color: var(--text-secondary); cursor: pointer; }
 .as-swipe [data-part="more"]:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -2px; }
 .as-swipe [data-part="more"]:not(:focus-visible) { position: absolute; inset-inline-end: 0; width: 1px; height: 1px; margin: 0; overflow: hidden; clip-path: inset(50%); }

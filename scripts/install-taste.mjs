@@ -279,8 +279,9 @@ function oneStyle(id) {
 }
 
 async function writeStatic() {
-  let esbuild;
-  try { esbuild = await import(pathToFileURL(createRequire(import.meta.url).resolve('esbuild')).href); } catch { fail('--framework static bundles with esbuild. Run `npm install --omit=dev` once in the skill folder (it fetches esbuild, about 10 MB), then try again.'); }
+  const { ensureEsbuild } = await import('./lib/ensure-esbuild.mjs');
+  const { esbuild, why } = await ensureEsbuild(root);
+  if (!esbuild) fail(`--framework static bundles with esbuild, and it could not be installed (${why}). Run \`npm install --omit=dev\` once in ${root}, then try again.`);
   const imp = [], reg = [], charts = [];
   for (const f of tokenFiles) imp.push(`import './${f}';`);
   imp.push(`import { autoEnhance } from './components/ui/_shared/dom';`, `import './components/ui/_shared/shared.css';`);

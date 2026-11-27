@@ -1,7 +1,7 @@
 .bp-app { display: flex; min-height: 100dvh; }
 .bp-app > .lt-sidebar { position: sticky; top: 0; height: 100dvh; }
 .bp-app-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.bp-topbar { position: sticky; top: 0; z-index: var(--z-sticky); display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); height: 60px; padding: 0 var(--space-5); background: color-mix(in oklab, var(--bg-canvas) 92%, transparent); backdrop-filter: blur(8px); border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
+.bp-topbar { position: sticky; top: 0; z-index: var(--z-sticky); display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); height: 60px; padding: 0 var(--space-5); background: color-mix(in oklab, var(--bg-canvas) 92%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: var(--bw) var(--border-style) var(--border-hairline); }
 /* A dense page that stays calm: one surface per block, space instead of rules, the hierarchy title → figures → one chart → table. */
 .bp-dash { display: grid; gap: var(--space-5); width: 100%; max-width: 1440px; padding: var(--space-6) var(--space-5) var(--space-8); }
 .bp-dash-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--space-3); }
