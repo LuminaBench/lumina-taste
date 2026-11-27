@@ -36,12 +36,14 @@
     "media": "node scripts/media-intake.mjs",
     "starter": "node scripts/starter.mjs"
   },
+  "dependencies": {
+    "esbuild": "^0.25.12"
+  },
   "devDependencies": {
     "@playwright/test": "^1.65.1",
     "@types/node": "^22.20.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "esbuild": "^0.25.12",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "typescript": "5.9"

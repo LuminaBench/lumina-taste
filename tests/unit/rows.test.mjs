@@ -32,7 +32,7 @@ test('a row of cards that starts level must end level; stretched rows and bento 
 test('the hosted gallery is a showroom: every page carries it, and a download only says so', { timeout: 60000 }, async (t) => {
   const dist = join(root, 'preview/dist');
   if (!existsSync(join(dist, 'index.html'))) return t.skip('gallery not built');
-  const pages = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((d) => (d.isDirectory() ? (d.name === '_react' ? [] : pages(join(dir, d.name))) : d.name.endsWith('.html') ? [join(dir, d.name)] : []));
+  const pages = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((d) => (d.isDirectory() ? (d.name.startsWith('_') ? [] : pages(join(dir, d.name))) : d.name.endsWith('.html') ? [join(dir, d.name)] : []));
   const missing = pages(dist).filter((f) => !readFileSync(f, 'utf8').includes('showroom.js'));
   assert.deepEqual(missing, []);
   assert.ok(!readFileSync(join(dist, '_react/index.html'), 'utf8').includes('showroom.js'), 'the React harness keeps downloads for the tests');

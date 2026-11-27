@@ -46,6 +46,8 @@ let brand = existsSync(join(brandDir, 'brand.json')) ? 'from your logo' : null;
 if (!brand && name) {
   const b = run('brand-kit.mjs', ['--name', name, '--line', plan.words?.firstScreen?.headline ?? '', '--subject', plan.words?.facts?.kind ?? brief, '--palette', plan.profile.palette, '--type', plan.profile.typography, '--out', brandDir]);
   brand = b.status === 0 ? 'drawn from the subject' : null;
+  // Without Playwright the kit writes the SVG and HTML sources but not the PNG files (icons, share image).
+  if (brand && /Playwright is not installed/.test(b.stderr + b.stdout)) brand += '; the PNG icons and share image need Playwright: npm i -D @playwright/test && npx playwright install chromium, then run brand-kit again';
 }
 
 // 3. One checklist: what is still sample or missing, from the plan and the page.
@@ -62,7 +64,7 @@ const lines = [
   `- Page: ${rel} (${plan.pageType.name.toLowerCase()}, first screen: ${plan.artDirection?.hero?.name ?? 'the app\'s own'})`,
   `- Look: ${plan.profile.palette} palette, ${plan.profile.typography} type${plan.artDirection?.hero?.why ? `; the first screen because ${plan.artDirection.hero.why}` : ''}`,
   `- Pictures: ${plan.draft?.images?.note ?? 'drawings of the subject, to replace with your own photographs (rerun with --media ./folder)'}`,
-  `- Brand: ${brand ? `brand/ (${brand}): wordmark, favicon and icons, share image, email header` : 'not made (no name yet)'}`,
+  `- Brand: ${brand ? (/need Playwright/.test(brand) ? `brand/: wordmark, favicon.svg, lockup and email header (${brand})` : `brand/ (${brand}): wordmark, favicon and icons, share image, email header`) : 'not made (no name yet)'}`,
   ...(plan.words?.firstScreen?.options?.length ? [`- Other headlines from the same facts: ${plan.words.firstScreen.options.map((o) => `“${o}”`).join(', ')}`] : []),
   '', '## Before it ships', '',
   ...(samples ? [`- ${samples} part(s) hold sample rows (marked data-sample): replace them with your own records`] : []),

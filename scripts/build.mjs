@@ -117,7 +117,7 @@ if (existsSync(join(root, 'tests/react/harness.tsx'))) {
 }
 // Showroom mode on every hosted page (not the React test harness): nothing downloads, a short note says so instead.
 cpSync(join(root, 'preview/showroom.js'), join(dist, 'showroom.js'));
-const pages = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((d) => (d.isDirectory() ? (d.name === '_react' ? [] : pages(join(dir, d.name))) : d.name.endsWith('.html') ? [join(dir, d.name)] : []));
+const pages = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((d) => (d.isDirectory() ? (d.name.startsWith('_') ? [] : pages(join(dir, d.name))) : d.name.endsWith('.html') ? [join(dir, d.name)] : []));
 for (const f of pages(dist)) {
   const up = relative(dirname(f), dist).split('\\').join('/');
   const tag = `<script src="${up ? `${up}/` : './'}showroom.js"></script>`;

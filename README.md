@@ -14,6 +14,8 @@ With Git and Node.js 20 or newer installed, run this command and select your cod
 npx skills add LuminaBench/lumina-taste -g
 ```
 
+The first time your agent drafts a page it runs `npm install --omit=dev` in the skill's folder: that fetches esbuild (about 10 MB), the one thing drafting needs. Checking pages in a browser (the audit, the photo check, PNG icons) also needs Playwright, which the agent asks for when it gets there.
+
 Open a fresh agent session in your project and try one of these prompts.
 
 > Use lumina-taste to build a pricing page for my app with a monthly/annual toggle. Navy and sand, soft corners.

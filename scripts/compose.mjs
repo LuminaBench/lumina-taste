@@ -722,7 +722,19 @@ if (writeDraft) {
     // and the page says its rows are samples in the subject's nouns until the real data replaces them.
     let appTodo = null;
     if (type.kind === 'app' && type.screens) {
+      // What the brief asks for that the blueprint has no screen for, judged before any of the brief's words go in.
       appTodo = missingAppFeatures(brief, readFileSync(path, 'utf8'));
+      // The welcome line and the page's description say what this app does, in the brief's words ("Juniper: balance,
+      // pots, send money" → "Balance, pots and send money, in one app."), not the blueprint's sample sentence.
+      const feats = brief.includes(':') ? brief.split(':').slice(1).join(':').split(/,\s*|\s+and\s+/).map((x) => x.trim().replace(/\.$/, '')).filter((x) => x && x.split(/\s+/).length <= 5).slice(0, 4) : [];
+      const said = feats.length >= 2 ? `${feats.slice(0, -1).join(', ')} and ${feats.at(-1)}` : feats[0] ?? null;
+      if (said) {
+        const line = `${said[0].toUpperCase()}${said.slice(1)}, in one app.`;
+        let html = readFileSync(path, 'utf8');
+        html = html.replace(/<meta name="description" content="[^"]*">/, `<meta name="description" content="${esc(`${product ?? (facts.kind ? facts.kind[0].toUpperCase() + facts.kind.slice(1) : 'This app')}: ${said}.`)}">`);
+        html = html.replace(/(<article\b[^>]*data-screen="welcome"[\s\S]*?<h[12]\b[^>]*>)([\s\S]*?)(<\/h[12]>\s*<p\b[^>]*>)[\s\S]*?(<\/p>)/, (m, a, h, b, c) => `${a}${product ? esc(product) : h}${b}${esc(line)}${c}`);
+        writeFileSync(path, html);
+      }
       const note = `<!-- Draft of the ${type.name.toLowerCase()} for ${(product ?? 'the product').replace(/--/g, '–')}. Rows marked data-sample are believable samples in the subject's own nouns: replace them with real data before this ships.${appTodo.length ? `\n  TODO, the brief names these and the blueprint has no screen for them yet:\n${appTodo.map((t) => `  - ${t.replace(/--/g, '–')}`).join('\n')}` : ''} -->`;
       writeFileSync(path, readFileSync(path, 'utf8').replace(/(<body[^>]*>)/, `$1\n  ${note}`));
     }

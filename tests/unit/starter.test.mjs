@@ -37,6 +37,11 @@ test('an app starter is its own app: "settings" or "bookings" in the feature lis
     const r = spawnSync(process.execPath, [join(root, 'scripts/starter.mjs'), 'chat-app', 'Halyard Chat: conversations, people, settings', '--project', dir], { encoding: 'utf8' });
     assert.equal(r.status, 0, r.stderr);
     assert.match(r.stdout, /- Page: index\.html \(messaging app \(phone\)/);
+    // The welcome screen and the page's description are the app's own, not the blueprint's sample lines.
+    const html = readFileSync(join(dir, 'index.html'), 'utf8');
+    assert.match(html, /id="wl-h"[^>]*>Halyard Chat</);
+    assert.match(html, /<p>Conversations, people and settings, in one app\.<\/p>/);
+    assert.match(html, /<meta name="description" content="Halyard Chat: conversations, people and settings\.">/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
@@ -61,6 +66,12 @@ test('made-up records in the product picture pass the ship check; the same rows 
     assert.notEqual(bad.status, 0);
     assert.match(bad.stdout, /taste-sample-rows/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('a fresh install needs one package to draft: esbuild, and nothing else', () => {
+  const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
+  assert.deepEqual(Object.keys(pkg.dependencies ?? {}), ['esbuild']);
+  assert.ok(!pkg.devDependencies?.esbuild);
 });
 
 test('an unknown kind or a missing project is a usage error', () => {
