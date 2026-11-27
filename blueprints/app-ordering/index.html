@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en" data-palette="espresso-terracotta" data-mode="light" data-type="humanist" data-density="balanced" data-radius="soft" data-motion="snappy" data-app>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <title>Copper Hare · ordering app</title>
+  <meta name="description" content="Blueprint: an order-ahead app for a café on a phone that widens to a menu beside its basket: the menu as drawn pictures with prices, an item sheet with size, milk and extras, a basket with the collection time and one Pay button, and the order's progress live from received to ready, built with lumina-taste.">
+</head>
+<body class="as" data-pane="onboard" data-screen="welcome" data-home="menu">
+  <a class="bp-skip" href="#main">Skip to content</a>
+  <nav class="as-side" aria-label="Sections">
+    <p class="as-side-name"><i aria-hidden="true"></i><span>Copper Hare</span></p>
+    <ul><li><a href="#screen-menu"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5Z"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H16M8.5 3.5c-.6 1 .6 1.6 0 2.6M11.5 3.5c-.6 1 .6 1.6 0 2.6"/></svg><span>Menu</span></a></li><li><a href="#screen-orders"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12v17l-2-1.4-2 1.4-2-1.4-2 1.4-2-1.4-2 1.4Z"/><path d="M9 8h6M9 11.5h6M9 15h3"/></svg><span>Orders</span></a></li><li><a href="#screen-account"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg><span>Account</span></a></li></ul>
+    <p class="as-side-foot">Copper Hare is a made-up café.</p>
+  </nav>
+  <main id="main" class="as-main">
+    <h1 class="lt-visually-hidden">Copper Hare, a café ordering app</h1>
+    <div class="as-panes">
+
+  <article class="as-screen" id="screen-welcome" data-screen="welcome" data-pane="onboard" data-current aria-labelledby="wl-h">
+    <div class="as-scroll"><div class="as-onboard">
+      <figure class="lt-art" data-scene="cup loaf" data-tone="accent" data-shot="A flat white and a cardamom bun on the café counter, morning light from the window"><svg data-part="scene" viewBox="44 36 232 164" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><circle data-m="sky" cx="143.9" cy="104.1" r="58"/><rect data-m="floor" x="-2000" y="176" width="4320" height="2000"/><path data-m="ink" d="M-2000 176H2320"/><g data-role="lead" transform="translate(41 38) scale(1)" style="--k:1"><ellipse data-m="b" cx="78" cy="128" rx="54" ry="10"/><path data-m="a" d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path data-m="b" d="M34 74H118V86H34Z"/><g data-m="ink"><ellipse cx="78" cy="128" rx="54" ry="10"/><path d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path d="M118 70H126A14 14 0 0 1 126 98H116"/><path d="M58 44C52 36 64 32 58 22M76 44C70 36 82 32 76 22M94 44C88 36 100 32 94 22"/></g></g><g data-role="rest" transform="translate(138.2 70.4) scale(0.8)" style="--k:0.8"><rect data-m="b" x="14" y="116" width="132" height="16" rx="8"/><path data-m="a" d="M26 116C26 74 50 50 80 50S134 74 134 116Z"/><g data-m="ink"><rect x="14" y="116" width="132" height="16" rx="8"/><path d="M26 116C26 74 50 50 80 50S134 74 134 116Z"/><path d="M52 92C58 80 68 74 80 72M70 106C78 92 92 84 106 82M90 70C96 64 104 62 112 64"/></g><circle data-m="dot" cx="132" cy="124" r="3"/></g></svg><figcaption class="lt-visually-hidden">A cup of coffee beside a loaf</figcaption></figure>
+      <ol class="as-dots" aria-label="Step 1 of 2"><li aria-current="step"></li><li></li></ol>
+      <h2 id="wl-h" tabindex="-1">Order on the way, collect it warm</h2>
+      <p>Choose from the menu and pay here. We start making it when you say, and tell you when it is on the counter.</p>
+      <button type="button" class="lt-btn" data-variant="primary" data-size="lg" data-go="menu"><span data-part="label">See the menu</span></button>
+      <button type="button" class="lt-btn" data-variant="ghost" data-size="lg" data-go="menu"><span data-part="label">Sign in</span></button>
+    </div></div>
+  </article>
+
+  <article class="as-screen" id="screen-menu" data-screen="menu" data-tab="menu" data-pane="list" data-detail="basket" aria-labelledby="mn-h">
+    <div class="as-scroll" id="or-menu-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Menu</p><button type="button" data-part="action" data-go="account" aria-label="Account, Rowan Hale"><span class="or-me" aria-hidden="true">RH</span></button></div>
+        <h2 data-part="large" id="mn-h" tabindex="-1">Menu</h2>
+      </header>
+      <div class="as-body or-menu">
+        <p class="or-where"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6-5.6-6-10.5a6 6 0 0 1 12 0C18 15.4 12 21 12 21Z"/><circle cx="12" cy="10.5" r="2.2"/></svg><span><b>14 Mill Lane</b> · ready in about 8 min</span></p>
+        <nav class="or-cats" aria-label="Menu sections" data-view="ready">
+          <a href="#or-sec-coffee" aria-current="true">Coffee</a><a href="#or-sec-bakery">Bakery</a><a href="#or-sec-lunch">Lunch</a>
+        </nav>
+        <section class="or-sec" id="or-sec-coffee" aria-labelledby="or-coffee-h" data-view="ready">
+          <h3 class="as-h" id="or-coffee-h">Coffee</h3>
+          <ul class="or-grid" data-sample>
+            <li class="or-item" data-item="flat"><figure class="lt-art" data-ratio="1/1" data-tone="accent" data-scene="cup" data-shot="A flat white in a brown cup on the wooden counter, from above"><svg data-part="scene" viewBox="44 36 232 164" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><circle data-m="sky" cx="180.9" cy="104.1" r="58"/><rect data-m="floor" x="-2000" y="176" width="4320" height="2000"/><path data-m="ink" d="M-2000 176H2320"/><g data-role="lead" transform="translate(78 38) scale(1)" style="--k:1"><ellipse data-m="b" cx="78" cy="128" rx="54" ry="10"/><path data-m="a" d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path data-m="b" d="M34 74H118V86H34Z"/><g data-m="ink"><ellipse cx="78" cy="128" rx="54" ry="10"/><path d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path d="M118 70H126A14 14 0 0 1 126 98H116"/><path d="M58 44C52 36 64 32 58 22M76 44C70 36 82 32 76 22M94 44C88 36 100 32 94 22"/></g></g></svg><figcaption class="lt-visually-hidden">A flat white</figcaption></figure><p><b>Flat white</b><small>Double shot, a little steamed milk</small><span>£3.20</span></p><button type="button" class="or-add" aria-haspopup="dialog" aria-label="Add a flat white, £3.20"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></li>
+            <li class="or-item" data-item="filter"><figure class="lt-art" data-ratio="1/1" data-scene="cup jar" data-shot="A glass pour-over dripping into a cup, beans in a jar behind it"><svg data-part="scene" viewBox="44 36 232 164" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><circle data-m="sky" cx="156.2" cy="104.1" r="58"/><rect data-m="floor" x="-2000" y="176" width="4320" height="2000"/><path data-m="ink" d="M-2000 176H2320"/><g data-role="lead" transform="translate(53.4 38) scale(1)" style="--k:1"><ellipse data-m="b" cx="78" cy="128" rx="54" ry="10"/><path data-m="a" d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path data-m="b" d="M34 74H118V86H34Z"/><g data-m="ink"><ellipse cx="78" cy="128" rx="54" ry="10"/><path d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path d="M118 70H126A14 14 0 0 1 126 98H116"/><path d="M58 44C52 36 64 32 58 22M76 44C70 36 82 32 76 22M94 44C88 36 100 32 94 22"/></g></g><g data-role="rest" transform="translate(143.4 62.4) scale(0.8)" style="--k:0.8"><circle data-m="b" cx="80" cy="22" r="11"/><rect data-m="b" x="50" y="38" width="60" height="14" rx="4"/><rect data-m="a" x="36" y="52" width="88" height="90" rx="18"/><rect data-m="b" x="52" y="78" width="56" height="38" rx="4"/><g data-m="ink"><circle cx="80" cy="22" r="11"/><path d="M74 22H86"/><rect x="50" y="38" width="60" height="14" rx="4"/><path d="M70 45H90"/><rect x="36" y="52" width="88" height="90" rx="18"/><rect x="52" y="78" width="56" height="38" rx="4"/><path d="M80 108V92M80 100C74 100 70 96 70 90C76 90 80 94 80 100ZM80 96C80 90 84 86 90 86C90 92 86 96 80 96Z"/></g></g></svg><figcaption class="lt-visually-hidden">Filter coffee and a jar of beans</figcaption></figure><p><b>Filter of the day</b><small>A light roast, brewed by the cup</small><span>£2.80</span></p><button type="button" class="or-add" aria-haspopup="dialog" aria-label="Add a filter of the day, £2.80"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></li>
+            <li class="or-item" data-item="choc"><figure class="lt-art" data-ratio="1/1" data-tone="ink" data-scene="cup" data-shot="A hot chocolate on a dark table, steam against the window"><svg data-part="scene" viewBox="44 36 232 164" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><circle data-m="sky" cx="180.9" cy="104.1" r="58"/><rect data-m="floor" x="-2000" y="176" width="4320" height="2000"/><path data-m="ink" d="M-2000 176H2320"/><g data-role="lead" transform="translate(78 38) scale(1)" style="--k:1"><ellipse data-m="b" cx="78" cy="128" rx="54" ry="10"/><path data-m="a" d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path data-m="b" d="M34 74H118V86H34Z"/><g data-m="ink"><ellipse cx="78" cy="128" rx="54" ry="10"/><path d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path d="M118 70H126A14 14 0 0 1 126 98H116"/><path d="M58 44C52 36 64 32 58 22M76 44C70 36 82 32 76 22M94 44C88 36 100 32 94 22"/></g></g></svg><figcaption class="lt-visually-hidden">A hot chocolate</figcaption></figure><p><b>Hot chocolate</b><small>Dark chocolate melted into milk</small><span>£3.40</span></p><button type="button" class="or-add" aria-haspopup="dialog" aria-label="Add a hot chocolate, £3.40"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></li>
+          </ul>
+        </section>
+        <section class="or-sec" id="or-sec-bakery" aria-labelledby="or-bakery-h" data-view="ready">
+          <h3 class="as-h" id="or-bakery-h">Bakery</h3>
+          <ul class="or-grid" data-sample>
+            <li class="or-item" data-item="bun"><figure class="lt-art" data-ratio="1/1" data-tone="accent" data-scene="loaf" data-shot="A cardamom bun on a paper bag, sugar on the counter"><svg data-part="scene" viewBox="44 74 232 126" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><circle data-m="sky" cx="183.8" cy="125.2" r="41"/><rect data-m="floor" x="-2000" y="176" width="4320" height="2000"/><path data-m="ink" d="M-2000 176H2320"/><g data-role="lead" transform="translate(80 44) scale(1)" style="--k:1"><rect data-m="b" x="14" y="116" width="132" height="16" rx="8"/><path data-m="a" d="M26 116C26 74 50 50 80 50S134 74 134 116Z"/><g data-m="ink"><rect x="14" y="116" width="132" height="16" rx="8"/><path d="M26 116C26 74 50 50 80 50S134 74 134 116Z"/><path d="M52 92C58 80 68 74 80 72M70 106C78 92 92 84 106 82M90 70C96 64 104 62 112 64"/></g><circle data-m="dot" cx="132" cy="124" r="3"/></g></svg><figcaption class="lt-visually-hidden">A cardamom bun</figcaption></figure><p><b>Cardamom bun</b><small>Baked here at 6 this morning</small><span>£2.90</span></p><button type="button" class="or-add" aria-haspopup="dialog" aria-label="Add a cardamom bun, £2.90"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></li>
+            <li class="or-item" data-item="toast"><figure class="lt-art" data-ratio="1/1" data-scene="loaf jar" data-shot="Two slices of sourdough toast and a jar of marmalade"><svg data-part="scene" viewBox="44 61 232 139" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><circle data-m="sky" cx="159.1" cy="125.2" r="41"/><rect data-m="floor" x="-2000" y="176" width="4320" height="2000"/><path data-m="ink" d="M-2000 176H2320"/><g data-role="lead" transform="translate(55.4 44) scale(1)" style="--k:1"><rect data-m="b" x="14" y="116" width="132" height="16" rx="8"/><path data-m="a" d="M26 116C26 74 50 50 80 50S134 74 134 116Z"/><g data-m="ink"><rect x="14" y="116" width="132" height="16" rx="8"/><path d="M26 116C26 74 50 50 80 50S134 74 134 116Z"/><path d="M52 92C58 80 68 74 80 72M70 106C78 92 92 84 106 82M90 70C96 64 104 62 112 64"/></g><circle data-m="dot" cx="132" cy="124" r="3"/></g><g data-role="rest" transform="translate(151.4 62.4) scale(0.8)" style="--k:0.8"><circle data-m="b" cx="80" cy="22" r="11"/><rect data-m="b" x="50" y="38" width="60" height="14" rx="4"/><rect data-m="a" x="36" y="52" width="88" height="90" rx="18"/><rect data-m="b" x="52" y="78" width="56" height="38" rx="4"/><g data-m="ink"><circle cx="80" cy="22" r="11"/><path d="M74 22H86"/><rect x="50" y="38" width="60" height="14" rx="4"/><path d="M70 45H90"/><rect x="36" y="52" width="88" height="90" rx="18"/><rect x="52" y="78" width="56" height="38" rx="4"/><path d="M80 108V92M80 100C74 100 70 96 70 90C76 90 80 94 80 100ZM80 96C80 90 84 86 90 86C90 92 86 96 80 96Z"/></g></g></svg><figcaption class="lt-visually-hidden">Sourdough and a jar of marmalade</figcaption></figure><p><b>Sourdough toast</b><small>Two slices, butter and marmalade</small><span>£3.80</span></p><button type="button" class="or-add" aria-haspopup="dialog" aria-label="Add sourdough toast, £3.80"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></li>
+          </ul>
+        </section>
+        <section class="or-sec" id="or-sec-lunch" aria-labelledby="or-lunch-h" data-view="ready">
+          <h3 class="as-h" id="or-lunch-h">Lunch</h3>
+          <ul class="or-grid" data-sample>
+            <li class="or-item" data-item="soup"><figure class="lt-art" data-ratio="1/1" data-tone="ink" data-scene="bowl" data-shot="A bowl of orange soup with bread beside it, from above"><svg data-part="scene" viewBox="44 29 232 171" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><circle data-m="sky" cx="180.9" cy="100.4" r="61"/><rect data-m="floor" x="-2000" y="176" width="4320" height="2000"/><path data-m="ink" d="M-2000 176H2320"/><g data-role="lead" transform="translate(80 36) scale(1)" style="--k:1"><path data-m="b" d="M34 80C40 60 60 54 80 58C100 54 120 60 126 80Z"/><path data-m="a" d="M22 80H138C138 112 112 132 80 132C48 132 22 112 22 80Z"/><g data-m="ink"><path d="M22 80H138C138 112 112 132 80 132C48 132 22 112 22 80Z"/><path d="M34 80C40 60 60 54 80 58C100 54 120 60 126 80"/><path d="M62 132V140H98V132"/><path d="M100 18L72 70M118 22L88 72"/></g></g></svg><figcaption class="lt-visually-hidden">A bowl of soup</figcaption></figure><p><b>Soup of the day</b><small>Roast squash and ginger, with bread</small><span>£5.60</span></p><button type="button" class="or-add" aria-haspopup="dialog" aria-label="Add the soup of the day, £5.60"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></li>
+            <li class="or-item" data-item="grain"><figure class="lt-art" data-ratio="1/1" data-tone="accent" data-scene="bowl leaf" data-shot="A grain bowl with greens and pickles on a light table"><svg data-part="scene" viewBox="46.2 4 232 196" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><circle data-m="sky" cx="162.9" cy="100.4" r="61"/><rect data-m="floor" x="-2000" y="176" width="4320" height="2000"/><path data-m="ink" d="M-2000 176H2320"/><g data-role="lead" transform="translate(62 36) scale(1)" style="--k:1"><path data-m="b" d="M34 80C40 60 60 54 80 58C100 54 120 60 126 80Z"/><path data-m="a" d="M22 80H138C138 112 112 132 80 132C48 132 22 112 22 80Z"/><g data-m="ink"><path d="M22 80H138C138 112 112 132 80 132C48 132 22 112 22 80Z"/><path d="M34 80C40 60 60 54 80 58C100 54 120 60 126 80"/><path d="M62 132V140H98V132"/><path d="M100 18L72 70M118 22L88 72"/></g></g><g data-role="rest" transform="translate(159.7 0.9) scale(0.56)" style="--k:0.56"><path data-m="a" d="M78 138C38 122 28 70 62 24C96 58 100 110 78 138Z"/><path data-m="b" d="M84 138C98 110 118 96 144 94C142 122 116 142 84 138Z"/><g data-m="ink"><path d="M78 138C38 122 28 70 62 24C96 58 100 110 78 138Z"/><path d="M84 138C98 110 118 96 144 94C142 122 116 142 84 138Z"/><path d="M78 138C72 100 68 64 62 24M73 100L54 84M70 76L56 62M76 110L90 96"/><path d="M84 138C104 124 122 110 144 94"/><path d="M80 138V150"/></g></g></svg><figcaption class="lt-visually-hidden">A grain bowl with greens</figcaption></figure><p><b>Grain bowl</b><small>Lentils, greens, tahini and pickles</small><span>£7.20</span></p><button type="button" class="or-add" aria-haspopup="dialog" aria-label="Add a grain bowl, £7.20"><svg class="lt-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></li>
+          </ul>
+        </section>
+
+        <div class="or-skel" data-view="loading" aria-busy="true" aria-label="Loading the menu" hidden>
+          <span class="lt-skeleton" style="width: 34%"></span>
+          <div><span class="lt-skeleton" data-tile></span><span class="lt-skeleton" data-tile></span><span class="lt-skeleton" style="width: 70%"></span><span class="lt-skeleton" style="width: 52%"></span></div>
+          <div><span class="lt-skeleton" data-tile></span><span class="lt-skeleton" data-tile></span><span class="lt-skeleton" style="width: 64%"></span><span class="lt-skeleton" style="width: 44%"></span></div>
+        </div>
+        <section class="as-state" data-view="empty" aria-labelledby="st-empty-h" hidden>
+          <figure class="lt-art" data-motif="cup" data-tone="accent" data-shot="The café's door at night with the chairs up on the tables"><svg data-part="motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><ellipse data-m="b" cx="78" cy="128" rx="54" ry="10"/><path data-m="a" d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path data-m="b" d="M34 74H118V86H34Z"/><g data-m="ink"><ellipse cx="78" cy="128" rx="54" ry="10"/><path d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path d="M118 70H126A14 14 0 0 1 126 98H116"/><path d="M58 44C52 36 64 32 58 22M76 44C70 36 82 32 76 22M94 44C88 36 100 32 94 22"/></g></svg><figcaption class="lt-visually-hidden">A cup</figcaption></figure>
+          <h3 id="st-empty-h">We are closed for now</h3>
+          <p>Copper Hare opens at 07:00. You can order ahead from 06:30.</p>
+          <button type="button" class="lt-btn" data-variant="primary" data-size="lg" data-set-state="ready"><span data-part="label">Remind me at 06:30</span></button>
+        </section>
+        <section class="as-state" data-view="error" role="alert" aria-labelledby="st-error-h" hidden>
+          <figure class="lt-art" data-motif="phone" data-shot="A phone with no signal on a café table"><svg data-part="motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><rect data-m="b" x="46" y="14" width="68" height="132" rx="14"/><rect data-m="a" x="58" y="46" width="44" height="30" rx="5"/><g data-m="ink"><rect x="46" y="14" width="68" height="132" rx="14"/><path d="M72 26H88M70 134H90"/><rect x="58" y="46" width="44" height="30" rx="5"/><path d="M58 92H102M58 106H92M58 120H98"/></g></svg><figcaption class="lt-visually-hidden">A phone</figcaption></figure>
+          <h3 id="st-error-h">We could not load the menu</h3>
+          <p>Your basket is kept. Check your connection and try again.</p>
+          <button type="button" class="lt-btn" data-variant="secondary" data-set-state="ready"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6L20 8.5M20 4v4.5h-4.5"/></svg><span data-part="label">Try again</span></button>
+        </section>
+      </div>
+    </div>
+    <div class="as-actionbar or-bagbar" data-view="ready">
+      <button type="button" class="lt-btn" data-variant="primary" data-size="lg" data-go="basket" id="or-bag"><span class="or-bag-count" id="or-bag-count">2</span><span data-part="label">View basket</span><span class="or-bag-total" id="or-bag-total">£6.40</span></button>
+    </div>
+  </article>
+
+  <article class="as-screen" id="screen-basket" data-screen="basket" data-pane="detail" data-parent="menu" aria-labelledby="bs-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><button type="button" data-part="back" data-go="menu" data-dir="back" aria-label="Back to Menu"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>Menu</span></button><p data-part="small" aria-hidden="true">Basket</p><span></span></div>
+        <h2 data-part="large" id="bs-h" tabindex="-1">Basket</h2>
+      </header>
+      <div class="as-body or-basket">
+        <ul class="as-rows or-lines" id="or-lines" aria-label="In your basket" data-sample>
+          <li data-line="l1"><div class="as-row"><span class="as-mark" aria-hidden="true"><svg data-part="mark-motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><ellipse data-m="b" cx="78" cy="128" rx="54" ry="10"/><path data-m="a" d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path data-m="b" d="M34 74H118V86H34Z"/><g data-m="ink"><ellipse cx="78" cy="128" rx="54" ry="10"/><path d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path d="M118 70H126A14 14 0 0 1 126 98H116"/><path d="M58 44C52 36 64 32 58 22M76 44C70 36 82 32 76 22M94 44C88 36 100 32 94 22"/></g></svg></span><span><b>Flat white</b><small>Regular · oat milk</small></span><span class="or-line-end"><span class="or-line-price">£3.50</span><span class="or-qty" role="group" aria-label="Flat white, how many"><button type="button" data-qty="-1" aria-label="One fewer flat white"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button><output aria-live="polite">1</output><button type="button" data-qty="1" aria-label="One more flat white"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></span></span></div></li>
+          <li data-line="l2"><div class="as-row"><span class="as-mark" aria-hidden="true"><svg data-part="mark-motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><rect data-m="b" x="14" y="116" width="132" height="16" rx="8"/><path data-m="a" d="M26 116C26 74 50 50 80 50S134 74 134 116Z"/><g data-m="ink"><rect x="14" y="116" width="132" height="16" rx="8"/><path d="M26 116C26 74 50 50 80 50S134 74 134 116Z"/><path d="M52 92C58 80 68 74 80 72M70 106C78 92 92 84 106 82M90 70C96 64 104 62 112 64"/></g><circle data-m="dot" cx="132" cy="124" r="3"/></svg></span><span><b>Cardamom bun</b><small>Warmed</small></span><span class="or-line-end"><span class="or-line-price">£2.90</span><span class="or-qty" role="group" aria-label="Cardamom bun, how many"><button type="button" data-qty="-1" aria-label="One fewer cardamom bun"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button><output aria-live="polite">1</output><button type="button" data-qty="1" aria-label="One more cardamom bun"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></span></span></div></li>
+        </ul>
+        <section class="as-state or-bag-empty" id="or-bag-empty" aria-labelledby="or-be-h" hidden>
+          <figure class="lt-art" data-motif="bag" data-tone="accent" data-shot="An empty paper bag on the counter"><svg data-part="motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><path data-m="a" d="M32 56H128L136 142H24Z"/><path data-m="b" d="M30 74H130L131 86H29Z"/><g data-m="ink"><path d="M32 56H128L136 142H24Z"/><path d="M58 56V44A22 22 0 0 1 102 44V56"/></g><circle data-m="dot" cx="58" cy="66" r="3.5"/><circle data-m="dot" cx="102" cy="66" r="3.5"/></svg><figcaption class="lt-visually-hidden">A paper bag</figcaption></figure>
+          <h3 id="or-be-h">Your basket is empty</h3>
+          <p>Add something from the menu and it shows here.</p>
+          <button type="button" class="lt-btn" data-variant="secondary" data-size="lg" data-go="menu" data-dir="back"><span data-part="label">Back to the menu</span></button>
+        </section>
+        <section class="or-when" aria-labelledby="or-when-h" id="or-when">
+          <h3 class="as-h" id="or-when-h">Collect</h3>
+          <div class="lt-segmented or-seg" data-lt="segmented-control" role="radiogroup" aria-labelledby="or-when-h" id="or-slot">
+            <span data-part="indicator" aria-hidden="true"></span>
+            <button type="button" role="radio" aria-checked="true" tabindex="0" data-value="asap">In 8 min</button>
+            <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="12:30">12:30</button>
+            <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="12:45">12:45</button>
+          </div>
+          <p class="or-from"><svg class="lt-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6-5.6-6-10.5a6 6 0 0 1 12 0C18 15.4 12 21 12 21Z"/><circle cx="12" cy="10.5" r="2.2"/></svg><span>From the counter at <b>14 Mill Lane</b>, in the name of Rowan</span></p>
+        </section>
+        <dl class="or-sum" id="or-sum">
+          <div><dt>Subtotal</dt><dd id="or-sub">£6.40</dd></div>
+          <div><dt>Card</dt><dd>Debit ending 4821</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="as-actionbar" id="or-paybar">
+      <p><b id="or-total">£6.40</b><small id="or-ready">Ready about 12:22</small></p>
+      <button type="button" class="lt-btn" data-variant="primary" data-size="lg" id="or-pay"><span data-part="label">Pay £6.40</span></button>
+    </div>
+  </article>
+
+  <article class="as-screen" id="screen-orders" data-screen="orders" data-tab="orders" data-pane="list" data-detail="track" aria-labelledby="od-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Orders</p><span></span></div>
+        <h2 data-part="large" id="od-h" tabindex="-1">Orders</h2>
+      </header>
+      <div class="as-body">
+        <a class="as-card or-now" href="#screen-track" data-go="track" aria-describedby="or-now-state">
+          <span class="or-now-top"><span class="or-dot" aria-hidden="true"></span><span id="or-now-state">Being made</span><span class="or-now-code">Order 42</span></span>
+          <b class="or-now-time" id="or-now-time">Ready about 12:22</b>
+          <span class="or-now-what">Flat white, cardamom bun</span>
+          <span class="or-mini" aria-hidden="true"><i data-on></i><i data-on></i><i></i></span>
+        </a>
+        <section class="or-earlier" aria-labelledby="or-earlier-h">
+          <h3 class="as-h" id="or-earlier-h">Earlier</h3>
+          <ul class="as-rows" data-sample>
+            <li><div class="as-row"><span class="as-mark" aria-hidden="true"><svg data-part="mark-motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><ellipse data-m="b" cx="78" cy="128" rx="54" ry="10"/><path data-m="a" d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path data-m="b" d="M34 74H118V86H34Z"/><g data-m="ink"><ellipse cx="78" cy="128" rx="54" ry="10"/><path d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path d="M118 70H126A14 14 0 0 1 126 98H116"/><path d="M58 44C52 36 64 32 58 22M76 44C70 36 82 32 76 22M94 44C88 36 100 32 94 22"/></g></svg></span><span><b>Flat white, cardamom bun</b><small>Tuesday 25 November · £6.40</small></span><button type="button" class="lt-btn or-again" data-variant="secondary" data-again="flat bun" aria-label="Order the flat white and cardamom bun again"><span data-part="label">Again</span></button></div></li>
+            <li><div class="as-row"><span class="as-mark" aria-hidden="true"><svg data-part="mark-motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><path data-m="b" d="M34 80C40 60 60 54 80 58C100 54 120 60 126 80Z"/><path data-m="a" d="M22 80H138C138 112 112 132 80 132C48 132 22 112 22 80Z"/><g data-m="ink"><path d="M22 80H138C138 112 112 132 80 132C48 132 22 112 22 80Z"/><path d="M34 80C40 60 60 54 80 58C100 54 120 60 126 80"/><path d="M62 132V140H98V132"/><path d="M100 18L72 70M118 22L88 72"/></g></svg></span><span><b>Soup of the day, filter</b><small>Saturday 22 November · £8.40</small></span><button type="button" class="lt-btn or-again" data-variant="secondary" data-again="soup filter" aria-label="Order the soup and filter again"><span data-part="label">Again</span></button></div></li>
+            <li><div class="as-row"><span class="as-mark" aria-hidden="true"><svg data-part="mark-motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><rect data-m="b" x="14" y="116" width="132" height="16" rx="8"/><path data-m="a" d="M26 116C26 74 50 50 80 50S134 74 134 116Z"/><g data-m="ink"><rect x="14" y="116" width="132" height="16" rx="8"/><path d="M26 116C26 74 50 50 80 50S134 74 134 116Z"/><path d="M52 92C58 80 68 74 80 72M70 106C78 92 92 84 106 82M90 70C96 64 104 62 112 64"/></g><circle data-m="dot" cx="132" cy="124" r="3"/></svg></span><span><b>Sourdough toast, flat white</b><small>Thursday 20 November · £7.00</small></span><button type="button" class="lt-btn or-again" data-variant="secondary" data-again="toast flat" aria-label="Order the toast and flat white again"><span data-part="label">Again</span></button></div></li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </article>
+
+  <article class="as-screen" id="screen-track" data-screen="track" data-pane="detail" data-parent="orders" aria-labelledby="tr-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><button type="button" data-part="back" data-go="orders" data-dir="back" aria-label="Back to Orders"><svg class="lt-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span>Orders</span></button><p data-part="small" aria-hidden="true">Order 42</p><span></span></div>
+        <h2 data-part="large" id="tr-h" tabindex="-1">Order 42</h2>
+      </header>
+      <div class="as-body or-track">
+        <div class="or-eta">
+          <p id="or-eta-state">Being made</p>
+          <b id="or-eta">Ready about 12:22</b>
+        </div>
+        <ol class="or-steps" id="or-steps" aria-label="Your order" style="--fill: 0.35">
+          <li data-done><span data-part="mark" aria-hidden="true"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><span><b>Received</b><small>12:14</small></span></li>
+          <li aria-current="step"><span data-part="mark" aria-hidden="true"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><span><b>Being made</b><small id="or-step-who">Ella is on your coffee</small></span></li>
+          <li><span data-part="mark" aria-hidden="true"><svg class="lt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><span><b>Ready to collect</b><small>On the counter by the door</small></span></li>
+        </ol>
+        <p class="lt-visually-hidden" role="status" id="or-live"></p>
+        <figure class="or-code" aria-labelledby="or-code-cap">
+          <p>Show this at the counter</p>
+          <b aria-hidden="true">42</b>
+          <span aria-hidden="true">Rowan · 2 items</span>
+          <figcaption id="or-code-cap" class="lt-visually-hidden">Collection number 42, in the name of Rowan, 2 items</figcaption>
+        </figure>
+        <figure class="lt-art or-map" data-ratio="16/9" data-tone="accent" data-scene="pin cup" data-shot="The café front on Mill Lane with the door open"><svg data-part="scene" viewBox="58.1 0 232 200" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><circle data-m="sky" cx="162.9" cy="104.1" r="58"/><rect data-m="floor" x="-2000" y="176" width="4320" height="2000"/><path data-m="ink" d="M-2000 176H2320"/><g data-role="rest" transform="translate(60 38) scale(1)" style="--k:1"><ellipse data-m="b" cx="78" cy="128" rx="54" ry="10"/><path data-m="a" d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path data-m="b" d="M34 74H118V86H34Z"/><g data-m="ink"><ellipse cx="78" cy="128" rx="54" ry="10"/><path d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path d="M118 70H126A14 14 0 0 1 126 98H116"/><path d="M58 44C52 36 64 32 58 22M76 44C70 36 82 32 76 22M94 44C88 36 100 32 94 22"/></g></g><g data-role="lead" transform="translate(159.2 -11.8) scale(0.74)" style="--k:0.74"><path data-m="b" d="M18 110L56 98L104 110L142 98V138L104 150L56 138L18 150Z"/><path data-m="a" d="M80 124C80 124 44 88 44 60A36 36 0 0 1 116 60C116 88 80 124 80 124Z"/><circle data-m="cut" cx="80" cy="60" r="13"/><g data-m="ink"><path d="M18 110L56 98L104 110L142 98V138L104 150L56 138L18 150Z"/><path d="M56 98V138M104 110V150"/><path d="M80 124C80 124 44 88 44 60A36 36 0 0 1 116 60C116 88 80 124 80 124Z"/><circle cx="80" cy="60" r="13"/></g></g></svg><p data-part="name">14 Mill Lane</p><p data-part="fact">4 min walk · the door with the copper sign</p><figcaption class="lt-visually-hidden">Copper Hare at 14 Mill Lane, a 4 minute walk</figcaption></figure>
+      </div>
+    </div>
+    <div class="as-actionbar">
+      <button type="button" class="lt-btn" data-variant="secondary" data-size="lg" id="or-here"><span data-part="label">I am here</span></button>
+    </div>
+  </article>
+
+  <article class="as-screen" id="screen-account" data-screen="account" data-tab="account" data-pane="full" aria-labelledby="ac-h">
+    <div class="as-scroll">
+      <header class="lt-appbar" data-lt="mobile-app-bar" data-size="large">
+        <div data-part="row"><span></span><p data-part="small" aria-hidden="true">Account</p><span></span></div>
+        <h2 data-part="large" id="ac-h" tabindex="-1">Account</h2>
+      </header>
+      <div class="as-body">
+        <div class="or-who"><span class="or-me or-me-lg" aria-hidden="true">RH</span><p><b>Rowan Hale</b><small>12 orders since September</small></p></div>
+        <div class="lt-setgroups" data-lt="settings-group">
+          <section data-part="group" aria-labelledby="or-ag1"><h3 id="or-ag1">Your usual</h3>
+            <ul><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Flat white</span><span data-part="desc">Regular, oat milk</span></span><span data-part="value">£3.50</span></a></li><li data-part="row"><label><span data-part="text"><span data-part="label">Cutlery with lunch</span><span data-part="desc">Only when you order food</span></span><input type="checkbox" role="switch" checked></label></li></ul>
+          </section>
+          <section data-part="group" aria-labelledby="or-ag2"><h3 id="or-ag2">Telling you</h3>
+            <ul><li data-part="row"><label><span data-part="text"><span data-part="label">When it is ready</span><span data-part="desc">A notification, once</span></span><input type="checkbox" role="switch" checked></label></li><li data-part="row"><label><span data-part="text"><span data-part="label">Receipts by email</span></span><input type="checkbox" role="switch"></label></li></ul>
+          </section>
+          <section data-part="group" aria-labelledby="or-ag3"><h3 id="or-ag3">Paying</h3>
+            <ul><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Card</span></span><span data-part="value">Debit ending 4821</span></a></li><li data-part="row"><a href="#"><span data-part="text"><span data-part="label">Allergies and diet</span></span><span data-part="value">None</span></a></li></ul>
+          </section>
+        </div>
+      </div>
+    </div>
+  </article>
+    </div>
+  </main>
+  <nav class="lt-bottom-nav as-tabs" data-lt="bottom-nav" aria-label="Tabs">
+    <span data-part="pill" aria-hidden="true"></span>
+    <a href="#screen-menu"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5Z"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H16M8.5 3.5c-.6 1 .6 1.6 0 2.6M11.5 3.5c-.6 1 .6 1.6 0 2.6"/></svg><span>Menu</span></a>
+    <a href="#screen-orders"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12v17l-2-1.4-2 1.4-2-1.4-2 1.4-2-1.4-2 1.4Z"/><path d="M9 8h6M9 11.5h6M9 15h3"/></svg><span>Orders</span></a>
+    <a href="#screen-account"><svg class="lt-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg><span>Account</span></a>
+  </nav>
+
+  <div data-lt="bottom-sheet" class="or-sheet-root">
+    <dialog class="lt-sheet or-sheet" id="or-sheet" aria-labelledby="or-sheet-h">
+      <button type="button" data-part="grab" aria-label="Close the sheet"><span></span></button>
+      <div class="or-sheet-art" id="or-sheet-art"></div>
+      <div class="as-sheet-head"><h2 id="or-sheet-h">Flat white</h2><button type="button" class="lt-btn" data-variant="ghost" data-part="cancel"><span data-part="label">Close</span></button></div>
+      <p class="or-sheet-note" id="or-sheet-note">Double shot, a little steamed milk</p>
+      <div class="or-opt" data-for="coffee">
+        <p class="or-opt-h" id="or-size-h">Size</p>
+        <div class="lt-segmented or-seg" data-lt="segmented-control" role="radiogroup" aria-labelledby="or-size-h" id="or-size">
+          <span data-part="indicator" aria-hidden="true"></span>
+          <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="-0.3">Small</button>
+          <button type="button" role="radio" aria-checked="true" tabindex="0" data-value="0">Regular</button>
+          <button type="button" role="radio" aria-checked="false" tabindex="-1" data-value="0.4">Large</button>
+        </div>
+      </div>
+      <fieldset class="lt-radio-group or-opt" data-for="coffee" id="or-milk">
+        <legend>Milk</legend>
+        <label class="lt-radio"><input type="radio" name="or-milk" value="whole" data-extra="0" checked><span data-part="dot" aria-hidden="true"></span>Whole</label>
+        <label class="lt-radio"><input type="radio" name="or-milk" value="oat" data-extra="0.3"><span data-part="dot" aria-hidden="true"></span>Oat <small>+30p</small></label>
+        <label class="lt-radio"><input type="radio" name="or-milk" value="none" data-extra="0"><span data-part="dot" aria-hidden="true"></span>No milk</label>
+      </fieldset>
+      <div class="or-opt or-switches">
+        <label class="lt-switch" data-for="coffee"><input type="checkbox" role="switch" id="or-shot" data-extra="0.6"><span data-part="track" aria-hidden="true"><span data-part="thumb"></span></span><span data-part="label">Extra shot <small>+60p</small></span></label>
+        <label class="lt-switch" data-for="bakery"><input type="checkbox" role="switch" id="or-warm" data-extra="0"><span data-part="track" aria-hidden="true"><span data-part="thumb"></span></span><span data-part="label">Warm it up</span></label>
+        <label class="lt-switch" data-for="lunch"><input type="checkbox" role="switch" id="or-bread" data-extra="0.8"><span data-part="track" aria-hidden="true"><span data-part="thumb"></span></span><span data-part="label">More bread <small>+80p</small></span></label>
+      </div>
+      <div class="or-sheet-foot">
+        <span class="or-qty" role="group" aria-label="How many"><button type="button" data-step="-1" aria-label="One fewer"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button><output id="or-n" aria-live="polite">1</output><button type="button" data-step="1" aria-label="One more"><svg class="lt-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></span>
+        <button type="button" class="lt-btn" data-variant="primary" data-size="lg" id="or-add-go"><span data-part="label">Add for £3.20</span></button>
+      </div>
+    </dialog>
+  </div>
+  <template id="or-marks"><span data-kind="coffee"><svg data-part="mark-motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><ellipse data-m="b" cx="78" cy="128" rx="54" ry="10"/><path data-m="a" d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path data-m="b" d="M34 74H118V86H34Z"/><g data-m="ink"><ellipse cx="78" cy="128" rx="54" ry="10"/><path d="M34 60H118V94A30 30 0 0 1 88 124H64A30 30 0 0 1 34 94Z"/><path d="M118 70H126A14 14 0 0 1 126 98H116"/><path d="M58 44C52 36 64 32 58 22M76 44C70 36 82 32 76 22M94 44C88 36 100 32 94 22"/></g></svg></span><span data-kind="bakery"><svg data-part="mark-motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><rect data-m="b" x="14" y="116" width="132" height="16" rx="8"/><path data-m="a" d="M26 116C26 74 50 50 80 50S134 74 134 116Z"/><g data-m="ink"><rect x="14" y="116" width="132" height="16" rx="8"/><path d="M26 116C26 74 50 50 80 50S134 74 134 116Z"/><path d="M52 92C58 80 68 74 80 72M70 106C78 92 92 84 106 82M90 70C96 64 104 62 112 64"/></g><circle data-m="dot" cx="132" cy="124" r="3"/></svg></span><span data-kind="lunch"><svg data-part="mark-motif" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><path data-m="b" d="M34 80C40 60 60 54 80 58C100 54 120 60 126 80Z"/><path data-m="a" d="M22 80H138C138 112 112 132 80 132C48 132 22 112 22 80Z"/><g data-m="ink"><path d="M22 80H138C138 112 112 132 80 132C48 132 22 112 22 80Z"/><path d="M34 80C40 60 60 54 80 58C100 54 120 60 126 80"/><path d="M62 132V140H98V132"/><path d="M100 18L72 70M118 22L88 72"/></g></svg></span></template>
+  <p class="as-toast" role="status"></p>
+  <!-- A deep link (?screen=, ?state=) is laid out before the first paint, so nothing moves when the app's script arrives. -->
+  <script>(() => { const p = new URLSearchParams(location.search), b = document.body, all = [...document.querySelectorAll('.as-screen')], q = p.get('screen'), st = p.get('state'); const id = all.some((x) => x.dataset.screen === q) ? q : st && st !== 'ready' ? b.dataset.home : null; if (st && /^[a-z-]+$/.test(st)) for (const el of document.querySelectorAll('[data-view]')) el.hidden = !el.dataset.view.split(' ').includes(st); if (!id) return; const s = all.find((x) => x.dataset.screen === id); for (const x of all) x.toggleAttribute('data-current', x === s); b.dataset.pane = s.dataset.pane; b.dataset.screen = id; const k = s.dataset.pane === 'detail' ? s.dataset.parent : s.dataset.pane === 'list' ? s.dataset.detail : null; if (k && innerWidth >= 768) all.find((x) => x.dataset.screen === k)?.setAttribute('data-shown', ''); })();</script>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

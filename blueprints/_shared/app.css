@@ -146,7 +146,7 @@ button.as-row, a.as-row { cursor: pointer; transition: background-color var(--du
   .as-panes { grid-template-columns: minmax(320px, 400px) minmax(0, 1fr); }
   .as-screen[data-pane="list"] { grid-area: 1 / 1; }
   .as-screen[data-pane="detail"] { grid-area: 1 / 2; box-shadow: inset 1px 0 0 var(--border-hairline); }
-  .as-screen:is([data-pane="full"], [data-pane="onboard"]) { grid-area: 1 / 1 / 2 / 3; }
+  .as-screen:is([data-pane="full"], [data-pane="onboard"], [data-pane="sheet"]) { grid-area: 1 / 1 / 2 / 3; }
   .as-screen[data-pane="full"] .as-scroll > * { width: min(100%, 720px); margin-inline: auto; }
   /* The list's default record shows beside it; the list shows beside its record. */
   .as-screen[data-shown] { display: flex; }
@@ -201,7 +201,19 @@ html[data-app]:dir(rtl) { --as-dir: -1; }
   html[data-nav="back"]::view-transition-new(root) { animation: as-drift-in var(--dur-4) var(--ease-out) both; }
   html:is([data-nav="tab"], [data-nav="pane"])::view-transition-old(root) { animation: as-fade-out var(--dur-3) var(--ease-out) both; }
   html:is([data-nav="tab"], [data-nav="pane"])::view-transition-new(root) { animation: as-fade-in var(--dur-3) var(--ease-out) both; }
+  /* A screen that rises like a sheet (data-dir="up"): it comes up from the bottom while the app behind steps back
+     and dims; "down" lets it fall away and the app comes forward again. */
+  html:is([data-nav="up"], [data-nav="down"])::view-transition-old(root),
+  html:is([data-nav="up"], [data-nav="down"])::view-transition-new(root) { mix-blend-mode: normal; }
+  html[data-nav="up"]::view-transition-old(root) { animation: as-recede var(--dur-4) var(--ease-out) both; }
+  html[data-nav="up"]::view-transition-new(root) { animation: as-rise var(--dur-4) var(--ease-out) both; border-radius: var(--radius-xl) var(--radius-xl) 0 0; box-shadow: 0 -8px 32px oklch(0 0 0 / 0.18); }
+  html[data-nav="down"]::view-transition-old(root) { z-index: 1; animation: as-fall var(--dur-4) var(--ease-out) both; border-radius: var(--radius-xl) var(--radius-xl) 0 0; box-shadow: 0 -8px 32px oklch(0 0 0 / 0.18); }
+  html[data-nav="down"]::view-transition-new(root) { animation: as-come-forward var(--dur-4) var(--ease-out) both; }
 }
+@keyframes as-rise { from { translate: 0 100%; } }
+@keyframes as-fall { to { translate: 0 100%; } }
+@keyframes as-recede { to { scale: 0.94; filter: brightness(0.82); } }
+@keyframes as-come-forward { from { scale: 0.94; filter: brightness(0.82); } }
 @keyframes as-slide-in { from { translate: calc(var(--as-dir) * 100%) 0; } }
 @keyframes as-slide-out { to { translate: calc(var(--as-dir) * 100%) 0; } }
 @keyframes as-drift-out { to { translate: calc(var(--as-dir) * -28%) 0; filter: brightness(0.9); } }

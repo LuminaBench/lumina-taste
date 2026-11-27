@@ -3,15 +3,17 @@
 // while the old one drifts back under it, back reverses that, and a tab cross-fades. From 768px a list screen
 // shows its record beside it (data-detail on the list, data-parent on the record) and changes cross-fade.
 // ?screen=id opens one; ?state=loading|empty|error opens the first useful screen in that state. Links and
-// buttons with data-go="id" change screen (data-dir="back" goes back); tab links point at #screen-id.
+// buttons with data-go="id" change screen (data-dir="back" goes back); tab links point at #screen-id. A screen that
+// rises over the app like a sheet (a player, a composer) opens with data-dir="up" and closes with "down";
+// data-go="back" returns to whichever screen opened the current one.
 //
 // Focus follows the person: a pushed screen focuses its title; going back puts focus on the row or button that
 // opened the screen, and the list is where it was left (each screen keeps its own scroll). Under reduced motion
 // every change is instant.
 import { reducedMotion } from '../../components/ui/_shared/dom';
 
-export type Nav = 'forward' | 'back' | 'tab';
-export interface AppShell { show: (id: string, dir?: Nav, from?: HTMLElement | null) => void; current: () => string; say: (text: string) => void }
+export type Nav = 'forward' | 'back' | 'tab' | 'up' | 'down';
+export interface AppShell { show: (id: string, dir?: Nav, from?: HTMLElement | null, instant?: boolean) => void; current: () => string; previous: () => string; say: (text: string) => void }
 type VTDoc = Document & { startViewTransition?: (cb: () => void) => { finished: Promise<void> } };
 
 export function appShell({ home, onShow }: { home: string; onShow?: (id: string) => void }): AppShell {
@@ -31,6 +33,8 @@ export function appShell({ home, onShow }: { home: string; onShow?: (id: string)
   // Where each screen was scrolled to, and what opened the screen above it: a hidden screen loses both otherwise.
   const scrolled = new Map<string, number>();
   const openers = new Map<string, HTMLElement>();
+  const cameFrom = new Map<string, string>();
+  const opens = (d: Nav) => d === 'forward' || d === 'up';
 
   const mark = (id: string) => {
     const s = byId(id)!;
@@ -55,31 +59,32 @@ export function appShell({ home, onShow }: { home: string; onShow?: (id: string)
   mark(current);
 
   /** Run a change of screen as a view transition named by its direction (app.css), or at once. */
-  const transition = (nav: string, swap: () => void) => {
+  const transition = (nav: string, swap: () => void, instant = false) => {
     const doc = document as VTDoc;
-    if (!doc.startViewTransition || reducedMotion() || html.dataset.motion === 'reduced') { swap(); return; }
+    if (instant || !doc.startViewTransition || reducedMotion() || html.dataset.motion === 'reduced') { swap(); return; }
     html.dataset.nav = nav;
     doc.startViewTransition(swap).finished.catch(() => {}).finally(() => { if (html.dataset.nav === nav) delete html.dataset.nav; });
   };
 
-  function show(id: string, dir: Nav = 'forward', from: HTMLElement | null = null) {
+  function show(id: string, dir: Nav = 'forward', from: HTMLElement | null = null, instant = false) {
     const s = byId(id);
     if (!s || id === current) return;
-    if (dir === 'forward') { const f = from ?? (document.activeElement as HTMLElement | null); if (f && f !== document.body) openers.set(current, f); }
+    if (opens(dir)) { const f = from ?? (document.activeElement as HTMLElement | null); if (f && f !== document.body) openers.set(current, f); cameFrom.set(id, current); }
     current = id;
     const heading = s.querySelector<HTMLElement>('h1[tabindex="-1"], h2[tabindex="-1"]');
     const swap = () => {
       mark(id);
       const sc = scrollerOf(id);
       // A pushed screen starts at its top; going back, or to another tab, finds the list where it was left.
-      if (sc) sc.scrollTop = dir === 'forward' ? 0 : scrolled.get(id) ?? 0;
-      const back = dir === 'back' ? openers.get(id) : undefined;
+      if (sc) sc.scrollTop = opens(dir) ? 0 : scrolled.get(id) ?? 0;
+      const back = dir === 'back' || dir === 'down' ? openers.get(id) : undefined;
       openers.delete(id);
       const target = back && back.isConnected && s.contains(back) && back.getClientRects().length ? back : heading;
       target?.focus({ preventScroll: true });
     };
     // Two panes: the list stays put and the record beside it changes, so a short cross-fade, never a slide.
-    transition(wide.matches ? 'pane' : dir, swap);
+    // A screen that rises like a sheet still rises on a wide screen.
+    transition(wide.matches && dir !== 'up' && dir !== 'down' ? 'pane' : dir, swap, instant);
   }
 
   document.addEventListener('click', (e) => {
@@ -99,8 +104,11 @@ export function appShell({ home, onShow }: { home: string; onShow?: (id: string)
     const go = (e.target as Element).closest<HTMLElement>('[data-go]');
     if (!go || e.defaultPrevented) return;
     e.preventDefault();
-    show(go.dataset.go!, (go.dataset.dir as Nav) ?? 'forward', go);
+    if (go.dataset.go === 'back') {
+      const s = byId(current);
+      show(cameFrom.get(current) ?? s?.dataset.parent ?? home, (go.dataset.dir as Nav) ?? 'back', go);
+    } else show(go.dataset.go!, (go.dataset.dir as Nav) ?? 'forward', go);
   });
   wide.addEventListener('change', () => mark(current));
-  return { show, current: () => current, say };
+  return { show, current: () => current, previous: () => cameFrom.get(current) ?? byId(current)?.dataset.parent ?? home, say };
 }

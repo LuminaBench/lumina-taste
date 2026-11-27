@@ -1,0 +1,149 @@
+/* Copper Hare on a phone: espresso and terracotta. The menu is pictures with prices, two to a row; an item opens
+   in a sheet with its few choices and one Add button; the basket says when it will be ready and has one Pay
+   button; the order's progress is a line that fills from received to ready. Wide, the basket stays beside the menu. */
+.or-me { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--bg-surface-2); color: var(--text-primary); font-size: var(--text-ui-xs); font-weight: 650; }
+.lt-appbar [data-part="action"]:has(.or-me) { width: 44px; height: 44px; padding: 0; justify-content: center; }
+.or-where, .or-from { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--text-secondary); }
+.or-where .lt-icon, .or-from .lt-icon { flex: none; color: var(--accent-text); }
+.or-where b, .or-from b { color: var(--text-primary); font-weight: 600; }
+
+/* ------------------------------------------------------------------ the menu */
+.or-menu { gap: 22px; }
+/* The sections as chips that stay under the bar; the one in view is marked, a tap scrolls to it. */
+.or-cats { position: sticky; top: 44px; z-index: 3; display: flex; gap: 8px; margin: -8px calc(var(--as-pad) * -1) -10px; padding: 8px var(--as-pad); overflow-x: auto; background: var(--bg-canvas); scrollbar-width: none; }
+.or-cats::-webkit-scrollbar { display: none; }
+.or-cats a { position: relative; flex: none; display: inline-flex; align-items: center; height: 36px; padding: 0 16px; border-radius: var(--radius-pill); background: var(--bg-surface-2); color: var(--text-primary); font-weight: 550; text-decoration: none; transition: background-color var(--dur-2) var(--ease-out), color var(--dur-2) var(--ease-out); }
+.or-cats a::before { content: ""; position: absolute; inset: -4px 0; }
+.or-cats a[aria-current] { background: var(--text-primary); color: var(--bg-canvas); }
+.or-cats a:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
+.or-sec { display: grid; gap: 26px; scroll-margin-top: 100px; }
+.or-sec .as-h:focus { outline: none; }
+.or-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 14px; margin: 0; padding: 0; list-style: none; }
+/* One thing on the menu: its picture, its name, a line about it and its price. The + is the keyboard's way in. */
+.or-item { position: relative; display: grid; align-content: start; gap: 10px; container-type: inline-size; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.or-item .lt-art { border-radius: var(--radius-lg); transition: scale var(--dur-1) var(--ease-out); }
+.or-item:active .lt-art { scale: 0.97; }
+.or-item p { display: grid; gap: 2px; margin: 0; }
+.or-item b { font-weight: 600; line-height: 1.25; }
+.or-item small { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; color: var(--text-secondary); font-size: var(--text-ui-sm); line-height: 1.35; }
+.or-item p > span { margin-top: 2px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.or-add { position: absolute; top: calc(100cqi - 52px); inset-inline-end: 8px; z-index: 1; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: var(--bg-canvas); color: var(--text-primary); box-shadow: 0 1px 2px oklch(0 0 0 / 0.14), 0 4px 12px -4px oklch(0 0 0 / 0.22); cursor: pointer; transition: scale var(--dur-1) var(--ease-out); }
+.or-add:active { scale: 0.92; }
+.or-add:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
+.or-skel { display: grid; gap: 16px; }
+.or-skel > div { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; }
+.or-skel .lt-skeleton { height: 16px; border-radius: 8px; }
+.or-skel [data-tile] { height: auto; aspect-ratio: 1; border-radius: var(--radius-lg); }
+
+/* The basket, low in reach above the tabs: how many, and what it comes to. */
+.or-bagbar[data-empty] { display: none; }
+.or-bagbar .lt-btn { justify-content: space-between; gap: 12px; padding-inline: 10px 18px; }
+.or-bag-count { display: grid; place-items: center; min-width: 30px; height: 30px; padding: 0 6px; border-radius: var(--radius-md); background: var(--accent-ink); color: var(--accent-solid); font-variant-numeric: tabular-nums; }
+.or-bag-total { font-variant-numeric: tabular-nums; }
+.or-bagbar[data-bump] .lt-btn { animation: or-bump var(--dur-4) var(--ease-spring); }
+@keyframes or-bump { 40% { scale: 1.03; } }
+
+/* ------------------------------------------------------------------ the basket */
+.or-basket { gap: 30px; }
+.or-lines .as-row { grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; }
+.or-lines .as-mark { margin-top: 2px; }
+.or-line-end { display: grid; justify-items: end; gap: 4px; }
+.or-line-price { font-weight: 600; font-variant-numeric: tabular-nums; }
+.or-qty { display: inline-flex; align-items: center; border-radius: var(--radius-pill); background: var(--bg-surface-2); }
+.or-qty button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--text-primary); cursor: pointer; }
+.or-qty button:disabled { color: var(--text-muted); cursor: default; }
+.or-qty button:active:not(:disabled) { background: var(--bg-surface-3); }
+.or-qty button:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -2px; }
+.or-qty output { min-width: 1.4em; text-align: center; font-weight: 650; font-variant-numeric: tabular-nums; }
+.or-when { display: grid; gap: 26px; }
+.or-when .lt-segmented { display: flex; width: 100%; }
+.or-when .lt-segmented button { flex: 1; }
+.or-from { margin-top: -10px; }
+.or-sum { display: grid; margin: 0; border-radius: var(--radius-lg); background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); }
+.or-sum > div { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 52px; padding: 0 16px; }
+.or-sum > div + div { box-shadow: inset 0 1px 0 var(--border-hairline); }
+.or-sum dt { color: var(--text-secondary); }
+.or-sum dd { margin: 0; font-weight: 550; text-align: end; font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------------ orders and the order on its way */
+.or-now { gap: 6px; color: inherit; text-decoration: none; }
+.or-now:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
+.or-now-top { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 600; }
+.or-now-code { margin-inline-start: auto; font-variant-numeric: tabular-nums; }
+.or-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-solid); }
+.or-now-time { font-family: var(--font-display); font-size: 1.75rem; font-weight: var(--weight-display); letter-spacing: -0.025em; line-height: 1.15; }
+.or-now-what { color: var(--text-secondary); }
+.or-mini { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 10px; }
+.or-mini i { height: 4px; border-radius: 2px; background: var(--bg-surface-3); transition: background-color var(--dur-4) var(--ease-out); }
+.or-mini i[data-on] { background: var(--accent-solid); }
+.or-earlier { display: grid; gap: 28px; }
+.or-again.lt-btn { min-height: 44px; padding-inline: 16px; border-radius: var(--radius-pill); }
+
+.or-track { gap: 30px; }
+.or-eta { display: grid; gap: 4px; }
+.or-eta p { margin: 0; color: var(--accent-text); font-weight: 650; }
+.or-eta b { font-family: var(--font-display); font-size: 2.625rem; font-weight: var(--weight-display); letter-spacing: -0.035em; line-height: 1.05; font-variant-numeric: tabular-nums; }
+/* The steps: a line runs from one mark to the next and fills as the order moves (--fill, 0 to 1). */
+.or-steps { --mark: 28px; display: grid; gap: 22px; margin: 0; padding: 0; list-style: none; }
+.or-steps > li { position: relative; display: grid; grid-template-columns: var(--mark) minmax(0, 1fr); align-items: start; gap: 14px; }
+.or-steps > li:not(:last-child)::before, .or-steps > li:not(:last-child)::after { content: ""; position: absolute; top: calc(var(--mark) + 4px); bottom: -18px; inset-inline-start: calc(var(--mark) / 2 - 1.5px); width: 3px; border-radius: 2px; background: var(--border-hairline); }
+.or-steps > li:not(:last-child)::after { background: var(--accent-solid); transform-origin: top; scale: 1 0; transition: scale var(--dur-4) var(--ease-out); }
+.or-steps > li[data-done]:not(:last-child)::after { scale: 1 1; }
+.or-steps > li[aria-current]:not([data-done])::after { scale: 1 var(--fill, 0); }
+.or-steps [data-part="mark"] { position: relative; display: grid; place-items: center; width: var(--mark); height: var(--mark); border-radius: 50%; box-shadow: inset 0 0 0 2px var(--border-strong); color: transparent; transition: background-color var(--dur-3) var(--ease-out), box-shadow var(--dur-3) var(--ease-out); }
+.or-steps [data-part="mark"] > *, .or-steps [data-part="mark"]::after { grid-area: 1 / 1; }
+.or-steps li[data-done] [data-part="mark"] { background: var(--accent-solid); box-shadow: none; color: var(--accent-ink); }
+.or-steps li[aria-current]:not([data-done]) [data-part="mark"] { box-shadow: inset 0 0 0 2px var(--accent-solid); }
+.or-steps li[aria-current]:not([data-done]) [data-part="mark"]::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--accent-solid); }
+.or-steps li > span:last-child { display: grid; gap: 2px; padding-top: 3px; }
+.or-steps b { font-weight: 600; }
+.or-steps li:not([data-done]):not([aria-current]) b { color: var(--text-secondary); font-weight: 550; }
+.or-steps small { color: var(--text-secondary); font-size: var(--text-ui-sm); }
+@media (prefers-reduced-motion: no-preference) {
+  .or-steps li[aria-current]:not([data-done]) [data-part="mark"]::after, .or-dot { animation: or-pulse 1.6s var(--ease-in-out) infinite; }
+}
+@keyframes or-pulse { 50% { opacity: 0.35; scale: 0.8; } }
+/* The number to show at the counter: a ticket, the number large. */
+.or-code { display: grid; justify-items: center; gap: 2px; margin: 0; padding: 20px; border-radius: var(--radius-xl); background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); text-align: center; }
+.or-code p { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 550; }
+.or-code b { font-family: var(--font-display); font-size: 4.5rem; font-weight: var(--weight-display); letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+.or-code span { font-weight: 550; }
+.or-map { border-radius: var(--radius-xl); }
+
+/* ------------------------------------------------------------------ account */
+.or-who { display: flex; align-items: center; gap: 14px; }
+.or-who p { display: grid; gap: 2px; margin: 0; }
+.or-who b { font-size: var(--step-1); }
+.or-who small { color: var(--text-secondary); }
+.or-me-lg { width: 56px; height: 56px; font-size: var(--text-ui); }
+
+/* ------------------------------------------------------------------ the item sheet */
+.or-sheet { overflow-y: auto; }
+.or-sheet[open] { display: grid; gap: 16px; }
+.or-sheet-art .lt-art { --art-ratio: 16 / 9; border-radius: var(--radius-lg); }
+.or-sheet-note { margin: -12px 0 0; color: var(--text-secondary); }
+.or-opt { display: grid; gap: 10px; }
+.or-opt-h { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 600; }
+.or-opt .lt-segmented { display: flex; width: 100%; }
+.or-opt .lt-segmented button { flex: 1; }
+.or-sheet .lt-radio { min-height: 44px; }
+.or-sheet .lt-radio small, .or-sheet .lt-switch small { color: var(--text-secondary); font-size: var(--text-ui-sm); }
+.or-switches { gap: 4px; }
+.or-switches .lt-switch { min-height: 44px; }
+.or-sheet [data-for][hidden] { display: none; }
+.or-sheet-foot { position: sticky; bottom: 0; z-index: 1; display: flex; align-items: center; gap: 12px; margin-top: 4px; padding-top: 10px; background: var(--bg-surface-1); }
+.or-sheet-foot .lt-btn { flex: 1; }
+
+@media (min-width: 768px) {
+  /* Wide, the basket stays beside the menu: the menu takes the room, the basket a column at the end. */
+  .as:is([data-screen="menu"], [data-screen="basket"]) .as-panes { grid-template-columns: minmax(0, 1fr) minmax(320px, 380px); }
+  #screen-basket .as-actionbar > .lt-btn { flex: 1; }
+  .or-bagbar { display: none; }
+  .or-grid { grid-template-columns: repeat(auto-fill, minmax(176px, 1fr)); gap: 28px 18px; }
+  .as-screen[data-pane="detail"] .or-track { width: min(100%, 560px); margin-inline: auto; }
+}
+@media (forced-colors: active) {
+  .or-steps [data-part="mark"] { border: 2px solid CanvasText; }
+  .or-steps > li::after, .or-mini i[data-on] { forced-color-adjust: none; background: Highlight; }
+  .or-cats a[aria-current] { outline: 2px solid Highlight; }
+}

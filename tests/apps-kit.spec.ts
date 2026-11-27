@@ -1,9 +1,9 @@
-// The app blueprints (banking, fitness, booking, messaging, settings) on a phone and on a wide screen: the
+// The app blueprints (banking, fitness, booking, messaging, settings, ordering, listening) on a phone and on a wide screen: the
 // shell's screens, tabs and panes, and the new parts working in place (number pad, date strip and slots,
 // composer, settings search, activity rings).
 import { expect, test, type Page } from '@playwright/test';
 
-const APPS = { banking: ['home', 'payment'], fitness: ['today', 'workout'], booking: ['bookings', 'booking'], messaging: ['chats', 'thread'], settings: ['settings', 'notifications'] } as const;
+const APPS = { banking: ['home', 'payment'], fitness: ['today', 'workout'], booking: ['bookings', 'booking'], messaging: ['chats', 'thread'], settings: ['settings', 'notifications'], ordering: ['menu', 'basket'], listening: ['library', 'episode'] } as const;
 const phone = { width: 390, height: 844 };
 /** Open an app screen and wait for the shell (a module script) to have taken over. */
 const open = async (page: Page, url: string) => { await page.goto(url); const want = new URL(url, 'http://x').searchParams.get('screen'); if (want) await page.waitForFunction((w) => document.body.dataset.screen === w, want); else await page.waitForLoadState('load'); };
@@ -211,4 +211,106 @@ test('sheets: the whole sheet drags down to close once its content is at the top
   await page.mouse.up();
   await expect(sheet).toBeHidden();
   await expect(page.locator('#bo-review')).toBeFocused();
+});
+
+test('ordering: an item sheet adds what was chosen at its price; the basket counts it; paying shows the order moving', async ({ page }) => {
+  await page.setViewportSize(phone);
+  await open(page, '/blueprints/app-ordering/?screen=menu');
+  const add = page.locator('[data-item="flat"] .or-add');
+  await add.focus();
+  await page.keyboard.press('Enter');
+  const sheet = page.locator('#or-sheet');
+  await expect(sheet).toBeVisible();
+  await expect(page.locator('#or-sheet-h')).toHaveText('Flat white');
+  await page.locator('#or-size [data-value="0.4"]').click();
+  await page.locator('#or-milk label', { hasText: 'Oat' }).click();
+  await expect(page.locator('#or-milk input[value="oat"]')).toBeChecked();
+  await page.locator('label:has(#or-shot)').click();
+  await expect(page.locator('#or-add-go')).toHaveText('Add for £4.50');
+  await page.locator('#or-sheet [data-step="1"]').click();
+  await expect(page.locator('#or-add-go')).toHaveText('Add 2 for £9.00');
+  await page.locator('#or-add-go').click();
+  await expect(sheet).toBeHidden();
+  await expect(add).toBeFocused();
+  await expect(page.locator('#or-bag-count')).toHaveText('4');
+  await expect(page.locator('#or-bag-total')).toHaveText('£15.40');
+  // A sheet for food asks other things: no milk, no size.
+  await page.locator('[data-item="soup"]').click();
+  await expect(page.locator('#or-milk')).toBeHidden();
+  await expect(page.locator('label:has(#or-bread)')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await page.locator('#or-bag').click();
+  await page.waitForFunction(() => document.body.dataset.screen === 'basket');
+  await expect(page.locator('#or-lines > li')).toHaveCount(3);
+  await page.locator('#or-lines [data-line="l2"] [data-qty="-1"]').click();
+  await expect(page.locator('#or-lines > li')).toHaveCount(2);
+  await expect(page.locator('#or-pay')).toHaveText('Pay £12.50');
+  await page.locator('#or-pay').click();
+  await page.waitForFunction(() => document.body.dataset.screen === 'track');
+  await expect(page.locator('#or-eta-state')).toHaveText('Received');
+  await expect(page.locator('#or-eta-state')).toHaveText('Being made', { timeout: 4000 });
+  await expect(page.locator('#or-steps > li[aria-current="step"] b')).toHaveText('Being made');
+  expect(await page.locator('#or-steps').evaluate((el) => Number(getComputedStyle(el).getPropertyValue('--fill')))).toBeLessThan(1);
+});
+
+test('ordering: wide, the basket stays beside the menu and the menu takes the room', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await open(page, '/blueprints/app-ordering/?screen=menu');
+  await expect.poll(() => shown(page)).toEqual(expect.arrayContaining(['menu', 'basket']));
+  const [menu, basket] = await Promise.all(['#screen-menu', '#screen-basket'].map((s) => page.locator(s).boundingBox()));
+  expect(menu!.width).toBeGreaterThan(basket!.width);
+  await expect(page.locator('.or-bagbar')).toBeHidden();
+});
+
+test('listening: the player rises from the mini player, plays, seeks by chapter, and drags down to close', async ({ page }) => {
+  await page.setViewportSize(phone);
+  await open(page, '/blueprints/app-listening/?screen=library');
+  await expect(page.locator('#ls-mini')).toBeVisible();
+  await page.locator('#ls-mini-open').click();
+  expect(await page.evaluate(() => document.documentElement.dataset.nav)).toBe('up');
+  await page.waitForFunction(() => document.body.dataset.screen === 'playing' && !document.documentElement.dataset.nav);
+  await expect(page.locator('#ls-mini')).toBeHidden();
+  await expect(page.locator('.as-tabs')).toBeHidden();
+  await expect(page.locator('#pl-h')).toBeFocused();
+  await page.locator('#ls-play').click();
+  await expect(page.locator('#ls-play')).toHaveAttribute('aria-label', 'Pause');
+  const t0 = await page.locator('#ls-seek').inputValue();
+  await expect.poll(() => page.locator('#ls-seek').inputValue()).not.toBe(t0);
+  await page.locator('#ls-pl-chapters [data-at="1625"]').click();
+  await expect(page.locator('#ls-pl-chapter')).toHaveText('The birds that stay');
+  await expect(page.locator('#ls-pl-chapters [data-at="1625"]')).toHaveAttribute('aria-current', 'true');
+  await page.locator('#ls-speed').click();
+  await expect(page.locator('#ls-speed')).toHaveText('1.25×');
+  // Drag the player down by its top (with its content at the top): it follows the finger and closes past the line.
+  await page.locator('#screen-playing .as-scroll').evaluate((el) => { el.scrollTop = 0; });
+  const top = (await page.locator('.ls-player-top p').boundingBox())!;
+  await page.mouse.move(top.x + 10, top.y + 10);
+  await page.mouse.down();
+  for (let i = 1; i <= 10; i++) await page.mouse.move(top.x + 10, top.y + 10 + i * 30);
+  expect(await page.locator('#screen-playing').evaluate((el) => el.style.translate)).toContain('px');
+  await page.mouse.up();
+  await page.waitForFunction(() => document.body.dataset.screen === 'library');
+  await expect(page.locator('#ls-mini')).toBeVisible();
+  await expect(page.locator('#ls-mini-play')).toHaveAttribute('aria-label', /^Pause/);
+});
+
+test('listening: an episode fills from its row; Up next reorders by keyboard', async ({ page }) => {
+  await page.setViewportSize(phone);
+  await open(page, '/blueprints/app-listening/?screen=library');
+  await page.locator('.ls-eps [data-ep="sh88"]').click();
+  await page.waitForFunction(() => document.body.dataset.screen === 'episode');
+  await expect(page.locator('#ep-h')).toHaveText('Bread at four in the morning');
+  await expect(page.locator('#ep-show')).toHaveText('Small Hours');
+  await expect(page.locator('#ls-ep-play')).toHaveText('Play');
+  await page.locator('#ls-ep-play').click();
+  await expect(page.locator('#ls-ep-play')).toHaveText('Pause');
+  await expect(page.locator('#ls-mini-title')).toHaveText('Bread at four in the morning');
+  await open(page, '/blueprints/app-listening/?screen=queue');
+  const first = page.locator('#ls-queue > li').first();
+  await expect(first).toHaveAttribute('data-ep', 'lw12');
+  await first.locator('[data-part="handle"]').focus();
+  await page.keyboard.press('Space');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Space');
+  await expect(page.locator('#ls-queue > li').nth(1)).toHaveAttribute('data-ep', 'lw12');
 });

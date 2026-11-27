@@ -54,3 +54,41 @@ test('drafts carry the name, sample rows marked, and what the blueprint still la
     }
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
+
+// Every app on the shared shell (the bank, the run, bookings, chat, settings, the café and the podcast player):
+// a welcome first, five or six screens, a tab bar of four at most, the three states on the first useful screen,
+// and a name that is made up and says so.
+test('every shell app has the same anatomy: welcome, five or six screens, tabs, states, a made-up name', () => {
+  const ids = ['app-banking', 'app-fitness', 'app-booking', 'app-messaging', 'app-settings', 'app-ordering', 'app-listening'];
+  for (const id of ids) {
+    const dir = join(root, 'blueprints', id);
+    const html = readFileSync(join(dir, 'index.html'), 'utf8');
+    const meta = JSON.parse(readFileSync(join(dir, 'meta.json'), 'utf8'));
+    assert.equal(meta.id, id);
+    assert.deepEqual(meta.states, ['loading', 'empty', 'error'], `${id}: states`);
+    assert.match(html, /<html[^>]* data-app>/, `${id}: data-app`);
+    assert.match(html, /viewport-fit=cover/, `${id}: viewport-fit`);
+    const screens = [...html.matchAll(/class="as-screen[^"]*"[^>]*data-screen="([a-z-]+)"/g)].map((m) => m[1]);
+    assert.equal(screens[0], 'welcome', `${id}: welcome first`);
+    assert.ok(screens.length >= 5 && screens.length <= 7, `${id}: ${screens.length} screens`);
+    const tabs = html.match(/<nav class="lt-bottom-nav as-tabs"[\s\S]*?<\/nav>/)[0].match(/<a href="#screen-/g).length;
+    assert.ok(tabs >= 2 && tabs <= 4, `${id}: ${tabs} tabs`);
+    for (const s of meta.states) assert.ok(html.includes(`data-view="${s}"`), `${id}: a ${s} view`);
+    assert.match(html, /class="as-side-foot">[^<]*made[- ]up/, `${id}: says the name is made up`);
+    for (const b of meta.brand ?? []) assert.ok(html.includes(b), `${id}: brand ${b} on the page`);
+  }
+});
+
+test('the café and the podcast player use the native parts: a sheet, a rising screen, a live step line, a scrubber', () => {
+  const ordering = readFileSync(join(root, 'blueprints/app-ordering/index.html'), 'utf8');
+  assert.match(ordering, /<dialog class="lt-sheet[^"]*" id="or-sheet"/);
+  assert.match(ordering, /<button type="button" data-part="grab"/, 'the item sheet has a grabber that is a button');
+  assert.match(ordering, /class="or-steps" id="or-steps"/);
+  assert.match(ordering, /data-scene="cup"/, 'menu pictures are drawn art panels');
+  const listening = readFileSync(join(root, 'blueprints/app-listening/index.html'), 'utf8');
+  assert.match(listening, /data-screen="playing" data-pane="sheet"/);
+  assert.match(listening, /data-go="playing" data-dir="up"/, 'the mini player raises the player');
+  assert.match(listening, /data-go="back" data-dir="down"/, 'the player closes downwards');
+  assert.match(listening, /<input type="range" id="ls-seek"/);
+  assert.match(listening, /class="ls-mini"/);
+});

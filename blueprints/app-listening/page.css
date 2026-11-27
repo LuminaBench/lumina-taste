@@ -1,0 +1,162 @@
+/* Field Notes on a phone: ochre and indigo, an editorial face. Covers are drawn squares; the episode to carry on
+   with is the one card; the player rises from a mini player that rides above the tab bar, its cover shrinking a
+   little while paused, with a scrubber notched at each chapter. Wide, the episode opens beside the library. */
+
+/* The mini player sits between the screens and the tab bar (or under the screens beside the sidebar). */
+.as { grid-template-rows: minmax(0, 1fr) auto auto; }
+.ls-mini { position: relative; z-index: 3; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px; margin: 0 8px 6px; padding: 6px 6px 6px 6px; border-radius: var(--radius-lg); background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline), 0 6px 20px -8px oklch(0 0 0 / 0.25); overflow: hidden; }
+.as:is([data-screen="welcome"], [data-screen="playing"]) .ls-mini { display: none; }
+.as[data-pane="detail"] .ls-mini { margin-bottom: calc(8px + env(safe-area-inset-bottom)); }
+.ls-mini-open { display: flex; text-decoration: none; align-items: center; gap: 12px; min-width: 0; min-height: 52px; padding: 0 6px 0 0; border: 0; border-radius: var(--radius-md); background: none; color: inherit; font: inherit; text-align: start; cursor: pointer; }
+.ls-mini-open > span:last-child { display: grid; min-width: 0; }
+.ls-mini-open b, .ls-mini-open small { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ls-mini-open b { font-weight: 600; }
+.ls-mini-open small { color: var(--text-secondary); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; }
+.ls-mini-open .ls-tile { width: 44px; height: 44px; }
+.ls-mini-play { display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--text-primary); cursor: pointer; }
+.ls-mini-bar { position: absolute; inset-inline: 12px; bottom: 0; height: 2px; border-radius: 1px; background: var(--border-hairline); }
+.ls-mini-bar i, .ls-progress i { display: block; width: var(--p, 0%); height: 100%; border-radius: inherit; background: var(--text-primary); }
+:is(.ls-mini-open, .ls-mini-play):focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -2px; }
+
+/* A show's cover, small: a square tile in its own tint with its drawing. */
+.as-mark.ls-tile { width: 52px; height: 52px; border-radius: var(--radius-md); background: color-mix(in oklab, var(--accent-solid) 20%, var(--bg-surface-1)); }
+.as-mark.ls-tile [data-part="mark-motif"] { width: 32px; height: 32px; }
+.as-mark.ls-tile[data-show="lw"] { background: var(--text-primary); }
+.as-mark.ls-tile[data-show="lw"] [data-part="mark-motif"] { --mi: var(--bg-canvas); --ma: color-mix(in oklab, var(--accent-solid) 78%, var(--bg-canvas)); --mb: color-mix(in oklab, var(--bg-canvas) 16%, var(--text-primary)); }
+.as-mark.ls-tile[data-show="sh"] { background: var(--bg-surface-3); }
+.as-mark.ls-tile[data-show="ss"] { background: color-mix(in oklab, var(--accent-solid) 34%, var(--bg-surface-1)); }
+
+/* ------------------------------------------------------------------ library */
+.ls-library { gap: 30px; }
+.ls-library > section, .ls-episode > section { display: grid; gap: 28px; align-content: start; }
+.ls-now-card { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 14px 12px; padding: 14px 14px 16px; }
+.ls-now-open { display: flex; text-decoration: none; align-items: center; gap: 14px; min-width: 0; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: start; cursor: pointer; border-radius: var(--radius-md); }
+.ls-now-open > span:last-child { display: grid; gap: 2px; min-width: 0; }
+.ls-now-open small { color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 550; }
+.ls-now-open b { font-family: var(--font-display); font-size: var(--step-1); font-weight: var(--weight-display); line-height: 1.2; }
+.ls-left { color: var(--text-secondary); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; }
+.ls-now-open:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 4px; }
+.ls-progress { grid-column: 1 / -1; height: 4px; border-radius: 2px; background: var(--bg-surface-3); overflow: hidden; }
+.ls-round { display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 50%; background: var(--text-primary); color: var(--bg-canvas); cursor: pointer; transition: scale var(--dur-1) var(--ease-out); }
+.ls-round-sm { width: 44px; height: 44px; background: var(--bg-surface-2); color: var(--text-primary); }
+.ls-round:active { scale: 0.92; }
+.ls-round:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
+/* Followed shows: a rail of covers that snaps, the show's name under each. */
+.ls-shows { display: grid; grid-auto-flow: column; grid-auto-columns: 136px; gap: 14px; margin: 0 calc(var(--as-pad) * -1); padding: 2px var(--as-pad) 4px; overflow-x: auto; list-style: none; scroll-snap-type: x mandatory; scroll-padding-inline: var(--as-pad); scrollbar-width: none; }
+.ls-shows::-webkit-scrollbar { display: none; }
+.ls-shows li { scroll-snap-align: start; }
+.ls-shows button { display: grid; gap: 8px; width: 100%; padding: 0; border: 0; background: none; color: inherit; font: 550 var(--text-ui-sm) var(--font-body); text-align: start; cursor: pointer; }
+.ls-shows .lt-art { border-radius: var(--radius-lg); transition: scale var(--dur-1) var(--ease-out); }
+.ls-shows button:active .lt-art { scale: 0.97; }
+.ls-shows button:focus-visible { outline: none; }
+.ls-shows button:focus-visible .lt-art { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
+.ls-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; }
+.ls-row .as-row { grid-template-columns: auto minmax(0, 1fr); }
+.ls-row .as-row > :last-child { justify-self: stretch; text-align: start; }
+.as-rows > li + li > .ls-row { box-shadow: inset 0 1px 0 var(--border-hairline); }
+.ls-eps small { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ls-skel-shows { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.ls-skel-shows .lt-skeleton { height: auto; aspect-ratio: 1; border-radius: var(--radius-lg); }
+
+/* ------------------------------------------------------------------ one episode */
+.ls-episode { gap: 26px; }
+.ls-ep-head { display: grid; justify-items: center; gap: 16px; text-align: center; }
+.ls-ep-cover { width: min(64vw, 240px); }
+.ls-ep-cover .lt-art { border-radius: var(--radius-xl); box-shadow: var(--shadow-overlay); }
+.ls-ep-words { display: grid; gap: 6px; }
+.ls-ep-meta { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 550; }
+.ls-ep-title { margin: 0; font-family: var(--font-display); font-size: 1.75rem; font-weight: var(--weight-display); letter-spacing: -0.02em; line-height: 1.15; text-wrap: balance; }
+.ls-ep-actions { display: flex; gap: 10px; }
+.ls-ep-actions > .lt-btn[data-variant="primary"] { flex: 1; border-radius: var(--radius-pill); }
+.ls-icon-btn.lt-btn { flex: none; width: 52px; padding: 0; border-radius: 50%; }
+.ls-icon-btn[aria-pressed="true"] { color: var(--accent-text); }
+.ls-ep-about { margin: 0; color: var(--text-secondary); font-size: var(--step-0); line-height: 1.5; text-wrap: pretty; }
+
+/* Chapters: the time, then the name; the one playing in the accent. */
+.ls-chapters { display: grid; margin: 0; padding: 0; list-style: none; }
+.ls-chapters li + li button { box-shadow: inset 0 1px 0 var(--border-hairline); }
+.ls-chapters button { display: grid; grid-template-columns: 4.2em minmax(0, 1fr); align-items: baseline; gap: 12px; width: 100%; min-height: 52px; padding: 14px 0; border: 0; background: none; color: var(--text-primary); font: inherit; text-align: start; cursor: pointer; }
+.ls-chapters time { color: var(--text-secondary); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; }
+.ls-chapters button[aria-current] span { font-weight: 650; }
+.ls-chapters button[aria-current] time { color: var(--accent-text); font-weight: 650; }
+.ls-chapters button:active { background: var(--bg-surface-2); }
+.ls-chapters button:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -2px; border-radius: var(--radius-md); }
+
+/* ------------------------------------------------------------------ now playing */
+.ls-player .as-scroll { background: linear-gradient(color-mix(in oklab, var(--accent-solid) 16%, var(--bg-canvas)), var(--bg-canvas) 62%); }
+.ls-player[data-dragging] { box-shadow: 0 -8px 32px oklch(0 0 0 / 0.18); border-radius: var(--radius-xl) var(--radius-xl) 0 0; overflow: hidden; }
+.ls-player-top { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; padding: 6px 12px 0; touch-action: none; }
+.ls-player-top p { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); font-weight: 600; text-align: center; }
+.ls-grab { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--text-primary); cursor: pointer; }
+.ls-grab:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -2px; }
+.ls-player-body { display: grid; gap: 22px; padding: 12px var(--as-pad) calc(32px + env(safe-area-inset-bottom)); }
+/* The cover: full size while it plays, a step back while paused. */
+.ls-cover { width: min(100%, 340px); margin: 6px auto 0; touch-action: none; }
+.ls-cover .lt-art { border-radius: var(--radius-xl); box-shadow: var(--shadow-overlay); }
+.ls-cover { scale: 0.86; transition: scale var(--dur-4) var(--ease-spring); }
+.as[data-playing] .ls-cover { scale: 1; }
+.ls-titles { display: grid; gap: 4px; }
+.ls-titles h2 { margin: 0; font-family: var(--font-display); font-size: 1.5rem; font-weight: var(--weight-display); letter-spacing: -0.015em; line-height: 1.2; }
+.ls-titles h2:focus { outline: none; }
+.ls-titles p { margin: 0; color: var(--text-secondary); }
+/* The scrubber: a thick line filled to the place, a notch at each chapter, the times under it. */
+.ls-scrub { position: relative; display: grid; gap: 0; }
+.ls-scrub input { --track: var(--border-strong); width: 100%; height: 44px; margin: 0; background: none; appearance: none; -webkit-appearance: none; cursor: pointer; }
+.ls-scrub input::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: linear-gradient(to right, var(--text-primary) var(--p), var(--track) var(--p)); }
+.ls-scrub input:dir(rtl)::-webkit-slider-runnable-track { background: linear-gradient(to left, var(--text-primary) var(--p), var(--track) var(--p)); }
+.ls-scrub input::-webkit-slider-thumb { width: 16px; height: 16px; margin-top: -5px; border: 0; border-radius: 50%; background: var(--text-primary); -webkit-appearance: none; transition: scale var(--dur-2) var(--ease-out); }
+.ls-scrub input:active::-webkit-slider-thumb { scale: 1.5; }
+.ls-scrub input::-moz-range-track { height: 6px; border-radius: 3px; background: var(--track); }
+.ls-scrub input::-moz-range-progress { height: 6px; border-radius: 3px; background: var(--text-primary); }
+.ls-scrub input::-moz-range-thumb { width: 16px; height: 16px; border: 0; border-radius: 50%; background: var(--text-primary); }
+.ls-scrub input:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; border-radius: var(--radius-sm); }
+.ls-ticks { position: absolute; inset-inline: 0; top: 19px; height: 6px; pointer-events: none; }
+.ls-ticks i { position: absolute; inset-inline-start: var(--at); width: 2px; height: 100%; background: var(--bg-canvas); }
+.ls-times { display: flex; justify-content: space-between; margin: -6px 0 0; color: var(--text-secondary); font-size: var(--text-ui-sm); font-variant-numeric: tabular-nums; }
+.ls-controls { display: flex; align-items: center; justify-content: center; gap: 28px; }
+.ls-skip { position: relative; display: grid; place-items: center; width: 60px; height: 60px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--text-primary); cursor: pointer; transition: scale var(--dur-1) var(--ease-out); }
+.ls-play { display: grid; place-items: center; width: 76px; height: 76px; padding: 0; border: 0; border-radius: 50%; background: var(--text-primary); color: var(--bg-canvas); cursor: pointer; transition: scale var(--dur-1) var(--ease-out); }
+:is(.ls-skip, .ls-play):active { scale: 0.92; }
+/* The seconds a skip moves, set in the middle of its arrow. */
+.ls-skip > span { position: absolute; inset: 0; display: grid; place-items: center; padding-top: 2px; font: 700 0.6875rem var(--font-body); font-variant-numeric: tabular-nums; }
+:is(.ls-skip, .ls-play):focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 3px; }
+.ls-extras { display: flex; justify-content: center; gap: 10px; }
+.ls-pill { display: inline-flex; align-items: center; gap: 6px; min-width: 64px; min-height: 44px; padding: 0 16px; justify-content: center; border: 0; border-radius: var(--radius-pill); background: color-mix(in oklab, var(--text-primary) 8%, transparent); color: var(--text-primary); font: 600 var(--text-ui-sm) var(--font-body); font-variant-numeric: tabular-nums; cursor: pointer; }
+.ls-pill[data-on] { color: var(--accent-text); }
+.ls-pill:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
+.ls-pl-chapters { display: grid; gap: 4px; margin-top: 6px; }
+.ls-pl-chapters h3 { margin: 0; font-size: var(--step-1); font-weight: 650; }
+
+/* ------------------------------------------------------------------ up next */
+.ls-queue-body { gap: 18px; }
+.ls-queue-sum { margin: -6px 0 0; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.ls-queue.lt-sortable-wrap { width: 100%; }
+.ls-queue [data-part="help"] { margin: 0 0 10px; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+.ls-queue .lt-sortable { gap: 8px; }
+.ls-queue .lt-sortable li { display: grid; grid-template-columns: 52px minmax(0, 1fr) 44px; grid-template-areas: "art title handle" "art sub handle"; align-items: center; column-gap: 14px; row-gap: 2px; height: auto; min-height: 72px; padding: 10px 6px 10px 10px; border: 0; border-radius: var(--radius-lg); background: var(--bg-surface-1); box-shadow: 0 0 0 var(--bw) var(--border-hairline); }
+.ls-queue li > span { grid-area: title; align-self: end; font-weight: 600; }
+.ls-queue li > small { grid-area: sub; align-self: start; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+.ls-queue li > .ls-tile { grid-area: art; }
+.ls-queue [data-part="handle"] { grid-area: handle; width: 44px; height: 44px; border-radius: var(--radius-md); }
+.ls-queue [data-part="handle"]:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -2px; }
+.ls-queue li[data-grabbed] { box-shadow: var(--shadow-md), 0 0 0 2px var(--accent-solid); }
+.ls-note { margin: 0; color: var(--text-secondary); font-size: var(--text-ui-sm); }
+
+@media (prefers-reduced-motion: reduce) { .ls-cover { transition: none; } }
+@media (min-width: 768px) {
+  .as { grid-template-rows: minmax(0, 1fr) auto; }
+  .as-side { grid-row: 1 / 3; }
+  .ls-mini { grid-column: 2; justify-self: center; width: min(100% - 32px, 560px); margin: 0 0 16px; }
+  .as[data-pane="detail"] .ls-mini { margin-bottom: 16px; }
+  .as-screen[data-pane="detail"] .ls-episode { width: min(100%, 620px); margin-inline: auto; }
+  .ls-ep-head { grid-template-columns: 200px minmax(0, 1fr); justify-items: start; align-items: end; text-align: start; }
+  .ls-ep-cover { width: 200px; }
+  .ls-player-body { width: min(100%, 520px); margin-inline: auto; }
+  .ls-player-top { width: min(100%, 560px); margin-inline: auto; }
+}
+@media (forced-colors: active) {
+  .ls-mini-bar i, .ls-progress i { forced-color-adjust: none; background: Highlight; }
+  .ls-progress, .ls-mini-bar { border: 1px solid CanvasText; }
+  .ls-scrub input { border: 1px solid CanvasText; }
+  .ls-play { border: 2px solid ButtonText; }
+}
