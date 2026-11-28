@@ -25,7 +25,7 @@ for (const [name, brief] of Object.entries(BRIEFS)) {
         await page.setViewportSize({ width, height: 900 });
         await page.emulateMedia({ reducedMotion: 'reduce' });
         await page.goto(pathToFileURL(join(dir, 'index.html')).href);
-        const bands = await page.$$eval('main > section', (els) => els.map((el) => ({ bg: getComputedStyle(el).backgroundColor, tone: el.getAttribute('data-tone'), rhythm: el.getAttribute('data-rhythm'), scale: el.getAttribute('data-scale'), picture: el.classList.contains('lt-media-band') })));
+        const bands = await page.$$eval('main > section', (els) => els.map((el) => ({ bg: getComputedStyle(el).backgroundColor, tone: el.getAttribute('data-tone'), rhythm: el.getAttribute('data-rhythm'), scale: el.getAttribute('data-scale'), picture: el.classList.contains('lt-media-band') || el.classList.contains('lt-photo-words') })));
         expect(bands.length).toBeGreaterThanOrEqual(3);
         for (const b of bands) expect(b.rhythm).toMatch(/^(quiet|busy)$/);
         for (let i = 1; i < bands.length; i++) if (!bands[i].picture && !bands[i - 1].picture) expect(bands[i].bg, `bands ${i - 1} and ${i} share a ground`).not.toBe(bands[i - 1].bg);
