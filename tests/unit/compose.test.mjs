@@ -445,7 +445,9 @@ test('every band a draft writes has something to look at; software shows itself;
       const html = readFileSync(join(dir, slug, 'index.html'), 'utf8');
       const main = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
       const bands = main.split(/(?=<section class=")/).slice(1);
-      assert.ok(bands.length >= 3, `${slug}: at least a first screen, a picture and a close`);
+      // A first screen and a close at least; a picture band only when it has a drawing and words the page has not
+      // shown yet (a thin brief may have neither: the scene in its first screen is its picture).
+      assert.ok(bands.length >= (slug === 'thin' ? 2 : 3), `${slug}: at least a first screen, a picture and a close`);
       for (const b of bands) assert.match(b, LOOK, `${slug}: a band with nothing to look at: ${b.slice(0, 80)}`);
       assert.ok((main.match(/class="lt-(art|device)"/g) ?? []).length >= 1, `${slug}: a picture at least`);
       // Moments: named in the strip and the plan, two at most, never in neighbouring bands, never the first screen.
@@ -543,4 +545,48 @@ test('--hero uses the first screen the person pointed at, and says so', () => {
   assert.equal(chosen.composition, 'cover');
   assert.match(chosen.why, /chosen by the person/);
   assert.equal(compose(b, '--hero', 'nonsense').artDirection.hero.composition, 'menu', 'an unknown name keeps the composer\'s choice');
+});
+
+test('words a draft gets right: articles, opening times, the owner\'s own line, steps and prices within a sentence', async () => {
+  const w = await import('../../engine/compose/words.mjs');
+  assert.equal(w.withArticle('invoicing and receipts'), 'invoicing and receipts');
+  assert.equal(w.withArticle('dentist'), 'a dentist');
+  assert.equal(w.withArticle('orchard'), 'an orchard');
+  assert.equal(w.withArticle('building firm'), 'a building firm');
+  const bakery = w.extractFacts('Aster & Rye, a neighbourhood bakery at 14 Chandos Road, Redland, Bristol. We fold the pastry by hand and leave the sourdough to ferment overnight. Butter croissant £3.40, cardamom knot £3.90. Open Wednesday to Sunday 8am to 2pm. Order by 6pm the day before.', 'Aster & Rye');
+  // "Order by 6pm" is a deadline, never when it opens.
+  assert.equal(w.openLine(bakery), 'Open Wednesday to Sunday, 8am to 2pm');
+  assert.equal(w.openingTime(bakery).value, '8am to 2pm');
+  assert.match(bakery.story, /^We fold the pastry by hand/);
+  assert.equal(w.heroCopy(bakery, { typeId: 'venue', product: 'Aster & Rye' }).lede, 'We fold the pastry by hand and leave the sourdough to ferment overnight.');
+  const app = w.extractFacts('Juniper Ledger, invoicing and receipts for design studios. Send an invoice in under a minute, chase late payers automatically, snap receipts on your phone. How it works: add a client, send the invoice, get paid. 3,100 studios use it. £12 a month per studio.', 'Juniper Ledger');
+  assert.deepEqual(app.steps, ['add a client', 'send the invoice', 'get paid']);
+  assert.ok(!app.claims.some((c) => /client/.test(c)), 'the steps are not claims');
+  assert.ok(app.prices.every((p) => !/studios use/.test(p.what ?? '')), 'a price never names words from the sentence before');
+  const cli = w.extractFacts('Halyard, a CLI that builds a preview URL for every pull request. Run halyard init in your repo, push a branch and open the link.', 'Halyard');
+  assert.ok(cli.steps.length >= 2 && /^run halyard init/.test(cli.steps[0]), 'instructions are steps');
+  const dinner = w.extractFacts('Ember & Vine, a wood-fired restaurant in Bristol, tasting menu £58', 'Ember & Vine');
+  assert.equal(w.heroCopy(dinner, { typeId: 'venue', product: 'Ember & Vine' }).action, 'Book a table');
+});
+
+test('drawings are the subject\'s own: no wine glass on a bakery, no terminal on a builder, a row all drawn or all plain', async () => {
+  const { rankMotifs } = await import('../../scripts/lib/image-motifs.mjs');
+  assert.equal(rankMotifs('glass of wine')[0], 'glass');
+  assert.equal(rankMotifs('kitchen extensions').includes('bowl'), false);
+  assert.deepEqual(rankMotifs('tasting menu'), []);
+  const dir = mkdtempSync(join(tmpdir(), 'lt-own-'));
+  try {
+    for (const [slug, brief] of Object.entries({
+      bakery: 'Aster & Rye, a neighbourhood bakery in Bristol. Butter croissant £3.40, cardamom knot £3.90, country sourdough £5.80, blackberry tart £4.60, flat white £3.20. Open Wednesday to Sunday 8am to 2pm.',
+      builder: 'Granite Row, builders in Glasgow: kitchen extensions and loft conversions, work from £40,000',
+      wool: 'Copper & Thread, hand-dyed wool from a mill in Hebden Bridge. Merino skein £18, alpaca skein £24, sock yarn £16, knitting kit £42.',
+    })) {
+      const r = node([join(root, 'scripts/compose.mjs'), brief, '--project', join(dir, slug), '--write']);
+      assert.equal(r.status, 0, r.stderr);
+      const html = readFileSync(join(dir, slug, 'index.html'), 'utf8');
+      const drawn = [...html.matchAll(/data-(?:motif|scene)="([a-z ]+)"/g)].flatMap((m) => m[1].split(' '));
+      const never = { bakery: ['glass', 'glasses', 'bowl', 'terminal', 'crane'], builder: ['terminal', 'bowl', 'glass', 'cup'], wool: ['cup', 'crane', 'document', 'bowl', 'terminal'] }[slug];
+      for (const n of never) assert.ok(!drawn.includes(n), `${slug}: drew a ${n}`);
+    }
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });

@@ -19,7 +19,8 @@ export const theme = () => Object.fromEntries(AXES.map((k) => [k, html.dataset[k
 
 export function setTheme(patch: Partial<Record<Axis, string>>) {
   for (const [k, v] of Object.entries(patch)) if (v) html.dataset[k] = v;
-  try { localStorage.setItem('lt-gallery', JSON.stringify(theme())); } catch { /* private mode */ }
+  // v: 2 marks a choice made since the showroom's default became Matte Black & Signal Orange in Stamped Slab.
+  try { localStorage.setItem('lt-gallery', JSON.stringify({ ...theme(), v: 2 })); } catch { /* private mode */ }
   ensureFont(html.dataset.type!);
   syncRoots();
   listeners.forEach((f) => f());
@@ -42,7 +43,7 @@ export const themeAttrs = () => AXES.map((k) => `data-${k}="${esc(theme()[k])}"`
 const loaded = new Set<string>();
 export function ensureFont(typeId: string) {
   const t = TYPOGRAPHY.find((x) => x.id === typeId);
-  if (!t?.webfont || loaded.has(t.webfont)) return;
+  if (!t?.webfont || loaded.has(t.webfont) || document.querySelector(`link[data-lt-font="${t.id}"]`)) return;
   loaded.add(t.webfont);
   const l = Object.assign(document.createElement('link'), { rel: 'stylesheet', href: t.webfont });
   document.head.append(l);

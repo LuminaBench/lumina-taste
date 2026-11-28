@@ -1,11 +1,17 @@
 <!doctype html>
-<html lang="en" data-palette="charcoal-sky" data-mode="dark" data-type="workbench" data-density="balanced" data-radius="balanced" data-motion="snappy" data-style="studio">
+<html lang="en" data-palette="black-signal" data-mode="dark" data-type="stamped" data-density="balanced" data-radius="balanced" data-motion="snappy" data-style="studio">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Lumina Taste</title>
   <meta name="description" content="Every UI element, chart and page pattern by its real name, live in 36 themes, with the code and a prompt your agent can build from.">
-  <script>(()=>{try{const s=JSON.parse(localStorage.getItem("lt-gallery")||"{}");const e=document.documentElement;for(const k of ["palette","mode","type","density","radius","motion","style"])if(typeof s[k]==="string"&&/^[a-z-]+$/.test(s[k]))e.dataset[k]=s[k]}catch{}})()</script>
+  <!-- The theme and its typeface are settled before the first paint: the last choice (or the default) is put on
+       <html> and its web font is asked for here, render-blocking, so the page never shows a stand-in look first. -->
+  <script>(()=>{const F=/*FONTS*/{};const e=document.documentElement;try{const s=JSON.parse(localStorage.getItem("lt-gallery")||"{}");if(s.v===2)for(const k of ["palette","mode","type","density","radius","motion","style"])if(typeof s[k]==="string"&&/^[a-z-]+$/.test(s[k]))e.dataset[k]=s[k]}catch{}const u=F[e.dataset.type];if(u)document.write('<link rel="stylesheet" href="'+u+'" data-lt-font="'+e.dataset.type+'">')})()</script>
+  <link rel="icon" href="./icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="./icons/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <meta name="theme-color" content="#0e0e0e">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="./gallery.css">

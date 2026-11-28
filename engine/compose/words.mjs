@@ -11,7 +11,7 @@ const DAY = `(?:${DAYS.join('|')})s?`;
 const STREET = '(?:Lane|Street|Road|Row|Way|Square|Avenue|Hill|Place|Yard|Walk|Terrace|Parade|Quay|Wharf|Gate|Green|Close|Crescent|Market)';
 const UNIT = '(?:second|minute|min|hour|day|week|month|year|night)s?';
 // Plain verbs a clause opens with when it says what a product does: "send an invoice in a minute".
-const CLAIM_VERB = /^(send|chase|get|track|book|find|plan|pay|see|keep|share|write|add|build|run|ship|query|store|sync|manage|check|watch|read|record|log|learn|compare|save|move|sign|scan|turn|answer|catch|cut|deploy|test|search|ask|schedule|invoice|split|draw|edit|publish|collect|post|preview|review|merge|host|monitor|automate|replace)$/i;
+const CLAIM_VERB = /^(send|chase|snap|file|push|get|track|book|find|plan|pay|see|keep|share|write|add|build|run|ship|query|store|sync|manage|check|watch|read|record|log|learn|compare|save|move|sign|scan|turn|answer|catch|cut|deploy|test|search|ask|schedule|invoice|split|draw|edit|publish|collect|post|preview|review|merge|host|monitor|automate|replace)$/i;
 // Verbs that open a giving clause: "donate £10 to fill a bag".
 const GIVE = /^(?:donate|give|gift|sponsor|pledge|chip)$/i;
 const NUM_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twelve: 12 };
@@ -24,7 +24,10 @@ const words = (s) => s.split(/\s+/).filter(Boolean);
 
 /** A noun phrase read backwards from position `end` in the brief: "loaves" in "loaves from £4.20". */
 function nounBefore(brief, end, max = 4) {
-  const ws = words(brief.slice(0, end).replace(/[,;:.()]+\s*$/, ''));
+  // Never across a sentence: in "3,100 studios use it. £12 a month" the price names nothing before it.
+  const before = brief.slice(0, end);
+  if (/[.!?]\s*$/.test(before)) return '';
+  const ws = words(before.slice(before.search(/[^.!?]*$/)).replace(/[,;:.()]+\s*$/, ''));
   const out = [];
   for (let i = ws.length - 1; i >= 0 && out.length < max; i--) {
     const w = ws[i].replace(/[,;:.()]+$/, '');
@@ -148,7 +151,7 @@ export function extractFacts(brief, { product = null } = {}) {
     facts.prices.push({ value, from: !!m[1], what: lowerFirst(what) || null, text: clean(m[0]) });
   }
   // Clock times: 7:30, 7.30am, 10am, "10 to 2" after days.
-  for (const m of b.matchAll(/\b(?:(open|opens|opening|from|until|till|closes|closing|at)\s+(?:from\s+)?)?(?<![£$€\d.,])((?:[01]?\d|2[0-3])[:.][0-5]\d(?:\s?[ap]m)?|\d{1,2}\s?[ap]m)\b/gi)) {
+  for (const m of b.matchAll(/\b(?:(open|opens|opening|from|until|till|closes|closing|at|by|before)\s+(?:from\s+)?)?(?<![£$€\d.,])((?:[01]?\d|2[0-3])[:.][0-5]\d(?:\s?[ap]m)?|\d{1,2}\s?[ap]m)\b/gi)) {
     facts.times.push({ value: m[2], what: m[1] ? m[1].toLowerCase() : null, text: clean(m[0]) });
   }
   // Days: "Tuesday to Sunday", "Monday and Thursday", "Saturdays", with an optional hour range "10 to 2".
@@ -205,9 +208,11 @@ export function extractFacts(brief, { product = null } = {}) {
   }
   // "Tally invoicing app: send an invoice from your phone in 30 seconds, chase late payers automatically": what
   // follows a colon, clause by clause, when a clause opens with a plain verb. Stored as "sends…", like the above.
-  if (!facts.claims.length && b.includes(':')) {
+  // Not the colon of "How it works:": that list is the steps.
+  const colon = b.search(/(?<!how it works|steps|how to start):/i);
+  if (!facts.claims.length && colon >= 0) {
     const BASE = CLAIM_VERB;
-    for (const part of b.slice(b.indexOf(':') + 1).split(/,\s*|;\s*/)) {
+    for (const part of b.slice(colon + 1).split(/[.!?]\s/)[0].split(/,\s*|;\s*/)) {
       const ws = words(clean(part));
       if (ws.length < 3 || !BASE.test(ws[0]) || /[£$€]/.test(part)) continue;
       const v = ws[0].toLowerCase();
@@ -218,13 +223,41 @@ export function extractFacts(brief, { product = null } = {}) {
   // "Larkspur, invoicing for small studios, send an invoice in a minute": a clause after the name that opens with a
   // plain verb says what the product does, as surely as one after a colon.
   if (!facts.claims.length) {
-    for (const part of b.split(/,\s*|;\s*/).slice(1)) {
+    for (const whole of b.split(/,\s*|;\s*/).slice(1)) {
+      // A clause ends with its sentence: "snap receipts on your phone. How it works: …" is one claim, not two.
+      const part = whole.split(/[.!?](?:\s|$)/)[0];
       const ws = words(clean(part));
       if (ws.length < 3 || !CLAIM_VERB.test(ws[0]) || /[£$€]/.test(part)) continue;
       const v = ws[0].toLowerCase();
       facts.claims.push(clean(part).replace(/^\w+/, /(ch|sh|s|x|z)$/.test(v) ? `${v}es` : `${v}s`));
       if (facts.claims.length >= 2) break;
     }
+  }
+  // "Send an invoice in under a minute, chase late payers automatically, snap receipts on your phone, and file VAT
+  // returns": a whole sentence of plain verbs is the feature list, each clause one claim ("sends an invoice…").
+  if (facts.claims.length < 2) {
+    for (const sent of b.split(/(?<=[.!?])\s+/).slice(1).filter((x) => !/\bhow it works\b|\bsteps?\b/i.test(x))) {
+      const parts = sent.replace(/[.!?]\s*$/, '').split(/,\s*(?:and\s+)?|\s+and\s+(?=[a-z]+\s)/i);
+      const verbs = parts.filter((p) => { const ws = words(clean(p)); return ws.length >= 2 && CLAIM_VERB.test(ws[0]) && !/[£$€]/.test(p); });
+      if (verbs.length < 2) continue;
+      // "Run halyard init, push a branch and get a link" is how to start, not what it does: those are the steps.
+      if (/^(run|install|push|clone|open|type|download|sign|connect|paste)$/i.test(words(clean(verbs[0]))[0])) {
+        if (!facts.steps.length) facts.steps.push(...verbs.map((p) => lowerFirst(clean(p))));
+        continue;
+      }
+      for (const part of verbs) {
+        const v = words(clean(part))[0].toLowerCase();
+        const c = clean(part).replace(/^\w+/, /(ch|sh|s|x|z)$/.test(v) ? `${v}es` : `${v}s`);
+        if (!facts.claims.some((x) => x.toLowerCase() === c.toLowerCase())) facts.claims.push(c);
+      }
+      if (facts.claims.length >= 2) break;
+    }
+  }
+  // The owner's own sentence about how they work ("We fold the pastry by hand and leave the sourdough to ferment
+  // overnight."): the truest line on a small business's page, kept word for word for the first screen.
+  {
+    const st = /(?:^|[.!?]\s+)((?:We|We're|Our)\s[^.!?:]{12,170}[.!?])/.exec(b)?.[1];
+    facts.story = st && !/[£$€]|\d{3,}/.test(st) && words(st).length <= 26 ? clean(st) : null;
   }
   // Offers: the things made or sold, after building/making/selling/offering.
   const offM = /\b(?:building|builds|making|makes|selling|sells|offering|offers|baking|bakes|serving|serves|repairing|installing|designing|teaching|running|runs)\s+(.+?)(?=,|[.;]|\s+(?:for|in|on|from|with|that)\s|$)/.exec(b);
@@ -313,7 +346,7 @@ export function heroCopy(facts, { typeId, product }) {
   const kind = facts.kind ? cap(facts.kind) : null;
   const where = facts.street ? `${facts.street}${facts.place ? `, ${facts.place}` : ''}` : facts.place;
   const price = facts.prices.find((p) => p.what) ?? facts.prices[0] ?? null;
-  const time = facts.times.find((t) => /open|from/.test(t.what ?? '')) ?? facts.times.find((t) => t.what === 'hours') ?? facts.times[0] ?? null;
+  const time = facts.times.find((t) => /^(open|opens|opening|from)$/.test(t.what ?? '')) ?? facts.times.find((t) => t.what === 'hours') ?? facts.times.find((t) => !t.what) ?? null;
   const count = facts.counts[0] ?? null;
   const dur = facts.durations.find((d) => d.what) ?? facts.durations[0] ?? null;
   const claim = facts.claims[0] ?? null;
@@ -340,10 +373,11 @@ export function heroCopy(facts, { typeId, product }) {
   else if (claim) headline = imperative(claim);
   else if (price?.what) headline = `${cap(price.what)} ${price.from ? 'from' : 'for'} ${price.value}`;
   // Nothing more specific: what it is and where, which is still true ("A dentist in Leeds").
-  if (!headline && kind) headline = `${/^(an?|the)\s/i.test(facts.kind) ? kind : `${/^[aeiou]/i.test(facts.kind) ? 'An' : 'A'} ${facts.kind}`}${facts.place ? ` in ${facts.place}` : ''}`;
+  if (!headline && kind) headline = cap(`${withArticle(facts.kind)}${facts.audience && !facts.place ? ` for ${facts.audience}` : ''}${facts.place ? ` in ${facts.place}` : ''}`);
   if (headline && headline.split(/\s+/).length > 12) headline = headline.split(/,\s*/)[0];
   const ledeParts = [];
   if (typeId === 'venue' || typeId === 'service-landing' || typeId === 'cause') {
+    if (facts.story && typeId !== 'cause') ledeParts.push(facts.story.replace(/[.!?]?$/, '.'));
     if (typeId === 'cause' && facts.claims.length && !facts.counts.some((c) => headline?.includes(c.value) && facts.claims[0].includes(c.value))) ledeParts.push(`${cap(facts.claims[0])}.`);
     if (facts.offers.length) ledeParts.push(`${cap(facts.offers.join(' and '))}${facts.place && !headline?.includes(facts.place) ? ` in ${facts.place}` : ''}.`);
     const others = facts.prices.filter((p) => p !== price && p.what);
@@ -357,6 +391,8 @@ export function heroCopy(facts, { typeId, product }) {
     for (const c of facts.claims.slice(headline === imperative(claim ?? '') ? 1 : 0, 2)) ledeParts.push(`${name ?? 'It'} ${c}.`);
     if (price && !headline?.includes(price.value)) ledeParts.push(price.what ? `${cap(price.what)} ${price.from ? 'from' : 'at'} ${price.value}.` : `${price.value.replace(/\s+a\s+/, ' a ')}${facts.audience ? ` for ${facts.audience}` : ''}.`.replace(/^./, (c) => c.toUpperCase()));
   }
+  // With the owner's own sentence there, it is the lede: the prices are on the board, the cards and the close.
+  if (facts.story && typeId !== 'cause') ledeParts.splice(1, ledeParts.length, ...ledeParts.slice(1).filter((x) => !/[£$€]\d/.test(x)));
   if (!ledeParts.length && typeId === 'cause' && (facts.days || time)) ledeParts.push(`Open ${facts.days ?? ''}${time ? `${facts.days ? ', ' : ''}${time.what === 'hours' ? time.value : `from ${time.value}`}` : ''}${facts.street ? `, at ${facts.building ? `${facts.building}, ` : ""}${facts.street}` : ''}.`.replace(/\s+/g, ' '));
   const noteParts = [facts.days && time ? `Open ${facts.days}${time.what === 'hours' ? `, ${time.value}` : `, from ${time.value}`}` : facts.days ? `Open ${facts.days}` : time ? `Open from ${time.value}` : null, facts.street ? where : null].filter(Boolean);
   // A note that would only repeat the place in the eyebrow says nothing.
@@ -373,6 +409,7 @@ export function heroCopy(facts, { typeId, product }) {
     : /\bclass(es)?\b/.test(b) && typeId === 'venue' ? 'Book a class'
     : /\b(donate|donation|give)\b/.test(b) || typeId === 'cause' ? (/\bfood bank|foodbank|parcels?\b/.test(b) ? 'Give food or money' : 'Donate')
     : /\b(table|tables)\b/.test(b) && typeId === 'venue' ? 'Book a table'
+    : /\b(restaurant|bistro|brasserie|tasting menu|dinner|supper)\b/.test(b) && typeId === 'venue' ? 'Book a table'
     : /\bticket/.test(b) ? 'Get a ticket'
     : null;
   // The second, quieter link names what it shows: "See the loaves", not the sample's own range.
@@ -426,4 +463,34 @@ export function openingHours(facts) {
     if (a && b) { for (let d = a; ; d = (d % 7) + 1) { open.add(d); if (d === b) break; } } else if (a) open.add(a);
   }
   return Object.fromEntries([1, 2, 3, 4, 5, 6, 7].map((d) => [d, open.has(d) ? `${fmt(h1, m[2])} to ${fmt(h2, m[5])}` : null]));
+}
+
+/**
+ * "a dentist", "an orchard", but never "an invoicing and receipts": an activity (-ing), a plural or a mass noun
+ * ("software", "advice") reads without an article, and a phrase that already has one keeps it.
+ */
+export function withArticle(kind) {
+  const k = String(kind ?? '').trim();
+  if (!k || /^(an?|the)\s/i.test(k)) return k;
+  const first = k.split(/\s+/)[0].toLowerCase(), head = k.split(/\s+(?:for|in|at|on|with|of|from)\s+/i)[0].split(/\s+/).pop().toLowerCase();
+  const bare = /ing$/.test(first) && !/^(building|wedding|clothing|ring|king|thing|spring|string|swing|wing|sling)$/.test(first)
+    || /\band\b/i.test(k) && /s$/.test(head)
+    || /[^s]s$/.test(head) && !/(ss|us|is|ics)$/.test(head)
+    || /^(software|advice|help|care|support|tuition|training|furniture|equipment|music|coffee|bread|wine|food|research|news)$/.test(head);
+  return bare ? k : `${/^[aeiou]/i.test(k) && !/^(uni|use|eu|one)/i.test(k) ? 'an' : 'a'} ${k}`;
+}
+
+/**
+ * When the place opens, for a line like "Open Wednesday to Sunday, 8am to 2pm": the hours range first, then a time
+ * it opens from. Never a deadline ("order by 6pm", "before 10am"), a closing time or a time named in passing.
+ */
+export function openingTime(facts) {
+  const t = facts?.times ?? [];
+  return t.find((x) => x.what === 'hours') ?? t.find((x) => /^(open|opens|opening|from)$/.test(x.what ?? '')) ?? null;
+}
+/** "Open Wednesday to Sunday, 8am to 2pm" / "Open Tuesday to Saturday, from 5pm" / "Open Saturdays", or null. */
+export function openLine(facts) {
+  if (!facts?.days) return null;
+  const t = openingTime(facts);
+  return `Open ${facts.days}${t ? `, ${t.what === 'hours' ? '' : 'from '}${t.value}` : ''}`;
 }

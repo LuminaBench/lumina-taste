@@ -46,5 +46,5 @@
 }
 /* On a dark ground the cards step up in lightness, with a hairline of light on the top edge, so the stacking stays visible. */
 :where([data-mode="dark"], [data-tone="dark"]) .lt-stack-cards li > article { background: var(--bg-surface-3); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.07), 0 16px 24px -18px oklch(0 0 0 / 0.3); }
-:where([data-mode="dark"], [data-tone="dark"]) .lt-stack-cards li:nth-child(even) > article { background: color-mix(in oklab, var(--bg-surface-3) 70%, var(--text-primary) 4%); }
+:where([data-mode="dark"], [data-tone="dark"]) .lt-stack-cards li:nth-child(even) > article { background: color-mix(in oklab, var(--bg-surface-3) 96%, var(--text-primary) 4%); }
 :where([data-mode="dark"], [data-tone="dark"]) .lt-stack-cards [data-part="visual"] { background: color-mix(in oklab, var(--accent-solid) 12%, var(--bg-surface-2)); }

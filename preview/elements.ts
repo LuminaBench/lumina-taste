@@ -151,6 +151,11 @@ export function fitMade(scope: ParentNode) {
     el.style.setProperty('--x', `${Math.round((width - w * s) / 2)}px`);
   }));
   scope.querySelectorAll<HTMLElement>('.g-made-frame').forEach((f) => ro.observe(f));
+  // Each page fades in once it has drawn with its own typefaces, never half-built.
+  scope.querySelectorAll<HTMLIFrameElement>('.g-made-frame iframe').forEach((f) => {
+    const show = () => { const d = f.contentDocument; const ready = d?.fonts?.ready ?? Promise.resolve(); void Promise.race([ready, new Promise((r) => setTimeout(r, 1500))]).then(() => requestAnimationFrame(() => (f.dataset.ready = ''))); };
+    if (f.contentDocument?.readyState === 'complete' && f.contentDocument.URL !== 'about:blank') show(); else f.addEventListener('load', show, { once: true });
+  });
   return () => ro.disconnect();
 }
 

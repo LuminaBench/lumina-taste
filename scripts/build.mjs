@@ -75,7 +75,13 @@ rmSync(dist, { recursive: true, force: true });
 mkdirSync(dist, { recursive: true });
 const common = { bundle: true, format: 'esm', target: 'es2022', loader: { '.html': 'text' }, minify: true, legalComments: 'none', logLevel: 'warning', jsx: 'automatic' };
 await build({ ...common, entryPoints: { gallery: join(root, 'preview/gallery.ts') }, outdir: dist });
-cpSync(join(root, 'preview/index.html'), join(dist, 'index.html'));
+{
+  // The gallery page, with every typeface's web-font address written into its head script (see preview/index.html).
+  const { TYPOGRAPHY } = await import(pathToFileURL(join(root, 'engine/profiles/options.mjs')).href);
+  const fonts = Object.fromEntries(TYPOGRAPHY.filter((t) => t.webfont).map((t) => [t.id, t.webfont.replace('display=swap', 'display=block')]));
+  writeFileSync(join(dist, 'index.html'), readFileSync(join(root, 'preview/index.html'), 'utf8').replace('/*FONTS*/{}', JSON.stringify(fonts)));
+  cpSync(join(root, 'preview/icons'), join(dist, 'icons'), { recursive: true });
+}
 
 // Component sources, fetched on demand by the element page's Code tabs (never bundled).
 for (const fam of families) for (const c of fam.components) {

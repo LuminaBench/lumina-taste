@@ -434,7 +434,7 @@ function retitle(page) {
     out = out.replace(/(<\/head>)/, `${css}\n$1`);
   }
   // The sample's action label, wherever it appears (the bar, the hero, the close), becomes this page's action.
-  const actionLabel = hero.action ?? (type.kind === 'marketing' && !['landing', 'dev-landing'].includes(type.id) ? 'Get in touch' : /^start free$/i.test(sampleAction ?? '') && !/\b(free|trial)\b/i.test(brief) ? 'Sign up' : null);
+  const actionLabel = hero.action ?? (type.kind === 'marketing' && !['landing', 'dev-landing'].includes(type.id) ? defaultAction(type.id, facts) : /^start free$/i.test(sampleAction ?? '') && !/\b(free|trial)\b/i.test(brief) ? 'Sign up' : null);
   if (sampleAction && actionLabel) out = out.split(`>${sampleAction}<`).join(`>${esc(actionLabel)}<`);
   if (title) out = out.replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`);
   if (desc) out = out.replace(/<meta name="description" content="[^"]*">/, `<meta name="description" content="${esc(desc.endsWith('.') ? desc : `${desc}.`)}">`);
@@ -517,7 +517,7 @@ function writeComposed(dir, run) {
   ctx.heroMotif = /data-motif="([a-z]+)"/.exec(heroHtml)?.[1] ?? /data-scene="([a-z]+)/.exec(heroHtml)?.[1] ?? null;
   bands.push({ id: heroSec.id, html: heroHtml, slug: 'top', label: 'Top' });
   // The close repeats the hero's action. Software with no word on price says "Sign up", not "Start free".
-  ctx.action = hero.action ?? (!isSoftware(ctx) ? 'Get in touch' : /^start free$/i.test(sampleAction ?? '') && !/\b(free|trial)\b/i.test(brief) ? 'Sign up' : sampleAction);
+  ctx.action = hero.action ?? (!isSoftware(ctx) ? defaultAction(ctx.typeId, facts) : /^start free$/i.test(sampleAction ?? '') && !/\b(free|trial)\b/i.test(brief) ? 'Sign up' : sampleAction);
   // Every other band from the facts, or left out with what it needs.
   for (const x of sections.filter((y) => !/^hero-/.test(y.id ?? '') && !CHROME.test(y.id ?? '') && !(y.optional && PROOF.has(y.id ?? '')) && y.id !== 'billing-toggle')) {
     const r = renderBand(x, ctx);
@@ -527,7 +527,8 @@ function writeComposed(dir, run) {
     // figures (or goes, when the person's own photographs are too few to fill it).
     if (comp.id === 'menu' && r.slug === 'range') {
       const own = media?.filter((i) => i.kind === 'photo').length ?? 0;
-      if (media && own < 3) continue;
+      // Without the person's own photographs of them, a second row of the same things says nothing new.
+      if (own < 3) continue;
       r.html = r.html.replace(/<p data-part="(?:figure|index)"[^>]*>[^<]*<\/p>/g, '').replace(/(<h2 id="h-range">)What it costs(<\/h2>)/, '$1Up close$2').replace(/(<figure class="lt-art"[^>]*?) data-variant="figure"/g, '$1');
       // A tile whose only content was its price is empty now: it gets the thing's own drawing, never a blank.
       r.html = r.html.replace(/(<figure class="lt-art"[^>]*>)(?!\s*<(?:svg|img|picture))([\s\S]*?<figcaption[^>]*>([^<]*)<\/figcaption>)/g, (m, open, rest, cap) => {
@@ -566,7 +567,12 @@ function writeComposed(dir, run) {
   for (const mo of moments) {
     const b = ordered[mo.at];
     if (mo.name === 'pinned scene') { const pr = pinnedSteps(ctx); if (pr) Object.assign(b, { html: pr.html, id: pr.id }); }
-    if (mo.name === 'side-scroll') { const sr = sideScroll(ctx); if (sr) Object.assign(b, { html: sr.html, id: sr.id }); }
+    if (mo.name === 'side-scroll') {
+      const sr = sideScroll(ctx);
+      // Under a menu board the rail shows the things, not their prices again (the board has them): "Up close".
+      if (sr && comp.id === 'menu') sr.html = sr.html.replace(/<p data-part="(?:figure|index)"[^>]*>[^<]*<\/p>/g, '').replace(/(<h2 id="h-range">)What it costs(<\/h2>)/, '$1Up close$2').replace(/(<figure class="lt-art"[^>]*?) data-variant="figure"/g, '$1');
+      if (sr) Object.assign(b, { html: sr.html, id: sr.id });
+    }
     if (mo.name === 'number-settle') b.html = settleFigures(b.html);
     b.beat.moment = mo.name;
   }
@@ -588,7 +594,7 @@ function writeComposed(dir, run) {
   const links = ordered.slice(1).filter((b) => b !== closeBand && b.slug !== 'picture').slice(0, 4).map((b) => ({ slug: b.slug, label: b.label }));
   const htmlAttrs = `data-palette="${profile.palette}" data-mode="${profile.mode}" data-type="${profile.typography}" data-density="${profile.density}" data-radius="balanced" data-motion="snappy"${profile.style ? ` data-style="${profile.style}"` : ''} data-vt`;
   const list = todo.length ? `<!-- TODO before this page ships. The brief did not say, so the draft leaves these out rather than inventing them:\n${todo.map((t) => `  - ${t.replace(/--/g, '–')}`).join('\n')}\n-->\n` : '';
-  let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${esc(product ?? 'TODO: page title')}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–')}. Every word on it comes from the brief; check each one, then add what the TODO list asks for. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${list}${navBar({ product, links, action, facts, style: art.chrome?.nav })}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}${moments.some((m) => m.name === 'number-settle') ? ' data-lt="number-settle"' : ''}>${ideaComment(idea)}\n${body.join('\n\n')}\n</main>\n${footerBar({ product, facts, year: new Date().getFullYear(), style: art.chrome?.footer, links })}\n</body>\n</html>\n`;
+  let page = `<!doctype html>\n<html lang="en" ${htmlAttrs}>\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${esc(product ?? 'TODO: page title')}</title>\n  <meta name="description" content="TODO: one sentence that says what this page is, for search results and link previews.">\n  <!-- lumina-taste draft for: ${brief.replace(/--/g, '–').replace(/[.\s]+$/, '')}. Every word on it comes from the brief; check each one, then add what the TODO list asks for. -->\n  <link rel="stylesheet" href="lumina-taste/lumina.css">\n  <script defer src="lumina-taste/lumina.js"></script>\n</head>\n<body>\n${list}${navBar({ product, links, action, facts, style: art.chrome?.nav })}\n<main id="main"${art.mainAttrs.length ? ' ' + art.mainAttrs.join(' ') : ''}${moments.some((m) => m.name === 'number-settle') ? ' data-lt="number-settle"' : ''}>${ideaComment(idea)}\n${body.join('\n\n')}\n</main>\n${footerBar({ product, facts, year: new Date().getFullYear(), style: art.chrome?.footer, links })}\n</body>\n</html>\n`;
   // Buttons: the primary goes to the close; a secondary goes to the prices if they are on the page; any other is dropped.
   const have = new Set([...page.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
   const pricesSlug = ['range', 'prices'].find((x) => have.has(x));
@@ -977,4 +983,11 @@ if (type.states.length) { L.push(H('States to build'), ''); for (const s of type
 L.push(H('Avoid'), ''); for (const a of type.avoid) L.push(`- ${a}`); L.push('');
 L.push(H('Finish'), ''); for (const f of plan.finish) L.push(`- ${f.startsWith('node') ? '`' + f.replace(/\s{2,}\(.*$/, '') + '`' + (f.match(/\s{2,}(\(.*)$/)?.[1] ? ' ' + f.match(/\s{2,}(\(.*)$/)[1] : '') : f}`);
 console.log(unmark(L.join('\n')));
+}
+
+/** The one action when the brief names none: a place is visited, a shop is shopped ("Shop the wool"), the rest are asked. */
+function defaultAction(typeId, facts) {
+  if (typeId === 'venue') return 'Plan your visit';
+  if (typeId === 'brand-landing') { const noun = String(facts.kind ?? '').trim().split(/\s+/).pop(); return noun && noun.length > 2 ? `Shop the ${noun.toLowerCase()}` : 'Shop'; }
+  return 'Get in touch';
 }

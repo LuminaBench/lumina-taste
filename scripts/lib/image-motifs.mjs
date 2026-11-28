@@ -16,7 +16,7 @@ export function loadMotifs() {
 }
 
 // The matching rules live in art-panel.ts (rankMotifs); these are the same, kept in step by a unit test.
-const NOT = /\b(house (blend|wine|special|music|plant|party|style|red|white|band)|key (lime|lime pie|points?|facts?|dates?|stage)|book (now|online|a|your|today|in)|chart (topping)|ticket (price|prices)|tool ?kit|phone (number|call|us)|box (set)|pin (number|code)|nursery (school|schools|class)|lock (in|down)|coach (trip|trips|holiday|holidays|travel|hire)|sound (advice|judgement)|file (a|your)|home (page|pages|screen|screens)|plant (hire))\b/g;
+const NOT = /\b(tasting (menu|menus)|house (blend|wine|special|music|plant|party|style|red|white|band)|key (lime|lime pie|points?|facts?|dates?|stage)|book (now|online|a|your|today|in)|chart (topping)|ticket (price|prices)|tool ?kit|phone (number|call|us)|box (set)|pin (number|code)|nursery (school|schools|class)|lock (in|down)|coach (trip|trips|holiday|holidays|travel|hire)|sound (advice|judgement)|file (a|your)|home (page|pages|screen|screens)|plant (hire))\b/g;
 const ENDING = /^(s|es|er|ers|ies)$/;
 // Words that are never a subject here: the instruction to build, a trainer at a gym.
 const STOP = /^(build|trainer|trainers|training)$/;

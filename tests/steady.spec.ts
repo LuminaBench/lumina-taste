@@ -93,3 +93,32 @@ test.describe('blueprint pages hold the pressed control', () => {
     still(before, after[0]);
   });
 });
+
+test.describe('typing and type', () => {
+  test('the search box keeps every letter on the home page, where the grid filters as you type', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    await page.locator('#g-q').click();
+    await page.keyboard.type('bottom sheet', { delay: 40 });
+    await page.waitForTimeout(400);
+    await expect(page.locator('#g-q')).toHaveValue('bottom sheet');
+    await expect(page.locator('#g-q')).toBeFocused();
+    // Picking a result empties the box, so the next page does not open with the old words in it.
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#g-q')).toHaveValue('');
+  });
+
+  test('a heading never breaks inside a word: it takes the word\'s width, then gets smaller', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/blueprints/venue/');
+    await page.evaluate(() => { document.querySelector('h1')!.textContent = 'Neighbourhood bakery on Chandos Road, Redland'; });
+    await page.setViewportSize({ width: 1180, height: 900 });
+    await page.waitForTimeout(300);
+    for (const w of [1180, 820, 390]) {
+      await page.setViewportSize({ width: w, height: 900 });
+      await page.waitForTimeout(250);
+      const r = await page.evaluate(() => { const h = document.querySelector('h1')!; const was = h.style.overflowWrap; h.style.overflowWrap = 'normal'; const out = { sw: h.scrollWidth, cw: h.clientWidth }; h.style.overflowWrap = was; return out; });
+      expect(r.sw, `at ${w}px the longest word fits its line`).toBeLessThanOrEqual(r.cw + 1);
+    }
+  });
+});

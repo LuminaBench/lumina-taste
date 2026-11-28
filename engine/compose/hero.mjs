@@ -7,7 +7,7 @@
 import { esc, keepHyphens, setHeroVisual } from './draft.mjs';
 import { heroPicture, itemsFrom, thingPanel, isSoftware } from './bands.mjs';
 import { dateFrom, timetable } from './compositions.mjs';
-import { rankMotifs, loadMotifs } from '../../scripts/lib/image-motifs.mjs';
+import { rankMotifs } from '../../scripts/lib/image-motifs.mjs';
 
 const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 const words = (s) => String(s ?? '').replace(/<[^>]+>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
@@ -100,10 +100,13 @@ export function composeHero(comp, html, ctx) {
       // The thing's own drawing (a mug is a cup), else one from the subject's world; never the neighbour's.
       const own = rankMotifs(it.name.toLowerCase().replace(/(\w{3,})s\b/g, '$1')).find((m) => m !== prev && !used.has(m));
       if (own) used.add(own);
-      // Else the subject's own kind of thing (a pottery's vase), never a drawing from another world.
-      // Never an empty tile: the subject's own world (never the domain's: a coffee shop is not a clothes shop).
-      motifs.push(own ?? [ctx.facts.kind ?? '', it.name].map((q) => rankMotifs(q.toLowerCase().replace(/\bstudios?\b/g, '')).find((m) => m !== prev && !motifs.includes(m))).find(Boolean) ?? rankMotifs(`${ctx.facts.kind ?? ''} ${ctx.domainWords ?? ''}`).concat(Object.keys(loadMotifs())).find((m) => m !== prev && !motifs.includes(m)) ?? null);
+      // Else the subject's own kind of thing (a pottery's vase), never a drawing from another world: no stand-in
+      // from the whole catalogue (a cup and a crane on a wool shop's tiles).
+      motifs.push(own ?? [ctx.facts.kind ?? '', it.name].map((q) => rankMotifs(q.toLowerCase().replace(/\bstudios?\b/g, '')).find((m) => m !== prev && !motifs.includes(m))).find(Boolean) ?? null);
     }
+    // All tiles drawn or none: where one thing has no drawing of its own, the mosaic is set in type, each tile its
+    // name on its own ground.
+    if (motifs.some((m) => !m)) motifs.fill(null);
     const tiles = items.map((it, k) => `<li>${thingPanel({ ...it, price: null, meta: null }, ctx, tones[k], motifs[k])}</li>`);
     // The headline's length, so the mosaic can size it to stay in its corner.
     out = out.replace(/(<h1\b[^>]*?)(\s*>)([\s\S]*?)<\/h1>/, (m, a, b, t) => `${a} style="--hero-len: ${t.replace(/<[^>]+>/g, '').trim().length}"${b}${t}</h1>`);

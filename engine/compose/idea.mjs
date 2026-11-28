@@ -1,3 +1,4 @@
+import { openingTime } from './words.mjs';
 // One bold idea per page, chosen from the subject. The plan names it ("the £40,000 fixed price set huge on
 // navy", "the 7:30 opening time as the hero") and says where it lives. It comes from the brief's own figures
 // first, then from the art direction's signature; when the brief has no figure, the idea says so and asks
@@ -25,7 +26,8 @@ const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 export function boldIdea({ facts, type, hero, signature, accent, sections }) {
   const ids = new Set(sections.map((s) => s.id).filter(Boolean));
   const price = facts.prices.find((p) => p.what) ?? facts.prices[0] ?? null;
-  const time = facts.times.find((t) => /open|from/.test(t.what ?? '')) ?? facts.times[0] ?? null;
+  // When it opens (its hours, or a time it opens from): never a deadline such as "order by 6pm".
+  const time = openingTime(facts);
   const count = facts.counts[0] ?? null;
   const dur = facts.durations.find((d) => facts.claims.some((c) => c.includes(d.text))) ?? facts.durations[0] ?? null;
   const visual = hero === 'hero-split' ? 'hero-visual' : hero === 'hero-statement' ? 'hero-headline' : null;

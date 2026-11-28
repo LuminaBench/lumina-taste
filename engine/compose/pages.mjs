@@ -7,6 +7,7 @@
 //
 // Pure functions, no I/O: compose.mjs passes the facts, the model and a reader for seeded sample data.
 import { esc, figureStyle, keepHyphens } from './draft.mjs';
+import { withArticle } from './words.mjs';
 import { plansFrom, basketFrom, servicesFrom, releasesFrom, optionsFrom, featuresFrom, plural } from './model.mjs';
 import { motifFor, motifParts, sceneFor, sceneParts, navBar, footer } from './bands.mjs';
 import { rankMotifs } from '../../scripts/lib/image-motifs.mjs';
@@ -275,7 +276,7 @@ function docs(ctx) {
   const recs = ctx.m.records.filter((r) => r.fromBrief).map((r) => cap(r.many));
   if (!steps.length) ctx.todo.push('the steps a new user takes, in order (each becomes a heading in the guide)');
   ctx.todo.push('one or two sentences under each heading, and real code or commands where a step needs them (no sample code is drafted)');
-  const lede = [facts.kind ? `${name} is ${/^[aeiou]/i.test(facts.kind) ? 'an' : 'a'} ${facts.kind}${facts.audience ? ` for ${facts.audience}` : ''}.` : null, facts.claims[0] ? `It ${facts.claims[0]}.` : null].filter(Boolean).join(' ') || null;
+  const lede = [facts.kind ? `${name} is ${withArticle(facts.kind)}${facts.audience ? ` for ${facts.audience}` : ''}.` : null, facts.claims[0] ? `It ${facts.claims[0]}.` : null].filter(Boolean).join(' ') || null;
   const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   const tree = [{ label: 'Getting started', kids: steps.length ? steps : [title] }, ...(recs.length ? [{ label: 'Concepts', kids: recs }] : [])];
   const body = `<header class="dc-top">
@@ -386,7 +387,7 @@ function auth(ctx) {
   const { facts } = ctx;
   const name = brand(ctx);
   const firstStep = facts.steps[0] ? cap(facts.steps[0]) : null;
-  const claim = facts.claims[0] ? `${name} ${facts.claims[0]}.` : facts.kind ? `${cap(/^(an?|the)\s/i.test(facts.kind) ? facts.kind : `${/^[aeiou]/i.test(facts.kind) ? 'An' : 'A'} ${facts.kind}`)}${facts.audience ? ` for ${facts.audience}` : ''}.` : null;
+  const claim = facts.claims[0] ? `${name} ${facts.claims[0]}.` : facts.kind ? `${cap(withArticle(facts.kind))}${facts.audience ? ` for ${facts.audience}` : ''}.` : null;
   if (!claim) ctx.todo.push('one sentence on what the product does, for the side panel');
   const otp = `<div data-part="fields"><input inputmode="numeric" autocomplete="one-time-code" maxlength="1" aria-label="Digit 1"><input inputmode="numeric" maxlength="1" aria-label="Digit 2"><input inputmode="numeric" maxlength="1" aria-label="Digit 3"><span data-part="sep" aria-hidden="true"></span><input inputmode="numeric" maxlength="1" aria-label="Digit 4"><input inputmode="numeric" maxlength="1" aria-label="Digit 5"><input inputmode="numeric" maxlength="1" aria-label="Digit 6"></div>`;
   const m = motifParts(motifFor(`${facts.kind ?? ''} ${facts.claims.join(' ')}`, ctx));

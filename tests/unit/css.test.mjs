@@ -34,3 +34,16 @@ test('every component that uses @container declares itself a container', () => {
 test('section blocks pad with --section-y, not fixed pixels', () => {
   for (const f of walk(join(root, 'components/ui/blocks'))) assert.ok(!/padding: 56px 40px/.test(readFileSync(f, 'utf8')), f);
 });
+
+test('a colour mix that names both shares adds up to 100%, or the colour turns see-through', () => {
+  // color-mix(in oklab, a 70%, b 4%) is 74% opaque: a "solid" card lets what is under it show through.
+  const share = String.raw`(?:[^,()]|\((?:[^()]|\([^()]*\))*\))+?`;
+  const re = new RegExp(String.raw`color-mix\(in [a-z]+,\s*${share}\s+(\d+(?:\.\d+)?)%\s*,\s*${share}\s+(\d+(?:\.\d+)?)%\s*\)`, 'g');
+  const bad = [];
+  for (const dir of ['components', 'tokens', 'blueprints', 'preview']) {
+    for (const f of walk(join(root, dir)).filter((p) => !p.includes('/dist/'))) {
+      for (const m of readFileSync(f, 'utf8').matchAll(re)) if (Math.abs(Number(m[1]) + Number(m[2]) - 100) > 0.01) bad.push(`${f.replace(root + '/', '')}: ${m[0].slice(0, 90)}`);
+    }
+  }
+  assert.deepEqual(bad, []);
+});

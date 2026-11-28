@@ -122,7 +122,7 @@ test('the picture band is set as photo words: the scrim only behind the words, t
     assert.equal(r.status, 0, r.stderr);
     const html = readFileSync(join(dir, 'index.html'), 'utf8');
     assert.match(html, /<section class="lt-photo-words" aria-labelledby="h-picture"[^>]*>\s*<figure data-part="photo" data-tone="dark">\s*<figure class="lt-art"[^>]*data-shot="A wide photograph/);
-    assert.match(html, /<div data-part="words" data-tone="dark"><h2 id="h-picture">Joiners in Hebden Bridge<\/h2>/);
+    assert.match(html, /<div data-part="words" data-tone="dark"><h2 id="h-picture">Holloway Joinery, Hebden Bridge<\/h2>/);
     assert.ok(existsSync(join(dir, 'lumina-taste')) && readFileSync(join(dir, 'lumina-taste', 'lumina.css'), 'utf8').includes('.lt-photo-words'), 'its styles are installed');
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });

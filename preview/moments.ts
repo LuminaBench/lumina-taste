@@ -104,7 +104,11 @@ function player(card: HTMLElement, m: Moment) {
     const block = d.querySelector<HTMLElement>('.g-stage-page > :not(.g-stage-lead, .g-stage-tail)');
     const top = block ? block.getBoundingClientRect().top + win.scrollY : 0, vh = win.innerHeight;
     const bh = block?.offsetHeight ?? 0;
-    const end = m.until != null ? top - m.until * vh : bh < vh ? top - (vh - bh) / 2 : top + bh - vh + 40;
+    let end = m.until != null ? top - m.until * vh : bh < vh ? top - (vh - bh) / 2 : top + bh - vh + 40;
+    // A block only a little taller than the stage ends with its heading still in sight: its own bottom padding
+    // is what goes out of view, never the title.
+    const head = block?.querySelector<HTMLElement>('h1, h2');
+    if (m.until == null && head && bh >= vh && bh < vh * 1.3) end = Math.min(end, head.getBoundingClientRect().top + win.scrollY - 20);
     const max = Math.max(0, Math.min(d.documentElement.scrollHeight - vh, end));
     const t0 = performance.now();
     const step = (now: number) => {

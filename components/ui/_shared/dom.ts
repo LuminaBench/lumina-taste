@@ -146,7 +146,7 @@ export function dismissable(el: HTMLElement, close: () => void, ignore: Element[
 
 /** Enhance every [data-lt="name"] under root with the matching enhancer. */
 export function autoEnhance(root: ParentNode, registry: Record<string, Enhancer>): Cleanup {
-  const cleanups: Cleanup[] = root === document ? [keepFloor()] : [];
+  const cleanups: Cleanup[] = root === document ? [keepFloor(), fitWords()] : [];
   for (const el of $$<HTMLElement>(root, '[data-lt]')) {
     const fn = registry[el.dataset.lt!];
     if (fn && !el.dataset.ltReady) { el.dataset.ltReady = ''; cleanups.push(fn(el)); }
@@ -263,4 +263,49 @@ export function keepFloor(): Cleanup {
   document.addEventListener('keydown', onKey, true);
   addEventListener('scroll', onScroll, { passive: true });
   return () => { document.removeEventListener('pointerdown', press, true); document.removeEventListener('keydown', onKey, true); removeEventListener('scroll', onScroll); set(0); };
+}
+
+/**
+ * A heading set large in a narrow column can hold a word wider than the column ("Neighbourhood" at 80px in 380px).
+ * The base rule then breaks it anywhere, mid-word. fitWords() sets such a heading just small enough for its longest
+ * word to fit whole, and gives the size back when there is room again. Only display sizes (28px and up) are touched;
+ * a word that still cannot fit at 45% of the size is hyphenated where a dictionary would break it.
+ * autoEnhance(document) turns it on.
+ */
+export function fitWords(scope: ParentNode = document): Cleanup {
+  const fit = (h: HTMLElement) => {
+    h.style.removeProperty('font-size');
+    h.style.removeProperty('hyphens');
+    h.style.removeProperty('max-width');
+    const size = parseFloat(getComputedStyle(h).fontSize);
+    if (!(size >= 28) || !h.isConnected || h.clientWidth < 1) return;
+    const wrap = h.style.overflowWrap;
+    h.style.overflowWrap = 'normal';
+    // A measure set in ch shrinks with the type, so the heading's width is fixed in pixels first: as wide as it is,
+    // or as the long word, up to its column. Then only the type gets smaller.
+    if (h.scrollWidth > h.clientWidth + 1) {
+      const p = h.parentElement, cs = p ? getComputedStyle(p) : null;
+      const room = p && cs ? p.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) : h.clientWidth;
+      h.style.maxWidth = `${Math.max(h.clientWidth, Math.min(room, h.scrollWidth + 2))}px`;
+    }
+    const floor = Math.max(24, size * 0.45);
+    let now = size;
+    for (let i = 0; i < 5 && h.scrollWidth > h.clientWidth + 1 && now > floor; i++) {
+      now = Math.max(floor, Math.floor(now * (h.clientWidth / h.scrollWidth) * 0.98));
+      h.style.fontSize = `${now}px`;
+    }
+    // Still too wide at the smallest size it may take: break the word where a dictionary would, with a hyphen.
+    if (h.scrollWidth > h.clientWidth + 1) h.style.hyphens = 'auto';
+    h.style.overflowWrap = wrap;
+  };
+  const heads = () => [...scope.querySelectorAll<HTMLElement>('h1, h2, h3, [data-part="title"], [data-part="headline"]')];
+  const widths = new WeakMap<Element, number>();
+  const ro = new ResizeObserver((entries) => entries.forEach((e) => {
+    const w = Math.round(e.contentRect.width);
+    if (widths.get(e.target) !== w) { widths.set(e.target, w); fit(e.target as HTMLElement); }
+  }));
+  const all = () => heads().forEach((h) => { ro.observe(h); fit(h); });
+  all();
+  document.fonts?.ready.then(all);
+  return () => ro.disconnect();
 }

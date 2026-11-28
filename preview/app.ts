@@ -10,6 +10,8 @@ import { rank } from './search';
 
 const main = document.getElementById('g-main')!;
 const q = document.querySelector<HTMLInputElement>('#g-q')!;
+// The top bar's real height (one row or two) for the sticky filter bar and anchor jumps below it.
+{ const top = document.querySelector<HTMLElement>('.g-top')!; new ResizeObserver(() => html.style.setProperty('--g-top-h', `${top.offsetHeight}px`)).observe(top); }
 const results = document.getElementById('g-results')!;
 const cleanups: Array<() => void> = [];
 ensureFont(html.dataset.type!);
@@ -87,10 +89,36 @@ function showResults() {
   results.innerHTML = hits.map((h, i) => `<a role="option" id="g-r${i}" href="${h.href}" aria-selected="${i === 0}"><span class="g-r-kind">${h.kind}</span><b>${esc(h.name)}</b><span class="g-r-sum">${esc(h.summary)}</span></a>`).join('');
   if (hits.length) q.setAttribute('aria-activedescendant', 'g-r0'); else q.removeAttribute('aria-activedescendant');
 }
+// On the home page the grid below filters as you type. Re-drawing it mounts live demos, and a demo may take focus
+// as it starts, so the redraw waits for a pause in typing and the box keeps focus and caret throughout.
+let typing = 0;
 q.addEventListener('input', () => {
   showResults();
-  if (route().name === 'ui' && !route().id) render();
+  if (route().name !== 'ui' || route().id) return;
+  clearTimeout(typing);
+  typing = window.setTimeout(() => {
+    const had = document.activeElement === q;
+    render();
+    if (had) holdSearchFocus();
+  }, 220);
 });
+/**
+ * For a moment after the grid is redrawn, a demo starting up may move focus (a field that focuses itself, a menu that
+ * opens). Unless the person clicks or presses a key outside the box in that time, focus and the caret come back.
+ */
+function holdSearchFocus(ms = 700) {
+  const a = q.selectionStart, z = q.selectionEnd;
+  let user = false;
+  const mark = (e: Event) => { if (e.target !== q) user = true; };
+  const back = () => { if (!user && document.activeElement !== q) { q.focus({ preventScroll: true }); if (a !== null && z !== null) q.setSelectionRange(a, z); showResults(); } };
+  document.addEventListener('pointerdown', mark, true);
+  document.addEventListener('keydown', mark, true);
+  document.addEventListener('focusin', back, true);
+  back();
+  const t0 = performance.now();
+  const tick = () => { back(); if (performance.now() - t0 < ms) requestAnimationFrame(tick); else { document.removeEventListener('pointerdown', mark, true); document.removeEventListener('keydown', mark, true); document.removeEventListener('focusin', back, true); } };
+  requestAnimationFrame(tick);
+}
 q.addEventListener('focus', showResults);
 q.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { results.hidden = true; q.setAttribute('aria-expanded', 'false'); return; }
@@ -100,11 +128,13 @@ q.addEventListener('keydown', (e) => {
     active = (active + (e.key === 'ArrowDown' ? 1 : -1) + hits.length) % hits.length;
     results.querySelectorAll('[role="option"]').forEach((o, i) => o.setAttribute('aria-selected', String(i === active)));
     q.setAttribute('aria-activedescendant', `g-r${active}`);
-  } else if (e.key === 'Enter') { e.preventDefault(); location.hash = hits[active].href; results.hidden = true; q.blur(); }
+  } else if (e.key === 'Enter') { e.preventDefault(); const to = hits[active].href; picked(); location.hash = to; }
 });
 q.addEventListener('blur', () => setTimeout(() => { results.hidden = true; q.setAttribute('aria-expanded', 'false'); }, 150));
 results.addEventListener('pointerdown', (e) => e.preventDefault());
-results.addEventListener('click', () => { results.hidden = true; });
+results.addEventListener('click', () => picked());
+/** A result was chosen: the box empties, so the next page does not open with the old words still in it. */
+function picked() { clearTimeout(typing); q.value = ''; hits = []; results.hidden = true; q.setAttribute('aria-expanded', 'false'); q.removeAttribute('aria-activedescendant'); q.blur(); }
 document.addEventListener('keydown', (e) => {
   const t = e.target as HTMLElement;
   const inDemo = t.closest?.('[data-contained]');

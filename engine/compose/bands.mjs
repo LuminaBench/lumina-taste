@@ -7,7 +7,7 @@
 //
 // Pure functions, no I/O: compose.mjs passes in the facts and a reader for the kit's snippets.
 import { esc, figureHtml, figureStyle, keepHyphens, setFacts, applyMediaIdea } from './draft.mjs';
-import { imperative } from './words.mjs';
+import { imperative, openLine } from './words.mjs';
 import { rankMotifs, motifSvg, pickScene, sceneSvg } from '../../scripts/lib/image-motifs.mjs';
 
 const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
@@ -22,6 +22,9 @@ const DAYS = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Satur
  * name (and the business's kind), never the same as the panel before it. Null when nothing fits.
  */
 const PROCESS = new Set(['document', 'calendar', 'envelope', 'coins', 'chat']);
+/** Drawings that stand for one trade (a bar, an optician, a restaurant, software, a building site, a café): never
+ * borrowed onto another's page unless its brief names them. */
+const OWN_TRADE = new Set(['glass', 'glasses', 'bowl', 'terminal', 'crane', 'cup', 'laptop', 'phone', 'chart']);
 export function motifFor(text, ctx, avoid = null, { item = false } = {}) {
   // The page's own words, not the request's: "home page", "website", phone numbers and "tool" in "invoicing
   // tool" would otherwise draw a house, a phone and a spanner. Plurals are read as their singular (loaves → loaf).
@@ -31,7 +34,12 @@ export function motifFor(text, ctx, avoid = null, { item = false } = {}) {
   // never bring in another ("start date" is not a startup's phone).
   // The subject's domain lends its own drawings too (a dentist's page may also draw the stethoscope), so a page
   // has more than one to choose from.
-  const world = [...new Set([...rankMotifs(plain(subject)), ...rankMotifs(ctx.domainWords ?? '').slice(0, 3)])];
+  // A borrowed drawing must still be the subject's: a café's world has wine glasses and noodle bowls, a bakery's
+  // does not; a builder's page never draws a terminal. Drawings that stand for a trade of their own come in only
+  // when the brief names them; the domain's others (a dentist's stethoscope) when the subject has fewer than two.
+  const mine = rankMotifs(plain(subject)), named = new Set(rankMotifs(plain(ctx.facts.brief ?? '')));
+  const borrowed = rankMotifs(ctx.domainWords ?? '').slice(0, 3).filter((m) => named.has(m) || (!OWN_TRADE.has(m) && mine.length < 2));
+  const world = [...new Set([...mine, ...borrowed])];
   const own = rankMotifs(plain(text));
   // Drawings of a process (a quote, a date, a message, a payment) fit any subject's steps.
   const ownFit = world.length ? own.filter((m) => world.includes(m) || PROCESS.has(m)) : own;
@@ -195,9 +203,10 @@ function pictureLine(ctx, name) {
   const offers = f.offers?.length ? cap(join(f.offers.slice(0, 3))) : null;
   const items = (f.prices ?? []).filter((p) => p.what).map((p) => p.what.replace(/^(?:a|an|the)\s+/i, ''));
   const candidates = [
-    f.days ? `Open ${f.days}${(f.times ?? [])[0]?.value ? `, from ${f.times[0].value}` : ''}` : null,
+    openLine(f),
     offers,
-    items.length >= 2 ? cap(join(items.slice(0, 3))) : null,
+    // Things, not kinds of ticket: "Tickets and students" names no thing.
+    items.length >= 2 && !items.some((x) => /\b(tickets?|students?|adults?|child(ren)?|members?|concessions?|seniors?|teams?|monthly|yearly)\b/i.test(x)) ? cap(join(items.slice(0, 3))) : null,
     f.claims?.[1] ? cap(f.claims[1]) : null,
     f.street ? `On ${f.street.replace(/^\d+\s+/, '')}${f.place ? `, ${f.place}` : ''}` : null,
   ];
@@ -208,9 +217,21 @@ export function pictureBand(ctx) {
   // The head noun of the brief's main count names the thing ("food parcels" → a parcel), else its kind.
   const head = (ctx.facts.counts[0]?.what ?? '').split(' ').pop();
   // A different drawing from the first screen's where the subject has one; else the same one on another ground.
-  const m = motifParts(motifFor(`${head} ${ctx.facts.kind ?? ''}`, ctx, ctx.heroMotif) ?? ctx.heroMotif, { small: true });
+  // Only a drawing of the subject not already on the first screen: the same picture again, or a stand-in from
+  // another trade, makes a band that says nothing.
+  const pick = motifFor(`${head} ${ctx.facts.kind ?? ''}`, ctx, ctx.heroMotif);
+  if (!pick || pick === ctx.heroMotif || (ctx.scene ?? []).includes(pick)) return null;
+  const m = motifParts(pick, { small: true });
   if (!m.attr) return null;
   const name = ctx.facts.kind ? cap(ctx.facts.kind) : ctx.product;
+  // Its words must be new too: a line that would only repeat the first screen's headline gives way to the name and
+  // the place ("Holloway Joinery, Hebden Bridge"), which the headline does not say.
+  const said = String(ctx.hero?.headline ?? '').toLowerCase();
+  const repeats = (t) => !t || (said && (said.includes(t.toLowerCase()) || t.toLowerCase().includes(said)));
+  let line = pictureLine(ctx, name);
+  if (repeats(line)) line = [ctx.product, ctx.facts.place].filter(Boolean).join(', ');
+  // The name alone, or a repeat, says nothing a band needs to.
+  if (repeats(line) || line.trim().toLowerCase() === String(ctx.product ?? '').trim().toLowerCase()) return null;
   // Set as photo-words: the picture across the screen, its name on it over a scrim that sits only behind the words.
   return { id: 'media-band', slug: 'picture', label: name ?? 'Picture', html: `<section class="lt-photo-words" aria-labelledby="h-picture">
   <figure data-part="photo" data-tone="dark">
@@ -219,7 +240,7 @@ export function pictureBand(ctx) {
       <figcaption class="lt-visually-hidden">${esc(`${ctx.product ?? name}${ctx.facts.place ? `, ${ctx.facts.place}` : ''}`)}</figcaption>
     </figure>
   </figure>
-  <div data-part="words" data-tone="dark"><h2 id="h-picture">${keepHyphens(esc(pictureLine(ctx, name)))}</h2></div>
+  <div data-part="words" data-tone="dark"><h2 id="h-picture">${keepHyphens(esc(line))}</h2></div>
 </section>` };
 }
 
@@ -322,6 +343,9 @@ export function motifsFor(items, ctx) {
     const m = motifFor(it.name, ctx, prev, { item: true });
     out.push(m);
   }
+  // A row is all drawn or all plain: one card with a drawing beside one without looks unfinished, and a stand-in
+  // from elsewhere in the subject's world is worse (a wine glass for a tart). So a row with a gap goes plain.
+  if (out.some(Boolean) && !out.every(Boolean)) return out.map(() => null);
   return out;
 }
 function offers(ctx) {
@@ -410,7 +434,8 @@ function stepPanels(ctx) {
   const li = st.map((step, k) => {
     const m = motifFor(step, ctx, out[k - 1] ?? null, { item: true }); out.push(m);
     const mp = motifParts(m);
-    const fact = /\bfree\b/i.test(step) ? 'Free' : /\b(?:within|in)\s+(\d+\s+\w+)/i.exec(step)?.[1] ?? null;
+    // The step's own fact ("Free", "A week", "5 days"); with neither a fact nor a drawing, its number, so no panel is blank.
+    const fact = /\bfree\b/i.test(step) ? 'Free' : /\b(?:within|in)\s+((?:\d+|a|an|one|two|three|four|five|six)\s+(?:hours?|days?|weeks?|months?|minutes?))\b/i.exec(step)?.[1] ?? (m ? null : String(k + 1));
     return `    <li><article>
       <figure class="lt-art"${tones[k]}${mp.attr}${fact ? ' data-variant="figure"' : ''} data-shot="${esc(`A photograph of ${step}, same light and ratio as the others, 4:5`)}">${mp.svg}${fact ? `<p data-part="figure"${figureStyle(fact)}>${figureHtml(cap(fact))}</p>` : ''}<figcaption class="lt-visually-hidden">${esc(`Step ${k + 1}: ${step}`)}</figcaption></figure>
       <h3>${tie(keepHyphens(esc(cap(step.replace(/^(a|an|the)\s+/i, '')))))}</h3>
@@ -504,7 +529,7 @@ function close(ctx) {
   // A service or a place closes on its action ("Book a first call with Harrow & Finch"); a product on its price.
   const service = ['service-landing', 'venue', 'event', 'about', 'portfolio'].includes(ctx.typeId);
   const other = facts.prices.find((p) => plainPrice(p.value) !== ctx.idea.figure && !String(hero.headline ?? '').includes(plainPrice(p.value)));
-  const heading = said ? cap(said) : service && ctx.action && product ? `${ctx.action} ${/^(give|donate)/i.test(ctx.action) ? 'to' : /^get (?!in touch)/i.test(ctx.action) ? 'from' : 'with'} ${product}` : (other ?? price) ? ((p) => `${p.what ? `${cap(p.what.replace(/^fixed[-\s](?:fee|price)\s+/i, ''))}, ` : product ? `${product}, ` : ''}${p.from ? 'from ' : ''}${p.value}`)(other ?? price) : price ? `${price.what ? `${cap(price.what.replace(/^fixed[-\s](?:fee|price)\s+/i, ''))}, ` : product ? `${product}, ` : ''}${price.from ? 'from ' : ''}${price.value}` : ctx.action && product ? `${ctx.action} ${/^(give|donate)/i.test(ctx.action) ? 'to' : /^get/i.test(ctx.action) ? 'from' : 'with'} ${product}` : ctx.action ?? null;
+  const heading = said ? cap(said) : service && ctx.action && product ? `${ctx.action} ${/^(give|donate)/i.test(ctx.action) ? 'to' : /^get (?!in touch)/i.test(ctx.action) ? 'from' : /^plan/i.test(ctx.action) ? 'to' : 'with'} ${product}` : (other ?? price) ? ((p) => `${p.what ? `${cap(p.what.replace(/^fixed[-\s](?:fee|price)\s+/i, ''))}, ` : product ? `${product}, ` : ''}${p.from ? 'from ' : ''}${p.value}`)(other ?? price) : price ? `${price.what ? `${cap(price.what.replace(/^fixed[-\s](?:fee|price)\s+/i, ''))}, ` : product ? `${product}, ` : ''}${price.from ? 'from ' : ''}${price.value}` : ctx.action && product ? `${ctx.action} ${/^(give|donate)/i.test(ctx.action) ? 'to' : /^get/i.test(ctx.action) ? 'from' : 'with'} ${product}` : ctx.action ?? null;
   if (!heading) return null;
   // The lede says what happens next when the brief gives the steps; otherwise one true line not yet on screen.
   const lede = facts.steps.length >= 2 ? `${cap(facts.steps.join(', then '))}.` : facts.claims.length ? `${product ?? 'It'} ${facts.claims[0]}.` : hero.lede && !hero.lede.includes(heading) ? hero.lede : null;
@@ -536,7 +561,11 @@ function media(ctx) {
   let html = ctx.snippet('media-band');
   const second = ctx.facts.claims[1];
   // The band's claim is the brief's own: a second claim, else what the figure counts. Never the sample's line.
-  html = applyMediaIdea(html, ctx.idea, second ? `${cap(second)}.` : `${cap(ctx.idea.caption ?? ctx.product ?? '')}.`);
+  // A claim is stored as what the product does ("snaps receipts"), so it reads with the name in front; a one-word
+  // caption reads with its figure ("30 days free", never "Free.").
+  const cap1 = String(ctx.idea.caption ?? '').trim();
+  const line = second ? `${ctx.product ? `${ctx.product} ${second}` : cap(second)}.` : cap1 && !/\s/.test(cap1) && ctx.idea.figure ? `${cap(`${ctx.idea.figure} ${cap1.toLowerCase()}`)}.` : `${cap(cap1 || ctx.product || '')}.`;
+  html = applyMediaIdea(html, ctx.idea, line);
   // The figure's panel carries the subject's drawing, so the band is a picture, not a number on a slab.
   const m = motifParts(motifFor(`${ctx.facts.claims.join(' ')} ${ctx.facts.kind ?? ''}`, ctx), { small: true });
   html = html.replace(/<div class="lt-art"([^>]*)>/, (x, a) => `<div class="lt-art"${a}${m.attr}>${m.svg}`);
@@ -579,7 +608,7 @@ export function footer({ product, facts, year, style = null, links = [], hours =
   }
   if (style?.id === 'contact' && (facts.phone || facts.email)) {
     const addr = [product, facts.building, facts.street, [facts.place, facts.postcode].filter(Boolean).join(' ')].filter(Boolean);
-    const open = facts.days ? `Open ${facts.days}${facts.times[0] ? `, ${facts.times[0].what === 'hours' ? '' : 'from '}${facts.times[0].value}` : ''}` : null;
+    const open = openLine(facts);
     return `<footer class="lt-footer" data-variant="contact"${style.tone ? ` data-tone="${style.tone}"` : ''}>
   <div data-part="top">
     <div data-part="reach"><p>${esc(facts.phone ? 'Ring, or write' : 'Write to us')}</p>${facts.phone ? `<a href="tel:${esc(facts.phone.replace(/[^\d+]/g, ''))}">${esc(facts.phone)}</a>` : ''}${facts.email ? `<a href="mailto:${esc(facts.email)}">${esc(facts.email)}</a>` : ''}</div>
